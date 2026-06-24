@@ -279,7 +279,7 @@ section { position: relative; }
    3 · JOURNEY — sticky scrollytelling (dark, the centerpiece)
    ============================================================ */
 .journey { background: var(--ink-800); color: #eafff5; overflow: clip; }
-.journey-top { padding: clamp(64px, 9vw, 120px) 0 0; }
+.journey-top { padding: clamp(64px, 9vw, 120px) 0 30px; }
 .journey-grid {
   display: grid; grid-template-columns: 0.92fr 1.08fr; gap: clamp(24px, 5vw, 72px);
   align-items: start;
