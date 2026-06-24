@@ -1,0 +1,84 @@
+name: Deploy Design Test
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: design-test-deploy
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Install WireGuard and SSH
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wireguard-tools openssh-client
+
+      - name: Start WireGuard
+        env:
+          WG_CONF: ${{ secrets.WG_CONF }}
+        run: |
+          sudo install -d -m 700 /etc/wireguard
+          sudo install -m 600 /dev/null /etc/wireguard/wg0.conf
+
+          printf '%s\n' "$WG_CONF" \
+            | sudo tee /etc/wireguard/wg0.conf > /dev/null
+
+          sudo wg-quick up wg0
+          sudo wg show wg0
+
+      - name: Configure SSH
+        env:
+          DESIGN_TEST_SSH_KEY: ${{ secrets.DESIGN_TEST_SSH_KEY }}
+          DESIGN_TEST_HOST: ${{ secrets.DESIGN_TEST_HOST }}
+          DESIGN_TEST_PORT: ${{ secrets.DESIGN_TEST_PORT }}
+        run: |
+          install -d -m 700 "$HOME/.ssh"
+
+          printf '%s\n' "$DESIGN_TEST_SSH_KEY" \
+            > "$HOME/.ssh/deploy_key"
+
+          chmod 600 "$HOME/.ssh/deploy_key"
+
+          ssh-keyscan \
+            -T 10 \
+            -p "$DESIGN_TEST_PORT" \
+            -H "$DESIGN_TEST_HOST" \
+            > "$HOME/.ssh/known_hosts"
+
+          chmod 600 "$HOME/.ssh/known_hosts"
+
+      - name: Deploy
+        env:
+          DESIGN_TEST_HOST: ${{ secrets.DESIGN_TEST_HOST }}
+          DESIGN_TEST_USER: ${{ secrets.DESIGN_TEST_USER }}
+          DESIGN_TEST_PORT: ${{ secrets.DESIGN_TEST_PORT }}
+        run: |
+          ssh \
+            -i "$HOME/.ssh/deploy_key" \
+            -p "$DESIGN_TEST_PORT" \
+            -o BatchMode=yes \
+            -o ConnectTimeout=15 \
+            "$DESIGN_TEST_USER@$DESIGN_TEST_HOST" \
+            'set -eu
+             cd /opt/design-test-nbs
+             git checkout main
+             git pull --ff-only origin main'
+
+      - name: Clean up
+        if: always()
+        run: |
+          sudo wg-quick down wg0 || true
+          sudo rm -f /etc/wireguard/wg0.conf
+          rm -f "$HOME/.ssh/deploy_key"
+          rm -f "$HOME/.ssh/known_hosts"
