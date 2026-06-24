@@ -79,6 +79,30 @@
       .export-toast { transition: opacity .2s; transform: none; }
       .export-toast-bar { animation: none; }
     }
+
+    /* Pathway tags on Step 3 activities + matrix activity cell */
+    .act-tag.pw-protect, .pw-mini.pw-protect { background: rgb(220,252,231); color: rgb(22,101,52); }
+    .act-tag.pw-manage,  .pw-mini.pw-manage  { background: rgb(254,243,199); color: rgb(146,64,14); }
+    .act-tag.pw-restore, .pw-mini.pw-restore { background: rgb(224,247,250); color: rgb(14,116,144); }
+    .pw-mini {
+      display: inline-block; margin-top: 7px;
+      font-family: var(--font-text); font-size: 9px; font-weight: 700;
+      letter-spacing: .04em; border-radius: 20px; padding: 2px 8px;
+    }
+
+    /* Benefit column (Step 4 matrix) */
+    .ben-cell { display: flex; flex-direction: column; gap: 5px; max-width: 220px; }
+    .ben-tag {
+      align-self: flex-start;
+      font-family: var(--font-text); font-size: 9px; font-weight: 700;
+      letter-spacing: .04em; text-transform: uppercase;
+      border-radius: 20px; padding: 2px 8px;
+    }
+    .ben-tag.nature  { background: rgb(220,252,231); color: rgb(22,101,52); }
+    .ben-tag.people  { background: rgb(239,246,255); color: #0a436b; }
+    .ben-tag.climate { background: rgb(255,237,213); color: rgb(194,65,12); }
+    .ben-tag.custom  { background: #f1f5f9; color: #475569; }
+    .ben-name { font-size: 11px; color: rgb(74,84,104); line-height: 1.4; }
   </style>
 </head>
 <body data-screen-label="F05.0 — Create New Project From Scratch">
@@ -319,7 +343,7 @@
         <div class="ws-hdr">
           <div>
             <div class="ws-title">Step 3 — Select planned NbS activities</div>
-            <div class="ws-hint">Choose activities based on the ecosystems present in your project area and your NbS Pathway. Recommended indicators will be generated automatically in the next step.</div>
+            <div class="ws-hint">Activities are shown for the NbS pathways you chose in Step 2. Pick the ones you'll implement — recommended indicators are generated automatically in the next step.</div>
           </div>
         </div>
         <div class="ws-body">
@@ -328,7 +352,7 @@
             <div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap">
               <div>
                 <div class="sel-label">Activities selected</div>
-                <div class="sel-count"><span id="selectedCount">0</span> / 12</div>
+                <div class="sel-count"><span id="selectedCount">0</span> / <span id="totalCount">0</span></div>
               </div>
               <div class="sel-tags" id="selectionTags"></div>
             </div>
@@ -354,11 +378,7 @@
         <div class="ws-hdr">
           <div>
             <div class="ws-title">Step 4 — Review generated monitoring matrix</div>
-            <div class="ws-hint">Based on your selected activities, the system has generated recommended monitoring content including indicators, methods, and frequency. Toggle to view optional indicators.</div>
-          </div>
-          <div class="toggle-row">
-            <button class="mtoggle active" id="showRecommended">✓ Recommended</button>
-            <button class="mtoggle" id="showOptional">+ Optional</button>
+            <div class="ws-hint">Based on your selected activities, the system has generated recommended monitoring content including indicators, methods, and frequency.</div>
           </div>
         </div>
         <div class="ws-body">
@@ -373,10 +393,10 @@
               <thead>
                 <tr>
                   <th>NbS Activity</th>
-                  <th>Indicator level</th>
+                  <th>Benefit</th>
                   <th>Monitoring indicators</th>
-                  <th>Method</th>
-                  <th>Frequency</th>
+                  <th>Data source</th>
+                  <th>Monitoring frequency</th>
                 </tr>
               </thead>
               <tbody id="matrixRows"></tbody>
@@ -416,18 +436,11 @@
                 <div id="pwReview5"></div>
               </div>
               <div class="custom-options">
-                <div class="custom-item" onclick="openModal('m-indicators')">
-                  <div class="custom-icon">
-                    <svg viewBox="0 0 24 24" fill="none"><path d="M9 11l3 3L22 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                  </div>
-                  <div><h4>Review and edit indicators</h4><p>Add, remove, or mark indicators as optional.</p></div>
-                  <span class="custom-status" id="opt1-status">Not started</span>
-                </div>
                 <div class="custom-item" onclick="openModal('m-methods')">
                   <div class="custom-icon">
                     <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/><path d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
                   </div>
-                  <div><h4>Adjust methods and frequency</h4><p>Change monitoring method, schedule, and data source.</p></div>
+                  <div><h4>Adjust data source and monitoring frequency</h4><p>Change monitoring method, schedule, and data source.</p></div>
                   <span class="custom-status" id="opt2-status">Not started</span>
                 </div>
                 <div class="custom-item" onclick="openModal('m-parties')">
@@ -455,10 +468,9 @@
               <div class="sum-row"><span>Ecosystems</span><strong id="sumEco">0</strong></div>
               <div class="sum-row"><span>NbS pathways</span><strong id="sumPathways">0</strong></div>
               <div class="sum-row"><span>Activities selected</span><strong id="sumActivities">0</strong></div>
-              <div class="sum-row"><span>Recommended indicators</span><strong id="sumRecommended">0</strong></div>
-              <div class="sum-row"><span>Optional indicators</span><strong id="sumOptional">0</strong></div>
+              <div class="sum-row"><span>Indicators</span><strong id="sumIndicators">0</strong></div>
               <div class="sum-row"><span>Monitoring methods</span><strong>6</strong></div>
-              <div class="sum-row"><span>Customizations done</span><strong id="sum-custom">0 / 4</strong></div>
+              <div class="sum-row"><span>Customizations done</span><strong id="sum-custom">0 / 3</strong></div>
               <button class="btn-export" id="finalizeBtn">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 Generate &amp; export plan
@@ -493,11 +505,7 @@
             <div class="success-acts">
               <button class="ws-btn ws-btn-back" onclick="showExportToast('pdf')">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                Download PDF
-              </button>
-              <button class="ws-btn ws-btn-ghost" onclick="showExportToast('excel')">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 2v6h6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                Export to Excel
+                Download Pre Feasibility Study Document
               </button>
               <button class="ws-btn ws-btn-primary" onclick="window.location.href='F06 NbS MRV.html'">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1" stroke="white" stroke-width="2"/><rect x="14" y="3" width="7" height="7" rx="1" stroke="white" stroke-width="2"/><rect x="3" y="14" width="7" height="7" rx="1" stroke="white" stroke-width="2"/><rect x="14" y="14" width="7" height="7" rx="1" stroke="white" stroke-width="2"/></svg>
@@ -543,48 +551,186 @@ const ecoIcons = {
 
 const ecosystems = [
   { id:'forest', name:'Forest', pwLabel:'Protect / Manage / Restore', pwClass:'', colorCls:'forest', activities:[
-    { id:'f-cons', name:'Forest conservation', type:'Recommended', checked:false, indicators:['Actual conservation area (ha)','Annual forest cover loss (ha/yr)'], optional:['Forest habitat fragmentation (index)','Conservation priority species (count)'], method:'Remote sensing + field verification', freq:'Annual' },
-    { id:'f-rest', name:'Forest restoration', type:'Recommended', checked:true, indicators:['Area of habitats restored (ha)','Forest cover gain (ha/yr)'], optional:['Tree biomass stock change (tCO₂e/ha)','Soil carbon content (tC/ha)'], method:'GPS mapping + satellite imagery', freq:'Annual / seasonal' },
-    { id:'anr', name:'Assisted natural regeneration', type:'Recommended', checked:true, indicators:['Area prepared for restoration (ha)','Seedling survival rate (%)'], optional:['Tree regeneration density (stems/ha)','Species diversity (index)'], method:'Field plots + geotagged photos', freq:'3, 6, 12 months' },
-    { id:'fire-f', name:'Fire prevention and control', type:'Optional', checked:false, indicators:['Burned area (ha)','Number of fire events (count/yr)'], optional:['Hotspot count (number)','Community patrol coverage (km²)'], method:'Satellite fire data + patrol reports', freq:'Monthly in dry season' }
+    { id:'f-boundary', name:'Boundary demarcation & legal recognition', pw:'PROTECT', type:'Recommended', checked:true, method:'Cadastral survey + remote sensing', freq:'Annual', benefits:[
+      { cat:'Nature',  benefit:'Maintenance of ecological connectivity', inds:['Forest fragmentation index (1–10)','Forest Connectivity Index'] },
+      { cat:'People',  benefit:'Secure land and resource tenure', inds:['Area under recognised customary tenure (ha)'] },
+      { cat:'Climate', benefit:'Reduced emissions from deforestation & degradation', inds:['Forest Carbon Stock (tCO₂e)'] },
+    ]},
+    { id:'f-patrol', name:'Community-based patrol & monitoring', pw:'PROTECT', type:'Recommended', checked:true, method:'Patrol reports + satellite alerts', freq:'Monthly', benefits:[
+      { cat:'Nature',  benefit:'Reduced vulnerability to fire, pests & disease', inds:['Forest Fire Incidents (number)','Primary Forest Loss (ha)'] },
+      { cat:'People',  benefit:'Strengthened social capital & governance', inds:['Grievance Redress Mechanism','MRV Institutional Capacity'] },
+      { cat:'Climate', benefit:'Reduced emissions from deforestation & degradation', inds:['Forest Carbon Stock (tCO₂e)'] },
+    ]},
+    { id:'f-fire', name:'Fire prevention infrastructure & early warning', pw:'PROTECT', type:'Recommended', checked:false, method:'Satellite fire data + patrol reports', freq:'Monthly in dry season', benefits:[
+      { cat:'Nature',  benefit:'Reduced vulnerability to fire, pests & disease', inds:['Forest Degradation Rate (ha/yr)'] },
+      { cat:'People',  benefit:'Enhanced food and water security', inds:['Social Forestry Beneficiaries'] },
+      { cat:'Climate', benefit:'Enhanced resilience to climate hazards', inds:['Area exposed to fire/drought hazard (ha)'] },
+    ]},
+    { id:'f-agro', name:'Agroforestry / silvopasture transition', pw:'MANAGE', type:'Recommended', checked:true, method:'Field survey + remote sensing', freq:'Annual / seasonal', benefits:[
+      { cat:'Nature',  benefit:'Enhanced biodiversity & ecosystem functions', inds:['Species Richness Index','Forest Connectivity Index'] },
+      { cat:'People',  benefit:'Enhanced food and water security', inds:['Social Forestry Beneficiaries','Crop / NTFP yield'] },
+      { cat:'Climate', benefit:'Increased carbon sequestration & storage', inds:['Forest Carbon Stock (tCO₂e)'] },
+      { cat:'Climate', benefit:'Microclimate regulation', inds:['Land surface temperature (°C)'] },
+    ]},
+    { id:'f-anr', name:'Assisted natural regeneration (ANR)', pw:'MANAGE', type:'Recommended', checked:false, method:'Field plots + geotagged photos', freq:'3, 6, 12 months', benefits:[
+      { cat:'Nature',  benefit:'Enhanced biodiversity & ecosystem functions', inds:['Species Richness Index'] },
+      { cat:'People',  benefit:'Sustainable livelihood opportunities', inds:['Social Forestry Beneficiaries'] },
+      { cat:'Climate', benefit:'Increased carbon sequestration & storage', inds:['Forest Carbon Stock (tCO₂e)'] },
+    ]},
+    { id:'f-enrich', name:'Enrichment planting with native species', pw:'RESTORE', type:'Recommended', checked:false, method:'GPS mapping + field plots', freq:'Annual', benefits:[
+      { cat:'Nature',  benefit:'Enhanced biodiversity & ecosystem functions', inds:['Species Richness Index'] },
+      { cat:'Nature',  benefit:'Maintenance of ecological connectivity', inds:['Tree canopy cover (%)'] },
+      { cat:'People',  benefit:'Sustainable livelihood opportunities (nursery employment)', inds:['Number of new jobs created'] },
+      { cat:'Climate', benefit:'Increased carbon sequestration & storage', inds:['Forest Carbon Stock (tCO₂e)'] },
+    ]},
+    { id:'f-reforest', name:'Full reforestation (high-density native planting)', pw:'RESTORE', type:'Recommended', checked:true, method:'GPS mapping + satellite imagery', freq:'Annual', benefits:[
+      { cat:'Nature',  benefit:'Improved forest productivity & regeneration', inds:['Tree canopy cover (%)','Crop / NTFP yield'] },
+      { cat:'People',  benefit:'Enhanced food and water security', inds:['Social Forestry Beneficiaries'] },
+      { cat:'Climate', benefit:'Increased carbon sequestration & storage', inds:['Carbon removed/stored in vegetation & soil (t/ha/yr)'] },
+    ]},
   ]},
-  { id:'mangrove', name:'Mangrove', pwLabel:'Protect / Restore', pwClass:'teal', colorCls:'mangrove', activities:[
-    { id:'mg-rehab', name:'Mangrove rehabilitation', type:'Recommended', checked:true, indicators:['Area of habitats restored (ha)','Mangrove cover change (ha/yr)'], optional:['Species diversity (index)','Sediment flow (kg/m²/yr)'], method:'Drone/satellite imagery + transect', freq:'6–12 months' },
-    { id:'hydro', name:'Hydrological improvement', type:'Recommended', checked:true, indicators:['Water flow condition (m³/s)','Tidal exchange (m)'], optional:['Sediment accretion (mm/yr)','Water salinity (ppt)'], method:'Field observation + hydrology assessment', freq:'Quarterly' },
-    { id:'shore', name:'Shoreline restoration', type:'Optional', checked:false, indicators:['Erosion risk area (ha)','Shoreline condition (index)'], optional:['Flood risk area (ha)','Recreational value (score)'], method:'Shoreline change analysis', freq:'Annual' },
-    { id:'mg-prot', name:'Protection of intact mangrove stands', type:'Optional', checked:false, indicators:['Mangrove cover maintained (ha)','Converted mangrove area (ha/yr)'], optional:['Habitat richness (species count)','Community stewardship (household)'], method:'Remote sensing + stakeholder report', freq:'Annual' }
+  { id:'mangrove', name:'Mangrove', pwLabel:'Protect / Manage / Restore', pwClass:'teal', colorCls:'mangrove', activities:[
+    { id:'mg-boundary', name:'Boundary demarcation & legal recognition', pw:'PROTECT', type:'Recommended', checked:true, method:'Cadastral survey + satellite imagery', freq:'Annual', benefits:[
+      { cat:'Nature',  benefit:'Maintenance of ecological connectivity', inds:['Mangrove Extent (ha)','Mangrove Carbon Stock (tCO₂e)','Mangrove Species Diversity'] },
+      { cat:'People',  benefit:'Secure land and resource tenure', inds:['Indigenous Land Tenure','Safeguard Information System'] },
+      { cat:'Climate', benefit:'Reduced emissions from deforestation & degradation', inds:['Mangrove Carbon Stock (tCO₂e)'] },
+    ]},
+    { id:'mg-patrol', name:'Community-based patrol & monitoring', pw:'PROTECT', type:'Recommended', checked:true, method:'Patrol reports + remote sensing', freq:'Monthly', benefits:[
+      { cat:'Nature',  benefit:'Reduced vulnerability to fire, pests & disease', inds:['Mangrove Extent (ha)','Protected Mangrove Area (ha)'] },
+      { cat:'People',  benefit:'Sustainable livelihood opportunities', inds:['Mangrove Community Beneficiaries'] },
+      { cat:'Climate', benefit:'Reduced emissions from deforestation & degradation', inds:['Mangrove Carbon Stock (tCO₂e)'] },
+    ]},
+    { id:'mg-buffer', name:'Buffer zone establishment & compatible land use', pw:'PROTECT', type:'Recommended', checked:false, method:'Remote sensing + stakeholder report', freq:'Annual', benefits:[
+      { cat:'Nature',  benefit:'Reduced vulnerability to fire, pests & disease', inds:['Mangrove Loss Rate (ha/yr)','Mangrove Species Diversity'] },
+      { cat:'People',  benefit:'Sustainable livelihood opportunities', inds:['Mangrove Community Beneficiaries','Fisheries Dependency Value'] },
+      { cat:'People',  benefit:'Equitable benefit-sharing mechanisms', inds:['Benefit Sharing Mechanism','Grievance Redress Mechanism'] },
+      { cat:'Climate', benefit:'Reduced emissions from deforestation & degradation', inds:['Mangrove Carbon Stock (tCO₂e)'] },
+    ]},
+    { id:'mg-anr', name:'Assisted natural regeneration (ANR)', pw:'MANAGE', type:'Recommended', checked:true, method:'Transect survey + drone imagery', freq:'6–12 months', benefits:[
+      { cat:'Nature',  benefit:'Improved forest productivity & regeneration', inds:['Mangrove Restoration Area (ha)','Mangrove Species Diversity'] },
+      { cat:'People',  benefit:'Sustainable livelihood opportunities', inds:['Mangrove Community Beneficiaries','Fisheries Dependency Value'] },
+      { cat:'Climate', benefit:'Increased carbon sequestration & storage', inds:['Mangrove Carbon Stock (tCO₂e)'] },
+    ]},
+    { id:'mg-pes', name:'Payment for Ecosystem Services (PES)', pw:'MANAGE', type:'Recommended', checked:false, method:'Hydrology assessment + financial records', freq:'Annual', benefits:[
+      { cat:'Nature',  benefit:'Protection of watershed functions', inds:['Net surface water availability (m³/yr)','Water Exploitation Index (%)'] },
+      { cat:'People',  benefit:'Equitable benefit-sharing mechanisms', inds:['Benefit Sharing Mechanism','Safeguard Information System'] },
+      { cat:'Climate', benefit:'Reduced emissions from deforestation & degradation', inds:['Avoided GHG emissions (tCO₂e/yr)','Mangrove Carbon Stock (tCO₂e)'] },
+    ]},
+    { id:'mg-reforest', name:'Full reforestation (high-density native planting)', pw:'RESTORE', type:'Recommended', checked:false, method:'Drone/satellite imagery + transect', freq:'6–12 months', benefits:[
+      { cat:'Nature',  benefit:'Enhanced biodiversity & ecosystem functions', inds:['Mangrove Species Diversity','Mangrove Restoration Area (ha)'] },
+      { cat:'People',  benefit:'Sustainable livelihood opportunities (planting employment)', inds:['Number of new jobs created'] },
+      { cat:'Climate', benefit:'Increased carbon sequestration & storage', inds:['Mangrove Carbon Stock (tCO₂e)'] },
+    ]},
+    { id:'mg-pioneer', name:'Pioneer species establishment (first-stage canopy)', pw:'RESTORE', type:'Recommended', checked:false, method:'Field plots + geotagged photos', freq:'3, 6, 12 months', benefits:[
+      { cat:'Nature',  benefit:'Improved forest productivity & regeneration', inds:['Mangrove Species Diversity','Mangrove Restoration Area (ha)'] },
+      { cat:'People',  benefit:'Sustainable livelihood opportunities (nursery + planting)', inds:['Mangrove Community Beneficiaries'] },
+      { cat:'Climate', benefit:'Increased carbon sequestration & storage', inds:['Mangrove Carbon Stock (tCO₂e)'] },
+    ]},
   ]},
-  { id:'peatland', name:'Peatland', pwLabel:'Protect / Restore', pwClass:'olive', colorCls:'peatland', activities:[
-    { id:'canal', name:'Canal blocking', type:'Recommended', checked:true, indicators:['Number of canal blocks (count)','Canal block condition (%)'], optional:['Canal proximity to settlement (km)','Hydrological feasibility (index)'], method:'GPS inspection + photo documentation', freq:'Quarterly' },
-    { id:'rewet', name:'Rewetting', type:'Recommended', checked:true, indicators:['Water table depth (cm below surface)','Wet area extent (ha)'], optional:['Wetness index (score)','Peat subsidence (mm/yr)'], method:'Dipwell/water logger + remote sensing', freq:'Monthly' },
-    { id:'fire-p', name:'Fire prevention', type:'Recommended', checked:false, indicators:['Burned area (ha)','Fire risk index (score)'], optional:['Hotspot count (number)','Patrol coverage (km²)'], method:'MODIS/VIIRS + patrol report', freq:'Monthly in dry season' },
-    { id:'veg', name:'Peat vegetation recovery', type:'Optional', checked:false, indicators:['Vegetation recovery area (ha)','Peatland vegetation maintained (%)'], optional:['Canopy condition (%)','Biodiversity observation (species count)'], method:'NDVI/canopy monitoring + field survey', freq:'Annual' }
-  ]}
+  { id:'peatland', name:'Peatland', pwLabel:'Protect / Manage / Restore', pwClass:'olive', colorCls:'peatland', activities:[
+    { id:'pt-boundary', name:'Boundary demarcation & legal recognition', pw:'PROTECT', type:'Recommended', checked:false, method:'Cadastral survey + remote sensing', freq:'Annual', benefits:[
+      { cat:'Nature',  benefit:'Maintenance of ecological connectivity', inds:['Water Table Depth (cm)'] },
+      { cat:'People',  benefit:'Secure land and resource tenure', inds:['Indigenous Land Tenure'] },
+      { cat:'Climate', benefit:'Reduced emissions from deforestation & degradation', inds:['Peatland Carbon Emission (tCO₂e/yr)','GHG Flux Measurement Sites'] },
+    ]},
+    { id:'pt-patrol', name:'Community-based patrol & monitoring', pw:'PROTECT', type:'Recommended', checked:true, method:'Patrol reports + satellite alerts', freq:'Monthly', benefits:[
+      { cat:'Nature',  benefit:'Reduced vulnerability to fire, pests & disease', inds:['Peat fire hotspots (count/yr)','Water Table Depth (cm)'] },
+      { cat:'Nature',  benefit:'Protection of watershed functions', inds:['Water Table Depth (cm)','Peat subsidence (cm/yr)'] },
+      { cat:'People',  benefit:'Strengthened social capital & governance', inds:['Fire Prevention Brigades'] },
+      { cat:'Climate', benefit:'Reduced emissions from deforestation & degradation', inds:['Peatland Carbon Emission (tCO₂e/yr)'] },
+    ]},
+    { id:'pt-buffer', name:'Buffer zone establishment & compatible land use', pw:'PROTECT', type:'Recommended', checked:false, method:'Remote sensing + stakeholder report', freq:'Annual', benefits:[
+      { cat:'Nature',  benefit:'Reduced vulnerability to fire, pests & disease', inds:['Peat fire hotspots (count/yr)'] },
+      { cat:'People',  benefit:'Sustainable livelihood opportunities', inds:['Social Forestry Beneficiaries'] },
+      { cat:'Climate', benefit:'Reduced emissions from deforestation & degradation', inds:['Peatland Carbon Emission (tCO₂e/yr)','GHG Flux Measurement Sites'] },
+    ]},
+    { id:'pt-fire', name:'Community-based fire management', pw:'MANAGE', type:'Recommended', checked:true, method:'MODIS/VIIRS + patrol report', freq:'Monthly in dry season', benefits:[
+      { cat:'Nature',  benefit:'Reduced vulnerability to fire, pests & disease', inds:['Peat Fire Hotspots (count/yr)','Fire Prevention Brigades','Burning Ban Compliance (%)'] },
+      { cat:'People',  benefit:'Strengthened social capital & governance', inds:['Multi-Stakeholder Platform','Grievance Redress Mechanism'] },
+      { cat:'Climate', benefit:'Reduced emissions from deforestation & degradation', inds:['Peatland Carbon Emissions (tCO₂e/yr)'] },
+      { cat:'Climate', benefit:'Enhanced resilience to climate hazards', inds:['Peat Subsidence Rate (cm/yr)'] },
+    ]},
+    { id:'pt-anr', name:'Assisted natural regeneration (ANR)', pw:'MANAGE', type:'Recommended', checked:false, method:'Field plots + remote sensing', freq:'3, 6, 12 months', benefits:[
+      { cat:'Nature',  benefit:'Enhanced biodiversity & ecosystem functions', inds:['Species Richness Index'] },
+      { cat:'People',  benefit:'Sustainable livelihood opportunities', inds:['Social Forestry Beneficiaries'] },
+      { cat:'Climate', benefit:'Increased carbon sequestration & storage', inds:['Forest Carbon Stock (tCO₂e)'] },
+    ]},
+    { id:'pt-hydro', name:'Hydrology / water management (rewetting)', pw:'RESTORE', type:'Recommended', checked:true, method:'Dipwell/water logger + remote sensing', freq:'Monthly', benefits:[
+      { cat:'Nature',  benefit:'Protection of watershed functions', inds:['Water Table Depth Monitoring (cm)','Peat Restoration Progress'] },
+      { cat:'People',  benefit:'Enhanced food and water security', inds:['Paludiculture Area (ha)'] },
+      { cat:'Climate', benefit:'Increased carbon sequestration & storage', inds:['Peatland Carbon Emissions (tCO₂e/yr)'] },
+    ]},
+    { id:'pt-wetland', name:'Wetland forest restoration (peat swamp)', pw:'RESTORE', type:'Recommended', checked:false, method:'Field survey + satellite imagery', freq:'Annual', benefits:[
+      { cat:'Nature',  benefit:'Enhanced biodiversity & ecosystem functions', inds:['Peat Restoration Progress','Species Richness Index'] },
+      { cat:'People',  benefit:'Enhanced food and water security', inds:['Paludiculture Area (ha)'] },
+      { cat:'Climate', benefit:'Enhanced resilience to climate hazards', inds:['Peatland Carbon Emissions (tCO₂e/yr)','Peat Subsidence Rate (cm/yr)'] },
+    ]},
+  ]},
 ];
+// Derive flat indicator lists used by Step 5 accordions & the indicator editor.
+ecosystems.forEach(e => e.activities.forEach(a => {
+  a.indicators = a.benefits.flatMap(b => b.inds);
+  a.optional = a.optional || [];
+}));
 
 let currentStep = 1;
 let maxReached = 1;
-const customDone = { opt1:false, opt2:false, opt3:false, opt4:false };
+const customDone = { opt2:false, opt3:false, opt4:false };
 
-/* ── Step 1 render ── */
+const EMPTY_IC = `<svg viewBox="0 0 24 24" fill="none"><path d="M3 5h18M6 5l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M4 4l16 16" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+function findAct(id){ for (const e of ecosystems){ const a = e.activities.find(x => x.id === id); if (a) return a; } return null; }
+
+/* ── Step 3 render — driven by the pathways chosen in Step 2 ── */
 function renderActivities() {
-  document.getElementById('activitySections').innerHTML = ecosystems.map(e => `
-    <div class="eco-card">
-      <div class="eco-head">
+  document.getElementById('activitySections').innerHTML = ecosystems.map(e => {
+    const sel = pathwaySel[e.id] || {};
+    const chosen = PATHS.filter(p => sel[p]);   // e.g. ['protect','restore']
+    const head = `<div class="eco-head">
         <div class="eco-title">${ecoIcons[e.id]}<span>${e.name}</span></div>
-        <span class="eco-badge ${e.pwClass}">${e.pwLabel}</span>
-      </div>
+        <div class="eco-badges">${chosen.length
+          ? chosen.map(p => `<span class="eco-badge ${e.pwClass}">${pathwayMeta[p].label}</span>`).join('')
+          : `<span class="eco-badge" style="background:#f1f3f5;color:#98a0aa">No pathway</span>`}</div>
+      </div>`;
+
+    // No pathway chosen for this ecosystem in Step 2 → disabled empty state.
+    if (chosen.length === 0) {
+      return `<div class="eco-card is-off">${head}
+        <div class="eco-empty">
+          <div class="eco-empty-ic">${EMPTY_IC}</div>
+          <div class="eco-empty-title">No ${e.name} pathway selected</div>
+          <div class="eco-empty-msg">You didn't choose an intervention pathway for <strong>${e.name}</strong> in Step 2. Go back to add one to see its activities.</div>
+        </div></div>`;
+    }
+
+    // Visible activities = matching a chosen pathway (custom activities have no pathway → always shown).
+    const visAct = e.activities.filter(a => !a.pw || chosen.includes(a.pw.toLowerCase()));
+    if (visAct.length === 0) {
+      return `<div class="eco-card">${head}
+        <div class="eco-empty">
+          <div class="eco-empty-ic">${EMPTY_IC}</div>
+          <div class="eco-empty-title">No matching activities</div>
+          <div class="eco-empty-msg"><strong>${e.name}</strong> has no activities for the selected pathway. Add a custom activity below.</div>
+        </div>
+        <button class="btn-add-act" onclick="openAddModal('${e.id}')">+ Add custom activity</button></div>`;
+    }
+
+    return `<div class="eco-card">${head}
       <div class="act-list">
-        ${e.activities.map(a => `
+        ${visAct.map(a => `
           <label class="act-item">
             <input type="checkbox" data-activity="${a.id}" ${a.checked?'checked':''}/>
             <span>${a.name}</span>
-            <span class="act-tag ${a.type==='Optional'?'opt':''}">${a.type}</span>
+            ${a.pw ? `<span class="act-tag pw-${a.pw.toLowerCase()}">${a.pw}</span>` : `<span class="act-tag opt">CUSTOM</span>`}
           </label>`).join('')}
       </div>
-      <button class="btn-add-act" onclick="openAddModal('${e.id}')">+ Add custom activity</button>
-    </div>`).join('');
-  document.querySelectorAll('[data-activity]').forEach(cb => cb.addEventListener('change', updateSelection));
+      <button class="btn-add-act" onclick="openAddModal('${e.id}')">+ Add custom activity</button></div>`;
+  }).join('');
+
+  document.querySelectorAll('[data-activity]').forEach(cb => cb.addEventListener('change', () => {
+    const a = findAct(cb.dataset.activity);
+    if (a) a.checked = cb.checked;   // persist toggle across re-renders
+    updateSelection();
+  }));
   updateSelection();
 }
 
@@ -596,6 +742,8 @@ function getSelected() {
 function updateSelection() {
   const sel = getSelected();
   document.getElementById('selectedCount').textContent = sel.length;
+  const total = document.querySelectorAll('[data-activity]').length;
+  const tc = document.getElementById('totalCount'); if (tc) tc.textContent = total;
   document.getElementById('step3Next').disabled = sel.length === 0;
   const ecoNames = [...new Set(sel.map(a => a.eco.name))];
   document.getElementById('selectionTags').innerHTML = ecoNames.map(n => `<span class="sel-tag">${n}</span>`).join('');
@@ -798,38 +946,13 @@ function goToStep(n) {
   });
 
   if (n === 2) { renderPwPanel(); updatePathwayMeta(); }
-  if (n === 4) { renderMatrix(document.getElementById('showOptional').classList.contains('active')); renderPathwayReview(); }
-  if (n === 5) { renderMatrix(true); renderAccordions(); renderPathwayReview(); updateCustomSummary(); }
+  if (n === 3) renderActivities();
+  if (n === 4) { renderMatrix(); renderPathwayReview(); }
+  if (n === 5) { renderMatrix(); renderAccordions(); renderPathwayReview(); updateCustomSummary(); }
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-/* ── Step 2 render ── */
-function renderMatrix(showOpt = false) {
-  const sel = getSelected();
-  const ecos = new Set(sel.map(a => a.eco.id));
-  const indCount = sel.reduce((s,a) => s + a.indicators.length + (showOpt ? a.optional.length : 0), 0);
-  document.getElementById('step2Counts').textContent = `${ecos.size} ecosystems · ${sel.length} activities · ${indCount} indicators`;
-  document.getElementById('sumActivities').textContent = sel.length;
-  document.getElementById('sumEco').textContent = ecos.size;
-  document.getElementById('sumRecommended').textContent = sel.reduce((s,a) => s + a.indicators.length, 0);
-  document.getElementById('sumOptional').textContent = sel.reduce((s,a) => s + a.optional.length, 0);
-
-  document.getElementById('matrixRows').innerHTML = sel.map(a => {
-    const inds = [
-      ...a.indicators.map(i => `<li>${i}</li>`),
-      ...(showOpt ? a.optional.map(i => `<li><span class="m-badge opt">Opt</span> ${i}</li>`) : [])
-    ].join('');
-    return `<tr>
-      <td><div class="act-cell ${a.eco.colorCls}">${ecoIcons[a.eco.id]}<span>${a.name}</span></div></td>
-      <td><span class="m-badge rec">Recommended</span>${showOpt?'<br><span class="m-badge opt" style="margin-top:4px">Optional avail.</span>':''}</td>
-      <td><ul class="ind-list">${inds}</ul></td>
-      <td style="font-size:11px;color:rgb(74,84,104)">${a.method}<br><span class="m-badge field" style="margin-top:5px">Field verify</span></td>
-      <td class="freq-cell">📅 ${a.freq}</td>
-    </tr>`;
-  }).join('');
-}
-
-/* ── Step 3 accordions ── */
+/* ── Step 5 accordions ── */
 function renderAccordions() {
   const sel = getSelected();
   const selIds = new Set(sel.map(a => a.id));
@@ -851,11 +974,10 @@ function renderAccordions() {
       </div>
       <div class="accordion-body">
         <table class="small-table">
-          <thead><tr><th>NbS Activity</th><th>Recommended indicators</th><th>Optional indicators</th><th>Method</th><th>Frequency</th></tr></thead>
+          <thead><tr><th>NbS Activity</th><th>Indicator</th><th>Data source</th><th>Monitoring frequency</th></tr></thead>
           <tbody>${e.activities.filter(a=>selIds.has(a.id)).map(a=>`<tr>
-            <td><strong>${a.name}</strong><br><span class="act-tag ${a.type==='Optional'?'opt':''}" style="display:inline-block;margin-top:3px">${a.type}</span></td>
+            <td><strong>${a.name}</strong></td>
             <td>${a.indicators.map(i=>`<div style="margin:2px 0">· ${i}</div>`).join('')}</td>
-            <td>${a.optional.map(i=>`<div style="margin:2px 0;color:#68727d">· ${i}</div>`).join('')}</td>
             <td style="font-size:11px">${a.method}</td>
             <td class="freq-cell">${a.freq}</td>
           </tr>`).join('')}</tbody>
@@ -864,16 +986,109 @@ function renderAccordions() {
     </div>`).join('');
 }
 
+/* ── Step 4 render — benefit-grouped monitoring matrix ── */
+function renderMatrix() {
+  const sel = getSelected();
+  const ecos = new Set(sel.map(a => a.eco.id));
+  const indCount = sel.reduce((s,a) => s + getMatrixInds(a).filter(it => it.checked).length, 0);
+  document.getElementById('step2Counts').textContent = `${ecos.size} ecosystems · ${sel.length} activities · ${indCount} indicators`;
+  document.getElementById('sumActivities').textContent = sel.length;
+  document.getElementById('sumEco').textContent = ecos.size;
+  document.getElementById('sumIndicators').textContent = indCount;
+
+  document.getElementById('matrixRows').innerHTML = sel.map(a => {
+    const list = getMatrixInds(a);
+    // group consecutive indicators by their benefit
+    const groups = [];
+    list.forEach((it, i) => {
+      let g = groups[groups.length - 1];
+      if (!g || g.benefit !== it.benefit) { g = { benefit: it.benefit, cat: it.cat, items: [] }; groups.push(g); }
+      g.items.push({ it, i });
+    });
+    const n = groups.length;
+    return groups.map((g, gi) => {
+      const indRows = g.items.map(({ it, i }) => `
+        <label class="mind-row">
+          <input type="checkbox" ${it.checked ? 'checked' : ''} onchange="toggleMatrixInd('${a.id}', ${i})" />
+          <span class="mind-name">${it.label}</span>
+        </label>`).join('');
+      let row = '<tr>';
+      if (gi === 0) row += `<td rowspan="${n}"><div class="act-cell ${a.eco.colorCls}">${ecoIcons[a.eco.id]}<span>${a.name}</span></div>${a.pw ? `<span class="pw-mini pw-${a.pw.toLowerCase()}">${a.pw}</span>` : `<span class="pw-mini" style="background:#f1f5f9;color:#475569">CUSTOM</span>`}</td>`;
+      row += `<td><div class="ben-cell"><span class="ben-tag ${g.cat.toLowerCase()}">${g.cat}</span><span class="ben-name">${g.benefit}</span></div></td>`;
+      row += `<td><div class="mind-list">${indRows}</div><button class="mind-add" onclick="openAddInd('${a.id}', '${encodeURIComponent(g.benefit)}', '${g.cat}')">+ Add indicator</button></td>`;
+      if (gi === 0) row += `<td rowspan="${n}" style="font-size:11px;color:rgb(74,84,104)">${a.method}<br><span class="m-badge field" style="margin-top:5px">Field verify</span></td><td rowspan="${n}" class="freq-cell">📅 ${a.freq}</td>`;
+      row += '</tr>';
+      return row;
+    }).join('');
+  }).join('');
+}
+
+/* ── Matrix indicator selection state ── */
+const matrixInd = {};
+function getMatrixInds(a) {
+  if (!matrixInd[a.id]) {
+    matrixInd[a.id] = [];
+    if (a.benefits && a.benefits.length) {
+      a.benefits.forEach(b => b.inds.forEach(label =>
+        matrixInd[a.id].push({ label, checked: true, benefit: b.benefit, cat: b.cat })));
+    } else {
+      (a.indicators || []).forEach(label =>
+        matrixInd[a.id].push({ label, checked: true, benefit: a.name, cat: 'Custom' }));
+    }
+  }
+  return matrixInd[a.id];
+}
+function toggleMatrixInd(actId, i) {
+  matrixInd[actId][i].checked = !matrixInd[actId][i].checked;
+  updateMatrixCounts();
+}
+function updateMatrixCounts() {
+  const sel = getSelected();
+  const ecos = new Set(sel.map(a => a.eco.id));
+  const indCount = sel.reduce((s,a) => s + getMatrixInds(a).filter(it => it.checked).length, 0);
+  document.getElementById('step2Counts').textContent = `${ecos.size} ecosystems · ${sel.length} activities · ${indCount} indicators`;
+  document.getElementById('sumIndicators').textContent = indCount;
+}
+let addIndTarget = null;
+function openAddInd(actId, benefitEnc, cat) {
+  addIndTarget = { actId, benefit: decodeURIComponent(benefitEnc || ''), cat: cat || 'Custom' };
+  document.getElementById('addIndName').value = '';
+  document.getElementById('addIndUnit').value = '';
+  document.getElementById('addIndName').style.borderColor = '';
+  const tag = document.getElementById('addIndBenefit');
+  if (tag) tag.innerHTML = `<span class="ben-tag ${addIndTarget.cat.toLowerCase()}">${addIndTarget.cat}</span><span class="ben-name">${addIndTarget.benefit}</span>`;
+  document.getElementById('m-add-ind').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  setTimeout(() => document.getElementById('addIndName').focus(), 50);
+}
+function confirmAddInd() {
+  const nameEl = document.getElementById('addIndName');
+  const name = nameEl.value.trim();
+  if (!name) { nameEl.focus(); nameEl.style.borderColor = '#e33b32'; return; }
+  const unit = document.getElementById('addIndUnit').value.trim();
+  const label = unit ? `${name} (${unit})` : name;
+  const a = ecosystems.flatMap(e => e.activities).find(x => x.id === addIndTarget.actId);
+  const list = getMatrixInds(a);
+  const newInd = { label, checked: true, benefit: addIndTarget.benefit, cat: addIndTarget.cat };
+  // insert right after the last existing indicator of this benefit so it stays grouped
+  let at = -1;
+  list.forEach((it, i) => { if (it.benefit === addIndTarget.benefit) at = i; });
+  if (at === -1) list.push(newInd); else list.splice(at + 1, 0, newInd);
+  closeModal('m-add-ind');
+  renderMatrix();
+}
+
 /* ── Navigation (legacy block removed — see canonical goToStep above) ── */
 
 function updateCustomSummary() {
   const done = Object.values(customDone).filter(Boolean).length;
-  document.getElementById('sum-custom').textContent = `${done} / 4`;
+  document.getElementById('sum-custom').textContent = `${done} / 3`;
 }
 
 function markDone(id) {
   customDone[id] = !customDone[id];
   const el = document.getElementById(`${id}-status`);
+  if (!el) return;
   el.textContent = customDone[id] ? 'Done ✓' : 'Not started';
   el.classList.toggle('done', customDone[id]);
   updateCustomSummary();
@@ -913,17 +1128,6 @@ document.querySelectorAll('.f05-step').forEach(s => {
     if (s.classList.contains('f05-disabled')) return;
     goToStep(parseInt(s.dataset.step));
   });
-});
-
-document.getElementById('showOptional').addEventListener('click', e => {
-  e.currentTarget.classList.toggle('active');
-  document.getElementById('showRecommended').classList.toggle('active', !e.currentTarget.classList.contains('active'));
-  renderMatrix(e.currentTarget.classList.contains('active'));
-});
-document.getElementById('showRecommended').addEventListener('click', e => {
-  e.currentTarget.classList.add('active');
-  document.getElementById('showOptional').classList.remove('active');
-  renderMatrix(false);
 });
 
 /* ── Init ── */
@@ -1035,8 +1239,8 @@ updatePathwayMeta();
   <div class="cust-modal wide">
     <div class="cust-mhd">
       <button class="cust-mclose" onclick="closeModal('m-methods')">✕</button>
-      <h2>Adjust methods and frequency</h2>
-      <p>Change the monitoring method, data source, and collection schedule per activity.</p>
+      <h2>Adjust data source and monitoring frequency</h2>
+      <p>Change the data source and collection schedule per activity.</p>
     </div>
     <div class="cust-mbody" id="meth-editor-body"></div>
     <div class="cust-mfoot">
@@ -1100,6 +1304,32 @@ updatePathwayMeta();
     <div class="cust-mfoot">
       <button class="ws-btn ws-btn-back" onclick="closeModal('m-notes')">Cancel</button>
       <button class="ws-btn ws-btn-primary" onclick="saveNotes()">Save &amp; done ✓</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL: Add Indicator (matrix) ══ -->
+<div class="cust-ov" id="m-add-ind">
+  <div class="cust-modal" style="max-width:440px">
+    <div class="cust-mhd">
+      <button class="cust-mclose" onclick="closeModal('m-add-ind')">✕</button>
+      <h2>Add monitoring indicator</h2>
+      <p>Define a new indicator for the benefit below. It will be added to the matrix under this benefit and selected by default.</p>
+    </div>
+    <div class="cust-mbody">
+      <div id="addIndBenefit" class="ben-cell" style="margin-bottom:16px;max-width:none"></div>
+      <div style="margin-bottom:16px">
+        <label style="font-family:var(--font-text);font-size:12px;font-weight:600;color:#444a51;display:block;margin-bottom:6px">Indicator name *</label>
+        <input id="addIndName" class="fi" type="text" placeholder="e.g. Canopy cover" onkeydown="if(event.key==='Enter')confirmAddInd()" />
+      </div>
+      <div>
+        <label style="font-family:var(--font-text);font-size:12px;font-weight:600;color:#444a51;display:block;margin-bottom:6px">Unit</label>
+        <input id="addIndUnit" class="fi" type="text" placeholder="e.g. %, ha, ha/yr, count" onkeydown="if(event.key==='Enter')confirmAddInd()" />
+      </div>
+    </div>
+    <div class="cust-mfoot">
+      <button class="ws-btn ws-btn-back" onclick="closeModal('m-add-ind')">Cancel</button>
+      <button class="ws-btn ws-btn-primary" onclick="confirmAddInd()">Add indicator</button>
     </div>
   </div>
 </div>
@@ -1186,13 +1416,13 @@ function buildMethEditor() {
       <div class="meth-row-hd">${a.eco.name} — ${a.name}</div>
       <div class="meth-fields">
         <div>
-          <label class="meth-label">Monitoring method</label>
+          <label class="meth-label">Data source</label>
           <select class="fi" data-act-meth="${a.id}" class="fi select-chev" style="font-size:12px;height:38px;">
             ${METHOD_OPTS.map(o => `<option ${a.method===o?'selected':''}>${o}</option>`).join('')}
           </select>
         </div>
         <div>
-          <label class="meth-label">Frequency</label>
+          <label class="meth-label">Monitoring frequency</label>
           <select class="fi" data-act-freq="${a.id}" class="fi select-chev" style="font-size:12px;height:38px;">
             ${FREQ_OPTS.map(o => `<option ${a.freq===o?'selected':''}>${o}</option>`).join('')}
           </select>
@@ -1300,32 +1530,23 @@ function saveNotes() { markDone('opt4'); closeModal('m-notes'); }
         <input id="actName" class="fi" type="text" placeholder="e.g. Community-led forest patrol" />
       </div>
 
-      <!-- Type + Frequency row -->
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-        <div>
-          <label style="font-family:var(--font-text);font-size:12px;font-weight:600;color:#444a51;display:block;margin-bottom:6px">Activity type</label>
-          <select id="actType" class="fi select-chev">
-            <option value="Recommended">Recommended</option>
-            <option value="Optional">Optional</option>
-          </select>
-        </div>
-        <div>
-          <label style="font-family:var(--font-text);font-size:12px;font-weight:600;color:#444a51;display:block;margin-bottom:6px">Monitoring frequency</label>
-          <select id="actFreq" class="fi select-chev">
-            <option>Monthly</option>
-            <option>Quarterly</option>
-            <option>Every 6 months</option>
-            <option selected>Annual</option>
-            <option>3, 6, 12 months</option>
-            <option>Monthly in dry season</option>
-            <option>Annual / seasonal</option>
-          </select>
-        </div>
+      <!-- Frequency -->
+      <div>
+        <label style="font-family:var(--font-text);font-size:12px;font-weight:600;color:#444a51;display:block;margin-bottom:6px">Monitoring frequency</label>
+        <select id="actFreq" class="fi select-chev">
+          <option>Monthly</option>
+          <option>Quarterly</option>
+          <option>Every 6 months</option>
+          <option selected>Annual</option>
+          <option>3, 6, 12 months</option>
+          <option>Monthly in dry season</option>
+          <option>Annual / seasonal</option>
+        </select>
       </div>
 
       <!-- Monitoring method -->
       <div>
-        <label style="font-family:var(--font-text);font-size:12px;font-weight:600;color:#444a51;display:block;margin-bottom:6px">Monitoring method</label>
+        <label style="font-family:var(--font-text);font-size:12px;font-weight:600;color:#444a51;display:block;margin-bottom:6px">Data source</label>
         <select id="actMethod" class="fi select-chev">
             <option>Remote sensing + field verification</option>
             <option>GPS mapping + satellite imagery</option>
@@ -1343,18 +1564,11 @@ function saveNotes() { markDone('opt4'); closeModal('m-notes'); }
         </select>
       </div>
 
-      <!-- Recommended indicators -->
+      <!-- Monitoring indicators -->
       <div>
-        <label style="font-family:var(--font-text);font-size:12px;font-weight:600;color:#444a51;display:block;margin-bottom:6px">Monitoring indicators (recommended)</label>
+        <label style="font-family:var(--font-text);font-size:12px;font-weight:600;color:#444a51;display:block;margin-bottom:6px">Monitoring indicators (can be more than 1)</label>
         <div id="indList" style="display:flex;flex-direction:column;gap:6px;margin-bottom:8px"></div>
         <button onclick="addIndRow('indList')" class="btn-add-act" style="margin-top:0">+ Add indicator</button>
-      </div>
-
-      <!-- Optional indicators -->
-      <div>
-        <label style="font-family:var(--font-text);font-size:12px;font-weight:600;color:#444a51;display:block;margin-bottom:6px">Optional indicators</label>
-        <div id="optList" style="display:flex;flex-direction:column;gap:6px;margin-bottom:8px"></div>
-        <button onclick="addIndRow('optList')" class="btn-add-act" style="margin-top:0">+ Add optional indicator</button>
       </div>
 
     </div>
@@ -1383,10 +1597,8 @@ function openAddModal(ecoId) {
   const eco = ecosystems.find(e => e.id === ecoId);
   document.getElementById('modalEcoLabel').textContent = eco ? eco.name : ecoId;
   document.getElementById('actName').value = '';
-  document.getElementById('actType').value = 'Recommended';
   document.getElementById('actFreq').value = 'Annual';
   document.getElementById('indList').innerHTML = '';
-  document.getElementById('optList').innerHTML = '';
   addIndRow('indList');
   document.getElementById('addActOverlay').classList.add('open');
   document.body.style.overflow = 'hidden';
@@ -1429,7 +1641,7 @@ function addIndRow(listId) {
 function submitCustomActivity() {
   const name = document.getElementById('actName').value.trim();
   if (!name) { document.getElementById('actName').focus(); document.getElementById('actName').style.borderColor='#e33b32'; return; }
-  const type = document.getElementById('actType').value;
+  const type = 'Recommended';
   const freq = document.getElementById('actFreq').value;
   const method = document.getElementById('actMethod').value;
   const indicators = [...document.querySelectorAll('#indList .ind-row')].map(row => {
@@ -1437,11 +1649,7 @@ function submitCustomActivity() {
     const unit = row.querySelector('select').value;
     return name ? (unit ? `${name} (${unit})` : name) : null;
   }).filter(Boolean);
-  const optional = [...document.querySelectorAll('#optList .ind-row')].map(row => {
-    const name = row.querySelector('input').value.trim();
-    const unit = row.querySelector('select').value;
-    return name ? (unit ? `${name} (${unit})` : name) : null;
-  }).filter(Boolean);
+  const optional = [];
 
   const eco = ecosystems.find(e => e.id === activeEcoId);
   if (!eco) return;

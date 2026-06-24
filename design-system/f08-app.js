@@ -132,10 +132,20 @@
     $('#pwForm').reset(); recalcStrength();
   });
 
+  /* ---------- Forgot password — send reset link ---------- */
+  var forgotBtn = $('#forgotPwBtn');
+  if (forgotBtn) {
+    forgotBtn.addEventListener('click', function () {
+      var emailEl = $('#emailInput');
+      var email = (emailEl && emailEl.value.trim()) ? emailEl.value.trim() : 'your registered email address';
+      toast('Reset link sent \u2014 check ' + email);
+    });
+  }
+
   /* ---------- Email verification ---------- */
   var emailStatus = $('#emailStatus');
   var resendTimer = null;
-
+  if (emailStatus) {
   function startResendCountdown() {
     var n = 30, btn = $('#resendBtn'), span = $('#resendCount');
     btn.disabled = true;
@@ -237,6 +247,7 @@
     $('#emailErr').classList.remove('show');
     $('#emailInput').classList.remove('invalid');
   });
+  } /* end email verification (section removed) */
 
   /* ============================================================
      Country / Province / City — open data via countriesnow.space
