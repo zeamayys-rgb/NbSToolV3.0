@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NbS Tool — F03 Document Generator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Barlow+Semi+Condensed:wght@600;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../tokens.css" />
+  <link rel="stylesheet" href="../f03.css" />
+    <link rel="stylesheet" href="../nav.css" />
+</head>
+<body data-screen-label="F03 — Document Generator">
+<a class="skip-link" href="#root">Skip to main content</a>
+
+<nav class="sitenav">
+  <a class="sitenav-logo" href="F00 Home.html">
+    <img src="../assets/scene-logo.png" alt="SCeNe Coalition" width="360" height="133" style="height:44px;width:auto" />
+  </a>
+  <div class="sitenav-links">
+    <a href="F00 Home.html" class="sitenav-link">Home</a>
+    <a href="F01 Interactive Map.html" class="sitenav-link">Interactive Map</a>
+    <a href="F04 Dashboard.html" class="sitenav-link active">My Project</a>
+  </div>
+  <div class="sitenav-actions">
+    <div class="sitenav-profile-wrap" id="profileWrap">
+      <button class="sitenav-profile" id="profileBtn"><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="white" stroke-width="2"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="white" stroke-width="2" stroke-linecap="round"/></svg> Profile <svg class="chev" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="sitenav-dropdown">
+        <div class="sitenav-user-info"><div class="sitenav-user-name">Adi Mantri</div><div class="sitenav-user-email">adi@lestari.org</div></div>
+        <a href="F04 Dashboard.html">My Projects</a>
+        <a href="F03 Document Generator.html">Document Generator</a>
+        <a href="F08 Account Settings.html">Account settings</a>
+        <button class="logout" onclick="window.location.href='F07 Login.html'">Log out</button>
+      </div>
+    </div>
+    <button class="sitenav-lang">🇺🇸 <svg class="chev" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  </div>
+</nav>
+<!-- profile dropdown handled by nav-mobile.js (Q-03) -->
+
+<nav class="crumbbar">
+  <a href="F04 Dashboard.html">My Project Dashboard</a>
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="opacity:.45;flex:none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  <a href="F04.1 Project Detail.html">Kubu Raya Mangrove</a>
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="opacity:.45;flex:none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  <span style="color:var(--text-base-main);font-weight:600">Document Generator</span>
+</nav>
+
+<div class="desktop-notice" role="note">
+  <svg viewBox="0 0 24 24" fill="none"><rect x="2" y="4" width="20" height="13" rx="2" stroke="currentColor" stroke-width="2"/><path d="M8 21h8M12 17v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+  <div class="dn-body"><strong>Best viewed on desktop.</strong> The NbS Tool is built for larger screens. This page still works on mobile, but for the full experience — wide data tables, side-by-side panels and editing — open it in a desktop browser.</div>
+  <button class="dn-x" type="button" aria-label="Dismiss"><svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+</div>
+<div class="f03-page" id="root" role="main" tabindex="-1"></div>
+
+<footer class="f03-footer">
+  <div class="f03-footer-inner">
+    <div>
+      <img src="../assets/scene-logo.png" alt="SCeNe Coalition" width="360" height="133" loading="lazy" style="height:40px;width:auto;opacity:.9;margin-bottom:12px" />
+      <p class="f03-footer-desc">SCeNe Coalition works to improve data accessibility, showcase high-quality projects and direct funding, as well as expand access for local organizations, enterprises, and communities.</p>
+    </div>
+    <div style="display:flex;gap:80px">
+      <div class="f03-footer-col"><h5>NbS Tool</h5><a href="F00 Home.html">NbS Tool Home</a><a href="F01 Interactive Map.html">Interactive Map</a></div>
+      <div class="f03-footer-col"><h5>Coalition</h5><a href="#">About SCeNe Coalition</a><a href="#">NbS Portfolio</a><a href="#">NbS Incubator</a><a href="#">Contact Us</a></div>
+    </div>
+  </div>
+  <div class="f03-footer-copy">© Copyright 2026 SCeNe Coalition.</div>
+</footer>
+
+<script src="../f03-app.js"></script>
+<script src="../nav-mobile.js"></script>
+</body>
+</html>

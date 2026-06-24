@@ -1,0 +1,81 @@
+/* ============================================================
+   NbS Tool V3 — F05.1.1 User Input Monitoring Form
+   (rides on f03.css; adds monitoring-specific bits)
+   ============================================================ */
+
+/* Breadcrumb above the form view */
+.miv-bc { display: flex; align-items: center; gap: 8px; font-family: var(--font-text); font-size: 12px; color: #68727d; max-width: 1500px; margin: 0 auto; padding: 24px 80px 0; flex-wrap: wrap; }
+.miv-bc a { color: #066653; font-weight: 500; text-decoration: none; }
+.miv-bc a:hover { text-decoration: underline; }
+.miv-bc .sep { font-size: 11px; color: #c0c2c6; }
+.miv-bc .current { color: #444a51; font-weight: 600; }
+
+/* Indicator input card */
+.mind-card { border: 1px solid #eaebf0; border-radius: 10px; padding: 18px 20px; margin-bottom: 14px; background: #fff; transition: border-color .15s; }
+.mind-card.filled { border-color: rgb(205,235,213); background: rgb(252,254,253); }
+.mind-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 14px; margin-bottom: 16px; }
+.mind-name { font-family: var(--font-text); font-size: 14px; font-weight: 600; color: #252525; letter-spacing: -0.01em; }
+.mind-ref { font-family: var(--font-text); font-size: 11px; color: #68727d; margin-top: 4px; display: flex; gap: 12px; flex-wrap: wrap; }
+.mind-ref b { color: #444a51; font-weight: 600; }
+.mind-tag { font-family: var(--font-text); font-size: 10px; font-weight: 700; padding: 4px 10px; border-radius: 20px; white-space: nowrap; flex-shrink: 0; }
+.mind-tag.rec { background: rgb(220,252,231); color: rgb(22,101,52); }
+.mind-tag.opt { background: #eaf2fb; color: #0a436b; }
+
+.mind-fields { display: flex; flex-wrap: wrap; gap: 14px 16px; }
+.mind-field { flex: 1 1 200px; min-width: 0; }
+.mind-field:first-child { flex: 2 1 260px; }
+.mind-field label { font-family: var(--font-text); font-size: 11px; font-weight: 600; color: #68727d; display: block; margin-bottom: 5px; }
+.mind-field .fi { width: 100%; box-sizing: border-box; }
+.mind-value-wrap { display: flex; gap: 8px; min-width: 0; }
+.mind-value-wrap .fi { flex: 1; min-width: 0; }
+.mind-unit { width: 90px; flex: 0 0 90px; }
+
+.mind-foot { display: flex; align-items: center; gap: 14px; margin-top: 14px; padding-top: 14px; border-top: 1px dashed #eaebf0; flex-wrap: wrap; }
+.mind-evidence { display: inline-flex; align-items: center; gap: 7px; font-family: var(--font-text); font-size: 12px; font-weight: 600; color: #066653; cursor: pointer; padding: 7px 14px; border: 1px dashed #066653; border-radius: 8px; background: #e9f8f1; position: relative; overflow: hidden; }
+.mind-evidence:hover { background: #e9f8f1; }
+.mind-evidence input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+.mind-evfile { font-family: var(--font-text); font-size: 11px; color: #68727d; display: inline-flex; align-items: center; gap: 6px; }
+.mind-evfile .x { cursor: pointer; color: rgb(172,26,19); font-weight: 700; }
+.mind-note { flex: 1; min-width: 220px; }
+.mind-note input { width: 100%; height: 38px; padding: 0 12px; border: 1px solid #eaebf0; border-radius: 6px; font-family: var(--font-text); font-size: 12px; color: #444a51; outline: none; }
+.mind-note input:focus { border-color: #066653; }
+
+/* Eco group header */
+.mgroup-hd { display: flex; align-items: center; gap: 10px; margin: 0 0 16px; }
+.mgroup-icon { width: 36px; height: 36px; border-radius: 9px; display: grid; place-items: center; flex-shrink: 0; }
+.mgroup-title { font-family: var(--font-text); font-size: 18px; font-weight: 700; color: #252525; letter-spacing: -0.01em; }
+.mgroup-sub { font-family: var(--font-text); font-size: 12px; color: #68727d; margin-top: 1px; }
+
+/* Period banner */
+.period-banner { display: flex; align-items: center; gap: 12px; background: rgb(239,246,255); border: 1px solid rgb(191,219,254); border-radius: 10px; padding: 12px 18px; margin-bottom: 20px; font-family: var(--font-text); font-size: 12px; color: rgb(30,64,175); }
+.period-banner select { height: 34px; border: 1px solid rgb(191,219,254); border-radius: 6px; padding: 0 10px; font-family: var(--font-text); font-size: 12px; font-weight: 600; color: rgb(30,64,175); background: #fff; margin-left: auto; cursor: pointer; }
+
+/* Review step */
+.review-tbl { width: 100%; border-collapse: collapse; font-family: var(--font-text); font-size: 12px; border: 1px solid #eaebf0; border-radius: 10px; overflow: hidden; }
+.review-tbl th { background: rgb(248,250,252); color: #68727d; text-align: left; font-size: 10px; padding: 11px 16px; border-bottom: 1px solid #eaebf0; text-transform: uppercase; letter-spacing: .04em; font-weight: 700; }
+.review-tbl td { padding: 12px 16px; border-bottom: 1px solid #eaebf0; color: #252525; }
+.review-tbl tr:last-child td { border-bottom: none; }
+.review-empty { color: #68727d; font-style: italic; }
+.review-eco-row td { background: #e9f8f1; font-weight: 700; color: #044c3e; font-size: 11px; text-transform: uppercase; letter-spacing: .04em; }
+
+/* Form controls always fill their cell (prevents overflow at any width) */
+.mind-card input, .mind-card textarea, .mind-card select,
+.mind-note input, .mind-note textarea {
+  width: 100%; max-width: 100%; min-width: 0; box-sizing: border-box;
+}
+
+/* ============================================================
+   RESPONSIVE  (rides on f03.css breakpoints)
+   ============================================================ */
+@media (max-width: 760px) {
+  .miv-bc { padding: 18px 16px 0; }
+  .mind-card { padding: 16px; }
+  .mind-top { flex-direction: column; }
+  .mind-unit { width: auto; flex: 0 0 90px; }
+  .mind-note { min-width: 0; flex: 1 1 100%; }
+  .period-banner { flex-wrap: wrap; }
+  .period-banner select { margin-left: 0; }
+  .mgroup-title { font-size: 16px; }
+  /* review table scrolls horizontally on small screens */
+  .review-tbl { display: block; overflow-x: auto; white-space: nowrap; }
+}

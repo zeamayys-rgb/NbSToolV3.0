@@ -1,0 +1,290 @@
+/* ============================================================
+   NbS Tool — Shared Site Navigation
+   ============================================================ */
+
+.sitenav {
+  height: 68px;
+  background: #fff;
+  border-bottom: 1px solid #eaebf0;
+  display: flex;
+  align-items: center;
+  padding: 0 calc((100% - 1280px) / 2 + 40px);
+  gap: 40px;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  font-family: var(--font-text);
+}
+
+/* ── Logo ── */
+.sitenav-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+.sitenav-logo img { height: 40px; width: auto; }
+.sitenav-brand { display: flex; flex-direction: column; line-height: 1.1; }
+.sitenav-brand-name { font-size: 17px; font-weight: 800; color: #252525; letter-spacing: -0.02em; }
+.sitenav-brand-sub  { font-size: 13px; font-weight: 600; color: #252525; letter-spacing: -0.01em; }
+
+/* ── Centre links ── */
+.sitenav-links {
+  display: flex;
+  align-items: center;
+  gap: 36px;
+  margin: 0 auto;
+}
+.sitenav-link {
+  font-size: 15px;
+  font-weight: 600;
+  color: #68727d;
+  text-decoration: none;
+  letter-spacing: -0.01em;
+  padding: 4px 0;
+  border-bottom: 2px solid transparent;
+  transition: color .15s, border-color .15s;
+}
+.sitenav-link:hover { color: #252525; }
+.sitenav-link.active { color: #066653; border-color: #066653; }
+
+/* ── Right actions ── */
+.sitenav-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+/* Login button (solid) */
+.sitenav-login {
+  height: 40px;
+  padding: 0 24px;
+  border-radius: var(--radius-pill);
+  background: #066653;
+  color: #fff;
+  border: none;
+  font-family: var(--font-text);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background .15s;
+  letter-spacing: -0.01em;
+}
+.sitenav-login:hover { background: #077f68; }
+
+/* Sign up button (outline) */
+.sitenav-signup {
+  height: 40px;
+  padding: 0 24px;
+  border-radius: var(--radius-pill);
+  background: #fff;
+  color: #066653;
+  border: 2px solid #066653;
+  font-family: var(--font-text);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background .15s, border-color .15s, color .15s, box-shadow .15s, transform .15s;
+  letter-spacing: -0.01em;
+}
+.sitenav-signup:hover { background: #e9f8f1; }
+
+/* Profile button (solid with dropdown) */
+.sitenav-profile-wrap { position: relative; }
+.sitenav-profile {
+  height: 40px;
+  padding: 0 18px;
+  border-radius: var(--radius-pill);
+  background: #066653;
+  color: #fff;
+  border: none;
+  font-family: var(--font-text);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: background .15s;
+  letter-spacing: -0.01em;
+}
+.sitenav-profile:hover { background: #077f68; }
+.sitenav-profile svg { flex-shrink: 0; }
+.sitenav-profile .chev { width: 14px; height: 14px; transition: transform .2s; }
+.sitenav-profile-wrap.open .chev { transform: rotate(180deg); }
+
+/* Profile dropdown */
+.sitenav-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: #fff;
+  border: 1px solid #eaebf0;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  min-width: 200px;
+  overflow: hidden;
+  display: none;
+  z-index: 300;
+}
+.sitenav-profile-wrap.open .sitenav-dropdown { display: block; }
+.sitenav-dropdown a,
+.sitenav-dropdown button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 18px;
+  font-family: var(--font-text);
+  font-size: 13px;
+  font-weight: 500;
+  color: #444a51;
+  text-decoration: none;
+  background: none;
+  border: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  transition: background .12s;
+  border-bottom: 1px solid #eaebf0;
+}
+.sitenav-dropdown a:last-child,
+.sitenav-dropdown button:last-child { border-bottom: none; }
+.sitenav-dropdown a:hover,
+.sitenav-dropdown button:hover { background: #e9f8f1; }
+.sitenav-dropdown .logout { color: rgb(172,26,19); }
+.sitenav-dropdown .logout:hover { background: rgb(255,240,240); }
+
+/* Language selector */
+.sitenav-lang {
+  height: 40px;
+  padding: 0 12px;
+  border-radius: var(--radius-pill);
+  background: #fff;
+  border: 1.5px solid #eaebf0;
+  font-size: 18px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: border-color .15s;
+  color: #444a51;
+}
+.sitenav-lang:hover { border-color: #066653; }
+.sitenav-lang svg { width: 12px; height: 12px; flex-shrink: 0; color: #68727d; }
+
+/* Profile avatar info inside dropdown */
+.sitenav-user-info {
+  padding: 14px 18px 12px;
+  border-bottom: 1px solid #eaebf0;
+}
+.sitenav-user-name { font-family: var(--font-text); font-size: 13px; font-weight: 700; color: #252525; }
+.sitenav-user-email { font-family: var(--font-text); font-size: 11px; color: #68727d; margin-top: 2px; }
+
+/* ── Hamburger (injected by nav-mobile.js; hidden on desktop) ── */
+.sitenav-burger {
+  display: none;
+  width: 44px; height: 44px;
+  align-items: center; justify-content: center;
+  background: none; border: 1.5px solid var(--stroke-base);
+  border-radius: var(--radius-md); color: var(--text-base-main);
+  cursor: pointer; flex-shrink: 0;
+}
+.sitenav-burger svg { width: 22px; height: 22px; }
+
+/* ============================================================
+   RESPONSIVE — shared site nav collapses to a hamburger menu
+   ============================================================ */
+@media (max-width: 860px) {
+  .sitenav {
+    height: auto; min-height: 64px;
+    flex-wrap: wrap; row-gap: 0; column-gap: 12px;
+    padding: 10px 20px;
+    justify-content: space-between;
+  }
+  .sitenav-logo { order: 1; }
+  .sitenav-logo img { height: 34px; }
+  .sitenav-burger { display: inline-flex; order: 2; }
+
+  .sitenav-links,
+  .sitenav-actions {
+    order: 3;
+    flex-basis: 100%;
+    width: 100%;
+    display: none;
+    flex-direction: column;
+    align-items: stretch;
+    margin: 0;
+  }
+  .sitenav.open .sitenav-links,
+  .sitenav.open .sitenav-actions { display: flex; }
+
+  .sitenav-links {
+    gap: 2px;
+    padding-top: 8px; margin-top: 6px;
+    border-top: 1px solid var(--stroke-base);
+  }
+  .sitenav-link {
+    font-size: 16px;
+    padding: 13px 6px;
+    border-bottom: 1px solid var(--stroke-base);
+  }
+  .sitenav-link.active { border-bottom-color: #066653; }
+
+  .sitenav-actions {
+    gap: 10px;
+    padding-bottom: 6px;
+  }
+  .sitenav-login,
+  .sitenav-signup,
+  .sitenav-profile { width: 100%; height: 48px; justify-content: center; }
+  .sitenav-profile-wrap { width: 100%; }
+  .sitenav-dropdown {
+    position: static; display: block;
+    min-width: 0; width: 100%;
+    border: 1px solid var(--stroke-base); box-shadow: none;
+    margin-top: 8px;
+  }
+  .sitenav-lang { align-self: flex-start; height: 44px; }
+}
+
+/* ============================================================
+   DESKTOP-RECOMMENDED NOTICE — shown only on small screens for
+   data-dense tool screens. Markup: <div class="desktop-notice">…</div>
+   ============================================================ */
+.desktop-notice { display: none; }
+@media (max-width: 760px) {
+  .desktop-notice {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin: 16px 20px 0;
+    padding: 14px 16px;
+    background: var(--bg-info-second);
+    border: 1px solid #b8d2f0;
+    border-radius: var(--radius-lg);
+    font-family: var(--font-text);
+  }
+  .desktop-notice svg { width: 20px; height: 20px; flex-shrink: 0; color: var(--text-info); margin-top: 1px; }
+  .desktop-notice .dn-body { font-size: 12.5px; line-height: 1.5; color: var(--text-base-main); }
+  .desktop-notice .dn-body strong { color: var(--text-info); font-weight: 700; }
+  .desktop-notice .dn-x {
+    margin-left: auto; flex-shrink: 0;
+    width: 28px; height: 28px; border: none; background: none;
+    color: var(--text-base-second); cursor: pointer;
+    display: grid; place-items: center; border-radius: var(--radius-sm);
+  }
+  .desktop-notice .dn-x:hover { background: rgba(0,0,0,.05); }
+  .desktop-notice.dismissed { display: none; }
+}
+
+/* ── Breadcrumb bar (P-10 — F03, F05.1.1, F06) ── */
+.crumbbar {
+  display: flex; align-items: center; gap: 8px;
+  font-family: var(--font-text); font-size: 13px; color: var(--text-base-second);
+  padding: 12px 40px; border-bottom: 1px solid var(--stroke-base);
+  background: var(--bg-base-main);
+}
+.crumbbar a { color: var(--text-base-second); text-decoration: none; transition: color var(--motion-fast); }
+.crumbbar a:hover { color: var(--text-primary); }

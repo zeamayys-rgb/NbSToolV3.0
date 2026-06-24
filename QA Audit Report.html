@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NbS Tool — QA / QC Audit Report (Waves 1–4)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Barlow+Semi+Condensed:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="design-system/tokens.css" />
+<style>
+  :root {
+    --r-bg: #f4f6f6;
+    --r-card: #ffffff;
+    --r-ink: #1c2421;
+    --r-muted: #5a6b66;
+    --r-line: #e4e8e7;
+    --r-brand: #066653;
+    --r-brand-soft: #e7f1ee;
+    --r-accent: #077f68;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: var(--font-text, "Poppins", system-ui, sans-serif);
+    color: var(--r-ink);
+    background: var(--r-bg);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.55;
+  }
+  .sheet { max-width: 1080px; margin: 0 auto; padding: 0 28px 96px; }
+
+  /* ── Cover band ── */
+  .cover {
+    background: linear-gradient(155deg, #044c3e 0%, #066653 55%, #077f68 100%);
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+  }
+  .cover::after {
+    content: ""; position: absolute; right: -120px; top: -120px;
+    width: 460px; height: 460px; border-radius: 50%;
+    background: radial-gradient(circle at center, rgba(255,255,255,.10), transparent 68%);
+  }
+  .cover-inner { max-width: 1080px; margin: 0 auto; padding: 40px 28px 48px; position: relative; z-index: 1; }
+  .cover-top { display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+  .logo-chip { background: #fff; border-radius: 12px; padding: 10px 16px; display: inline-flex; box-shadow: 0 6px 20px rgba(0,0,0,.18); }
+  .logo-chip img { height: 40px; width: auto; display: block; }
+  .cover-tag {
+    font-family: var(--font-override, "Inter", sans-serif);
+    font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase;
+    color: rgba(255,255,255,.78);
+    border: 1px solid rgba(255,255,255,.3); border-radius: 999px; padding: 7px 15px;
+  }
+  .cover h1 {
+    font-family: "Barlow Semi Condensed", var(--font-text), sans-serif;
+    font-weight: 700; font-size: clamp(34px, 5.4vw, 58px); line-height: 1.02;
+    margin: 34px 0 14px; letter-spacing: -0.01em; text-wrap: balance;
+  }
+  .cover h1 span { color: #b7e7d6; }
+  .cover-sub { font-size: 16px; color: rgba(255,255,255,.9); max-width: 660px; margin: 0; }
+  .cover-meta { display: flex; flex-wrap: wrap; gap: 18px 34px; margin-top: 30px; }
+  .cover-meta > div { min-width: 0; }
+  .cover-meta .m-k { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: rgba(255,255,255,.66); margin-bottom: 4px; font-family: var(--font-override, "Inter", sans-serif); font-weight: 600; white-space: nowrap; }
+  .cover-meta .m-v { font-size: 15px; font-weight: 600; color: #fff; }
+
+  /* ── Metrics ── */
+  .metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin: -38px 0 12px; position: relative; z-index: 3; }
+  .metric { background: var(--r-card); border: 1px solid var(--r-line); border-radius: 14px; padding: 20px 22px; box-shadow: 0 10px 30px rgba(8,40,32,.07); }
+  .metric .big { font-family: "Barlow Semi Condensed", sans-serif; font-weight: 700; font-size: 42px; line-height: 1; color: var(--r-brand); }
+  .metric .lbl { font-size: 12.5px; color: var(--r-muted); margin-top: 7px; font-weight: 500; }
+  .metric.amber .big { color: #b9791a; }
+  .metric.ink .big { color: var(--r-ink); }
+
+  /* ── Section ── */
+  .intro { margin: 40px 0 8px; }
+  .intro p { color: var(--r-muted); font-size: 15px; max-width: 820px; }
+  .section-eyebrow {
+    font-family: var(--font-override, "Inter", sans-serif);
+    font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--r-accent); margin-bottom: 6px;
+  }
+  h2.report-h { font-family: "Barlow Semi Condensed", sans-serif; font-weight: 700; font-size: 17px; letter-spacing: .04em; text-transform: uppercase; color: var(--r-ink); margin: 0 0 14px; }
+
+  .wave { margin-top: 44px; scroll-margin-top: 18px; }
+  .wave-head {
+    display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+    padding-bottom: 16px; border-bottom: 2px solid var(--r-brand-soft); margin-bottom: 4px;
+  }
+  .wave-num {
+    flex-shrink: 0;
+    width: 54px; height: 54px; border-radius: 14px;
+    background: var(--r-brand-soft); color: var(--r-brand);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    font-family: "Barlow Semi Condensed", sans-serif; line-height: 1;
+  }
+  .wave-num small { font-size: 9px; letter-spacing: .12em; text-transform: uppercase; font-weight: 600; opacity: .72; }
+  .wave-num b { font-size: 24px; font-weight: 700; }
+  .wave-title { display: flex; flex-direction: column; }
+  .wave-title h3 { margin: 0; font-family: "Barlow Semi Condensed", sans-serif; font-weight: 700; font-size: 26px; color: var(--r-ink); letter-spacing: .01em; }
+  .wave-title .wt-sub { font-size: 13.5px; color: var(--r-muted); }
+  .wave-count { margin-left: auto; font-size: 13px; color: var(--r-muted); background: #fff; border: 1px solid var(--r-line); border-radius: 999px; padding: 6px 14px; font-weight: 500; }
+  .wave-count b { color: var(--r-brand); }
+
+  /* ── Issue cards ── */
+  .issues { display: flex; flex-direction: column; gap: 14px; margin-top: 22px; }
+  .issue {
+    background: var(--r-card); border: 1px solid var(--r-line); border-radius: 14px;
+    overflow: hidden; box-shadow: 0 2px 8px rgba(8,40,32,.03);
+  }
+  .issue-top { display: flex; align-items: flex-start; gap: 14px; padding: 18px 20px 14px; }
+  .id-badge {
+    flex-shrink: 0; font-family: var(--font-override, "Inter", sans-serif);
+    font-weight: 700; font-size: 13px; letter-spacing: .02em;
+    background: var(--r-brand); color: #fff; border-radius: 8px; padding: 6px 11px; min-width: 48px; text-align: center;
+  }
+  .issue-headings { flex: 1; min-width: 0; }
+  .issue-title { font-weight: 600; font-size: 16px; color: var(--r-ink); margin: 1px 0 5px; }
+  .issue-files { font-family: var(--font-override, "Inter", sans-serif); font-size: 12.5px; color: var(--r-muted); display: flex; flex-wrap: wrap; gap: 6px 8px; align-items: center; }
+  .file-tag { background: #f1f4f3; border: 1px solid var(--r-line); border-radius: 6px; padding: 2px 8px; font-weight: 500; color: #3d4d48; }
+
+  .pills { display: flex; flex-direction: column; gap: 7px; align-items: flex-end; flex-shrink: 0; }
+  .sev { font-size: 11px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; padding: 4px 10px; border-radius: 999px; white-space: nowrap; display: inline-flex; align-items: center; gap: 5px; font-family: var(--font-override, "Inter", sans-serif); }
+  .sev::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+  .sev.critical { color: #c2261d; background: #fdecea; }
+  .sev.high { color: #b9791a; background: #fdf4e6; }
+  .sev.medium { color: #1d6cc9; background: #eaf2fb; }
+  .sev.low { color: #5a6b66; background: #eef1f0; }
+
+  .status { font-size: 11.5px; font-weight: 700; padding: 4px 11px; border-radius: 999px; white-space: nowrap; display: inline-flex; align-items: center; gap: 5px; font-family: var(--font-override, "Inter", sans-serif); }
+  .status.fixed { color: #0f7a52; background: #e3f4ec; }
+  .status.deferred { color: #946200; background: #fbf0d8; }
+  .status svg { width: 12px; height: 12px; }
+
+  .ba { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border-top: 1px solid var(--r-line); }
+  .ba > div { padding: 15px 20px; font-size: 13.5px; }
+  .ba .before { border-right: 1px solid var(--r-line); background: #fcfbfa; }
+  .ba .ba-k { font-family: var(--font-override, "Inter", sans-serif); font-size: 10.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 6px; display: inline-flex; align-items: center; gap: 6px; }
+  .before .ba-k { color: #c2261d; }
+  .after .ba-k { color: #0f7a52; }
+  .ba p { margin: 0; color: #3a4742; }
+  .ba code, .intro code {
+    font-family: ui-monospace, "SF Mono", "Cascadia Code", Menlo, monospace;
+    font-size: 12px; background: #eef2f1; color: #0c5544;
+    padding: 1px 6px; border-radius: 5px; border: 1px solid #e0e7e5;
+    white-space: nowrap;
+  }
+  .before code { background: #fbeeec; color: #b3362c; border-color: #f3dcd9; }
+
+  /* ── TOC / sticky rail ── */
+  .toc { position: sticky; top: 0; z-index: 20; background: rgba(244,246,246,.9); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border-bottom: 1px solid var(--r-line); }
+  .toc-inner { max-width: 1080px; margin: 0 auto; padding: 12px 28px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .toc a { font-size: 13px; font-weight: 600; color: var(--r-muted); padding: 7px 13px; border-radius: 8px; transition: all .15s; text-decoration: none; }
+  .toc a:hover { color: var(--r-brand); background: var(--r-brand-soft); }
+  .toc .toc-label { font-family: var(--font-override, "Inter", sans-serif); font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #9aa6a2; margin-right: 4px; }
+
+  /* ── Footer ── */
+  .report-foot { margin-top: 56px; padding-top: 26px; border-top: 1px solid var(--r-line); display: flex; justify-content: space-between; align-items: center; gap: 18px; flex-wrap: wrap; color: var(--r-muted); font-size: 13px; }
+  .report-foot img { height: 30px; width: auto; opacity: .9; }
+
+  .legend { display: flex; flex-wrap: wrap; gap: 10px 18px; margin-top: 16px; font-size: 12.5px; color: var(--r-muted); }
+  .legend .sev { font-size: 10.5px; }
+
+  a:focus-visible, .toc a:focus-visible { outline: 2px solid var(--r-brand); outline-offset: 2px; border-radius: 6px; }
+
+  @media (max-width: 720px) {
+    .metrics { grid-template-columns: repeat(2, 1fr); }
+    .ba { grid-template-columns: 1fr; }
+    .ba .before { border-right: none; border-bottom: 1px solid var(--r-line); }
+    .issue-top { flex-wrap: wrap; }
+    .pills { flex-direction: row; align-items: center; width: 100%; order: 3; }
+    .sheet { padding: 0 18px 64px; }
+    .cover-inner { padding: 28px 18px 40px; }
+    .toc { position: static; }
+  }
+</style>
+</head>
+<body>
+
+<header class="cover">
+  <div class="cover-inner">
+    <div class="cover-top">
+      <span class="logo-chip"><img src="design-system/assets/scene-logo.png" alt="SCeNe Coalition" /></span>
+      <span class="cover-tag">Quality Assurance · Internal</span>
+    </div>
+    <h1>NbS Tool — QA / QC<br /><span>Audit Report</span></h1>
+    <p class="cover-sub">Findings, remediations and verification across the first four QA waves of the Nature-based Solutions Design-to-MRV platform.</p>
+    <div class="cover-meta">
+      <div><div class="m-k">Scope</div><div class="m-v">F00, F03, F04, F04.1, F05, F05.1.1, F06, F07</div></div>
+      <div><div class="m-k">Excluded</div><div class="m-v">F01 Interactive Map</div></div>
+      <div><div class="m-k">Waves covered</div><div class="m-v">1 – 4 of 6</div></div>
+      <div><div class="m-k">Date</div><div class="m-v">June 6, 2026</div></div>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Report sections">
+  <div class="toc-inner">
+    <span class="toc-label">Jump to</span>
+    <a href="#summary">Summary</a>
+    <a href="#wave1">1 · Functional</a>
+    <a href="#wave2">2 · Consistency</a>
+    <a href="#wave3">3 · Responsive</a>
+    <a href="#wave4">4 · Accessibility</a>
+  </div>
+</nav>
+
+<main class="sheet">
+
+  <!-- Metrics -->
+  <section id="summary" aria-label="Executive summary">
+    <div class="metrics">
+      <div class="metric ink"><div class="big">24</div><div class="lbl">Issues identified</div></div>
+      <div class="metric"><div class="big">23</div><div class="lbl">Resolved &amp; verified</div></div>
+      <div class="metric amber"><div class="big">1</div><div class="lbl">Deferred — awaiting decision</div></div>
+      <div class="metric ink"><div class="big">4</div><div class="lbl">QA waves completed</div></div>
+    </div>
+
+    <div class="intro">
+      <div class="section-eyebrow">Executive summary</div>
+      <p>Each wave followed the project QA protocol: audit first and report with no edits, then remediate on approval, then verify. Waves&nbsp;1–4 moved the tool from broken primary flows and an inconsistent palette to a functional, token-driven, mobile-ready and WCAG&nbsp;2.1&nbsp;AA-aligned product. One item — heading hierarchy (A5) — is intentionally held for a maintainer decision rather than restructured automatically.</p>
+      <div class="legend">
+        <span style="font-weight:600;color:#3a4742;">Severity:</span>
+        <span class="sev critical">Critical</span>
+        <span class="sev high">High</span>
+        <span class="sev medium">Medium</span>
+        <span class="sev low">Low</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- WAVE 1 -->
+  <section class="wave" id="wave1">
+    <div class="wave-head">
+      <div class="wave-num"><small>Wave</small><b>01</b></div>
+      <div class="wave-title">
+        <h3>Functional</h3>
+        <span class="wt-sub">Links, buttons, forms, navigation &amp; destructive actions</span>
+      </div>
+      <span class="wave-count"><b>5</b> issues · all fixed</span>
+    </div>
+    <div class="issues" id="w1-issues"></div>
+  </section>
+
+  <!-- WAVE 2 -->
+  <section class="wave" id="wave2">
+    <div class="wave-head">
+      <div class="wave-num"><small>Wave</small><b>02</b></div>
+      <div class="wave-title">
+        <h3>Design-System Consistency</h3>
+        <span class="wt-sub">Brand colour, token usage, palette drift &amp; inline styles</span>
+      </div>
+      <span class="wave-count"><b>6</b> issues · all fixed</span>
+    </div>
+    <div class="issues" id="w2-issues"></div>
+  </section>
+
+  <!-- WAVE 3 -->
+  <section class="wave" id="wave3">
+    <div class="wave-head">
+      <div class="wave-num"><small>Wave</small><b>03</b></div>
+      <div class="wave-title">
+        <h3>Responsive &amp; Cross-Browser</h3>
+        <span class="wt-sub">Mobile layout, hamburger nav, Safari/iOS fixes &amp; touch targets</span>
+      </div>
+      <span class="wave-count"><b>6</b> issues · all fixed</span>
+    </div>
+    <div class="issues" id="w3-issues"></div>
+  </section>
+
+  <!-- WAVE 4 -->
+  <section class="wave" id="wave4">
+    <div class="wave-head">
+      <div class="wave-num"><small>Wave</small><b>04</b></div>
+      <div class="wave-title">
+        <h3>Accessibility — WCAG 2.1 AA</h3>
+        <span class="wt-sub">Focus visibility, colour contrast, ARIA, landmarks &amp; labels</span>
+      </div>
+      <span class="wave-count"><b>7</b> issues · 6 fixed · 1 deferred</span>
+    </div>
+    <div class="issues" id="w4-issues"></div>
+  </section>
+
+  <footer class="report-foot">
+    <img src="design-system/assets/scene-logo.png" alt="SCeNe Coalition" />
+    <span>NbS Tool QA / QC Audit · Waves 1–4 · Generated June 6, 2026 · Waves 5–6 in progress</span>
+  </footer>
+</main>
+
+<script>
+  const STATUS = {
+    fixed: '<span class="status fixed"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Fixed</span>',
+    deferred: '<span class="status deferred"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 8v4l3 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Deferred</span>'
+  };
+
+  const DATA = {
+    'w1-issues': [
+      { id:'C1', sev:'critical', title:'Home auth buttons were dead', files:['F00 Home'],
+        before:'The auth modal “Log in” and “Create account” buttons were <code>type="submit"</code> inside a form with no handler — clicking did nothing, blocking the main entry into the app.',
+        after:'Replaced with real submit listeners that validate and navigate to the dashboard.', status:'fixed' },
+      { id:'H1', sev:'high', title:'Hero CTA linked nowhere', files:['F00 Home'],
+        before:'The primary hero call-to-action “Start Using the Tool” used <code>href="#"</code> and jumped to the top of the page.',
+        after:'Now opens the sign-up modal via <code>data-auth="signup"</code>.', status:'fixed' },
+      { id:'H2', sev:'high', title:'Dashboard delete buttons did nothing', files:['F04 Dashboard'],
+        before:'Row and card delete buttons only called <code>stopPropagation()</code> — a destructive control that silently failed.',
+        after:'Wired confirm → remove row/card → success toast, cancel-safe via capture-phase handling.', status:'fixed' },
+      { id:'M1', sev:'medium', title:'Dead “#” links used as navigation', files:['All screens'],
+        before:'Footer and nav links with real destinations pointed to <code>href="#"</code>, jumping to page top.',
+        after:'Repointed to F00, F01 and F04; genuine placeholders (Portfolio, Contact, Account) left as stubs by decision.', status:'fixed' },
+      { id:'M2', sev:'medium', title:'Forms accepted any input', files:['F00 Home','F07 Login'],
+        before:'Login / sign-up proceeded with empty fields, malformed email, short password or an unchecked Terms box.',
+        after:'Added email-format, password length and required-checkbox validation with inline error messaging.', status:'fixed' }
+    ],
+    'w2-issues': [
+      { id:'DS-1', sev:'high', title:'Brand-green drift', files:['All CSS','All screens'],
+        before:'The brand green oscillated between <code>#077f68</code> and <code>#066653</code> — two greens for the same role across nav, CTAs and auth.',
+        after:'Standardised on <code>#066653</code> as the main fill everywhere; <code>#077f68</code> reserved for hover/accent only.', status:'fixed' },
+      { id:'DS-2', sev:'medium', title:'Off-palette grays hardcoded', files:['All CSS','All screens'],
+        before:'A parallel “Tailwind” gray ramp (#677389, #A0ABC0, #1A202C, #E2E7F0 …) bypassed the token layer entirely.',
+        after:'Mapped every literal to its nearest design token — 370+ replacements across the codebase.', status:'fixed' },
+      { id:'DS-3', sev:'medium', title:'F04.1 built from inline styles', files:['F04.1 Project Detail'],
+        before:'100+ repeated inline <code>style</code> blocks for doc rows, badges and spec rows — untheme-able, no dark-mode reach.',
+        after:'Extracted into reusable token-based classes in <code>f041.css</code> (<code>.doc-row</code>, <code>.doc-badge</code>, <code>.spec-row</code> …).', status:'fixed' },
+      { id:'DS-4', sev:'medium', title:'Badge colours hardcoded; no “info” token', files:['All CSS','All screens'],
+        before:'Status badges used raw hex pairs, and a blue informational accent (#0A436B, #1D4ED8) existed with no matching token.',
+        after:'Added a full <code>info</code> / blue family to the tokens (light + dark); badges now reference semantic tokens.', status:'fixed' },
+      { id:'DS-5', sev:'low', title:'Raw font-family literals', files:['All CSS','All screens'],
+        before:'Dozens of <code>font-family: Poppins / Inter</code> literals would ignore a future family change.',
+        after:'Replaced with <code>var(--font-text)</code> and <code>var(--font-override)</code>.', status:'fixed' },
+      { id:'DS-6', sev:'low', title:'Off-scale radii', files:['f06.css','others'],
+        before:'<code>border-radius: 99px</code> used in place of the pill token.',
+        after:'Replaced with <code>var(--radius-pill)</code>.', status:'fixed' }
+    ],
+    'w3-issues': [
+      { id:'RESP-1', sev:'high', title:'No mobile navigation', files:['All screens'],
+        before:'The top nav links overflowed horizontally below ~860px with no collapse behaviour.',
+        after:'Shared <code>nav-mobile.js</code> injects a hamburger and toggles the menu on tap, outside-click and Esc.', status:'fixed' },
+      { id:'RESP-2', sev:'high', title:'Dense tool screens unusable on phones', files:['F03','F05','F05.1.1','F06'],
+        before:'Data-dense generator and MRV screens were cramped on mobile with no guidance to the user.',
+        after:'Added a dismissible “Best viewed on desktop” notice shown at ≤760px on all four tool screens.', status:'fixed' },
+      { id:'RESP-3', sev:'high', title:'Layout overflow at 375px', files:['All screens'],
+        before:'Grids, hero, toolbars, the stepper and wide tables forced page-level horizontal scroll.',
+        after:'Breakpoints stack to single column, the stepper goes vertical, and wide tables scroll inside their own container.', status:'fixed' },
+      { id:'RESP-4', sev:'medium', title:'Blur broken in Safari', files:['All screens'],
+        before:'Modal / overlay <code>backdrop-filter</code> lacked the <code>-webkit-</code> prefix and failed on Safari &amp; iOS.',
+        after:'Added <code>-webkit-backdrop-filter</code> to every blurred surface.', status:'fixed' },
+      { id:'RESP-5', sev:'medium', title:'iOS input zoom &amp; date styling', files:['F03','F05.1.1','Auth'],
+        before:'Inputs under 16px triggered Safari focus-zoom; <code>date</code> inputs rendered inconsistently on iOS.',
+        after:'Inputs forced to 16px on mobile; date inputs styled consistently.', status:'fixed' },
+      { id:'RESP-6', sev:'low', title:'Small touch targets', files:['All screens'],
+        before:'Some icon buttons and modal closes were below the 44px recommended hit area.',
+        after:'Minimum touch targets enlarged toward 44px on touch screens.', status:'fixed' }
+    ],
+    'w4-issues': [
+      { id:'A1', sev:'high', title:'No visible keyboard focus', files:['All screens'],
+        before:'Buttons, links, tabs and cards had no <code>:focus-visible</code> style — keyboard users had no focus indicator (WCAG 2.4.7).',
+        after:'Global focus ring added in <code>tokens.css</code> (green on light, white on dark/primary); mouse clicks stay clean.', status:'fixed' },
+      { id:'A2', sev:'high', title:'Text contrast failure', files:['f03/f05/f06/f0511/f041.css'],
+        before:'<code>#a0a4ac</code> body text measured 2.50:1 — fails 4.5:1 (WCAG 1.4.3): column headers, breadcrumbs, KPI units, placeholders.',
+        after:'Body text darkened to <code>#68727d</code> (4.89:1); placeholders to <code>#767b82</code>; borders left unchanged.', status:'fixed' },
+      { id:'A3', sev:'medium', title:'Inputs lacked accessible names', files:['F03','F04.1'],
+        before:'Generated and inline inputs were placeholder-only — screen readers announced “edit text” (WCAG 4.1.2).',
+        after:'Added <code>aria-label</code> to generated fields (derived from question text) and F04.1 invite controls.', status:'fixed' },
+      { id:'A4', sev:'medium', title:'Incomplete tab pattern', files:['F04.1','F00','F07'],
+        before:'F04.1 tabs had a tablist but no <code>role="tab"</code>, <code>aria-selected</code> or <code>aria-controls</code>; panels lacked <code>role="tabpanel"</code>.',
+        after:'Tabs fully wired with roles and <code>aria-selected</code> synced on every switch; auth tabs confirmed correct.', status:'fixed' },
+      { id:'A5', sev:'medium', title:'Heading order skips H2', files:['All app screens'],
+        before:'App screens jump from <code>h1</code> (page title) to <code>h3</code> (block heads), skipping the <code>h2</code> level.',
+        after:'Held for maintainer decision — structure left intact rather than auto-restructured. Options: promote to H2, add hidden H2, or accept.', status:'deferred' },
+      { id:'A6', sev:'low', title:'Decorative SVGs read by AT', files:['All screens'],
+        before:'Hundreds of inline decorative icons were exposed to assistive tech (WCAG 1.1.1).',
+        after:'<code>nav-mobile.js</code> marks unlabeled SVGs <code>aria-hidden</code> + <code>focusable="false"</code>, re-running for JS-rendered icons.', status:'fixed' },
+      { id:'A7', sev:'low', title:'No skip link or main landmark', files:['All screens'],
+        before:'Content sat in generic <code>&lt;div&gt;</code>s with no <code>&lt;main&gt;</code> landmark and no skip link (WCAG 2.4.1).',
+        after:'“Skip to main content” link plus a <code>main</code> / <code>role="main"</code> landmark added to every screen.', status:'fixed' }
+    ]
+  };
+
+  function render() {
+    for (const [containerId, items] of Object.entries(DATA)) {
+      const el = document.getElementById(containerId);
+      el.innerHTML = items.map(function (i) {
+        const files = i.files.map(function (f) { return '<span class="file-tag">' + f + '</span>'; }).join('');
+        return '' +
+          '<article class="issue">' +
+            '<div class="issue-top">' +
+              '<span class="id-badge">' + i.id + '</span>' +
+              '<div class="issue-headings">' +
+                '<div class="issue-title">' + i.title + '</div>' +
+                '<div class="issue-files">' + files + '</div>' +
+              '</div>' +
+              '<div class="pills">' +
+                '<span class="sev ' + i.sev + '">' + i.sev + '</span>' +
+                STATUS[i.status] +
+              '</div>' +
+            '</div>' +
+            '<div class="ba">' +
+              '<div class="before"><div class="ba-k">Before</div><p>' + i.before + '</p></div>' +
+              '<div class="after"><div class="ba-k">After</div><p>' + i.after + '</p></div>' +
+            '</div>' +
+          '</article>';
+      }).join('');
+    }
+  }
+  render();
+</script>
+
+</body>
+</html>

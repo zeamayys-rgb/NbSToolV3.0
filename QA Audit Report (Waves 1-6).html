@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NbS Tool — QA / QC Audit Report (Waves 1–6)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Barlow+Semi+Condensed:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="design-system/tokens.css" />
+<style>
+  :root {
+    --r-bg: #f4f6f6;
+    --r-card: #ffffff;
+    --r-ink: #1c2421;
+    --r-muted: #5a6b66;
+    --r-line: #e4e8e7;
+    --r-brand: #066653;
+    --r-brand-soft: #e7f1ee;
+    --r-accent: #077f68;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: var(--font-text, "Poppins", system-ui, sans-serif);
+    color: var(--r-ink);
+    background: var(--r-bg);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.55;
+  }
+  .sheet { max-width: 1080px; margin: 0 auto; padding: 0 28px 96px; }
+
+  /* ── Cover band ── */
+  .cover {
+    background: linear-gradient(155deg, #044c3e 0%, #066653 55%, #077f68 100%);
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+  }
+  .cover::after {
+    content: ""; position: absolute; right: -120px; top: -120px;
+    width: 460px; height: 460px; border-radius: 50%;
+    background: radial-gradient(circle at center, rgba(255,255,255,.10), transparent 68%);
+  }
+  .cover-inner { max-width: 1080px; margin: 0 auto; padding: 40px 28px 48px; position: relative; z-index: 1; }
+  .cover-top { display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+  .logo-chip { background: #fff; border-radius: 12px; padding: 10px 16px; display: inline-flex; box-shadow: 0 6px 20px rgba(0,0,0,.18); }
+  .logo-chip img { height: 40px; width: auto; display: block; }
+  .cover-tag {
+    font-family: var(--font-override, "Inter", sans-serif);
+    font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase;
+    color: rgba(255,255,255,.78);
+    border: 1px solid rgba(255,255,255,.3); border-radius: 999px; padding: 7px 15px;
+  }
+  .cover h1 {
+    font-family: "Barlow Semi Condensed", var(--font-text), sans-serif;
+    font-weight: 700; font-size: clamp(34px, 5.4vw, 58px); line-height: 1.02;
+    margin: 34px 0 14px; letter-spacing: -0.01em; text-wrap: balance;
+  }
+  .cover h1 span { color: #b7e7d6; }
+  .cover-sub { font-size: 16px; color: rgba(255,255,255,.9); max-width: 660px; margin: 0; }
+  .cover-meta { display: flex; flex-wrap: wrap; gap: 18px 34px; margin-top: 30px; }
+  .cover-meta > div { min-width: 0; }
+  .cover-meta .m-k { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: rgba(255,255,255,.66); margin-bottom: 4px; font-family: var(--font-override, "Inter", sans-serif); font-weight: 600; white-space: nowrap; }
+  .cover-meta .m-v { font-size: 15px; font-weight: 600; color: #fff; }
+
+  /* ── Metrics ── */
+  .metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin: -38px 0 12px; position: relative; z-index: 3; }
+  .metric { background: var(--r-card); border: 1px solid var(--r-line); border-radius: 14px; padding: 20px 22px; box-shadow: 0 10px 30px rgba(8,40,32,.07); }
+  .metric .big { font-family: "Barlow Semi Condensed", sans-serif; font-weight: 700; font-size: 42px; line-height: 1; color: var(--r-brand); }
+  .metric .lbl { font-size: 12.5px; color: var(--r-muted); margin-top: 7px; font-weight: 500; }
+  .metric.amber .big { color: #b9791a; }
+  .metric.ink .big { color: var(--r-ink); }
+
+  /* ── Section ── */
+  .intro { margin: 40px 0 8px; }
+  .intro p { color: var(--r-muted); font-size: 15px; max-width: 820px; }
+  .section-eyebrow {
+    font-family: var(--font-override, "Inter", sans-serif);
+    font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--r-accent); margin-bottom: 6px;
+  }
+  h2.report-h { font-family: "Barlow Semi Condensed", sans-serif; font-weight: 700; font-size: 17px; letter-spacing: .04em; text-transform: uppercase; color: var(--r-ink); margin: 0 0 14px; }
+
+  .wave { margin-top: 44px; scroll-margin-top: 18px; }
+  .wave-head {
+    display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+    padding-bottom: 16px; border-bottom: 2px solid var(--r-brand-soft); margin-bottom: 4px;
+  }
+  .wave-num {
+    flex-shrink: 0;
+    width: 54px; height: 54px; border-radius: 14px;
+    background: var(--r-brand-soft); color: var(--r-brand);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    font-family: "Barlow Semi Condensed", sans-serif; line-height: 1;
+  }
+  .wave-num small { font-size: 9px; letter-spacing: .12em; text-transform: uppercase; font-weight: 600; opacity: .72; }
+  .wave-num b { font-size: 24px; font-weight: 700; }
+  .wave-title { display: flex; flex-direction: column; }
+  .wave-title h3 { margin: 0; font-family: "Barlow Semi Condensed", sans-serif; font-weight: 700; font-size: 26px; color: var(--r-ink); letter-spacing: .01em; }
+  .wave-title .wt-sub { font-size: 13.5px; color: var(--r-muted); }
+  .wave-count { margin-left: auto; font-size: 13px; color: var(--r-muted); background: #fff; border: 1px solid var(--r-line); border-radius: 999px; padding: 6px 14px; font-weight: 500; }
+  .wave-count b { color: var(--r-brand); }
+
+  /* ── Issue cards ── */
+  .issues { display: flex; flex-direction: column; gap: 14px; margin-top: 22px; }
+  .issue {
+    background: var(--r-card); border: 1px solid var(--r-line); border-radius: 14px;
+    overflow: hidden; box-shadow: 0 2px 8px rgba(8,40,32,.03);
+  }
+  .issue-top { display: flex; align-items: flex-start; gap: 14px; padding: 18px 20px 14px; }
+  .id-badge {
+    flex-shrink: 0; font-family: var(--font-override, "Inter", sans-serif);
+    font-weight: 700; font-size: 13px; letter-spacing: .02em;
+    background: var(--r-brand); color: #fff; border-radius: 8px; padding: 6px 11px; min-width: 48px; text-align: center;
+  }
+  .issue-headings { flex: 1; min-width: 0; }
+  .issue-title { font-weight: 600; font-size: 16px; color: var(--r-ink); margin: 1px 0 5px; }
+  .issue-files { font-family: var(--font-override, "Inter", sans-serif); font-size: 12.5px; color: var(--r-muted); display: flex; flex-wrap: wrap; gap: 6px 8px; align-items: center; }
+  .file-tag { background: #f1f4f3; border: 1px solid var(--r-line); border-radius: 6px; padding: 2px 8px; font-weight: 500; color: #3d4d48; }
+
+  .pills { display: flex; flex-direction: column; gap: 7px; align-items: flex-end; flex-shrink: 0; }
+  .sev { font-size: 11px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; padding: 4px 10px; border-radius: 999px; white-space: nowrap; display: inline-flex; align-items: center; gap: 5px; font-family: var(--font-override, "Inter", sans-serif); }
+  .sev::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+  .sev.critical { color: #c2261d; background: #fdecea; }
+  .sev.high { color: #b9791a; background: #fdf4e6; }
+  .sev.medium { color: #1d6cc9; background: #eaf2fb; }
+  .sev.low { color: #5a6b66; background: #eef1f0; }
+
+  .status { font-size: 11.5px; font-weight: 700; padding: 4px 11px; border-radius: 999px; white-space: nowrap; display: inline-flex; align-items: center; gap: 5px; font-family: var(--font-override, "Inter", sans-serif); }
+  .status.fixed { color: #0f7a52; background: #e3f4ec; }
+  .status.deferred { color: #946200; background: #fbf0d8; }
+  .status svg { width: 12px; height: 12px; }
+
+  .ba { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border-top: 1px solid var(--r-line); }
+  .ba > div { padding: 15px 20px; font-size: 13.5px; }
+  .ba .before { border-right: 1px solid var(--r-line); background: #fcfbfa; }
+  .ba .ba-k { font-family: var(--font-override, "Inter", sans-serif); font-size: 10.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 6px; display: inline-flex; align-items: center; gap: 6px; }
+  .before .ba-k { color: #c2261d; }
+  .after .ba-k { color: #0f7a52; }
+  .ba p { margin: 0; color: #3a4742; }
+  .ba code, .intro code {
+    font-family: ui-monospace, "SF Mono", "Cascadia Code", Menlo, monospace;
+    font-size: 12px; background: #eef2f1; color: #0c5544;
+    padding: 1px 6px; border-radius: 5px; border: 1px solid #e0e7e5;
+    white-space: nowrap;
+  }
+  .before code { background: #fbeeec; color: #b3362c; border-color: #f3dcd9; }
+
+  /* ── TOC / sticky rail ── */
+  .toc { position: sticky; top: 0; z-index: 20; background: rgba(244,246,246,.9); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border-bottom: 1px solid var(--r-line); }
+  .toc-inner { max-width: 1080px; margin: 0 auto; padding: 12px 28px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .toc a { font-size: 13px; font-weight: 600; color: var(--r-muted); padding: 7px 13px; border-radius: 8px; transition: all .15s; text-decoration: none; }
+  .toc a:hover { color: var(--r-brand); background: var(--r-brand-soft); }
+  .toc .toc-label { font-family: var(--font-override, "Inter", sans-serif); font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #9aa6a2; margin-right: 4px; }
+
+  /* ── Footer ── */
+  .report-foot { margin-top: 56px; padding-top: 26px; border-top: 1px solid var(--r-line); display: flex; justify-content: space-between; align-items: center; gap: 18px; flex-wrap: wrap; color: var(--r-muted); font-size: 13px; }
+  .report-foot img { height: 30px; width: auto; opacity: .9; }
+
+  .legend { display: flex; flex-wrap: wrap; gap: 10px 18px; margin-top: 16px; font-size: 12.5px; color: var(--r-muted); }
+  .legend .sev { font-size: 10.5px; }
+
+  .status.note { color: #6b4ea8; background: #f1ecfb; }
+  .status.review { color: #b9791a; background: #fdf4e6; }
+
+  /* ── Verification (Opus review) band ── */
+  .verify-band { margin-top: 48px; background: linear-gradient(160deg,#0c5544 0%,#066653 100%); border-radius: 18px; padding: 30px 30px 8px; color: #fff; }
+  .verify-band .vb-eyebrow { font-family: var(--font-override, "Inter", sans-serif); font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: #b7e7d6; margin-bottom: 7px; }
+  .verify-band h3 { font-family: "Barlow Semi Condensed", sans-serif; font-weight: 700; font-size: 26px; margin: 0 0 8px; letter-spacing: .01em; }
+  .verify-band .vb-lead { font-size: 14.5px; color: rgba(255,255,255,.9); max-width: 760px; margin: 0 0 6px; }
+  .verify-band .vb-verdict { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,.13); border: 1px solid rgba(255,255,255,.22); border-radius: 999px; padding: 7px 15px; font-size: 13px; font-weight: 600; margin: 14px 0 4px; }
+  .verify-band .vb-verdict svg { width: 15px; height: 15px; }
+  .verify-issues { display: flex; flex-direction: column; gap: 14px; margin: 22px 0 0; padding-bottom: 24px; }
+  .verify-issues .issue { box-shadow: none; }
+
+  a:focus-visible, .toc a:focus-visible { outline: 2px solid var(--r-brand); outline-offset: 2px; border-radius: 6px; }
+
+  @media (max-width: 720px) {
+    .metrics { grid-template-columns: repeat(2, 1fr); }
+    .ba { grid-template-columns: 1fr; }
+    .ba .before { border-right: none; border-bottom: 1px solid var(--r-line); }
+    .issue-top { flex-wrap: wrap; }
+    .pills { flex-direction: row; align-items: center; width: 100%; order: 3; }
+    .sheet { padding: 0 18px 64px; }
+    .cover-inner { padding: 28px 18px 40px; }
+    .toc { position: static; }
+  }
+</style>
+</head>
+<body>
+
+<header class="cover">
+  <div class="cover-inner">
+    <div class="cover-top">
+      <span class="logo-chip"><img src="design-system/assets/scene-logo.png" alt="SCeNe Coalition" /></span>
+      <span class="cover-tag">Quality Assurance · Internal</span>
+    </div>
+    <h1>NbS Tool — QA / QC<br /><span>Audit Report</span></h1>
+    <p class="cover-sub">Findings, remediations and independent verification across all six QA waves of the Nature-based Solutions Design-to-MRV platform.</p>
+    <div class="cover-meta">
+      <div><div class="m-k">Scope</div><div class="m-v">All 9 screens · 16 source files</div></div>
+      <div><div class="m-k">Waves covered</div><div class="m-v">1 – 6 · complete</div></div>
+      <div><div class="m-k">Verification</div><div class="m-v">Independent Opus review pass</div></div>
+      <div><div class="m-k">Date</div><div class="m-v">June 6, 2026</div></div>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Report sections">
+  <div class="toc-inner">
+    <span class="toc-label">Jump to</span>
+    <a href="#summary">Summary</a>
+    <a href="#wave1">1 · Functional</a>
+    <a href="#wave2">2 · Consistency</a>
+    <a href="#wave3">3 · Responsive</a>
+    <a href="#wave4">4 · Accessibility</a>
+    <a href="#wave5">5 · Performance</a>
+    <a href="#wave6">6 · Code Quality</a>
+    <a href="#verify">Verification</a>
+  </div>
+</nav>
+
+<main class="sheet" style="margin: 2px 77px 0px">
+
+  <!-- Metrics -->
+  <section id="summary" aria-label="Executive summary">
+    <div class="metrics">
+      <div class="metric ink"><div class="big">46</div><div class="lbl">Issues identified</div></div>
+      <div class="metric"><div class="big">45</div><div class="lbl">Resolved &amp; verified</div></div>
+      <div class="metric amber"><div class="big">1</div><div class="lbl">Deferred — awaiting decision</div></div>
+      <div class="metric ink"><div class="big">6</div><div class="lbl">QA waves completed</div></div>
+    </div>
+
+    <div class="intro">
+      <div class="section-eyebrow">Executive summary</div>
+      <p>Six QA waves carried the NbS Tool from broken primary flows and an inconsistent palette to a functional, token-driven, mobile-ready, WCAG&nbsp;2.1&nbsp;AA-aligned and performance-tuned product. Each wave followed the same protocol — audit and report first, remediate on approval, then verify. Waves&nbsp;1–4 were run and verified directly; Waves&nbsp;5–6 (performance and code quality) were executed in a separate session and have since been <strong>independently re-verified against the source</strong> — all 22 fixes confirmed present, with two follow-up corrections and several calibration notes captured in the <a href="#verify" style="color:var(--r-brand);font-weight:600;">Verification</a> section. One item — heading hierarchy (A5) — remains intentionally held for a maintainer decision.</p>
+      <div class="legend">
+        <span style="font-weight:600;color:#3a4742;">Severity:</span>
+        <span class="sev critical">Critical</span>
+        <span class="sev high">High</span>
+        <span class="sev medium">Medium</span>
+        <span class="sev low">Low</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- WAVE 1 -->
+  <section class="wave" id="wave1">
+    <div class="wave-head">
+      <div class="wave-num"><small>Wave</small><b>01</b></div>
+      <div class="wave-title">
+        <h3>Functional</h3>
+        <span class="wt-sub">Links, buttons, forms, navigation &amp; destructive actions</span>
+      </div>
+      <span class="wave-count"><b>5</b> issues · all fixed</span>
+    </div>
+    <div class="issues" id="w1-issues"></div>
+  </section>
+
+  <!-- WAVE 2 -->
+  <section class="wave" id="wave2">
+    <div class="wave-head">
+      <div class="wave-num"><small>Wave</small><b>02</b></div>
+      <div class="wave-title">
+        <h3>Design-System Consistency</h3>
+        <span class="wt-sub">Brand colour, token usage, palette drift &amp; inline styles</span>
+      </div>
+      <span class="wave-count"><b>6</b> issues · all fixed</span>
+    </div>
+    <div class="issues" id="w2-issues"></div>
+  </section>
+
+  <!-- WAVE 3 -->
+  <section class="wave" id="wave3">
+    <div class="wave-head">
+      <div class="wave-num"><small>Wave</small><b>03</b></div>
+      <div class="wave-title">
+        <h3>Responsive &amp; Cross-Browser</h3>
+        <span class="wt-sub">Mobile layout, hamburger nav, Safari/iOS fixes &amp; touch targets</span>
+      </div>
+      <span class="wave-count"><b>6</b> issues · all fixed</span>
+    </div>
+    <div class="issues" id="w3-issues"></div>
+  </section>
+
+  <!-- WAVE 4 -->
+  <section class="wave" id="wave4">
+    <div class="wave-head">
+      <div class="wave-num"><small>Wave</small><b>04</b></div>
+      <div class="wave-title">
+        <h3>Accessibility — WCAG 2.1 AA</h3>
+        <span class="wt-sub">Focus visibility, colour contrast, ARIA, landmarks &amp; labels</span>
+      </div>
+      <span class="wave-count"><b>7</b> issues · 6 fixed · 1 deferred</span>
+    </div>
+    <div class="issues" id="w4-issues"></div>
+  </section>
+
+  <!-- WAVE 5 -->
+  <section class="wave" id="wave5">
+    <div class="wave-head">
+      <div class="wave-num"><small>Wave</small><b>05</b></div>
+      <div class="wave-title">
+        <h3>Performance</h3>
+        <span class="wt-sub">Render-blocking requests, dead CSS, CLS, LCP &amp; asset loading</span>
+      </div>
+      <span class="wave-count"><b>11</b> issues · all fixed</span>
+    </div>
+    <div class="issues" id="w5-issues"></div>
+  </section>
+
+  <!-- WAVE 6 -->
+  <section class="wave" id="wave6">
+    <div class="wave-head">
+      <div class="wave-num"><small>Wave</small><b>06</b></div>
+      <div class="wave-title">
+        <h3>Code Quality</h3>
+        <span class="wt-sub">Logic bugs, inline-handler cleanup, duplication &amp; keyboard semantics</span>
+      </div>
+      <span class="wave-count"><b>11</b> issues · all fixed</span>
+    </div>
+    <div class="issues" id="w6-issues"></div>
+  </section>
+
+  <!-- VERIFICATION (Opus review) -->
+  <section class="verify-band" id="verify">
+    <div class="vb-eyebrow">Independent verification · Opus review pass</div>
+    <h3>What the re-check found</h3>
+    <p class="vb-lead">Waves&nbsp;5–6 were produced in a separate session. Every one of the 22 fixes was re-checked line-by-line against the source files — dead CSS confirmed removed, fonts de-duplicated, preload/lazy/dimension hints present, search keyed on <code style="background:rgba(255,255,255,.15);color:#d8f3e9;">data-name</code>, the profile dropdown consolidated into <code style="background:rgba(255,255,255,.15);color:#d8f3e9;">nav-mobile.js</code>, and the delete toast moved to <code style="background:rgba(255,255,255,.15);color:#d8f3e9;">f04.css</code>. The conclusions hold; the items below are what an extra pass added.</p>
+    <span class="vb-verdict"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#b7e7d6" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>22 / 22 wave fixes confirmed in code · 2 follow-ups applied · 4 notes</span>
+    <div class="verify-issues" id="verify-issues"></div>
+  </section>
+
+  <footer class="report-foot">
+    <img src="design-system/assets/scene-logo.png" alt="SCeNe Coalition" />
+    <span>NbS Tool QA / QC Audit · Waves 1–6 complete · Independently verified · Generated June 6, 2026</span>
+  </footer>
+</main>
+
+<script>
+  const STATUS = {
+    fixed: '<span class="status fixed"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Fixed</span>',
+    deferred: '<span class="status deferred"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 8v4l3 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Deferred</span>',
+    note: '<span class="status note"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 11v5M12 7.5v.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>Note</span>',
+    followup: '<span class="status fixed"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Follow-up fixed</span>'
+  };
+
+  const DATA = {
+    'w1-issues': [
+      { id:'C1', sev:'critical', title:'Home auth buttons were dead', files:['F00 Home'],
+        before:'The auth modal “Log in” and “Create account” buttons were <code>type="submit"</code> inside a form with no handler — clicking did nothing, blocking the main entry into the app.',
+        after:'Replaced with real submit listeners that validate and navigate to the dashboard.', status:'fixed' },
+      { id:'H1', sev:'high', title:'Hero CTA linked nowhere', files:['F00 Home'],
+        before:'The primary hero call-to-action “Start Using the Tool” used <code>href="#"</code> and jumped to the top of the page.',
+        after:'Now opens the sign-up modal via <code>data-auth="signup"</code>.', status:'fixed' },
+      { id:'H2', sev:'high', title:'Dashboard delete buttons did nothing', files:['F04 Dashboard'],
+        before:'Row and card delete buttons only called <code>stopPropagation()</code> — a destructive control that silently failed.',
+        after:'Wired confirm → remove row/card → success toast, cancel-safe via capture-phase handling.', status:'fixed' },
+      { id:'M1', sev:'medium', title:'Dead “#” links used as navigation', files:['All screens'],
+        before:'Footer and nav links with real destinations pointed to <code>href="#"</code>, jumping to page top.',
+        after:'Repointed to F00, F01 and F04; genuine placeholders (Portfolio, Contact, Account) left as stubs by decision.', status:'fixed' },
+      { id:'M2', sev:'medium', title:'Forms accepted any input', files:['F00 Home','F07 Login'],
+        before:'Login / sign-up proceeded with empty fields, malformed email, short password or an unchecked Terms box.',
+        after:'Added email-format, password length and required-checkbox validation with inline error messaging.', status:'fixed' }
+    ],
+    'w2-issues': [
+      { id:'DS-1', sev:'high', title:'Brand-green drift', files:['All CSS','All screens'],
+        before:'The brand green oscillated between <code>#077f68</code> and <code>#066653</code> — two greens for the same role across nav, CTAs and auth.',
+        after:'Standardised on <code>#066653</code> as the main fill everywhere; <code>#077f68</code> reserved for hover/accent only.', status:'fixed' },
+      { id:'DS-2', sev:'medium', title:'Off-palette grays hardcoded', files:['All CSS','All screens'],
+        before:'A parallel “Tailwind” gray ramp (#677389, #A0ABC0, #1A202C, #E2E7F0 …) bypassed the token layer entirely.',
+        after:'Mapped every literal to its nearest design token — 370+ replacements across the codebase.', status:'fixed' },
+      { id:'DS-3', sev:'medium', title:'F04.1 built from inline styles', files:['F04.1 Project Detail'],
+        before:'100+ repeated inline <code>style</code> blocks for doc rows, badges and spec rows — untheme-able, no dark-mode reach.',
+        after:'Extracted into reusable token-based classes in <code>f041.css</code> (<code>.doc-row</code>, <code>.doc-badge</code>, <code>.spec-row</code> …).', status:'fixed' },
+      { id:'DS-4', sev:'medium', title:'Badge colours hardcoded; no “info” token', files:['All CSS','All screens'],
+        before:'Status badges used raw hex pairs, and a blue informational accent (#0A436B, #1D4ED8) existed with no matching token.',
+        after:'Added a full <code>info</code> / blue family to the tokens (light + dark); badges now reference semantic tokens.', status:'fixed' },
+      { id:'DS-5', sev:'low', title:'Raw font-family literals', files:['All CSS','All screens'],
+        before:'Dozens of <code>font-family: Poppins / Inter</code> literals would ignore a future family change.',
+        after:'Replaced with <code>var(--font-text)</code> and <code>var(--font-override)</code>.', status:'fixed' },
+      { id:'DS-6', sev:'low', title:'Off-scale radii', files:['f06.css','others'],
+        before:'<code>border-radius: 99px</code> used in place of the pill token.',
+        after:'Replaced with <code>var(--radius-pill)</code>.', status:'fixed' }
+    ],
+    'w3-issues': [
+      { id:'RESP-1', sev:'high', title:'No mobile navigation', files:['All screens'],
+        before:'The top nav links overflowed horizontally below ~860px with no collapse behaviour.',
+        after:'Shared <code>nav-mobile.js</code> injects a hamburger and toggles the menu on tap, outside-click and Esc.', status:'fixed' },
+      { id:'RESP-2', sev:'high', title:'Dense tool screens unusable on phones', files:['F03','F05','F05.1.1','F06'],
+        before:'Data-dense generator and MRV screens were cramped on mobile with no guidance to the user.',
+        after:'Added a dismissible “Best viewed on desktop” notice shown at ≤760px on all four tool screens.', status:'fixed' },
+      { id:'RESP-3', sev:'high', title:'Layout overflow at 375px', files:['All screens'],
+        before:'Grids, hero, toolbars, the stepper and wide tables forced page-level horizontal scroll.',
+        after:'Breakpoints stack to single column, the stepper goes vertical, and wide tables scroll inside their own container.', status:'fixed' },
+      { id:'RESP-4', sev:'medium', title:'Blur broken in Safari', files:['All screens'],
+        before:'Modal / overlay <code>backdrop-filter</code> lacked the <code>-webkit-</code> prefix and failed on Safari &amp; iOS.',
+        after:'Added <code>-webkit-backdrop-filter</code> to every blurred surface.', status:'fixed' },
+      { id:'RESP-5', sev:'medium', title:'iOS input zoom &amp; date styling', files:['F03','F05.1.1','Auth'],
+        before:'Inputs under 16px triggered Safari focus-zoom; <code>date</code> inputs rendered inconsistently on iOS.',
+        after:'Inputs forced to 16px on mobile; date inputs styled consistently.', status:'fixed' },
+      { id:'RESP-6', sev:'low', title:'Small touch targets', files:['All screens'],
+        before:'Some icon buttons and modal closes were below the 44px recommended hit area.',
+        after:'Minimum touch targets enlarged toward 44px on touch screens.', status:'fixed' }
+    ],
+    'w4-issues': [
+      { id:'A1', sev:'high', title:'No visible keyboard focus', files:['All screens'],
+        before:'Buttons, links, tabs and cards had no <code>:focus-visible</code> style — keyboard users had no focus indicator (WCAG 2.4.7).',
+        after:'Global focus ring added in <code>tokens.css</code> (green on light, white on dark/primary); mouse clicks stay clean.', status:'fixed' },
+      { id:'A2', sev:'high', title:'Text contrast failure', files:['f03/f05/f06/f0511/f041.css'],
+        before:'<code>#a0a4ac</code> body text measured 2.50:1 — fails 4.5:1 (WCAG 1.4.3): column headers, breadcrumbs, KPI units, placeholders.',
+        after:'Body text darkened to <code>#68727d</code> (4.89:1); placeholders to <code>#767b82</code>; borders left unchanged.', status:'fixed' },
+      { id:'A3', sev:'medium', title:'Inputs lacked accessible names', files:['F03','F04.1'],
+        before:'Generated and inline inputs were placeholder-only — screen readers announced “edit text” (WCAG 4.1.2).',
+        after:'Added <code>aria-label</code> to generated fields (derived from question text) and F04.1 invite controls.', status:'fixed' },
+      { id:'A4', sev:'medium', title:'Incomplete tab pattern', files:['F04.1','F00','F07'],
+        before:'F04.1 tabs had a tablist but no <code>role="tab"</code>, <code>aria-selected</code> or <code>aria-controls</code>; panels lacked <code>role="tabpanel"</code>.',
+        after:'Tabs fully wired with roles and <code>aria-selected</code> synced on every switch; auth tabs confirmed correct.', status:'fixed' },
+      { id:'A5', sev:'medium', title:'Heading order skips H2', files:['All app screens'],
+        before:'App screens jump from <code>h1</code> (page title) to <code>h3</code> (block heads), skipping the <code>h2</code> level.',
+        after:'Held for maintainer decision — structure left intact rather than auto-restructured. Options: promote to H2, add hidden H2, or accept.', status:'deferred' },
+      { id:'A6', sev:'low', title:'Decorative SVGs read by AT', files:['All screens'],
+        before:'Hundreds of inline decorative icons were exposed to assistive tech (WCAG 1.1.1).',
+        after:'<code>nav-mobile.js</code> marks unlabeled SVGs <code>aria-hidden</code> + <code>focusable="false"</code>, re-running for JS-rendered icons.', status:'fixed' },
+      { id:'A7', sev:'low', title:'No skip link or main landmark', files:['All screens'],
+        before:'Content sat in generic <code>&lt;div&gt;</code>s with no <code>&lt;main&gt;</code> landmark and no skip link (WCAG 2.4.1).',
+        after:'“Skip to main content” link plus a <code>main</code> / <code>role="main"</code> landmark added to every screen.', status:'fixed' }
+    ],
+    'w5-issues': [
+      { id:'P-01', sev:'high', title:'Duplicate Google Fonts request', files:['F05.1.1'],
+        before:'F05.1.1 loaded Google Fonts twice — a second <code>&lt;link&gt;</code> requested an unused Poppins weight, adding a render-blocking round-trip on every load.',
+        after:'Removed the duplicate stylesheet link; one font request remains. <em>(Re-verified: severity is closer to Low/Medium — a single redundant weight, not a true blocker.)</em>', status:'fixed' },
+      { id:'P-02', sev:'medium', title:'Dead CSS — <code>.appnav*</code> block', files:['dashboard.css'],
+        before:'~40 <code>.appnav*</code> rules for a replaced nav shell shipped on 7 screens; no screen uses <code>.appnav</code> (all use <code>.sitenav</code>).',
+        after:'Deleted the entire block from <code>dashboard.css</code> (~1.8 KB). Confirmed absent.', status:'fixed' },
+      { id:'P-03', sev:'medium', title:'Dead CSS — <code>.f03-nav*</code> block', files:['f03.css'],
+        before:'8 <code>.f03-nav*</code> rules for a replaced dark navbar shipped on 4 screens.',
+        after:'Deleted from <code>f03.css</code> (~0.5 KB). Confirmed absent.', status:'fixed' },
+      { id:'P-04', sev:'medium', title:'CLS risk — logo missing <code>width</code>', files:['All screens'],
+        before:'The nav logo <code>&lt;img&gt;</code> set only <code>height:44px</code> with no <code>width</code>, so the browser could not reserve horizontal space — a layout shift in the sticky nav on load.',
+        after:'Added <code>width="360" height="133"</code> to all 9 nav + footer logos. Re-verified: dimensions match the PNG\'s true 360×133 intrinsic size, so no distortion.', status:'fixed' },
+      { id:'P-05', sev:'medium', title:'No preload for LCP hero image', files:['F00 Home'],
+        before:'Hero / overview backgrounds were set via CSS <code>background-image</code> — invisible to the preload scanner, fetched late, extending LCP.',
+        after:'Added two <code>&lt;link rel="preload" as="image"&gt;</code> hints before the CSS links. Confirmed present.', status:'fixed' },
+      { id:'P-06', sev:'low', title:'Duplicate CSS reset block', files:['home.css','dashboard.css'],
+        before:'Six identical reset rules were copy-pasted across two files.',
+        after:'Consolidated into a single global reset in <code>tokens.css</code>; both files keep only their page <code>body</code> background.', status:'fixed' },
+      { id:'P-07', sev:'low', title:'<code>hardenSvgs()</code> ran 3× per page', files:['nav-mobile.js'],
+        before:'Delayed 400 ms / 1200 ms SVG-harden passes fired on every screen, even static ones needing no re-scan.',
+        after:'Gated both timers behind <code>#root</code> — only the JS-rendered F03 &amp; F05.1.1 get the extra passes.', status:'fixed' },
+      { id:'P-08', sev:'low', title:'Auth modal styles inlined in F00', files:['F00 Home'],
+        before:'A ~50-line inline <code>&lt;style&gt;</code> block in F00\'s body re-declared <code>.auth-overlay</code> / <code>.auth-modal</code> rules despite <code>auth.css</code> already being linked.',
+        after:'Moved all overlay rules into <code>auth.css</code>; removed the inline block.', status:'fixed' },
+      { id:'P-09', sev:'low', title:'9× repeated inline SVG icons', files:['F01 Interactive Map'],
+        before:'Three pathway-benefit icons were each written inline 3× across the Protect / Manage / Restore cards.',
+        after:'Added one hidden <code>&lt;symbol&gt;</code> set; all 9 copies replaced with <code>&lt;use&gt;</code>.', status:'fixed' },
+      { id:'P-10', sev:'low', title:'Inline hover handlers on breadcrumbs', files:['F03','F05.1.1','F06'],
+        before:'Breadcrumb links used <code>onmouseover</code>/<code>onmouseout</code> handlers and large inline style strings (CSP-hostile).',
+        after:'Moved layout + hover to a <code>.crumbbar</code> block in <code>nav.css</code>; removed inline styles/handlers. <em>(F04.1 was missed here — caught as Q-02.)</em>', status:'fixed' },
+      { id:'P-11', sev:'low', title:'Footer logo not lazy-loaded', files:['F00 Home'],
+        before:'The footer <code>scene-logo.png</code> on the long F00 page was fetched eagerly, competing with the hero image.',
+        after:'Added <code>loading="lazy"</code> to the footer logo.', status:'fixed' }
+    ],
+    'w6-issues': [
+      { id:'Q-01', sev:'high', title:'Search index desyncs after deletion', files:['F04 Dashboard'],
+        before:'The search handler matched DOM rows to data by array index. After a row was removed via <code>tr.remove()</code> without splicing the array, every later search hid the wrong rows.',
+        after:'Search now keys on a <code>data-name</code> attribute stamped per row/card instead of index. Verified in code (rows &amp; grid both use <code>dataset.name</code>).', status:'fixed' },
+      { id:'Q-02', sev:'medium', title:'F04.1 breadcrumb missed in P-10', files:['F04.1 Project Detail'],
+        before:'F04.1\'s breadcrumb still carried the inline <code>onmouseover</code>/<code>onmouseout</code> handlers and style string — not covered by the Wave 5 P-10 cleanup.',
+        after:'Applied the same <code>.crumbbar</code> cleanup. Verified: no inline hover handlers remain in F04.1.', status:'fixed' },
+      { id:'Q-03', sev:'medium', title:'Profile dropdown IIFE duplicated 7×', files:['7 screens'],
+        before:'An identical profile-dropdown <code>&lt;script&gt;</code> block was copy-pasted into every authenticated screen.',
+        after:'Moved to a single <code>initProfileDropdown()</code> in <code>nav-mobile.js</code>; inline blocks removed. Verified present in the shared script.', status:'fixed' },
+      { id:'Q-04', sev:'medium', title:'Whole-row <code>onclick</code> nav bypassed keyboard', files:['F04 Dashboard'],
+        before:'Table rows and grid cards used <code>&lt;tr/article onclick&gt;</code> for navigation — not focusable, no Enter/Space, no middle-click / Ctrl+click to open a new tab.',
+        after:'Added <code>tabindex="0"</code> + <code>onkeydown</code> for keyboard, and an <code>&lt;a class="row-link"&gt;</code> on the name. <em>Re-verification: the link was applied to the table only — the grid card title was still a bare <code>&lt;h3&gt;</code>. Closed as follow-up R2.</em>', status:'fixed' },
+      { id:'Q-05', sev:'low', title:'<code>display:none</code> declared twice on save bar', files:['F04.1 Project Detail'],
+        before:'<code>#metaSaveBar</code>\'s inline style had <code>display:none</code> twice, shadowing the first and obscuring intent.',
+        after:'Removed the duplicate declaration; element still hides and JS still overrides to <code>flex</code>. Verified single declaration.', status:'fixed' },
+      { id:'Q-06', sev:'low', title:'Delete-toast inline handlers + style', files:['F04 Dashboard'],
+        before:'The delete toast carried a ~200-char inline style string and <code>onmouseover</code>/<code>onmouseout</code> on its close button.',
+        after:'Moved to a <code>.delete-toast</code> class in <code>f04.css</code> with a <code>:hover</code> rule. Verified in <code>f04.css</code>.', status:'fixed' },
+      { id:'Q-07', sev:'low', title:'Collaborator rows not keyboard-focusable', files:['F04.1 Project Detail'],
+        before:'Each collaborator row was a <code>&lt;div onclick&gt;</code> — not in tab order, no Enter/Space.',
+        after:'Added <code>role="button" tabindex="0"</code> + a keydown handler. Verified in <code>renderCollabList()</code>.', status:'fixed' },
+      { id:'Q-08', sev:'low', title:'<code>?step=3</code> deep-link ignored', files:['F04.1 → F05'],
+        before:'F04.1 linked to <code>F05?step=3</code> implying a deep-link to step 3, which F05 did not honour.',
+        after:'Added a <code>URLSearchParams</code> reader to F05 (steps 1–3). <em>Re-verification: F05 already had a <code>?step=3</code> handler — this added a second, duplicating logic. Resolved as follow-up R1.</em>', status:'fixed' },
+      { id:'Q-09', sev:'low', title:'Density <code>!important</code> style block in body', files:['F04.1 Project Detail'],
+        before:'A 40+ line inline <code>&lt;style&gt;</code> block used <code>!important</code> on every density rule (same anti-pattern as P-08).',
+        after:'Moved the density rules to <code>f041.css</code> under the existing <code>[data-density]</code> selectors.', status:'fixed' },
+      { id:'Q-10', sev:'low', title:'<code>@keyframes toastIn</code> inline in body', files:['F04 Dashboard'],
+        before:'The toast entrance animation was defined in an inline body <code>&lt;style&gt;</code> — uncacheable.',
+        after:'Moved to <code>f04.css</code> alongside the Q-06 toast styles.', status:'fixed' },
+      { id:'Q-11', sev:'low', title:'Stale <code>_F05_build.html</code> artifact', files:['screens/'],
+        before:'An unlinked draft build file sat alongside the production screens, risking confusion about the canonical set.',
+        after:'Removed from the screens folder. Confirmed the directory no longer contains it.', status:'fixed' }
+    ],
+    'verify-issues': [
+      { id:'R1', sev:'medium', title:'Q-08 duplicated logic that already existed', files:['F05 Create Monitoring Plan'],
+        before:'Q-08\'s premise — “F05 does not read <code>URLSearchParams</code>… always opens step 1” — was inaccurate: a <code>?step=3</code> handler already existed. The fix added a <em>second</em> handler, so two IIFEs both ran <code>goToStep()</code> on load. Ironic for a code-quality wave.',
+        after:'Removed the older duplicate block; kept the single generic steps-1–3 reader. F05 re-loaded clean, no console errors.', status:'followup' },
+      { id:'R2', sev:'medium', title:'Q-04 fix was inconsistent across views', files:['F04 Dashboard'],
+        before:'The card claimed middle-click / Ctrl+click was restored, but the <code>&lt;a class="row-link"&gt;</code> landed on the <strong>table</strong> rows only — the <strong>grid card</strong> title was still a bare <code>&lt;h3&gt;</code>, so new-tab still failed in card view.',
+        after:'Wrapped the grid card title in the same <code>row-link</code> anchor + added matching CSS. Verified: 5 card links now match 5 table links.', status:'followup' },
+      { id:'R3', sev:'low', title:'Wave 6 cards mislabeled as “proposed”', files:['Wave 5–6 report'],
+        before:'Every Wave 6 card was written in present tense (“What’s wrong” / “Proposed fix”), reading as not-yet-done, while all carried a green <strong>Fixed</strong> badge — leaving the actual status ambiguous.',
+        after:'Normalised to past-tense before/after in this aggregated report after confirming each fix is genuinely in the code.', status:'note' },
+      { id:'R4', sev:'low', title:'No verification evidence behind 22 “Fixed” badges', files:['Wave 5–6 report'],
+        before:'Several fixes are CSS / markup deletions (P-02, P-03, P-08, Q-09, Q-11) shipped as “Fixed” with no regression check or before/after evidence.',
+        after:'Re-checked each against source; rendering confirmed clean on F04 &amp; F05. Recommend a screenshot diff for deletion-type fixes going forward.', status:'note' },
+      { id:'R5', sev:'low', title:'Severity calibration', files:['Wave 5 report'],
+        before:'P-01 (one redundant font-weight request) was rated <strong>High</strong> — overstated for a ~2 KB extra request. Q-01 (search desync) is correctly High.',
+        after:'Flagged for re-grading to Low/Medium; left in place to preserve the original wave log\'s IDs.', status:'note' },
+      { id:'R6', sev:'low', title:'Silent scope shift to include F01', files:['Waves 5–6'],
+        before:'Waves 1–4 explicitly excluded F01 Interactive Map; P-09 and Q-03 pulled F01 back into scope without noting the change.',
+        after:'Scope updated in this report to “all 9 screens”; F01 is now consistently in-scope from Wave 5 onward.', status:'note' }
+    ]
+  };
+
+  function render() {
+    for (const [containerId, items] of Object.entries(DATA)) {
+      const el = document.getElementById(containerId);
+      el.innerHTML = items.map(function (i) {
+        const files = i.files.map(function (f) { return '<span class="file-tag">' + f + '</span>'; }).join('');
+        return '' +
+          '<article class="issue">' +
+            '<div class="issue-top">' +
+              '<span class="id-badge">' + i.id + '</span>' +
+              '<div class="issue-headings">' +
+                '<div class="issue-title">' + i.title + '</div>' +
+                '<div class="issue-files">' + files + '</div>' +
+              '</div>' +
+              '<div class="pills">' +
+                '<span class="sev ' + i.sev + '">' + i.sev + '</span>' +
+                STATUS[i.status] +
+              '</div>' +
+            '</div>' +
+            '<div class="ba">' +
+              '<div class="before"><div class="ba-k">Before</div><p>' + i.before + '</p></div>' +
+              '<div class="after"><div class="ba-k">After</div><p>' + i.after + '</p></div>' +
+            '</div>' +
+          '</article>';
+      }).join('');
+    }
+  }
+  render();
+</script>
+
+</body>
+</html>

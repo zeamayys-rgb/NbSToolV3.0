@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" class="no-js">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NbS Tool — From a place on the map to verified climate impact</title>
+<meta name="description" content="NbS Tool helps frontline organisations across Southeast Asia scope a site, analyse its baseline, choose a Nature-based pathway, document it for donors, and verify impact — the full Design-to-MRV workflow on one standardised platform." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Barlow+Semi+Condensed:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="preload" href="../assets/overview-bg.jpg" as="image" />
+<link rel="preload" href="../assets/genctx/eco-map.png" as="image" />
+<!-- tokens → auth → nav → home (home LAST so its body + button rules win) -->
+<link rel="stylesheet" href="../tokens.css" />
+<link rel="stylesheet" href="../auth.css" />
+<link rel="stylesheet" href="../nav.css" />
+<link rel="stylesheet" href="../home.css" />
+<noscript><style>.reveal{opacity:1!important;transform:none!important}.stage{opacity:1}</style></noscript>
+</head>
+<body data-screen-label="F00 — NbS Tool Home">
+<a class="skip-link" href="#main">Skip to main content</a>
+<div class="scrollbar" id="scrollbar"></div>
+
+<nav class="sitenav">
+  <a class="sitenav-logo" href="F00 Home.html">
+    <img src="../assets/scene-logo.png" alt="SCeNe Coalition" width="360" height="133" style="height:44px;width:auto" />
+  </a>
+  <div class="sitenav-links">
+    <a href="F00 Home.html" class="sitenav-link active">Home</a>
+    <a href="F01 Interactive Map.html" class="sitenav-link">Interactive Map</a>
+    <a href="F04 Dashboard.html" class="sitenav-link">My Project</a>
+  </div>
+  <div class="sitenav-actions">
+    <button class="sitenav-login" data-auth="login">Login</button>
+    <button class="sitenav-signup" data-auth="signup">Sign up</button>
+    <button class="sitenav-lang">🇺🇸 <svg class="chev" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  </div>
+</nav>
+
+
+<!-- ============================================================
+     1 · HERO
+     ============================================================ -->
+<header class="hero" id="main" tabindex="-1" data-screen-label="Hero">
+  <canvas id="terrain" aria-hidden="true"></canvas>
+  <div class="hero-graticule" aria-hidden="true"></div>
+  <div class="hero-contour" aria-hidden="true" style="background:repeating-radial-gradient(circle at 84% 14%, transparent 0 25px, rgba(95,230,160,.14) 25px 26px); -webkit-mask-image:radial-gradient(60% 50% at 84% 14%, #000, transparent 72%); mask-image:radial-gradient(60% 50% at 84% 14%, #000, transparent 72%);"></div>
+  <div class="hero-veil" aria-hidden="true"></div>
+
+  <div class="hud hud-tl"><span class="dot"></span> Baseline · live</div>
+  <div class="hud hud-tr">1.4078°S · 109.8290°E</div>
+  <div class="hud hud-br">RLCMS · Tier-2 regional baseline</div>
+
+  <div class="hero-inner">
+    <span class="kicker hero-eyebrow reveal">Nature-based Solutions · Design&nbsp;→&nbsp;MRV</span>
+    <h1 class="reveal">Turn a place into a climate project <span class="lit">the world can verify.</span></h1>
+    <p class="hero-sub reveal">NbS Tool helps frontline organisations across Southeast Asia scope a site, read its baseline, choose a Nature-based pathway, and carry it all the way to a monitored, donor-ready MRV record — on one standardised platform.</p>
+    <div class="hero-cta reveal">
+      <a class="cbtn cbtn-spring" href="F01 Interactive Map.html">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M9 4L3 7v13l6-3 6 3 6-3V4l-6 3-6-3z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 4v13M15 7v13" stroke="currentColor" stroke-width="1.8"/></svg>
+        Start with the map
+      </a>
+      <a class="cbtn cbtn-ghost" href="#journey" data-scroll>
+        <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.7"/><path d="M10 9l5 3-5 3V9z" fill="currentColor"/></svg>
+        See how it works
+      </a>
+    </div>
+  </div>
+
+  <div class="hero-stats">
+    <div class="wrap">
+      <div class="hstat reveal"><div class="v"><span data-count="8420">0</span> <small>ha</small></div><div class="k">Mapped &amp; under management</div></div>
+      <div class="hstat reveal"><div class="v"><span data-count="5">0</span></div><div class="k">Active field projects</div></div>
+      <div class="hstat reveal"><div class="v"><span data-count="3">0</span></div><div class="k">Ecosystems · 3 pathways</div></div>
+      <div class="hstat reveal"><div class="v"><span data-count="12">0</span></div><div class="k">Live MRV indicators</div></div>
+    </div>
+  </div>
+
+  <div class="scrollcue" aria-hidden="true">Scroll<div class="rail"></div></div>
+</header>
+
+
+<!-- ============================================================
+     2 · DEFINITION — the triple benefit
+     ============================================================ -->
+<section class="band band-paper grain" data-screen-label="What is NbS">
+  <div class="wrap">
+    <div class="triple-lead">
+      <div class="head">
+        <span class="kicker reveal">What are Nature-based Solutions?</span>
+        <h2 class="reveal">Actions that pay back <span class="em">three times over.</span></h2>
+        <p class="reveal">Protect, sustainably manage, or restore an ecosystem to solve a real societal challenge — and a <em>high-quality</em> solution delivers measurable benefit across three intertwined dimensions at once.</p>
+      </div>
+      <div class="triple-logo-note reveal">
+        <img src="../assets/scene-logo.png" alt="SCeNe Coalition mark" />
+        <p>It's why our mark holds three things at once — a <b>leaf</b>, a <b>cloud</b>, and a <b>face</b>. Climate, Nature and People, inseparable.</p>
+      </div>
+    </div>
+
+    <div class="triple">
+      <article class="tcard climate reveal">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.8"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+        <h3>Climate</h3>
+        <p>Carbon you can count — biomass and emissions avoided, quantified from vegetation cover on a five-pool basis.</p>
+        <ul>
+          <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg> Carbon stock <span class="unit">92.4 tC/ha</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg> Above + below-ground biomass</li>
+          <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg> Emissions avoided <span class="unit">UDEF-A</span></li>
+        </ul>
+      </article>
+      <article class="tcard people reveal">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3" stroke="currentColor" stroke-width="1.8"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16 7a3 3 0 010 6M21 20c0-2.5-1.5-4.6-3.5-5.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+        <h3>People</h3>
+        <p>Communities at the centre — livelihoods, resilience and GEDSI, with free, prior &amp; informed consent in the record.</p>
+        <ul>
+          <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg> GEDSI indicators</li>
+          <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg> Villages &amp; FPIC <span class="unit">consent</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg> People benefiting</li>
+        </ul>
+      </article>
+      <article class="tcard nature reveal">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21V11M12 11c0-3-2-5.5-5-6m5 6c0-3.5 2.5-6 6-6.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 21c-4 0-8-3-8-8 0-2 1-4 1-4s3 1 5 4M12 21c4 0 8-3 8-9 0 0-3 0-5 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <h3>Nature</h3>
+        <p>Living systems restored — biodiversity and ecosystem integrity, tracked through habitat condition over time.</p>
+        <ul>
+          <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg> Species &amp; IUCN status</li>
+          <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg> Habitat condition <span class="unit">FLII</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg> Net biodiversity gain</li>
+        </ul>
+      </article>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     3 · JOURNEY — sticky scrollytelling
+     ============================================================ -->
+<section class="journey" id="journey" data-screen-label="The Design-to-MRV workflow">
+  <div class="journey-top">
+    <div class="wrap head center">
+      <span class="kicker no-rule reveal" style="justify-content:center">One continuous workflow</span>
+      <h2 class="reveal">The Design-to-MRV journey, <span class="em">end to end.</span></h2>
+      <p class="reveal">Most tools hand you a map and stop. NbS Tool threads every stage together — so the polygon you draw on day one becomes the impact you verify years later. Scroll to follow a single project through.</p>
+    </div>
+  </div>
+
+  <div class="wrap-wide">
+    <div class="journey-grid">
+
+      <!-- STICKY STAGE VIEWPORT -->
+      <div class="stage-col">
+        <div class="stage-frame" id="stageFrame">
+          <div class="frame-hud"><span class="d live"></span> NbS&nbsp;Tool <span class="grow" id="frameStep">01 / 06 · Scope</span></div>
+
+          <!-- STAGE 1 — SCOPE -->
+          <div class="stage" data-stage="0">
+            <div class="stage-pad">
+              <div class="mini-h">F01 · Interactive Map</div>
+              <div class="s-map" style="margin-top:10px;background-image:url(../assets/genctx/eco-map.png)">
+                <svg class="poly" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M14,42 L34,26 L52,20 L74,30 L84,52 L70,74 L44,80 L24,66 Z"/></svg>
+                <span class="s-pin" style="left:42%;top:46%">Kubu Raya · 1,240 ha</span>
+              </div>
+              <div class="s-chips">
+                <span class="s-chip on"><span class="sw" style="background:#2c6639"></span>Land cover</span>
+                <span class="s-chip on"><span class="sw" style="background:#5fe6a0"></span>Mangrove</span>
+                <span class="s-chip"><span class="sw" style="background:#8bb4e6"></span>Protected areas</span>
+                <span class="s-chip"><span class="sw" style="background:#f2b559"></span>Deforestation risk</span>
+                <span class="s-chip">+ 5 groups</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- STAGE 2 — ANALYSE -->
+          <div class="stage" data-stage="1">
+            <div class="stage-pad">
+              <div class="mini-h">F02 · Data Analyser — baseline &amp; threats</div>
+              <div class="s-an" style="margin-top:10px">
+                <div class="s-thumb" style="background-image:url(../assets/genctx/terrain.jpg)"><span>Elevation</span></div>
+                <div class="s-thumb" style="background-image:url(../assets/genctx/risk-map.png);background-color:#fff"><span>Threat profile</span></div>
+              </div>
+              <div class="s-read">
+                <div class="s-stat"><div class="n">184<i>t/ha</i></div><div class="l">Biomass</div></div>
+                <div class="s-stat"><div class="n">92.4<i>tC</i></div><div class="l">Carbon stock</div></div>
+                <div class="s-stat"><div class="n">76<i>%</i></div><div class="l">Veg. cover</div></div>
+              </div>
+              <div class="s-threats">
+                <span class="s-threat"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M12 3l9 16H3L12 3z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 10v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Deforestation</span>
+                <span class="s-threat"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M12 3l9 16H3L12 3z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 10v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Fire risk</span>
+                <span class="s-threat"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M12 3l9 16H3L12 3z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 10v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Tidal flood</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- STAGE 3 — DECIDE -->
+          <div class="stage" data-stage="2">
+            <div class="stage-pad">
+              <div class="mini-h">F02 · Pathway selection — Mangrove</div>
+              <div class="s-paths" style="margin-top:12px">
+                <div class="s-path"><img src="../assets/pathway/protect-mangrove.svg" alt="" /><div class="pn">Protect</div><div class="pe">eligible</div></div>
+                <div class="s-path"><img src="../assets/pathway/manage-mangrove.svg" alt="" /><div class="pn">Manage</div><div class="pe">eligible</div></div>
+                <div class="s-path sel"><span class="check"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span><img src="../assets/pathway/restore-mangrove.svg" alt="" /><div class="pn">Restore</div><div class="pe">selected</div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- STAGE 4 — DOCUMENT -->
+          <div class="stage" data-stage="3">
+            <div class="stage-pad">
+              <div class="mini-h">F03 · Document Generator</div>
+              <div class="s-doc" style="margin-top:10px">
+                <div class="s-paper">
+                  <span class="badge">CCB · VERRA</span>
+                  <h6>Climate, Community &amp; Biodiversity Project Document</h6>
+                  <div class="ln m"></div><div class="ln"></div><div class="ln s"></div>
+                  <div class="ln m" style="margin-top:14px"></div><div class="ln"></div><div class="ln s"></div>
+                </div>
+                <div class="s-doc-side">
+                  <div class="s-docrow"><svg viewBox="0 0 24 24" fill="none"><path d="M7 3h7l5 5v13H7a1 1 0 01-1-1V4a1 1 0 011-1z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M14 3v5h5" stroke="currentColor" stroke-width="1.7"/></svg><div>General Pre-Feasibility Study<div class="meta">Auto-filled from analysis</div></div></div>
+                  <div class="s-docrow"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><div>CCB Standard document<div class="meta">Donor &amp; auditor ready</div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- STAGE 5 — MANAGE -->
+          <div class="stage" data-stage="4">
+            <div class="stage-pad">
+              <div class="mini-h">F04 · My Project Dashboard</div>
+              <div class="s-dash">
+                <div class="s-prow">
+                  <span class="eco"><img src="../assets/pathway/eco-mangrove.svg" alt="" style="width:34px;height:34px"/></span>
+                  <div><div class="nm">Kubu Raya Mangrove</div><div class="mt">West Kalimantan · 1,240 ha · Restore</div></div>
+                  <span class="s-pill live">Monitoring active</span>
+                </div>
+                <div class="s-prow">
+                  <span class="eco"><img src="../assets/pathway/eco-peatland.svg" alt="" style="width:34px;height:34px"/></span>
+                  <div><div class="nm">Sebangau Peatland</div><div class="mt">Central Kalimantan · 3,500 ha · Restore</div></div>
+                  <span class="s-pill wait">MRV plan due</span>
+                </div>
+                <div class="s-prow">
+                  <span class="eco"><img src="../assets/pathway/eco-forest.svg" alt="" style="width:34px;height:34px"/></span>
+                  <div><div class="nm">Leuser Lowland Forest</div><div class="mt">Aceh · 2,120 ha · Manage</div></div>
+                  <span class="s-pill live">64 entries</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- STAGE 6 — VERIFY -->
+          <div class="stage" data-stage="5">
+            <div class="stage-pad">
+              <div class="mini-h">F06 · MRV Dashboard — Q2 2026</div>
+              <div class="s-ver" style="margin-top:10px">
+                <div class="s-inds">
+                  <div class="s-ind"><div class="mini-row"><span class="il">Area of habitats restored</span><span class="iv">412 / 600 ha</span></div><div class="s-track"><div class="s-fill" style="width:69%"></div></div></div>
+                  <div class="s-ind"><div class="mini-row"><span class="il">Mangrove cover change</span><span class="iv">+38 ha/yr</span></div><div class="s-track"><div class="s-fill" style="width:76%"></div></div></div>
+                  <div class="s-ind"><div class="mini-row"><span class="il">Seedling survival rate</span><span class="iv">74 %</span></div><div class="s-track"><div class="s-fill" style="width:92%"></div></div></div>
+                  <div class="s-ind"><div class="mini-row"><span class="il">Canal blocks installed</span><span class="iv">34 / 50</span></div><div class="s-track"><div class="s-fill" style="width:68%"></div></div></div>
+                </div>
+                <div class="s-ring">
+                  <div class="s-ringwrap">
+                    <svg viewBox="0 0 120 120"><circle class="track" cx="60" cy="60" r="50" fill="none" stroke-width="10"/><circle class="prog" cx="60" cy="60" r="50" fill="none" stroke-width="10" stroke-dasharray="314" stroke-dashoffset="100"/></svg>
+                    <div class="pct">68%</div>
+                  </div>
+                  <div class="lbl">indicators reported<br>8 of 12 filled</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- SCROLLING CHAPTERS -->
+      <div class="chapters">
+        <article class="chapter" data-chapter="0">
+          <div class="chapter-no"><span class="bar"></span>STEP 01 · F01</div>
+          <h3>Find the place.</h3>
+          <p>Search a location or drop into the field, then read it through five thematic layer groups — land cover, nature, climate, people and country-specific permits. Draw the boundary that becomes your Area of Interest.</p>
+          <div class="tags"><span class="tag">Interactive map</span><span class="tag">5 layer groups</span><span class="tag">Generate baseline map</span></div>
+          <a class="cbtn cbtn-text chapter-link" href="F01 Interactive Map.html">Open the map <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        </article>
+
+        <article class="chapter" data-chapter="1">
+          <div class="chapter-no"><span class="bar"></span>STEP 02 · F02</div>
+          <h3>Read the land.</h3>
+          <p>The analyser builds a technical baseline automatically — biomass, carbon stock, vegetation cover — then profiles the threats: deforestation, fire and flood. No manual data compilation, harmonised to a Southeast-Asia standard.</p>
+          <div class="tags"><span class="tag">Site characterisation</span><span class="tag">Threat profile</span><span class="tag">Triple-benefit projection</span></div>
+          <a class="cbtn cbtn-text chapter-link" href="F05.0 Create New Project From Scratch.html">See the analyser <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        </article>
+
+        <article class="chapter" data-chapter="2">
+          <div class="chapter-no"><span class="bar"></span>STEP 03 · F02</div>
+          <h3>Choose the intervention.</h3>
+          <p>Based on what's actually eligible for your ecosystem, pick a Nature-based pathway — Protect, Manage or Restore — across Forest, Mangrove or Peatland. Recommendations are framed as conditional examples, never prescriptions.</p>
+          <div class="tags"><span class="tag">Protect</span><span class="tag">Manage</span><span class="tag">Restore</span></div>
+        </article>
+
+        <article class="chapter" data-chapter="3">
+          <div class="chapter-no"><span class="bar"></span>STEP 04 · F03</div>
+          <h3>Make it bankable.</h3>
+          <p>Generate standardised, regulator-grade documents straight from your analysis — a General Pre-Feasibility Study and a Climate, Community &amp; Biodiversity (CCB) document aligned with Verra. Bridge the credibility gap with donors and auditors.</p>
+          <div class="tags"><span class="tag">General Pre-FS</span><span class="tag">CCB Standard</span><span class="tag">Save as draft</span></div>
+          <a class="cbtn cbtn-text chapter-link" href="F03 Document Generator.html">Generate documents <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        </article>
+
+        <article class="chapter" data-chapter="4">
+          <div class="chapter-no"><span class="bar"></span>STEP 05 · F04</div>
+          <h3>Run the portfolio.</h3>
+          <p>Every project lives in one dashboard — boundaries, analyses, documents, collaborators and incubator status, from draft to ready-to-submit. Manage privacy, invite your team, and send a project to the NbS Incubator.</p>
+          <div class="tags"><span class="tag">Incubator status</span><span class="tag">Collaborators</span><span class="tag">Privacy controls</span></div>
+          <a class="cbtn cbtn-text chapter-link" href="F04 Dashboard.html">Open the dashboard <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        </article>
+
+        <article class="chapter" data-chapter="5">
+          <div class="chapter-no"><span class="bar"></span>STEP 06 · F05 + F06</div>
+          <h3>Prove the impact.</h3>
+          <p>Translate your pathway into a monitoring plan — indicators, methods and frequency — then track them live in the MRV dashboard. Compare year on year, attach field evidence, and export a verifiable summary report.</p>
+          <div class="tags"><span class="tag">Monitoring plan</span><span class="tag">Y0 / Y1 / Y2</span><span class="tag">MRV report</span></div>
+          <a class="cbtn cbtn-text chapter-link" href="F06 NbS MRV.html">See the MRV dashboard <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        </article>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     4 · FEATURES — module index
+     ============================================================ -->
+<section class="band band-paper" data-screen-label="Core Features">
+  <div class="wrap">
+    <div class="head reveal">
+      <span class="kicker">Six connected modules</span>
+      <h2>Everything the lifecycle needs, <span class="em">nothing it doesn't.</span></h2>
+    </div>
+    <div class="features">
+      <article class="fcard reveal">
+        <div class="ftop"><div class="ic"><svg viewBox="0 0 24 24" fill="none"><path d="M9 4L3 7v13l6-3 6 3 6-3V4l-6 3-6-3z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M9 4v13M15 7v13" stroke="currentColor" stroke-width="1.7"/></svg></div><span class="fid">F01</span></div>
+        <h4>Interactive Map</h4>
+        <p>Search a site, toggle five thematic layer groups, inspect legends, and export generated maps for baseline documentation.</p>
+        <a class="cbtn cbtn-text" href="F01 Interactive Map.html">Open map <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </article>
+      <article class="fcard reveal">
+        <div class="ftop"><div class="ic"><svg viewBox="0 0 24 24" fill="none"><path d="M4 20V4M4 20h16M8 16v-4M12 16V8M16 16v-7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></div><span class="fid">F02</span></div>
+        <h4>Data Analyser</h4>
+        <p>Build a technical baseline across Climate, People and Nature, profile the threats, then select a pathway: Protect, Manage, Restore.</p>
+        <a class="cbtn cbtn-text" href="F05.0 Create New Project From Scratch.html">Analyse a site <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </article>
+      <article class="fcard reveal">
+        <div class="ftop"><div class="ic"><svg viewBox="0 0 24 24" fill="none"><path d="M7 3h7l5 5v13H7a1 1 0 01-1-1V4a1 1 0 011-1z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M14 3v5h5M9 13h6M9 17h6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></div><span class="fid">F03</span></div>
+        <h4>Document Generator</h4>
+        <p>Produce compliance and pre-feasibility documents — General Pre-FS and CCB Standard — straight from your analysis.</p>
+        <a class="cbtn cbtn-text" href="F03 Document Generator.html">Generate docs <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </article>
+      <article class="fcard reveal">
+        <div class="ftop"><div class="ic"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.7"/><rect x="13" y="3" width="8" height="5" rx="1.5" stroke="currentColor" stroke-width="1.7"/><rect x="13" y="11" width="8" height="10" rx="1.5" stroke="currentColor" stroke-width="1.7"/><rect x="3" y="14" width="8" height="7" rx="1.5" stroke="currentColor" stroke-width="1.7"/></svg></div><span class="fid">F04</span></div>
+        <h4>Project Dashboard</h4>
+        <p>Manage every project in one place — statuses, baselines, documents, collaborators and monitoring, searchable and sortable.</p>
+        <a class="cbtn cbtn-text" href="F04 Dashboard.html">View dashboard <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </article>
+      <article class="fcard reveal">
+        <div class="ftop"><div class="ic"><svg viewBox="0 0 24 24" fill="none"><rect x="5" y="4" width="14" height="17" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M9 4V3a1 1 0 011-1h4a1 1 0 011 1v1" stroke="currentColor" stroke-width="1.7"/><path d="M9 11l2 2 4-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="fid">F05</span></div>
+        <h4>Monitoring Plan</h4>
+        <p>Turn a pathway into an MRV protocol — recommended indicators, methods and frequency you can customise to your context.</p>
+        <a class="cbtn cbtn-text" href="F05 Create Monitoring Plan.html">Build a plan <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </article>
+      <article class="fcard reveal">
+        <div class="ftop"><div class="ic"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="fid" style="display:flex;gap:8px;align-items:center"><span class="wip">WIP</span>F06</span></div>
+        <h4>NbS MRV</h4>
+        <p>Monitor, report and verify impact over the life of the project — closing the loop on the Design-to-MRV workflow.</p>
+        <a class="cbtn cbtn-text" href="F06 NbS MRV.html">Learn more <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </article>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     5 · PROOF — portfolio + live numbers
+     ============================================================ -->
+<section class="band proof grain" data-screen-label="Proof in the field">
+  <div class="wrap">
+    <div class="head reveal">
+      <span class="kicker">Proof in the field</span>
+      <h2>Real places. Real hectares. <span class="em">Real numbers.</span></h2>
+      <p>A live snapshot of triple-benefit projects already documented and monitored with the tool — across three ecosystems and five provinces of Indonesia.</p>
+    </div>
+
+    <div class="proof-stats">
+      <div class="reveal"><div class="bignum xl"><span data-count="8420">0</span><span class="u">ha</span></div><div class="k">Mapped &amp; under active management</div></div>
+      <div class="pstat reveal"><div class="v"><span data-count="5">0</span></div><div class="k">Field projects</div></div>
+      <div class="pstat reveal"><div class="v"><span data-count="3">0</span></div><div class="k">Ecosystems</div></div>
+      <div class="pstat reveal"><div class="v"><span data-count="5">0</span></div><div class="k">Provinces</div></div>
+    </div>
+
+    <div class="portfolio">
+      <article class="pcard reveal">
+        <div class="pc-top"><span class="pc-eco"><img src="../assets/pathway/eco-mangrove.svg" alt="" style="width:38px;height:38px"/></span><span class="pc-tag restore">Restore</span></div>
+        <h4>Kubu Raya Mangrove</h4>
+        <div class="pc-loc"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M12 21s-7-5-7-11a7 7 0 1114 0c0 6-7 11-7 11z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="2"/></svg> West Kalimantan</div>
+        <div class="pc-foot"><span class="pc-ha">1,240 <small>ha</small></span><span class="pc-status">● Monitoring active</span></div>
+      </article>
+      <article class="pcard reveal">
+        <div class="pc-top"><span class="pc-eco"><img src="../assets/pathway/eco-peatland.svg" alt="" style="width:38px;height:38px"/></span><span class="pc-tag">Restore</span></div>
+        <h4>Sebangau Peatland</h4>
+        <div class="pc-loc"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M12 21s-7-5-7-11a7 7 0 1114 0c0 6-7 11-7 11z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="2"/></svg> Central Kalimantan</div>
+        <div class="pc-foot"><span class="pc-ha">3,500 <small>ha</small></span><span class="pc-status">◔ MRV plan due</span></div>
+      </article>
+      <article class="pcard reveal">
+        <div class="pc-top"><span class="pc-eco"><img src="../assets/pathway/eco-forest.svg" alt="" style="width:38px;height:38px"/></span><span class="pc-tag">Manage</span></div>
+        <h4>Leuser Lowland Forest</h4>
+        <div class="pc-loc"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M12 21s-7-5-7-11a7 7 0 1114 0c0 6-7 11-7 11z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="2"/></svg> Aceh, Sumatra</div>
+        <div class="pc-foot"><span class="pc-ha">2,120 <small>ha</small></span><span class="pc-status">● 64 field entries</span></div>
+      </article>
+    </div>
+
+    <div class="proof-foot reveal">
+      <a class="cbtn cbtn-spring" href="F04 Dashboard.html">Explore the full portfolio
+        <svg viewBox="0 0 24 24" fill="none"><path d="M7 7l5 5-5 5M13 7l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     6 · CREDIBILITY — tiered data + standards + criteria
+     ============================================================ -->
+<section class="band band-mint" data-screen-label="Why it holds up">
+  <div class="wrap">
+    <div class="head reveal">
+      <span class="kicker">Why a project built here holds up</span>
+      <h2>Decision-grade data, <span class="em">not guesswork.</span></h2>
+      <p>The tool is built to move data from exploratory to defensible — so your findings stand up to certification bodies, officials and auditors.</p>
+    </div>
+
+    <div class="cred-grid">
+      <div class="reveal">
+        <div class="tier-ladder">
+          <div class="tier t1"><div class="tn">TIER 1</div><div><h5>Global baseline</h5><p>System-generated layers give every site an instant starting point.</p></div></div>
+          <div class="tier-arrow"><svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M6 13l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> override with</div>
+          <div class="tier t2"><div class="tn">TIER 2</div><div><h5>National data</h5><p>Harmonised with national definitions and regulatory guidance.</p></div></div>
+          <div class="tier-arrow"><svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M6 13l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> override with</div>
+          <div class="tier t3"><div class="tn">TIER 3</div><div><h5>Field-verified</h5><p>Upload your own project-derived measurements — the gold standard for certification.</p></div></div>
+        </div>
+        <div class="standards reveal">
+          <div class="sl">Aligned with</div>
+          <div class="row">
+            <span class="stdchip"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>CCB Standard</span>
+            <span class="stdchip"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Verra VM0048</span>
+            <span class="stdchip"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Plan Vivo</span>
+            <span class="stdchip"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>ASEAN MRV Framework</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal">
+        <div class="criteria">
+          <div class="crit"><div class="cn">1</div><div><h5>Addresses societal challenges</h5><p>Tied to a clear adaptation, mitigation or resilience need for the community it serves.</p></div></div>
+          <div class="crit"><div class="cn">2</div><div><h5>Designed at the right scale</h5><p>Scoped to the ecosystem and landscape, not arbitrary administrative lines.</p></div></div>
+          <div class="crit"><div class="cn">3</div><div><h5>Net biodiversity gain</h5><p>Improves habitat condition and ecosystem integrity, tracked through degradation layers.</p></div></div>
+          <div class="crit"><div class="cn">4</div><div><h5>Economically viable</h5><p>Backed by a baseline credible enough to attract and withstand climate finance.</p></div></div>
+          <div class="crit"><div class="cn">5</div><div><h5>Inclusive &amp; equitable governance</h5><p>Centres local organisations, with GEDSI indicators built into monitoring.</p></div></div>
+          <div class="crit"><div class="cn">6</div><div><h5>Monitored &amp; verified</h5><p>Carried into a long-term MRV plan so impact is measured, reported and verified.</p></div></div>
+        </div>
+        <p style="font-family:var(--mono);font-size:12px;color:var(--paper-sub);margin-top:22px;letter-spacing:.02em">↳ Every figure links back to its method — the math behind the map — so you can explain your project to anyone who asks.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     7 · TESTIMONY
+     ============================================================ -->
+<section class="band testimony-band" data-screen-label="Testimony">
+  <div class="wrap">
+    <div class="quote-wrap reveal">
+      <div class="quote-mark" aria-hidden="true">&ldquo;</div>
+      <blockquote>The NbS Tool turned months of fragmented spatial work into <b>one baseline we could take straight to our donors</b> — and defend in an audit.</blockquote>
+      <div class="quote-who">
+        <div class="av">RA</div>
+        <div><div class="qn">Rina Ardyanti</div><div class="qr">Programme Lead · Frontline Conservation Org, Indonesia</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     8 · COALITION
+     ============================================================ -->
+<section class="band band-paper coalition" id="about" data-screen-label="Coalition Members">
+  <div class="wrap">
+    <div class="head center reveal" style="margin-inline:auto">
+      <span class="kicker no-rule" style="justify-content:center">Coalition Members</span>
+      <h2>A partnership of leading <span class="em">SE-Asian institutions.</span></h2>
+      <p>Built under the ASEAN-NbS Tool project by a coalition working to improve data access, showcase high-quality projects, and direct funding to local communities.</p>
+      <div class="rule"></div>
+    </div>
+    <div class="partner-groups reveal">
+      <div class="partner-group member">
+        <img class="logo-img logo-members" src="../assets/coalition/members-logos.png" alt="Coalition members: BirdLife International, Conservation International, IDH, Mandai Nature, RECOFTC, The Nature Conservancy, Wildlife Conservation Society, WRI Indonesia and WWF" />
+      </div>
+      <div class="partner-group support">
+        <h5 class="pg-label">With support from</h5>
+        <img class="logo-img logo-support" src="../assets/coalition/support-logos.png" alt="With support from: Google.org, UBS Optimus Foundation, The Silent Foundation, QuantEdge Advancement Initiative, UK Mission to ASEAN and UK International Development" />
+      </div>
+      <div class="partner-group strategic">
+        <h5 class="pg-label">Strategic Partner</h5>
+        <img class="logo-img logo-strategic" src="../assets/coalition/strategic-logos.png" alt="Strategic Partner: BCG" />
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     9 · FINAL CTA + FOOTER
+     ============================================================ -->
+<section class="finale" data-screen-label="Get started">
+  <div class="finale-bg" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="coord reveal">1.4078°S · 109.8290°E — your site is already on the map</div>
+    <h2 class="reveal">Let's make it count.</h2>
+    <p class="reveal">Start where every great Nature-based Solution starts: a boundary on a map. Scope it, analyse it, and build the proof that unlocks the finance to protect it.</p>
+    <div class="cbtn-row reveal">
+      <a class="cbtn cbtn-spring" href="F01 Interactive Map.html">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M9 4L3 7v13l6-3 6 3 6-3V4l-6 3-6-3z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 4v13M15 7v13" stroke="currentColor" stroke-width="1.8"/></svg>
+        Start with the map
+      </a>
+      <button class="cbtn cbtn-ghost" data-auth="signup">Create a free account</button>
+    </div>
+  </div>
+</section>
+
+<footer class="footer" data-screen-label="Footer">
+  <div class="wrap">
+    <div class="footer-top">
+      <div>
+        <span class="logo-chip"><img src="../assets/scene-logo.png" alt="SCeNe Coalition" width="360" height="133" loading="lazy" /></span>
+        <p>SCeNe Coalition works to improve data accessibility, showcase high-quality projects and direct funding, and expand access for local organizations, enterprises and communities.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Platform</h5>
+        <a href="F00 Home.html">NbS Tool Home</a>
+        <a href="F01 Interactive Map.html">Interactive Map</a>
+        <a href="F05.0 Create New Project From Scratch.html">Data Analyser</a>
+        <a href="F04 Dashboard.html">My Projects</a>
+      </div>
+      <div class="footer-col">
+        <h5>Workflow</h5>
+        <a href="F03 Document Generator.html">Document Generator</a>
+        <a href="F05 Create Monitoring Plan.html">Monitoring Plan</a>
+        <a href="F06 NbS MRV.html">MRV Dashboard</a>
+      </div>
+      <div class="footer-col">
+        <h5>Coalition</h5>
+        <a href="#about">About SCeNe</a>
+        <a href="#">NbS Portfolio</a>
+        <a href="#">NbS Incubator</a>
+        <a href="#">Contact Us</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 SCeNe Coalition · ASEAN-NbS Tool project</span>
+      <div class="soc">
+        <a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.94 5a1.94 1.94 0 11-3.88 0 1.94 1.94 0 013.88 0zM3.4 8.4h3.1V21H3.4V8.4zM9.1 8.4h2.97v1.72h.04c.41-.78 1.42-1.6 2.93-1.6 3.13 0 3.71 2.06 3.71 4.74V21h-3.1v-5.5c0-1.31-.02-3-1.83-3-1.83 0-2.11 1.43-2.11 2.9V21H9.1V8.4z"/></svg></a>
+        <a href="#" aria-label="Website"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.7"/><path d="M3 12h18M12 3c2.5 2.5 2.5 15 0 18M12 3c-2.5 2.5-2.5 15 0 18" stroke="currentColor" stroke-width="1.7"/></svg></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+<!-- ============================================================
+     AUTH MODAL (shared component — auth.css + inline JS)
+     ============================================================ -->
+<div class="auth-overlay" id="authOverlay" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+  <div class="auth-modal">
+    <button class="auth-close" id="authClose" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+    <div class="form-head">
+      <h1 id="authTitle">Welcome back</h1>
+      <p id="authSub">Log in to continue your Nature-based Solutions projects.</p>
+    </div>
+    <div class="seg" role="tablist">
+      <button type="button" id="tabLogin" class="active" role="tab" aria-selected="true">Log in</button>
+      <button type="button" id="tabSignup" role="tab" aria-selected="false">Sign up</button>
+    </div>
+    <section class="panel active" id="panelLogin" role="tabpanel">
+      <form id="loginForm" novalidate>
+        <div class="field">
+          <label for="lEmail">Email</label>
+          <div class="input-box">
+            <span class="lead"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M4 7l8 6 8-6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <input class="input" id="lEmail" type="email" placeholder="you@organisation.org" autocomplete="email" />
+          </div>
+        </div>
+        <div class="field">
+          <label for="lPass">Password</label>
+          <div class="input-box">
+            <span class="lead"><svg viewBox="0 0 24 24" fill="none"><rect x="4" y="10" width="16" height="10" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M8 10V7a4 4 0 118 0v3" stroke="currentColor" stroke-width="1.7"/></svg></span>
+            <input class="input has-trail" id="lPass" type="password" placeholder="Enter your password" autocomplete="current-password" />
+            <button class="trail-btn" type="button" data-toggle="lPass" aria-label="Show password">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.7"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="between">
+          <label class="check"><input type="checkbox" /><span class="box"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Remember me</label>
+          <a class="link" href="#">Forgot password?</a>
+        </div>
+        <p class="auth-err" id="loginErr" hidden></p>
+        <button class="btn-primary" type="submit">Log in
+          <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <p class="switch-line">Don't have an account? <button type="button" id="goSignup">Sign up</button></p>
+      </form>
+    </section>
+    <section class="panel" id="panelSignup" role="tabpanel">
+      <form id="signupForm" novalidate>
+        <div class="row2">
+          <div class="field">
+            <label for="sName">Full name</label>
+            <div class="input-box">
+              <span class="lead"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3.2" stroke="currentColor" stroke-width="1.7"/><path d="M5 20c0-3.6 3.1-6 7-6s7 2.4 7 6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></span>
+              <input class="input" id="sName" type="text" placeholder="Jane Mantri" autocomplete="name" />
+            </div>
+          </div>
+          <div class="field">
+            <label for="sOrg">Organisation name</label>
+            <div class="input-box">
+              <span class="lead"><svg viewBox="0 0 24 24" fill="none"><path d="M4 21V6l8-3v18M12 21V8l8 3v10M4 21h16" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              <input class="input" id="sOrg" type="text" placeholder="Frontline Org" autocomplete="organization" />
+            </div>
+          </div>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label for="sOrgType">Organisation type</label>
+            <div class="input-box">
+              <span class="lead"><svg viewBox="0 0 24 24" fill="none"><path d="M4 13V5a1 1 0 011-1h8l7 7-9 9-7-7z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><circle cx="8.5" cy="8.5" r="1.4" fill="currentColor"/></svg></span>
+              <select class="input" id="sOrgType" required>
+                <option value="" disabled selected>Select type</option>
+                <option>NGO / Non-profit</option>
+                <option>Government agency</option>
+                <option>Research / Academic</option>
+                <option>Community group</option>
+                <option>Indigenous / Local organisation</option>
+                <option>Private sector</option>
+                <option>Other</option>
+              </select>
+              <span class="chevron"><svg viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </div>
+          </div>
+          <div class="field">
+            <label for="sCountry">Country</label>
+            <div class="input-box">
+              <span class="lead"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.7"/><path d="M3 12h18M12 3c2.5 2.5 2.5 16 0 18M12 3c-2.5 2.5-2.5 16 0 18" stroke="currentColor" stroke-width="1.7"/></svg></span>
+              <select class="input" id="sCountry" required>
+                <option value="" disabled selected>Select country</option>
+                <option>Brazil</option><option>Colombia</option><option>Indonesia</option><option>Kenya</option>
+                <option>India</option><option>Philippines</option><option>Mexico</option><option>South Africa</option>
+                <option>Peru</option><option>Tanzania</option><option>United Kingdom</option><option>United States</option><option>Other</option>
+              </select>
+              <span class="chevron"><svg viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </div>
+          </div>
+        </div>
+        <div class="field">
+          <label for="sEmail">Work email</label>
+          <div class="input-box">
+            <span class="lead"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M4 7l8 6 8-6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <input class="input" id="sEmail" type="email" placeholder="you@organisation.org" autocomplete="email" />
+          </div>
+        </div>
+        <div class="field">
+          <label for="sPass">Password</label>
+          <div class="input-box">
+            <span class="lead"><svg viewBox="0 0 24 24" fill="none"><rect x="4" y="10" width="16" height="10" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M8 10V7a4 4 0 118 0v3" stroke="currentColor" stroke-width="1.7"/></svg></span>
+            <input class="input has-trail" id="sPass" type="password" placeholder="At least 8 characters" autocomplete="new-password" />
+            <button class="trail-btn" type="button" data-toggle="sPass" aria-label="Show password">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.7"/></svg>
+            </button>
+          </div>
+          <span class="hint">Use 8+ characters with a mix of letters, numbers &amp; symbols.</span>
+        </div>
+        <label class="check terms"><input type="checkbox" id="sTerms" /><span class="box"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>I agree to the <a href="#">Terms of Use</a> and <a href="#">Privacy Policy</a> of the SCeNe Coalition.</span></label>
+        <p class="auth-err" id="signupErr" hidden></p>
+        <button class="btn-primary" type="submit">Create account
+          <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <p class="switch-line">Already have an account? <button type="button" id="goLogin">Log in</button></p>
+      </form>
+    </section>
+    <p class="form-foot">Protected by reCAPTCHA · NbS Tool V3 · © 2026 SCeNe Coalition</p>
+  </div>
+</div>
+
+
+<!-- ============================================================
+     SCRIPTS
+     ============================================================ -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+
+<script>
+/* mark JS-enabled */
+document.documentElement.classList.remove('no-js');
+const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+</script>
+
+<!-- AUTH MODAL behaviour (shared) -->
+<script>
+(function () {
+  const overlay = document.getElementById('authOverlay');
+  const closeBtn = document.getElementById('authClose');
+  const tabLogin = document.getElementById('tabLogin');
+  const tabSignup = document.getElementById('tabSignup');
+  const panelLogin = document.getElementById('panelLogin');
+  const panelSignup = document.getElementById('panelSignup');
+  const titleEl = document.getElementById('authTitle');
+  const subEl = document.getElementById('authSub');
+
+  function selectTab(which) {
+    const login = which !== 'signup';
+    tabLogin.classList.toggle('active', login);
+    tabSignup.classList.toggle('active', !login);
+    tabLogin.setAttribute('aria-selected', login ? 'true' : 'false');
+    tabSignup.setAttribute('aria-selected', login ? 'false' : 'true');
+    panelLogin.classList.toggle('active', login);
+    panelSignup.classList.toggle('active', !login);
+    titleEl.textContent = login ? 'Welcome back' : 'Create your account';
+    subEl.textContent = login ? 'Log in to continue your Nature-based Solutions projects.' : 'Join the frontline organisations building high-quality NbS projects.';
+  }
+  function openAuth(which) {
+    selectTab(which);
+    overlay.classList.add('open');
+    document.body.classList.add('auth-open');
+    setTimeout(function () {
+      const active = which === 'signup' ? panelSignup : panelLogin;
+      const first = active.querySelector('input:not([type="checkbox"])');
+      if (first) first.focus();
+    }, 90);
+  }
+  function closeAuth() {
+    overlay.classList.remove('open');
+    document.body.classList.remove('auth-open');
+  }
+  document.querySelectorAll('[data-auth]').forEach(function (el) {
+    el.addEventListener('click', function (e) { e.preventDefault(); openAuth(el.getAttribute('data-auth')); });
+  });
+  closeBtn.addEventListener('click', closeAuth);
+  overlay.addEventListener('click', function (e) { if (e.target === overlay) closeAuth(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && overlay.classList.contains('open')) closeAuth(); });
+  tabLogin.addEventListener('click', function () { selectTab('login'); });
+  tabSignup.addEventListener('click', function () { selectTab('signup'); });
+  const goSignup = document.getElementById('goSignup');
+  const goLogin = document.getElementById('goLogin');
+  if (goSignup) goSignup.addEventListener('click', function () { selectTab('signup'); });
+  if (goLogin) goLogin.addEventListener('click', function () { selectTab('login'); });
+  document.querySelectorAll('[data-toggle]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      const input = document.getElementById(btn.getAttribute('data-toggle'));
+      if (!input) return;
+      const show = input.type === 'password';
+      input.type = show ? 'text' : 'password';
+      btn.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
+    });
+  });
+  const loginForm = document.getElementById('loginForm');
+  const signupForm = document.getElementById('signupForm');
+  if (loginForm) loginForm.addEventListener('submit', function (e) { e.preventDefault(); window.location.href = 'F04 Dashboard.html'; });
+  if (signupForm) signupForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    const terms = document.getElementById('sTerms');
+    const err = document.getElementById('signupErr');
+    if (terms && !terms.checked) { if (err) { err.textContent = 'Please accept the terms to continue.'; err.hidden = false; } return; }
+    if (err) err.hidden = true;
+    window.location.href = 'F04 Dashboard.html';
+  });
+})();
+</script>
+
+<!-- HOME interactions: reveals, counters, journey, progress, smooth-scroll -->
+<script>
+(function () {
+  /* ---- smooth in-page scroll for [data-scroll] ---- */
+  document.querySelectorAll('a[data-scroll]').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      const id = a.getAttribute('href');
+      const t = document.querySelector(id);
+      if (t) { e.preventDefault(); t.scrollIntoView({ behavior: REDUCED ? 'auto' : 'smooth' }); }
+    });
+  });
+
+  /* ---- scroll progress hairline ---- */
+  const bar = document.getElementById('scrollbar');
+  function onScroll() {
+    const h = document.documentElement;
+    const max = h.scrollHeight - h.clientHeight;
+    bar.style.width = (max > 0 ? (h.scrollTop / max) * 100 : 0) + '%';
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  /* ---- reveal on scroll ---- */
+  const reveals = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window && !REDUCED) {
+    const ro = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en, i) {
+        if (en.isIntersecting) {
+          const el = en.target;
+          // gentle stagger for siblings entering together
+          setTimeout(function () { el.classList.add('is-in'); }, Math.min(i * 60, 240));
+          ro.unobserve(el);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+    reveals.forEach(function (el) { ro.observe(el); });
+  } else {
+    reveals.forEach(function (el) { el.classList.add('is-in'); });
+  }
+
+  /* ---- count-up numbers ---- */
+  function countUp(el) {
+    const target = +el.getAttribute('data-count');
+    const dur = 1500, t0 = performance.now();
+    function tick(now) {
+      const p = Math.min((now - t0) / dur, 1);
+      const eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(target * eased).toLocaleString('en-US');
+      if (p < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+  const nums = document.querySelectorAll('[data-count]');
+  if ('IntersectionObserver' in window && !REDUCED) {
+    const co = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) { if (en.isIntersecting) { countUp(en.target); co.unobserve(en.target); } });
+    }, { threshold: 0.6 });
+    nums.forEach(function (el) { co.observe(el); });
+  } else {
+    nums.forEach(function (el) { el.textContent = (+el.getAttribute('data-count')).toLocaleString('en-US'); });
+  }
+
+  /* ---- journey: sticky stage <-> chapter sync ---- */
+  const chapters = Array.from(document.querySelectorAll('.chapter'));
+  const stages = Array.from(document.querySelectorAll('.stage'));
+  const frameStep = document.getElementById('frameStep');
+  const stepNames = ['Scope', 'Analyse', 'Decide', 'Document', 'Manage', 'Verify'];
+  function setActive(idx) {
+    chapters.forEach(function (c, i) { c.classList.toggle('is-active', i === idx); });
+    stages.forEach(function (s, i) { s.classList.toggle('is-active', i === idx); });
+    if (frameStep) frameStep.textContent = '0' + (idx + 1) + ' / 06 · ' + stepNames[idx];
+  }
+  setActive(0);
+  if (chapters.length) {
+    if ('IntersectionObserver' in window) {
+      let current = 0;
+      const jo = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          if (en.isIntersecting) {
+            const idx = chapters.indexOf(en.target);
+            if (idx !== -1 && idx !== current) { current = idx; setActive(idx); }
+          }
+        });
+      }, { rootMargin: '-45% 0px -45% 0px', threshold: 0 });
+      chapters.forEach(function (c) { jo.observe(c); });
+    } else {
+      chapters.forEach(function (c) { c.classList.add('is-active'); });
+      stages[0] && stages[0].classList.add('is-active');
+    }
+  }
+})();
+</script>
+
+<!-- THREE.js living terrain (hero) + GSAP polish -->
+<script>
+window.addEventListener('load', function () {
+  /* ---------- GSAP enhancements (guarded) ---------- */
+  if (!REDUCED && window.gsap && window.ScrollTrigger) {
+    gsap.registerPlugin(ScrollTrigger);
+    /* hero intro timeline */
+    gsap.timeline({ defaults: { ease: 'power3.out' } })
+      .from('.hero-eyebrow', { y: 18, opacity: 0, duration: .7 }, .1)
+      .from('.hero h1', { y: 34, opacity: 0, duration: .9 }, .18)
+      .from('.hero-sub', { y: 24, opacity: 0, duration: .8 }, .36)
+      .from('.hero-cta', { y: 20, opacity: 0, duration: .7 }, .5)
+      .from('.hstat', { y: 22, opacity: 0, duration: .7, stagger: .08 }, .6);
+    /* subtle parallax on the sticky stage frame + finale bg */
+    gsap.to('.finale-bg', { yPercent: 18, ease: 'none', scrollTrigger: { trigger: '.finale', start: 'top bottom', end: 'bottom top', scrub: true } });
+    gsap.to('.stage-frame', { yPercent: -4, ease: 'none', scrollTrigger: { trigger: '.journey', start: 'top top', end: 'bottom bottom', scrub: true } });
+  }
+
+  /* ---------- Three.js terrain ---------- */
+  const canvas = document.getElementById('terrain');
+  if (REDUCED || !window.THREE || !canvas) {
+    if (canvas) canvas.style.display = 'none';
+    return;
+  }
+  const THREE = window.THREE;
+  let renderer, scene, camera, points, geo, raf, running = true;
+  const COLS = 104, ROWS = 72, W = 70, H = 52;
+  const lowC = new THREE.Color(0x0c5a48), midC = new THREE.Color(0x1f9d7a), hiC = new THREE.Color(0x6fe9a4);
+  const mouse = { x: 0, y: 0, tx: 0, ty: 0 };
+
+  function height(x, z, t) {
+    return (
+      Math.sin(x * 0.30 + t) * 0.9 +
+      Math.sin(z * 0.24 - t * 0.7) * 0.9 +
+      Math.sin((x + z) * 0.18 + t * 0.5) * 0.7 +
+      Math.sin(x * 0.12 - z * 0.20) * 1.1
+    );
+  }
+
+  function init() {
+    renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.6));
+    renderer.setClearColor(0x000000, 0);
+    scene = new THREE.Scene();
+    scene.fog = new THREE.FogExp2(0x041a14, 0.035);
+    camera = new THREE.PerspectiveCamera(55, 1, 0.1, 200);
+    camera.position.set(0, 9, 19);
+    camera.lookAt(0, -1, -8);
+
+    geo = new THREE.PlaneGeometry(W, H, COLS, ROWS);
+    geo.rotateX(-Math.PI / 2);
+    const pos = geo.attributes.position;
+    const colors = new Float32Array(pos.count * 3);
+    geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+    const mat = new THREE.PointsMaterial({ size: 0.13, vertexColors: true, transparent: true, opacity: 0.95, sizeAttenuation: true, depthWrite: false });
+    points = new THREE.Points(geo, mat);
+    points.position.z = -10;
+    scene.add(points);
+
+    resize();
+    window.addEventListener('resize', resize);
+    window.addEventListener('pointermove', function (e) {
+      mouse.tx = (e.clientX / window.innerWidth - 0.5);
+      mouse.ty = (e.clientY / window.innerHeight - 0.5);
+    });
+    /* pause RAF when hero off-screen */
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (en) {
+        running = en[0].isIntersecting;
+        if (running) animate();
+      }, { threshold: 0 }).observe(document.querySelector('.hero'));
+    }
+    animate();
+  }
+
+  function resize() {
+    const hero = document.querySelector('.hero');
+    const w = hero.clientWidth, h = hero.clientHeight;
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+  }
+
+  function animate() {
+    if (!running) { cancelAnimationFrame(raf); return; }
+    raf = requestAnimationFrame(animate);
+    const t = performance.now() * 0.00035;
+    const pos = geo.attributes.position;
+    const col = geo.attributes.color;
+    const tmp = new THREE.Color();
+    for (let i = 0; i < pos.count; i++) {
+      const x = pos.getX(i), z = pos.getZ(i);
+      const y = height(x, z, t);
+      pos.setY(i, y);
+      const n = Math.max(0, Math.min(1, (y + 2.2) / 4.4));
+      if (n < 0.5) tmp.copy(lowC).lerp(midC, n / 0.5);
+      else tmp.copy(midC).lerp(hiC, (n - 0.5) / 0.5);
+      col.setXYZ(i, tmp.r, tmp.g, tmp.b);
+    }
+    pos.needsUpdate = true;
+    col.needsUpdate = true;
+
+    mouse.x += (mouse.tx - mouse.x) * 0.05;
+    mouse.y += (mouse.ty - mouse.y) * 0.05;
+    camera.position.x = mouse.x * 6;
+    camera.position.y = 9 - mouse.y * 3;
+    camera.lookAt(0, -1, -8);
+    renderer.render(scene, camera);
+  }
+
+  try { init(); } catch (e) { canvas.style.display = 'none'; }
+});
+</script>
+
+<script src="../nav-mobile.js"></script>
+</body>
+</html>

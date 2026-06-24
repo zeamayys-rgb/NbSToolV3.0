@@ -1,0 +1,105 @@
+/* ============================================================
+   F02 · Step 2 — General Context  (pixel-faithful from Figma)
+   Scoped to .ctx-pane[data-ctx="general"] inside the Data Analyser
+   ============================================================ */
+
+.gc { display: flex; flex-direction: column; gap: 14px; }
+
+/* ---------- Section card ---------- */
+.gc-sec {
+  border: 1px solid #e1e6e4;
+  border-radius: 10px;
+  background: #fff;
+  overflow: hidden;
+}
+.gc-sec__head {
+  display: flex; align-items: flex-start; gap: 11px;
+  padding: 14px 16px;
+}
+.gc-sec__ic {
+  flex: none; width: 34px; height: 34px; border-radius: 8px;
+  display: grid; place-items: center;
+  background: #e9f8f1; color: #066653;
+}
+.gc-sec__ic svg { width: 19px; height: 19px; stroke: currentColor; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.gc-sec__tt { flex: 1; min-width: 0; }
+.gc-sec__tt h4 {
+  margin: 1px 0 2px; font-family: var(--font-display, 'Poppins');
+  font-size: 15px; font-weight: 600; color: #04473a; letter-spacing: -0.01em;
+}
+.gc-sec__tt p { margin: 0; font-size: 12px; line-height: 1.45; color: #5b6b66; }
+.gc-sec__body { padding: 0 16px 16px; }
+
+/* ---------- Map / image frame ---------- */
+.gc-map {
+  position: relative; border-radius: 8px; overflow: hidden;
+  border: 1px solid #e1e6e4; background: #eef3f1;
+}
+.gc-map img { display: block; width: 100%; height: auto; }
+.gc-map--terrain { background: #000; }
+.gc-map__tag {
+  position: absolute; left: 10px; top: 10px;
+  background: rgba(255,255,255,0.92); color: #04473a;
+  font-size: 11px; font-weight: 600; padding: 4px 9px; border-radius: 999px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+}
+
+/* ---------- Legend ---------- */
+.gc-legend { display: flex; flex-wrap: wrap; gap: 8px 16px; margin-top: 12px; }
+.gc-legend__item { display: flex; align-items: center; gap: 7px; font-size: 12px; color: #344b44; }
+.gc-legend__sw { width: 13px; height: 13px; border-radius: 3px; flex: none; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.08); }
+
+/* ---------- Narrative callout ---------- */
+.gc-note {
+  margin-top: 12px; padding: 11px 13px;
+  background: #f3f8f6; border: 1px solid #e1e6e4; border-radius: 8px;
+  font-size: 12.5px; line-height: 1.55; color: #344b44;
+}
+.gc-note b { color: #04473a; font-weight: 600; }
+
+/* ---------- Land-cover composition rows ---------- */
+.gc-lc { display: flex; flex-direction: column; gap: 10px; }
+.gc-lc__row { display: grid; grid-template-columns: 38px 1fr auto; align-items: center; gap: 12px; }
+.gc-lc__ic { width: 38px; height: 38px; flex: none; overflow: hidden; }
+.gc-lc__ic > * { transform: scale(0.475); transform-origin: top left; }
+.gc-lc__mid { min-width: 0; }
+.gc-lc__nm { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-bottom: 5px; }
+.gc-lc__nm b { font-size: 13px; font-weight: 600; color: #243832; }
+.gc-lc__nm .ha { font-size: 11.5px; color: #6b7d77; }
+.gc-lc__bar { height: 7px; border-radius: 999px; background: #edf1ef; overflow: hidden; }
+.gc-lc__bar i { display: block; height: 100%; border-radius: 999px; }
+.gc-lc__pct { font-family: var(--font-display, 'Poppins'); font-size: 14px; font-weight: 600; color: #04473a; min-width: 38px; text-align: right; }
+
+/* ---------- Metric rows (topography) ---------- */
+.gc-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+.gc-metric {
+  border: 1px solid #e6ebe9; border-radius: 8px; padding: 10px 12px; background: #fafcfb;
+}
+.gc-metric .l { font-size: 11px; color: #6b7d77; margin-bottom: 3px; }
+.gc-metric .v { font-family: var(--font-display, 'Poppins'); font-size: 17px; font-weight: 600; color: #04473a; }
+.gc-metric .v small { font-size: 11px; font-weight: 500; color: #6b7d77; }
+
+/* ---------- Natural-disaster rows ---------- */
+.gc-nd { display: flex; flex-direction: column; gap: 10px; }
+.gc-nd__row {
+  display: grid; grid-template-columns: 52px 1fr auto; align-items: center; gap: 13px;
+  border: 1px solid #e6ebe9; border-radius: 9px; padding: 9px 12px 9px 9px; background: #fafcfb;
+}
+.gc-nd__ic { width: 52px; height: 70px; border-radius: 7px; overflow: hidden; flex: none; background: #eef3f1; }
+.gc-nd__ic > * { transform: scale(0.325); transform-origin: top left; }
+.gc-nd__main { min-width: 0; }
+.gc-nd__main h5 { margin: 0 0 2px; font-size: 13px; font-weight: 600; color: #243832; }
+.gc-nd__main p { margin: 0; font-size: 11.5px; line-height: 1.4; color: #6b7d77; }
+.gc-lvl {
+  flex: none; font-size: 11px; font-weight: 700; letter-spacing: 0.02em;
+  padding: 4px 10px; border-radius: 999px; white-space: nowrap;
+}
+.gc-lvl.low  { background: #e7f6ec; color: #1c7d43; }
+.gc-lvl.mod  { background: #fdf0d8; color: #b3791b; }
+.gc-lvl.high { background: #fde8e4; color: #c5371f; }
+
+/* risk-level legend (vertical scale) */
+.gc-risk-legend { display: flex; flex-direction: column; gap: 6px; margin-top: 12px; }
+.gc-risk-legend .t { font-size: 11px; font-weight: 700; color: #344b44; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 1px; }
+.gc-risk-legend .item { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #344b44; }
+.gc-risk-legend .sw { width: 22px; height: 12px; border-radius: 3px; flex: none; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.08); }

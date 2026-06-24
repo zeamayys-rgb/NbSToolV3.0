@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NbS Tool — QA Audit Report</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; font-family: "Inter", system-ui, sans-serif; font-size: 14px; background: #f4f5f7; color: #1a1d23; -webkit-font-smoothing: antialiased; }
+
+/* ── Sticky header ── */
+.hd { background: #044c3e; color: #fff; padding: 28px 48px 0; position: sticky; top: 0; z-index: 100; border-bottom: 2px solid #033e32; }
+.hd-top { max-width: 1100px; margin: 0 auto; display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; flex-wrap: wrap; padding-bottom: 16px; }
+.hd-tag { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.45); margin-bottom: 5px; }
+.hd-title { font-size: 24px; font-weight: 700; letter-spacing: -.5px; margin: 0 0 5px; }
+.hd-sub { font-size: 13px; color: rgba(255,255,255,.6); margin: 0; max-width: 540px; line-height: 1.55; }
+.hd-pills { display: flex; gap: 10px; flex-wrap: wrap; align-self: flex-end; }
+.hd-pill { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.18); border-radius: 999px; padding: 5px 12px; font-size: 12px; font-weight: 600; color: #fff; }
+.hd-pill svg { width: 12px; height: 12px; flex: none; }
+
+/* ── Wave tabs ── */
+.tabs { max-width: 1100px; margin: 0 auto; display: flex; gap: 4px; padding-top: 4px; }
+.tab-btn { display: flex; align-items: center; gap: 8px; padding: 10px 20px; font-family: inherit; font-size: 13px; font-weight: 600; border: none; background: rgba(255,255,255,.08); color: rgba(255,255,255,.65); cursor: pointer; border-radius: 8px 8px 0 0; transition: background .15s, color .15s; position: relative; top: 2px; }
+.tab-btn:hover { background: rgba(255,255,255,.14); color: rgba(255,255,255,.9); }
+.tab-btn.active { background: #f4f5f7; color: #044c3e; }
+.tab-btn .wave-badge { font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 999px; }
+.tab-btn.active .wave-badge.done { background: #e9f8f1; color: #044c3e; }
+.tab-btn.active .wave-badge.open { background: #fdf6ea; color: #8f611c; }
+.tab-btn .wave-badge.done { background: rgba(255,255,255,.15); color: rgba(255,255,255,.8); }
+.tab-btn .wave-badge.open { background: rgba(239,162,47,.25); color: #f5c782; }
+
+/* ── Layout ── */
+.wrap { max-width: 1100px; margin: 0 auto; padding: 32px 48px 80px; }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* ── Summary ── */
+.summary { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 36px; }
+.sum-card { background: #fff; border: 1px solid #e3e6ec; border-radius: 12px; padding: 18px 20px; }
+.sum-count { font-size: 32px; font-weight: 800; letter-spacing: -1.5px; line-height: 1; }
+.sum-label { font-size: 12px; color: #68727d; font-weight: 500; margin-top: 3px; }
+.sum-card.high   .sum-count { color: #c0302a; }
+.sum-card.medium .sum-count { color: #dc9d24; }
+.sum-card.low    .sum-count { color: #1d6cc9; }
+.sum-card.total  .sum-count { color: #044c3e; }
+
+/* ── Section titles ── */
+.section-title { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #9aa0aa; margin: 36px 0 14px; padding-bottom: 10px; border-bottom: 1px solid #e3e6ec; }
+
+/* ── Issue cards ── */
+.issue { background: #fff; border: 1px solid #e3e6ec; border-radius: 12px; margin-bottom: 12px; overflow: hidden; }
+.issue-head { display: grid; grid-template-columns: 48px 1fr auto auto; align-items: center; gap: 14px; padding: 14px 18px; cursor: pointer; transition: background .12s; }
+.issue-head:hover { background: #fafbfc; }
+.issue-id { font-size: 11px; font-weight: 800; letter-spacing: .08em; color: #9aa0aa; font-variant-numeric: tabular-nums; }
+.issue-title { font-size: 13px; font-weight: 600; color: #1a1d23; line-height: 1.4; }
+.issue-files { font-size: 11px; color: #9aa0aa; margin-top: 2px; font-family: ui-monospace, "SF Mono", monospace; }
+.badge { font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 3px 9px; border-radius: 999px; white-space: nowrap; }
+.badge.high   { background: #ffefee; color: #c0302a; border: 1px solid #fea19b; }
+.badge.medium { background: #fdf6ea; color: #8f611c; border: 1px solid #f5c782; }
+.badge.low    { background: #eaf2fb; color: #0f4377; border: 1px solid #8bb4e6; }
+.badge.fixed  { background: #e9f8f1; color: #044c3e; border: 1px solid #beead5; }
+.badge.open   { background: #ffefee; color: #c0302a; border: 1px solid #fea19b; }
+.chev { width: 17px; height: 17px; color: #c0c2c6; transition: transform .18s; flex: none; }
+.issue.open .chev { transform: rotate(180deg); }
+.issue-body { display: none; padding: 0 18px 18px; border-top: 1px solid #f0f1f4; }
+.issue.open .issue-body { display: block; }
+.issue-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 14px; }
+.issue-section h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: #9aa0aa; margin: 0 0 7px; }
+.issue-section p { font-size: 13px; color: #444a51; line-height: 1.65; margin: 0 0 8px; }
+.issue-section ul { font-size: 13px; color: #444a51; line-height: 1.7; margin: 0; padding-left: 18px; }
+code { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 12px; background: #f0f2f5; border-radius: 4px; padding: 1px 5px; color: #044c3e; }
+pre { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 12px; background: #f7f8fa; border: 1px solid #e3e6ec; border-radius: 8px; padding: 12px 14px; margin: 8px 0 0; overflow-x: auto; color: #323539; line-height: 1.6; white-space: pre-wrap; }
+pre .add { color: #066653; }
+pre .del { color: #c0302a; opacity: .75; }
+pre .cmt { color: #9aa0aa; }
+.impact-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+.impact-chip { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 999px; display: inline-flex; align-items: center; gap: 5px; }
+.ic-bug  { background: #ffefee; color: #c0302a; border: 1px solid #fea19b; }
+.ic-ux   { background: #fdf6ea; color: #8f611c; border: 1px solid #f5c782; }
+.ic-code { background: #eaf2fb; color: #0f4377; border: 1px solid #8bb4e6; }
+.ic-csl  { background: #f0eeff; color: #453de3; border: 1px solid #c7c4fd; }
+.ic-perf { background: #e9f8f1; color: #044c3e; border: 1px solid #beead5; }
+
+/* ── Issue log table ── */
+.log-table { width: 100%; border-collapse: collapse; font-size: 13px; background: #fff; border-radius: 12px; overflow: hidden; border: 1px solid #e3e6ec; margin-top: 36px; }
+.log-table thead th { text-align: left; padding: 11px 14px; font-size: 11px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: #9aa0aa; background: #fafbfc; border-bottom: 1px solid #e3e6ec; }
+.log-table tbody td { padding: 11px 14px; border-bottom: 1px solid #f0f1f4; vertical-align: top; }
+.log-table tbody tr:last-child td { border-bottom: none; }
+.log-table code { font-size: 11px; }
+
+/* ── Footer ── */
+.page-footer { border-top: 1px solid #e3e6ec; padding: 20px 48px; font-size: 12px; color: #9aa0aa; display: flex; align-items: center; gap: 8px; max-width: 1100px; margin: 0 auto; }
+</style>
+</head>
+<body>
+
+<!-- ── Header ── -->
+<div class="hd">
+  <div class="hd-top">
+    <div>
+      <div class="hd-tag">NbS Tool V3 · QA/QC</div>
+      <h1 class="hd-title">QA Audit Report</h1>
+      <p class="hd-sub">Running audit across all 9 screens and 16 source files. Waves completed in sequence; no wave starts until the previous is approved.</p>
+    </div>
+    <div class="hd-pills">
+      <span class="hd-pill"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M4 7l8 6 8-6" stroke="currentColor" stroke-width="1.8"/></svg>June 2026</span>
+      <span class="hd-pill"><svg viewBox="0 0 24 24" fill="none"><path d="M4 20V4M4 20h16M8 16v-4M12 16V8M16 16v-7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>9 screens · 16 files</span>
+    </div>
+  </div>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('w5')">
+      Wave 5 — Performance
+      <span class="wave-badge done">11 Fixed</span>
+    </button>
+    <button class="tab-btn" onclick="switchTab('w6')">
+      Wave 6 — Code Quality
+      <span class="wave-badge done">11 Fixed</span>
+    </button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     WAVE 5 TAB
+═══════════════════════════════════════ -->
+<div class="wrap">
+<div class="tab-panel active" id="tab-w5">
+
+  <div class="summary">
+    <div class="sum-card high"><div class="sum-count">1</div><div class="sum-label">High — Fixed</div></div>
+    <div class="sum-card medium"><div class="sum-count">4</div><div class="sum-label">Medium — Fixed</div></div>
+    <div class="sum-card low"><div class="sum-count">6</div><div class="sum-label">Low — Fixed</div></div>
+    <div class="sum-card total"><div class="sum-count">11</div><div class="sum-label">Total Fixed ✓</div></div>
+  </div>
+
+  <div class="section-title">High</div>
+
+  <div class="issue" id="P-01">
+    <div class="issue-head" onclick="toggle('P-01')">
+      <span class="issue-id">P-01</span>
+      <div><div class="issue-title">Duplicate Google Fonts request — extra render-blocking round-trip</div><div class="issue-files">F05.1.1 User Input Monitoring Form.html · line 11</div></div>
+      <span class="badge high">High</span>
+      <svg class="chev" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="issue-body">
+      <div class="impact-row"><span class="impact-chip ic-perf">⛔ Render-blocking</span><span class="impact-chip ic-code">~2–4 KB extra</span><span class="badge fixed">Fixed</span></div>
+      <div class="issue-grid">
+        <div class="issue-section"><h4>What was wrong</h4><p>F05.1.1 loaded Google Fonts twice — a second <code>&lt;link&gt;</code> requested Poppins with weight 300 (unused) causing an extra render-blocking round-trip on every load.</p></div>
+        <div class="issue-section"><h4>Fix applied</h4><p>Removed the duplicate <code>&lt;link rel="stylesheet" href="...Poppins:wght@300..."&gt;</code> tag from F05.1.1 <code>&lt;head&gt;</code>.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title">Medium</div>
+
+  <div class="issue" id="P-02">
+    <div class="issue-head" onclick="toggle('P-02')">
+      <span class="issue-id">P-02</span>
+      <div><div class="issue-title">Dead CSS — <code>.appnav*</code> block shipped on 7 screens</div><div class="issue-files">dashboard.css · ~lines 23–70</div></div>
+      <span class="badge medium">Medium</span>
+      <svg class="chev" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="issue-body">
+      <div class="impact-row"><span class="impact-chip ic-code">~1.8 KB dead CSS</span><span class="badge fixed">Fixed</span></div>
+      <div class="issue-grid">
+        <div class="issue-section"><h4>What was wrong</h4><p>~40 <code>.appnav*</code> rules defined a replaced nav shell. No screen uses <code>.appnav</code> — all use <code>.sitenav</code> from <code>nav.css</code>.</p></div>
+        <div class="issue-section"><h4>Fix applied</h4><p>Deleted the entire <code>/* App navbar */</code> block from <code>dashboard.css</code>.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="issue" id="P-03">
+    <div class="issue-head" onclick="toggle('P-03')">
+      <span class="issue-id">P-03</span>
+      <div><div class="issue-title">Dead CSS — <code>.f03-nav*</code> block shipped on 4 screens</div><div class="issue-files">f03.css · lines 6–14</div></div>
+      <span class="badge medium">Medium</span>
+      <svg class="chev" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="issue-body">
+      <div class="impact-row"><span class="impact-chip ic-code">~0.5 KB dead CSS</span><span class="badge fixed">Fixed</span></div>
+      <div class="issue-grid">
+        <div class="issue-section"><h4>What was wrong</h4><p>8 <code>.f03-nav*</code> rules defined a replaced dark navbar. All screens using <code>f03.css</code> render <code>.sitenav</code> instead.</p></div>
+        <div class="issue-section"><h4>Fix applied</h4><p>Deleted the <code>.f03-nav*</code> block from <code>f03.css</code> lines 6–14.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="issue" id="P-04">
+    <div class="issue-head" onclick="toggle('P-04')">
+      <span class="issue-id">P-04</span>
+      <div><div class="issue-title">CLS risk — <code>scene-logo.png</code> missing <code>width</code> on all 9 navbars</div><div class="issue-files">All screens · nav + F00 footer</div></div>
+      <span class="badge medium">Medium</span>
+      <svg class="chev" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="issue-body">
+      <div class="impact-row"><span class="impact-chip ic-ux">📐 CLS — sticky nav shift</span><span class="badge fixed">Fixed</span></div>
+      <div class="issue-grid">
+        <div class="issue-section"><h4>What was wrong</h4><p>Logo <code>&lt;img&gt;</code> had only <code>height:44px</code> set, no <code>width</code>. Browser couldn't pre-reserve horizontal space, causing a layout shift in the sticky nav on every page load.</p></div>
+        <div class="issue-section"><h4>Fix applied</h4><p>Added <code>width="360" height="133" style="height:44px;width:auto"</code> to all 9 nav instances. Footer logo in F00 also received <code>loading="lazy"</code>.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="issue" id="P-05">
+    <div class="issue-head" onclick="toggle('P-05')">
+      <span class="issue-id">P-05</span>
+      <div><div class="issue-title">No <code>preload</code> hint for LCP background image on F00 Home</div><div class="issue-files">F00 Home.html · home.css <code>.hero-bg</code></div></div>
+      <span class="badge medium">Medium</span>
+      <svg class="chev" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="issue-body">
+      <div class="impact-row"><span class="impact-chip ic-perf">⛔ LCP delay</span><span class="badge fixed">Fixed</span></div>
+      <div class="issue-grid">
+        <div class="issue-section"><h4>What was wrong</h4><p>Hero and overview background images were set via CSS <code>background-image</code>. Not discoverable by the preload scanner — fetched late, extending LCP on the landing page.</p></div>
+        <div class="issue-section"><h4>Fix applied</h4><p>Added two <code>&lt;link rel="preload" as="image"&gt;</code> hints for <code>hero-bg.jpg</code> and <code>overview-bg.jpg</code> in F00's <code>&lt;head&gt;</code>, before the CSS links.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title">Low</div>
+
+  <div class="issue" id="P-06">
+    <div class="issue-head" onclick="toggle('P-06')">
+      <span class="issue-id">P-06</span>
+      <div><div class="issue-title">Duplicate CSS reset block in <code>home.css</code> and <code>dashboard.css</code></div><div class="issue-files">home.css · lines 1–16 &amp; dashboard.css · lines 1–18</div></div>
+      <span class="badge low">Low</span>
+      <svg class="chev" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="issue-body">
+      <div class="impact-row"><span class="impact-chip ic-code">Duplicate CSS rules</span><span class="badge fixed">Fixed</span></div>
+      <div class="issue-grid">
+        <div class="issue-section"><h4>What was wrong</h4><p>Six identical rules (<code>box-sizing</code>, <code>scroll-behavior</code>, <code>-webkit-font-smoothing</code>, <code>img</code>, <code>a</code>, <code>button</code>) copy-pasted in two files.</p></div>
+        <div class="issue-section"><h4>Fix applied</h4><p>Moved all six to a <code>/* GLOBAL RESET */</code> section in <code>tokens.css</code>. Both files now only set their page-specific <code>body { background }</code>.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="issue" id="P-07">
+    <div class="issue-head" onclick="toggle('P-07')">
+      <span class="issue-id">P-07</span>
+      <div><div class="issue-title"><code>nav-mobile.js</code> runs 3 SVG-harden traversals on every page</div><div class="issue-files">nav-mobile.js · lines 55–60</div></div>
+      <span class="badge low">Low</span>
+      <svg class="chev" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="issue-body">
+      <div class="impact-row"><span class="impact-chip ic-code">2 redundant timer traversals on 7/9 screens</span><span class="badge fixed">Fixed</span></div>
+      <div class="issue-grid">
+        <div class="issue-section"><h4>What was wrong</h4><p>The delayed <code>hardenSvgs()</code> passes at 400ms and 1200ms fired unconditionally on every screen, even purely static ones that need no re-scan.</p></div>
+        <div class="issue-section"><h4>Fix applied</h4><p>Gated both <code>setTimeout</code> calls behind <code>document.getElementById('root')</code> — only F03 and F05.1.1 (JS-rendered) get the extra passes.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="issue" id="P-08">
+    <div class="issue-head" onclick="toggle('P-08')">
+      <span class="issue-id">P-08</span>
+      <div><div class="issue-title">Auth modal styles inlined in F00 instead of <code>auth.css</code></div><div class="issue-files">F00 Home.html · inline <code>&lt;style&gt;</code> block in body</div></div>
+      <span class="badge low">Low</span>
+      <svg class="chev" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="issue-body">
+      <div class="impact-row"><span class="impact-chip ic-code">~1.1 KB uncacheable CSS</span><span class="badge fixed">Fixed</span></div>
+      <div class="issue-grid">
+        <div class="issue-section"><h4>What was wrong</h4><p>~50-line inline <code>&lt;style&gt;</code> block in F00's body declared all <code>.auth-overlay</code> / <code>.auth-modal</code> rules despite <code>auth.css</code> already being linked.</p></div>
+        <div class="issue-section"><h4>Fix applied</h4><p>Moved all overlay rules into <code>auth.css</code>. Removed inline block from F00.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="issue" id="P-09">
+    <div class="issue-head" onclick="toggle('P-09')">
+      <span class="issue-id">P-09</span>
+      <div><div class="issue-title">9× repeated inline SVG icon paths in F01 benefit cards</div><div class="issue-files">F01 Interactive Map.html · Step 5 tbc-rows</div></div>
+      <span class="badge low">Low</span>
+      <svg class="chev" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="issue-body">
+      <div class="impact-row"><span class="impact-chip ic-code">~2–3 KB saved in F01</span><span class="badge fixed">Fixed</span></div>
+      <div class="issue-grid">
+        <div class="issue-section"><h4>What was wrong</h4><p>Three unique SVG icons (Nature, People, Climate) each written inline 3× across the Protect/Manage/Restore pathway benefit cards.</p></div>
+        <div class="issue-section"><h4>Fix applied</h4><p>Added a hidden <code>&lt;svg&gt;</code> with three <code>&lt;symbol&gt;</code> defs. All 9 inline copies replaced with <code>&lt;use href="#ic-tbc-*"/&gt;</code>.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="issue" id="P-10">
+    <div class="issue-head" onclick="toggle('P-10')">
+      <span class="issue-id">P-10</span>
+      <div><div class="issue-title">Inline <code>onmouseover</code>/<code>onmouseout</code> on breadcrumb links</div><div class="issue-files">F03, F05.1.1, F06 · <code>&lt;nav class="crumbbar"&gt;</code></div></div>
+      <span class="badge low">Low</span>
+      <svg class="chev" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="issue-body">
+      <div class="impact-row"><span class="impact-chip ic-code">CSP-hostile inline handlers</span><span class="badge fixed">Fixed</span></div>
+      <div class="issue-grid">
+        <div class="issue-section"><h4>What was wrong</h4><p>Breadcrumb <code>&lt;a&gt;</code> elements used <code>onmouseover="this.style.color=..."</code> handlers and large inline style strings on the <code>&lt;nav&gt;</code> element.</p></div>
+        <div class="issue-section"><h4>Fix applied</h4><p>Moved all layout + hover rules to a <code>.crumbbar</code> block in <code>nav.css</code>. Removed all inline styles and event handlers from the HTML.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="issue" id="P-11">
+    <div class="issue-head" onclick="toggle('P-11')">
+      <span class="issue-id">P-11</span>
+      <div><div class="issue-title">Footer logo in F00 not lazy-loaded</div><div class="issue-files">F00 Home.html · <code>&lt;footer&gt;</code></div></div>
+      <span class="badge low">Low</span>
+      <svg class="chev" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="issue-body">
+      <div class="impact-row"><span class="impact-chip ic-perf">Unnecessary early fetch</span><span class="badge fixed">Fixed</span></div>
+      <div class="issue-grid">
+        <div class="issue-section"><h4>What was wrong</h4><p>The footer instance of <code>scene-logo.png</code> on the long-scroll F00 page was fetched eagerly, competing with the above-the-fold hero image.</p></div>
+        <div class="issue-section"><h4>Fix applied</h4><p>Added <code>loading="lazy"</code> to the footer logo in F00. Covered alongside the P-04 <code>width</code>/<code>height</code> fix.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Issue log table — Wave 5 -->
+  <table class="log-table">
+    <thead><tr><th>ID</th><th>Wave</th><th>Sev</th><th>File / Location</th><th>Issue</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td><strong>P-01</strong></td><td>5</td><td><span class="badge high">High</span></td><td><code>F05.1.1</code></td><td>Duplicate Google Fonts link (Poppins 300)</td><td><span class="badge fixed">Fixed</span></td></tr>
+      <tr><td><strong>P-02</strong></td><td>5</td><td><span class="badge medium">Medium</span></td><td><code>dashboard.css</code></td><td>Dead CSS — <code>.appnav*</code> block (~1.8 KB, 7 screens)</td><td><span class="badge fixed">Fixed</span></td></tr>
+      <tr><td><strong>P-03</strong></td><td>5</td><td><span class="badge medium">Medium</span></td><td><code>f03.css</code></td><td>Dead CSS — <code>.f03-nav*</code> block (~0.5 KB, 4 screens)</td><td><span class="badge fixed">Fixed</span></td></tr>
+      <tr><td><strong>P-04</strong></td><td>5</td><td><span class="badge medium">Medium</span></td><td>All screens nav</td><td>CLS — logo missing <code>width</code> attribute</td><td><span class="badge fixed">Fixed</span></td></tr>
+      <tr><td><strong>P-05</strong></td><td>5</td><td><span class="badge medium">Medium</span></td><td><code>F00</code> head</td><td>No <code>preload</code> for LCP <code>hero-bg.jpg</code></td><td><span class="badge fixed">Fixed</span></td></tr>
+      <tr><td><strong>P-06</strong></td><td>5</td><td><span class="badge low">Low</span></td><td><code>home.css</code> + <code>dashboard.css</code></td><td>6-rule reset block duplicated; moved to <code>tokens.css</code></td><td><span class="badge fixed">Fixed</span></td></tr>
+      <tr><td><strong>P-07</strong></td><td>5</td><td><span class="badge low">Low</span></td><td><code>nav-mobile.js</code></td><td><code>hardenSvgs</code> ran 3× per page; gated on <code>#root</code></td><td><span class="badge fixed">Fixed</span></td></tr>
+      <tr><td><strong>P-08</strong></td><td>5</td><td><span class="badge low">Low</span></td><td><code>F00</code> inline style</td><td>Auth modal styles inlined; moved to <code>auth.css</code></td><td><span class="badge fixed">Fixed</span></td></tr>
+      <tr><td><strong>P-09</strong></td><td>5</td><td><span class="badge low">Low</span></td><td><code>F01</code> Step 5</td><td>9× repeated SVG icon paths → <code>&lt;symbol&gt;</code>/<code>&lt;use&gt;</code></td><td><span class="badge fixed">Fixed</span></td></tr>
+      <tr><td><strong>P-10</strong></td><td>5</td><td><span class="badge low">Low</span></td><td>F03, F05.1.1, F06</td><td>Inline <code>onmouseover</code>/<code>onmouseout</code> on breadcrumbs</td><td><span class="badge fixed">Fixed</span></td></tr>
+      <tr><td><strong>P-11</strong></td><td>5</td><td><span class="badge low">Low</span></td><td><code>F00</code> footer</td><td>Footer logo missing <code>loading="lazy"</code></td><td><span class="badge fixed">Fixed</span></td></tr>
+    </tbody>
+  </table>
+
+</div><!-- /tab-w5 -->
+
+<!-- ═══════════════════════════════════════
+     WAVE 6 TAB
+═══════════════════════════════════════ -->
+<div class="tab-panel" id="tab-w6">
+
+  <div class="summary">
+    <div class="sum-card high"><div class="sum-count">1</div><div class="sum-label">High — Fixed</div></div>
+    <div class="sum-card medium"><div class="sum-count">4</div><div class="sum-label">Medium — Fixed</div></div>
+    <div class="sum-card low"><div class="sum-count">6</div><div class="sum-label">Low — Fixed</div></div>
+    <div class="sum-card total"><div class="sum-count">11</div><div class="sum-label">Total Fixed ✓</div></div>
+  </div>
+
+  <div class="section-title">High</div>
+
+  <!-- Q-01 -->
+  <div class="issue" id="Q-01">
+    <div class="issue-head" onclick="toggle('Q-01')">
+      <span class="issue-id">Q-01</span>
+      <div><div class="issue-title">Search filter index desyncs after project deletion — wrong rows hidden</div><div class="issue-files">F04 Dashboard.html · search <code>input</code> handler · ~line 296</div></div>
+      <span class="badge high">High</span>
+      <svg class="chev" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="issue-body">
+      <div class="impact-row"><span class="impact-chip ic-bug">🐛 Functional bug after deletion</span><span class="badge fixed">Fixed</span></div>
+      <div class="issue-grid">
+        <div class="issue-section">
+          <h4>What's wrong</h4>
+          <p>The search handler matches DOM children to data by array index:</p>
+<pre>[...rows.children].forEach((tr, i) => {
+  tr.style.display =
+    projects[i].name.toLowerCase()
+      .includes(q) ? '' : 'none';
+});</pre>
+          <p>After a project row is deleted via <code>tr.remove()</code>, the <code>projects</code> array is not spliced. <code>rows.children[0]</code> now corresponds to what was <code>projects[1]</code>, so every subsequent search hides the wrong rows.</p>
+        </div>
+        <div class="issue-section">
+          <h4>Proposed fix</h4>
+          <p>Match by a <code>data-name</code> attribute stamped on each row at render time, rather than by index:</p>
+<pre><span class="cmt">// At render time (already present on delete buttons):</span>
+<span class="add">&lt;tr data-name="${p.name}" ...&gt;</span>
+
+<span class="cmt">// Search handler:</span>
+<span class="del">[...rows.children].forEach((tr, i) => {
+  tr.style.display =
+    projects[i].name...includes(q)...
+});</span>
+<span class="add">[...rows.children].forEach(tr => {
+  const name = (tr.dataset.name || '')
+    .toLowerCase();
+  tr.style.display =
+    name.includes(q) ? '' : 'none';
+});</span></pre>
+          <p style="margin-top:8px">Apply the same pattern to grid cards.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title">Medium</div>
+
+  <!-- Q-02 -->
+  <div class="issue" id="Q-02">
+    <div class="issue-head" onclick="toggle('Q-02')">
+      <span class="issue-id">Q-02</span>
+      <div><div class="issue-title">F04.1 breadcrumb still has inline <code>onmouseover</code>/<code>onmouseout</code> — missed in Wave 5 P-10</div><div class="issue-files">F04.1 Project Detail.html · line 52</div></div>
+      <span class="badge medium">Medium</span>
+      <svg class="chev" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="issue-body">
+      <div class="impact-row"><span class="impact-chip ic-code">Wave 5 P-10 regression — F04.1 not covered</span><span class="badge fixed">Fixed</span></div>
+      <div class="issue-grid">
+        <div class="issue-section">
+          <h4>What's wrong</h4>
+          <p>F04.1's <code>&lt;nav class="crumbbar"&gt;</code> still carries the full inline style string and the <code>onmouseover</code>/<code>onmouseout</code> handlers on its breadcrumb link. It was not included in the Wave 5 P-10 fix (only F03, F05.1.1, F06 were cleaned).</p>
+          <p style="margin-top:8px">The <code>.crumbbar</code> CSS is now in <code>nav.css</code> — F04.1 just needs its HTML cleaned to match the other screens.</p>
+        </div>
+        <div class="issue-section">
+          <h4>Proposed fix</h4>
+          <p>Apply the same cleanup done in P-10 to F04.1:</p>
+<pre><span class="del">&lt;nav class="crumbbar"
+  style="display:flex;align-items:center;
+         gap:8px;font-family:..."&gt;
+  &lt;a href="F04 Dashboard.html"
+     style="color:var(--text-base-second);..."
+     onmouseover="this.style.color=..."
+     onmouseout="this.style.color=..."&gt;</span>
+<span class="add">&lt;nav class="crumbbar"&gt;
+  &lt;a href="F04 Dashboard.html"&gt;</span></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q-03 -->
+  <div class="issue" id="Q-03">
+    <div class="issue-head" onclick="toggle('Q-03')">
+      <span class="issue-id">Q-03</span>
+      <div><div class="issue-title">Profile dropdown IIFE duplicated verbatim across 7 screens — belongs in <code>nav-mobile.js</code></div><div class="issue-files">F01, F03, F04, F04.1, F05, F05.1.1, F06 · inline <code>&lt;script&gt;</code> after <code>&lt;nav&gt;</code></div></div>
+      <span class="badge medium">Medium</span>
+      <svg class="chev" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="issue-body">
+      <div class="impact-row"><span class="impact-chip ic-code">7× repeated script block</span><span class="badge fixed">Fixed</span></div>
+      <div class="issue-grid">
+        <div class="issue-section">
+          <h4>What's wrong</h4>
+          <p>Every authenticated screen has this identical inline block immediately after the nav:</p>
+<pre>(function(){
+  const wrap =
+    document.getElementById('profileWrap');
+  if(!wrap)return;
+  document.getElementById('profileBtn')
+    .addEventListener('click', e => {
+      e.stopPropagation();
+      wrap.classList.toggle('open');
+    });
+  document.addEventListener('click',
+    () => wrap.classList.remove('open'));
+  document.addEventListener('keydown',
+    e => { if(e.key==='Escape')
+      wrap.classList.remove('open'); });
+})();</pre>
+          <p style="margin-top:8px"><code>nav-mobile.js</code> is already loaded by all 7 screens and runs on <code>DOMContentLoaded</code> — the perfect home for this behaviour.</p>
+        </div>
+        <div class="issue-section">
+          <h4>Proposed fix</h4>
+          <p>Add a <code>initProfileDropdown()</code> function inside <code>nav-mobile.js</code>'s <code>boot()</code>:</p>
+<pre><span class="add">function initProfileDropdown() {
+  const wrap =
+    document.getElementById('profileWrap');
+  if (!wrap) return;
+  document.getElementById('profileBtn')
+    .addEventListener('click', e => {
+      e.stopPropagation();
+      wrap.classList.toggle('open');
+    });
+  document.addEventListener('click',
+    () => wrap.classList.remove('open'));
+  document.addEventListener('keydown',
+    e => { if (e.key === 'Escape')
+      wrap.classList.remove('open'); });
+}</span>
+
+<span class="cmt">// inside boot():</span>
+<span class="add">initProfileDropdown();</span></pre>
+          <p style="margin-top:8px">Then delete the inline <code>&lt;script&gt;</code> block from all 7 screens. <strong>Risk:</strong> <code>nav-mobile.js</code> uses <code>DOMContentLoaded</code> — verify the nav element exists by then (it will, since all 7 screens place nav before body scripts).</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q-04 -->
+  <div class="issue" id="Q-04">
+    <div class="issue-head" onclick="toggle('Q-04')">
+      <span class="issue-id">Q-04</span>
+      <div><div class="issue-title"><code>&lt;tr onclick&gt;</code> / <code>&lt;article onclick&gt;</code> navigation bypasses keyboard and middle-click</div><div class="issue-files">F04 Dashboard.html · table rows and grid cards</div></div>
+      <span class="badge medium">Medium</span>
+      <svg class="chev" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="issue-body">
+      <div class="impact-row"><span class="impact-chip ic-ux">Keyboard nav broken</span><span class="impact-chip ic-ux">No middle-click / Ctrl+click</span><span class="badge fixed">Fixed</span></div>
+      <div class="issue-grid">
+        <div class="issue-section">
+          <h4>What's wrong</h4>
+          <p>Both the table view (<code>&lt;tr onclick="window.location.href=..."&gt;</code>) and grid view (<code>&lt;article onclick="window.location.href=..."&gt;</code>) use <code>onclick</code> for whole-row navigation. <code>&lt;tr&gt;</code> and <code>&lt;article&gt;</code> are not focusable by default — keyboard users pressing Tab/Enter cannot navigate to a project. Middle-click or Ctrl+click to open in a new tab also doesn't work.</p>
+        </div>
+        <div class="issue-section">
+          <h4>Proposed fix</h4>
+          <p>Wrap the project name cell in an <code>&lt;a&gt;</code> tag (the primary call-to-action cell) so native link behaviour is preserved. Keep <code>onclick</code> only on the actions column for stop-propagation:</p>
+<pre><span class="del">&lt;tr onclick="window.location.href=
+  'F04.1 Project Detail.html'"&gt;
+  &lt;td&gt;...project name...&lt;/td&gt;</span>
+<span class="add">&lt;tr&gt;
+  &lt;td&gt;
+    &lt;a href="F04.1 Project Detail.html"
+       class="row-link"&gt;
+      ...project name...
+    &lt;/a&gt;
+  &lt;/td&gt;</span></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title">Low</div>
+
+  <!-- Q-05 -->
+  <div class="issue" id="Q-05">
+    <div class="issue-head" onclick="toggle('Q-05')">
+      <span class="issue-id">Q-05</span>
+      <div><div class="issue-title"><code>#metaSaveBar</code> has <code>display:none</code> written twice — <code>gap</code> and <code>align-items</code> unreachable</div><div class="issue-files">F04.1 Project Detail.html · line 145</div></div>
+      <span class="badge low">Low</span>
+      <svg class="chev" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="issue-body">
+      <div class="impact-row"><span class="impact-chip ic-bug">Confusing inline style bug</span><span class="badge fixed">Fixed</span></div>
+      <div class="issue-grid">
+        <div class="issue-section">
+          <h4>What's wrong</h4>
+          <p>The save bar's inline style string is:</p>
+<pre>style="display:none;margin-top:14px;
+       display:none;gap:10px;
+       align-items:center"</pre>
+          <p style="margin-top:8px"><code>display:none</code> appears twice. The second occurrence shadows the first, and <code>gap</code> + <code>align-items</code> follow the second <code>display:none</code>. When JS sets <code>display='flex'</code> at runtime the flex layout works, but the intent is unclear and the double declaration is a maintenance hazard.</p>
+        </div>
+        <div class="issue-section">
+          <h4>Proposed fix</h4>
+<pre><span class="del">style="display:none;margin-top:14px;
+       display:none;gap:10px;
+       align-items:center"</span>
+<span class="add">style="display:none;margin-top:14px;
+       gap:10px;align-items:center"</span></pre>
+          <p style="margin-top:8px">Remove the first <code>display:none;</code> (the duplicate). The element remains hidden; JS still overrides it to <code>flex</code> correctly.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q-06 -->
+  <div class="issue" id="Q-06">
+    <div class="issue-head" onclick="toggle('Q-06')">
+      <span class="issue-id">Q-06</span>
+      <div><div class="issue-title">Delete toast close button retains <code>onmouseover</code>/<code>onmouseout</code> + 200-char inline style</div><div class="issue-files">F04 Dashboard.html · <code>#deleteToast</code> · ~line 371</div></div>
+      <span class="badge low">Low</span>
+      <svg class="chev" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="issue-body">
+      <div class="impact-row"><span class="impact-chip ic-code">P-10 pattern not applied to toast</span><span class="badge fixed">Fixed</span></div>
+      <div class="issue-grid">
+        <div class="issue-section">
+          <h4>What's wrong</h4>
+          <p>The delete toast <code>&lt;div&gt;</code> carries a ~200-character inline style string. Its close button still uses <code>onmouseover</code>/<code>onmouseout</code> handlers — the same pattern fixed in P-10 for breadcrumbs. The toast's <code>@keyframes toastIn</code> is also in an inline <code>&lt;style&gt;</code> block in the body rather than <code>f04.css</code>.</p>
+        </div>
+        <div class="issue-section">
+          <h4>Proposed fix</h4>
+          <p>Move the toast styles (including <code>@keyframes toastIn</code>) to <code>f04.css</code> as a <code>.delete-toast</code> class. Replace <code>onmouseover</code>/<code>onmouseout</code> with a <code>:hover</code> CSS rule. The toast element already has <code>id="deleteToast"</code> which can anchor its styles.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q-07 -->
+  <div class="issue" id="Q-07">
+    <div class="issue-head" onclick="toggle('Q-07')">
+      <span class="issue-id">Q-07</span>
+      <div><div class="issue-title">Collaborator list items use <code>&lt;div onclick&gt;</code> without <code>role="button"</code> or <code>tabindex</code></div><div class="issue-files">F04.1 Project Detail.html · <code>#collabList</code> rows · ~line 713</div></div>
+      <span class="badge low">Low</span>
+      <svg class="chev" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="issue-body">
+      <div class="impact-row"><span class="impact-chip ic-ux">Not keyboard-focusable</span><span class="badge fixed">Fixed</span></div>
+      <div class="issue-grid">
+        <div class="issue-section">
+          <h4>What's wrong</h4>
+          <p>Each row in the collaborator list is a <code>&lt;div onclick="openEditCollabModal(i)"&gt;</code>. <code>&lt;div&gt;</code> elements are not in the tab order and don't respond to Enter/Space — keyboard users cannot open the edit modal.</p>
+        </div>
+        <div class="issue-section">
+          <h4>Proposed fix</h4>
+          <p>Add <code>role="button" tabindex="0"</code> to each collaborator row div, and add a <code>keydown</code> listener for Enter/Space to trigger the click action. Alternatively, change the wrapper to a <code>&lt;button&gt;</code> element (with appropriate styling reset).</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q-08 -->
+  <div class="issue" id="Q-08">
+    <div class="issue-head" onclick="toggle('Q-08')">
+      <span class="issue-id">Q-08</span>
+      <div><div class="issue-title"><code>?step=3</code> query parameter in F05 links is silently ignored</div><div class="issue-files">F04.1 Project Detail.html · 2 links to F05 · lines ~468, 856</div></div>
+      <span class="badge low">Low</span>
+      <svg class="chev" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="issue-body">
+      <div class="impact-row"><span class="impact-chip ic-bug">Dead query param — always opens Step 1</span><span class="badge fixed">Fixed</span></div>
+      <div class="issue-grid">
+        <div class="issue-section">
+          <h4>What's wrong</h4>
+          <p>Two links from F04.1 navigate to <code>F05 Create Monitoring Plan.html?step=3</code> implying the user should land on step 3 (Indicators). F05 does not read <code>URLSearchParams</code> — it always initialises at step 1, ignoring the parameter entirely.</p>
+        </div>
+        <div class="issue-section">
+          <h4>Proposed fix (two options)</h4>
+          <p><strong>Option A</strong> — implement the intent: add URL param reading to F05's init:</p>
+<pre><span class="add">const urlStep = parseInt(
+  new URLSearchParams(location.search)
+    .get('step'));
+if (urlStep >= 1 && urlStep <= 3)
+  goStep(urlStep);</span></pre>
+          <p style="margin-top:8px"><strong>Option B</strong> — remove the parameter if deep-linking is not yet implemented, to avoid implying behaviour that doesn't exist.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q-09 -->
+  <div class="issue" id="Q-09">
+    <div class="issue-head" onclick="toggle('Q-09')">
+      <span class="issue-id">Q-09</span>
+      <div><div class="issue-title">F04.1 density tweaks <code>&lt;style&gt;</code> block with <code>!important</code> embedded in <code>&lt;body&gt;</code></div><div class="issue-files">F04.1 Project Detail.html · inline <code>&lt;style&gt;</code> before tweaks panel · ~line 1130</div></div>
+      <span class="badge low">Low</span>
+      <svg class="chev" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="issue-body">
+      <div class="impact-row"><span class="impact-chip ic-code">Same pattern as P-08 — inline styles in body</span><span class="badge fixed">Fixed</span></div>
+      <div class="issue-grid">
+        <div class="issue-section">
+          <h4>What's wrong</h4>
+          <p>A 40+ line <code>&lt;style&gt;</code> block in F04.1's <code>&lt;body&gt;</code> defines density override rules using <code>!important</code> on every declaration. This is the same anti-pattern fixed in P-08 (Wave 5). Inline <code>&lt;style&gt;</code> in the body is uncacheable and splits style authority.</p>
+        </div>
+        <div class="issue-section">
+          <h4>Proposed fix</h4>
+          <p>Move the density rules to <code>f041.css</code>. The rules are already properly scoped via <code>[data-density="compact"]</code> and <code>[data-density="spacious"]</code> selectors — they don't depend on inline placement. Drop the <code>!important</code> once no conflicting inline styles remain on the targeted elements.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q-10 -->
+  <div class="issue" id="Q-10">
+    <div class="issue-head" onclick="toggle('Q-10')">
+      <span class="issue-id">Q-10</span>
+      <div><div class="issue-title"><code>@keyframes toastIn</code> defined in inline <code>&lt;style&gt;</code> in F04 body</div><div class="issue-files">F04 Dashboard.html · inline <code>&lt;style&gt;</code> · ~line 375</div></div>
+      <span class="badge low">Low</span>
+      <svg class="chev" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="issue-body">
+      <div class="impact-row"><span class="impact-chip ic-code">Inline body style block</span><span class="badge fixed">Fixed</span></div>
+      <div class="issue-grid">
+        <div class="issue-section">
+          <h4>What's wrong</h4>
+          <p>The delete toast's entrance animation is defined as an inline <code>&lt;style&gt;</code> in the body of F04:</p>
+          <pre>@keyframes toastIn {
+  from { opacity:0; transform:translateY(-10px) scale(.97); }
+  to   { opacity:1; transform:none; }
+}</pre>
+          <p style="margin-top:8px">Same anti-pattern as P-08 and Q-09. Uncacheable, body-embedded style.</p>
+        </div>
+        <div class="issue-section">
+          <h4>Proposed fix</h4>
+          <p>Move <code>@keyframes toastIn</code> and all <code>#deleteToast</code>-related styles to <code>f04.css</code>. To be addressed together with Q-06 (toast style cleanup).</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q-11 -->
+  <div class="issue" id="Q-11">
+    <div class="issue-head" onclick="toggle('Q-11')">
+      <span class="issue-id">Q-11</span>
+      <div><div class="issue-title"><code>_F05_build.html</code> stale development artifact in production screens folder</div><div class="issue-files">design-system/screens/_F05_build.html</div></div>
+      <span class="badge low">Low</span>
+      <svg class="chev" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="issue-body">
+      <div class="impact-row"><span class="impact-chip ic-code">Stale artifact</span><span class="badge fixed">Fixed</span></div>
+      <div class="issue-grid">
+        <div class="issue-section">
+          <h4>What's wrong</h4>
+          <p>A file named <code>_F05_build.html</code> (underscore prefix suggests a draft or build artifact) lives alongside the production screens. It is not linked from any navigation and its purpose is unclear. Stale artifacts in the screens folder risk confusion about the canonical file set.</p>
+        </div>
+        <div class="issue-section">
+          <h4>Proposed fix</h4>
+          <p>Verify whether <code>_F05_build.html</code> is still needed. If it is a working draft or superseded iteration, move it to a <code>/drafts/</code> subfolder or delete it. If it contains functionality that was never merged into <code>F05 Create Monitoring Plan.html</code>, document the intent in a comment and track it.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Issue log table — Wave 6 -->
+  <table class="log-table">
+    <thead><tr><th>ID</th><th>Wave</th><th>Sev</th><th>File / Location</th><th>Issue</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Q-01</strong></td><td>6</td><td><span class="badge high">High</span></td><td><code>F04</code> search handler</td><td>Search index desyncs after deletion — wrong rows hidden</td><td><span class="badge fixed">Fixed</span></td></tr>
+      <tr><td><strong>Q-02</strong></td><td>6</td><td><span class="badge medium">Medium</span></td><td><code>F04.1</code> crumbbar</td><td>P-10 regression — breadcrumb inline handlers not cleaned</td><td><span class="badge fixed">Fixed</span></td></tr>
+      <tr><td><strong>Q-03</strong></td><td>6</td><td><span class="badge medium">Medium</span></td><td>7 screens · inline script</td><td>Profile dropdown IIFE copy-pasted 7×; belongs in <code>nav-mobile.js</code></td><td><span class="badge fixed">Fixed</span></td></tr>
+      <tr><td><strong>Q-04</strong></td><td>6</td><td><span class="badge medium">Medium</span></td><td><code>F04</code> table + grid</td><td><code>&lt;tr onclick&gt;</code> nav bypasses keyboard &amp; middle-click</td><td><span class="badge fixed">Fixed</span></td></tr>
+      <tr><td><strong>Q-05</strong></td><td>6</td><td><span class="badge low">Low</span></td><td><code>F04.1</code> line 145</td><td><code>#metaSaveBar</code> — <code>display:none</code> duplicated, hides <code>gap</code>/<code>align-items</code></td><td><span class="badge fixed">Fixed</span></td></tr>
+      <tr><td><strong>Q-06</strong></td><td>6</td><td><span class="badge low">Low</span></td><td><code>F04</code> toast</td><td>Delete toast button uses <code>onmouseover</code>/<code>onmouseout</code> + 200-char inline style</td><td><span class="badge fixed">Fixed</span></td></tr>
+      <tr><td><strong>Q-07</strong></td><td>6</td><td><span class="badge low">Low</span></td><td><code>F04.1</code> collabList</td><td><code>&lt;div onclick&gt;</code> rows not keyboard-focusable</td><td><span class="badge fixed">Fixed</span></td></tr>
+      <tr><td><strong>Q-08</strong></td><td>6</td><td><span class="badge low">Low</span></td><td><code>F04.1</code> ~lines 468, 856</td><td><code>?step=3</code> query param not consumed by F05 — always opens step 1</td><td><span class="badge fixed">Fixed</span></td></tr>
+      <tr><td><strong>Q-09</strong></td><td>6</td><td><span class="badge low">Low</span></td><td><code>F04.1</code> inline style</td><td>Density <code>&lt;style&gt;</code> block with <code>!important</code> in body (same as P-08)</td><td><span class="badge fixed">Fixed</span></td></tr>
+      <tr><td><strong>Q-10</strong></td><td>6</td><td><span class="badge low">Low</span></td><td><code>F04</code> inline style</td><td><code>@keyframes toastIn</code> in body <code>&lt;style&gt;</code>; belongs in <code>f04.css</code></td><td><span class="badge fixed">Fixed</span></td></tr>
+      <tr><td><strong>Q-11</strong></td><td>6</td><td><span class="badge low">Low</span></td><td>screens/<code>_F05_build.html</code></td><td>Stale dev artifact in production screens folder</td><td><span class="badge fixed">Fixed</span></td></tr>
+    </tbody>
+  </table>
+
+</div><!-- /tab-w6 -->
+</div><!-- /wrap -->
+
+<div class="page-footer">
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 11v5M12 8h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+  <span>Wave 5 (Performance) — <strong>11 Fixed.</strong> Wave 6 (Code Quality) — <strong>11 Fixed.</strong></span>
+</div>
+
+<script>
+function switchTab(id) {
+  document.querySelectorAll('.tab-btn').forEach((b, i) => {
+    b.classList.toggle('active', (i === 0 && id === 'w5') || (i === 1 && id === 'w6'));
+  });
+  document.querySelectorAll('.tab-panel').forEach(p => {
+    p.classList.toggle('active', p.id === 'tab-' + id);
+  });
+}
+function toggle(id) {
+  document.getElementById(id).classList.toggle('open');
+}
+// open first card in each wave by default
+document.addEventListener('DOMContentLoaded', () => {
+  toggle('P-01');
+  toggle('Q-01');
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,78 @@
+/* ============================================================
+   NbS Tool V3 — Authenticated app shell
+   Shared by [F04] My Project Dashboard & [F04.1] Project Detail.
+   Built on the NbS design system (tokens.css).
+   ============================================================ */
+
+/* page-specific background (reset rules now in tokens.css) */
+body { background: var(--bg-base-second); }
+.display { font-family: var(--font-display); letter-spacing: -1px; }
+.wrap { max-width: 1440px; margin: 0 auto; padding: 0 var(--space-40); }
+
+
+
+/* ---------- Buttons ---------- */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-weight: 600; font-size: 14px; line-height: 20px; border: 1px solid transparent; border-radius: var(--radius-md); padding: 9px 16px; cursor: pointer; white-space: nowrap; transition: background var(--motion-fast), box-shadow var(--motion-fast), border-color var(--motion-fast), color var(--motion-fast); }
+.btn svg { width: 17px; height: 17px; flex: none; }
+.btn-primary { background: var(--bg-primary-main); color: var(--text-on-color); box-shadow: var(--elevation-1); }
+.btn-primary:hover { background: var(--primary-700); }
+.btn-secondary { background: var(--bg-base-main); color: var(--text-base-main); border-color: var(--stroke-base); box-shadow: var(--elevation-1); }
+.btn-secondary:hover { background: var(--bg-base-third); }
+.btn-ghost { background: transparent; color: var(--text-base-second); }
+.btn-ghost:hover { background: var(--bg-base-third); color: var(--text-base-main); }
+.btn-danger-ghost { background: transparent; color: var(--text-danger); border-color: var(--danger-200); }
+.btn-danger-ghost:hover { background: var(--bg-danger-second); }
+.btn-sm { font-size: 13px; padding: 6px 12px; }
+
+/* ---------- Status badges ---------- */
+.badge { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; line-height: 18px; border-radius: var(--radius-pill); padding: 3px 11px; border: 1px solid transparent; white-space: nowrap; }
+.badge .d { width: 6px; height: 6px; border-radius: 50%; background: currentColor; flex: none; }
+.badge.s-draft   { color: var(--text-base-second); background: var(--bg-base-third); border-color: var(--stroke-base); }
+.badge.s-generated { color: var(--purple-700); background: var(--bg-purple-second); border-color: var(--purple-100); }
+.badge.s-monitoring { color: var(--success-700); background: var(--bg-success-second); border-color: var(--success-200); }
+.badge.s-completed { color: var(--text-primary); background: var(--primary-50); border-color: var(--primary-100); }
+.badge.s-verified  { color: var(--text-on-color); background: var(--bg-primary-main); border-color: var(--bg-primary-main); }
+/* incubator */
+.badge.i-na { color: var(--text-base-third); background: var(--bg-base-third); border-color: var(--stroke-base); }
+.badge.i-draft { color: var(--warning-700); background: var(--bg-warning-second); border-color: var(--warning-300); }
+.badge.i-ready { color: var(--purple-700); background: var(--bg-purple-second); border-color: var(--purple-100); }
+.badge.i-review { color: var(--warning-700); background: var(--bg-warning-second); border-color: var(--warning-200); }
+.badge.i-finished { color: var(--success-700); background: var(--bg-success-second); border-color: var(--success-200); }
+
+/* ---------- Cards / panels ---------- */
+.card { background: var(--bg-base-main); border-radius: var(--radius-2xl); box-shadow: var(--elevation-3); border: 1px solid var(--stroke-base); }
+
+/* ---------- Ecosystem icon chip ---------- */
+.eco { width: 38px; height: 38px; border-radius: var(--radius-md); display: grid; place-items: center; flex: none; overflow: hidden; }
+.eco img { width: 38px; height: 38px; display: block; }
+.eco svg { width: 21px; height: 21px; }
+.eco.mangrove { background: var(--bg-success-second); color: var(--success-700); }
+.eco.forest { background: var(--primary-50); color: var(--text-primary); }
+.eco.peat { background: var(--bg-warning-second); color: var(--warning-700); }
+.eco.coastal { background: var(--bg-purple-second); color: var(--purple-700); }
+
+/* ---------- Footer (compact) ---------- */
+.appfoot { background: var(--primary-700); color: #fff; margin-top: var(--space-64); }
+.appfoot-inner { display: flex; align-items: center; justify-content: space-between; gap: var(--space-24); padding: var(--space-32) 0; flex-wrap: wrap; }
+.appfoot .l { display: flex; align-items: center; gap: var(--space-16); }
+.appfoot .chip { background: #fff; border-radius: var(--radius-md); padding: 6px 10px; }
+.appfoot .chip img { height: 26px; }
+.appfoot .l p { margin: 0; font-size: 13px; color: rgba(255,255,255,0.7); max-width: 46ch; }
+.appfoot .links { display: flex; gap: var(--space-24); flex-wrap: wrap; }
+.appfoot .links a { font-size: 13px; color: rgba(255,255,255,0.82); }
+.appfoot .links a:hover { color: #fff; }
+.appfoot .cr { width: 100%; padding-top: var(--space-20); border-top: 1px solid rgba(255,255,255,0.12); font-size: 12px; color: rgba(255,255,255,0.55); }
+
+/* ---------- Generic field / select (toolbar) ---------- */
+.selct { display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 12px; border: 1px solid var(--stroke-base); border-radius: var(--radius-md); background: var(--bg-base-main); font-size: 13px; font-weight: 500; color: var(--text-base-main); cursor: pointer; box-shadow: var(--elevation-1); }
+.selct .lab { color: var(--text-base-second); }
+.selct svg { width: 16px; height: 16px; color: var(--text-base-second); }
+.searchbox { display: flex; align-items: center; gap: 8px; height: 40px; padding: 0 14px; border: 1px solid var(--stroke-base); border-radius: var(--radius-pill); background: var(--bg-base-main); box-shadow: var(--elevation-1); min-width: 240px; }
+.searchbox svg { width: 17px; height: 17px; color: var(--text-base-second); flex: none; }
+.searchbox input { border: none; outline: none; background: transparent; font-family: var(--font-text); font-size: 14px; color: var(--text-base-main); width: 100%; }
+.searchbox input::placeholder { color: var(--text-base-third); }
+
+.viewtoggle { display: inline-flex; background: var(--bg-base-third); border: 1px solid var(--stroke-base); border-radius: var(--radius-md); padding: 3px; gap: 3px; }
+.viewtoggle button { width: 34px; height: 32px; border: none; background: transparent; border-radius: var(--radius-sm); color: var(--text-base-second); cursor: pointer; display: grid; place-items: center; }
+.viewtoggle button.on { background: var(--bg-base-main); color: var(--text-primary); box-shadow: var(--elevation-1); }
+.viewtoggle svg { width: 17px; height: 17px; }
