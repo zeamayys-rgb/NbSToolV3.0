@@ -887,13 +887,15 @@ window.addEventListener('load', function () {
   /* ---------- GSAP enhancements (guarded) ---------- */
   if (!REDUCED && window.gsap && window.ScrollTrigger) {
     gsap.registerPlugin(ScrollTrigger);
-    /* hero intro timeline */
+    /* hero intro timeline — fromTo with explicit end state so a warm-cache
+       'load' that beats the .reveal IntersectionObserver can't make GSAP
+       capture opacity:0 as the target and leave the hero stuck invisible. */
     gsap.timeline({ defaults: { ease: 'power3.out' } })
-      .from('.hero-eyebrow', { y: 18, opacity: 0, duration: .7 }, .1)
-      .from('.hero h1', { y: 34, opacity: 0, duration: .9 }, .18)
-      .from('.hero-sub', { y: 24, opacity: 0, duration: .8 }, .36)
-      .from('.hero-cta', { y: 20, opacity: 0, duration: .7 }, .5)
-      .from('.hstat', { y: 22, opacity: 0, duration: .7, stagger: .08 }, .6);
+      .fromTo('.hero-eyebrow', { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: .7 }, .1)
+      .fromTo('.hero h1', { y: 34, opacity: 0 }, { y: 0, opacity: 1, duration: .9 }, .18)
+      .fromTo('.hero-sub', { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: .8 }, .36)
+      .fromTo('.hero-cta', { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: .7 }, .5)
+      .fromTo('.hstat', { y: 22, opacity: 0 }, { y: 0, opacity: 1, duration: .7, stagger: .08 }, .6);
     /* subtle parallax on the sticky stage frame + finale bg */
     gsap.to('.finale-bg', { yPercent: 18, ease: 'none', scrollTrigger: { trigger: '.finale', start: 'top bottom', end: 'bottom top', scrub: true } });
     gsap.to('.stage-frame', { yPercent: -4, ease: 'none', scrollTrigger: { trigger: '.journey', start: 'top top', end: 'bottom bottom', scrub: true } });
