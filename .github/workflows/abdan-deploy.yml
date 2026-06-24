@@ -28,7 +28,6 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y \
             wireguard-tools \
-            openresolv \
             openssh-client
 
       - name: Start WireGuard
@@ -43,10 +42,14 @@ jobs:
           fi
 
           sudo install -d -m 700 /etc/wireguard
-          sudo install -m 600 /dev/null /etc/wireguard/wg0.conf
 
+          # Remove DNS entries because the runner does not need
+          # WireGuard DNS to SSH to a private IP address.
           printf '%s\n' "$WG_CONF" \
+            | sed -E '/^[[:space:]]*DNS[[:space:]]*=/d' \
             | sudo tee /etc/wireguard/wg0.conf > /dev/null
+
+          sudo chmod 600 /etc/wireguard/wg0.conf
 
           sudo wg-quick up wg0
           sudo wg show wg0
@@ -79,7 +82,7 @@ jobs:
           : > "$HOME/.ssh/known_hosts"
 
           for attempt in {1..10}; do
-            echo "SSH host scan attempt $attempt..."
+            echo "SSH connection check: attempt $attempt"
 
             ssh-keyscan \
               -T 10 \
@@ -95,7 +98,7 @@ jobs:
           done
 
           if [ ! -s "$HOME/.ssh/known_hosts" ]; then
-            echo "Could not reach SSH server through WireGuard"
+            echo "Could not reach $DESIGN_TEST_HOST:$DESIGN_TEST_PORT through WireGuard"
             exit 1
           fi
 
