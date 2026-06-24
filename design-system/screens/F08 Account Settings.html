@@ -11,6 +11,34 @@
 <link rel="stylesheet" href="../dashboard.css" />
 <link rel="stylesheet" href="../nav.css" />
 <link rel="stylesheet" href="../settings.css" />
+<style>
+  .forgot-pw-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 7px;
+  }
+  .forgot-pw-hint {
+    font-family: var(--font-text);
+    font-size: 12px;
+    color: var(--text-base-second);
+  }
+  .forgot-pw-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: var(--font-text);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-primary, #066653);
+    padding: 0;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: opacity .15s;
+  }
+  .forgot-pw-btn:hover { opacity: .7; }
+  .forgot-pw-btn:focus-visible { outline: 2px solid var(--text-primary, #066653); border-radius: 2px; }
+</style>
 </head>
 <body data-screen-label="F08 — Account Settings">
 <a class="skip-link" href="#main">Skip to main content</a>
@@ -59,7 +87,6 @@
     <!-- ===== Section rail ===== -->
     <aside class="settings-nav" aria-label="Settings sections">
       <a href="#profile" class="active" data-spy="profile"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3.6" stroke="currentColor" stroke-width="1.8"/><path d="M5 20c0-3.9 3.1-7 7-7s7 3.1 7 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg> Personal identity</a>
-      <a href="#email" data-spy="email"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M4 7l8 6 8-6" stroke="currentColor" stroke-width="1.8"/></svg> Email verification</a>
       <a href="#password" data-spy="password"><svg viewBox="0 0 24 24" fill="none"><rect x="4" y="10" width="16" height="10" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M8 10V7a4 4 0 018 0v3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg> Password</a>
       <a href="#org" data-spy="org"><svg viewBox="0 0 24 24" fill="none"><path d="M4 21V7l8-4 8 4v14M4 21h16M9 21v-5h6v5" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg> Organization info</a>
       <div class="rail-foot">
@@ -118,59 +145,6 @@
         </div>
       </section>
 
-      <!-- ---------- Email verification ---------- -->
-      <section class="card sect" id="email" data-screen-label="Email verification">
-        <div class="sect-head">
-          <h2>Email verification</h2>
-          <p>Your email is used for sign-in, notifications and report delivery.</p>
-        </div>
-        <div class="sect-body">
-          <div class="email-status is-unverified" id="emailStatus">
-            <div class="es-ic" id="esIc">
-              <svg viewBox="0 0 24 24" fill="none"><path d="M12 9v4m0 4h.01M10.3 4.3l-7 12A2 2 0 005 19.5h14a2 2 0 001.7-3.2l-7-12a2 2 0 00-3.4 0z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </div>
-            <div class="es-text">
-              <div class="es-addr">adi@lestari.org &nbsp;<span class="badge s-pending" id="emailBadge"><span class="d"></span>Unverified</span></div>
-              <div class="es-sub" id="esSub">We sent a link to this address when you signed up. Verify it to unlock report exports.</div>
-            </div>
-            <div class="es-action">
-              <button type="button" class="btn btn-primary btn-sm" id="sendVerifyBtn">Verify email</button>
-            </div>
-          </div>
-
-          <!-- code entry -->
-          <div class="verify-panel" id="verifyPanel">
-            <div class="vp-title">Enter the 6-digit code</div>
-            <div class="vp-sub">We emailed a verification code to <b id="vpAddr">adi@lestari.org</b>. It expires in 10 minutes.</div>
-            <div class="otp" id="otp">
-              <input type="text" inputmode="numeric" maxlength="1" aria-label="Digit 1" />
-              <input type="text" inputmode="numeric" maxlength="1" aria-label="Digit 2" />
-              <input type="text" inputmode="numeric" maxlength="1" aria-label="Digit 3" />
-              <input type="text" inputmode="numeric" maxlength="1" aria-label="Digit 4" />
-              <input type="text" inputmode="numeric" maxlength="1" aria-label="Digit 5" />
-              <input type="text" inputmode="numeric" maxlength="1" aria-label="Digit 6" />
-            </div>
-            <div class="vp-foot">
-              <button type="button" class="btn btn-primary btn-sm" id="confirmCodeBtn">Confirm</button>
-              <button type="button" class="resend" id="resendBtn" disabled>Resend code (<span id="resendCount">30</span>s)</button>
-            </div>
-          </div>
-
-          <div class="fgrid">
-            <div class="field span-2">
-              <label for="emailInput">Change email address</label>
-              <input class="input" id="emailInput" type="email" value="adi@lestari.org" autocomplete="email" />
-              <span class="field-err" id="emailErr">Enter a valid email address.</span>
-              <span class="hint">Changing your email requires re-verification before it becomes active.</span>
-            </div>
-          </div>
-        </div>
-        <div class="sect-foot">
-          <span class="saved-note" id="emailSaved"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg> Updated</span>
-          <button type="button" class="btn btn-primary" id="updateEmailBtn">Update email</button>
-        </div>
-      </section>
-
       <!-- ---------- Password ---------- -->
       <section class="card sect" id="password" data-screen-label="Password">
         <div class="sect-head">
@@ -184,6 +158,10 @@
               <div class="input-wrap">
                 <input class="input has-trail" id="curPw" type="password" autocomplete="current-password" placeholder="Enter current password" />
                 <button type="button" class="trail-btn" data-toggle="curPw" aria-label="Show password"><svg viewBox="0 0 24 24" fill="none"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/></svg></button>
+              </div>
+              <div class="forgot-pw-row">
+                <span class="forgot-pw-hint">Can't remember it?</span>
+                <button type="button" class="forgot-pw-btn" id="forgotPwBtn">Send a password reset link</button>
               </div>
             </div>
             <div class="field">

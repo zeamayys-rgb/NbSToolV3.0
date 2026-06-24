@@ -16,6 +16,7 @@
 
 /* ── Document picker ── */
 .doc-picker-wrap { max-width: 1500px; margin: 0 auto; padding: 60px 80px; }
+.picker-back { margin-bottom: 24px; }
 .doc-picker-hd { margin-bottom: 40px; }
 .doc-picker-hd h1 { font-family: var(--font-text); font-size: 28px; font-weight: 700; color: #252525; letter-spacing: -0.01em; margin: 0 0 10px; }
 .doc-picker-hd p { font-family: var(--font-text); font-size: 16px; color: #68727d; margin: 0; }
@@ -78,6 +79,22 @@
 .form-subsec-hd:hover { background: #fafbfc; }
 .form-subsec-hd-title { font-family: var(--font-text); font-size: 20px; font-weight: 700; color: #444a51; letter-spacing: -0.01em; }
 .form-subsec-body { padding: 0 24px 24px; background: #fff; }
+
+/* ── Socio-economic (general step 5) ── */
+.se-intro { font-family: var(--font-text); font-size: 13px; color: #68727d; line-height: 1.6; margin: 0 0 20px; max-width: 760px; }
+.se-sec-right { display: flex; align-items: center; gap: 14px; }
+.se-sec-count { font-family: var(--font-text); font-size: 12px; font-weight: 500; color: #68727d; }
+.se-sec-chev { font-size: 13px; color: #68727d; line-height: 1; }
+.se-subsec { padding-top: 4px; }
+.se-subsec:not(:first-child) { border-top: 1px dashed #e3e5ea; margin-top: 12px; padding-top: 16px; }
+.se-subsec-title { font-family: var(--font-text); font-size: 12px; font-weight: 700; color: rgb(32,41,58); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2px; }
+.se-meta { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 6px; }
+.se-badge { display: inline-flex; align-items: center; font-family: var(--font-text); font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 4px; letter-spacing: 0.02em; text-transform: uppercase; white-space: nowrap; }
+.se-badge.lvl { background: #eef1f5; color: #5b6470; }
+.se-badge.man { background: #fdeceb; color: #e33b32; }
+.se-badge.opt { background: #eef1f5; color: #68727d; }
+.se-badge.rev { background: #fff5e6; color: #b9770e; }
+.se-prompt { font-family: var(--font-text); font-size: 12px; color: rgb(126,130,153); line-height: 1.4; }
 
 /* ── Form rows ── */
 .frow { display: flex; gap: 8px; padding: 16px 0; border-bottom: 1px solid #eaebf0; }
@@ -232,6 +249,7 @@ select.fi { appearance: none; -webkit-appearance: none; padding-right: 36px; bac
 .modal-title { font-family: var(--font-text); font-size: 17px; font-weight: 700; color: var(--text-base-main); letter-spacing: -0.02em; margin: 14px 32px 0; }
 .modal-desc { font-family: var(--font-text); font-size: 13px; color: var(--text-base-second); line-height: 1.65; margin: 8px 32px 24px; }
 .modal-btns { display: flex; gap: 10px; justify-content: flex-end; padding: 16px 32px; border-top: 1px solid var(--stroke-base); background: var(--bg-base-second); border-radius: 0 0 16px 16px; margin-top: auto; }
+.modal-btns.col { flex-direction: column; }
 .mb-out {
   height: 44px; padding: 0 28px;
   border-radius: var(--radius-md);

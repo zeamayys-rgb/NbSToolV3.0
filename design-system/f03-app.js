@@ -33,6 +33,12 @@
     { k: 'cGriev', q: 'Describe the grievance and feedback mechanism*', type: 'ta', ph: 'How can communities raise concerns and receive timely responses?' }
   ];
   var GEN_STEPS = [
+    { id: 1, label: 'Demography', sub: 'Population & structure', secKey: 'demography' },
+    { id: 2, label: 'Social', sub: 'Employment, education, health', secKey: 'social' },
+    { id: 3, label: 'Economics', sub: 'Income, poverty & GDP', secKey: 'economics' },
+    { id: 4, label: 'Housing & Settlements', sub: 'Services & dwellings', secKey: 'housing' }
+  ];
+  var GEN_STEPS_OLD = [
     { id: 1, label: 'Project Overview', sub: 'Basic Info', fields: [
       { k: 'gName', q: 'Project name*', type: 'text', ph: 'e.g. Kubu Raya Mangrove Restoration Project' },
       { k: 'gDesc', q: 'Project description*', type: 'ta', ph: 'Describe objectives, activities and expected outcomes...' },
@@ -63,13 +69,7 @@
       { k: 'bHab', q: 'Habitat condition assessment*', type: 'sel', opts: ['Good (minimal degradation)', 'Fair (some degradation)', 'Poor (heavily degraded)', 'Very Poor (near total degradation)'] },
       { k: 'bThreat', q: 'Key threats to biodiversity*', type: 'ta', ph: 'Describe main threats affecting biodiversity in the project area...' }
     ] },
-    { id: 5, label: 'Community & Wellbeing', sub: 'Socioeconomic', fields: [
-      { k: 'wComm', q: 'Primary beneficiary communities*', type: 'ta', ph: 'List and describe local communities that will benefit from this project...' },
-      { k: 'wInv', q: 'Level of community involvement*', type: 'sel', opts: ['Informed', 'Consulted', 'Involved', 'Collaborating', 'Empowered'] },
-      { k: 'wBen', q: 'Expected community co-benefits*', type: 'ta', auto: true, ph: 'Employment, income, food security, water access, cultural preservation...' },
-      { k: 'wFPIC', q: 'FPIC status*', type: 'sel', opts: ['Completed', 'In Progress', 'Not yet started', 'Not applicable'] },
-      { k: 'wGend', q: 'Gender-responsive measures*', type: 'ta', ph: "Describe provisions to ensure women's meaningful participation..." }
-    ] },
+    { id: 5, label: 'Socio-economic', sub: 'BPS Indicators', fields: [] },
     { id: 6, label: 'Safeguards & Governance', sub: 'Governance', fields: [
       { k: 'sgEnv', q: 'Environmental safeguards compliance*', type: 'sel', opts: ['Fully compliant', 'Partially compliant', 'Under review', 'Not assessed'] },
       { k: 'sgSoc', q: 'Social safeguards compliance*', type: 'sel', opts: ['Fully compliant', 'Partially compliant', 'Under review', 'Not assessed'] },
@@ -97,14 +97,89 @@
   var DEFAULT_TA = {
     existBio: 'The forests in the project area are classified as [forest type 1], [forest type 2], and [forest type 3]. The most important characteristics of vegetation are described in Section 2.1.5. The section lists alternative land use scenarios to the project activity resulting from the additionality analysis. The scenarios are:',
     currBio: 'The selected area is located within [KBA name] Key Biodiversity Area and has overlapped area by [x] ha. According to the Forest Landscape Integrity Index, the average forest integrity in the regions is: [FLII Scores]. [x]% of forest within the project area has low integrity, meaning it may be suitable for a forest restoration project.',
-    optCrit: 'The project does not seek to validate Gold Level for exceptional biodiversity benefits'
+    optCrit: 'The project does not seek to validate Gold Level for exceptional biodiversity benefits',
+    // Socio-economic narrative (auto) prefills
+    seHealthDisease: 'Common endemic infectious diseases reported in the selected area include [Disease 1], [Disease 2], and [Disease 3].',
+    seIplc: '[IP&LC / Ethnicity] in the selected area identify as Indigenous Peoples or members of local communities.'
   };
+
+  /* ── Socio-economic indicators (F03 General Template — BPS) ──
+     ui: 'input'  = long-answer textbox, example shown as placeholder
+          'auto'  = narrative auto-generated, prefilled & editable
+          'select'= single-selection dropdown                         */
+  var SOCIO = [
+    { key: 'demography', title: 'Demography', subs: [
+      { title: 'Total Populations', inds: [
+        { k: 'sePopTotal', name: 'Total populations', level: 'Desa/Kelurahan', req: 'Mandatory', ui: 'input', prompt: 'State the total population and its breakdown by sex.', example: 'e.g. According to BPS, the selected area has a total population of 12,480, comprising 6,310 males and 6,170 females.' },
+        { k: 'sePopHh', name: 'Household population & number of households', level: 'Desa/Kelurahan', req: 'Optional', ui: 'input', prompt: 'Report household members and the number of households.', example: 'e.g. According to BPS, the selected Desa/Kelurahan contains 11,920 household members across 3,140 households.' },
+        { k: 'sePopGrowth', name: 'Population growth', level: 'Desa/Kelurahan', req: 'Optional', ui: 'select', prompt: 'Select the population growth trend between census rounds.', opts: ['High growth (> 2% / year)', 'Moderate growth (1–2% / year)', 'Low growth (< 1% / year)', 'Stable (≈ 0%)', 'Declining (negative growth)'] }
+      ] },
+      { title: 'Gender Disaggregation', inds: [
+        { k: 'seGender', name: 'Gender disaggregation (% Male / % Female)', level: 'Desa/Kelurahan', req: 'Mandatory', ui: 'select', prompt: 'Select the sex distribution of the population (male / female only).', opts: ['Male majority (> 55% male)', 'Balanced (≈ 50% / 50%)', 'Female majority (> 55% female)'] }
+      ] },
+      { title: 'Age Group', inds: [
+        { k: 'seAge', name: 'Age group (5-year bands, 0–4 … 75+)', level: 'Desa/Kelurahan', req: 'Mandatory', ui: 'select', prompt: 'Select the dominant age structure.', opts: ['Predominantly young (0–14 dominant)', 'Predominantly working age (15–64 dominant)', 'Ageing population (65+ significant)', 'Balanced age structure'] }
+      ] },
+      { title: 'Population Density', inds: [
+        { k: 'seDensity', name: 'Population density', level: 'Desa/Kelurahan', req: 'Mandatory', ui: 'input', prompt: 'Enter the population density (persons per km²).', example: 'e.g. The selected Desa/Kelurahan has a population density of 245 persons per square kilometre (according to BPS).' }
+      ] },
+      { title: 'Disability', inds: [
+        { k: 'seDisability', name: 'Disabilities (disabilitas / tanpa disabilitas)', level: 'Kabupaten/Kota', req: 'Optional', ui: 'input', prompt: 'Report the share of persons with disabilities.', example: 'e.g. According to BPS, 2.3% of the population in the selected Kabupaten/Kota are persons with disabilities.' }
+      ] }
+    ] },
+    { key: 'social', title: 'Social', subs: [
+      { title: 'Employment', inds: [
+        { k: 'seEmpStatus', name: 'Employment status (% formal / informal workers)', level: 'Kabupaten/Kota', req: 'Review', ui: 'input', prompt: 'Report the formal / informal employment split.', example: 'e.g. According to BPS, 38% of the labour force is in formal employment and 62% in informal employment.' },
+        { k: 'seEmpSector', name: 'Employment by sector (Agriculture / Forestry / Fisheries)', level: 'Kabupaten/Kota', req: 'Optional', ui: 'input', prompt: 'Report employment shares in agriculture, forestry and fisheries.', example: 'e.g. According to BPS, 41% of employed persons work in agriculture, 6% in forestry, and 18% in fisheries.' }
+      ] },
+      { title: 'Education', inds: [
+        { k: 'seEduLevel', name: 'Education level (none, SD, SMP, SMA, D1/D2 … S3)', level: 'Kabupaten/Kota', req: 'Mandatory', ui: 'input', prompt: 'Report educational attainment by highest level completed.', example: 'e.g. According to BPS, educational attainment is 8% with no schooling, 34% primary (SD), 22% junior secondary (SMP), 28% senior secondary (SMA), and 8% diploma or university.' },
+        { k: 'seEduSchools', name: 'Number of schools', level: 'Desa/Kelurahan', req: 'Optional', ui: 'input', prompt: 'Report the number of schools by level.', example: 'e.g. The selected area is served by 14 schools, including 9 primary, 3 secondary, and 2 senior/high schools (according to BPS).' },
+        { k: 'seEduEnrol', name: 'School enrolment & participation rate', level: 'Kabupaten/Kota', req: 'Optional', ui: 'input', prompt: 'Report school enrolment and participation rates.', example: 'e.g. According to BPS, the school enrolment rate is 94% and the participation rate 89% among school-age children.' }
+      ] },
+      { title: 'Health', inds: [
+        { k: 'seHealthFac', name: 'Health facilities', level: 'Desa/Kelurahan', req: 'Mandatory', ui: 'input', prompt: 'Report the number of health facilities.', example: 'e.g. Health services in the selected area are supported by 1 hospital, 4 clinics, and 2 community health centres (according to BPS).' },
+        { k: 'seHealthWork', name: 'Medical workers', level: 'Desa/Kelurahan', req: 'Mandatory', ui: 'input', prompt: 'Report the number of medical workers.', example: 'e.g. Healthcare in the selected area is supported by 6 doctors, 28 nurses, and 12 midwives (according to BPS).' },
+        { k: 'seHealthDisease', name: 'Endemic infectious diseases (dengue, malaria, hepatitis, TBC)', level: 'Kabupaten/Kota', req: 'Review', ui: 'auto' }
+      ] },
+      { title: 'IP&LC or Ethnicity Identification', inds: [
+        { k: 'seIplc', name: 'IP&LC or ethnicity identification', level: 'Desa/Kelurahan', req: 'Review', ui: 'auto' }
+      ] }
+    ] },
+    { key: 'economics', title: 'Economics', subs: [
+      { title: 'Household Economy', inds: [
+        { k: 'seHhIncome', name: 'Household income & expenditure (Susenas)', level: 'Kabupaten/Kota', req: 'Mandatory', ui: 'input', prompt: 'Report average household income and expenditure.', example: 'e.g. Household economic conditions indicate an average income of IDR 3,200,000 and average expenditure of IDR 2,750,000 per household (according to BPS).' },
+        { k: 'seHhLivelihood', name: 'Household based on livelihood', level: 'Kabupaten/Kota', req: 'Optional', ui: 'select', prompt: 'Select the dominant household livelihood.', opts: ['Agriculture', 'Fisheries', 'Forestry', 'Services / trade', 'Mixed livelihoods'] }
+      ] },
+      { title: 'Poverty & Food Security', inds: [
+        { k: 'sePoverty', name: '% population in poverty', level: 'Kabupaten/Kota', req: 'Optional', ui: 'select', prompt: 'Select the poverty incidence band.', opts: ['Very low (< 5%)', 'Low (5–10%)', 'Moderate (10–20%)', 'High (> 20%)'] },
+        { k: 'seUndernourish', name: '% undernourished', level: 'Kabupaten/Kota', req: 'Optional', ui: 'input', prompt: 'Report the share of undernourished population.', example: 'e.g. According to BPS, 7.4% of the population in the selected Kabupaten/Kota is undernourished, indicating food-security concerns.' },
+        { k: 'seLowIncome', name: 'Low-income household coverage', level: 'Kabupaten/Kota', req: 'Optional', ui: 'input', prompt: 'Report the share of low-income households.', example: 'e.g. An estimated 21% of households in the selected Kabupaten/Kota are low-income (according to BPS).' }
+      ] },
+      { title: 'GDP', inds: [
+        { k: 'seGdp', name: 'GDP / GRDP', level: 'Kabupaten/Kota', req: 'Optional', ui: 'input', prompt: 'Report the gross domestic / regional product.', example: 'e.g. The selected area records a GDP of IDR 18.6 trillion (according to BPS).' }
+      ] },
+      { title: 'Gini Ratio Line', inds: [
+        { k: 'seGini', name: 'Gini ratio line', level: 'Kabupaten/Kota', req: 'Optional', ui: 'input', prompt: 'Report the Gini ratio (income inequality).', example: 'e.g. Income inequality in the selected area is reflected by a Gini ratio of 0.34 (according to BPS).' }
+      ] }
+    ] },
+    { key: 'housing', title: 'Housing & Settlements', subs: [
+      { title: 'Basic Services', inds: [
+        { k: 'seElectricity', name: '% households with access to electricity', level: 'Desa/Kelurahan', req: 'Mandatory', ui: 'input', prompt: 'Report household access to electricity.', example: 'e.g. Access to electricity covers 96% of households in the selected area (according to BPS).' },
+        { k: 'seWash', name: '% households with access to WASH', level: 'Desa/Kelurahan', req: 'Mandatory', ui: 'input', prompt: 'Report household access to water and sanitation (WASH).', example: 'e.g. Access to WASH (clean water and sanitation) covers 82% of households in the selected area (according to BPS).' }
+      ] },
+      { title: 'Housing', inds: [
+        { k: 'seHousing', name: 'Housing (PODES facilities; dwelling via Susenas)', level: 'Desa/Kelurahan', req: 'Review', ui: 'select', prompt: 'Select the dominant housing / dwelling type.', opts: ['Permanent (brick / concrete)', 'Semi-permanent', 'Non-permanent (wood / bamboo)', 'Mixed housing types'] }
+      ] }
+    ] }
+  ];
 
   /* ── state ── */
   var view = 'picker';       // 'picker' | 'ccb' | 'general'
   var step = 1;
   var modal = null;
   var openSub = { s1: true, s2: true };
+  var openSec = { demography: true, social: false, economics: false, housing: false };
   var fd = {};
   function lsKey() { return view === 'ccb' ? 'f03_ccb' : 'f03_gen'; }
   function loadFd() { try { fd = JSON.parse(localStorage.getItem(lsKey()) || '{}'); } catch (e) { fd = {}; } }
@@ -213,12 +288,68 @@
     return s1 + s2;
   }
 
+  /* ── Socio-economic (general step 5) ── */
+  function seFieldInput(ind) {
+    var d = 'data-scope="fd" data-k="' + ind.k + '"';
+    var al = ' aria-label="' + esc(ind.name) + '"';
+    if (ind.ui === 'auto') {
+      return '<textarea class="fi-ta auto" rows="3" ' + d + al + '></textarea>' +
+        '<div class="fi-sub">Auto-generated based on project data. You may edit based on your conditions.</div>';
+    }
+    if (ind.ui === 'select') {
+      var opts = '<option value="">— Select</option>' +
+        (ind.opts || []).map(function (o) { return '<option>' + esc(o) + '</option>'; }).join('');
+      return '<select class="fi" style="font-size:12px" ' + d + al + '>' + opts + '</select>';
+    }
+    return '<textarea class="fi-ta" rows="3" placeholder="' + esc(ind.example || '') + '" ' + d + al + '></textarea>';
+  }
+  function seRow(ind) {
+    var star = ind.req === 'Mandatory' ? '<span style="color:#e33b32"> *</span>' : '';
+    var reqCls = ind.req === 'Mandatory' ? 'man' : ind.req === 'Optional' ? 'opt' : 'rev';
+    var meta = '<div class="se-meta"><span class="se-badge lvl">' + esc(ind.level) + '</span>' +
+      '<span class="se-badge ' + reqCls + '">' + esc(ind.req) + '</span></div>' +
+      (ind.prompt ? '<div class="se-prompt">' + esc(ind.prompt) + '</div>' : '');
+    return frow(esc(ind.name) + star, meta, seFieldInput(ind));
+  }
+  function seSection(sec) {
+    var open = !!openSec[sec.key];
+    var count = sec.subs.reduce(function (n, sub) { return n + sub.inds.length; }, 0);
+    var body = '';
+    if (open) {
+      body = '<div class="form-subsec-body">' + sec.subs.map(function (sub) {
+        return '<div class="se-subsec"><div class="se-subsec-title">' + esc(sub.title) + '</div>' +
+          sub.inds.map(seRow).join('') + '</div>';
+      }).join('') + '</div>';
+    }
+    return '<div class="form-subsec"><div class="form-subsec-hd" data-act="toggleSec" data-sec="' + sec.key + '">' +
+      '<span class="form-subsec-hd-title">' + esc(sec.title) + '</span>' +
+      '<span class="se-sec-right"><span class="se-sec-count">' + count + ' indicators</span>' +
+      '<span class="se-sec-chev">' + (open ? '▲' : '▼') + '</span></span></div>' + body + '</div>';
+  }
+  function genSocioStepHTML() {
+    var sec = SOCIO[step - 1];
+    if (!sec) return '';
+    return '<p class="se-intro">Socio-economic indicators for <strong>' + esc(sec.title) + '</strong> are drawn from official statistics (BPS). ' +
+      'Fields are auto-filled from project data where available, and you can edit any of them.</p>' +
+      sec.subs.map(function (sub) {
+        return '<div class="se-subsec"><div class="se-subsec-title">' + esc(sub.title) + '</div>' +
+          sub.inds.map(seRow).join('') + '</div>';
+      }).join('');
+  }
+  function genStep5HTML() {
+    return '<p class="se-intro">Socio-economic indicators are drawn from official statistics (BPS). ' +
+      'Expand a section to fill it in — fields are auto-filled from project data where available, and you can edit any of them.</p>' +
+      SOCIO.map(seSection).join('');
+  }
+
   function stepContentHTML() {
     if (view === 'ccb') {
       if (step === 1) return ccbStep1HTML();
       if (step === 5) return ccbStep5HTML();
       return simpleFields(CCB_FIELDS[step] || []);
     }
+    if (view !== 'ccb') return genSocioStepHTML();
+    if (step === 5) return genStep5HTML();
     var s = GEN_STEPS[step - 1];
     return s ? simpleFields(s.fields) : '';
   }
@@ -235,7 +366,7 @@
 
   function sidebarHTML() {
     var steps = view === 'ccb' ? CCB_STEPS : GEN_STEPS;
-    var total = view === 'ccb' ? 44 : 36;
+    var total = view === 'ccb' ? 44 : 26;
     var filled = filledCount();
     var pct = Math.min(100, Math.round(filled / total * 100));
     var items = steps.map(function (s) {
@@ -250,21 +381,22 @@
       '<span class="prog-count" id="progCount">' + filled + ' / ' + total + ' questions filled</span></div>' +
       '<div class="prog-bar"><div class="prog-fill" id="progFill" style="width:' + pct + '%"></div></div></div>' +
       '<div class="step-nav-card">' + items + '</div>' +
-      '<div class="dl-hint"><div class="dl-hint-title">Download unfinished document</div>' +
+      '<div class="dl-hint"><div class="dl-hint-title">Download document</div>' +
       '<p class="dl-hint-text">Document can be generated without finishing the form. You can fill in manually by .docx or continue from the project dashboard.</p>' +
       '<button class="btn-dl-gen" data-act="dl"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Generate Document</button></div></div>';
   }
 
   function pickerHTML() {
-    return '<div class="doc-picker-wrap"><div class="doc-picker-hd"><h1>F03 — Document Generator</h1>' +
+    return '<div class="doc-picker-wrap"><button class="btn-back picker-back" data-act="toDetail">← Back to project</button>' +
+      '<div class="doc-picker-hd"><h1>Document Generator</h1>' +
       '<p>Select a document template to begin filling out your project documentation for Nature-based Solutions.</p></div>' +
       '<div class="doc-picker-grid">' +
-      '<div class="doc-card" data-act="pick" data-doc="ccb"><div class="doc-card-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><polyline points="14 2 14 8 20 8" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><line x1="16" y1="13" x2="8" y2="13" stroke="currentColor" stroke-width="2"/><line x1="16" y1="17" x2="8" y2="17" stroke="currentColor" stroke-width="2"/></svg></div>' +
-      '<div class="doc-card-badge">CCB Standard</div><div class="doc-card-title">CCB Form</div>' +
+      '<div class="doc-card" data-act="pick" data-doc="ccb" style="padding:24px"><div class="doc-card-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><polyline points="14 2 14 8 20 8" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><line x1="16" y1="13" x2="8" y2="13" stroke="currentColor" stroke-width="2"/><line x1="16" y1="17" x2="8" y2="17" stroke="currentColor" stroke-width="2"/></svg></div>' +
+      '<div class="doc-card-badge">CCB Standard</div><div class="doc-card-title">Climate, Community and Biodiversity (CCB) Standard</div>' +
       '<div class="doc-card-desc">Generate a Climate, Community and Biodiversity (CCB) Standards project document. Covers 5 sections: Basic Information, General Description, Climate/Carbon Accounting, Community Impacts, and Biodiversity/Nature criteria — including full flora and fauna inventories.</div></div>' +
-      '<div class="doc-card" data-act="pick" data-doc="general"><div class="doc-card-icon"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M3 9h18M9 21V9" stroke="currentColor" stroke-width="2"/></svg></div>' +
-      '<div class="doc-card-badge">General Template</div><div class="doc-card-title">General Template</div>' +
-      '<div class="doc-card-desc">Comprehensive NbS project data entry covering 6 sections: Project Overview, Site & Ecosystem, Carbon & Climate accounting, Biodiversity, Community & Wellbeing, and Safeguards & Governance documentation.</div></div>' +
+      '<div class="doc-card" data-act="pick" data-doc="general" style="padding:24px"><div class="doc-card-icon"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M3 9h18M9 21V9" stroke="currentColor" stroke-width="2"/></svg></div>' +
+      '<div class="doc-card-badge">Socio-Economic</div><div class="doc-card-title">Pre Feasibility Document</div>' +
+      '<div class="doc-card-desc">Socio-economic data entry drawn from official statistics (BPS), covering 4 sections: Demography, Social, Economics, and Housing & Settlements.</div></div>' +
       '</div></div>';
   }
 
@@ -272,8 +404,8 @@
     var isCcb = view === 'ccb';
     var steps = isCcb ? CCB_STEPS : GEN_STEPS;
     var isLast = step === steps.length;
-    var title = isCcb ? 'Generate Project Document' : 'General Template — Data Entry';
-    var badge = isCcb ? 'CCB Standard v3.1' : 'General Template v3.1';
+    var title = isCcb ? 'Generate Project Document' : 'Socio-Economic — Form Data Entry';
+    var badge = isCcb ? 'CCB Standard v3.1' : 'Pre-feasibility Document Template';
     var secHd = isCcb ? CCB_TITLES[step - 1] : (GEN_STEPS[step - 1] ? GEN_STEPS[step - 1].label : '');
     var prev = step > 1 ? '<button class="btn-draft" data-act="prev">← Previous</button>' : '';
     var nextIcon = isLast ? '' : '<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
@@ -315,7 +447,7 @@
   }
 
   function updateProgress() {
-    var total = view === 'ccb' ? 44 : 36;
+    var total = view === 'ccb' ? 44 : 26;
     var filled = filledCount();
     var pct = Math.min(100, Math.round(filled / total * 100));
     var a = document.getElementById('progPct'), b = document.getElementById('progCount'), c = document.getElementById('progFill');
@@ -338,11 +470,12 @@
       var savedDesc = view === 'ccb'
         ? 'Your progress has been saved. You can always edit and re-visit your project documentation from the project dashboard.'
         : 'Your progress has been saved as a draft. You can continue editing from the project dashboard at any time.';
-      var savedBtn = view === 'ccb' ? 'Continue Filling' : 'Continue';
+      var savedBtn = view === 'ccb' ? 'Continue Filling' : 'Continue editing';
       h = ov('<div class="f03-modal sm">' + modalX() +
         '<div class="modal-icon" style="background:#e9f8f1;border-radius:50%"><svg width="36" height="36" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#066653" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>' +
         '<div class="modal-title">' + savedTitle + '</div><p class="modal-desc">' + savedDesc + '</p>' +
-        '<div class="modal-btns"><button class="mb-solid full" data-act="closeModal">' + savedBtn + '</button></div></div>');
+        '<div class="modal-btns col"><button class="mb-solid full" data-act="closeModal">' + savedBtn + '</button>' +
+        '<button class="mb-out full" data-act="backToPicker">Go to My Project Dashboard</button></div></div>');
     } else if (modal === 'dl-undone') {
       h = ov('<div class="f03-modal">' + modalX() + '<div class="modal-icon">' + DL_ICON + '</div>' +
         '<div class="modal-title">Download unfinished document</div>' +
@@ -356,8 +489,8 @@
         '<div class="modal-btns"><button class="mb-solid full" data-act="processing">Download CCB Document</button></div></div>');
     } else if (modal === 'dl') {
       h = ov('<div class="f03-modal">' + modalX() + '<div class="modal-icon">' + DL_ICON + '</div>' +
-        '<div class="modal-title">Generate General Template</div>' +
-        '<p class="modal-desc">Your NbS project data will be compiled into a general project document. The document will be sent to your registered email address.</p>' +
+        '<div class="modal-title">Generate Pre Feasibility Document</div>' +
+        '<p class="modal-desc">Your socio-economic project data will be compiled into a Pre Feasibility document. The document will be sent to your registered email address.</p>' +
         '<div class="modal-btns"><button class="mb-solid full" data-act="processing">Generate Document</button></div></div>');
     } else if (modal === 'processing') {
       var procDesc = view === 'ccb'
@@ -404,7 +537,8 @@
     var act = e.target.closest('[data-act]');
     if (!act) return;
     var a = act.getAttribute('data-act');
-    if (a === 'pick') { view = act.getAttribute('data-doc'); step = 1; openSub = { s1: true, s2: true }; loadFd(); render(); }
+    if (a === 'pick') { view = act.getAttribute('data-doc'); step = 1; openSub = { s1: true, s2: true }; openSec = { demography: true, social: false, economics: false, housing: false }; loadFd(); render(); }
+    else if (a === 'toDetail') { window.location.href = 'F04.1 Project Detail.html'; }
     else if (a === 'back' || a === 'backToPicker') { view = 'picker'; modal = null; step = 1; render(); }
     else if (a === 'save') { modal = 'save'; renderModal(); }
     else if (a === 'dl') { handleDl(); }
@@ -419,6 +553,7 @@
     else if (a === 'addBio') { var abt = act.getAttribute('data-bt'); fd[abt] = (fd[abt] || [{}]).concat([{}]); save(); render(); }
     else if (a === 'delBio') { var bt2 = act.getAttribute('data-bt'), dbi = +act.getAttribute('data-i'); fd[bt2] = (fd[bt2] || [{}]).filter(function (_, j) { return j !== dbi; }); save(); render(); }
     else if (a === 'toggleSub') { var sub = act.getAttribute('data-sub'); openSub[sub] = !openSub[sub]; render(); }
+    else if (a === 'toggleSec') { var sec = act.getAttribute('data-sec'); openSec[sec] = !openSec[sec]; render(); }
   });
   modalRoot.addEventListener('click', function (e) {
     if (e.target.getAttribute && e.target.getAttribute('data-ov') === '1') { modal = null; renderModal(); return; }
