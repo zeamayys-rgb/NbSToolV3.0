@@ -1,0 +1,6 @@
+# Local / internal — not part of the deployed site
+uploads/
+scraps/
+docs/
+.claude/
+.DS_Store
