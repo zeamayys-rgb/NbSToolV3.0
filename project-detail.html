@@ -1,0 +1,1784 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NbS Tool — Project Detail</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Barlow+Semi+Condensed:wght@600;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/tokens.css" />
+<link rel="stylesheet" href="css/dashboard.css" />
+<link rel="stylesheet" href="css/f041.css" />
+<link rel="stylesheet" href="css/nav.css" />
+<style>
+/* ── NbS Design summary (F05.0 framework) ── */
+.nds-eco-strip { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:20px; }
+.nds-eco-card { border:1px solid var(--stroke-base); border-radius:12px; padding:12px 14px 14px; background:var(--bg-base-main); cursor:pointer; transition:border-color .15s, box-shadow .15s, transform .15s; }
+.nds-eco-card:hover { border-color:var(--text-base-second); box-shadow:0 3px 10px rgba(0,0,0,.07); transform:translateY(-2px); }
+.nds-eco-card.active { border-color:var(--text-primary); box-shadow:0 0 0 1px var(--text-primary); }
+.nds-eco-card.active:hover { box-shadow:0 0 0 1px var(--text-primary), 0 3px 10px rgba(0,0,0,.07); }
+.nds-eco-toggle { display:flex; align-items:center; gap:10px; width:100%; background:none; border:none; cursor:pointer; padding:2px 0; }
+.nds-eco-toggle .nds-eco-ic { width:30px; height:30px; flex:none; }
+.nds-chev { color:var(--text-base-second); flex:none; transition:transform .2s; }
+.nds-eco-card.active .nds-chev { transform:rotate(180deg); color:var(--text-primary); }
+.nds-eco-name { font-family:var(--font-text); font-size:14px; font-weight:700; color:var(--text-base-main); letter-spacing:-0.01em; }
+.nds-eco-area { font-family:var(--font-text); font-size:11px; color:var(--text-base-second); margin-top:1px; }
+.nds-eco-stats { display:flex; align-items:center; gap:7px; font-family:var(--font-text); font-size:11.5px; color:var(--text-base-second); margin:11px 0 10px; }
+.nds-eco-stats strong { color:var(--text-base-main); font-weight:700; }
+.nds-eco-stats .dot { color:var(--stroke-strong,#c9ccce); }
+.nds-pw-row { display:flex; flex-wrap:wrap; gap:6px; }
+.nds-pw-chip { display:inline-flex; align-items:center; gap:5px; font-family:var(--font-text); font-size:10px; font-weight:700; letter-spacing:.03em; text-transform:uppercase; border-radius:20px; padding:3px 10px 3px 4px; }
+.nds-pw-chip img { width:18px; height:18px; flex:none; }
+.pw-protect { background:rgb(220,252,231); color:rgb(22,101,52); }
+.pw-manage  { background:rgb(254,243,199); color:rgb(146,64,14); }
+.pw-restore { background:rgb(224,247,250); color:rgb(14,116,144); }
+
+.nds-group { overflow:hidden; }
+.nds-group.collapsed { display:none; }
+.nds-group-hd { display:flex; align-items:center; gap:9px; padding:14px 0 10px; border-top:1px solid var(--stroke-base); }
+.nds-group-hd img { width:22px; height:22px; flex:none; }
+.nds-group-name { font-family:var(--font-text); font-size:13px; font-weight:700; color:var(--text-base-main); }
+.nds-group-meta { font-family:var(--font-text); font-size:11px; color:var(--text-base-second); margin-left:auto; white-space:nowrap; }
+
+.nds-act { display:flex; align-items:center; gap:14px; padding:11px 15px; border:1px solid var(--stroke-base); border-radius:10px; margin-bottom:8px; background:var(--bg-base-main); }
+.nds-act-main { flex:1; min-width:0; }
+.nds-act-name-row { display:flex; align-items:center; gap:8px; margin-bottom:7px; flex-wrap:wrap; }
+.nds-act-name { font-family:var(--font-text); font-size:13px; font-weight:600; color:var(--text-base-main); }
+.nds-tags { display:flex; flex-wrap:wrap; gap:6px; }
+.nds-tag { font-family:var(--font-text); font-size:9px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; border-radius:20px; padding:2px 8px; }
+.nds-tag.nature  { background:rgb(220,252,231); color:rgb(22,101,52); }
+.nds-tag.people  { background:rgb(239,246,255); color:#0a436b; }
+.nds-tag.climate { background:rgb(255,237,213); color:rgb(194,65,12); }
+.nds-tag.protect { background:rgb(220,252,231); color:rgb(22,101,52); }
+.nds-tag.manage  { background:rgb(254,243,199); color:rgb(146,64,14); }
+.nds-tag.restore { background:rgb(224,247,250); color:rgb(14,116,144); }
+.nds-ind { display:flex; flex-direction:column; align-items:flex-end; flex:none; line-height:1; }
+.nds-ind-num { font-family:var(--font-text); font-size:17px; font-weight:700; color:var(--text-primary); }
+.nds-ind-lbl { font-family:var(--font-text); font-size:9px; font-weight:600; color:var(--text-base-second); text-transform:uppercase; letter-spacing:.04em; margin-top:3px; }
+
+.nds-matrix-sum { display:flex; align-items:center; gap:16px; flex-wrap:wrap; margin-top:18px; padding:16px 18px; border:1px solid var(--stroke-base); border-radius:12px; background:var(--bg-base-second); }
+.nds-ms-title { display:flex; align-items:center; gap:8px; font-family:var(--font-text); font-size:12px; font-weight:700; color:var(--text-base-main); text-transform:uppercase; letter-spacing:.05em; }
+.nds-ms-chips { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+.nds-ms-chip { display:flex; align-items:center; gap:7px; font-family:var(--font-text); font-size:12px; color:var(--text-base-second); }
+.nds-ms-chip img { width:18px; height:18px; }
+.nds-ms-chip strong { color:var(--text-base-main); font-weight:700; }
+.nds-ms-total { margin-left:auto; display:flex; align-items:baseline; gap:6px; font-family:var(--font-text); }
+.nds-ms-total .n { font-size:22px; font-weight:700; color:var(--text-primary); }
+.nds-ms-total .l { font-size:11px; color:var(--text-base-second); text-transform:uppercase; letter-spacing:.04em; }
+
+/* Download dropdown */
+.nds-dl-wrap { position:relative; }
+.nds-dl-menu { position:absolute; right:0; top:calc(100% + 6px); width:280px; background:var(--bg-base-main); border:1px solid var(--stroke-base); border-radius:12px; box-shadow:0 20px 48px rgba(0,0,0,0.16); padding:6px; z-index:60; display:none; }
+.nds-dl-menu.open { display:block; }
+.nds-dl-menu .dl-hd { font-family:var(--font-text); font-size:10px; font-weight:700; color:var(--text-base-second); text-transform:uppercase; letter-spacing:.05em; padding:8px 10px 6px; }
+.nds-dl-item { display:flex; align-items:center; gap:10px; width:100%; text-align:left; background:none; border:none; cursor:pointer; padding:9px 10px; border-radius:8px; font-family:var(--font-text); font-size:12px; color:var(--text-base-main); }
+.nds-dl-item:hover { background:var(--bg-base-second); }
+.nds-dl-item .dl-step { font-size:10px; font-weight:700; color:var(--text-base-second); flex:none; width:34px; }
+.nds-dl-item.full { font-weight:700; color:var(--text-primary); border-bottom:1px solid var(--stroke-base); border-radius:8px 8px 0 0; margin-bottom:4px; }
+
+#ndsToastHost { position:fixed; right:24px; bottom:24px; z-index:4000; display:flex; flex-direction:column; gap:10px; }
+.nds-toast { display:flex; align-items:center; gap:11px; width:320px; padding:13px 15px; background:var(--bg-base-main); border:1px solid rgba(7,127,104,0.18); border-radius:12px; box-shadow:0 12px 32px -8px rgba(15,40,30,0.28); font-family:var(--font-text); opacity:0; transform:translateY(12px); transition:opacity .26s, transform .26s; }
+.nds-toast.in { opacity:1; transform:none; }
+.nds-toast-ic { width:30px; height:30px; border-radius:8px; background:rgba(7,127,104,0.10); display:grid; place-items:center; flex:none; }
+.nds-toast-t { font-size:13px; font-weight:700; color:var(--text-base-main); }
+.nds-toast-f { font-size:11px; color:var(--text-base-second); margin-top:1px; }
+
+/* ── Analysis · Site Characterisation (Figma General Context) ── */
+.an2 { display:grid; grid-template-columns:250px 1fr; gap:28px; align-items:start; }
+.an2-nav { position:sticky; top:84px; align-self:start; border:1px solid var(--stroke-base); border-radius:14px; background:var(--bg-base-main); padding:10px; box-shadow:var(--elevation-2); }
+.an2-step__hd { display:flex; align-items:center; gap:11px; width:100%; background:none; border:none; cursor:pointer; padding:11px 10px; border-radius:10px; text-align:left; font-family:var(--font-text); transition:background .15s; }
+.an2-step__hd:hover { background:var(--bg-base-second); }
+.an2-step__hd.active { background:var(--bg-success-second); }
+.an2-num { width:23px; height:23px; border-radius:50%; flex:none; display:grid; place-items:center; font-size:11px; font-weight:700; background:var(--bg-base-third); color:var(--text-base-second); }
+.an2-step__hd.active .an2-num { background:var(--bg-primary-main); color:#fff; }
+.an2-step__lbl { flex:1; font-size:14px; font-weight:600; color:var(--text-base-main); }
+.an2-step__hd.active .an2-step__lbl { color:var(--text-primary); }
+.an2-chev { width:16px; height:16px; flex:none; color:var(--text-base-third); transition:transform .2s; }
+.an2-step.open .an2-chev { transform:rotate(180deg); }
+.an2-subs { display:none; flex-direction:column; gap:2px; padding:2px 0 8px 44px; }
+.an2-step.open .an2-subs { display:flex; }
+.an2-sub { text-align:left; background:none; border:1px solid transparent; cursor:pointer; padding:8px 12px; border-radius:8px; font-family:var(--font-text); font-size:13px; color:var(--text-base-second); transition:background .15s,color .15s; }
+.an2-sub:hover { background:var(--bg-base-second); color:var(--text-base-main); }
+.an2-sub.active { background:var(--bg-success-second); color:var(--text-primary); font-weight:600; border-color:var(--primary-100); }
+
+.an2-main { min-width:0; }
+.an2-pane { display:none; }
+.an2-pane.active { display:block; animation:fade var(--motion-default); }
+.an2-title { text-align:center; font-family:var(--font-text); font-size:22px; font-weight:700; color:var(--text-base-main); letter-spacing:-0.02em; margin:2px 0 10px; }
+.an2-rule { width:118px; height:3px; margin:0 auto 26px; border-radius:2px; background:linear-gradient(90deg,#e9ee2f,#a7cf4e,#1a6b2e); }
+
+.gcard { border:1px solid var(--stroke-base); border-radius:14px; background:var(--bg-base-main); padding:22px 24px; margin-bottom:20px; box-shadow:var(--elevation-1); }
+.gcard__eyebrow { display:flex; align-items:center; gap:8px; font-size:12px; font-weight:700; letter-spacing:.055em; text-transform:uppercase; color:var(--text-primary); margin-bottom:18px; }
+.gcard__eyebrow svg { width:16px; height:16px; flex:none; }
+.gcard h4 { font-family:var(--font-text); font-size:16px; font-weight:700; color:var(--text-base-main); margin:0 0 8px; }
+.gcard p { font-family:var(--font-text); font-size:13px; line-height:1.6; color:var(--text-base-second); margin:0 0 10px; }
+.gcard p b { color:var(--text-base-main); font-weight:600; }
+.g-split { display:grid; grid-template-columns:1fr 1fr; gap:24px; align-items:center; }
+.g-img { border-radius:12px; overflow:hidden; position:relative; border:1px solid var(--stroke-base); background:var(--bg-base-third); }
+.g-img img { width:100%; height:100%; object-fit:cover; display:block; }
+.g-img__tag { position:absolute; left:10px; top:10px; font-size:10px; font-weight:600; color:#fff; background:rgba(4,38,32,.62); padding:3px 9px; border-radius:20px; backdrop-filter:blur(2px); }
+
+/* Donut */
+.g-donut-wrap { display:flex; align-items:center; gap:20px; }
+.donut { width:172px; height:172px; border-radius:50%; flex:none; position:relative; }
+.donut::after { content:""; position:absolute; inset:30px; border-radius:50%; background:var(--bg-base-main); box-shadow:inset 0 0 0 1px var(--stroke-base); }
+.donut__c { position:absolute; inset:0; display:grid; place-items:center; text-align:center; z-index:1; }
+.donut__c .l { font-size:11px; color:var(--text-base-second); }
+.donut__c .v { font-size:17px; font-weight:700; color:var(--text-base-main); letter-spacing:-0.02em; }
+.g-legend { display:flex; flex-direction:column; gap:9px; }
+.g-legend .li { display:flex; align-items:center; gap:9px; font-size:12.5px; color:var(--text-base-main); }
+.g-legend .sw { width:13px; height:13px; border-radius:3px; flex:none; }
+.g-legend .pc { margin-left:auto; font-weight:600; color:var(--text-base-second); font-variant-numeric:tabular-nums; }
+
+/* Slope list */
+.g-slope { display:flex; flex-direction:column; gap:2px; }
+.g-slope .row { display:grid; grid-template-columns:20px 1fr auto auto; align-items:center; gap:12px; padding:9px 4px; border-bottom:1px solid var(--stroke-base); font-size:13px; }
+.g-slope .row:last-child { border-bottom:none; }
+.g-slope .sw { width:13px; height:13px; border-radius:3px; }
+.g-slope .nm { color:var(--text-base-main); font-weight:500; }
+.g-slope .ha { color:var(--text-base-second); font-variant-numeric:tabular-nums; }
+.g-slope .pc { background:var(--bg-base-third); border-radius:6px; padding:2px 8px; font-size:11px; font-weight:700; color:var(--text-base-main); font-variant-numeric:tabular-nums; min-width:42px; text-align:center; }
+
+/* Deforestation stats */
+.g-defo { display:grid; grid-template-columns:1fr 1fr; gap:22px; margin-bottom:6px; }
+.g-defo .big { font-size:26px; font-weight:700; color:var(--text-base-main); letter-spacing:-0.02em; margin-top:2px; }
+.g-defo .big small { font-size:14px; font-weight:600; color:var(--text-base-second); }
+
+/* Land cover tiles */
+.g-lc { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+.g-lc__tile { display:flex; align-items:center; gap:13px; padding:12px 14px; border:1px solid var(--stroke-base); border-radius:12px; background:var(--bg-base-main); }
+.g-lc__ic { width:46px; height:46px; border-radius:11px; flex:none; display:grid; place-items:center; background:var(--bg-success-second); color:var(--text-primary); }
+.g-lc__ic svg { width:26px; height:26px; }
+.g-lc__nm { font-size:12.5px; color:var(--text-base-second); margin-bottom:2px; }
+.g-lc__v { font-size:15px; font-weight:700; color:var(--text-base-main); letter-spacing:-0.01em; }
+.g-lc__v small { font-size:11px; font-weight:600; color:var(--text-base-second); margin-left:5px; }
+
+/* Disaster cards */
+.g-nd { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; }
+.g-nd__card { border:1px solid var(--stroke-base); border-radius:12px; overflow:hidden; background:var(--bg-base-main); }
+.g-nd__img { height:104px; background:var(--bg-base-third); position:relative; }
+.g-nd__img img { width:100%; height:100%; object-fit:cover; display:block; }
+.g-nd__b { padding:11px 13px 13px; }
+.g-nd__nm { font-size:13px; font-weight:700; color:var(--text-base-main); margin-bottom:5px; }
+.g-nd__lvl { display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.03em; border-radius:20px; padding:2px 9px; }
+.g-nd__lvl.high { background:var(--bg-danger-second); color:var(--text-danger); }
+.g-nd__lvl.mod { background:rgb(255,237,213); color:rgb(194,65,12); }
+.g-nd__lvl.low { background:var(--bg-success-second); color:var(--text-primary); }
+.g-nd__lvl .d { width:6px; height:6px; border-radius:50%; background:currentColor; }
+
+.g-src { display:flex; align-items:center; gap:6px; margin-top:16px; padding-top:13px; border-top:1px solid var(--stroke-base); font-size:11.5px; color:var(--text-base-third); }
+.g-src b { color:var(--text-base-second); font-weight:600; }
+.g-src a { color:var(--text-primary); font-weight:600; text-decoration:underline; text-underline-offset:2px; cursor:pointer; }
+
+/* compact context panes */
+.g-sc { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:20px; }
+.g-sc__t { border:1px solid var(--stroke-base); border-radius:12px; background:var(--bg-base-second); padding:15px 16px; }
+.g-sc__t .l { font-size:12px; color:var(--text-base-second); margin-bottom:6px; }
+.g-sc__t .v { font-size:24px; font-weight:700; color:var(--text-base-main); letter-spacing:-0.03em; }
+.g-sc__t .v small { font-size:13px; font-weight:600; color:var(--text-base-second); }
+.g-rows { display:flex; flex-direction:column; }
+.g-rows .r { display:flex; align-items:center; justify-content:space-between; gap:14px; padding:12px 2px; border-bottom:1px solid var(--stroke-base); font-size:13px; }
+.g-rows .r:last-child { border-bottom:none; }
+.g-rows .nm { color:var(--text-base-main); }
+.g-rows .nm small { display:block; color:var(--text-base-third); font-size:11px; margin-top:1px; }
+.g-rows .val { font-weight:600; color:var(--text-base-main); }
+.g-threat { display:flex; gap:15px; padding:18px; border:1px solid var(--stroke-base); border-radius:12px; margin-bottom:14px; }
+.g-threat__ic { width:42px; height:42px; border-radius:11px; flex:none; display:grid; place-items:center; }
+.g-threat__ic.high { background:var(--bg-danger-second); color:var(--text-danger); }
+.g-threat__ic.mod { background:rgb(255,237,213); color:rgb(194,65,12); }
+.g-threat__ic.low { background:var(--bg-success-second); color:var(--text-primary); }
+.g-threat__ic svg { width:22px; height:22px; }
+.g-threat__m { flex:1; min-width:0; }
+.g-threat__top { display:flex; align-items:center; gap:10px; margin-bottom:6px; }
+.g-threat__top h4 { margin:0; font-size:15px; }
+.g-threat__meta { display:flex; flex-wrap:wrap; gap:8px 26px; margin-top:10px; }
+.g-threat__meta .m { font-size:12px; color:var(--text-base-second); }
+.g-threat__meta .m b { display:block; color:var(--text-base-main); font-weight:600; font-size:13px; margin-top:1px; }
+
+@media (max-width:880px){ .an2 { grid-template-columns:1fr; } .an2-nav { position:static; } .g-split,.g-defo { grid-template-columns:1fr; } .g-lc,.g-nd,.g-sc { grid-template-columns:repeat(2,1fr); } }
+</style>
+</head>
+<body data-screen-label="F04.1 — Project Detail" style="background-color:rgb(249,249,249)">
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<nav class="sitenav">
+  <a class="sitenav-logo" href="index.html">
+    <img src="assets/scene-logo.png" alt="SCeNe Coalition" width="360" height="133" style="height:44px;width:auto" />
+  </a>
+  <div class="sitenav-links">
+    <a href="index.html" class="sitenav-link">Home</a>
+    <a href="interactive-map.html" class="sitenav-link">Interactive Map</a>
+    <a href="dashboard.html" class="sitenav-link active">My Project</a>
+  </div>
+  <div class="sitenav-actions">
+    <div class="sitenav-profile-wrap" id="profileWrap">
+      <button class="sitenav-profile" id="profileBtn"><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="white" stroke-width="2"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="white" stroke-width="2" stroke-linecap="round"/></svg> Profile <svg class="chev" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="sitenav-dropdown">
+        <div class="sitenav-user-info"><div class="sitenav-user-name">Adi Mantri</div><div class="sitenav-user-email">adi@lestari.org</div></div>
+        <a href="dashboard.html">My Projects</a>
+        <a href="document-generator.html">Document Generator</a>
+        <a href="account-settings.html">Account settings</a>
+        <button class="logout" onclick="window.location.href='login.html'">Log out</button>
+      </div>
+    </div>
+    <button class="sitenav-lang">🇺🇸 <svg class="chev" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  </div>
+</nav>
+<!-- profile dropdown handled by nav-mobile.js (Q-03) -->
+
+<nav class="crumbbar">
+  <a href="dashboard.html">My Project Dashboard</a>
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="opacity:.45;flex:none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  <span id="bc-current" style="color:var(--text-base-main);font-weight:600">Kubu Raya Mangrove</span>
+</nav>
+
+<main class="wrap detail" id="main" tabindex="-1">
+
+  <!-- ===== Header ===== -->
+  <div class="detail-head" style="display:block;margin-bottom:var(--space-24)">
+
+    <!-- Row 1: Back + Title + Actions -->
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:var(--space-16);margin-bottom:var(--space-16)">
+      <div style="display:flex;align-items:center;gap:var(--space-12);min-width:0">
+        <a href="dashboard.html" class="btn btn-secondary btn-sm" style="text-decoration:none;flex:none;gap:6px">
+          <svg viewBox="0 0 24 24" fill="none" width="13" height="13"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Back
+        </a>
+        <h1 id="projTitle" style="font-family:var(--font-display);font-weight:700;font-size:34px;letter-spacing:-1.5px;margin:0;color:var(--text-base-main);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Kubu Raya Mangrove</h1>
+      </div>
+      <div style="display:flex;align-items:center;gap:var(--space-8);flex:none">
+        <button class="btn btn-secondary btn-sm" id="headerEditBtn" onclick="openEditModal()">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M4 20h4L18 10l-4-4L4 16v4z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M13 7l4 4" stroke="currentColor" stroke-width="1.7"/></svg>Edit
+        </button>
+        <button class="btn btn-danger-ghost btn-sm" aria-label="Delete" title="Delete project" onclick="openDeleteModal()">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M5 7h14M9 7V5h6v2M6 7l1 13h10l1-13" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Row 2: Status pills + Collaborators -->
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:var(--space-16)">
+      <div style="display: flex; align-items: center; gap: 9px; letter-spacing: 0.2px">
+        <span class="privacy" style="font-size:12px">Privacy: <span class="pill"><svg viewBox="0 0 24 24" fill="none"><rect x="5" y="11" width="14" height="9" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M8 11V8a4 4 0 018 0v3" stroke="currentColor" stroke-width="1.8"/></svg>Level 2 · Coalition</span></span>
+        <span style="width:1px;height:14px;background:var(--stroke-base);flex:none"></span>
+        <span class="badge s-monitoring"><span class="d"></span>Monitoring Active</span>
+      </div>
+      <div class="collab-stack">
+        <span class="av" style="background:#066653">AM</span>
+        <span class="av" style="background:#564efa">Rs</span>
+        <span class="av" style="background:#efa22f">JX</span>
+        <button class="add" aria-label="Add collaborator" title="Add collaborator" onclick="openCollabModal()"><svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== Tabs ===== -->
+  <div class="tabwrap" role="tablist" aria-label="Project sections">
+    <div class="tabgroup">
+      <span class="glabel" style="color: rgb(239, 162, 47)">Information</span>
+      <button class="tab active" id="tab-overview" role="tab" aria-controls="p-overview" aria-selected="true" data-tab="overview">Overview</button>
+      <button class="tab" id="tab-collaborators" role="tab" aria-controls="p-collaborators" aria-selected="false" data-tab="collaborators">Collaborators</button>
+      <button class="tab" id="tab-privacy" role="tab" aria-controls="p-privacy" aria-selected="false" data-tab="privacy">Privacy</button>
+      <button class="tab" id="tab-history" role="tab" aria-controls="p-history" aria-selected="false" data-tab="history">History</button>
+    </div>
+    <div class="tabgroup">
+      <span class="glabel" style="color: rgb(239, 162, 47)">Project Data</span>
+      <button class="tab" id="tab-analysis" role="tab" aria-controls="p-analysis" aria-selected="false" data-tab="analysis">Analysis</button>
+      <button class="tab" id="tab-monitoring" role="tab" aria-controls="p-monitoring" aria-selected="false" data-tab="monitoring">Monitoring Plan</button>
+      <button class="tab" id="tab-mrv" role="tab" aria-controls="p-mrv" aria-selected="false" data-tab="mrv">MRV Data</button>
+    </div>
+  </div>
+
+  <!-- ===== OVERVIEW ===== -->
+  <section class="panel active" id="p-overview">
+    <div class="grid2" style="margin: 0px 0px 20px">
+      <div class="block" style="margin-bottom:0">
+        <div class="block-head"><h3><svg viewBox="0 0 24 24" fill="none"><path d="M9 4L3 7v13l6-3 6 3 6-3V4l-6 3-6-3z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M9 4v13M15 7v13" stroke="currentColor" stroke-width="1.7"/></svg>Location &amp; extent</h3><span class="link">Open in Interactive Map<svg viewBox="0 0 24 24" fill="none"><path d="M7 17L17 7M17 7H9M17 7v8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+        <div class="map-snip"><span class="pin"></span><span class="inset"></span><span class="scalebar">▮▮▮▮ 5 km</span></div>
+      </div>
+      <div>
+        <div class="block" style="margin-bottom:0">
+          <div class="block-head"><h3>Project metadata</h3><span class="link" id="metaEditBtn" onclick="toggleMetaEdit()" style="cursor:pointer">Inline edit<svg viewBox="0 0 24 24" fill="none"><path d="M4 20h4L18 10l-4-4L4 16v4z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></span></div>
+          <div class="dl" style="font-weight: 200">
+            <div class="it" style="grid-column:1/-1">
+              <div class="k">Project Name</div>
+              <div class="v meta-view" id="nameView" style="font-weight:700;font-size:13px">Kubu Raya Mangrove</div>
+              <div class="meta-edit" id="nameEdit" style="display:none">
+                <input id="nameInput" type="text" value="Kubu Raya Mangrove" style="width:100%;height:36px;padding:0 12px;border:1.5px solid #066653;border-radius:6px;font-family:var(--font-text);font-size:13px;font-weight:700;color:#252525;outline:none;background:#fff" />
+              </div>
+            </div>
+            <div class="it" style="grid-column:1/-1">
+              <div class="k">Description</div>
+              <div class="v meta-view" id="descView" style="font-size:13px">Community-led restoration of a degraded coastal mangrove belt — rebuilding blue-carbon stocks and storm protection while strengthening local fisheries livelihoods across three villages.</div>
+              <div class="meta-edit" id="descEdit" style="display:none">
+                <textarea id="descInput" rows="4" style="width:100%;padding:10px 12px;border:1.5px solid #066653;border-radius:6px;font-family:var(--font-text);font-size:13px;color:#252525;outline:none;background:#fff;resize:vertical;line-height:1.55">Community-led restoration of a degraded coastal mangrove belt — rebuilding blue-carbon stocks and storm protection while strengthening local fisheries livelihoods across three villages.</textarea>
+              </div>
+            </div>
+            <div class="it"><div class="k">Province</div><div class="v" style="font-weight:600;font-size:13px">West Kalimantan</div></div>
+            <div class="it"><div class="k">District</div><div class="v" style="font-size:13px">Kubu Raya</div></div>
+            <div class="it"><div class="k">Project size</div><div class="v" style="font-size:13px">1,240 ha</div></div>
+            <div class="it"><div class="k">Created</div><div class="v" style="font-size:13px">12 Mar 2024</div></div>
+          </div>
+          <!-- Save/cancel bar (hidden by default) -->
+          <div id="metaSaveBar" style="display:none;margin-top:14px;gap:10px;align-items:center">
+            <button onclick="saveMetaEdit()" class="btn btn-primary btn-sm">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Save changes
+            </button>
+            <button onclick="cancelMetaEdit()" class="btn btn-secondary btn-sm">Cancel</button>
+            <span id="metaSavedMsg" style="display:none;font-family:var(--font-text);font-size:12px;color:#066653;font-weight:600">✓ Saved</span>
+          </div>
+
+          <script>
+            let metaEditing = false;
+
+            function toggleMetaEdit() {
+              metaEditing ? cancelMetaEdit() : startMetaEdit();
+            }
+
+            function startMetaEdit() {
+              metaEditing = true;
+              document.getElementById('nameInput').value = document.getElementById('nameView').textContent;
+              document.getElementById('descInput').value  = document.getElementById('descView').textContent;
+              ['nameView','descView'].forEach(id => document.getElementById(id).style.display = 'none');
+              ['nameEdit','descEdit'].forEach(id => document.getElementById(id).style.display = 'block');
+              document.getElementById('metaSaveBar').style.display = 'flex';
+              document.getElementById('metaEditBtn').innerHTML = 'Cancel<svg viewBox="0 0 24 24" fill="none" width="14" height="14"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+              document.getElementById('nameInput').focus();
+            }
+
+            function cancelMetaEdit() {
+              metaEditing = false;
+              ['nameView','descView'].forEach(id => document.getElementById(id).style.display = '');
+              ['nameEdit','descEdit'].forEach(id => document.getElementById(id).style.display = 'none');
+              document.getElementById('metaSaveBar').style.display = 'none';
+              document.getElementById('metaSavedMsg').style.display = 'none';
+              document.getElementById('metaEditBtn').innerHTML = 'Inline edit<svg viewBox="0 0 24 24" fill="none"><path d="M4 20h4L18 10l-4-4L4 16v4z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>';
+            }
+
+            function saveMetaEdit() {
+              const newName = document.getElementById('nameInput').value.trim();
+              const newDesc = document.getElementById('descInput').value.trim();
+              if (!newName) { document.getElementById('nameInput').focus(); return; }
+              // Update display values
+              document.getElementById('nameView').textContent = newName;
+              document.getElementById('descView').textContent = newDesc;
+              // Also update the page <h1> in the header and the breadcrumb
+              const h1 = document.getElementById('projTitle');
+              if (h1) h1.textContent = newName;
+              const bc = document.getElementById('bc-current');
+              if (bc) bc.textContent = newName;
+              cancelMetaEdit();
+              // Flash saved message
+              const msg = document.getElementById('metaSavedMsg');
+              msg.style.display = 'inline';
+              document.getElementById('metaSaveBar').style.display = 'flex';
+              document.getElementById('metaSaveBar').style.alignItems = 'center';
+              setTimeout(() => { msg.style.display = 'none'; document.getElementById('metaSaveBar').style.display = 'none'; }, 2500);
+            }
+          </script>
+        </div>
+
+
+      </div>
+    </div>
+
+    <!-- Bottom row: Project Docs + NbS Intervention side by side -->
+    <div class="ov-grid" style="display:grid;grid-template-columns:1fr 562px;gap:var(--space-24);align-items:stretch">
+
+      <!-- Project Documentation (moved here) -->
+        <!-- Project Documentation -->
+        <div class="block" style="margin-bottom:0">
+          <div class="block-head">
+            <h3><svg viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>Project documents</h3>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 110px auto;gap:0;padding:8px 16px;border-bottom:1px solid #eaebf0">
+            <span class="doc-col-head">Document type</span>
+            <span class="doc-col-head" style="padding-left:2px">Status</span>
+            <span class="doc-col-head">Action</span>
+          </div>
+          <div class="doc-row">
+            <div class="doc-name">Pre Feasibility Study</div>
+            <div><span class="doc-badge is-draft">Draft</span></div>
+            <div style="display:flex;gap:6px;align-items:center">
+              <button class="btn btn-sm btn-secondary btn-brand-outline"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg>View</button>
+              <a href="document-generator.html" class="btn btn-sm btn-primary" style="text-decoration:none"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" stroke="white" stroke-width="2" stroke-linecap="round"/><path d="M18.5 2.5a2.1 2.1 0 013 3L12 15l-4 1 1-4 9.5-9.5z" stroke="white" stroke-width="2" stroke-linejoin="round"/></svg>Edit</a>
+              <button class="btn btn-sm btn-primary" ><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Download</button>
+            </div>
+          </div>
+          <div class="doc-row">
+            <div class="doc-name">MRV Report</div>
+            <div><span class="doc-badge is-final">Final</span></div>
+            <div style="display:flex;gap:6px;align-items:center">
+              <button class="btn btn-sm btn-secondary btn-brand-outline"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg>View</button>
+              <a href="mrv.html" class="btn btn-sm btn-primary" style="text-decoration:none"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" stroke="white" stroke-width="2" stroke-linecap="round"/><path d="M18.5 2.5a2.1 2.1 0 013 3L12 15l-4 1 1-4 9.5-9.5z" stroke="white" stroke-width="2" stroke-linejoin="round"/></svg>Edit</a>
+              <button class="btn btn-sm btn-primary" ><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Download</button>
+            </div>
+          </div>
+          <div class="doc-row">
+            <div class="doc-name">Monitoring Plan</div>
+            <div><span class="doc-badge is-final">Final</span></div>
+            <div style="display:flex;gap:6px;align-items:center">
+              <button class="btn btn-sm btn-secondary btn-brand-outline" onclick="openMonitoringModal()"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg>View</button>
+              <a href="create-monitoring-plan.html" class="btn btn-sm btn-primary" style="text-decoration:none"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" stroke="white" stroke-width="2" stroke-linecap="round"/><path d="M18.5 2.5a2.1 2.1 0 013 3L12 15l-4 1 1-4 9.5-9.5z" stroke="white" stroke-width="2" stroke-linejoin="round"/></svg>Edit</a>
+              <button class="btn btn-sm btn-primary" ><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Download</button>
+            </div>
+          </div>
+          <div class="doc-row last">
+            <div class="doc-name">CCB Standard</div>
+            <div><span class="doc-badge is-none">Not created</span></div>
+            <div style="display:flex;gap:6px;align-items:center">
+              <a href="document-generator.html" class="btn btn-sm btn-secondary btn-brand-outline" style="text-decoration:none"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Generate</a>
+            </div>
+          </div>
+        </div>
+
+      <!-- NbS Intervention (narrow right column) -->
+      <div class="block" style="margin-bottom:0">
+        <div class="block-head"><h3><svg viewBox="0 0 24 24" fill="none"><path d="M12 21V11M12 11c0-3-2-5.5-5-6m5 6c0-3.5 2.5-6 6-6.5" stroke="currentColor" stroke-width="1.7"/></svg>NbS Intervention</h3></div>
+        <div style="display:flex;flex-direction:column;gap:0">
+          <div class="spec-row top">
+            <span class="spec-key wide">Intervention</span>
+            <span class="spec-val right">Mangrove replanting &amp; hydrological restoration</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-key">Pathway</span>
+            <span class="spec-val brand">Restore</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-key">Ecosystem</span>
+            <span class="spec-val">Coastal mangrove</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-key">Duration</span>
+            <span class="spec-val">2024 — 2034 (10 yr)</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-key">NbS Incubator</span>
+            <span class="badge i-review" style="font-size:10px">Under review</span>
+          </div>
+          <div class="spec-row last">
+            <span class="spec-key">Data tier</span>
+            <span class="spec-val">Tier 2 · partial</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="block" style="margin-bottom:0;margin-top:var(--space-24)">
+      <div class="block-head"><h3><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.7"/><rect x="14" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.7"/><rect x="14" y="14" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.7"/><path d="M10 6.5h4M17.5 10v4" stroke="currentColor" stroke-width="1.7"/></svg>NbS Design summary</h3><div style="display:flex;gap:8px">
+        <a href="new-project.html?mode=edit" class="btn btn-secondary btn-sm" style="text-decoration:none"><svg viewBox="0 0 24 24" fill="none" width="13" height="13"><path d="M4 20h4L18 10l-4-4L4 16v4z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M13 7l4 4" stroke="currentColor" stroke-width="1.7"/></svg>Edit NbS Design</a>
+        <div class="nds-dl-wrap">
+          <button class="btn btn-secondary btn-sm" onclick="toggleNdsDl(event)"><svg viewBox="0 0 24 24" fill="none"><path d="M12 4v11M8 11l4 4 4-4M5 19h14" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>Download<svg viewBox="0 0 24 24" fill="none" width="12" height="12" style="margin-left:-2px"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <div class="nds-dl-menu" id="ndsDlMenu">
+            <div class="dl-hd">Download NbS Design</div>
+            <button class="nds-dl-item full" onclick="ndsDownload('Full NbS Design report','Kubu_Raya_NbS_Design.pdf')"><span class="dl-step">All</span>Full NbS Design report (PDF)</button>
+            <div class="dl-hd">By step</div>
+            <button class="nds-dl-item" onclick="ndsDownload('Step 1 — Site characterisation','Kubu_Raya_Step1_Site_Characterisation.pdf')"><span class="dl-step">01</span>Site characterisation</button>
+            <button class="nds-dl-item" onclick="ndsDownload('Step 2 — NbS pathways','Kubu_Raya_Step2_NbS_Pathways.pdf')"><span class="dl-step">02</span>NbS pathways</button>
+            <button class="nds-dl-item" onclick="ndsDownload('Step 3 — Selected activities','Kubu_Raya_Step3_Activities.pdf')"><span class="dl-step">03</span>Selected activities</button>
+            <button class="nds-dl-item" onclick="ndsDownload('Step 4 — Monitoring matrix','Kubu_Raya_Step4_Monitoring_Matrix.xlsx')"><span class="dl-step">04</span>Monitoring matrix</button>
+            <button class="nds-dl-item" onclick="ndsDownload('Step 5 — Customization &amp; responsibilities','Kubu_Raya_Step5_Customization.pdf')"><span class="dl-step">05</span>Customization &amp; responsibilities</button>
+          </div>
+        </div>
+      </div></div>
+      <div class="nds-eco-strip" id="ndsEcoStrip"></div>
+      <div id="ndsGroups"></div>
+      <div class="nds-matrix-sum" id="ndsMatrixSum"></div>
+    </div>
+  </section>
+
+  <script>
+  /* NbS Design summary — mirrors the F05.0 framework (ecosystems → pathways →
+     activities → benefits → monitoring indicators). Data reflects the activities
+     chosen in F05.0 Step 3 for this project. */
+  const NBS_DESIGN = [
+    { id:'forest', name:'Forest', area:'13,942 ha · 40%', activities:[
+      { name:'Boundary demarcation & legal recognition', pw:'PROTECT', benefits:['Nature','People','Climate'], ind:3 },
+      { name:'Community-based patrol & monitoring',       pw:'PROTECT', benefits:['Nature','People','Climate'], ind:7 },
+      { name:'Soil rehabilitation & erosion control',     pw:'MANAGE',  benefits:['Nature','People','Climate'], ind:6 },
+    ] },
+    { id:'mangrove', name:'Mangrove', area:'9,755 ha · 28%', activities:[
+      { name:'Boundary demarcation & legal recognition', pw:'PROTECT', benefits:['Nature','People','Climate'], ind:6 },
+      { name:'Community-based patrol & monitoring',       pw:'PROTECT', benefits:['Nature','People','Climate'], ind:5 },
+      { name:'Assisted Natural Regeneration (ANR)',       pw:'MANAGE',  benefits:['Nature','People','Climate'], ind:7 },
+    ] },
+    { id:'peatland', name:'Peatland', area:'11,211 ha · 32%', activities:[
+      { name:'Boundary demarcation & legal recognition',            pw:'PROTECT', benefits:['Nature','People','Climate'], ind:3 },
+      { name:'Community-based patrol & monitoring',                 pw:'PROTECT', benefits:['Nature','People','Climate'], ind:5 },
+      { name:'Community-based fire management (degraded areas)',    pw:'MANAGE',  benefits:['Nature','People','Climate'], ind:8 },
+    ] },
+  ];
+  const PW_ORDER = ['PROTECT','MANAGE','RESTORE'];
+  const ecoIcon = id => `assets/pathway/eco-${id}.svg`;
+  const pwIcon  = (pw, eco) => `assets/pathway/${pw.toLowerCase()}-${eco}.svg`;
+  const ecoInds = e => e.activities.reduce((s,a) => s + a.ind, 0);
+
+  function renderNbsDesign() {
+    // Ecosystem cards = summary + expand/hide control for the activity list below
+    document.getElementById('ndsEcoStrip').innerHTML = NBS_DESIGN.map((e, i) => {
+      const pws = PW_ORDER.filter(p => e.activities.some(a => a.pw === p));
+      const chips = pws.map(p => `<span class="nds-pw-chip pw-${p.toLowerCase()}"><img src="${pwIcon(p,e.id)}" alt="" />${p}</span>`).join('');
+      const open = false;
+      return `<div class="nds-eco-card${open ? ' active' : ''}" data-eco="${e.id}" onclick="toggleEco('${e.id}')">
+        <button class="nds-eco-toggle" aria-expanded="${open}" tabindex="-1">
+          <img class="nds-eco-ic" src="${ecoIcon(e.id)}" alt="" />
+          <div style="flex:1;min-width:0;text-align:left"><div class="nds-eco-name">${e.name}</div><div class="nds-eco-area">${e.area}</div></div>
+          <svg class="nds-chev" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="nds-eco-stats"><span><strong>${e.activities.length}</strong> activities</span><span class="dot">·</span><span><strong>${ecoInds(e)}</strong> indicators</span></div>
+        <div class="nds-pw-row">${chips}</div>
+      </div>`;
+    }).join('');
+
+    // Collapsible activity list per ecosystem (no group header — control lives on the card above)
+    document.getElementById('ndsGroups').innerHTML = NBS_DESIGN.map((e, i) => {
+      const acts = e.activities.map(a => `
+        <div class="nds-act">
+          <div class="nds-act-main">
+            <div class="nds-act-name-row"><span class="nds-tag ${a.pw.toLowerCase()}">${a.pw}</span><span class="nds-act-name">${a.name}</span></div>
+            <div class="nds-tags">${a.benefits.map(b => `<span class="nds-tag ${b.toLowerCase()}">${b}</span>`).join('')}</div>
+          </div>
+          <div class="nds-ind"><span class="nds-ind-num">${a.ind}</span><span class="nds-ind-lbl">indicators</span></div>
+        </div>`).join('');
+      return `<div class="nds-group collapsed" data-eco="${e.id}">
+        <div class="nds-group-hd"><img src="${ecoIcon(e.id)}" alt="" /><span class="nds-group-name">${e.name}</span><span class="nds-group-meta">${e.activities.length} activities · ${ecoInds(e)} indicators</span></div>
+        <div class="nds-act-list">${acts}</div>
+      </div>`;
+    }).join('');
+
+    // Monitoring matrix summary — indicator count per ecosystem matrix
+    const total = NBS_DESIGN.reduce((s,e) => s + ecoInds(e), 0);
+    document.getElementById('ndsMatrixSum').innerHTML = `
+      <div class="nds-ms-title"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M3 9h18M9 3v18" stroke="currentColor" stroke-width="1.8"/></svg>Monitoring matrix</div>
+      <div class="nds-ms-chips">${NBS_DESIGN.map(e => `<span class="nds-ms-chip"><img src="${ecoIcon(e.id)}" alt="" />${e.name} <strong>${ecoInds(e)}</strong></span>`).join('')}</div>
+      <div class="nds-ms-total"><span class="n">${total}</span><span class="l">indicators total</span></div>`;
+  }
+  renderNbsDesign();
+
+  /* Expand/collapse an ecosystem's activity list */
+  function toggleEco(id) {
+    const grp = document.querySelector(`.nds-group[data-eco="${id}"]`);
+    const card = document.querySelector(`.nds-eco-card[data-eco="${id}"]`);
+    if (!grp) return;
+    const open = grp.classList.toggle('collapsed') === false;
+    if (card) { card.classList.toggle('active', open); card.querySelector('.nds-eco-toggle').setAttribute('aria-expanded', open); }
+  }
+
+  /* Download dropdown + toast */
+  function toggleNdsDl(ev) {
+    ev.stopPropagation();
+    document.getElementById('ndsDlMenu').classList.toggle('open');
+  }
+  document.addEventListener('click', () => document.getElementById('ndsDlMenu').classList.remove('open'));
+  function ndsDownload(label, file) {
+    document.getElementById('ndsDlMenu').classList.remove('open');
+    ndsToast(label + ' downloaded', file);
+  }
+  function ndsToast(title, file) {
+    let host = document.getElementById('ndsToastHost');
+    if (!host) { host = document.createElement('div'); host.id = 'ndsToastHost'; document.body.appendChild(host); }
+    const t = document.createElement('div');
+    t.className = 'nds-toast';
+    t.innerHTML = `<div class="nds-toast-ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#066653" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div style="min-width:0"><div class="nds-toast-t">${title}</div><div class="nds-toast-f">${file}</div></div>`;
+    host.appendChild(t);
+    requestAnimationFrame(() => t.classList.add('in'));
+    setTimeout(() => { t.classList.remove('in'); setTimeout(() => t.remove(), 300); }, 3200);
+  }
+  </script>
+
+  <!-- ===== COLLABORATORS ===== -->
+  <section class="panel" id="p-collaborators">
+    <div class="block">
+      <div class="block-head"><h3><svg viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3" stroke="currentColor" stroke-width="1.7"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="currentColor" stroke-width="1.7"/><path d="M16 7a3 3 0 010 6" stroke="currentColor" stroke-width="1.7"/></svg>Collaborators · <span id="collabCount">3</span></h3><button class="btn btn-secondary btn-sm" onclick="openCollabModal()"><svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Add collaborator</button></div>
+      <div class="collab-list" id="collabList"></div>
+    </div>
+  </section>
+
+  <!-- ===== PRIVACY ===== -->
+  <section class="panel" id="p-privacy">
+    <div class="block">
+      <div class="block-head"><h3><svg viewBox="0 0 24 24" fill="none"><rect x="5" y="11" width="14" height="9" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M8 11V8a4 4 0 018 0v3" stroke="currentColor" stroke-width="1.7"/></svg>Privacy level</h3></div>
+      <div class="pv-grid" style="display:grid;grid-template-columns:1fr 420px;gap:28px;align-items:start">
+
+        <!-- LEFT: Terms & Conditions -->
+        <div style="border:1px solid #eaebf0;border-radius:12px;padding:24px;background:#fafbfc">
+          <div style="font-family:var(--font-text);font-size:13px;font-weight:700;color:#252525;margin-bottom:16px;display:flex;align-items:center;gap:8px">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="#066653" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8" stroke="#066653" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Data Sharing Terms &amp; Conditions
+          </div>
+          <div style="font-family:var(--font-text);font-size:12px;color:#444a51;line-height:1.75">
+            <p style="font-weight:600;color:#252525;margin:0 0 6px">1. Scope of data shared</p>
+            <p style="margin:0 0 14px">When you raise your privacy level, SCeNe Coalition may share project metadata, baseline summaries, ecosystem descriptions, and aggregated carbon estimates with verified members, funders, and the public — depending on the level selected.</p>
+
+            <p style="font-weight:600;color:#252525;margin:0 0 6px">2. Irreversibility</p>
+            <p style="margin:0 0 14px">Lowering your privacy level <em>after</em> data has been viewed or shared may not fully retract that data from third parties who have already accessed it. Once shared publicly (Level 3), summaries may be cached or indexed externally.</p>
+
+            <p style="font-weight:600;color:#252525;margin:0 0 6px">3. Collaborator notification</p>
+            <p style="margin:0 0 14px">All project collaborators are automatically notified by email when the privacy level changes. The change is also logged in the project History for audit purposes.</p>
+
+            <p style="font-weight:600;color:#252525;margin:0 0 6px">4. Sensitive information</p>
+            <p style="margin:0 0 14px">Personal contact details, financial data, and GPS coordinates at sub-hectare resolution are <strong>never</strong> shared publicly regardless of privacy level. Only aggregated spatial footprints are published.</p>
+
+            <p style="font-weight:600;color:#252525;margin:0 0 6px">5. Your rights</p>
+            <p style="margin:0 0 18px">You retain ownership of your project data at all times. You may request data deletion or correction by contacting the SCeNe Coalition data team. Requests are processed within 30 business days.</p>
+          </div>
+          <a href="#" class="btn btn-secondary" style="color:#066653;border-color:#066653;text-decoration:none">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 3h6v6M10 14L21 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Read full SCeNe Privacy Policy
+          </a>
+        </div>
+
+        <!-- RIGHT: Privacy levels + controls -->
+        <div>
+          <div class="plevels" id="privacyLevels">
+            <div class="plevel" data-level="1" onclick="selectPrivacy(1)"><span class="rb"></span><div><h4>Level 1 · Private</h4><p>Only you and invited collaborators can view this project. Excluded from the public NbS Portfolio.</p></div></div>
+            <div class="plevel sel" data-level="2" onclick="selectPrivacy(2)"><span class="rb"></span><div><h4>Level 2 · Coalition <span class="badge i-na" id="currentBadge" style="margin-left:6px">Current</span></h4><p>Visible to verified SCeNe Coalition members and the NbS Incubator for review and funding matchmaking.</p></div></div>
+            <div class="plevel" data-level="3" onclick="selectPrivacy(3)"><span class="rb"></span><div><h4>Level 3 · Public</h4><p>Listed in the public NbS Portfolio as a high-quality example. Baseline summaries are visible to anyone.</p></div></div>
+          </div>
+          <div class="note" style="margin-top:14px"><b>Heads up:</b> raising the privacy level shares your baseline and documentation more widely and cannot be silently reversed — collaborators are notified.</div>
+          <div style="margin-top:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+            <button class="btn btn-secondary btn-sm" id="changePrivacyBtn" onclick="togglePrivacyEdit()">Change privacy level</button>
+            <button class="btn btn-primary btn-sm" id="savePrivacyBtn" style="display:none" onclick="savePrivacy()">
+              <svg viewBox="0 0 24 24" fill="none" width="14" height="14"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v14a2 2 0 01-2 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M17 21v-8H7v8M7 3v5h8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Save changes
+            </button>
+            <span id="savedMsg" style="display:none;font-family:var(--font-text);font-size:12px;color:#066653;font-weight:600">✓ Privacy level saved</span>
+          </div>
+        </div>
+      </div>
+    </div>
+      <script>
+        let savedLevel = 2;
+        let pendingLevel = 2;
+        let editing = false;
+
+        function togglePrivacyEdit() {
+          editing = !editing;
+          document.getElementById('savePrivacyBtn').style.display = editing ? 'inline-flex' : 'none';
+          document.getElementById('changePrivacyBtn').textContent = editing ? 'Cancel' : 'Change privacy level';
+          document.getElementById('savedMsg').style.display = 'none';
+          if (!editing) { pendingLevel = savedLevel; renderPrivacy(); }
+          document.querySelectorAll('.plevel').forEach(el => {
+            el.style.cursor = editing ? 'pointer' : 'default';
+            el.style.pointerEvents = editing ? 'auto' : 'none';
+          });
+        }
+
+        function selectPrivacy(level) {
+          if (!editing) return;
+          pendingLevel = level;
+          renderPrivacy();
+        }
+
+        function renderPrivacy() {
+          document.querySelectorAll('.plevel').forEach(el => {
+            const lv = parseInt(el.dataset.level);
+            el.classList.toggle('sel', lv === pendingLevel);
+          });
+          const badge = document.getElementById('currentBadge');
+          if (badge) badge.style.display = pendingLevel === 2 ? 'inline-block' : 'none';
+        }
+
+        function savePrivacy() {
+          savedLevel = pendingLevel;
+          editing = false;
+          document.getElementById('savePrivacyBtn').style.display = 'none';
+          document.getElementById('changePrivacyBtn').textContent = 'Change privacy level';
+          document.getElementById('savedMsg').style.display = 'inline';
+          document.querySelectorAll('.plevel').forEach(el => {
+            el.style.cursor = 'default';
+            el.style.pointerEvents = 'none';
+          });
+          setTimeout(() => { document.getElementById('savedMsg').style.display = 'none'; }, 3000);
+        }
+
+        // init: make non-editable by default
+        document.querySelectorAll('.plevel').forEach(el => {
+          el.style.cursor = 'default';
+          el.style.pointerEvents = 'none';
+        });
+      </script>
+    </div>
+  </section>
+
+  <!-- ===== HISTORY ===== -->
+  <section class="panel" id="p-history">
+    <div class="block">
+      <div class="block-head"><h3><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.7"/><path d="M12 7v5l3 2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>History &amp; audit log</h3></div>
+      <div class="timeline">
+        <div class="tl-item"><div class="act"><b>Rina Sari</b> added a monitoring entry — <b>Plot B3 survival rate 82%</b></div><div class="meta">2 hours ago</div></div>
+        <div class="tl-item"><div class="act"><b>Adi Mantri</b> sent the project to the <b>NbS Incubator</b> for review</div><div class="meta">Yesterday · 16:40</div></div>
+        <div class="tl-item"><div class="act"><b>Adi Mantri</b> generated <b>General Pre-FS Report v1</b></div><div class="meta">3 days ago</div></div>
+        <div class="tl-item"><div class="act"><b>Jie Xien Pho</b> was added as a <b>Viewer</b></div><div class="meta">5 days ago</div></div>
+        <div class="tl-item"><div class="act"><b>Adi Mantri</b> created the project from an Area of Interest</div><div class="meta">12 Mar 2024</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ANALYSIS ===== -->
+  <section class="panel" id="p-analysis">
+    <div class="an2">
+      <!-- Sticky left nav -->
+      <aside class="an2-nav" aria-label="Site analysis sections">
+        <div class="an2-step open" id="an2-step-1">
+          <button class="an2-step__hd active" onclick="an2ToggleStep(1)">
+            <span class="an2-num">1</span><span class="an2-step__lbl">Site Characterisation</span>
+            <svg class="an2-chev" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="an2-subs">
+            <button class="an2-sub active" data-pane="general" onclick="an2Go('general')">General Information</button>
+            <button class="an2-sub" data-pane="nature" onclick="an2Go('nature')">Nature</button>
+            <button class="an2-sub" data-pane="people" onclick="an2Go('people')">People</button>
+            <button class="an2-sub" data-pane="climate" onclick="an2Go('climate')">Climate</button>
+          </div>
+        </div>
+        <div class="an2-step" id="an2-step-2">
+          <button class="an2-step__hd" onclick="an2Go('threat')">
+            <span class="an2-num">2</span><span class="an2-step__lbl">Threat Profile</span>
+            <svg class="an2-chev" viewBox="0 0 24 24" fill="none" style="transform:rotate(-90deg)"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+        <div class="an2-step" id="an2-step-3">
+          <button class="an2-step__hd" onclick="an2Go('benefit')">
+            <span class="an2-num">3</span><span class="an2-step__lbl">Potential Benefit</span>
+            <svg class="an2-chev" viewBox="0 0 24 24" fill="none" style="transform:rotate(-90deg)"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </aside>
+
+      <!-- Content -->
+      <div class="an2-main">
+
+        <!-- ══ GENERAL CONTEXT ══ -->
+        <div class="an2-pane active" data-pane="general">
+          <div class="an2-title" id="an2Title">Site Characterisation: General Context</div>
+          <div class="an2-rule"></div>
+
+          <!-- Administrative & ecosystem -->
+          <div class="gcard">
+            <div class="gcard__eyebrow"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 11v5M12 8h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Administrative and ecosystem type information</div>
+            <div class="g-split">
+              <div class="g-img" style="aspect-ratio:4/3"><span class="g-img__tag">Ecosystem map · 2025</span><img src="assets/genctx/eco-map.png" alt="Ecosystem map of the project area" /></div>
+              <div>
+                <h4>Ecosystem Type Identification</h4>
+                <p>In 2025, the project area is dominated by <b>dryland forest</b> ecosystem covering <b>22,758.3 ha (47%)</b> of the total area, followed by peatland and mangrove.</p>
+                <div class="g-donut-wrap">
+                  <div class="donut" style="background:conic-gradient(#e9ee2f 0 25%,#a7cf4e 25% 51%,#1a6b2e 51% 98%,#d3d8d6 98% 100%)">
+                    <div class="donut__c"><div><div class="l">Total</div><div class="v">48,421.9 ha</div></div></div>
+                  </div>
+                  <div class="g-legend">
+                    <span class="li"><span class="sw" style="background:#e9ee2f"></span>Mangrove<span class="pc">25%</span></span>
+                    <span class="li"><span class="sw" style="background:#a7cf4e"></span>Peatland<span class="pc">26%</span></span>
+                    <span class="li"><span class="sw" style="background:#1a6b2e"></span>Dryland Forest<span class="pc">47%</span></span>
+                    <span class="li"><span class="sw" style="background:#d3d8d6"></span>Non-Eligible Area<span class="pc">2%</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <h4 style="margin-top:22px">Administrative Information</h4>
+            <p>This project area is majorly located in <b>Kabupaten Kubu Raya, Kalimantan Barat</b> with an approximate total area of <b>48,421.9 ha</b>. Within this province, the area also overlaps with Kabupaten Mempawah (1,204 ha) and Kabupaten Ketapang (863 ha). This project area overlaps with <b>2,140 ha</b> of protected areas, designated as <b>National Park</b>.</p>
+            <div class="g-src"><b>Data source:</b> KLHK Land Cover, RLCMS · 2024. <a>See more</a></div>
+          </div>
+
+          <!-- Topography / slope -->
+          <div class="gcard">
+            <div class="gcard__eyebrow"><svg viewBox="0 0 24 24" fill="none"><path d="M3 20h18M6 20l5-11 3 6 2-3 4 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Topography &amp; slope</div>
+            <div class="g-img" style="aspect-ratio:16/6;margin-bottom:18px"><span class="g-img__tag">Elevation model</span><img src="assets/genctx/terrain-sm.jpg" alt="3D terrain elevation model" /></div>
+            <div class="g-split" style="align-items:center">
+              <div>
+                <p style="margin-bottom:12px">The slope of the area consists of:</p>
+                <div class="g-slope">
+                  <div class="row"><span class="sw" style="background:#14532d"></span><span class="nm">Flat</span><span class="ha">19,368.8 ha</span><span class="pc">40%</span></div>
+                  <div class="row"><span class="sw" style="background:#256d3a"></span><span class="nm">Undulating</span><span class="ha">13,558.1 ha</span><span class="pc">28%</span></div>
+                  <div class="row"><span class="sw" style="background:#4f9e5f"></span><span class="nm">Rolling</span><span class="ha">8,715.9 ha</span><span class="pc">18%</span></div>
+                  <div class="row"><span class="sw" style="background:#86c393"></span><span class="nm">Moderately Steep</span><span class="ha">4,358.0 ha</span><span class="pc">9%</span></div>
+                  <div class="row"><span class="sw" style="background:#c3e3cb"></span><span class="nm">Steep</span><span class="ha">2,421.1 ha</span><span class="pc">5%</span></div>
+                </div>
+              </div>
+              <div class="g-donut-wrap" style="justify-content:center">
+                <div class="donut" style="background:conic-gradient(#14532d 0 40%,#256d3a 40% 68%,#4f9e5f 68% 86%,#86c393 86% 95%,#c3e3cb 95% 100%)">
+                  <div class="donut__c"><div><div class="l">Slope</div><div class="v">Class</div></div></div>
+                </div>
+              </div>
+            </div>
+            <div class="g-src"><b>Data source:</b> DEMNAS Elevation · 2023. <a>See more</a></div>
+          </div>
+
+          <!-- Deforestation -->
+          <div class="gcard">
+            <div class="gcard__eyebrow"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3v18M12 8c-3.5 0-6-2.4-6-6 3.5 0 6 2.5 6 6ZM12 13c3.5 0 6-2.4 6-6-3.5 0-6 2.5-6 6Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>Deforestation analysis</div>
+            <h4>Historical Deforestation</h4>
+            <div class="g-defo">
+              <div>
+                <p style="margin:0">In the past <b>10 years</b>, the annual historical rate of deforestation is <b>0.47%</b>.</p>
+                <div class="big">269.9 ha/year <small>(0.47% / year)</small></div>
+              </div>
+              <div>
+                <p style="margin:0">Meanwhile, the <b>total deforestation</b> of the area from <b>2014 – 2023</b> is:</p>
+                <div class="big">1,929.9 <small>ha</small></div>
+              </div>
+            </div>
+            <div class="g-split" style="margin-top:20px">
+              <div class="g-img" style="aspect-ratio:4/3;max-width:300px"><span class="g-img__tag">Risk map</span><img src="assets/genctx/risk-map.png" alt="Deforestation risk map" /></div>
+              <div>
+                <h4>Deforestation Risk</h4>
+                <p>Assuming no interventions are made (Business-as-Usual scenario), the majority of the selected area has a <b>moderate</b> risk of deforestation, concentrated along the eastern margin.</p>
+                <div class="g-legend" style="flex-direction:row;flex-wrap:wrap;gap:8px 18px">
+                  <span class="li"><span class="sw" style="background:#e8412c;border-radius:50%"></span>High Risk</span>
+                  <span class="li"><span class="sw" style="background:#f5c842;border-radius:50%"></span>Moderate Risk</span>
+                  <span class="li"><span class="sw" style="background:#fdf3b4;border-radius:50%"></span>Low Risk</span>
+                </div>
+              </div>
+            </div>
+            <div class="g-src"><b>Data source:</b> UDEF-A Risk Model (VM0048) · 2024. <a>See more</a></div>
+          </div>
+
+          <!-- Land cover -->
+          <div class="gcard">
+            <div class="gcard__eyebrow"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/><rect x="14" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/><rect x="3" y="14" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/><rect x="14" y="14" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/></svg>Land cover class</div>
+            <p style="margin-bottom:16px">The major land cover categories in the selected area are:</p>
+            <div class="g-lc">
+              <div class="g-lc__tile"><span class="g-lc__ic"><svg viewBox="0 0 24 24" fill="none"><path d="M3 14c3-3 6-3 9 0M3 18c3-3 6-3 9 0" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M13 10c3-2 6-1 8 2-2 3-5 4-8 2z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><circle cx="17" cy="11.5" r="1" fill="currentColor"/></svg></span><div><div class="g-lc__nm">Aquaculture</div><div class="g-lc__v">6,053.0 ha<small>12.5%</small></div></div></div>
+              <div class="g-lc__tile"><span class="g-lc__ic"><svg viewBox="0 0 24 24" fill="none"><circle cx="18" cy="6" r="2.5" stroke="currentColor" stroke-width="1.7"/><path d="M3 18c2-2 4-2 6 0s4 2 6 0 4-2 6 0" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M4 21c2-1.5 4-1.5 6 0" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></span><div><div class="g-lc__nm">Barren</div><div class="g-lc__v">1,452.7 ha<small>3%</small></div></div></div>
+              <div class="g-lc__tile"><span class="g-lc__ic"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21V9" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M12 9a4 4 0 1 1 4-4 4 4 0 0 1-4 4Z" stroke="currentColor" stroke-width="1.7"/><path d="M9 21h6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></span><div><div class="g-lc__nm">Rubber</div><div class="g-lc__v">3,389.5 ha<small>7%</small></div></div></div>
+              <div class="g-lc__tile"><span class="g-lc__ic"><svg viewBox="0 0 24 24" fill="none"><path d="M6 21V11M12 21V8M18 21V11" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M6 11c-1.5-1-1.5-3 0-4 1.5 1 1.5 3 0 4ZM12 8c-1.5-1-1.5-3 0-4 1.5 1 1.5 3 0 4ZM18 11c-1.5-1-1.5-3 0-4 1.5 1 1.5 3 0 4Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></span><div><div class="g-lc__nm">Crop Plantation</div><div class="g-lc__v">2,905.3 ha<small>6%</small></div></div></div>
+              <div class="g-lc__tile"><span class="g-lc__ic"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21v-3M7 18h10l-3-4h2l-4-5h1.5L12 3 7.5 6H9l-4 5h2l-3 4Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></span><div><div class="g-lc__nm">Evergreen</div><div class="g-lc__v">22,758.3 ha<small>47%</small></div></div></div>
+              <div class="g-lc__tile"><span class="g-lc__ic"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21V9" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M12 9c0-3 3-5 6-5-1 3-3 5-6 5ZM12 9c0-3-3-5-6-5 1 3 3 5 6 5ZM12 9c2-2 5-2 7-1-1 2-4 3-7 1ZM12 9c-2-2-5-2-7-1 1 2 4 3 7 1Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></span><div><div class="g-lc__nm">Oil palm</div><div class="g-lc__v">4,358.0 ha<small>9%</small></div></div></div>
+            </div>
+            <div class="g-src"><b>Data source:</b> RLCMS Land Cover · 2023. <a>See more</a></div>
+          </div>
+
+          <!-- Natural disaster -->
+          <div class="gcard">
+            <div class="gcard__eyebrow"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3l9 16H3l9-16Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 10v4M12 17h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Natural disaster risk</div>
+            <p style="margin-bottom:16px">The selected area is susceptible to several natural disaster risks, including:</p>
+            <div class="g-nd">
+              <div class="g-nd__card"><div class="g-nd__img"><img src="assets/genctx-icons/assets/1d0b51938b0d9b33.png" alt="Flood" /></div><div class="g-nd__b"><div class="g-nd__nm">Flood</div><span class="g-nd__lvl high"><span class="d"></span>High risk</span></div></div>
+              <div class="g-nd__card"><div class="g-nd__img"><img src="assets/genctx-icons/assets/landslide.jpg" alt="Landslide" /></div><div class="g-nd__b"><div class="g-nd__nm">Landslide</div><span class="g-nd__lvl low"><span class="d"></span>Low risk</span></div></div>
+              <div class="g-nd__card"><div class="g-nd__img"><img src="assets/genctx-icons/assets/83928a4e30c7d5f0.png" alt="Tropical typhoon" /></div><div class="g-nd__b"><div class="g-nd__nm">Tropical Typhoon</div><span class="g-nd__lvl mod"><span class="d"></span>Moderate risk</span></div></div>
+              <div class="g-nd__card"><div class="g-nd__img"><img src="assets/genctx-icons/assets/22cf7464d36d3b46.png" alt="Drought" /></div><div class="g-nd__b"><div class="g-nd__nm">Drought</div><span class="g-nd__lvl low"><span class="d"></span>Low risk</span></div></div>
+            </div>
+            <div class="g-src"><b>Data source:</b> BNPB InaRISK · 2023. <a>See more</a></div>
+          </div>
+        </div>
+
+        <!-- ══ NATURE ══ -->
+        <div class="an2-pane" data-pane="nature">
+          <div class="an2-title">Site Characterisation: Nature Context</div>
+          <div class="an2-rule"></div>
+          <div class="gcard">
+            <div class="gcard__eyebrow"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21V11M12 11C8 11 5 8 5 4c4 0 7 3 7 7ZM12 11c0-4 3-7 7-7 0 4-3 7-7 7Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>Ecological baseline</div>
+            <div class="g-sc">
+              <div class="g-sc__t"><div class="l">Area of Habitat</div><div class="v">960 <small>ha</small></div></div>
+              <div class="g-sc__t"><div class="l">Above-ground biomass</div><div class="v">142 <small>t/ha</small></div></div>
+              <div class="g-sc__t"><div class="l">Soil organic carbon</div><div class="v">386 <small>tC/ha</small></div></div>
+              <div class="g-sc__t"><div class="l">Canopy cover</div><div class="v">76 <small>%</small></div></div>
+            </div>
+            <h4>Biodiversity baseline</h4>
+            <div class="g-rows">
+              <div class="r"><span class="nm">IUCN species of concern<small>Within AOI + 5 km buffer</small></span><span class="val">7</span></div>
+              <div class="r"><span class="nm">Endangered tree species richness</span><span class="val">Moderate–High</span></div>
+              <div class="r"><span class="nm">Key Biodiversity Area overlap</span><span class="val">Partial (north)</span></div>
+              <div class="r"><span class="nm">Forest Landscape Integrity Index</span><span class="val">6.8 / 10</span></div>
+              <div class="r"><span class="nm">Ecological connectivity</span><span class="val">High</span></div>
+            </div>
+            <div class="g-src"><b>Data source:</b> IUCN AoH, KBA, FLII · 2023. <a>See more</a></div>
+          </div>
+        </div>
+
+        <!-- ══ PEOPLE ══ -->
+        <div class="an2-pane" data-pane="people">
+          <div class="an2-title">Site Characterisation: People Context</div>
+          <div class="an2-rule"></div>
+          <div class="gcard">
+            <div class="gcard__eyebrow"><svg viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3" stroke="currentColor" stroke-width="1.7"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6M16 5.5a3 3 0 0 1 0 5.5M21 20c0-2.5-1.5-4.7-3.7-5.6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>Socio-economic baseline</div>
+            <div class="g-sc">
+              <div class="g-sc__t"><div class="l">Households</div><div class="v">480</div></div>
+              <div class="g-sc__t"><div class="l">Population (5 km)</div><div class="v">2,150</div></div>
+              <div class="g-sc__t"><div class="l">Primary livelihood</div><div class="v" style="font-size:18px">Fishing</div></div>
+              <div class="g-sc__t"><div class="l">Land tenure</div><div class="v" style="font-size:16px">Mixed / customary</div></div>
+            </div>
+            <h4>Community profile</h4>
+            <div class="g-rows">
+              <div class="r"><span class="nm">Dependent on coastal resources</span><span class="val">High</span></div>
+              <div class="r"><span class="nm">Indigenous / customary presence</span><span class="val">Present</span></div>
+              <div class="r"><span class="nm">Aquaculture ponds</span><span class="val">Present (south-east)</span></div>
+              <div class="r"><span class="nm">Community organisations</span><span class="val">3 active</span></div>
+            </div>
+            <div class="g-src"><b>Data source:</b> BPS Census, Ethnicity layer · 2023. <a>See more</a></div>
+          </div>
+        </div>
+
+        <!-- ══ CLIMATE ══ -->
+        <div class="an2-pane" data-pane="climate">
+          <div class="an2-title">Site Characterisation: Climate Context</div>
+          <div class="an2-rule"></div>
+          <div class="gcard">
+            <div class="gcard__eyebrow"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.7"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>Climate baseline</div>
+            <div class="g-sc">
+              <div class="g-sc__t"><div class="l">Annual rainfall</div><div class="v">3,100 <small>mm</small></div></div>
+              <div class="g-sc__t"><div class="l">Mean temperature</div><div class="v">27 <small>°C</small></div></div>
+              <div class="g-sc__t"><div class="l">Baseline carbon stock</div><div class="v">528 <small>tC/ha</small></div></div>
+              <div class="g-sc__t"><div class="l">Köppen class</div><div class="v" style="font-size:16px">Af · Tropical</div></div>
+            </div>
+            <h4>Climate exposure</h4>
+            <div class="g-rows">
+              <div class="r"><span class="nm">Current carbon storage</span><span class="val">Very high</span></div>
+              <div class="r"><span class="nm">Dry-season length</span><span class="val">~2 months</span></div>
+              <div class="r"><span class="nm">Frequency of land fires</span><span class="val">Low–Moderate</span></div>
+              <div class="r"><span class="nm">Sea-level-rise exposure</span><span class="val">Elevated</span></div>
+            </div>
+            <div class="g-src"><b>Data source:</b> WorldClim, Global Carbon layers · 2023. <a>See more</a></div>
+          </div>
+        </div>
+
+        <!-- ══ THREAT PROFILE ══ -->
+        <div class="an2-pane" data-pane="threat">
+          <div class="an2-title">Threat Profile</div>
+          <div class="an2-rule"></div>
+          <div class="gcard">
+            <div class="gcard__eyebrow"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3l9 16H3l9-16Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 10v4M12 17h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Pressures detected across the project area</div>
+            <div class="g-threat"><span class="g-threat__ic high"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21V8M12 12C8.5 12 6 9.6 6 6c3.5 0 6 2.5 6 6ZM3 21h18" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div class="g-threat__m"><div class="g-threat__top"><h4>Deforestation &amp; forest loss</h4><span class="g-nd__lvl high"><span class="d"></span>High</span></div><p style="margin:0">Sustained clearing along the eastern margin, driven by aquaculture conversion. UDEF-A flags this area above the regional median.</p><div class="g-threat__meta"><span class="m">Annual loss rate<b>1.8% / yr</b></span><span class="m">5-year trend<b>↑ Increasing</b></span><span class="m">Risk class<b>VM0048 high</b></span></div></div></div>
+            <div class="g-threat"><span class="g-threat__ic mod"><svg viewBox="0 0 24 24" fill="none"><path d="M12 22c4 0 7-2.6 7-6.5 0-3-2-5.4-3-7-.4 1.6-1.4 2.5-2.4 2.8C14 8 13 4.5 10.5 2 11 5 8 6.5 6.5 9.5 5.6 11.2 5 13 5 15.5 5 19.4 8 22 12 22Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></span><div class="g-threat__m"><div class="g-threat__top"><h4>Fire risk &amp; hotspots</h4><span class="g-nd__lvl mod"><span class="d"></span>Medium</span></div><p style="margin:0">Seasonal hotspots concentrated in drained, degraded margins. Burned-area extent remains contained but trends with dry-season length.</p><div class="g-threat__meta"><span class="m">Hotspots (12 mo)<b>14</b></span><span class="m">Burned area<b>23 ha</b></span><span class="m">Peak month<b>Aug–Sep</b></span></div></div></div>
+            <div class="g-threat"><span class="g-threat__ic mod"><svg viewBox="0 0 24 24" fill="none"><path d="M3 16c1.5 0 2.2-1 3.5-1s2 1 3.5 1 2.2-1 3.5-1 2 1 3.5 1M3 20c1.5 0 2.2-1 3.5-1s2 1 3.5 1 2.2-1 3.5-1 2 1 3.5 1" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></span><div class="g-threat__m"><div class="g-threat__top"><h4>Flood &amp; disaster risk</h4><span class="g-nd__lvl mod"><span class="d"></span>Medium</span></div><p style="margin:0">Low-lying terrain with elevated tidal-flood and sea-level-rise exposure. Landslide risk negligible given flat topography.</p><div class="g-threat__meta"><span class="m">Flood exposure<b>High (coastal)</b></span><span class="m">Landslide<b>Low</b></span><span class="m">SLR sensitivity<b>Elevated</b></span></div></div></div>
+            <div class="g-src"><b>Data source:</b> UDEF-A, InaRISK, MODIS fire · 2024. <a>See more</a></div>
+          </div>
+        </div>
+
+        <!-- ══ POTENTIAL BENEFIT ══ -->
+        <div class="an2-pane" data-pane="benefit">
+          <div class="an2-title">Potential Benefit</div>
+          <div class="an2-rule"></div>
+          <div class="gcard">
+            <div class="gcard__eyebrow"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>Projected triple-benefit outcomes</div>
+            <div class="g-sc" style="grid-template-columns:repeat(3,1fr)">
+              <div class="g-sc__t" style="background:var(--bg-success-second);border-color:var(--primary-100)"><div class="l" style="color:var(--text-primary);font-weight:700">CLIMATE</div><div class="v">126 <small>ktCO₂e</small></div><div class="l" style="margin-top:6px">Carbon sequestration (10 yr)</div></div>
+              <div class="g-sc__t"><div class="l" style="font-weight:700">PEOPLE</div><div class="v">1,850</div><div class="l" style="margin-top:6px">Households benefiting</div></div>
+              <div class="g-sc__t"><div class="l" style="font-weight:700">NATURE</div><div class="v">+34 <small>%</small></div><div class="l" style="margin-top:6px">Biodiversity uplift</div></div>
+            </div>
+            <h4>Expected outcomes by benefit category</h4>
+            <div class="g-rows">
+              <div class="r"><span class="nm">Avoided emissions vs. Business-as-Usual</span><span class="val">126 ktCO₂e</span></div>
+              <div class="r"><span class="nm">Mangrove &amp; forest area under improved management</span><span class="val">1,490 ha</span></div>
+              <div class="r"><span class="nm">Sustainable livelihood beneficiaries</span><span class="val">1,850 households</span></div>
+              <div class="r"><span class="nm">Ecological connectivity restored</span><span class="val">+34%</span></div>
+            </div>
+            <div class="g-src"><b>Data source:</b> NbS benefit projection model · 2024. <a>See more</a></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <script>
+  function an2Go(pane) {
+    document.querySelectorAll('#p-analysis .an2-pane').forEach(function (p) { p.classList.toggle('active', p.dataset.pane === pane); });
+    document.querySelectorAll('#p-analysis .an2-sub').forEach(function (b) { b.classList.toggle('active', b.dataset.pane === pane); });
+    var isSite = ['general','nature','people','climate'].indexOf(pane) !== -1;
+    document.querySelector('#an2-step-1 .an2-step__hd').classList.toggle('active', isSite);
+    document.querySelector('#an2-step-2 .an2-step__hd').classList.toggle('active', pane === 'threat');
+    document.querySelector('#an2-step-3 .an2-step__hd').classList.toggle('active', pane === 'benefit');
+    if (isSite) document.getElementById('an2-step-1').classList.add('open');
+  }
+  function an2ToggleStep(n) {
+    if (n === 1) document.getElementById('an2-step-1').classList.toggle('open');
+  }
+  </script>
+
+
+  <!-- ===== MONITORING ===== -->
+  <section class="panel" id="p-monitoring">
+    <div class="block" style="margin-bottom:0">
+
+      <!-- Block header with state toggle -->
+      <div class="block-head" style="flex-wrap:wrap;gap:10px">
+        <h3><svg viewBox="0 0 24 24" fill="none"><rect x="5" y="4" width="14" height="17" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M9 4V3h6v1M9 11l2 2 4-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>Monitoring plan</h3>
+        <!-- State toggle pill -->
+        <div style="display:flex;align-items:center;gap:6px;margin-left:auto">
+          <span style="font-family:var(--font-text);font-size:11px;color:var(--text-base-second);font-weight:500">Preview state:</span>
+          <div style="display:flex;background:var(--bg-base-third);border-radius:var(--radius-lg);padding:3px;gap:2px" role="group">
+            <button id="mon-toggle-has" onclick="setMonitoringState('has')"
+              style="font-family:var(--font-text);font-size:11px;font-weight:600;padding:4px 12px;border:none;border-radius:var(--radius-md);cursor:pointer;transition:all .15s;background:var(--bg-primary-main);color:#fff">
+              Has plan
+            </button>
+            <button id="mon-toggle-no" onclick="setMonitoringState('no')"
+              style="font-family:var(--font-text);font-size:11px;font-weight:600;padding:4px 12px;border:none;border-radius:var(--radius-md);cursor:pointer;transition:all .15s;background:transparent;color:var(--text-base-second)">
+              No plan yet
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── STATE A: Has monitoring plan ── -->
+      <div id="mon-state-has">
+        <div style="display:flex;gap:8px;margin-bottom:16px">
+          <button class="btn btn-secondary btn-sm" onclick="openMonitoringModal()">See plan</button>
+          <a href="create-monitoring-plan.html?step=3" class="btn btn-secondary btn-sm" style="text-decoration:none">Edit</a>
+        </div>
+        <div class="dl" style="padding:0 0 1px;margin:0 0 15px">
+          <div class="it"><div class="k">Plan status</div><div class="v"><span class="badge s-monitoring"><span class="d"></span>Active</span></div></div>
+          <div class="it"><div class="k">Indicators tracked</div><div class="v">18 indicators · 3 activities</div></div>
+          <div class="it"><div class="k">Monitoring frequency</div><div class="v">Quarterly</div></div>
+          <div class="it"><div class="k">Entries logged</div><div class="v">37</div></div>
+        </div>
+        <!-- CTA: Input monitoring data -->
+        <div style="margin:0 -1px -1px;padding:20px 24px;background:linear-gradient(135deg,rgb(240,255,250) 0%,rgb(232,248,242) 100%);border-top:1px solid rgb(176,222,205);border-radius:0 0 10px 10px;display:flex;align-items:center;justify-content:space-between;gap:16px">
+          <div>
+            <div style="font-family:var(--font-text);font-size:13px;font-weight:700;color:#044c3e;margin-bottom:3px">Ready to log field data?</div>
+            <div style="font-family:var(--font-text);font-size:12px;color:rgb(5,100,80);line-height:1.5">Input values for each monitoring indicator tracked in this plan.</div>
+          </div>
+          <a href="monitoring-form.html" class="btn btn-primary" style="text-decoration:none;flex:none">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="white" stroke-width="2.2" stroke-linecap="round"/></svg>
+            Input Monitoring Data
+            <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- ── STATE B: No monitoring plan yet ── -->
+      <div id="mon-state-no" style="display:none">
+        <div style="padding:40px 24px 32px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:0">
+          <!-- Icon -->
+          <div style="width:64px;height:64px;border-radius:16px;background:var(--bg-base-third);display:grid;place-items:center;margin-bottom:18px">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><rect x="5" y="4" width="14" height="17" rx="2" stroke="var(--text-base-second)" stroke-width="1.7"/><path d="M9 4V3h6v1" stroke="var(--text-base-second)" stroke-width="1.7" stroke-linecap="round"/><path d="M9 12h6M12 9v6" stroke="var(--text-base-second)" stroke-width="1.7" stroke-linecap="round"/></svg>
+          </div>
+          <div style="font-family:var(--font-text);font-size:15px;font-weight:700;color:var(--text-base-main);margin-bottom:6px">No monitoring plan yet</div>
+          <div style="font-family:var(--font-text);font-size:13px;color:var(--text-base-second);line-height:1.65;max-width:400px;margin-bottom:24px">Define the indicators, frequency, and data collection methods you'll use to track outcomes over this project's lifecycle.</div>
+          <a href="create-monitoring-plan.html" class="btn btn-primary" style="text-decoration:none">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="white" stroke-width="2.2" stroke-linecap="round"/></svg>
+            Create Monitoring Plan
+          </a>
+        </div>
+        <!-- Hint strip -->
+        <div style="margin:0 -1px -1px;padding:14px 20px;background:var(--bg-base-second);border-top:1px solid var(--stroke-base);border-radius:0 0 10px 10px;display:flex;align-items:center;gap:10px">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="flex:none;color:var(--text-primary)"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 8v4M12 16h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <span style="font-family:var(--font-text);font-size:12px;color:var(--text-base-second);line-height:1.5">A monitoring plan is required before you can log field data or submit an MRV report.</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <script>
+  function setMonitoringState(state) {
+    const hasEl  = document.getElementById('mon-state-has');
+    const noEl   = document.getElementById('mon-state-no');
+    const btnHas = document.getElementById('mon-toggle-has');
+    const btnNo  = document.getElementById('mon-toggle-no');
+    const isHas  = state === 'has';
+    hasEl.style.display  = isHas ? '' : 'none';
+    noEl.style.display   = isHas ? 'none' : '';
+    btnHas.style.background = isHas ? 'var(--bg-primary-main)' : 'transparent';
+    btnHas.style.color      = isHas ? '#fff' : 'var(--text-base-second)';
+    btnNo.style.background  = isHas ? 'transparent' : 'var(--bg-primary-main)';
+    btnNo.style.color       = isHas ? 'var(--text-base-second)' : '#fff';
+  }
+  </script>
+
+  <!-- ===== MRV ===== -->
+  <section class="panel" id="p-mrv">
+    <div class="block" style="margin-bottom:0">
+
+      <!-- Block header with state toggle -->
+      <div class="block-head" style="flex-wrap:wrap;gap:10px">
+        <h3>
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>MRV data
+        </h3>
+        <span class="badge i-draft">WIP module</span>
+        <!-- State toggle pill -->
+        <div style="display:flex;align-items:center;gap:6px;margin-left:auto">
+          <span style="font-family:var(--font-text);font-size:11px;color:var(--text-base-second);font-weight:500">Preview state:</span>
+          <div style="display:flex;background:var(--bg-base-third);border-radius:var(--radius-lg);padding:3px;gap:2px" role="group">
+            <button id="mrv-toggle-has" onclick="setMrvState('has')"
+              style="font-family:var(--font-text);font-size:11px;font-weight:600;padding:4px 12px;border:none;border-radius:var(--radius-md);cursor:pointer;transition:all .15s;background:var(--bg-primary-main);color:#fff">
+              Has plan
+            </button>
+            <button id="mrv-toggle-no" onclick="setMrvState('no')"
+              style="font-family:var(--font-text);font-size:11px;font-weight:600;padding:4px 12px;border:none;border-radius:var(--radius-md);cursor:pointer;transition:all .15s;background:transparent;color:var(--text-base-second)">
+              No plan yet
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── STATE A: Has monitoring plan → show MRV dashboard ── -->
+      <div id="mrv-state-has">
+        <div class="mrv-link">
+          <span class="ic"><svg viewBox="0 0 24 24" fill="none"><path d="M4 20V4M4 20h16M8 16l3-4 3 2 4-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <div class="tx"><h4>Impact monitoring &amp; verification</h4><p>Track measured outcomes over the project lifecycle and prepare data for independent verification.</p></div>
+          <button class="btn btn-primary" onclick="window.location.href='mrv.html'">Open MRV Dashboard<svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </div>
+        <!-- CTA: Input monitoring data -->
+        <div style="margin:16px -1px -1px;padding:20px 24px;background:linear-gradient(135deg,rgb(240,255,250) 0%,rgb(232,248,242) 100%);border-top:1px solid rgb(176,222,205);border-radius:0 0 10px 10px;display:flex;align-items:center;justify-content:space-between;gap:16px">
+          <div>
+            <div style="font-family:var(--font-text);font-size:13px;font-weight:700;color:#044c3e;margin-bottom:3px">Log new monitoring data</div>
+            <div style="font-family:var(--font-text);font-size:12px;color:rgb(5,100,80);line-height:1.5">Enter field measurements and indicator values for the current monitoring period.</div>
+          </div>
+          <a href="monitoring-form.html" class="btn btn-primary" style="text-decoration:none;flex:none">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="white" stroke-width="2.2" stroke-linecap="round"/></svg>
+            Input Monitoring Data
+            <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- ── STATE B: No monitoring plan → MRV locked ── -->
+      <div id="mrv-state-no" style="display:none">
+        <!-- Locked MRV card -->
+        <div style="margin:0 0 0;padding:32px 24px;display:flex;align-items:center;gap:24px;background:var(--bg-base-second);border-radius:var(--radius-lg);border:1px dashed var(--stroke-base);opacity:.55;pointer-events:none;user-select:none">
+          <span class="ic" style="flex:none"><svg viewBox="0 0 24 24" fill="none"><path d="M4 20V4M4 20h16M8 16l3-4 3 2 4-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <div class="tx"><h4>Impact monitoring &amp; verification</h4><p>Track measured outcomes over the project lifecycle and prepare data for independent verification.</p></div>
+          <button class="btn btn-primary" disabled style="pointer-events:none;opacity:.5">Open MRV Dashboard<svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </div>
+
+        <!-- Lock notice -->
+        <div style="margin:16px 0 0;padding:20px 24px;border:1px solid var(--stroke-base);border-radius:var(--radius-lg);background:var(--bg-base-main);display:flex;align-items:flex-start;gap:16px">
+          <div style="width:40px;height:40px;border-radius:10px;background:var(--bg-base-third);display:grid;place-items:center;flex:none">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="5" y="11" width="14" height="9" rx="2" stroke="var(--text-base-second)" stroke-width="1.8"/><path d="M8 11V8a4 4 0 018 0v3" stroke="var(--text-base-second)" stroke-width="1.8"/></svg>
+          </div>
+          <div style="flex:1;min-width:0">
+            <div style="font-family:var(--font-text);font-size:13px;font-weight:700;color:var(--text-base-main);margin-bottom:4px">Monitoring plan required</div>
+            <div style="font-family:var(--font-text);font-size:12px;color:var(--text-base-second);line-height:1.65;margin-bottom:16px">The MRV Dashboard is only available once a monitoring plan has been created. Set up your indicators and reporting schedule first.</div>
+            <a href="create-monitoring-plan.html" class="btn btn-primary btn-sm" style="text-decoration:none">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="white" stroke-width="2.2" stroke-linecap="round"/></svg>
+              Create Monitoring Plan
+            </a>
+          </div>
+        </div>
+
+        <!-- Bottom hint -->
+        <div style="margin:0 -1px -1px;padding:14px 20px;background:var(--bg-base-second);border-top:1px solid var(--stroke-base);border-radius:0 0 10px 10px;display:flex;align-items:center;gap:10px">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="flex:none;color:var(--text-primary)"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 8v4M12 16h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <span style="font-family:var(--font-text);font-size:12px;color:var(--text-base-second);line-height:1.5">MRV reporting requires at least one completed monitoring cycle with verified indicator data.</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <script>
+  function setMrvState(state) {
+    const hasEl  = document.getElementById('mrv-state-has');
+    const noEl   = document.getElementById('mrv-state-no');
+    const btnHas = document.getElementById('mrv-toggle-has');
+    const btnNo  = document.getElementById('mrv-toggle-no');
+    const isHas  = state === 'has';
+    hasEl.style.display = isHas ? '' : 'none';
+    noEl.style.display  = isHas ? 'none' : '';
+    btnHas.style.background = isHas ? 'var(--bg-primary-main)' : 'transparent';
+    btnHas.style.color      = isHas ? '#fff' : 'var(--text-base-second)';
+    btnNo.style.background  = isHas ? 'transparent' : 'var(--bg-primary-main)';
+    btnNo.style.color       = isHas ? 'var(--text-base-second)' : '#fff';
+  }
+  </script>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="appfoot">
+  <div class="wrap appfoot-inner">
+    <div class="l">
+      <span class="chip"><img src="assets/scene-logo.png" alt="SCeNe Coalition" width="360" height="133" style="height:44px;width:auto" /></span>
+      <p>SCeNe Coalition — improving data access, showcasing high-quality projects and directing funding to local communities.</p>
+    </div>
+    <nav class="links">
+      <a href="index.html">NbS Tool Home</a>
+      <a href="#">Interactive Map</a>
+      <a href="#">NbS Portfolio</a>
+      <a href="#">Contact Us</a>
+    </nav>
+    <div class="cr">© 2026 SCeNe Coalition · ASEAN-NbS Tool project.</div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  const tabs = document.querySelectorAll('.tab');
+  const panels = document.querySelectorAll('.panel');
+  // role=tabpanel wiring for each panel
+  panels.forEach((p) => {
+    const key = p.id.replace(/^p-/, '');
+    p.setAttribute('role', 'tabpanel');
+    p.setAttribute('aria-labelledby', 'tab-' + key);
+    p.setAttribute('tabindex', '0');
+  });
+  tabs.forEach((t) => t.addEventListener('click', () => {
+    tabs.forEach((x) => { x.classList.remove('active'); x.setAttribute('aria-selected', 'false'); });
+    panels.forEach((p) => p.classList.remove('active'));
+    t.classList.add('active');
+    t.setAttribute('aria-selected', 'true');
+    const panel = document.getElementById('p-' + t.dataset.tab);
+    if (panel) panel.classList.add('active');
+    try { history.replaceState(null, '', '#' + t.dataset.tab); } catch (e) {}
+  }));
+  const h = location.hash.slice(1);
+  if (h) { const t = [...tabs].find((x) => x.dataset.tab === h); if (t) t.click(); }
+})();
+</script>
+<!-- ══ ADD COLLABORATOR MODAL ══ -->
+<div id="collabOverlay" style="display:none;position:fixed;inset:0;background:rgba(4,38,32,0.45);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);z-index:900;align-items:center;justify-content:center;padding:20px">
+  <div style="background:#fff;border-radius:16px;width:100%;max-width:560px;max-height:90vh;overflow-y:auto;box-shadow:0 32px 80px rgba(0,0,0,0.22);position:relative">
+    <div style="padding:26px 32px 18px;border-bottom:1px solid #eaebf0">
+      <button onclick="closeCollabModal()" style="position:absolute;top:14px;right:14px;width:34px;height:34px;border:none;background:#eaebf0;border-radius:50%;cursor:pointer;font-size:16px;display:grid;place-items:center;color:#444a51">✕</button>
+      <div style="font-family:var(--font-text);font-size:18px;font-weight:700;color:#252525;letter-spacing:-0.02em;margin-bottom:4px">Add collaborator</div>
+      <div style="font-family:var(--font-text);font-size:12px;color:#68727d">Invite a team member to this project. They will receive an email notification.</div>
+    </div>
+    <div style="padding:22px 32px">
+      <!-- Invite row -->
+      <div class="invite-grid" style="display:grid;grid-template-columns:1fr 160px auto;gap:8px;margin-bottom:22px;padding-bottom:22px;border-bottom:1px solid #eaebf0">
+        <input id="cl-email" type="email" aria-label="Colleague email address" placeholder="colleague@organisation.org" style="height:40px;padding:0 12px;border:1px solid #eaebf0;border-radius:6px;font-family:var(--font-text);font-size:12px;color:#444a51;outline:none;width:100%" onfocus="this.style.borderColor='#066653'" onblur="this.style.borderColor='#eaebf0'" />
+        <select id="cl-role" aria-label="Collaborator role" style="height:40px;padding:0 10px;border:1px solid #eaebf0;border-radius:6px;font-family:var(--font-text);font-size:12px;color:#444a51;background:#fff;outline:none;cursor:pointer;width:100%">
+          <option>Editor</option>
+          <option>Viewer</option>
+          <option>Collector</option>
+          <option>Verifier</option>
+        </select>
+        <button onclick="addCollab()" class="btn btn-primary">Invite</button>
+      </div>
+      <!-- People with access -->
+      <div style="font-family:var(--font-text);font-size:11px;font-weight:700;color:#68727d;text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px">People with access</div>
+      <div id="collabModalList"></div>
+    </div>
+    <div style="padding:16px 32px;border-top:1px solid #eaebf0;background:#fafbfc;border-radius:0 0 16px 16px;display:flex;justify-content:flex-end;gap:10px">
+      <button onclick="closeCollabModal()" class="btn btn-secondary">Close</button>
+      <button onclick="closeCollabModal()" class="btn btn-primary">Done ✓</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ── Collaborator data ── */
+const AVATAR_COLORS = ['#066653','#564efa','#efa22f','#0a436b','#8A7A1F','#1A6B6B','#5A1A8A','#6B1A1A'];
+const collabs = [
+  { name:'Adi Mantri', role:'Project Lead', access:'Owner', email:'adi@lestari.org', initials:'AM', color:'#066653' },
+  { name:'Rina Sari', role:'Field Analyst', access:'Editor', email:'rina@lestari.org', initials:'Rs', color:'#564efa' },
+  { name:'Jie Xien Pho', role:'MRV Specialist', access:'Viewer', email:'jiexien@scene.org', initials:'JX', color:'#efa22f' },
+];
+
+function renderCollabList() {
+  /* tab list — each row is clickable (except Owner indicator) */
+  document.getElementById('collabList').innerHTML = collabs.map((c,i) => `
+    <div class="collab-item" role="button" tabindex="0"
+      onclick="openEditCollabModal(${i})"
+      onkeydown="if(event.key==='Enter'||event.key===' ')openEditCollabModal(${i})">
+      <span class="av" style="background:${c.color}">${c.initials}</span>
+      <div style="flex:1;min-width:0"><div class="nm">${c.name}</div><div class="ro">${c.role} · ${c.access}</div></div>
+      <span class="em" style="margin-right:8px">${c.email}</span>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="flex:none;opacity:.35"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>`).join('');
+  document.getElementById('collabCount').textContent = collabs.length;
+
+  /* modal list */
+  const ml = document.getElementById('collabModalList');
+  if (!ml) return;
+  ml.innerHTML = collabs.map((c,i) => `
+    <div class="collab-row" style="display:grid;grid-template-columns:32px 1fr 150px 32px;gap:10px;align-items:center;padding:10px 14px;border:1px solid #eaebf0;border-radius:8px;margin-bottom:8px;background:#fff">
+      <div style="width:32px;height:32px;border-radius:50%;background:${c.color};color:#fff;display:grid;place-items:center;font-family:var(--font-text);font-size:11px;font-weight:700">${c.initials}</div>
+      <div>
+        <div style="font-family:var(--font-text);font-size:12px;font-weight:600;color:#252525">${c.name}</div>
+        <div style="font-family:var(--font-text);font-size:11px;color:#68727d">${c.email}</div>
+      </div>
+      ${c.access === 'Owner'
+        ? `<span style="font-family:var(--font-text);font-size:10px;font-weight:700;padding:4px 10px;border-radius:20px;background:#e9f8f1;color:#044c3e">Owner</span>`
+        : `<select onchange="collabs[${i}].access=this.value;renderCollabList()" style="height:32px;padding:0 10px;border:1px solid #eaebf0;border-radius:6px;font-family:var(--font-text);font-size:11px;background:#fff;cursor:pointer">
+            <option ${c.access==='Editor'?'selected':''}>Editor</option>
+            <option ${c.access==='Viewer'?'selected':''}>Viewer</option>
+            <option ${c.access==='Collector'?'selected':''}>Collector</option>
+            <option ${c.access==='Verifier'?'selected':''}>Verifier</option>
+          </select>`
+      }
+      ${c.access !== 'Owner'
+        ? `<button onclick="removeCollab(${i})" style="background:none;border:none;cursor:pointer;color:rgb(172,26,19);width:28px;height:28px;display:grid;place-items:center;border-radius:4px;font-size:13px">✕</button>`
+        : `<div></div>`}
+    </div>`).join('');
+}
+
+function addCollab() {
+  const email = document.getElementById('cl-email').value.trim();
+  if (!email) { document.getElementById('cl-email').focus(); return; }
+  const role  = document.getElementById('cl-role').value;
+  const name  = email.split('@')[0].replace(/[._-]/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
+  const initials = name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  const color = AVATAR_COLORS[collabs.length % AVATAR_COLORS.length];
+  collabs.push({ name, role:'Team Member', access: role, email, initials, color });
+  document.getElementById('cl-email').value = '';
+  renderCollabList();
+}
+
+function removeCollab(i) { collabs.splice(i,1); renderCollabList(); }
+
+function openCollabModal() {
+  renderCollabList();
+  document.getElementById('collabOverlay').style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+function closeCollabModal() {
+  document.getElementById('collabOverlay').style.display = 'none';
+  document.body.style.overflow = '';
+}
+document.getElementById('collabOverlay').addEventListener('click', e => {
+  if (e.target === document.getElementById('collabOverlay')) closeCollabModal();
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeCollabModal(); });
+
+/* init */
+renderCollabList();
+</script>
+
+<!-- ═══ MONITORING PLAN MODAL ═══ -->
+<div id="monitoringOverlay" style="display:none;position:fixed;inset:0;background:rgba(4,38,32,0.48);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);z-index:800;align-items:center;justify-content:center;padding:20px">
+  <div style="background:var(--bg-base-main);border-radius:16px;width:100%;max-width:720px;max-height:90vh;overflow-y:auto;box-shadow:0 32px 80px rgba(0,0,0,0.22);position:relative;display:flex;flex-direction:column">
+    <!-- Header -->
+    <div style="padding:26px 32px 20px;border-bottom:1px solid var(--stroke-base);position:sticky;top:0;background:var(--bg-base-main);z-index:1">
+      <button onclick="closeMonitoringModal()" style="position:absolute;top:14px;right:14px;width:34px;height:34px;border:none;background:var(--bg-base-third);border-radius:50%;cursor:pointer;display:grid;place-items:center;color:var(--text-base-second)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+      <div style="display:flex;align-items:center;gap:14px">
+        <div style="width:44px;height:44px;border-radius:10px;background:var(--bg-success-second);display:grid;place-items:center;flex:none">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="5" y="4" width="14" height="17" rx="2" stroke="var(--text-primary)" stroke-width="1.7"/><path d="M9 4V3h6v1M9 11l2 2 4-4" stroke="var(--text-primary)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div>
+          <div style="font-family:var(--font-text);font-size:17px;font-weight:700;color:var(--text-base-main);letter-spacing:-0.02em">Monitoring Plan</div>
+          <div style="font-family:var(--font-text);font-size:12px;color:var(--text-base-second)">Kubu Raya Mangrove · Step 3 — Customize and finalize</div>
+        </div>
+      </div>
+    </div>
+    <!-- Summary stats -->
+    <div class="mon-stats" style="display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-bottom:1px solid var(--stroke-base)">
+      <div style="padding:16px 24px;border-right:1px solid var(--stroke-base)"><div style="font-family:var(--font-text);font-size:11px;color:var(--text-base-second);margin-bottom:4px">Ecosystem</div><div style="font-family:var(--font-text);font-size:18px;font-weight:700;color:var(--text-base-main)">1</div></div>
+      <div style="padding:16px 24px;border-right:1px solid var(--stroke-base)"><div style="font-family:var(--font-text);font-size:11px;color:var(--text-base-second);margin-bottom:4px">NbS activities</div><div style="font-family:var(--font-text);font-size:18px;font-weight:700;color:var(--text-base-main)">3</div></div>
+      <div style="padding:16px 24px;border-right:1px solid var(--stroke-base)"><div style="font-family:var(--font-text);font-size:11px;color:var(--text-base-second);margin-bottom:4px">Benefits</div><div style="font-family:var(--font-text);font-size:18px;font-weight:700;color:var(--text-base-main)">12</div></div>
+      <div style="padding:16px 24px"><div style="font-family:var(--font-text);font-size:11px;color:var(--text-base-second);margin-bottom:4px">Monitoring indicators</div><div style="font-family:var(--font-text);font-size:18px;font-weight:700;color:var(--text-primary)">18</div></div>
+    </div>
+    <!-- Matrix table -->
+    <div style="padding:24px 32px;flex:1">
+      <div style="font-family:var(--font-text);font-size:12px;font-weight:700;color:var(--text-base-second);text-transform:uppercase;letter-spacing:.05em;margin-bottom:14px">Monitoring matrix · Mangrove</div>
+      <div style="overflow-x:auto;border:1px solid var(--stroke-base);border-radius:10px">
+        <table style="width:100%;border-collapse:collapse;font-family:var(--font-text);font-size:12px">
+          <thead>
+            <tr style="background:var(--bg-base-second);border-bottom:1px solid var(--stroke-base)">
+              <th style="text-align:left;padding:10px 12px;font-size:10px;font-weight:700;color:var(--text-base-second);text-transform:uppercase;letter-spacing:.04em">NbS Activity</th>
+              <th style="text-align:left;padding:10px 12px;font-size:10px;font-weight:700;color:var(--text-base-second);text-transform:uppercase;letter-spacing:.04em">Benefit</th>
+              <th style="text-align:left;padding:10px 12px;font-size:10px;font-weight:700;color:var(--text-base-second);text-transform:uppercase;letter-spacing:.04em">Monitoring indicator</th>
+              <th style="text-align:left;padding:10px 12px;font-size:10px;font-weight:700;color:var(--text-base-second);text-transform:uppercase;letter-spacing:.04em">Data source</th>
+              <th style="text-align:left;padding:10px 12px;font-size:10px;font-weight:700;color:var(--text-base-second);text-transform:uppercase;letter-spacing:.04em">Frequency</th>
+            </tr>
+          </thead>
+          <tbody id="monMatrixRows"></tbody>
+        </table>
+      </div>
+      <div style="margin-top:16px;display:flex;align-items:flex-start;gap:8px;font-family:var(--font-text);font-size:12px;color:var(--text-base-second);background:var(--bg-base-second);border:1px solid var(--stroke-base);border-radius:8px;padding:12px 14px">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="flex:none;margin-top:1px"><circle cx="12" cy="12" r="9" stroke="var(--text-primary)" stroke-width="2"/><path d="M12 8v4M12 16h.01" stroke="var(--text-primary)" stroke-width="2" stroke-linecap="round"/></svg>
+        Field verification, stakeholder consultation, and data quality review are required before formal reporting. Customizations can be made in the Monitoring Plan editor.
+      </div>
+    </div>
+    <!-- Footer -->
+    <div style="padding:16px 32px;border-top:1px solid var(--stroke-base);background:var(--bg-base-second);border-radius:0 0 16px 16px;display:flex;justify-content:flex-end;gap:10px;position:sticky;bottom:0">
+      <button onclick="closeMonitoringModal()" class="btn btn-secondary btn-sm">Close</button>
+      <a href="create-monitoring-plan.html?step=3" class="btn btn-primary btn-sm" style="text-decoration:none">
+        <svg viewBox="0 0 24 24" fill="none" width="14" height="14"><path d="M4 20h4L18 10l-4-4L4 16v4z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M13 7l4 4" stroke="currentColor" stroke-width="1.7"/></svg>
+        Edit in Monitoring Plan
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+/* Monitoring matrix — mirrors F05 structure (Activity → Benefit category → Indicators).
+   Uses the default recommended mangrove activities from the plan. */
+const MON_PLAN = [
+  { name: 'Boundary demarcation & legal recognition', pw: 'PROTECT', source: 'Remote Sensing / Field Measurement', freq: 'Annually', benefits: [
+    { cat: 'Nature',  benefit: 'Maintenance of ecological connectivity', inds: ['MAN-01 Mangrove Extent', 'MAN-02 Mangrove Carbon Stock', 'MAN-04 Mangrove Species Diversity'] },
+    { cat: 'People',  benefit: 'Secure land and resource tenure', inds: ['GOV-03 Indigenous Land Tenure', 'GOV-07 Safeguard Information System'] },
+    { cat: 'Climate', benefit: 'Reduced emissions from deforestation and degradation', inds: ['MAN-02 Mangrove Carbon Stock (tCO₂e)'] },
+  ] },
+  { name: 'Community-based patrol & monitoring', pw: 'PROTECT', source: 'Remote Sensing', freq: 'Annually', benefits: [
+    { cat: 'Nature',  benefit: 'Reduced vulnerability to fire, pests, and diseases', inds: ['MAN-01 Mangrove Extent', 'MAN-10 Protected Mangrove Area'] },
+    { cat: 'People',  benefit: 'Sustainable livelihood opportunities', inds: ['MAN-06 Mangrove Community Beneficiaries'] },
+    { cat: 'Climate', benefit: 'Reduced emissions from deforestation and degradation', inds: ['MAN-02 Mangrove Carbon Stock'] },
+    { cat: 'People',  benefit: 'Strengthened social capital and governance capacity', inds: ['GOV-04 MRV Institutional Capacity'] },
+  ] },
+  { name: 'Assisted Natural Regeneration (ANR)', pw: 'MANAGE', source: 'Remote Sensing', freq: 'Annually', benefits: [
+    { cat: 'Nature',  benefit: 'Enhanced biodiversity and ecosystem functions', inds: ['Mangrove Species Diversity'] },
+    { cat: 'People',  benefit: 'Sustainable livelihood opportunities', inds: ['Mangrove Community Beneficiaries', 'Fisheries Dependency Value'] },
+    { cat: 'Climate', benefit: 'Increased carbon sequestration and storage', inds: ['Mangrove Carbon Stock'] },
+    { cat: 'Nature',  benefit: 'Improved forest productivity and regeneration', inds: ['Mangrove Restoration Area'] },
+    { cat: 'Nature',  benefit: 'Maintenance of ecological connectivity', inds: ['Mangrove Extent', 'Protected Mangrove Area'] },
+  ] },
+];
+const MON_CAT = {
+  Nature:  { bg: 'rgb(220,252,231)', fg: 'rgb(22,101,52)' },
+  People:  { bg: 'rgb(239,246,255)', fg: '#0a436b' },
+  Climate: { bg: 'rgb(255,237,213)', fg: 'rgb(194,65,12)' },
+};
+const MON_PW = {
+  PROTECT: { bg: 'rgb(220,252,231)', fg: 'rgb(22,101,52)' },
+  MANAGE:  { bg: 'rgb(254,243,199)', fg: 'rgb(146,64,14)' },
+  RESTORE: { bg: 'rgb(224,242,254)', fg: 'rgb(3,105,161)' },
+};
+function renderMonMatrix() {
+  const body = document.getElementById('monMatrixRows');
+  if (!body || body.dataset.rendered) return;
+  const tdBase = 'padding:10px 12px;vertical-align:top;border-bottom:1px solid var(--stroke-base)';
+  const grpBorder = 'border-right:1px solid var(--stroke-base)';
+  let html = '';
+  MON_PLAN.forEach((act, ai) => {
+    const actRows = act.benefits.reduce((s, b) => s + b.inds.length, 0);
+    const pw = MON_PW[act.pw] || MON_PW.PROTECT;
+    const heavy = ai < MON_PLAN.length - 1 ? ';border-bottom:2px solid var(--stroke-base)' : '';
+    let firstActRow = true;
+    act.benefits.forEach((b) => {
+      const cat = MON_CAT[b.cat] || MON_CAT.Nature;
+      b.inds.forEach((ind, ii) => {
+        html += '<tr>';
+        if (firstActRow) {
+          html += `<td rowspan="${actRows}" style="${tdBase};${grpBorder}${heavy}">
+            <div style="font-weight:600;color:var(--text-base-main);line-height:1.35;margin-bottom:6px">${act.name}</div>
+            <span style="display:inline-block;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;border-radius:20px;padding:2px 8px;background:${pw.bg};color:${pw.fg}">${act.pw}</span></td>`;
+          firstActRow = false;
+        }
+        if (ii === 0) {
+          const bBottom = ii === 0 && b === act.benefits[act.benefits.length - 1] ? heavy : '';
+          html += `<td rowspan="${b.inds.length}" style="${tdBase};${grpBorder}${bBottom}">
+            <span style="display:inline-block;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;border-radius:20px;padding:2px 8px;background:${cat.bg};color:${cat.fg}">${b.cat}</span>
+            <div style="font-size:11px;color:rgb(74,84,104);line-height:1.4;margin-top:5px">${b.benefit}</div></td>`;
+        }
+        const rowHeavy = (ii === b.inds.length - 1 && b === act.benefits[act.benefits.length - 1]) ? heavy : '';
+        html += `<td style="${tdBase}${rowHeavy};color:var(--text-base-main)">${ind}</td>`;
+        html += `<td style="${tdBase}${rowHeavy};color:var(--text-base-second);font-size:11px">${act.source}</td>`;
+        html += `<td style="${tdBase}${rowHeavy}"><span style="background:var(--bg-base-third);border:1px solid var(--stroke-base);border-radius:20px;padding:3px 10px;font-size:11px;font-weight:600;color:var(--text-base-main);white-space:nowrap">${act.freq}</span></td>`;
+        html += '</tr>';
+      });
+    });
+  });
+  body.innerHTML = html;
+  body.dataset.rendered = '1';
+}
+
+function openMonitoringModal() {
+  renderMonMatrix();
+  document.getElementById('monitoringOverlay').style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+function closeMonitoringModal() {
+  document.getElementById('monitoringOverlay').style.display = 'none';
+  document.body.style.overflow = '';
+}
+document.getElementById('monitoringOverlay').addEventListener('click', function(e) {
+  if (e.target === this) closeMonitoringModal();
+});
+</script>
+
+<!-- ═══ EDIT COLLABORATOR MODAL ═══ -->
+<div id="editCollabOverlay" style="display:none;position:fixed;inset:0;background:rgba(4,38,32,0.48);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);z-index:950;align-items:center;justify-content:center;padding:20px">
+  <div style="background:#fff;border-radius:16px;width:100%;max-width:460px;box-shadow:0 32px 80px rgba(0,0,0,0.22);position:relative;overflow:hidden">
+
+    <!-- Header -->
+    <div style="padding:24px 28px 20px;border-bottom:1px solid #eaebf0">
+      <button onclick="closeEditCollabModal()" style="position:absolute;top:14px;right:14px;width:34px;height:34px;border:none;background:#eaebf0;border-radius:50%;cursor:pointer;display:grid;place-items:center;color:#444a51">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+      <!-- Avatar + name + email -->
+      <div style="display:flex;align-items:center;gap:14px">
+        <div id="ecm-avatar" style="width:48px;height:48px;border-radius:50%;display:grid;place-items:center;font-family:var(--font-text);font-size:15px;font-weight:700;color:#fff;flex:none"></div>
+        <div>
+          <div id="ecm-name" style="font-family:var(--font-text);font-size:16px;font-weight:700;color:#252525;letter-spacing:-0.02em"></div>
+          <div id="ecm-email" style="font-family:var(--font-text);font-size:12px;color:#68727d;margin-top:1px"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Body -->
+    <div style="padding:22px 28px 6px">
+      <!-- Role (display only) -->
+      <div style="margin-bottom:18px">
+        <div style="font-family:var(--font-text);font-size:11px;font-weight:700;color:#68727d;text-transform:uppercase;letter-spacing:.05em;margin-bottom:7px">Job role</div>
+        <div id="ecm-role" style="font-family:var(--font-text);font-size:13px;color:#444a51"></div>
+      </div>
+      <!-- Access level -->
+      <div id="ecm-access-block" style="margin-bottom:20px">
+        <div style="font-family:var(--font-text);font-size:11px;font-weight:700;color:#68727d;text-transform:uppercase;letter-spacing:.05em;margin-bottom:7px">Access level</div>
+        <select id="ecm-access-select"
+          style="width:100%;height:42px;padding:0 14px;border:1.5px solid #eaebf0;border-radius:8px;font-family:var(--font-text);font-size:13px;font-weight:600;color:#252525;background:#fff;cursor:pointer;outline:none;appearance:none;background-image:url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M6 9l6 6 6-6' stroke='%23687182' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E\");background-repeat:no-repeat;background-position:right 14px center"
+          onfocus="this.style.borderColor='#066653'" onblur="this.style.borderColor='#eaebf0'">
+          <option value="Editor">Editor — can edit project data</option>
+          <option value="Viewer">Viewer — read-only access</option>
+          <option value="Collector">Collector — add monitoring data</option>
+          <option value="Verifier">Verifier — review &amp; sign off</option>
+        </select>
+        <div style="font-family:var(--font-text);font-size:11px;color:#68727d;margin-top:7px;line-height:1.5" id="ecm-role-hint"></div>
+      </div>
+    </div>
+
+    <!-- Remove section -->
+    <div id="ecm-remove-block" style="margin:0 28px 22px;padding:14px 16px;border:1px solid rgb(253,226,224);border-radius:10px;background:rgb(255,249,249);display:flex;align-items:center;justify-content:space-between;gap:12px">
+      <div>
+        <div style="font-family:var(--font-text);font-size:12px;font-weight:700;color:rgb(172,26,19);margin-bottom:2px">Remove from project</div>
+        <div style="font-family:var(--font-text);font-size:11px;color:rgb(172,26,19);opacity:.75">They will lose all access immediately.</div>
+      </div>
+      <button id="ecm-remove-btn" onclick="deleteCollabFromModal()" class="btn btn-sm" style="background:rgb(172,26,19);color:#fff;border:none;flex:none">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M5 7h14M9 7V5h6v2M6 7l1 13h10l1-13" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Remove
+      </button>
+    </div>
+
+    <!-- Footer -->
+    <div style="padding:14px 28px;border-top:1px solid #eaebf0;background:#fafbfc;display:flex;justify-content:flex-end;gap:10px">
+      <button onclick="closeEditCollabModal()" class="btn btn-secondary">Cancel</button>
+      <button id="ecm-save-btn" onclick="saveCollabEdit()" class="btn btn-primary">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Save changes
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+const ROLE_HINTS = {
+  Editor:    'Can edit all project fields, documents, and monitoring data.',
+  Viewer:    'Read-only. Can view all data but cannot make changes.',
+  Collector: 'Can only log new monitoring entries.',
+  Verifier:  'Can review documents and countersign monitoring reports.',
+};
+
+let editCollabIndex = -1;
+
+function openEditCollabModal(i) {
+  editCollabIndex = i;
+  const c = collabs[i];
+  const isOwner = c.access === 'Owner';
+
+  // Populate header
+  document.getElementById('ecm-avatar').style.background = c.color;
+  document.getElementById('ecm-avatar').textContent = c.initials;
+  document.getElementById('ecm-name').textContent = c.name;
+  document.getElementById('ecm-email').textContent = c.email;
+  document.getElementById('ecm-role').textContent = c.role;
+
+  // Access select
+  const sel = document.getElementById('ecm-access-select');
+  const accessBlock = document.getElementById('ecm-access-block');
+  if (isOwner) {
+    accessBlock.innerHTML = `
+      <div style="font-family:var(--font-text);font-size:11px;font-weight:700;color:#68727d;text-transform:uppercase;letter-spacing:.05em;margin-bottom:7px">Access level</div>
+      <div style="display:inline-flex;align-items:center;gap:7px;font-family:var(--font-text);font-size:12px;font-weight:700;padding:8px 14px;border-radius:8px;background:#e9f8f1;color:#044c3e;border:1px solid rgb(176,222,193)">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Project Owner — cannot be changed
+      </div>`;
+  } else {
+    // Re-render full access block in case it was replaced for a previous Owner
+    accessBlock.innerHTML = `
+      <div style="font-family:var(--font-text);font-size:11px;font-weight:700;color:#68727d;text-transform:uppercase;letter-spacing:.05em;margin-bottom:7px">Access level</div>
+      <select id="ecm-access-select"
+        style="width:100%;height:42px;padding:0 14px;border:1.5px solid #eaebf0;border-radius:8px;font-family:var(--font-text);font-size:13px;font-weight:600;color:#252525;background:#fff;cursor:pointer;outline:none;appearance:none;background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2214%22 height=%2214%22 viewBox=%220 0 24 24%22 fill=%22none%22%3E%3Cpath d=%22M6 9l6 6 6-6%22 stroke=%22%23687182%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22/%3E%3C/svg%3E');background-repeat:no-repeat;background-position:right 14px center"
+        onfocus="this.style.borderColor='#066653'" onblur="this.style.borderColor='#eaebf0'"
+        onchange="document.getElementById('ecm-role-hint').textContent=ROLE_HINTS[this.value]||''">
+        <option value="Editor">Editor — can edit project data</option>
+        <option value="Viewer">Viewer — read-only access</option>
+        <option value="Collector">Collector — add monitoring data</option>
+        <option value="Verifier">Verifier — review &amp; sign off</option>
+      </select>
+      <div style="font-family:var(--font-text);font-size:11px;color:#68727d;margin-top:7px;line-height:1.5" id="ecm-role-hint"></div>`;
+    const newSel = document.getElementById('ecm-access-select');
+    newSel.value = c.access;
+    document.getElementById('ecm-role-hint').textContent = ROLE_HINTS[c.access] || '';
+  }
+
+  // Remove block visibility
+  document.getElementById('ecm-remove-block').style.display = isOwner ? 'none' : 'flex';
+  document.getElementById('ecm-save-btn').style.display    = isOwner ? 'none' : 'inline-flex';
+
+  document.getElementById('editCollabOverlay').style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeEditCollabModal() {
+  document.getElementById('editCollabOverlay').style.display = 'none';
+  document.body.style.overflow = '';
+  editCollabIndex = -1;
+}
+
+function saveCollabEdit() {
+  if (editCollabIndex < 0) return;
+  const sel = document.getElementById('ecm-access-select');
+  if (!sel) return;
+  collabs[editCollabIndex].access = sel.value;
+  renderCollabList();
+  closeEditCollabModal();
+}
+
+function deleteCollabFromModal() {
+  if (editCollabIndex < 0) return;
+  collabs.splice(editCollabIndex, 1);
+  renderCollabList();
+  closeEditCollabModal();
+}
+
+document.getElementById('editCollabOverlay').addEventListener('click', e => {
+  if (e.target === document.getElementById('editCollabOverlay')) closeEditCollabModal();
+});
+</script>
+
+<!-- ═══ EDIT PROJECT MODAL ═══ -->
+<div id="editOverlay" style="display:none;position:fixed;inset:0;background:rgba(4,38,32,0.45);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);z-index:800;align-items:center;justify-content:center;padding:20px">
+  <div style="background:var(--bg-base-main);border-radius:16px;width:100%;max-width:520px;box-shadow:0 32px 80px rgba(0,0,0,0.22);position:relative">
+    <div style="padding:26px 32px 20px;border-bottom:1px solid var(--stroke-base)">
+      <button onclick="closeEditModal()" style="position:absolute;top:14px;right:14px;width:34px;height:34px;border:none;background:var(--bg-base-third);border-radius:50%;cursor:pointer;display:grid;place-items:center;color:var(--text-base-second)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+      <div style="font-family:var(--font-text);font-size:17px;font-weight:700;color:var(--text-base-main);letter-spacing:-0.02em;margin-bottom:3px">Edit project</div>
+      <div style="font-family:var(--font-text);font-size:12px;color:var(--text-base-second)">Update the project name and description.</div>
+    </div>
+    <div style="padding:24px 32px;display:flex;flex-direction:column;gap:18px">
+      <div>
+        <label style="display:block;font-family:var(--font-text);font-size:12px;font-weight:600;color:var(--text-base-main);margin-bottom:7px">Project name</label>
+        <input id="editNameInput" type="text" style="width:100%;height:42px;padding:0 14px;border:1.5px solid var(--stroke-base);border-radius:8px;font-family:var(--font-text);font-size:14px;font-weight:600;color:var(--text-base-main);background:var(--bg-base-main);outline:none;box-sizing:border-box;transition:border-color .15s"
+          onfocus="this.style.borderColor='var(--stroke-primary)'" onblur="this.style.borderColor='var(--stroke-base)'" />
+      </div>
+      <div>
+        <label style="display:block;font-family:var(--font-text);font-size:12px;font-weight:600;color:var(--text-base-main);margin-bottom:7px">Description</label>
+        <textarea id="editDescInput" rows="4" style="width:100%;padding:10px 14px;border:1.5px solid var(--stroke-base);border-radius:8px;font-family:var(--font-text);font-size:13px;color:var(--text-base-main);background:var(--bg-base-main);outline:none;resize:vertical;line-height:1.6;box-sizing:border-box;transition:border-color .15s"
+          onfocus="this.style.borderColor='var(--stroke-primary)'" onblur="this.style.borderColor='var(--stroke-base)'"></textarea>
+      </div>
+    </div>
+    <div style="padding:16px 32px;border-top:1px solid var(--stroke-base);background:var(--bg-base-second);border-radius:0 0 16px 16px;display:flex;justify-content:flex-end;gap:10px">
+      <button onclick="closeEditModal()" class="btn btn-secondary">Cancel</button>
+      <button onclick="saveEditModal()" class="btn btn-primary">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Save changes
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ DELETE CONFIRMATION MODAL ═══ -->
+<div id="deleteOverlay" style="display:none;position:fixed;inset:0;background:rgba(4,38,32,0.50);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);z-index:800;align-items:center;justify-content:center;padding:20px">
+  <div style="background:var(--bg-base-main);border-radius:16px;width:100%;max-width:440px;box-shadow:0 32px 80px rgba(0,0,0,0.25);position:relative;overflow:hidden">
+    <div style="padding:28px 32px 22px">
+      <div style="width:48px;height:48px;border-radius:12px;background:var(--bg-danger-second);display:grid;place-items:center;margin-bottom:18px">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M5 7h14M9 7V5h6v2M6 7l1 13h10l1-13" stroke="var(--text-danger)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div style="font-family:var(--font-text);font-size:17px;font-weight:700;color:var(--text-base-main);margin-bottom:8px">Delete project?</div>
+      <div style="font-family:var(--font-text);font-size:13px;color:var(--text-base-second);line-height:1.65;margin-bottom:6px">You are about to permanently delete <strong id="deleteProjectName" style="color:var(--text-base-main)"></strong>. This will remove all associated data, documents, and monitoring records.</div>
+      <div style="display:inline-flex;align-items:center;gap:7px;font-family:var(--font-text);font-size:12px;font-weight:600;color:var(--text-danger);background:var(--bg-danger-second);border:1px solid #fea19b;border-radius:6px;padding:8px 12px;margin-top:10px">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 8v4M12 16h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        This action cannot be undone.
+      </div>
+    </div>
+    <div style="padding:16px 32px;border-top:1px solid var(--stroke-base);background:var(--bg-base-second);display:flex;justify-content:flex-end;gap:10px">
+      <button onclick="closeDeleteModal()" class="btn btn-secondary">Cancel</button>
+      <button onclick="confirmDelete()" class="btn" style="background:var(--bg-danger-main);color:#fff;border:none">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M5 7h14M9 7V5h6v2M6 7l1 13h10l1-13" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Delete project
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ── Edit modal ── */
+function openEditModal() {
+  document.getElementById('editNameInput').value = document.getElementById('nameView').textContent.trim();
+  document.getElementById('editDescInput').value  = document.getElementById('descView').textContent.trim();
+  document.getElementById('editOverlay').style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+  setTimeout(() => document.getElementById('editNameInput').focus(), 60);
+}
+function closeEditModal() {
+  document.getElementById('editOverlay').style.display = 'none';
+  document.body.style.overflow = '';
+}
+function saveEditModal() {
+  const newName = document.getElementById('editNameInput').value.trim();
+  const newDesc = document.getElementById('editDescInput').value.trim();
+  if (!newName) { document.getElementById('editNameInput').focus(); return; }
+  document.getElementById('nameView').textContent = newName;
+  document.getElementById('descView').textContent = newDesc;
+  document.getElementById('nameInput').value = newName;
+  document.getElementById('descInput').value = newDesc;
+  const h1 = document.getElementById('projTitle');
+  if (h1) h1.textContent = newName;
+  const crumb = document.getElementById('bc-current');
+  if (crumb) crumb.textContent = newName;
+  document.getElementById('deleteProjectName').textContent = '"' + newName + '"';
+  closeEditModal();
+}
+document.getElementById('editOverlay').addEventListener('click', e => { if (e.target === document.getElementById('editOverlay')) closeEditModal(); });
+
+/* ── Delete modal ── */
+function openDeleteModal() {
+  const name = (document.getElementById('projTitle')?.textContent || '').trim();
+  document.getElementById('deleteProjectName').textContent = '"' + name + '"';
+  document.getElementById('deleteOverlay').style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+function closeDeleteModal() {
+  document.getElementById('deleteOverlay').style.display = 'none';
+  document.body.style.overflow = '';
+}
+function confirmDelete() {
+  const name = (document.getElementById('projTitle')?.textContent || '').trim();
+  localStorage.setItem('nbs_deleted_project', name);
+  window.location.href = 'dashboard.html';
+}
+document.getElementById('deleteOverlay').addEventListener('click', e => { if (e.target === document.getElementById('deleteOverlay')) closeDeleteModal(); });
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { closeEditModal(); closeDeleteModal(); }
+});
+</script>
+
+<!-- ═══ TWEAKS PANEL ═══ -->
+<!-- density rules moved to f041.css (Q-09) -->
+
+<div id="tweaks-root"></div>
+
+<script src="js/tweaks-vanilla.js"></script>
+<script>
+const ACCENT_PRESETS = {
+  '#066653': { main:'#066653', text:'#066653', stroke:'#066653', second:'#e9f8f1', border:'#beead5', light:'#6ab2a4', ring:'rgba(7,127,104,0.15)' },
+  '#1a4b7a': { main:'#1a4b7a', text:'#1a4b7a', stroke:'#1a4b7a', second:'#e8f0f8', border:'#a8c8e8', light:'#5a8ab4', ring:'rgba(26,75,122,0.15)' },
+  '#7d5a3c': { main:'#7d5a3c', text:'#7d5a3c', stroke:'#7d5a3c', second:'#f8f1ea', border:'#d4b89a', light:'#b08060', ring:'rgba(125,90,60,0.15)' },
+  '#3d5a6e': { main:'#3d5a6e', text:'#3d5a6e', stroke:'#3d5a6e', second:'#eaf0f5', border:'#a8c4d4', light:'#6a8aa0', ring:'rgba(61,90,110,0.15)' },
+};
+
+function applyAccent(hex) {
+  const p = ACCENT_PRESETS[hex];
+  if (!p) return;
+  const r = document.documentElement.style;
+  r.setProperty('--bg-primary-main',   p.main);
+  r.setProperty('--text-primary',      p.text);
+  r.setProperty('--stroke-primary',    p.stroke);
+  r.setProperty('--bg-success-second', p.second);
+  r.setProperty('--primary-100',       p.border);
+  r.setProperty('--primary-300',       p.light);
+  r.setProperty('--ring-primary',      `0px 0px 0px 3px ${p.ring}`);
+  r.setProperty('--primary-200',       p.border);
+}
+
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "dark": false,
+  "density": "compact",
+  "accent": "#066653"
+}/*EDITMODE-END*/;
+
+mountTweaks({
+  title: 'Tweaks',
+  defaults: TWEAK_DEFAULTS,
+  controls: [
+    { type: 'section', label: 'Appearance' },
+    { type: 'toggle',  key: 'dark',    label: 'Dark mode' },
+    { type: 'color',   key: 'accent',  label: 'Accent',
+      options: ['#066653','#1a4b7a','#7d5a3c','#3d5a6e'] },
+    { type: 'section', label: 'Layout' },
+    { type: 'radio',   key: 'density', label: 'Density',
+      options: ['compact','default','spacious'] },
+  ],
+  apply: (t) => {
+    document.documentElement.setAttribute('data-theme', t.dark ? 'dark' : 'light');
+    document.documentElement.setAttribute('data-density', t.density);
+    applyAccent(t.accent);
+  },
+});
+</script>
+<script src="js/nav-mobile.js"></script>
+</body>
+</html>

@@ -1,0 +1,1703 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NbS Tool — F05.0 Create New Project From Scratch</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Barlow+Semi+Condensed:wght@600;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/tokens.css" />
+  <link rel="stylesheet" href="css/f03.css" />
+    <link rel="stylesheet" href="css/f05.css" />
+  <link rel="stylesheet" href="css/f05-0.css" />
+  <link rel="stylesheet" href="css/nav.css" />
+  <style>
+    #exportToastHost {
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+      z-index: 4000;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      pointer-events: none;
+    }
+    .export-toast {
+      pointer-events: auto;
+      position: relative;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      width: 340px;
+      padding: 14px 14px 16px;
+      background: #fff;
+      border: 1px solid rgba(7,127,104,0.18);
+      border-radius: 12px;
+      box-shadow: 0 12px 32px -8px rgba(15,40,30,0.28), 0 2px 8px rgba(15,40,30,0.08);
+      font-family: 'Inter', sans-serif;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(14px) scale(0.98);
+      transition: opacity .28s cubic-bezier(.2,.7,.3,1), transform .28s cubic-bezier(.2,.7,.3,1);
+    }
+    .export-toast.in { opacity: 1; transform: translateY(0) scale(1); }
+    .export-toast.out { opacity: 0; transform: translateY(8px) scale(0.98); }
+    .export-toast-ic {
+      flex-shrink: 0;
+      width: 30px; height: 30px;
+      display: grid; place-items: center;
+      background: rgba(7,127,104,0.10);
+      border-radius: 8px;
+    }
+    .export-toast-body { flex: 1; min-width: 0; }
+    .export-toast-title {
+      font-size: 14px; font-weight: 700; color: #14241d; line-height: 1.3;
+    }
+    .export-toast-file {
+      font-size: 12px; color: #6a7a72; margin-top: 2px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .export-toast-x {
+      flex-shrink: 0;
+      background: none; border: none; cursor: pointer;
+      color: #9aa8a1; padding: 2px; border-radius: 6px;
+      display: grid; place-items: center;
+      transition: background .15s, color .15s;
+    }
+    .export-toast-x:hover { background: rgba(15,40,30,0.06); color: #4a5a52; }
+    .export-toast-bar {
+      position: absolute;
+      left: 0; bottom: 0; height: 3px;
+      width: 100%;
+      background: #066653;
+      transform-origin: left;
+      animation: exportToastBar 4s linear forwards;
+    }
+    @keyframes exportToastBar { from { transform: scaleX(1); } to { transform: scaleX(0); } }
+    @media (prefers-reduced-motion: reduce) {
+      .export-toast { transition: opacity .2s; transform: none; }
+      .export-toast-bar { animation: none; }
+    }
+
+    /* Pathway tags on Step 3 activities + matrix activity cell */
+    .act-tag.pw-protect, .pw-mini.pw-protect { background: rgb(220,252,231); color: rgb(22,101,52); }
+    .act-tag.pw-manage,  .pw-mini.pw-manage  { background: rgb(254,243,199); color: rgb(146,64,14); }
+    .act-tag.pw-restore, .pw-mini.pw-restore { background: rgb(224,247,250); color: rgb(14,116,144); }
+    .pw-mini {
+      display: inline-block; margin-top: 7px;
+      font-family: var(--font-text); font-size: 9px; font-weight: 700;
+      letter-spacing: .04em; border-radius: 20px; padding: 2px 8px;
+    }
+
+    /* Benefit column (Step 4 matrix) */
+    .ben-cell { display: flex; flex-direction: column; gap: 5px; max-width: 220px; }
+    .ben-tag {
+      align-self: flex-start;
+      font-family: var(--font-text); font-size: 9px; font-weight: 700;
+      letter-spacing: .04em; text-transform: uppercase;
+      border-radius: 20px; padding: 2px 8px;
+    }
+    .ben-tag.nature  { background: rgb(220,252,231); color: rgb(22,101,52); }
+    .ben-tag.people  { background: rgb(239,246,255); color: #0a436b; }
+    .ben-tag.climate { background: rgb(255,237,213); color: rgb(194,65,12); }
+    .ben-tag.custom  { background: #f1f5f9; color: #475569; }
+    .ben-name { font-size: 11px; color: rgb(74,84,104); line-height: 1.4; }
+  </style>
+</head>
+<body data-screen-label="F05.0 — Create New Project From Scratch">
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<nav class="sitenav">
+  <a class="sitenav-logo" href="index.html">
+    <img src="assets/scene-logo.png" alt="SCeNe Coalition" width="360" height="133" style="height:44px;width:auto" />
+  </a>
+  <div class="sitenav-links">
+    <a href="index.html" class="sitenav-link">Home</a>
+    <a href="interactive-map.html" class="sitenav-link">Interactive Map</a>
+    <a href="dashboard.html" class="sitenav-link active">My Project</a>
+  </div>
+  <div class="sitenav-actions">
+    <div class="sitenav-profile-wrap" id="profileWrap">
+      <button class="sitenav-profile" id="profileBtn"><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="white" stroke-width="2"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="white" stroke-width="2" stroke-linecap="round"/></svg> Profile <svg class="chev" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="sitenav-dropdown">
+        <div class="sitenav-user-info"><div class="sitenav-user-name">Adi Mantri</div><div class="sitenav-user-email">adi@lestari.org</div></div>
+        <a href="dashboard.html">My Projects</a>
+        <a href="document-generator.html">Document Generator</a>
+        <a href="account-settings.html">Account settings</a>
+        <button class="logout" onclick="window.location.href='login.html'">Log out</button>
+      </div>
+    </div>
+    <button class="sitenav-lang">🇺🇸 <svg class="chev" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  </div>
+</nav>
+<!-- profile dropdown handled by nav-mobile.js (Q-03) -->
+
+<nav class="crumbbar" style="display:flex;align-items:center;gap:8px;font-family:var(--font-text);font-size:13px;color:var(--text-base-second);padding:12px 40px;border-bottom:1px solid var(--stroke-base);background:var(--bg-base-main)">
+  <a href="dashboard.html" style="color:var(--text-base-second);text-decoration:none;transition:color .15s" onmouseover="this.style.color='var(--text-primary)'" onmouseout="this.style.color='var(--text-base-second)'">My Project Dashboard</a>
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="opacity:.45;flex:none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  <span style="color:var(--text-base-main);font-weight:600">Create New Project — From Scratch</span>
+</nav>
+
+<div class="desktop-notice" role="note">
+  <svg viewBox="0 0 24 24" fill="none"><rect x="2" y="4" width="20" height="13" rx="2" stroke="currentColor" stroke-width="2"/><path d="M8 21h8M12 17v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+  <div class="dn-body"><strong>Best viewed on desktop.</strong> The NbS Tool is built for larger screens. This page still works on mobile, but for the full experience — wide data tables, side-by-side panels and editing — open it in a desktop browser.</div>
+  <button class="dn-x" type="button" aria-label="Dismiss"><svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+</div>
+<div class="f05-page" id="main" role="main" tabindex="-1">
+  <div class="f05-main">
+
+    <!-- PAGE HEADER -->
+    <div class="f05-hdr">
+      <div style="width: 920px">
+        <div class="f05-hdr-title">Import Existing Project to NbS Tool</div>
+        <p class="f05-hdr-sub" style="width: 1094px">Track and document an existing project in the NbS Tool — upload your SHP boundary, define interventions, and develop monitoring metrics. After developing the monitoring matrix, your project still gets an analysis on the My Projects dashboard.</p>
+      </div>
+      <div class="f05-status-pill">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="12" y1="9" x2="12" y2="13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="17" x2="12.01" y2="17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <div>Screening result<small>Requires field verification</small></div>
+      </div>
+    </div>
+
+    <!-- STEPPER -->
+    <div class="f05-stepper f05-stepper-5" id="stepper">
+      <div class="f05-step f05-active" data-step="1">
+        <div class="f05-step-num" id="snum1">1</div>
+        <div>
+          <div class="f05-step-label">User Action</div>
+          <div class="f05-step-title">Upload site boundary</div>
+          <div class="f05-step-desc">Drop your SHP / KML to generate site data.</div>
+        </div>
+      </div>
+      <div class="f05-step f05-disabled" data-step="2">
+        <div class="f05-step-num" id="snum2">2</div>
+        <div>
+          <div class="f05-step-label">User Action</div>
+          <div class="f05-step-title">Select NbS pathway</div>
+          <div class="f05-step-desc">Protect, Manage or Restore per ecosystem.</div>
+        </div>
+      </div>
+      <div class="f05-step f05-disabled" data-step="3">
+        <div class="f05-step-num" id="snum3">3</div>
+        <div>
+          <div class="f05-step-label">User Action</div>
+          <div class="f05-step-title">Select NbS activities</div>
+          <div class="f05-step-desc">Choose activities by ecosystem.</div>
+        </div>
+      </div>
+      <div class="f05-step f05-disabled" data-step="4">
+        <div class="f05-step-num" id="snum4">4</div>
+        <div>
+          <div class="f05-step-label">System generates</div>
+          <div class="f05-step-title">Review monitoring matrix</div>
+          <div class="f05-step-desc">Indicators, methods, and frequency.</div>
+        </div>
+      </div>
+      <div class="f05-step f05-disabled" data-step="5">
+        <div class="f05-step-num" id="snum5">5</div>
+        <div>
+          <div class="f05-step-label">User Action</div>
+          <div class="f05-step-title">Customize and finalize</div>
+          <div class="f05-step-desc">Edit, assign, add notes, export.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WORKSPACE -->
+    <div class="workspace">
+
+      <!-- ══ STEP 1 — UPLOAD SITE BOUNDARY ══ -->
+      <div class="step-content active" data-content="1">
+        <div class="ws-hdr">
+          <div>
+            <div class="ws-title">Step 1 — Upload your site boundary</div>
+            <div class="ws-hint">Upload the boundary of your project area. NbS Tool reads the geometry to generate Site Characterisation data — ecosystems, area, and condition — used throughout this flow.</div>
+          </div>
+        </div>
+        <div class="ws-body">
+          <!-- Drop zone -->
+          <div class="upload-hero" id="uploadHero">
+            <input type="file" id="shpInput" accept=".zip,.shp,.shx,.dbf,.prj,.kml,.kmz" />
+            <div class="upload-hero-ic">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <h3>Drop your SHP file here to generate the Site Characterisation data</h3>
+            <p>Drag &amp; drop your file, or browse to upload. We'll detect ecosystems and condition automatically.</p>
+            <div class="upload-formats">
+              <span class="fmt-chip">.zip (.shp, .shx, .dbf, .prj)</span>
+              <span class="fmt-chip">.kml</span>
+              <span class="fmt-chip">.kmz</span>
+            </div>
+            <div class="upload-or">
+              <button class="upload-browse" type="button" onclick="document.getElementById('shpInput').click()">Browse files</button>
+            </div>
+          </div>
+          <!-- Demo state previewer -->
+          <div class="upload-demo" id="uploadDemoBar">
+            <span class="upload-demo-lbl">Preview states</span>
+            <button type="button" class="upload-demo-btn" onclick="handleShpUpload(null)">Valid upload</button>
+            <button type="button" class="upload-demo-btn" onclick="showUploadError('format','project-boundary.pdf')">Wrong file format</button>
+            <button type="button" class="upload-demo-btn" onclick="showUploadError('area')">Area &gt; 500,000 ha</button>
+            <button type="button" class="upload-demo-btn" onclick="showUploadError('region')">Outside South East Asia</button>
+          </div>
+          <!-- Processing -->
+          <div class="upload-processing" id="uploadProcessing">
+            <div class="proc-card">
+              <div class="proc-spinner"></div>
+              <div style="flex:1">
+                <div style="font-family:var(--font-text);font-size:14px;font-weight:700;color:var(--text-base-main)">Generating Site Characterisation…</div>
+                <div style="font-family:var(--font-override);font-size:12px;color:var(--text-base-second);margin-top:2px" id="procFileName">kubu-raya-boundary.zip</div>
+                <div class="proc-bar-track"><div class="proc-bar-fill" id="procFill"></div></div>
+                <div style="font-family:var(--font-override);font-size:11px;color:var(--text-base-second)" id="procStatus">Reading geometry…</div>
+              </div>
+            </div>
+          </div>
+          <!-- Generated result -->
+          <div class="upload-result" id="uploadResult">
+            <div class="site-card">
+              <div class="site-card-map">
+                <img src="assets/asset/IMAGE_PROJECT MAP SNIPPET.png" alt="Project area map" />
+                <div class="map-flag">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M12 21s-7-5.5-7-11a7 7 0 0114 0c0 5.5-7 11-7 11z" stroke="#fff" stroke-width="2" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.5" stroke="#fff" stroke-width="2"/></svg>
+                  Kubu Raya, West Kalimantan
+                </div>
+              </div>
+              <div class="site-card-body">
+                <h3>Site Characterisation generated</h3>
+                <div class="site-card-file">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="var(--text-primary)" stroke-width="2" stroke-linejoin="round"/><path d="M14 2v6h6" stroke="var(--text-primary)" stroke-width="2" stroke-linejoin="round"/></svg>
+                  <span id="resultFileName">kubu-raya-boundary.zip</span> · processed just now
+                </div>
+                <div class="site-stats">
+                  <div class="site-stat"><div class="ss-val">34,907.6</div><div class="ss-lbl">Total area (ha)</div></div>
+                  <div class="site-stat"><div class="ss-val">3</div><div class="ss-lbl">Ecosystems detected</div></div>
+                  <div class="site-stat"><div class="ss-val">14,854</div><div class="ss-lbl">Disturbed area (ha)</div></div>
+                </div>
+                <div class="site-eco-row">
+                  <span class="site-eco-chip"><img src="assets/pathway/eco-forest.svg" alt="" />Forest · 40%</span>
+                  <span class="site-eco-chip"><img src="assets/pathway/eco-mangrove.svg" alt="" />Mangrove · 28%</span>
+                  <span class="site-eco-chip"><img src="assets/pathway/eco-peatland.svg" alt="" />Peatland · 32%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Error / requirement-not-met state -->
+          <div class="upload-error" id="uploadError">
+            <div class="up-err-card" id="upErrCard">
+              <div class="up-err-ic" id="upErrIc"></div>
+              <div class="up-err-body">
+                <div class="up-err-tag" id="upErrTag"></div>
+                <h3 id="upErrTitle"></h3>
+                <p id="upErrMsg"></p>
+                <div class="up-err-detail" id="upErrDetail"></div>
+                <div class="up-err-acts">
+                  <button class="ws-btn ws-btn-primary" type="button" onclick="resetUpload()">↻ Upload a different file</button>
+                  <a class="ws-btn ws-btn-back" href="design-system.html#requirements" style="text-decoration:none;display:inline-flex;align-items:center">View upload requirements</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ws-footer">
+          <div class="ws-footer-meta">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#066653" stroke-width="2"/><path d="M12 8v4M12 16h.01" stroke="#066653" stroke-width="2" stroke-linecap="round"/></svg>
+            Step 1 of 5 · Upload site boundary
+          </div>
+          <div style="display:flex;gap:8px">
+            <button class="ws-btn ws-btn-back" onclick="window.location.href='dashboard.html'">✕ Cancel</button>
+            <button class="ws-btn ws-btn-primary" id="step1Next" disabled>Continue to pathways →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ STEP 2 — NbS PATHWAY SELECTION ══ -->
+      <div class="step-content" data-content="2">
+        <div class="ws-hdr">
+          <div>
+            <div class="ws-title">Step 2 — Select your NbS pathway</div>
+            <div class="ws-hint">Review the screening result for each ecosystem, then choose an intervention pathway — Protect, Manage, or Restore. The tool highlights the best-fit pathway based on condition and threat.</div>
+          </div>
+        </div>
+        <div class="ws-body">
+          <!-- Screening result table -->
+          <div class="screening">
+            <div class="screening-head">
+              <div>Ecosystem</div>
+              <div>Condition</div>
+              <div>Main threat</div>
+              <div>Recommended intervention</div>
+            </div>
+            <div id="screeningRows"></div>
+          </div>
+
+          <!-- Build your intervention -->
+          <div class="build-hd">
+            <div>
+              <h2>Build your intervention</h2>
+              <p>Select the ecosystem, then toggle the pathway you want to include.</p>
+            </div>
+            <div class="pw-tabs" id="pwTabs">
+              <button class="pw-tab active" data-eco="forest">Forest</button>
+              <button class="pw-tab" data-eco="mangrove">Mangrove</button>
+              <button class="pw-tab" data-eco="peatland">Peatland</button>
+            </div>
+          </div>
+          <div id="pwPanel"></div>
+
+          <!-- Disclaimer -->
+          <div class="pw-disclaimer">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><line x1="12" y1="9" x2="12" y2="13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="17" x2="12.01" y2="17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            <p><strong>Disclaimer: Field verification required.</strong> All information in the NbS Tool is intended to support your pre-feasibility study. Always verify on the ground before use.</p>
+          </div>
+        </div>
+        <div class="ws-footer">
+          <div class="ws-footer-meta">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#066653" stroke-width="2"/><path d="M12 8v4M12 16h.01" stroke="#066653" stroke-width="2" stroke-linecap="round"/></svg>
+            Step 2 of 5 · <span id="pwSummaryMeta">0 pathways selected</span>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button class="ws-btn ws-btn-back" id="step2Back">← Back</button>
+            <button class="ws-btn ws-btn-primary" id="step2Next" disabled>Continue to activities →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ STEP 3 ══ -->
+      <div class="step-content" data-content="3">
+        <div class="ws-hdr">
+          <div>
+            <div class="ws-title">Step 3 — Select planned NbS activities</div>
+            <div class="ws-hint">Activities are shown for the NbS pathways you chose in Step 2. Pick the ones you'll implement — recommended indicators are generated automatically in the next step.</div>
+          </div>
+          <div class="ws-filters" id="step3Filters">
+            <div class="filter-group">
+              <span class="filter-label">Ecosystem</span>
+              <div class="fpill-row">
+                <button class="fpill eco-forest active" type="button" data-fkind="eco" data-fval="forest">Forest</button>
+                <button class="fpill eco-mangrove active" type="button" data-fkind="eco" data-fval="mangrove">Mangrove</button>
+                <button class="fpill eco-peatland active" type="button" data-fkind="eco" data-fval="peatland">Peatland</button>
+              </div>
+            </div>
+            <div class="filter-divider"></div>
+            <div class="filter-group">
+              <span class="filter-label">Intervention</span>
+              <div class="fpill-row">
+                <button class="fpill pw-protect active" type="button" data-fkind="intv" data-fval="PROTECT">Protect</button>
+                <button class="fpill pw-manage active" type="button" data-fkind="intv" data-fval="MANAGE">Manage</button>
+                <button class="fpill pw-restore active" type="button" data-fkind="intv" data-fval="RESTORE">Restore</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ws-body">
+          <div class="act-grid" id="activitySections"></div>
+          <div class="sel-summary">
+            <div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap">
+              <div>
+                <div class="sel-label">Activities selected</div>
+                <div class="sel-count"><span id="selectedCount">0</span> / <span id="totalCount">0</span></div>
+              </div>
+              <div class="sel-tags" id="selectionTags"></div>
+            </div>
+            <div style="font-family:var(--font-text);font-size:11px;color:#68727d;max-width:260px;text-align:right">
+              Select at least 1 activity to proceed to the next step.
+            </div>
+          </div>
+        </div>
+        <div class="ws-footer">
+          <div class="ws-footer-meta">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#066653" stroke-width="2"/><path d="M12 8v4M12 16h.01" stroke="#066653" stroke-width="2" stroke-linecap="round"/></svg>
+            Step 3 of 5 · Activity selection
+          </div>
+          <div style="display:flex;gap:8px">
+            <button class="ws-btn ws-btn-back" id="step3Back">← Back</button>
+            <button class="ws-btn ws-btn-primary" id="step3Next" disabled>Generate matrix →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ STEP 4 ══ -->
+      <div class="step-content" data-content="4">
+        <div class="ws-hdr">
+          <div>
+            <div class="ws-title">Step 4 — Review generated monitoring matrix</div>
+            <div class="ws-hint">Based on your selected activities, the system has generated recommended monitoring content including indicators, methods, and frequency.</div>
+          </div>
+        </div>
+        <div class="ws-body">
+          <!-- Selected NbS pathways recap -->
+          <div style="margin-bottom:20px">
+            <div style="font-family:var(--font-text);font-size:13px;font-weight:700;color:var(--text-base-main);margin-bottom:4px">Selected NbS pathways</div>
+            <div style="font-family:var(--font-text);font-size:12px;color:var(--text-base-second);margin-bottom:12px">The pathways you chose in Step 2 — carried through to the monitoring plan.</div>
+            <div id="pwReview4"></div>
+          </div>
+          <div class="matrix-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>NbS Activity</th>
+                  <th>Benefit</th>
+                  <th>Monitoring indicators</th>
+                  <th>Data source</th>
+                  <th>Monitoring frequency</th>
+                </tr>
+              </thead>
+              <tbody id="matrixRows"></tbody>
+            </table>
+          </div>
+          <div class="matrix-info">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><path d="M12 8v4M12 16h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            This is an automatically generated draft. Field verification, stakeholder consultation, and data quality review are required before formal reporting. You can customize all indicators in the next step.
+          </div>
+        </div>
+        <div class="ws-footer">
+          <div class="ws-footer-meta">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#066653" stroke-width="2"/><path d="M12 8v4M12 16h.01" stroke="#066653" stroke-width="2" stroke-linecap="round"/></svg>
+            Step 4 of 5 · <span id="step2Counts">0 ecosystems · 0 activities · 0 indicators</span>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button class="ws-btn ws-btn-back" id="step4Back">← Back</button>
+            <button class="ws-btn ws-btn-primary" id="step4Next">Continue to customize →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ STEP 5 ══ -->
+      <div class="step-content" data-content="5">
+        <div class="ws-hdr">
+          <div>
+            <div class="ws-title">Step 5 — Customize and finalize your plan</div>
+            <div class="ws-hint">Adjust indicators, methods, and frequency. Assign responsibilities and add local context, assumptions, and evidence. When ready, export your monitoring plan.</div>
+          </div>
+        </div>
+        <div class="ws-body">
+          <div class="step3-grid">
+            <div>
+              <!-- Pathway recap -->
+              <div style="margin-bottom:18px">
+                <div style="font-family:var(--font-text);font-size:13px;font-weight:700;color:var(--text-base-main);margin-bottom:10px">Your NbS pathways</div>
+                <div id="pwReview5"></div>
+              </div>
+              <div class="custom-options">
+                <div class="custom-item" onclick="openModal('m-methods')">
+                  <div class="custom-icon">
+                    <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/><path d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                  </div>
+                  <div><h4>Adjust data source and monitoring frequency</h4><p>Change monitoring method, schedule, and data source.</p></div>
+                  <span class="custom-status" id="opt2-status">Not started</span>
+                </div>
+                <div class="custom-item" onclick="openModal('m-parties')">
+                  <div class="custom-icon">
+                    <svg viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                  </div>
+                  <div><h4>Assign responsible parties</h4><p>Define who collects, verifies, and reports the data.</p></div>
+                  <span class="custom-status" id="opt3-status">Not started</span>
+                </div>
+                <div class="custom-item" onclick="openModal('m-notes')">
+                  <div class="custom-icon">
+                    <svg viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </div>
+                  <div><h4>Add notes and evidence</h4><p>Add local context, assumptions, and evidence needs.</p></div>
+                  <span class="custom-status" id="opt4-status">Not started</span>
+                </div>
+              </div>
+              <div class="detail-stack" id="accordions"></div>
+            </div>
+            <div class="sum-card">
+              <div class="sum-card-hd">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M9 11l3 3L22 4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Plan summary
+              </div>
+              <div class="sum-row"><span>Ecosystems</span><strong id="sumEco">0</strong></div>
+              <div class="sum-row"><span>NbS pathways</span><strong id="sumPathways">0</strong></div>
+              <div class="sum-row"><span>Activities selected</span><strong id="sumActivities">0</strong></div>
+              <div class="sum-row"><span>Indicators</span><strong id="sumIndicators">0</strong></div>
+              <div class="sum-row"><span>Monitoring methods</span><strong>6</strong></div>
+              <div class="sum-row"><span>Customizations done</span><strong id="sum-custom">0 / 3</strong></div>
+              <button class="btn-export" id="finalizeBtn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Generate &amp; export plan
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="ws-footer">
+          <div class="ws-footer-meta">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#066653" stroke-width="2"/><path d="M12 8v4M12 16h.01" stroke="#066653" stroke-width="2" stroke-linecap="round"/></svg>
+            Step 5 of 5 · Customization
+          </div>
+          <div style="display:flex;gap:8px">
+            <button class="ws-btn ws-btn-back" id="step5Back">← Back</button>
+            <button class="ws-btn ws-btn-ghost">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v14a2 2 0 01-2 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M17 21v-8H7v8M7 3v5h8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Save as draft
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ STEP 6 SUCCESS ══ -->
+      <div class="step-content" data-content="6">
+        <div class="ws-body">
+          <div class="success-state">
+            <div class="success-icon">
+              <svg width="42" height="42" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#066653" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="success-title">Project created &amp; monitoring plan generated</div>
+            <p class="success-desc">Your new project <strong>Kubu Raya Restoration</strong> has been created from your uploaded boundary, with NbS pathways and a monitoring plan saved. You can download it now or proceed to the MRV Dashboard.</p>
+            <div class="success-acts">
+              <button class="ws-btn ws-btn-back" onclick="showExportToast('pdf')">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Download Pre Feasibility Study Document
+              </button>
+              <button class="ws-btn ws-btn-primary" onclick="window.location.href='mrv.html'">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1" stroke="white" stroke-width="2"/><rect x="14" y="3" width="7" height="7" rx="1" stroke="white" stroke-width="2"/><rect x="3" y="14" width="7" height="7" rx="1" stroke="white" stroke-width="2"/><rect x="14" y="14" width="7" height="7" rx="1" stroke="white" stroke-width="2"/></svg>
+                Go to MRV Dashboard
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /workspace -->
+
+    <div class="footer-note">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><path d="M12 8v4M12 16h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      Monitoring plans are generated as guidance. Field verification, stakeholder consultation, and data quality review are required before formal reporting.
+    </div>
+
+  </div><!-- /f05-main -->
+</div><!-- /f05-page -->
+
+<!-- FOOTER -->
+<footer class="f03-footer">
+  <div class="f03-footer-inner">
+    <div>
+      <img src="assets/scene-logo.png" alt="SCeNe Coalition" style="height:40px;opacity:.9;margin-bottom:12px" />
+      <p class="f03-footer-desc">SCeNe Coalition works to improve data accessibility, showcase high-quality projects and direct funding, as well as expand access for local organizations, enterprises, and communities.</p>
+    </div>
+    <div style="display:flex;gap:80px">
+      <div class="f03-footer-col"><h5>NbS Tool</h5><a href="#">NbS Tool Home</a><a href="#">Interactive Map</a></div>
+      <div class="f03-footer-col"><h5>Coalition</h5><a href="#">About SCeNe Coalition</a><a href="#">NbS Portfolio</a><a href="#">NbS Incubator</a><a href="#">Contact Us</a></div>
+    </div>
+  </div>
+  <div class="f03-footer-copy">© Copyright 2026 SCeNe Coalition.</div>
+</footer>
+
+<script src="js/f05-shared.js"></script>
+<script>
+/* ── Data ── */
+/* Activity data, ecoIcons, EMPTY_IC, findAct & the activity-card builder
+   now live in js/f05-shared.js (single source of truth shared with F05). */
+
+let currentStep = 1;
+let maxReached = 1;
+const customDone = { opt2:false, opt3:false, opt4:false };
+
+
+/* ── Step 3 filter state — seeded from the pathways chosen in Step 2, then
+   user-adjustable via the Ecosystem / Intervention chips (mirrors F05 Step 1). ── */
+const step3Eco  = new Set();
+const step3Intv = new Set();
+const PW_TO_INTV = { protect:'PROTECT', manage:'MANAGE', restore:'RESTORE' };
+
+function seedStep3Filters() {
+  step3Eco.clear(); step3Intv.clear();
+  ECOS.forEach(eco => {
+    const sel = pathwaySel[eco] || {};
+    let any = false;
+    PATHS.forEach(p => { if (sel[p]) { step3Intv.add(PW_TO_INTV[p]); any = true; } });
+    if (any) step3Eco.add(eco);
+  });
+  // Fallbacks so the step is never empty if Step 2 was skipped.
+  if (step3Eco.size === 0) ECOS.forEach(e => step3Eco.add(e));
+  if (step3Intv.size === 0) ['PROTECT','MANAGE','RESTORE'].forEach(p => step3Intv.add(p));
+  document.querySelectorAll('#step3Filters .fpill').forEach(chip => {
+    const on = chip.dataset.fkind === 'eco' ? step3Eco.has(chip.dataset.fval) : step3Intv.has(chip.dataset.fval);
+    chip.classList.toggle('active', on);
+  });
+}
+
+/* ── Step 3 render — shared activity-card builder (see js/f05-shared.js) ── */
+function renderActivities() {
+  document.getElementById('activitySections').innerHTML = buildActivitySectionsHTML(step3Eco, step3Intv);
+  wireActivityCheckboxes(updateSelection);
+  updateSelection();
+}
+
+/* Step 3 filter chips (same behaviour as F05 Step 1). */
+document.querySelectorAll('#step3Filters .fpill').forEach(chip => {
+  chip.addEventListener('click', () => {
+    const set = chip.dataset.fkind === 'eco' ? step3Eco : step3Intv;
+    const val = chip.dataset.fval;
+    if (set.has(val)) {
+      if (set.size === 1) { chip.classList.remove('shake'); void chip.offsetWidth; chip.classList.add('shake'); return; }
+      set.delete(val); chip.classList.remove('active');
+    } else {
+      set.add(val); chip.classList.add('active');
+    }
+    renderActivities();
+  });
+});
+
+function getSelected() {
+  const ids = [...document.querySelectorAll('[data-activity]:checked')].map(cb => cb.dataset.activity);
+  return ecosystems.flatMap(e => e.activities.filter(a => ids.includes(a.id)).map(a => ({...a, eco:e})));
+}
+
+function updateSelection() {
+  const sel = getSelected();
+  document.getElementById('selectedCount').textContent = sel.length;
+  const total = document.querySelectorAll('[data-activity]').length;
+  const tc = document.getElementById('totalCount'); if (tc) tc.textContent = total;
+  document.getElementById('step3Next').disabled = sel.length === 0;
+  const ecoNames = [...new Set(sel.map(a => a.eco.name))];
+  document.getElementById('selectionTags').innerHTML = ecoNames.map(n => `<span class="sel-tag">${n}</span>`).join('');
+}
+
+/* ════════════════════════════════════════════
+   STEP 1 — SHP upload
+   ════════════════════════════════════════════ */
+function handleShpUpload(file) {
+  const name = (file && file.name) ? file.name : 'kubu-raya-boundary.zip';
+  /* Validate file format — reject anything that isn't a shapefile bundle or KML/KMZ */
+  if (file) {
+    const okExt = ['zip','shp','shx','dbf','prj','kml','kmz'];
+    const ext = (name.split('.').pop() || '').toLowerCase();
+    if (!okExt.includes(ext)) { showUploadError('format', name); return; }
+  }
+  document.getElementById('uploadError').classList.remove('show');
+  document.getElementById('procFileName').textContent = name;
+  document.getElementById('resultFileName').textContent = name;
+  document.getElementById('uploadHero').style.display = 'none';
+  document.getElementById('uploadDemoBar').style.display = 'none';
+  document.getElementById('uploadProcessing').classList.add('show');
+  document.getElementById('uploadResult').classList.remove('show');
+  const phases = ['Reading geometry…','Detecting ecosystems…','Assessing condition…','Compiling characterisation…'];
+  const fill = document.getElementById('procFill');
+  const st = document.getElementById('procStatus');
+  let pct = 0;
+  const iv = setInterval(() => {
+    pct = Math.min(100, pct + Math.random() * 20 + 9);
+    fill.style.width = pct + '%';
+    st.textContent = phases[Math.min(phases.length - 1, Math.floor(pct / 26))];
+    if (pct >= 100) {
+      clearInterval(iv);
+      setTimeout(() => {
+        document.getElementById('uploadProcessing').classList.remove('show');
+        document.getElementById('uploadResult').classList.add('show');
+        document.getElementById('step1Next').disabled = false;
+      }, 420);
+    }
+  }, 340);
+}
+
+/* ── Contextual upload error states ── */
+const ERR_IC = {
+  format: '<svg viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M14 2v6h6" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9.5 13.5l5 5M14.5 13.5l-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
+  area:   '<svg viewBox="0 0 24 24" fill="none"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 9v4M12 17h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
+  region: '<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20" stroke="currentColor" stroke-width="2"/><path d="M4 5l16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>'
+};
+const UPLOAD_ERRORS = {
+  format: {
+    tone: 'danger', tag: 'Unsupported file',
+    title: 'We couldn\u2019t read this file',
+    msg: (n) => `<strong>${n}</strong> isn\u2019t a boundary file we can process. Upload a zipped Shapefile or a KML / KMZ file and try again.`,
+    detail: 'Accepted formats: a zipped Shapefile (.zip containing .shp, .shx, .dbf and .prj), or a .kml / .kmz file. Make sure the archive isn\u2019t corrupted and includes all required Shapefile parts.'
+  },
+  area: {
+    tone: 'warning', tag: 'Area too large',
+    title: 'Project area exceeds the 500,000 ha limit',
+    msg: 'This boundary covers <strong>over 500,000 ha</strong>, which is above the maximum the NbS Tool can process in a single project.',
+    detail: 'The NbS Tool supports project areas up to 500,000 ha. Split your area into smaller sites, or upload a single sub-boundary, then add the others as separate projects.'
+  },
+  region: {
+    tone: 'warning', tag: 'Outside supported region',
+    title: 'This area is outside South East Asia',
+    msg: 'Your boundary falls <strong>outside South East Asia</strong>, which the NbS Tool doesn\u2019t cover yet.',
+    detail: 'The NbS Tool currently supports projects located within the South East Asia region only. Check that your file uses the correct coordinate reference system (CRS) — a wrong projection can place a valid site outside the region.'
+  }
+};
+function showUploadError(type, name) {
+  const c = UPLOAD_ERRORS[type];
+  if (!c) return;
+  document.getElementById('uploadHero').style.display = 'none';
+  document.getElementById('uploadDemoBar').style.display = 'none';
+  document.getElementById('uploadProcessing').classList.remove('show');
+  document.getElementById('uploadResult').classList.remove('show');
+  document.getElementById('upErrCard').className = 'up-err-card ' + c.tone;
+  document.getElementById('upErrIc').innerHTML = ERR_IC[type] || '';
+  document.getElementById('upErrTag').textContent = c.tag;
+  document.getElementById('upErrTitle').textContent = c.title;
+  document.getElementById('upErrMsg').innerHTML = (typeof c.msg === 'function') ? c.msg(name || 'your file') : c.msg;
+  document.getElementById('upErrDetail').textContent = c.detail;
+  document.getElementById('uploadError').classList.add('show');
+  document.getElementById('step1Next').disabled = true;
+}
+function resetUpload() {
+  document.getElementById('uploadError').classList.remove('show');
+  document.getElementById('uploadProcessing').classList.remove('show');
+  document.getElementById('uploadResult').classList.remove('show');
+  document.getElementById('uploadHero').style.display = '';
+  document.getElementById('uploadDemoBar').style.display = '';
+  const inp = document.getElementById('shpInput');
+  if (inp) inp.value = '';
+  document.getElementById('step1Next').disabled = true;
+}
+
+/* ════════════════════════════════════════════
+   STEP 2 — NbS pathway selection
+   ════════════════════════════════════════════ */
+const ECOS = ['forest','mangrove','peatland'];
+const PATHS = ['protect','manage','restore'];
+const pathwayInfo = {
+  forest: {
+    name:'Forest', icon:'assets/pathway/eco-forest.svg',
+    area:'13,942.2 ha', areaPct:'40% of area',
+    dist:{ level:'Low disturbance', cls:'low', ha:'4,638.4 ha', pct:12, note:'12% of forest is disturbed' },
+    threats:['Plantation','Urban dev.','Agriculture'],
+    scores:{ protect:5, manage:2, restore:1 },
+    pathArea:{ protect:'13,942.2 ha · 40%', manage:'5,420.9 ha · 16%', restore:'4,638.4 ha · 13%' }
+  },
+  mangrove: {
+    name:'Mangrove', icon:'assets/pathway/eco-mangrove.svg',
+    area:'9,754.6 ha', areaPct:'28% of area',
+    dist:{ level:'Moderate disturbance', cls:'moderate', ha:'2,731.3 ha', pct:28, note:'28% of mangrove is disturbed' },
+    threats:['Aquaculture','Coastal dev.'],
+    scores:{ protect:2, manage:4, restore:3 },
+    pathArea:{ protect:'7,023.3 ha · 20%', manage:'9,754.6 ha · 28%', restore:'2,731.3 ha · 8%' }
+  },
+  peatland: {
+    name:'Peatland', icon:'assets/pathway/eco-peatland.svg',
+    area:'11,210.8 ha', areaPct:'32% of area',
+    dist:{ level:'High disturbance', cls:'high', ha:'7,484.3 ha', pct:80, note:'80% of peatland is disturbed' },
+    threats:['Drainage','Fire','Oil palm'],
+    scores:{ protect:2, manage:1, restore:5 },
+    pathArea:{ protect:'3,726.5 ha · 11%', manage:'2,180.1 ha · 6%', restore:'11,210.8 ha · 32%' }
+  }
+};
+const pathwayMeta = {
+  protect:{ label:'Protect', desc:'Safeguard intact ecosystems from future degradation. Best for areas with low-to-moderate damage and intact structure.', rec:'recommended for protection' },
+  manage:{ label:'Manage', desc:'Sustain and improve ecosystem function through active, ongoing management. Best for areas under moderate but reversible pressure.', rec:'recommended for management' },
+  restore:{ label:'Restore', desc:'Rebuild heavily degraded ecosystems and recover lost function. Best for converted or severely disturbed areas.', rec:'recommended for restoration' }
+};
+function bestPath(eco){ return PATHS.reduce((b,p)=> pathwayInfo[eco].scores[p] > pathwayInfo[eco].scores[b] ? p : b, 'protect'); }
+function fitLabel(s){ return s>=5?'Best fit':s>=4?'Good fit':s>=3?'Fair fit':s>=2?'Fair fit':'Low fit'; }
+
+const pathwaySel = {};
+ECOS.forEach(eco => { pathwaySel[eco] = { protect:false, manage:false, restore:false, duration:30 }; pathwaySel[eco][bestPath(eco)] = true; });
+let activeEco = 'forest';
+
+function renderScreening(){
+  document.getElementById('screeningRows').innerHTML = ECOS.map(eco => {
+    const d = pathwayInfo[eco]; const best = bestPath(eco);
+    const recRows = PATHS.map(p => {
+      const isBest = p === best;
+      return `<div class="rec-item ${isBest?'best':''}">
+        <div><span class="rec-name">${pathwayMeta[p].label}</span>${isBest?'<div class="rec-best-tag">★ BEST</div>':''}</div>
+        <div class="score-squares">${[1,2,3,4,5].map(i=>`<span class="${i<=d.scores[p]?'on':''}"></span>`).join('')}</div>
+        <div class="rec-score">${d.scores[p]}/5</div>
+      </div>`;
+    }).join('');
+    return `<div class="screening-row">
+      <div class="sc-eco">
+        <div class="sc-eco-top"><img src="${d.icon}" alt=""><span class="sc-eco-name">${d.name}</span></div>
+        <div class="sc-eco-area">${d.area}</div>
+        <div class="sc-eco-sub">${d.areaPct}</div>
+      </div>
+      <div>
+        <span class="dist-badge ${d.dist.cls}"><span class="dot"></span>${d.dist.level.toUpperCase()}</span>
+        <div class="dist-ha">${d.dist.ha}</div>
+        <div class="dist-track"><div class="dist-fill ${d.dist.cls}" style="width:${d.dist.pct}%"></div></div>
+        <div class="dist-note">${d.dist.note}</div>
+      </div>
+      <div class="threat-list">${d.threats.map((t,i)=>`<div class="threat-chip"><span class="tnum">0${i+1}</span>${t}</div>`).join('')}</div>
+      <div class="rec-list">${recRows}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderPwPanel(){
+  const eco = activeEco; const d = pathwayInfo[eco]; const best = bestPath(eco); const sel = pathwaySel[eco];
+  const cards = PATHS.map(p => {
+    const isBest = p === best; const on = sel[p];
+    return `<div class="pw-card ${on?'on':''}" role="button" tabindex="0" onclick="togglePathway('${eco}','${p}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();togglePathway('${eco}','${p}');}">
+      <div class="pw-card-top">
+        <div class="pw-card-ic"><img src="assets/pathway/${p}-${eco}.svg" alt=""></div>
+        <div class="pw-switch"></div>
+      </div>
+      <h4>${pathwayMeta[p].label}</h4>
+      <div class="pw-card-meta">${d.pathArea[p]}</div>
+      <span class="fit-badge ${isBest?'best':''}">${isBest?'★ ':''}${fitLabel(d.scores[p])} · ${d.scores[p]}/5</span>
+    </div>`;
+  }).join('');
+  document.getElementById('pwPanel').innerHTML = `
+    <div class="pw-panel-hd">
+      <div class="pw-eco-info">
+        <img src="${d.icon}" alt="">
+        <div>
+          <h3>${d.name} Ecosystem</h3>
+          <p>${pathwayMeta[best].desc}</p>
+        </div>
+      </div>
+      <span class="pw-rec-pill">★ ${d.name} ${pathwayMeta[best].rec}</span>
+    </div>
+    <div class="pw-cards">${cards}</div>
+    <div class="pw-duration">
+      <div class="pw-dur-label">
+        <h4>Duration of ${pathwayMeta[best].label.toLowerCase()}</h4>
+        <p>How many years should this intervention of the ${d.name} Ecosystem last?</p>
+      </div>
+      <div class="pw-slider-wrap">
+        <input type="range" class="pw-range" min="20" max="70" step="5" value="${sel.duration}" oninput="setDuration('${eco}', this.value)" aria-label="Duration in years">
+        <div class="pw-range-ticks"><span>20</span><span>30</span><span>40</span><span>50</span><span>60</span><span>70</span></div>
+      </div>
+      <div class="pw-dur-value"><div class="pdv-num" id="durNum">${sel.duration}</div><div class="pdv-unit">years</div></div>
+    </div>`;
+}
+function togglePathway(eco, p){ pathwaySel[eco][p] = !pathwaySel[eco][p]; renderPwPanel(); updatePathwayMeta(); }
+function setDuration(eco, v){ pathwaySel[eco].duration = +v; const n = document.getElementById('durNum'); if (n) n.textContent = v; }
+function selectedPathwayCount(){ let c=0; ECOS.forEach(e=>PATHS.forEach(p=>{ if(pathwaySel[e][p]) c++; })); return c; }
+function ecosWithSelection(){ return ECOS.filter(e=>PATHS.some(p=>pathwaySel[e][p])).length; }
+function updatePathwayMeta(){
+  const c = selectedPathwayCount();
+  document.getElementById('pwSummaryMeta').textContent = `${c} pathway${c!==1?'s':''} selected · ${ecosWithSelection()} of 3 ecosystems`;
+  document.getElementById('step2Next').disabled = c === 0;
+}
+function pathwayReviewHTML(){
+  return `<div class="pw-review-grid">` + ECOS.map(eco => {
+    const d = pathwayInfo[eco]; const sel = pathwaySel[eco];
+    const chosen = PATHS.filter(p => sel[p]);
+    const tags = chosen.length
+      ? chosen.map(p => `<span class="pw-tag">${pathwayMeta[p].label}</span>`).join('')
+      : `<span class="pw-tag muted">No pathway</span>`;
+    return `<div class="pw-review-card">
+      <div class="prc-eco"><img src="${d.icon}" alt="">${d.name}</div>
+      <div class="pw-review-tags">${tags}</div>
+      <div class="prc-dur">Duration · <strong>${sel.duration} years</strong></div>
+    </div>`;
+  }).join('') + `</div>`;
+}
+function renderPathwayReview(){
+  const h = pathwayReviewHTML();
+  const a = document.getElementById('pwReview4'); if (a) a.innerHTML = h;
+  const b = document.getElementById('pwReview5'); if (b) b.innerHTML = h;
+  const sp = document.getElementById('sumPathways'); if (sp) sp.textContent = selectedPathwayCount();
+}
+
+/* ── Navigation ── */
+function goToStep(n) {
+  if (n > maxReached) return;
+  currentStep = n;
+
+  document.querySelectorAll('.step-content').forEach(c => c.classList.remove('active'));
+  document.querySelector(`[data-content="${n}"]`).classList.add('active');
+
+  const displayStep = n > 5 ? 6 : n;
+  document.querySelectorAll('.f05-step').forEach(s => {
+    const sn = parseInt(s.dataset.step);
+    s.classList.remove('f05-active','f05-complete','f05-disabled');
+    const numEl = s.querySelector('.f05-step-num');
+    if (sn < displayStep) {
+      s.classList.add('f05-complete');
+      numEl.textContent = '✓';
+    } else if (sn === displayStep) {
+      s.classList.add('f05-active');
+      numEl.textContent = sn;
+    } else if (sn > maxReached) {
+      s.classList.add('f05-disabled');
+      numEl.textContent = sn;
+    } else {
+      numEl.textContent = sn;
+    }
+  });
+
+  if (n === 2) { renderPwPanel(); updatePathwayMeta(); }
+  if (n === 3) { seedStep3Filters(); renderActivities(); }
+  if (n === 4) { renderMatrix(); renderPathwayReview(); }
+  if (n === 5) { renderMatrix(); renderAccordions(); renderPathwayReview(); updateCustomSummary(); }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ── Step 5 accordions ── */
+function renderAccordions() {
+  const sel = getSelected();
+  const selIds = new Set(sel.map(a => a.id));
+  const toShow = ecosystems.filter(e => e.activities.some(a => selIds.has(a.id)));
+  document.getElementById('accordions').innerHTML = toShow.map(e => `
+    <div class="accordion">
+      <div class="accordion-head" onclick="this.parentElement.classList.toggle('open')">
+        <div class="accordion-title">
+          ${ecoIcons[e.id]}
+          <div>
+            <strong style="color:var(--primary-600)">${e.name} monitoring plan</strong>
+            <div class="acc-hint">Detailed activities, indicators, methods, and responsibilities.</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span class="acc-count">${e.activities.filter(a=>selIds.has(a.id)).length} selected</span>
+          <span class="acc-chev">▼</span>
+        </div>
+      </div>
+      <div class="accordion-body">
+        <table class="small-table">
+          <thead><tr><th>NbS Activity</th><th>Indicator</th><th>Data source</th><th>Monitoring frequency</th></tr></thead>
+          <tbody>${e.activities.filter(a=>selIds.has(a.id)).map(a=>`<tr>
+            <td><strong>${a.name}</strong></td>
+            <td>${a.indicators.map(i=>`<div style="margin:2px 0">· ${i}</div>`).join('')}</td>
+            <td style="font-size:11px">${a.method}</td>
+            <td class="freq-cell">${a.freq}</td>
+          </tr>`).join('')}</tbody>
+        </table>
+      </div>
+    </div>`).join('');
+}
+
+/* ── Step 4 render — benefit-grouped monitoring matrix ── */
+function renderMatrix() {
+  const sel = getSelected();
+  const ecos = new Set(sel.map(a => a.eco.id));
+  const indCount = sel.reduce((s,a) => s + getMatrixInds(a).filter(it => it.checked).length, 0);
+  document.getElementById('step2Counts').textContent = `${ecos.size} ecosystems · ${sel.length} activities · ${indCount} indicators`;
+  document.getElementById('sumActivities').textContent = sel.length;
+  document.getElementById('sumEco').textContent = ecos.size;
+  document.getElementById('sumIndicators').textContent = indCount;
+
+  document.getElementById('matrixRows').innerHTML = sel.map(a => {
+    const list = getMatrixInds(a);
+    // group consecutive indicators by their benefit
+    const groups = [];
+    list.forEach((it, i) => {
+      let g = groups[groups.length - 1];
+      if (!g || g.benefit !== it.benefit) { g = { benefit: it.benefit, cat: it.cat, items: [] }; groups.push(g); }
+      g.items.push({ it, i });
+    });
+    const n = groups.length;
+    return groups.map((g, gi) => {
+      const indRows = g.items.map(({ it, i }) => `
+        <label class="mind-row">
+          <input type="checkbox" ${it.checked ? 'checked' : ''} onchange="toggleMatrixInd('${a.id}', ${i})" />
+          <span class="mind-name">${it.label}</span>
+        </label>`).join('');
+      let row = '<tr>';
+      if (gi === 0) row += `<td rowspan="${n}"><div class="act-cell ${a.eco.colorCls}">${ecoIcons[a.eco.id]}<span>${a.name}</span></div>${a.pw ? `<span class="pw-mini pw-${a.pw.toLowerCase()}">${a.pw}</span>` : `<span class="pw-mini" style="background:#f1f5f9;color:#475569">CUSTOM</span>`}</td>`;
+      row += `<td><div class="ben-cell"><span class="ben-tag ${g.cat.toLowerCase()}">${g.cat}</span><span class="ben-name">${g.benefit}</span></div></td>`;
+      row += `<td><div class="mind-list">${indRows}</div><button class="mind-add" onclick="openAddInd('${a.id}', '${encodeURIComponent(g.benefit)}', '${g.cat}')">+ Add indicator</button></td>`;
+      if (gi === 0) row += `<td rowspan="${n}" style="font-size:11px;color:rgb(74,84,104)">${a.method}<br><span class="m-badge field" style="margin-top:5px">Field verify</span></td><td rowspan="${n}" class="freq-cell">📅 ${a.freq}</td>`;
+      row += '</tr>';
+      return row;
+    }).join('');
+  }).join('');
+}
+
+/* ── Matrix indicator selection state ── */
+const matrixInd = {};
+function getMatrixInds(a) {
+  if (!matrixInd[a.id]) {
+    matrixInd[a.id] = [];
+    if (a.benefits && a.benefits.length) {
+      a.benefits.forEach(b => b.inds.forEach(label =>
+        matrixInd[a.id].push({ label, checked: true, benefit: b.benefit, cat: b.cat })));
+    } else {
+      (a.indicators || []).forEach(label =>
+        matrixInd[a.id].push({ label, checked: true, benefit: a.name, cat: 'Custom' }));
+    }
+  }
+  return matrixInd[a.id];
+}
+function toggleMatrixInd(actId, i) {
+  matrixInd[actId][i].checked = !matrixInd[actId][i].checked;
+  updateMatrixCounts();
+}
+function updateMatrixCounts() {
+  const sel = getSelected();
+  const ecos = new Set(sel.map(a => a.eco.id));
+  const indCount = sel.reduce((s,a) => s + getMatrixInds(a).filter(it => it.checked).length, 0);
+  document.getElementById('step2Counts').textContent = `${ecos.size} ecosystems · ${sel.length} activities · ${indCount} indicators`;
+  document.getElementById('sumIndicators').textContent = indCount;
+}
+let addIndTarget = null;
+function openAddInd(actId, benefitEnc, cat) {
+  addIndTarget = { actId, benefit: decodeURIComponent(benefitEnc || ''), cat: cat || 'Custom' };
+  document.getElementById('addIndName').value = '';
+  document.getElementById('addIndUnit').value = '';
+  document.getElementById('addIndName').style.borderColor = '';
+  const tag = document.getElementById('addIndBenefit');
+  if (tag) tag.innerHTML = `<span class="ben-tag ${addIndTarget.cat.toLowerCase()}">${addIndTarget.cat}</span><span class="ben-name">${addIndTarget.benefit}</span>`;
+  document.getElementById('m-add-ind').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  setTimeout(() => document.getElementById('addIndName').focus(), 50);
+}
+function confirmAddInd() {
+  const nameEl = document.getElementById('addIndName');
+  const name = nameEl.value.trim();
+  if (!name) { nameEl.focus(); nameEl.style.borderColor = '#e33b32'; return; }
+  const unit = document.getElementById('addIndUnit').value.trim();
+  const label = unit ? `${name} (${unit})` : name;
+  const a = ecosystems.flatMap(e => e.activities).find(x => x.id === addIndTarget.actId);
+  const list = getMatrixInds(a);
+  const newInd = { label, checked: true, benefit: addIndTarget.benefit, cat: addIndTarget.cat };
+  // insert right after the last existing indicator of this benefit so it stays grouped
+  let at = -1;
+  list.forEach((it, i) => { if (it.benefit === addIndTarget.benefit) at = i; });
+  if (at === -1) list.push(newInd); else list.splice(at + 1, 0, newInd);
+  closeModal('m-add-ind');
+  renderMatrix();
+}
+
+/* ── Navigation (legacy block removed — see canonical goToStep above) ── */
+
+function updateCustomSummary() {
+  const done = Object.values(customDone).filter(Boolean).length;
+  document.getElementById('sum-custom').textContent = `${done} / 3`;
+}
+
+function markDone(id) {
+  customDone[id] = !customDone[id];
+  const el = document.getElementById(`${id}-status`);
+  if (!el) return;
+  el.textContent = customDone[id] ? 'Done ✓' : 'Not started';
+  el.classList.toggle('done', customDone[id]);
+  updateCustomSummary();
+}
+
+/* ── Wire up buttons ── */
+document.getElementById('step1Next').addEventListener('click', () => { maxReached = Math.max(maxReached, 2); goToStep(2); });
+document.getElementById('step2Back').addEventListener('click', () => goToStep(1));
+document.getElementById('step2Next').addEventListener('click', () => { maxReached = Math.max(maxReached, 3); goToStep(3); });
+document.getElementById('step3Back').addEventListener('click', () => goToStep(2));
+document.getElementById('step3Next').addEventListener('click', () => { maxReached = Math.max(maxReached, 4); goToStep(4); });
+document.getElementById('step4Back').addEventListener('click', () => goToStep(3));
+document.getElementById('step4Next').addEventListener('click', () => { maxReached = Math.max(maxReached, 5); goToStep(5); });
+document.getElementById('step5Back').addEventListener('click', () => goToStep(4));
+document.getElementById('finalizeBtn').addEventListener('click', () => { maxReached = 6; goToStep(6); });
+
+/* Pathway ecosystem tabs */
+document.querySelectorAll('#pwTabs .pw-tab').forEach(t => {
+  t.addEventListener('click', () => {
+    document.querySelectorAll('#pwTabs .pw-tab').forEach(x => x.classList.remove('active'));
+    t.classList.add('active');
+    activeEco = t.dataset.eco;
+    renderPwPanel();
+  });
+});
+
+/* SHP upload wiring */
+const shpInput = document.getElementById('shpInput');
+shpInput.addEventListener('change', e => { if (e.target.files.length) handleShpUpload(e.target.files[0]); });
+const uploadHero = document.getElementById('uploadHero');
+['dragover','dragenter'].forEach(ev => uploadHero.addEventListener(ev, e => { e.preventDefault(); uploadHero.classList.add('dragover'); }));
+['dragleave','dragend'].forEach(ev => uploadHero.addEventListener(ev, e => { e.preventDefault(); uploadHero.classList.remove('dragover'); }));
+uploadHero.addEventListener('drop', e => { e.preventDefault(); uploadHero.classList.remove('dragover'); handleShpUpload(e.dataTransfer.files[0]); });
+
+document.querySelectorAll('.f05-step').forEach(s => {
+  s.addEventListener('click', () => {
+    if (s.classList.contains('f05-disabled')) return;
+    goToStep(parseInt(s.dataset.step));
+  });
+});
+
+/* ── Init ── */
+renderActivities();
+renderScreening();
+updatePathwayMeta();
+</script>
+<!-- ══ SHARED MODAL STYLES ══ -->
+<style>
+.cust-ov { position:fixed;inset:0;background:rgba(4,38,32,0.48);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);z-index:900;display:none;align-items:center;justify-content:center;padding:20px; }
+.cust-ov.open { display:flex; }
+.cust-modal { background:#fff;border-radius:16px;width:100%;max-width:680px;max-height:90vh;overflow-y:auto;box-shadow:0 32px 80px rgba(0,0,0,0.24);position:relative; }
+.cust-modal.wide { max-width:780px; }
+.cust-mhd { padding:26px 32px 18px;border-bottom:1px solid #eaebf0;position:sticky;top:0;background:#fff;z-index:10; }
+.cust-mhd h2 { font-family:var(--font-text);font-size:17px;font-weight:700;color:#252525;letter-spacing:-0.02em;margin:0 0 4px; }
+.cust-mhd p { font-family:var(--font-text);font-size:12px;color:#68727d;margin:0; }
+.cust-mclose { position:absolute;top:14px;right:14px;width:34px;height:34px;border:none;background:#eaebf0;border-radius:50%;cursor:pointer;font-size:16px;display:grid;place-items:center;color:#444a51; }
+.cust-mclose:hover { background:#eaebf0; }
+.cust-mbody { padding:22px 32px; }
+.cust-mfoot { padding:16px 32px;border-top:1px solid #eaebf0;background:#fafbfc;border-radius:0 0 16px 16px;display:flex;justify-content:flex-end;gap:10px;position:sticky;bottom:0; }
+
+/* Indicator editor */
+.ind-edit-row { display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;padding:10px 14px;border:1px solid #eaebf0;border-radius:8px;background:#fff;margin-bottom:8px; }
+.ind-edit-name { font-family:var(--font-text);font-size:12px;color:#252525;font-weight:500; }
+.ind-toggle-opt {
+  font-family:var(--font-text);font-size:10px;font-weight:600;
+  padding:4px 10px 4px 8px;
+  border-radius:20px;border:1.5px solid;
+  cursor:pointer;transition:all .18s;
+  display:inline-flex;align-items:center;gap:5px;
+  user-select:none;
+}
+.ind-toggle-opt .tog-icon { font-size:11px; transition:transform .25s; display:inline-block; }
+.ind-toggle-opt:hover .tog-icon { transform:rotate(180deg); }
+.ind-toggle-opt:not(.is-opt) {
+  background:rgb(236,253,245);color:rgb(5,102,83);border-color:rgb(110,210,169);
+}
+.ind-toggle-opt:not(.is-opt):hover {
+  background:rgb(209,250,229);border-color:rgb(5,102,83);
+}
+.ind-toggle-opt.is-opt {
+  background:rgb(239,246,255);color:#0a436b;border-color:rgb(147,197,253);
+}
+.ind-toggle-opt.is-opt:hover {
+  background:#eaf2fb;border-color:rgb(59,130,246);
+}
+.ind-del2 { background:none;border:none;cursor:pointer;color:rgb(172,26,19);width:26px;height:26px;display:grid;place-items:center;border-radius:4px;font-size:13px; }
+.ind-del2:hover { background:rgb(255,240,240); }
+.act-section-hd { font-family:var(--font-text);font-size:12px;font-weight:700;color:#044c3e;background:#e9f8f1;border:1px solid rgb(205,235,213);border-radius:6px;padding:8px 14px;margin:16px 0 10px;display:flex;align-items:center;gap:8px; }
+
+/* Method editor */
+.meth-row { padding:14px;border:1px solid #eaebf0;border-radius:10px;margin-bottom:10px; }
+.meth-row-hd { font-family:var(--font-text);font-size:12px;font-weight:700;color:#252525;margin-bottom:10px; }
+.meth-fields { display:grid;grid-template-columns:1fr 1fr;gap:10px; }
+.meth-label { font-family:var(--font-text);font-size:11px;font-weight:600;color:#68727d;display:block;margin-bottom:4px; }
+.select-chev {
+  appearance:none;
+  -webkit-appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23677389' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-position:right 12px center;
+  padding-right:32px !important;
+  cursor:pointer;
+}
+
+/* Parties */
+.party-row { display:grid;grid-template-columns:1fr 160px 140px 32px;gap:10px;align-items:center;padding:10px 14px;border:1px solid #eaebf0;border-radius:8px;background:#fff;margin-bottom:8px; }
+.party-avatar { width:30px;height:30px;border-radius:50%;background:#066653;color:#fff;display:grid;place-items:center;font-family:var(--font-text);font-size:11px;font-weight:700;flex-shrink:0; }
+.party-name { font-family:var(--font-text);font-size:12px;font-weight:600;color:#252525; }
+.party-email { font-family:var(--font-text);font-size:11px;color:#68727d; }
+.role-badge { display:inline-block;font-family:var(--font-text);font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px; }
+.role-owner { background:#e9f8f1;color:#044c3e; }
+.role-editor { background:#eaf2fb;color:#0a436b; }
+.role-viewer { background:#f7f7f8;color:#68727d; }
+
+/* Notes / evidence */
+.upload-zone { border:2px dashed #c0c2c6;border-radius:10px;padding:32px;text-align:center;cursor:pointer;transition:all .15s;position:relative;overflow:hidden; }
+.upload-zone:hover { border-color:#066653;background:#e9f8f1; }
+.upload-zone input[type=file] { position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%; }
+.upload-zone-title { font-family:var(--font-text);font-size:14px;font-weight:700;color:#252525;margin:12px 0 4px; }
+.upload-zone-sub { font-family:var(--font-text);font-size:12px;color:#68727d; }
+.evidence-item { display:grid;grid-template-columns:36px 1fr auto;gap:10px;align-items:center;border:1px solid #eaebf0;border-radius:8px;padding:12px 14px;margin-bottom:8px;background:#fff; }
+.ev-icon { width:36px;height:36px;border-radius:8px;background:#e9f8f1;display:grid;place-items:center; }
+.ev-name { font-family:var(--font-text);font-size:12px;font-weight:600;color:#252525; }
+.ev-meta { font-family:var(--font-text);font-size:11px;color:#68727d;margin-top:2px; }
+.note-input { width:100%;padding:12px 14px;border:1px solid #eaebf0;border-radius:8px;font-family:var(--font-text);font-size:12px;color:#444a51;min-height:90px;resize:vertical;outline:none;line-height:1.5; }
+.note-input:focus { border-color:#066653; }
+.note-section-lbl { font-family:var(--font-text);font-size:12px;font-weight:700;color:#444a51;margin:16px 0 6px;display:block; }
+</style>
+
+<!-- ══ MODAL 1: Review & Edit Indicators ══ -->
+<div class="cust-ov" id="m-indicators">
+  <div class="cust-modal wide">
+    <div class="cust-mhd">
+      <button class="cust-mclose" onclick="closeModal('m-indicators')">✕</button>
+      <h2>Review and edit indicators</h2>
+      <p>Add, remove or mark indicators as optional. Changes apply to the monitoring matrix.</p>
+    </div>
+    <div class="cust-mbody" id="ind-editor-body"></div>
+    <div class="cust-mfoot">
+      <button class="ws-btn ws-btn-back" onclick="closeModal('m-indicators')">Cancel</button>
+      <button class="ws-btn ws-btn-primary" onclick="saveIndicators()">Save changes ✓</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL 2: Adjust Methods & Frequency ══ -->
+<div class="cust-ov" id="m-methods">
+  <div class="cust-modal wide">
+    <div class="cust-mhd">
+      <button class="cust-mclose" onclick="closeModal('m-methods')">✕</button>
+      <h2>Adjust data source and monitoring frequency</h2>
+      <p>Change the data source and collection schedule per activity.</p>
+    </div>
+    <div class="cust-mbody" id="meth-editor-body"></div>
+    <div class="cust-mfoot">
+      <button class="ws-btn ws-btn-back" onclick="closeModal('m-methods')">Cancel</button>
+      <button class="ws-btn ws-btn-primary" onclick="saveMethods()">Save changes ✓</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL 3: Assign Responsible Parties ══ -->
+<div class="cust-ov" id="m-parties">
+  <div class="cust-modal">
+    <div class="cust-mhd">
+      <button class="cust-mclose" onclick="closeModal('m-parties')">✕</button>
+      <h2>Assign responsible parties</h2>
+      <p>Define who collects, verifies, and reports data. Collaborators will receive access to this monitoring plan.</p>
+    </div>
+    <div class="cust-mbody">
+      <!-- Invite row -->
+      <div style="display:grid;grid-template-columns:1fr 140px auto;gap:8px;margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid #eaebf0">
+        <input id="party-email-input" class="fi" placeholder="colleague@organisation.org" type="email" style="height:40px;font-size:12px" />
+        <select id="party-role-input" class="fi" class="fi select-chev" style="height:40px;font-size:12px;">
+          <option value="Editor">Editor</option>
+          <option value="Viewer">Viewer</option>
+          <option value="Collector">Collector</option>
+          <option value="Verifier">Verifier</option>
+        </select>
+        <button class="ws-btn ws-btn-primary" style="height:40px;white-space:nowrap" onclick="addParty()">Invite</button>
+      </div>
+      <!-- Party list -->
+      <div style="font-family:var(--font-text);font-size:11px;font-weight:700;color:#68727d;text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px">People with access</div>
+      <div id="party-list"></div>
+    </div>
+    <div class="cust-mfoot">
+      <button class="ws-btn ws-btn-back" onclick="closeModal('m-parties')">Cancel</button>
+      <button class="ws-btn ws-btn-primary" onclick="saveParties()">Done ✓</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL 4: Add Notes & Evidence ══ -->
+<div class="cust-ov" id="m-notes">
+  <div class="cust-modal">
+    <div class="cust-mhd">
+      <button class="cust-mclose" onclick="closeModal('m-notes')">✕</button>
+      <h2>Add notes and evidence</h2>
+      <p>Attach supporting documents, upload evidence files, and add local context or assumptions.</p>
+    </div>
+    <div class="cust-mbody">
+      <label class="note-section-lbl">Project notes &amp; assumptions</label>
+      <textarea class="note-input" id="notes-text" placeholder="Describe local context, baseline assumptions, data gaps, and any notes for the monitoring team..."></textarea>
+      <label class="note-section-lbl" style="margin-top:20px">Upload evidence files</label>
+      <div class="upload-zone" id="upload-zone">
+        <input type="file" multiple accept=".pdf,.doc,.docx,.xlsx,.png,.jpg,.jpeg" onchange="handleFiles(this.files)" />
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" style="margin:0 auto;color:#066653"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div class="upload-zone-title">Drop files here or click to upload</div>
+        <div class="upload-zone-sub">PDF, Word, Excel, or image files. Max 20 MB each.</div>
+      </div>
+      <div id="evidence-list" style="margin-top:14px"></div>
+    </div>
+    <div class="cust-mfoot">
+      <button class="ws-btn ws-btn-back" onclick="closeModal('m-notes')">Cancel</button>
+      <button class="ws-btn ws-btn-primary" onclick="saveNotes()">Save &amp; done ✓</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL: Add Indicator (matrix) ══ -->
+<div class="cust-ov" id="m-add-ind">
+  <div class="cust-modal" style="max-width:440px">
+    <div class="cust-mhd">
+      <button class="cust-mclose" onclick="closeModal('m-add-ind')">✕</button>
+      <h2>Add monitoring indicator</h2>
+      <p>Define a new indicator for the benefit below. It will be added to the matrix under this benefit and selected by default.</p>
+    </div>
+    <div class="cust-mbody">
+      <div id="addIndBenefit" class="ben-cell" style="margin-bottom:16px;max-width:none"></div>
+      <div style="margin-bottom:16px">
+        <label style="font-family:var(--font-text);font-size:12px;font-weight:600;color:#444a51;display:block;margin-bottom:6px">Indicator name *</label>
+        <input id="addIndName" class="fi" type="text" placeholder="e.g. Canopy cover" onkeydown="if(event.key==='Enter')confirmAddInd()" />
+      </div>
+      <div>
+        <label style="font-family:var(--font-text);font-size:12px;font-weight:600;color:#444a51;display:block;margin-bottom:6px">Unit</label>
+        <input id="addIndUnit" class="fi" type="text" placeholder="e.g. %, ha, ha/yr, count" onkeydown="if(event.key==='Enter')confirmAddInd()" />
+      </div>
+    </div>
+    <div class="cust-mfoot">
+      <button class="ws-btn ws-btn-back" onclick="closeModal('m-add-ind')">Cancel</button>
+      <button class="ws-btn ws-btn-primary" onclick="confirmAddInd()">Add indicator</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ── Modal open/close ── */
+function openModal(id) {
+  if (id === 'm-indicators') buildIndEditor();
+  if (id === 'm-methods')    buildMethEditor();
+  if (id === 'm-parties')    buildPartyList();
+  document.getElementById(id).classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.querySelectorAll('.cust-ov').forEach(ov => {
+  ov.addEventListener('click', e => { if (e.target === ov) closeModal(ov.id); });
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') document.querySelectorAll('.cust-ov.open').forEach(ov => closeModal(ov.id));
+});
+
+/* ══ MODAL 1 — Indicator editor ══ */
+function buildIndEditor() {
+  const sel = getSelected();
+  let html = '';
+  const byEco = {};
+  sel.forEach(a => {
+    if (!byEco[a.eco.id]) byEco[a.eco.id] = { eco: a.eco, acts: [] };
+    byEco[a.eco.id].acts.push(a);
+  });
+  Object.values(byEco).forEach(({ eco, acts }) => {
+    html += `<div class="act-section-hd">${ecoIcons[eco.id]} ${eco.name}</div>`;
+    acts.forEach(a => {
+      html += `<div style="margin-bottom:16px">
+        <div style="font-family:var(--font-text);font-size:12px;font-weight:700;color:#444a51;margin-bottom:8px">${a.name}</div>
+        <div id="ind-rows-${a.id}">
+          ${a.indicators.map((ind, i) => indRow(a.id, ind, false, i)).join('')}
+          ${a.optional.map((ind, i) => indRow(a.id, ind, true, 'o'+i)).join('')}
+        </div>
+        <button onclick="addNewInd('${a.id}')" class="btn-add-act" style="margin-top:6px;font-size:11px">+ Add indicator</button>
+      </div>`;
+    });
+  });
+  document.getElementById('ind-editor-body').innerHTML = html || '<p style="font-family:var(--font-text);font-size:13px;color:#68727d">No activities selected yet.</p>';
+}
+function indRow(actId, text, isOpt, idx) {
+  return `<div class="ind-edit-row" id="irow-${actId}-${idx}">
+    <span class="ind-edit-name">${text}</span>
+    <button class="ind-toggle-opt ${isOpt?'is-opt':''}" onclick="toggleOpt(this)" title="Click to toggle Recommended / Optional"><span class="tog-icon">⇄</span>${isOpt?'Optional':'Recommended'}</button>
+    <button class="ind-del2" onclick="this.closest('.ind-edit-row').remove()">✕</button>
+  </div>`;
+}
+function toggleOpt(btn) {
+  btn.classList.toggle('is-opt');
+  const isOpt = btn.classList.contains('is-opt');
+  btn.innerHTML = `<span class="tog-icon">${isOpt ? '⇄' : '⇄'}</span>${isOpt ? 'Optional' : 'Recommended'}`;
+}
+function addNewInd(actId) {
+  const container = document.getElementById('ind-rows-' + actId);
+  const div = document.createElement('div');
+  div.className = 'ind-edit-row';
+  div.innerHTML = `<input type="text" style="font-family:var(--font-text);font-size:12px;border:none;outline:none;width:100%;background:transparent" placeholder="New indicator name..." />
+    <button class="ind-toggle-opt" onclick="toggleOpt(this)" title="Click to toggle Recommended / Optional"><span class="tog-icon">⇄</span>Recommended</button>
+    <button class="ind-del2" onclick="this.closest('.ind-edit-row').remove()">✕</button>`;
+  container.appendChild(div);
+  div.querySelector('input').focus();
+}
+function saveIndicators() {
+  markDone('opt1');
+  closeModal('m-indicators');
+}
+
+/* ══ MODAL 2 — Methods editor ══ */
+const METHOD_OPTS = ['Remote sensing + field verification','GPS mapping + satellite imagery','Field plots + geotagged photos','Drone/satellite imagery + transect','Field observation + hydrology assessment','Shoreline change analysis','GPS inspection + photo documentation','Dipwell/water logger + remote sensing','MODIS/VIIRS + patrol report','NDVI/canopy monitoring + field survey','Stakeholder interview + survey','Community patrol + field report','Other / custom method'];
+const FREQ_OPTS = ['Monthly','Quarterly','Every 6 months','Annual','Annual / seasonal','3, 6, 12 months','Monthly in dry season','Per event'];
+
+function buildMethEditor() {
+  const sel = getSelected();
+  const html = sel.map(a => `
+    <div class="meth-row">
+      <div class="meth-row-hd">${a.eco.name} — ${a.name}</div>
+      <div class="meth-fields">
+        <div>
+          <label class="meth-label">Data source</label>
+          <select class="fi" data-act-meth="${a.id}" class="fi select-chev" style="font-size:12px;height:38px;">
+            ${METHOD_OPTS.map(o => `<option ${a.method===o?'selected':''}>${o}</option>`).join('')}
+          </select>
+        </div>
+        <div>
+          <label class="meth-label">Monitoring frequency</label>
+          <select class="fi" data-act-freq="${a.id}" class="fi select-chev" style="font-size:12px;height:38px;">
+            ${FREQ_OPTS.map(o => `<option ${a.freq===o?'selected':''}>${o}</option>`).join('')}
+          </select>
+        </div>
+      </div>
+    </div>`).join('') || '<p style="font-family:var(--font-text);font-size:13px;color:#68727d">No activities selected yet.</p>';
+  document.getElementById('meth-editor-body').innerHTML = html;
+}
+function saveMethods() {
+  const sel = getSelected();
+  sel.forEach(a => {
+    const ms = document.querySelector(`[data-act-meth="${a.id}"]`);
+    const fs = document.querySelector(`[data-act-freq="${a.id}"]`);
+    if (ms) a.method = ms.value;
+    if (fs) a.freq   = fs.value;
+  });
+  markDone('opt2');
+  closeModal('m-methods');
+}
+
+/* ══ MODAL 3 — Assign parties ══ */
+const parties = [
+  { name:'Agus Maulana', email:'agus@kuburaya.org', role:'Owner', initials:'AM' },
+  { name:'Rini Sari', email:'rini.sari@wwf.id', role:'Editor', initials:'RS' },
+];
+const AVATAR_COLORS = ['#066653','#0a436b','#8A7A1F','#6B1A1A','#1A6B6B','#5A1A8A'];
+function buildPartyList() {
+  renderParties();
+}
+function renderParties() {
+  document.getElementById('party-list').innerHTML = parties.map((p, i) => `
+    <div class="party-row">
+      <div style="display:flex;gap:10px;align-items:center">
+        <div class="party-avatar" style="background:${AVATAR_COLORS[i%AVATAR_COLORS.length]}">${p.initials}</div>
+        <div><div class="party-name">${p.name}</div><div class="party-email">${p.email}</div></div>
+      </div>
+      <div>
+        ${p.role === 'Owner'
+          ? `<span class="role-badge role-owner">Owner</span>`
+          : `<select class="fi" class="fi select-chev" style="height:32px;font-size:11px;" onchange="parties[${i}].role=this.value">
+              <option ${p.role==='Editor'?'selected':''}>Editor</option>
+              <option ${p.role==='Viewer'?'selected':''}>Viewer</option>
+              <option ${p.role==='Collector'?'selected':''}>Collector</option>
+              <option ${p.role==='Verifier'?'selected':''}>Verifier</option>
+            </select>`}
+      </div>
+      <div style="font-family:var(--font-text);font-size:11px;color:#68727d">${p.role==='Owner'?'Full access':p.role==='Editor'?'Can edit':'Read only'}</div>
+      ${p.role !== 'Owner'
+        ? `<button class="ind-del2" onclick="removeParty(${i})">✕</button>`
+        : `<div></div>`}
+    </div>`).join('');
+}
+function addParty() {
+  const email = document.getElementById('party-email-input').value.trim();
+  if (!email) return;
+  const role = document.getElementById('party-role-input').value;
+  const name = email.split('@')[0].replace(/[._]/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
+  const initials = name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  parties.push({ name, email, role, initials });
+  document.getElementById('party-email-input').value = '';
+  renderParties();
+}
+function removeParty(i) { parties.splice(i,1); renderParties(); }
+function saveParties() { markDone('opt3'); closeModal('m-parties'); }
+
+/* ══ MODAL 4 — Notes & evidence ══ */
+const evidenceFiles = [];
+function handleFiles(files) {
+  [...files].forEach(f => {
+    evidenceFiles.push({ name: f.name, size: (f.size/1024).toFixed(1)+' KB', type: f.name.split('.').pop().toUpperCase() });
+  });
+  renderEvidence();
+}
+function renderEvidence() {
+  document.getElementById('evidence-list').innerHTML = evidenceFiles.map((f,i) => `
+    <div class="evidence-item">
+      <div class="ev-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="#066653" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 2v6h6" stroke="#066653" stroke-width="2" stroke-linecap="round"/></svg>
+      </div>
+      <div>
+        <div class="ev-name">${f.name}</div>
+        <div class="ev-meta">${f.type} · ${f.size}</div>
+      </div>
+      <button class="ind-del2" onclick="evidenceFiles.splice(${i},1);renderEvidence()">✕</button>
+    </div>`).join('');
+}
+function saveNotes() { markDone('opt4'); closeModal('m-notes'); }
+</script>
+
+<!-- ══ ADD CUSTOM ACTIVITY MODAL ══ -->
+<div id="addActOverlay" style="display:none;position:fixed;inset:0;background:rgba(4,38,32,0.45);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);z-index:800;align-items:center;justify-content:center;padding:20px">
+  <div style="background:#fff;border-radius:16px;width:100%;max-width:560px;max-height:90vh;overflow-y:auto;box-shadow:0 32px 80px rgba(0,0,0,0.22);position:relative">
+    <!-- Header -->
+    <div style="padding:28px 32px 20px;border-bottom:1px solid #eaebf0">
+      <button onclick="closeAddModal()" style="position:absolute;top:14px;right:14px;width:34px;height:34px;border:none;background:#eaebf0;border-radius:50%;cursor:pointer;font-size:16px;display:grid;place-items:center;color:#444a51">✕</button>
+      <div style="font-family:var(--font-text);font-size:18px;font-weight:700;color:#252525;letter-spacing:-0.02em;margin-bottom:4px">Add Custom Activity</div>
+      <div style="font-family:var(--font-text);font-size:12px;color:#68727d">Adding to: <strong id="modalEcoLabel" style="color:#066653">—</strong></div>
+    </div>
+    <!-- Body -->
+    <div style="padding:24px 32px;display:flex;flex-direction:column;gap:18px">
+
+      <!-- Activity name -->
+      <div>
+        <label style="font-family:var(--font-text);font-size:12px;font-weight:600;color:#444a51;display:block;margin-bottom:6px">Activity name *</label>
+        <input id="actName" class="fi" type="text" placeholder="e.g. Community-led forest patrol" />
+      </div>
+
+      <!-- Frequency -->
+      <div>
+        <label style="font-family:var(--font-text);font-size:12px;font-weight:600;color:#444a51;display:block;margin-bottom:6px">Monitoring frequency</label>
+        <select id="actFreq" class="fi select-chev">
+          <option>Monthly</option>
+          <option>Quarterly</option>
+          <option>Every 6 months</option>
+          <option selected>Annual</option>
+          <option>3, 6, 12 months</option>
+          <option>Monthly in dry season</option>
+          <option>Annual / seasonal</option>
+        </select>
+      </div>
+
+      <!-- Monitoring method -->
+      <div>
+        <label style="font-family:var(--font-text);font-size:12px;font-weight:600;color:#444a51;display:block;margin-bottom:6px">Data source</label>
+        <select id="actMethod" class="fi select-chev">
+            <option>Remote sensing + field verification</option>
+            <option>GPS mapping + satellite imagery</option>
+            <option>Field plots + geotagged photos</option>
+            <option>Drone/satellite imagery + transect</option>
+            <option>Field observation + hydrology assessment</option>
+            <option>Shoreline change analysis</option>
+            <option>GPS inspection + photo documentation</option>
+            <option>Dipwell/water logger + remote sensing</option>
+            <option>MODIS/VIIRS + patrol report</option>
+            <option>NDVI/canopy monitoring + field survey</option>
+            <option>Stakeholder interview + survey</option>
+            <option>Community patrol + field report</option>
+            <option>Other / custom method</option>
+        </select>
+      </div>
+
+      <!-- Monitoring indicators -->
+      <div>
+        <label style="font-family:var(--font-text);font-size:12px;font-weight:600;color:#444a51;display:block;margin-bottom:6px">Monitoring indicators (can be more than 1)</label>
+        <div id="indList" style="display:flex;flex-direction:column;gap:6px;margin-bottom:8px"></div>
+        <button onclick="addIndRow('indList')" class="btn-add-act" style="margin-top:0">+ Add indicator</button>
+      </div>
+
+    </div>
+    <!-- Footer -->
+    <div style="padding:18px 32px;border-top:1px solid #eaebf0;display:flex;justify-content:flex-end;gap:12px;background:#fafbfc;border-radius:0 0 16px 16px">
+      <button onclick="closeAddModal()" class="ws-btn ws-btn-back">Cancel</button>
+      <button onclick="submitCustomActivity()" class="ws-btn ws-btn-primary">Add activity →</button>
+    </div>
+  </div>
+</div>
+
+<style>
+#addActOverlay.open { display:flex !important; }
+.ind-row { display:flex; gap:8px; align-items:center; }
+.ind-row input { flex:1; height:36px; padding:0 12px; border:1px solid #eaebf0; border-radius:6px; font-family:var(--font-text); font-size:12px; color:#444a51; outline:none; }
+.ind-row input:focus { border-color:#066653; }
+.ind-del { width:30px; height:30px; border:none; background:none; cursor:pointer; color:rgb(172,26,19); border-radius:4px; font-size:14px; flex-shrink:0; display:grid; place-items:center; }
+.ind-del:hover { background:rgb(255,240,240); }
+</style>
+
+<script>
+let activeEcoId = null;
+
+function openAddModal(ecoId) {
+  activeEcoId = ecoId;
+  const eco = ecosystems.find(e => e.id === ecoId);
+  document.getElementById('modalEcoLabel').textContent = eco ? eco.name : ecoId;
+  document.getElementById('actName').value = '';
+  document.getElementById('actFreq').value = 'Annual';
+  document.getElementById('indList').innerHTML = '';
+  addIndRow('indList');
+  document.getElementById('addActOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeAddModal() {
+  document.getElementById('addActOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function addIndRow(listId) {
+  const row = document.createElement('div');
+  row.className = 'ind-row';
+  row.innerHTML = `
+    <input type="text" placeholder="e.g. Area of habitat restored" style="flex:1" />
+    <select style="width:110px;height:36px;padding:0 8px;border:1px solid #eaebf0;border-radius:6px;font-family:var(--font-text);font-size:12px;color:#444a51;background:#fff;outline:none;cursor:pointer;flex-shrink:0">
+      <option value="">Unit</option>
+      <option>ha</option>
+      <option>km²</option>
+      <option>km</option>
+      <option>m</option>
+      <option>number</option>
+      <option>count</option>
+      <option>%</option>
+      <option>tCO₂e</option>
+      <option>tCO₂e/yr</option>
+      <option>m³</option>
+      <option>index</option>
+      <option>score</option>
+      <option>species</option>
+      <option>household</option>
+      <option>person</option>
+      <option>other</option>
+    </select>
+    <button class="ind-del" onclick="this.parentElement.remove()" title="Remove">✕</button>`;
+  document.getElementById(listId).appendChild(row);
+  row.querySelector('input').focus();
+}
+
+function submitCustomActivity() {
+  const name = document.getElementById('actName').value.trim();
+  if (!name) { document.getElementById('actName').focus(); document.getElementById('actName').style.borderColor='#e33b32'; return; }
+  const type = 'Recommended';
+  const freq = document.getElementById('actFreq').value;
+  const method = document.getElementById('actMethod').value;
+  const indicators = [...document.querySelectorAll('#indList .ind-row')].map(row => {
+    const name = row.querySelector('input').value.trim();
+    const unit = row.querySelector('select').value;
+    return name ? (unit ? `${name} (${unit})` : name) : null;
+  }).filter(Boolean);
+  const optional = [];
+
+  const eco = ecosystems.find(e => e.id === activeEcoId);
+  if (!eco) return;
+
+  const newId = 'custom-' + Date.now();
+  eco.activities.push({
+    id: newId,
+    name,
+    type,
+    checked: true,
+    indicators: indicators.length ? indicators : ['Custom indicator'],
+    optional: optional.length ? optional : [],
+    method,
+    freq
+  });
+
+  closeAddModal();
+  renderActivities();
+}
+
+document.getElementById('addActOverlay').addEventListener('click', e => {
+  if (e.target === document.getElementById('addActOverlay')) closeAddModal();
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAddModal(); });
+
+/* Q-08: honour ?step= URL param (from F04 / shortcut links) */
+(function () {
+  const params = new URLSearchParams(location.search);
+  /* Edit mode (from F04.1 "Edit NbS Design") — reframe the page as an edit flow */
+  if (params.get('mode') === 'edit') {
+    const t = document.querySelector('.f05-hdr-title');
+    if (t) t.textContent = 'Edit NbS Design';
+    const s = document.querySelector('.f05-hdr-sub');
+    if (s) s.textContent = 'Review and adjust your NbS design — site boundary, pathways, activities, and monitoring matrix. Changes are saved back to your project.';
+    const crumb = document.querySelector('.crumbbar span');
+    if (crumb) crumb.textContent = 'Edit NbS Design';
+  }
+  const n = parseInt(params.get('step'));
+  if (!isNaN(n) && n >= 1 && n <= 6) {
+    maxReached = n;
+    goToStep(n);
+  }
+})();
+
+/* ── Export toast ── */
+let _toastTimer = null;
+function showExportToast(kind) {
+  const conf = kind === 'pdf'
+    ? { label: 'PDF downloaded', file: 'Kubu_Raya_Mangrove_Monitoring_Plan.pdf' }
+    : { label: 'Exported to Excel', file: 'Kubu_Raya_Mangrove_Monitoring_Plan.xlsx' };
+  let host = document.getElementById('exportToastHost');
+  if (!host) {
+    host = document.createElement('div');
+    host.id = 'exportToastHost';
+    document.body.appendChild(host);
+  }
+  const toast = document.createElement('div');
+  toast.className = 'export-toast';
+  toast.innerHTML = `
+    <div class="export-toast-ic">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#066653" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="export-toast-body">
+      <div class="export-toast-title">${conf.label}</div>
+      <div class="export-toast-file">${conf.file}</div>
+    </div>
+    <button class="export-toast-x" aria-label="Dismiss">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+    </button>
+    <div class="export-toast-bar"></div>`;
+  host.appendChild(toast);
+  requestAnimationFrame(() => toast.classList.add('in'));
+  const dismiss = () => {
+    toast.classList.remove('in');
+    toast.classList.add('out');
+    setTimeout(() => toast.remove(), 320);
+  };
+  toast.querySelector('.export-toast-x').addEventListener('click', dismiss);
+  setTimeout(dismiss, 4000);
+}
+</script>
+<script src="js/nav-mobile.js"></script>
+</body>
+</html>

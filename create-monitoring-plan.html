@@ -1,0 +1,1904 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NbS Tool — F05 Create Monitoring Plan</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Barlow+Semi+Condensed:wght@600;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/tokens.css" />
+  <link rel="stylesheet" href="css/f03.css" />
+    <link rel="stylesheet" href="css/f05.css" />
+  <link rel="stylesheet" href="css/nav.css" />
+  <style>
+    #exportToastHost {
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+      z-index: 4000;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      pointer-events: none;
+    }
+    .export-toast {
+      pointer-events: auto;
+      position: relative;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      width: 340px;
+      padding: 14px 14px 16px;
+      background: #fff;
+      border: 1px solid rgba(7,127,104,0.18);
+      border-radius: 12px;
+      box-shadow: 0 12px 32px -8px rgba(15,40,30,0.28), 0 2px 8px rgba(15,40,30,0.08);
+      font-family: 'Inter', sans-serif;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(14px) scale(0.98);
+      transition: opacity .28s cubic-bezier(.2,.7,.3,1), transform .28s cubic-bezier(.2,.7,.3,1);
+    }
+    .export-toast.in { opacity: 1; transform: translateY(0) scale(1); }
+    .export-toast.out { opacity: 0; transform: translateY(8px) scale(0.98); }
+    .export-toast-ic {
+      flex-shrink: 0;
+      width: 30px; height: 30px;
+      display: grid; place-items: center;
+      background: rgba(7,127,104,0.10);
+      border-radius: 8px;
+    }
+    .export-toast-body { flex: 1; min-width: 0; }
+    .export-toast-title {
+      font-size: 14px; font-weight: 700; color: #14241d; line-height: 1.3;
+    }
+    .export-toast-file {
+      font-size: 12px; color: #6a7a72; margin-top: 2px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .export-toast-x {
+      flex-shrink: 0;
+      background: none; border: none; cursor: pointer;
+      color: #9aa8a1; padding: 2px; border-radius: 6px;
+      display: grid; place-items: center;
+      transition: background .15s, color .15s;
+    }
+    .export-toast-x:hover { background: rgba(15,40,30,0.06); color: #4a5a52; }
+    .export-toast-bar {
+      position: absolute;
+      left: 0; bottom: 0; height: 3px;
+      width: 100%;
+      background: #066653;
+      transform-origin: left;
+      animation: exportToastBar 4s linear forwards;
+    }
+    @keyframes exportToastBar { from { transform: scaleX(1); } to { transform: scaleX(0); } }
+    @media (prefers-reduced-motion: reduce) {
+      .export-toast { transition: opacity .2s; transform: none; }
+      .export-toast-bar { animation: none; }
+    }
+
+    /* Pathway tags on Step 1 activities + matrix activity cell */
+    .act-tag.pw-protect, .pw-mini.pw-protect { background: rgb(220,252,231); color: rgb(22,101,52); }
+    .act-tag.pw-manage,  .pw-mini.pw-manage  { background: rgb(254,243,199); color: rgb(146,64,14); }
+    .act-tag.pw-restore, .pw-mini.pw-restore { background: rgb(224,247,250); color: rgb(14,116,144); }
+    /* Step 1 — pathway section titles (Protect / Manage / Restore) */
+    .pw-group + .pw-group { margin-top: 20px; }
+    .pw-section-hd {
+      display: flex; align-items: center; gap: 9px;
+      font-family: var(--font-text); font-size: 12px; font-weight: 700;
+      letter-spacing: .07em; text-transform: uppercase; color: #5a6b63;
+      padding: 4px 2px 10px; margin: 2px 0 4px;
+      border-bottom: 1px solid var(--stroke-base, #e7ece9);
+    }
+    .pw-section-hd .pw-dot { width: 9px; height: 9px; border-radius: 50%; flex: none; }
+    .pw-section-hd.pw-protect .pw-dot { background: rgb(22,101,52); }
+    .pw-section-hd.pw-manage  .pw-dot { background: rgb(146,64,14); }
+    .pw-section-hd.pw-restore .pw-dot { background: rgb(14,116,144); }
+    .pw-section-hd.pw-custom  .pw-dot { background: #64748b; }
+
+    .pw-mini {
+      display: inline-block; margin-top: 7px;
+      font-family: var(--font-text); font-size: 9px; font-weight: 700;
+      letter-spacing: .04em; border-radius: 20px; padding: 2px 8px;
+    }
+
+    /* Step 3 — "Your NbS pathways" overview cards */
+    .pw-overview-hd { font-family: var(--font-text); font-size: 15px; font-weight: 700; color: var(--text-base-main); margin: 0 0 12px; }
+    .pw-overview { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 14px; margin-bottom: 24px; }
+    .pw-ov-card { border: 1px solid var(--stroke-base); border-radius: 14px; padding: 16px 18px; background: var(--bg-base-main); }
+    .pw-ov-hd { display: flex; align-items: center; gap: 11px; margin-bottom: 13px; }
+    .pw-ov-ic { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; flex: none; overflow: hidden; }
+    .pw-ov-ic .eco-logo { width: 40px; height: 40px; }
+    .pw-ov-name { font-family: var(--font-text); font-size: 16px; font-weight: 700; color: var(--text-base-main); }
+    .pw-ov-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+    .pw-ov-pill { font-family: var(--font-text); font-size: 12px; font-weight: 700; color: var(--text-primary); background: var(--bg-success-second); border-radius: 20px; padding: 5px 14px; }
+    .pw-ov-pill.is-none { background: #f1f3f5; color: #98a0aa; }
+    .pw-ov-dur { font-family: var(--font-text); font-size: 13px; color: var(--text-base-second); }
+    .pw-ov-dur strong { color: var(--text-base-main); }
+    .pw-ov-empty { font-family: var(--font-text); font-size: 13px; color: #98a0aa; padding: 8px 0 4px; }
+    .acc-ben { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px; margin-right: 6px; vertical-align: middle; }
+
+    /* Benefit column (Step 2 matrix) */
+    .ben-cell { display: flex; flex-direction: column; gap: 5px; max-width: 220px; }
+
+    /* Step 2 — advanced filter bar + search */
+    .mx-filterbar {
+      display: flex; align-items: flex-end; justify-content: space-between;
+      gap: 18px; flex-wrap: wrap;
+      padding: 14px 16px; margin-bottom: 14px;
+      background: var(--bg-base-second, #fafbfc);
+      border: 1px solid #eef0f3; border-radius: 12px;
+    }
+    .mx-filterbar .fpill.ben-nature.active  { background: rgb(220,252,231); color: rgb(22,101,52);  border-color: rgb(150,220,170); }
+    .mx-filterbar .fpill.ben-people.active  { background: rgb(239,246,255); color: #0a436b;         border-color: rgb(160,195,240); }
+    .mx-filterbar .fpill.ben-climate.active { background: rgb(255,237,213); color: rgb(194,65,12);   border-color: rgb(240,190,140); }
+    .mx-search {
+      display: flex; align-items: center; gap: 8px;
+      flex: 1 1 240px; min-width: 220px; max-width: 360px;
+      height: 38px; padding: 0 12px;
+      background: #fff; border: 1px solid #e2e5ea; border-radius: 20px;
+      color: #98a0aa; transition: border-color .15s, box-shadow .15s;
+    }
+    .mx-search:focus-within { border-color: #066653; box-shadow: var(--ring-primary); color: #066653; }
+    .mx-search svg { flex: none; }
+    .mx-search input {
+      flex: 1; min-width: 0; border: none; outline: none; background: transparent;
+      font-family: var(--font-text); font-size: 12px; color: #252525;
+    }
+    .mx-search input::placeholder { color: #98a0aa; }
+    td.mx-empty {
+      text-align: center; padding: 44px 20px; color: #8a929c;
+      font-family: var(--font-text); font-size: 13px;
+    }
+    td.mx-empty { display: table-cell; }
+    td.mx-empty svg { display: block; margin: 0 auto 10px; color: #b6bdc4; }
+    td.mx-empty span { display: block; }
+
+    .ben-cell2-spacer { display: none; }
+    .ben-tag {
+      align-self: flex-start;
+      font-family: var(--font-text); font-size: 9px; font-weight: 700;
+      letter-spacing: .04em; text-transform: uppercase;
+      border-radius: 20px; padding: 2px 8px;
+    }
+    .ben-tag.nature  { background: rgb(220,252,231); color: rgb(22,101,52); }
+    .ben-tag.people  { background: rgb(239,246,255); color: #0a436b; }
+    .ben-tag.climate { background: rgb(255,237,213); color: rgb(194,65,12); }
+    .ben-tag.custom  { background: #f1f5f9; color: #475569; }
+    .ben-name { font-size: 11px; color: rgb(74,84,104); line-height: 1.4; }
+  </style>
+</head>
+<body data-screen-label="F05 — Create Monitoring Plan">
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<nav class="sitenav">
+  <a class="sitenav-logo" href="index.html">
+    <img src="assets/scene-logo.png" alt="SCeNe Coalition" width="360" height="133" style="height:44px;width:auto" />
+  </a>
+  <div class="sitenav-links">
+    <a href="index.html" class="sitenav-link">Home</a>
+    <a href="interactive-map.html" class="sitenav-link">Interactive Map</a>
+    <a href="dashboard.html" class="sitenav-link active">My Project</a>
+  </div>
+  <div class="sitenav-actions">
+    <div class="sitenav-profile-wrap" id="profileWrap">
+      <button class="sitenav-profile" id="profileBtn"><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="white" stroke-width="2"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="white" stroke-width="2" stroke-linecap="round"/></svg> Profile <svg class="chev" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="sitenav-dropdown">
+        <div class="sitenav-user-info"><div class="sitenav-user-name">Adi Mantri</div><div class="sitenav-user-email">adi@lestari.org</div></div>
+        <a href="dashboard.html">My Projects</a>
+        <a href="document-generator.html">Document Generator</a>
+        <a href="account-settings.html">Account settings</a>
+        <button class="logout" onclick="window.location.href='login.html'">Log out</button>
+      </div>
+    </div>
+    <button class="sitenav-lang">🇺🇸 <svg class="chev" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  </div>
+</nav>
+<!-- profile dropdown handled by nav-mobile.js (Q-03) -->
+
+<nav class="crumbbar" style="display:flex;align-items:center;gap:8px;font-family:var(--font-text);font-size:13px;color:var(--text-base-second);padding:12px 40px;border-bottom:1px solid var(--stroke-base);background:var(--bg-base-main)">
+  <a href="dashboard.html" style="color:var(--text-base-second);text-decoration:none;transition:color .15s" onmouseover="this.style.color='var(--text-primary)'" onmouseout="this.style.color='var(--text-base-second)'">My Project Dashboard</a>
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="opacity:.45;flex:none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  <a href="project-detail.html" style="color:var(--text-base-second);text-decoration:none;transition:color .15s" onmouseover="this.style.color='var(--text-primary)'" onmouseout="this.style.color='var(--text-base-second)'">Kubu Raya Mangrove</a>
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="opacity:.45;flex:none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  <span style="color:var(--text-base-main);font-weight:600">Monitoring Plan Development</span>
+</nav>
+
+<div class="desktop-notice" role="note">
+  <svg viewBox="0 0 24 24" fill="none"><rect x="2" y="4" width="20" height="13" rx="2" stroke="currentColor" stroke-width="2"/><path d="M8 21h8M12 17v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+  <div class="dn-body"><strong>Best viewed on desktop.</strong> The NbS Tool is built for larger screens. This page still works on mobile, but for the full experience — wide data tables, side-by-side panels and editing — open it in a desktop browser.</div>
+  <button class="dn-x" type="button" aria-label="Dismiss"><svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+</div>
+<div class="f05-page" id="main" role="main" tabindex="-1">
+  <div class="f05-main">
+
+    <!-- PAGE HEADER -->
+    <div class="f05-hdr">
+      <div>
+        <div class="f05-hdr-title">Monitoring Plan Development</div>
+        <p class="f05-hdr-sub">Select planned NbS activities and monitoring indicators. NbS Tool will generate recommended and additional monitoring indicators for review before generating the document report.</p>
+      </div>
+      <div class="f05-status-pill">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="12" y1="9" x2="12" y2="13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="17" x2="12.01" y2="17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <div>Screening result<small>Requires field verification</small></div>
+      </div>
+    </div>
+
+    <!-- STEPPER -->
+    <div class="f05-stepper" id="stepper">
+      <div class="f05-step f05-active" data-step="1">
+        <div class="f05-step-num" id="snum1">1</div>
+        <div>
+          <div class="f05-step-title">Define NbS Activities</div>
+          <div class="f05-step-desc">Choose activities by ecosystem &amp; pathway.</div>
+        </div>
+      </div>
+      <div class="f05-step-arrow" id="sarr1">›</div>
+      <div class="f05-step f05-disabled" data-step="2">
+        <div class="f05-step-num" id="snum2">2</div>
+        <div>
+          <div class="f05-step-title">Define Monitoring Indicators</div>
+          <div class="f05-step-desc">Indicators, methods, and frequency.</div>
+        </div>
+      </div>
+      <div class="f05-step-arrow" id="sarr2">›</div>
+      <div class="f05-step f05-disabled" data-step="3">
+        <div class="f05-step-num" id="snum3">3</div>
+        <div>
+          <div class="f05-step-title">Review and Finalize</div>
+          <div class="f05-step-desc">Edit, assign, add notes, export.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WORKSPACE -->
+    <div class="workspace">
+
+      <!-- ══ STEP 1 ══ -->
+      <div class="step-content active" data-content="1">
+        <div class="ws-hdr">
+          <div>
+            <div class="ws-title">Define NbS Activities</div>
+            <div class="ws-hint">Choose activities based on the ecosystems present in your project area and your NbS Pathway. Recommended indicators will be generated automatically in the next step.</div>
+          </div>
+          <div class="ws-filters" id="step1Filters">
+            <div class="filter-group">
+              <span class="filter-label">Ecosystem</span>
+              <div class="fpill-row" id="ecoFilterChips">
+                <button class="fpill eco-forest active" type="button" data-fkind="eco" data-fval="forest">Forest</button>
+                <button class="fpill eco-mangrove active" type="button" data-fkind="eco" data-fval="mangrove">Mangrove</button>
+                <button class="fpill eco-peatland active" type="button" data-fkind="eco" data-fval="peatland">Peatland</button>
+              </div>
+            </div>
+            <div class="filter-divider"></div>
+            <div class="filter-group">
+              <span class="filter-label">Intervention</span>
+              <div class="fpill-row" id="intvFilterChips">
+                <button class="fpill pw-protect active" type="button" data-fkind="intv" data-fval="PROTECT">Protect</button>
+                <button class="fpill pw-manage active" type="button" data-fkind="intv" data-fval="MANAGE">Manage</button>
+                <button class="fpill pw-restore active" type="button" data-fkind="intv" data-fval="RESTORE">Restore</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ws-body">
+          <div class="act-grid" id="activitySections"></div>
+          <div class="sel-summary">
+            <div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap">
+              <div>
+                <div class="sel-label">Activities selected</div>
+                <div class="sel-count"><span id="selectedCount">0</span> / 61</div>
+              </div>
+              <div class="sel-tags" id="selectionTags"></div>
+            </div>
+            <div style="font-family:var(--font-text);font-size:11px;color:#68727d;max-width:260px;text-align:right">
+              Select at least 1 activity to proceed to the next step.
+            </div>
+          </div>
+        </div>
+        <div class="ws-footer">
+          <div class="ws-footer-meta">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#066653" stroke-width="2"/><path d="M12 8v4M12 16h.01" stroke="#066653" stroke-width="2" stroke-linecap="round"/></svg>
+            Step 1 of 3 · Activity selection
+          </div>
+          <div style="display:flex;gap:8px">
+            <button class="ws-btn ws-btn-back" onclick="window.location.href='dashboard.html'">✕ Cancel</button>
+            <button class="ws-btn ws-btn-primary" id="nextTo2" disabled>Generate matrix →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ STEP 2 ══ -->
+      <div class="step-content" data-content="2">
+        <div class="ws-hdr">
+          <div>
+            <div class="ws-title">Define Monitoring Indicators</div>
+            <div class="ws-hint" style="width: 480px">Based on your selected activities, the system has generated recommended monitoring content. Data source and monitoring frequency are set per indicator.</div>
+          </div>
+        </div>
+        <div class="mx-filterbar" id="step2Filters">
+          <div class="ws-filters">
+            <div class="filter-group">
+              <span class="filter-label">Ecosystem</span>
+              <div class="fpill-row">
+                <button class="fpill eco-forest active" type="button" data-fkind="eco" data-fval="forest">Forest</button>
+                <button class="fpill eco-mangrove active" type="button" data-fkind="eco" data-fval="mangrove">Mangrove</button>
+                <button class="fpill eco-peatland active" type="button" data-fkind="eco" data-fval="peatland">Peatland</button>
+              </div>
+            </div>
+            <div class="filter-divider"></div>
+            <div class="filter-group">
+              <span class="filter-label">Intervention pathway</span>
+              <div class="fpill-row">
+                <button class="fpill pw-protect active" type="button" data-fkind="intv" data-fval="PROTECT">Protect</button>
+                <button class="fpill pw-manage active" type="button" data-fkind="intv" data-fval="MANAGE">Manage</button>
+                <button class="fpill pw-restore active" type="button" data-fkind="intv" data-fval="RESTORE">Restore</button>
+              </div>
+            </div>
+            <div class="filter-divider"></div>
+            <div class="filter-group">
+              <span class="filter-label">Benefit type</span>
+              <div class="fpill-row">
+                <button class="fpill ben-nature active" type="button" data-fkind="ben" data-fval="Nature">Nature</button>
+                <button class="fpill ben-people active" type="button" data-fkind="ben" data-fval="People">People</button>
+                <button class="fpill ben-climate active" type="button" data-fkind="ben" data-fval="Climate">Climate</button>
+              </div>
+            </div>
+          </div>
+          <div class="mx-search">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4.3-4.3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            <input id="mxSearchInput" type="search" autocomplete="off" placeholder="Search activities, benefits or indicators…" />
+          </div>
+        </div>
+        <div class="ws-body">
+          <div class="matrix-wrap" id="matrixWrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>NbS Activity</th>
+                  <th>Benefit</th>
+                  <th>Monitoring indicator</th>
+                  <th data-col="ds">Data source</th>
+                  <th>Monitoring frequency</th>
+                </tr>
+              </thead>
+              <tbody id="matrixRows"></tbody>
+            </table>
+          </div>
+          <div class="matrix-info">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><path d="M12 8v4M12 16h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            This is an automatically generated draft. Field verification, stakeholder consultation, and data quality review are required before formal reporting. You can customize all indicators in the next step.
+          </div>
+        </div>
+        <div class="ws-footer">
+          <div class="ws-footer-meta">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#066653" stroke-width="2"/><path d="M12 8v4M12 16h.01" stroke="#066653" stroke-width="2" stroke-linecap="round"/></svg>
+            Step 2 of 3 · <span id="step2Counts">0 ecosystems · 0 activities · 0 indicators</span>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button class="ws-btn ws-btn-back" id="backTo1">← Back</button>
+            <button class="ws-btn ws-btn-primary" id="nextTo3">Continue to customize →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ STEP 3 ══ -->
+      <div class="step-content" data-content="3">
+        <div class="ws-hdr">
+          <div>
+            <div class="ws-title">Review and Finalize</div>
+            <div class="ws-hint">Adjust indicators, methods, and frequency. Assign responsibilities and add local context, assumptions, and evidence. When ready, export your monitoring plan.</div>
+          </div>
+        </div>
+        <div class="ws-body">
+          <div class="step3-grid">
+            <div>
+              <div class="pw-overview-hd">Your NbS pathways</div>
+              <div class="pw-overview" id="pathwayOverview"></div>
+              <div class="detail-stack" id="accordions"></div>
+            </div>
+            <div class="sum-card">
+              <div class="sum-card-hd">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M9 11l3 3L22 4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Plan summary
+              </div>
+              <div class="sum-row"><span>Ecosystems</span><strong id="sumEco">0</strong></div>
+              <div class="sum-row"><span>Activities selected</span><strong id="sumActivities">0</strong></div>
+              <div class="sum-row"><span>Indicators</span><strong id="sumIndicators">0</strong></div>
+              <div class="sum-row"><span>Monitoring methods</span><strong>6</strong></div>
+              <button class="btn-export" id="finalizeBtn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M3 12h4l3 8 4-16 3 8h4" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Generate Monitoring Plan
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="ws-footer">
+          <div class="ws-footer-meta">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#066653" stroke-width="2"/><path d="M12 8v4M12 16h.01" stroke="#066653" stroke-width="2" stroke-linecap="round"/></svg>
+            Step 3 of 3 · Customization
+          </div>
+          <div style="display:flex;gap:8px">
+            <button class="ws-btn ws-btn-back" id="backTo2">← Back</button>
+            <button class="ws-btn ws-btn-ghost">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v14a2 2 0 01-2 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M17 21v-8H7v8M7 3v5h8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Save as draft
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ STEP 4 SUCCESS ══ -->
+      <div class="step-content" data-content="4">
+        <div class="ws-body">
+          <div class="success-state">
+            <div class="success-icon">
+              <svg width="42" height="42" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#066653" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="success-title">Monitoring plan generated</div>
+            <p class="success-desc">Your monitoring plan for <strong>Kubu Raya Mangrove</strong> has been generated and saved to your project. You can download it now or proceed to the MRV Dashboard.</p>
+            <div class="success-acts">
+              <button class="ws-btn ws-btn-back" onclick="openModal('m-download')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Download Monitoring Plan</button>
+              <button class="ws-btn ws-btn-primary" onclick="window.location.href='project-detail.html'">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1" stroke="white" stroke-width="2"/><rect x="14" y="3" width="7" height="7" rx="1" stroke="white" stroke-width="2"/><rect x="3" y="14" width="7" height="7" rx="1" stroke="white" stroke-width="2"/><rect x="14" y="14" width="7" height="7" rx="1" stroke="white" stroke-width="2"/></svg>
+                Back to Project Detail Page
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /workspace -->
+
+    <div class="footer-note">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><path d="M12 8v4M12 16h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      Monitoring plans are generated as guidance. Field verification, stakeholder consultation, and data quality review are required before formal reporting.
+    </div>
+
+  </div><!-- /f05-main -->
+</div><!-- /f05-page -->
+
+<!-- FOOTER -->
+<footer class="f03-footer">
+  <div class="f03-footer-inner">
+    <div>
+      <img src="assets/scene-logo.png" alt="SCeNe Coalition" style="height:40px;opacity:.9;margin-bottom:12px" />
+      <p class="f03-footer-desc">SCeNe Coalition works to improve data accessibility, showcase high-quality projects and direct funding, as well as expand access for local organizations, enterprises, and communities.</p>
+    </div>
+    <div style="display:flex;gap:80px">
+      <div class="f03-footer-col"><h5>NbS Tool</h5><a href="#">NbS Tool Home</a><a href="#">Interactive Map</a></div>
+      <div class="f03-footer-col"><h5>Coalition</h5><a href="#">About SCeNe Coalition</a><a href="#">NbS Portfolio</a><a href="#">NbS Incubator</a><a href="#">Contact Us</a></div>
+    </div>
+  </div>
+  <div class="f03-footer-copy">© Copyright 2026 SCeNe Coalition.</div>
+</footer>
+
+<script src="js/f05-shared.js"></script>
+<script>
+/* ── Data ── */
+/* Activity data, ecoIcons, EMPTY_IC, findAct & the activity-card builder
+   now live in js/f05-shared.js (single source of truth). */
+
+let currentStep = 1;
+let maxReached = 1;
+const customDone = { opt2:false, opt3:false, opt4:false };
+
+/* ── Step 1 filter state (multi-select; all on by default) ── */
+const activeEco  = new Set(['forest', 'mangrove', 'peatland']);
+const activeIntv = new Set(['PROTECT', 'MANAGE', 'RESTORE']);
+function listIntv() { return [...activeIntv].map(p => INTV_LABEL[p]).join(' / '); }
+
+/* ── Step 1 render ── */
+function renderActivities() {
+  document.getElementById('activitySections').innerHTML = buildActivitySectionsHTML(activeEco, activeIntv);
+  wireActivityCheckboxes(updateSelection);
+  updateSelection();
+}
+
+/* ── Step 1 filter chips ── */
+document.querySelectorAll('#step1Filters .fpill').forEach(chip => {
+  chip.addEventListener('click', () => {
+    const set = chip.dataset.fkind === 'eco' ? activeEco : activeIntv;
+    const val = chip.dataset.fval;
+    if (set.has(val)) {
+      if (set.size === 1) {   // keep at least one selected per group
+        chip.classList.remove('shake'); void chip.offsetWidth; chip.classList.add('shake');
+        return;
+      }
+      set.delete(val); chip.classList.remove('active');
+    } else {
+      set.add(val); chip.classList.add('active');
+    }
+    renderActivities();
+  });
+});
+
+function getSelected() {
+  const ids = [...document.querySelectorAll('[data-activity]:checked')].map(cb => cb.dataset.activity);
+  return ecosystems.flatMap(e => e.activities.filter(a => ids.includes(a.id)).map(a => ({...a, eco:e})));
+}
+
+function updateSelection() {
+  const sel = getSelected();
+  document.getElementById('selectedCount').textContent = sel.length;
+  document.getElementById('nextTo2').disabled = sel.length === 0;
+  const ecoNames = [...new Set(sel.map(a => a.eco.name))];
+  document.getElementById('selectionTags').innerHTML = ecoNames.map(n => `<span class="sel-tag">${n}</span>`).join('');
+}
+
+/* ── Step 2: advanced filter + search state ── */
+const mxEco  = new Set(['forest', 'mangrove', 'peatland']);
+const mxIntv = new Set(['PROTECT', 'MANAGE', 'RESTORE']);
+const mxBen  = new Set(['Nature', 'People', 'Climate']);
+let   mxSearch = '';
+const BEN_KNOWN = ['Nature', 'People', 'Climate'];
+
+/* Visible indicators for an activity given the active matrix filters + search.
+   Returns [{ it, i }] preserving each indicator's original index in matrixInd. */
+function activityVisibleInds(a) {
+  if (!mxEco.has(a.eco.id)) return [];
+  if (a.pw && !mxIntv.has(a.pw)) return [];
+  const q = (mxSearch || '').trim().toLowerCase();
+  const actMatch = !!q && a.name.toLowerCase().includes(q);
+  const out = [];
+  getMatrixInds(a).forEach((it, i) => {
+    if (BEN_KNOWN.includes(it.cat) && !mxBen.has(it.cat)) return;
+    if (q && !(actMatch
+      || (it.benefit && it.benefit.toLowerCase().includes(q))
+      || (it.label && it.label.toLowerCase().includes(q)))) return;
+    out.push({ it, i });
+  });
+  return out;
+}
+
+/* ── Step 2 render ── */
+function renderMatrix(showOpt = false) {
+  const sel = getSelected();
+  const ecos = new Set(sel.map(a => a.eco.id));
+  const indCount = sel.reduce((s,a) => s + getMatrixInds(a).filter(it => it.checked).length, 0);
+  document.getElementById('step2Counts').textContent = `${ecos.size} ecosystems · ${sel.length} activities · ${indCount} indicators`;
+  document.getElementById('sumActivities').textContent = sel.length;
+  document.getElementById('sumEco').textContent = ecos.size;
+  document.getElementById('sumIndicators').textContent = indCount;
+
+  const visByAct = sel.map(a => ({ a, vis: activityVisibleInds(a) })).filter(x => x.vis.length);
+
+  if (!visByAct.length) {
+    document.getElementById('matrixRows').innerHTML =
+      `<tr><td colspan="5" class="mx-empty">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4.3-4.3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <span>No indicators match your filters${mxSearch ? ` for “${escHtml(mxSearch)}”` : ''}.</span>
+        <button class="ws-btn ws-btn-back" style="margin-top:4px" onclick="resetMatrixFilters()">Reset filters</button>
+      </td></tr>`;
+    return;
+  }
+
+  document.getElementById('matrixRows').innerHTML = visByAct.map(({ a, vis }) => {
+    // group consecutive visible indicators by their benefit
+    const groups = [];
+    vis.forEach(({ it, i }) => {
+      let g = groups[groups.length - 1];
+      if (!g || g.benefit !== it.benefit) { g = { benefit: it.benefit, cat: it.cat, items: [] }; groups.push(g); }
+      g.items.push({ it, i });
+    });
+    const total = vis.length;
+    let rendered = 0;
+    return groups.map((g) => {
+      return g.items.map(({ it, i }, gj) => {
+        let row = '<tr>';
+        if (rendered === 0) {
+          row += `<td rowspan="${total}"><div class="act-cell ${a.eco.colorCls}">${ecoIcons[a.eco.id]}<span>${a.name}</span></div>${a.pw ? `<span class="pw-mini pw-${a.pw.toLowerCase()}">${a.pw}</span>` : ''}</td>`;
+        }
+        if (gj === 0) {
+          row += `<td rowspan="${g.items.length}"><div class="ben-cell"><span class="ben-tag ${g.cat.toLowerCase()}">${g.cat}</span><span class="ben-name">${g.benefit}</span></div>` +
+            `<button class="mind-add" style="margin-top:8px" onclick="openAddInd('${a.id}', '${encodeURIComponent(g.benefit)}', '${g.cat}')">+ Add indicator</button></td>`;
+        }
+        row += `<td><label class="mind-row"><input type="checkbox" ${it.checked ? 'checked' : ''} onchange="toggleMatrixInd('${a.id}', ${i})" /><span class="mind-name">${it.label}</span></label></td>`;
+        row += `<td data-col="ds"><div class="ds-text">${dsText(it)}</div></td>`;
+        row += `<td class="freq-cell">${freqSelect(a.id, i, it.freq)}</td>`;
+        row += '</tr>';
+        rendered++;
+        return row;
+      }).join('');
+    }).join('');
+  }).join('');
+}
+
+/* Toggle one matrix filter chip (Ecosystem / Intervention / Benefit type) */
+function mxFilterSet(kind) { return kind === 'eco' ? mxEco : kind === 'intv' ? mxIntv : mxBen; }
+function resetMatrixFilters() {
+  mxEco.clear();  ['forest','mangrove','peatland'].forEach(v => mxEco.add(v));
+  mxIntv.clear(); ['PROTECT','MANAGE','RESTORE'].forEach(v => mxIntv.add(v));
+  mxBen.clear();  ['Nature','People','Climate'].forEach(v => mxBen.add(v));
+  mxSearch = '';
+  const si = document.getElementById('mxSearchInput'); if (si) si.value = '';
+  document.querySelectorAll('#step2Filters .fpill').forEach(c => c.classList.add('active'));
+  renderMatrix(false);
+}
+document.querySelectorAll('#step2Filters .fpill').forEach(chip => {
+  chip.addEventListener('click', () => {
+    const set = mxFilterSet(chip.dataset.fkind);
+    const val = chip.dataset.fval;
+    if (set.has(val)) {
+      if (set.size === 1) { chip.classList.remove('shake'); void chip.offsetWidth; chip.classList.add('shake'); return; }
+      set.delete(val); chip.classList.remove('active');
+    } else {
+      set.add(val); chip.classList.add('active');
+    }
+    renderMatrix(false);
+  });
+});
+(function () {
+  const si = document.getElementById('mxSearchInput');
+  if (si) si.addEventListener('input', () => { mxSearch = si.value; renderMatrix(false); });
+})();
+
+/* per-indicator inline selects (Step 2 matrix) */
+function dsSelect(actId, i, val) {
+  const opts = METHOD_OPTS.includes(val) ? METHOD_OPTS : (val ? [val, ...METHOD_OPTS] : METHOD_OPTS);
+  const inner = ['<option value="">— Select data source</option>']
+    .concat(opts.map(o => `<option ${o === val ? 'selected' : ''}>${o}</option>`)).join('');
+  return `<select class="mx-src" title="${(val || '').replace(/"/g, '&quot;')}" onchange="setIndField('${actId}', ${i}, 'source', this.value); this.title=this.value">${inner}</select>`;
+}
+/* Data source — view-only text (predefined by system / typed via Add Indicator modal) */
+function escHtml(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+function dsText(it) {
+  return it.source ? escHtml(it.source) : '<span class="ds-empty">—</span>';
+}
+function freqSelect(actId, i, val) {
+  const opts = FREQ_OPTS.includes(val) ? FREQ_OPTS : (val ? [val, ...FREQ_OPTS] : FREQ_OPTS);
+  const inner = ['<option value="">— Frequency</option>']
+    .concat(opts.map(o => `<option ${o === val ? 'selected' : ''}>${o}</option>`)).join('');
+  return `<select class="mx-freq" onchange="setIndField('${actId}', ${i}, 'freq', this.value)">${inner}</select>`;
+}
+function setIndField(actId, i, key, val) {
+  if (matrixInd[actId] && matrixInd[actId][i]) matrixInd[actId][i][key] = val;
+}
+
+/* show/hide the Data source column */
+let dsDetailHidden = false;
+function toggleDsDetail() {
+  dsDetailHidden = !dsDetailHidden;
+  document.getElementById('matrixWrap').classList.toggle('hide-ds', dsDetailHidden);
+  document.getElementById('dsToggleLabel').textContent = dsDetailHidden ? 'Show data source detail' : 'Hide data source detail';
+}
+
+/* ── Matrix indicator selection state ── */
+const matrixInd = {};
+function getMatrixInds(a) {
+  if (!matrixInd[a.id]) {
+    matrixInd[a.id] = [];
+    const push = (label, benefit, cat) => {
+      const meta = (a.indMeta && a.indMeta[label]) || {};
+      matrixInd[a.id].push({
+        label, checked: true, benefit, cat,
+        source: meta.source || a.method || '',
+        freq: meta.freq || a.freq || ''
+      });
+    };
+    if (a.benefits && a.benefits.length) {
+      a.benefits.forEach(b => b.inds.forEach(label => push(label, b.benefit, b.cat)));
+    } else if (a.indicators && a.indicators.length) {
+      a.indicators.forEach(label => push(label, 'Custom indicators', 'Custom'));
+    }
+  }
+  return matrixInd[a.id];
+}
+function toggleMatrixInd(actId, i) {
+  matrixInd[actId][i].checked = !matrixInd[actId][i].checked;
+  updateMatrixCounts();
+}
+function updateMatrixCounts() {
+  const sel = getSelected();
+  const ecos = new Set(sel.map(a => a.eco.id));
+  const indCount = sel.reduce((s,a) => s + getMatrixInds(a).filter(it => it.checked).length, 0);
+  document.getElementById('step2Counts').textContent = `${ecos.size} ecosystems · ${sel.length} activities · ${indCount} indicators`;
+  document.getElementById('sumIndicators').textContent = indCount;
+}
+let addIndTarget = null;
+function openAddInd(actId, benefitEnc, cat) {
+  addIndTarget = { actId, benefit: decodeURIComponent(benefitEnc || ''), cat: cat || 'Custom' };
+  document.getElementById('addIndName').value = '';
+  document.getElementById('addIndUnit').value = '';
+  document.getElementById('addIndSource').value = '';
+  document.getElementById('addIndName').style.borderColor = '';
+  const tag = document.getElementById('addIndBenefit');
+  if (tag) tag.innerHTML = `<span class="ben-tag ${addIndTarget.cat.toLowerCase()}">${addIndTarget.cat}</span><span class="ben-name">${addIndTarget.benefit}</span>`;
+  document.getElementById('m-add-ind').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  setTimeout(() => document.getElementById('addIndName').focus(), 50);
+}
+function confirmAddInd() {
+  const nameEl = document.getElementById('addIndName');
+  const name = nameEl.value.trim();
+  if (!name) { nameEl.focus(); nameEl.style.borderColor = '#e33b32'; return; }
+  const unit = document.getElementById('addIndUnit').value.trim();
+  const source = document.getElementById('addIndSource').value.trim();
+  const label = unit ? `${name} (${unit})` : name;
+  const a = ecosystems.flatMap(e => e.activities).find(x => x.id === addIndTarget.actId);
+  const list = getMatrixInds(a);
+  const newInd = { label, checked: true, benefit: addIndTarget.benefit, cat: addIndTarget.cat, source: source, freq: a.freq || '', custom: true };
+  // insert right after the last existing indicator of this benefit so it stays grouped
+  let at = -1;
+  list.forEach((it, i) => { if (it.benefit === addIndTarget.benefit) at = i; });
+  if (at === -1) list.push(newInd); else list.splice(at + 1, 0, newInd);
+  closeModal('m-add-ind');
+  renderMatrix(false);
+}
+
+/* ── Step 3 — "Your NbS pathways" overview ── */
+const pwDuration = {};                                   // random, stable per ecosystem (prototype)
+function genDuration() { return (Math.floor(Math.random() * 5) + 3) * 5; }  // 15–35, multiples of 5
+function renderPathwayOverview() {
+  const sel = getSelected();
+  const selIds = new Set(sel.map(a => a.id));
+  const toShow = ecosystems.filter(e => e.activities.some(a => selIds.has(a.id)));
+  const PW_ORDER = ['PROTECT', 'MANAGE', 'RESTORE'];
+  const PW_LBL = { PROTECT:'Protect', MANAGE:'Manage', RESTORE:'Restore' };
+  const host = document.getElementById('pathwayOverview');
+  if (!host) return;
+  if (!toShow.length) {
+    host.innerHTML = '<div class="pw-ov-empty">Select activities in Step 1 to see your ecosystem pathways.</div>';
+    return;
+  }
+  host.innerHTML = toShow.map(e => {
+    // Pathways follow the user's choices: which interventions have selected activities here.
+    const pws = PW_ORDER.filter(p => e.activities.some(a => selIds.has(a.id) && a.pw === p));
+    if (!(e.id in pwDuration)) pwDuration[e.id] = genDuration();
+    const pills = pws.length
+      ? pws.map(p => `<span class="pw-ov-pill">${PW_LBL[p]}</span>`).join('')
+      : '<span class="pw-ov-pill is-none">No pathway</span>';
+    return `<div class="pw-ov-card">
+      <div class="pw-ov-hd"><span class="pw-ov-ic">${ecoIcons[e.id]}</span><span class="pw-ov-name">${e.name}</span></div>
+      <div class="pw-ov-pills">${pills}</div>
+      <div class="pw-ov-dur">Duration · <strong>${pwDuration[e.id]} years</strong></div>
+    </div>`;
+  }).join('');
+}
+
+/* ── Step 3 accordions ── */
+function renderAccordions() {
+  const sel = getSelected();
+  const selIds = new Set(sel.map(a => a.id));
+  const toShow = ecosystems.filter(e => e.activities.some(a => selIds.has(a.id)));
+  const CATC = { Nature:['#dcfce7','#166534'], People:['#eff6ff','#0a436b'], Climate:['#ffedd5','#c2410c'], Custom:['#f1f5f9','#475569'] };
+  document.getElementById('accordions').innerHTML = toShow.map(e => {
+    const acts = e.activities.filter(a => selIds.has(a.id));
+    // Build rows straight from the Step 2 matrix state (only checked indicators, with their source + frequency).
+    const rows = acts.map(a => {
+      const inds = getMatrixInds(a).filter(it => it.checked);
+      if (!inds.length) return '';
+      return inds.map((it, idx) => {
+        const c = CATC[it.cat] || CATC.Custom;
+        return `<tr>
+          ${idx === 0 ? `<td rowspan="${inds.length}"><strong>${a.name}</strong>${a.pw ? `<span class="pw-mini pw-${a.pw.toLowerCase()}">${a.pw}</span>` : ''}</td>` : ''}
+          <td><span class="acc-ben" style="background:${c[0]};color:${c[1]}">${it.cat}</span>${it.benefit}</td>
+          <td>${it.label}</td>
+          <td style="font-size:11px">${it.source || '—'}</td>
+          <td class="freq-cell">${it.freq || '—'}</td>
+        </tr>`;
+      }).join('');
+    }).join('');
+    const indCount = acts.reduce((s, a) => s + getMatrixInds(a).filter(it => it.checked).length, 0);
+    return `
+    <div class="accordion">
+      <div class="accordion-head" onclick="this.parentElement.classList.toggle('open')">
+        <div class="accordion-title">
+          ${ecoIcons[e.id]}
+          <div>
+            <strong style="color:var(--primary-600)">${e.name} monitoring plan</strong>
+            <div class="acc-hint">${indCount} indicators · data sources and monitoring frequency from your matrix.</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span class="acc-count">${acts.length} activities selected</span>
+          <span class="acc-chev">▼</span>
+        </div>
+      </div>
+      <div class="accordion-body">
+        <table class="small-table">
+          <thead><tr><th>NbS Activity</th><th>Benefit</th><th>Indicator</th><th>Data source</th><th>Monitoring frequency</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ── Navigation ── */
+function goToStep(n) {
+  if (n > maxReached) return;
+  currentStep = n;
+
+  document.querySelectorAll('.step-content').forEach(c => c.classList.remove('active'));
+  document.querySelector(`[data-content="${n}"]`).classList.add('active');
+
+  document.querySelectorAll('.f05-step').forEach(s => {
+    const sn = parseInt(s.dataset.step);
+    s.classList.remove('f05-active','f05-complete','f05-disabled');
+    const numEl = s.querySelector('.f05-step-num');
+    if (sn < n) {
+      s.classList.add('f05-complete');
+      numEl.textContent = '✓';
+    } else if (sn === n) {
+      s.classList.add('f05-active');
+      numEl.textContent = sn;
+    } else if (sn > maxReached) {
+      s.classList.add('f05-disabled');
+      numEl.textContent = sn;
+    } else {
+      numEl.textContent = sn;
+    }
+  });
+
+  document.querySelectorAll('.f05-step-arrow').forEach((a, i) => {
+    a.classList.toggle('done', i + 1 < n);
+  });
+
+  if (n === 2) renderMatrix(false);
+  if (n === 3) { renderMatrix(true); renderPathwayOverview(); renderAccordions(); updateCustomSummary(); }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function updateCustomSummary() {
+  const done = Object.values(customDone).filter(Boolean).length;
+  const el = document.getElementById('sum-custom');
+  if (el) el.textContent = `${done} / 3`;
+}
+
+function markDone(id) {
+  customDone[id] = !customDone[id];
+  const el = document.getElementById(`${id}-status`);
+  if (!el) return;
+  el.textContent = customDone[id] ? 'Done ✓' : 'Not started';
+  el.classList.toggle('done', customDone[id]);
+  updateCustomSummary();
+}
+
+/* ── Wire up buttons ── */
+document.getElementById('nextTo2').addEventListener('click', () => {
+  maxReached = Math.max(maxReached, 2);
+  goToStep(2);
+});
+document.getElementById('backTo1').addEventListener('click', () => goToStep(1));
+document.getElementById('nextTo3').addEventListener('click', () => {
+  maxReached = Math.max(maxReached, 3);
+  goToStep(3);
+});
+document.getElementById('backTo2').addEventListener('click', () => goToStep(2));
+document.getElementById('finalizeBtn').addEventListener('click', () => {
+  maxReached = 4;
+  goToStep(4);
+});
+
+document.querySelectorAll('.f05-step').forEach(s => {
+  s.addEventListener('click', () => {
+    if (s.classList.contains('f05-disabled')) return;
+    goToStep(parseInt(s.dataset.step));
+  });
+});
+
+
+
+/* ── Init ── */
+renderActivities();
+
+// Opus follow-up R1: removed duplicate ?step handler — the canonical one (Q-08, below) covers steps 1–3
+</script>
+<!-- ══ SHARED MODAL STYLES ══ -->
+<style>
+.cust-ov { position:fixed;inset:0;background:rgba(4,38,32,0.48);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);z-index:900;display:none;align-items:center;justify-content:center;padding:20px; }
+.cust-ov.open { display:flex; }
+.cust-modal { background:#fff;border-radius:16px;width:100%;max-width:680px;max-height:90vh;overflow-y:auto;box-shadow:0 32px 80px rgba(0,0,0,0.24);position:relative; }
+.cust-modal.wide { max-width:780px; }
+.cust-mhd { padding:26px 32px 18px;border-bottom:1px solid #eaebf0;position:sticky;top:0;background:#fff;z-index:10; }
+.cust-mhd h2 { font-family:var(--font-text);font-size:17px;font-weight:700;color:#252525;letter-spacing:-0.02em;margin:0 0 4px; }
+.cust-mhd p { font-family:var(--font-text);font-size:12px;color:#68727d;margin:0; }
+.cust-mclose { position:absolute;top:14px;right:14px;width:34px;height:34px;border:none;background:#eaebf0;border-radius:50%;cursor:pointer;font-size:16px;display:grid;place-items:center;color:#444a51; }
+.cust-mclose:hover { background:#eaebf0; }
+.cust-mbody { padding:22px 32px; }
+.cust-mfoot { padding:16px 32px;border-top:1px solid #eaebf0;background:#fafbfc;border-radius:0 0 16px 16px;display:flex;justify-content:flex-end;gap:10px;position:sticky;bottom:0; }
+
+/* Indicator editor */
+.ind-edit-row { display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;padding:10px 14px;border:1px solid #eaebf0;border-radius:8px;background:#fff;margin-bottom:8px; }
+/* Indicator editor card — name + per-indicator data source & frequency */
+.ind-edit-card { border:1px solid #eaebf0;border-radius:8px;background:#fff;margin-bottom:8px;padding:10px 14px;display:flex;flex-direction:column;gap:10px; }
+.ind-edit-top { display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center; }
+.ind-edit-meta { display:grid;grid-template-columns:1fr 168px;gap:10px;padding-top:10px;border-top:1px dashed #eef0f3; }
+.ind-edit-meta label { font-family:var(--font-text);font-size:10px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:#68727d;display:block;margin-bottom:4px; }
+.ind-edit-meta select { width:100%;height:34px;padding:0 10px;border:1px solid #eaebf0;border-radius:6px;font-family:var(--font-text);font-size:12px;color:#444a51;background:#fff;cursor:pointer;outline:none;box-sizing:border-box;text-overflow:ellipsis; }
+.ind-edit-meta select:focus { border-color:#066653; }
+.ind-edit-name { font-family:var(--font-text);font-size:12px;color:#252525;font-weight:500; }
+.ind-toggle-opt {
+  font-family:var(--font-text);font-size:10px;font-weight:600;
+  padding:4px 10px 4px 8px;
+  border-radius:20px;border:1.5px solid;
+  cursor:pointer;transition:all .18s;
+  display:inline-flex;align-items:center;gap:5px;
+  user-select:none;
+}
+.ind-toggle-opt .tog-icon { font-size:11px; transition:transform .25s; display:inline-block; }
+.ind-toggle-opt:hover .tog-icon { transform:rotate(180deg); }
+.ind-toggle-opt:not(.is-opt) {
+  background:rgb(236,253,245);color:rgb(5,102,83);border-color:rgb(110,210,169);
+}
+.ind-toggle-opt:not(.is-opt):hover {
+  background:rgb(209,250,229);border-color:rgb(5,102,83);
+}
+.ind-toggle-opt.is-opt {
+  background:rgb(239,246,255);color:#0a436b;border-color:rgb(147,197,253);
+}
+.ind-toggle-opt.is-opt:hover {
+  background:#eaf2fb;border-color:rgb(59,130,246);
+}
+.ind-del2 { background:none;border:none;cursor:pointer;color:rgb(172,26,19);width:26px;height:26px;display:grid;place-items:center;border-radius:4px;font-size:13px; }
+.ind-del2:hover { background:rgb(255,240,240); }
+.act-section-hd { font-family:var(--font-text);font-size:12px;font-weight:700;color:#044c3e;background:#e9f8f1;border:1px solid rgb(205,235,213);border-radius:6px;padding:8px 14px;margin:16px 0 10px;display:flex;align-items:center;gap:8px; }
+
+/* Method editor */
+.meth-row { padding:14px;border:1px solid #eaebf0;border-radius:10px;margin-bottom:10px; }
+.meth-row-hd { font-family:var(--font-text);font-size:12px;font-weight:700;color:#252525;margin-bottom:10px; }
+.meth-fields { display:grid;grid-template-columns:1fr 1fr;gap:10px; }
+.meth-label { font-family:var(--font-text);font-size:11px;font-weight:600;color:#68727d;display:block;margin-bottom:4px; }
+.select-chev {
+  appearance:none;
+  -webkit-appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23677389' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-position:right 12px center;
+  padding-right:32px !important;
+  cursor:pointer;
+}
+
+/* Parties */
+.party-row { display:grid;grid-template-columns:1fr 160px 140px 32px;gap:10px;align-items:center;padding:10px 14px;border:1px solid #eaebf0;border-radius:8px;background:#fff;margin-bottom:8px; }
+.party-avatar { width:30px;height:30px;border-radius:50%;background:#066653;color:#fff;display:grid;place-items:center;font-family:var(--font-text);font-size:11px;font-weight:700;flex-shrink:0; }
+.party-name { font-family:var(--font-text);font-size:12px;font-weight:600;color:#252525; }
+.party-email { font-family:var(--font-text);font-size:11px;color:#68727d; }
+.role-badge { display:inline-block;font-family:var(--font-text);font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px; }
+.role-owner { background:#e9f8f1;color:#044c3e; }
+.role-editor { background:#eaf2fb;color:#0a436b; }
+.role-viewer { background:#f7f7f8;color:#68727d; }
+
+/* Notes / evidence */
+.upload-zone { border:2px dashed #c0c2c6;border-radius:10px;padding:32px;text-align:center;cursor:pointer;transition:all .15s;position:relative;overflow:hidden; }
+.upload-zone:hover { border-color:#066653;background:#e9f8f1; }
+.upload-zone input[type=file] { position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%; }
+.upload-zone-title { font-family:var(--font-text);font-size:14px;font-weight:700;color:#252525;margin:12px 0 4px; }
+.upload-zone-sub { font-family:var(--font-text);font-size:12px;color:#68727d; }
+.evidence-item { display:grid;grid-template-columns:36px 1fr auto;gap:10px;align-items:center;border:1px solid #eaebf0;border-radius:8px;padding:12px 14px;margin-bottom:8px;background:#fff; }
+.ev-icon { width:36px;height:36px;border-radius:8px;background:#e9f8f1;display:grid;place-items:center; }
+.ev-name { font-family:var(--font-text);font-size:12px;font-weight:600;color:#252525; }
+.ev-meta { font-family:var(--font-text);font-size:11px;color:#68727d;margin-top:2px; }
+.note-input { width:100%;padding:12px 14px;border:1px solid #eaebf0;border-radius:8px;font-family:var(--font-text);font-size:12px;color:#444a51;min-height:90px;resize:vertical;outline:none;line-height:1.5; }
+.note-input:focus { border-color:#066653; }
+.note-section-lbl { font-family:var(--font-text);font-size:12px;font-weight:700;color:#444a51;margin:16px 0 6px;display:block; }
+</style>
+
+<!-- ══ MODAL 1: Review & Edit Indicators ══ -->
+<div class="cust-ov" id="m-indicators">
+  <div class="cust-modal wide">
+    <div class="cust-mhd">
+      <button class="cust-mclose" onclick="closeModal('m-indicators')">✕</button>
+      <h2>Review and edit indicators</h2>
+      <p>Add, remove or mark indicators as optional. Changes apply to the monitoring matrix.</p>
+    </div>
+    <div class="cust-mbody" id="ind-editor-body"></div>
+    <div class="cust-mfoot">
+      <button class="ws-btn ws-btn-back" onclick="closeModal('m-indicators')">Cancel</button>
+      <button class="ws-btn ws-btn-primary" onclick="saveIndicators()">Save changes ✓</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL 2: Adjust Methods & Frequency ══ -->
+<div class="cust-ov" id="m-methods">
+  <div class="cust-modal wide">
+    <div class="cust-mhd">
+      <button class="cust-mclose" onclick="closeModal('m-methods')">✕</button>
+      <h2>Adjust data source and monitoring frequency</h2>
+      <p>Change the data source and collection schedule per activity.</p>
+    </div>
+    <div class="cust-mbody" id="meth-editor-body"></div>
+    <div class="cust-mfoot">
+      <button class="ws-btn ws-btn-back" onclick="closeModal('m-methods')">Cancel</button>
+      <button class="ws-btn ws-btn-primary" onclick="saveMethods()">Save changes ✓</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL 3: Assign Responsible Parties ══ -->
+<div class="cust-ov" id="m-parties">
+  <div class="cust-modal">
+    <div class="cust-mhd">
+      <button class="cust-mclose" onclick="closeModal('m-parties')">✕</button>
+      <h2>Assign responsible parties</h2>
+      <p>Define who collects, verifies, and reports data. Collaborators will receive access to this monitoring plan.</p>
+    </div>
+    <div class="cust-mbody">
+      <!-- Invite row -->
+      <div style="display:grid;grid-template-columns:1fr 140px auto;gap:8px;margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid #eaebf0">
+        <input id="party-email-input" class="fi" placeholder="colleague@organisation.org" type="email" style="height:40px;font-size:12px" />
+        <select id="party-role-input" class="fi" class="fi select-chev" style="height:40px;font-size:12px;">
+          <option value="Editor">Editor</option>
+          <option value="Viewer">Viewer</option>
+          <option value="Collector">Collector</option>
+          <option value="Verificator">Verificator</option>
+        </select>
+        <button class="ws-btn ws-btn-primary" style="height:40px;white-space:nowrap" onclick="addParty()">Invite</button>
+      </div>
+      <!-- Party list -->
+      <div style="font-family:var(--font-text);font-size:11px;font-weight:700;color:#68727d;text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px">People with access</div>
+      <div id="party-list"></div>
+    </div>
+    <div class="cust-mfoot">
+      <button class="ws-btn ws-btn-back" onclick="closeModal('m-parties')">Cancel</button>
+      <button class="ws-btn ws-btn-primary" onclick="saveParties()">Done ✓</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL 4: Add Notes & Evidence ══ -->
+<div class="cust-ov" id="m-notes">
+  <div class="cust-modal">
+    <div class="cust-mhd">
+      <button class="cust-mclose" onclick="closeModal('m-notes')">✕</button>
+      <h2>Add notes and evidence</h2>
+      <p>Attach supporting documents, upload evidence files, and add local context or assumptions.</p>
+    </div>
+    <div class="cust-mbody">
+      <label class="note-section-lbl">Project notes &amp; assumptions</label>
+      <textarea class="note-input" id="notes-text" placeholder="Describe local context, baseline assumptions, data gaps, and any notes for the monitoring team..."></textarea>
+      <label class="note-section-lbl" style="margin-top:20px">Upload evidence files</label>
+      <div class="upload-zone" id="upload-zone">
+        <input type="file" multiple accept=".pdf,.doc,.docx,.xlsx,.png,.jpg,.jpeg" onchange="handleFiles(this.files)" />
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" style="margin:0 auto;color:#066653"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div class="upload-zone-title">Drop files here or click to upload</div>
+        <div class="upload-zone-sub">PDF, Word, Excel, or image files. Max 20 MB each.</div>
+      </div>
+      <div id="evidence-list" style="margin-top:14px"></div>
+    </div>
+    <div class="cust-mfoot">
+      <button class="ws-btn ws-btn-back" onclick="closeModal('m-notes')">Cancel</button>
+      <button class="ws-btn ws-btn-primary" onclick="saveNotes()">Save &amp; done ✓</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL: Add Indicator (matrix) ══ -->
+<div class="cust-ov" id="m-add-ind">
+  <div class="cust-modal" style="max-width:440px">
+    <div class="cust-mhd">
+      <button class="cust-mclose" onclick="closeModal('m-add-ind')">✕</button>
+      <h2>Add monitoring indicator</h2>
+      <p>Define a new indicator for the benefit below. It will be added to the matrix under this benefit and selected by default.</p>
+    </div>
+    <div class="cust-mbody">
+      <div id="addIndBenefit" class="ben-cell" style="margin-bottom:16px;max-width:none"></div>
+      <div style="margin-bottom:16px">
+        <label style="font-family:var(--font-text);font-size:12px;font-weight:600;color:#444a51;display:block;margin-bottom:6px">Indicator name *</label>
+        <input id="addIndName" class="fi" type="text" placeholder="e.g. Canopy cover" onkeydown="if(event.key==='Enter')confirmAddInd()" />
+      </div>
+      <div style="margin-bottom:16px">
+        <label style="font-family:var(--font-text);font-size:12px;font-weight:600;color:#444a51;display:block;margin-bottom:6px">Unit</label>
+        <input id="addIndUnit" class="fi" type="text" placeholder="e.g. %, ha, ha/yr, count" onkeydown="if(event.key==='Enter')confirmAddInd()" />
+      </div>
+      <div>
+        <label style="font-family:var(--font-text);font-size:12px;font-weight:600;color:#444a51;display:block;margin-bottom:6px">Data source</label>
+        <textarea id="addIndSource" class="fi" rows="3" style="resize:vertical;line-height:1.5" placeholder="Describe how this indicator will be measured — e.g. Field plots + geotagged photos, remote sensing analysis, household surveys..."></textarea>
+        <div style="font-family:var(--font-text);font-size:11px;color:#8a929c;margin-top:5px">Shown as read-only text in the matrix once added.</div>
+      </div>
+    </div>
+    <div class="cust-mfoot">
+      <button class="ws-btn ws-btn-back" onclick="closeModal('m-add-ind')">Cancel</button>
+      <button class="ws-btn ws-btn-primary" onclick="confirmAddInd()">Add indicator</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL: Download format chooser ══ -->
+<style>
+.dl-choice { display:flex; flex-direction:column; gap:12px; }
+.dl-card {
+  display:flex; align-items:center; gap:14px; width:100%; text-align:left;
+  padding:16px; border:1.5px solid #e2e6e4; border-radius:12px; background:#fff;
+  cursor:pointer; transition:all .15s; font-family:var(--font-text);
+}
+.dl-card:hover { border-color:#066653; background:#f6faf8; box-shadow:0 6px 18px -10px rgba(6,102,83,.4); }
+.dl-ic {
+  flex:none; width:46px; height:46px; border-radius:10px; display:grid; place-items:center;
+  font-family:var(--font-text); font-size:12px; font-weight:800; letter-spacing:.04em; color:#fff;
+}
+.dl-ic-pdf { background:#c0392b; }
+.dl-ic-doc { background:#2b579a; }
+.dl-ic-xls { background:#1f7a4d; }
+.dl-tx { flex:1; display:flex; flex-direction:column; gap:3px; }
+.dl-tx strong { font-size:14px; font-weight:700; color:#252525; }
+.dl-tx span { font-size:12px; color:#68727d; line-height:1.45; }
+.dl-card .dl-chev { flex:none; color:#9aa8a1; transition:transform .15s; }
+.dl-card:hover .dl-chev { transform:translateX(3px); color:#066653; }
+</style>
+<div class="cust-ov" id="m-download">
+  <div class="cust-modal" style="max-width:460px">
+    <div class="cust-mhd">
+      <button class="cust-mclose" onclick="closeModal('m-download')">✕</button>
+      <h2>Download monitoring plan</h2>
+      <p>Choose a format. Your selected activities, benefits, indicators, data sources and monitoring frequency are all included.</p>
+    </div>
+    <div class="cust-mbody">
+      <div class="dl-choice">
+        <button class="dl-card" onclick="downloadPlanPDF()">
+          <div class="dl-ic dl-ic-pdf">PDF</div>
+          <div class="dl-tx"><strong>PDF document</strong><span>Branded NbS Tool report — ready to print, save or share.</span></div>
+          <svg class="dl-chev" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="dl-card" onclick="downloadPlanWord()">
+          <div class="dl-ic dl-ic-doc">DOC</div>
+          <div class="dl-tx"><strong>Word document</strong><span>Editable .doc report in the NbS Tool layout.</span></div>
+          <svg class="dl-chev" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="dl-card" onclick="downloadPlanExcel()">
+          <div class="dl-ic dl-ic-xls">XLS</div>
+          <div class="dl-tx"><strong>Excel spreadsheet</strong><span>Editable table of every activity, indicator, data source &amp; frequency.</span></div>
+          <svg class="dl-chev" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ── Modal open/close ── */
+function openModal(id) {
+  if (id === 'm-indicators') buildIndEditor();
+  if (id === 'm-methods')    buildMethEditor();
+  if (id === 'm-parties')    buildPartyList();
+  document.getElementById(id).classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.querySelectorAll('.cust-ov').forEach(ov => {
+  ov.addEventListener('click', e => { if (e.target === ov) closeModal(ov.id); });
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') document.querySelectorAll('.cust-ov.open').forEach(ov => closeModal(ov.id));
+});
+
+/* ══ MODAL 1 — Indicator editor ══ */
+function buildIndEditor() {
+  const sel = getSelected();
+  let html = '';
+  const byEco = {};
+  sel.forEach(a => {
+    if (!byEco[a.eco.id]) byEco[a.eco.id] = { eco: a.eco, acts: [] };
+    byEco[a.eco.id].acts.push(a);
+  });
+  Object.values(byEco).forEach(({ eco, acts }) => {
+    html += `<div class="act-section-hd">${ecoIcons[eco.id]} ${eco.name}</div>`;
+    acts.forEach(a => {
+      html += `<div style="margin-bottom:16px">
+        <div style="font-family:var(--font-text);font-size:12px;font-weight:700;color:#444a51;margin-bottom:8px">${a.name}</div>
+        <div id="ind-rows-${a.id}">
+          ${a.indicators.map((ind, i) => indRow(a.id, ind, false, i)).join('')}
+          ${a.optional.map((ind, i) => indRow(a.id, ind, true, 'o'+i)).join('')}
+        </div>
+        <button onclick="addNewInd('${a.id}')" class="btn-add-act" style="margin-top:6px;font-size:11px">+ Add indicator</button>
+      </div>`;
+    });
+  });
+  document.getElementById('ind-editor-body').innerHTML = html || '<p style="font-family:var(--font-text);font-size:13px;color:#68727d">No activities selected yet.</p>';
+}
+function indRow(actId, text, isOpt, idx) {
+  return `<div class="ind-edit-card" id="irow-${actId}-${idx}">
+    <div class="ind-edit-top">
+      <span class="ind-edit-name">${text}</span>
+      <button class="ind-toggle-opt ${isOpt?'is-opt':''}" onclick="toggleOpt(this)" title="Click to toggle Recommended / Optional"><span class="tog-icon">⇄</span>${isOpt?'Optional':'Recommended'}</button>
+      <button class="ind-del2" onclick="this.closest('.ind-edit-card').remove()">✕</button>
+    </div>
+    <div class="ind-edit-meta">
+      <div><label>Data source</label>${indEditSelect(actId, text, 'source')}</div>
+      <div><label>Monitoring freq.</label>${indEditSelect(actId, text, 'freq')}</div>
+    </div>
+  </div>`;
+}
+/* per-indicator Data source / Frequency selects in the editor (aligned with matrix lists) */
+function getAct(actId) { return ecosystems.flatMap(e => e.activities).find(x => x.id === actId); }
+function indMetaVal(a, label, kind) {
+  const m = (a && a.indMeta && a.indMeta[label]) || {};
+  if (kind === 'source') return m.source || (a && a.method) || '';
+  let f = m.freq || (a && a.freq) || '';
+  if (f === 'Annual') f = 'Annually';
+  return f;
+}
+function indEditSelect(actId, label, kind) {
+  const a = getAct(actId);
+  const base = kind === 'source' ? METHOD_OPTS : FREQ_OPTS;
+  const cur = label ? indMetaVal(a, label, kind) : '';
+  const ph = kind === 'source' ? '— Select data source' : '— Frequency';
+  const cls = kind === 'source' ? 'mx-src' : 'mx-freq';
+  const list = base.includes(cur) ? base : (cur ? [cur, ...base] : base);
+  const inner = [`<option value="">${ph}</option>`]
+    .concat(list.map(o => `<option ${o === cur ? 'selected' : ''}>${o}</option>`)).join('');
+  return `<select class="${cls}" title="${(cur || '').replace(/"/g, '&quot;')}" onchange="onIndMetaChange(this, '${actId}', '${kind}')">${inner}</select>`;
+}
+function onIndMetaChange(sel, actId, kind) {
+  const card = sel.closest('.ind-edit-card');
+  const nameEl = card.querySelector('.ind-edit-name, .ind-name-input');
+  const label = nameEl ? (nameEl.tagName === 'INPUT' ? nameEl.value.trim() : nameEl.textContent.trim()) : '';
+  if (label) {
+    const a = getAct(actId);
+    if (a) {
+      if (!a.indMeta) a.indMeta = {};
+      if (!a.indMeta[label]) a.indMeta[label] = {};
+      a.indMeta[label][kind] = sel.value;
+      if (matrixInd[actId]) matrixInd[actId].forEach(it => { if (it.label === label) it[kind] = sel.value; });
+    }
+  }
+  if (kind === 'source') sel.title = sel.value;
+}
+function toggleOpt(btn) {
+  btn.classList.toggle('is-opt');
+  const isOpt = btn.classList.contains('is-opt');
+  btn.innerHTML = `<span class="tog-icon">${isOpt ? '⇄' : '⇄'}</span>${isOpt ? 'Optional' : 'Recommended'}`;
+}
+function addNewInd(actId) {
+  const container = document.getElementById('ind-rows-' + actId);
+  const div = document.createElement('div');
+  div.className = 'ind-edit-card';
+  div.innerHTML = `
+    <div class="ind-edit-top">
+      <input class="ind-name-input" type="text" style="font-family:var(--font-text);font-size:12px;border:none;outline:none;width:100%;background:transparent" placeholder="New indicator name..." />
+      <button class="ind-toggle-opt" onclick="toggleOpt(this)" title="Click to toggle Recommended / Optional"><span class="tog-icon">⇄</span>Recommended</button>
+      <button class="ind-del2" onclick="this.closest('.ind-edit-card').remove()">✕</button>
+    </div>
+    <div class="ind-edit-meta">
+      <div><label>Data source</label>${indEditSelect(actId, '', 'source')}</div>
+      <div><label>Monitoring freq.</label>${indEditSelect(actId, '', 'freq')}</div>
+    </div>`;
+  container.appendChild(div);
+  div.querySelector('input').focus();
+}
+function saveIndicators() {
+  markDone('opt1');
+  closeModal('m-indicators');
+}
+
+/* ══ MODAL 2 — Methods editor ══ */
+const METHOD_OPTS = ["Physical forest inventories using allometric equations (DBH) combined with remote-sensing LiDAR/Radar models.","GIS mapping utilizing land-cover baseline maps, high-resolution satellite arrays, and targeted ground-truthing plots.","Multi-temporal automated classification of satellite imagery (Sentinel-2, Landsat) cross-verified with global forest loss alerts.","Remote sensing analysis using high-resolution satellite imagery (Sentinel-2, Landsat, PlanetScope) combined with ground-truthing via spherical densiometers, hemispherical photography, or drone/LiDAR canopy modeling.","Canopy density tracking via continuous fractional vegetation cover (FVC) analysis or delta-NDVI baseline comparisons.","Administrative registries from community forestry groups and formal land-allocation project tracking systems.","MODIS and VIIRS satellite active fire thermal anomaly data combined with localized post-fire perimeter mapping.","Spatial network analysis software (e.g., Conefor, GuidosToolbox) mapping patch sizes, edge effects, and corridor resistance.","Systematic grid sampling across permanent forest line-transects combined with high-resolution drone multi-spectral mapping.","Non-invasive camera-trapping arrays, acoustic bird monitoring networks, and standardized biodiversity field tracking.","Standardized laboratory testing (Walkley-Black or dry combustion) of soil cores collected from permanent field monitoring grids.","Combining satellite-derived net primary productivity (NPP) models with localized gridded rain-gauge data arrays.","Field measurement using erosion pins or sediment traps compared against open, un-vegetated control catchments.","Line-intercept field transects combined with ultra-high-resolution airborne or drone orthomosaic imagery classification.","Water-table fluctuation methods in local monitoring wells paired with localized water balance modeling software.","Seasonal forage biomass clipping and weighing trials combined with community livestock tracking audits.","Direct measurement using velocity-area methods (flow/current meters, ADCP), hydraulic structures (weirs or flumes with pressure transducers/ultrasonic level sensors), or indirect estimation using slope-area methods (Manning's equation)","Household survey databases, community forest cooperative registries, agricultural extension records, and regional remote sensing yield analysis reports","Nursery inventory and seedling dispatch logs combined with field planting registries, geotagged mobile app data, and verified through random plot-based survival audits and drone-based high-resolution aerial counts.","Quantification of net carbon stock changes in above- and below-ground biomass using permanent field sample plots (allometric equations based on DBH and height), calibrated with remote sensing models, subtracting baseline changes, project emissions, and leakage as per certified standards.","Systematic soil auger field profiling, electrical resistivity imaging (ERI), and specialized digital soil mapping models.","Field measurements using peat augers or ground-penetrating radar (GPR), with depth recorded until the mineral substrate is reached.","Measured through laboratory analysis of peat samples using dry combustion (elemental analyzer) or other standardized carbon determination methods.","Measured by collecting undisturbed peat core samples, drying them to constant weight, and calculating dry mass per unit volume.","Peat coring to determine peat depth, bulk density, and carbon concentration, followed by carbon stock estimation using standardized calculation methods.","Closed flux chamber field measurements calibrated with water table depth proxy emission factors (IPCC Tier 2/3 models).","Field deployment of automated or manual static greenhouse gas flux chambers and gas chromatography analysis.","Measured through post-fire field surveys by comparing pre- and post-fire peat surface elevations, burn scar assessments, and direct peat depth measurements at representative locations.","Automated telemetry-enabled dipwells and piezometers logging water table fluctuations at hourly intervals across a grid.","Measured using in-situ soil moisture sensors installed at representative depths, supplemented by gravimetric analysis of peat samples collected in the field.","Derived from water table monitoring, soil moisture measurements, and/or satellite-based hydrological assessments using a standardized calculation approach.","As-built engineering mapping verified by satellite hydrological tracking and localized water table depth stabilization data.","Daily processing of MODIS/VIIRS thermal data combined with localized ground patrol fire verification grids.","Measured using satellite imagery, burned scar mapping, fire hotspot detection, and field verification where applicable.","Project agricultural distribution records and land-use mapping cross-verified with seasonal satellite vegetative indices.","Project management milestone auditing against the formal landscape-scale master restoration plan.","Civil defense or project administrative records verifying active rosters, training certificates, and equipment maintenance logs.","Manual and automated remote-sensing digitizing of canal networks and associated dry-land vegetative signatures.","Physical field measurements using deep-anchored subsidence poles anchored to bedrock, supplemented by InSAR satellite radar.","Remote sensing fire-origin tracking intersected with land tenure maps, combined with field citation records.","Engineering maintenance logs, field inspections, and geotagged drone validation surveys of structure structural integrity.","Quadrat sampling across permanent field plots combined with ultra-high-resolution drone orthomosaics.","Regular collection of subsurface pore-water using suction lysimeters followed by standardized laboratory chemical tracking.","Supervised machine learning classification of multi-spectral satellite data (e.g., Radar + optical Sentinel blends) and edge mapping.","Allometric measurement of tree dimensions paired with deep-core sediment soil carbon sampling in coastal transects.","Annual delta-change analysis of high-resolution coastal land-cover maps and active coastal deforestation monitoring networks.","Geotagged project boundaries verified via high-resolution satellite arrays and localized seedling survival count grids.","Standardized point-centered quarter method or fixed quadrat field surveys counting distinct species stems within coastal zones.","Socio-economic household surveys, project benefit distribution logs, and cooperative membership records.","Field installation and monitoring of Surface Elevation Tables (SET) paired with horizontal feldspar marker horizons.","GIS buffer analysis calculating the distance and conversion rates of aquaculture boundaries relative to intact forest margins.","National environmental ministry gazette documents and digital boundaries overlayed with total baseline mangrove maps.","Intersecting local coastal tide gauge/satellite altimetry data with Surface Elevation Table (SET) field metrics.","Deployment of automated pressure-transducer water level loggers within the forest interior calibrated to local tide datums.","Legal audit and policy review tracking milestones (e.g., 1: No Policy, 2: Drafted, 3: Enacted, 4: Enforced).","Financial compliance audits of trust funds, project bank statements, and community-approved allocation registries.","Reviewing official land registry titles, land-tenure maps, and legal gazettes against traditional territory claims.","Standardized institutional capacity assessments evaluation across staffing, GIS hardware availability, and data audit trails.","Independent verification reports checking system updates, public accessibility, and compliance metrics logs.","Project grievance logbooks tracking total inputs, days to resolution, and formal stakeholder satisfaction sign-offs.","Reviewing formal resource collection permits, attendance at decision assemblies, and micro-grant disbursement lists.","Auditing project management logs tracking the time delta between an adverse monitoring report and implemented field adjustments."];
+const FREQ_OPTS = ["Hourly","Daily","Weekly","Bi-weekly","Monthly","Quarterly (3 month)","Semester (6 month)","Annually"];
+
+function buildMethEditor() {
+  const sel = getSelected();
+  const html = sel.map(a => `
+    <div class="meth-row">
+      <div class="meth-row-hd">${a.eco.name} — ${a.name}</div>
+      <div class="meth-fields">
+        <div>
+          <label class="meth-label">Data source</label>
+          <select class="fi" data-act-meth="${a.id}" class="fi select-chev" style="font-size:12px;height:38px;">
+            ${METHOD_OPTS.map(o => `<option ${a.method===o?'selected':''}>${o}</option>`).join('')}
+          </select>
+        </div>
+        <div>
+          <label class="meth-label">Monitoring frequency</label>
+          <select class="fi" data-act-freq="${a.id}" class="fi select-chev" style="font-size:12px;height:38px;">
+            ${FREQ_OPTS.map(o => `<option ${a.freq===o?'selected':''}>${o}</option>`).join('')}
+          </select>
+        </div>
+      </div>
+    </div>`).join('') || '<p style="font-family:var(--font-text);font-size:13px;color:#68727d">No activities selected yet.</p>';
+  document.getElementById('meth-editor-body').innerHTML = html;
+}
+function saveMethods() {
+  const sel = getSelected();
+  sel.forEach(a => {
+    const ms = document.querySelector(`[data-act-meth="${a.id}"]`);
+    const fs = document.querySelector(`[data-act-freq="${a.id}"]`);
+    if (ms) a.method = ms.value;
+    if (fs) a.freq   = fs.value;
+  });
+  markDone('opt2');
+  closeModal('m-methods');
+}
+
+/* ══ MODAL 3 — Assign parties ══ */
+const parties = [
+  { name:'Agus Maulana', email:'agus@kuburaya.org', role:'Owner', initials:'AM' },
+  { name:'Rini Sari', email:'rini.sari@wwf.id', role:'Editor', initials:'RS' },
+];
+const AVATAR_COLORS = ['#066653','#0a436b','#8A7A1F','#6B1A1A','#1A6B6B','#5A1A8A'];
+function buildPartyList() {
+  renderParties();
+}
+function renderParties() {
+  document.getElementById('party-list').innerHTML = parties.map((p, i) => `
+    <div class="party-row">
+      <div style="display:flex;gap:10px;align-items:center">
+        <div class="party-avatar" style="background:${AVATAR_COLORS[i%AVATAR_COLORS.length]}">${p.initials}</div>
+        <div><div class="party-name">${p.name}</div><div class="party-email">${p.email}</div></div>
+      </div>
+      <div>
+        ${p.role === 'Owner'
+          ? `<span class="role-badge role-owner">Owner</span>`
+          : `<select class="fi" class="fi select-chev" style="height:32px;font-size:11px;" onchange="parties[${i}].role=this.value">
+              <option ${p.role==='Editor'?'selected':''}>Editor</option>
+              <option ${p.role==='Viewer'?'selected':''}>Viewer</option>
+              <option ${p.role==='Collector'?'selected':''}>Collector</option>
+              <option ${p.role==='Verificator'?'selected':''}>Verificator</option>
+            </select>`}
+      </div>
+      <div style="font-family:var(--font-text);font-size:11px;color:#68727d">${p.role==='Owner'?'Full access':p.role==='Editor'?'Can edit':'Read only'}</div>
+      ${p.role !== 'Owner'
+        ? `<button class="ind-del2" onclick="removeParty(${i})">✕</button>`
+        : `<div></div>`}
+    </div>`).join('');
+}
+function addParty() {
+  const email = document.getElementById('party-email-input').value.trim();
+  if (!email) return;
+  const role = document.getElementById('party-role-input').value;
+  const name = email.split('@')[0].replace(/[._]/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
+  const initials = name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  parties.push({ name, email, role, initials });
+  document.getElementById('party-email-input').value = '';
+  renderParties();
+}
+function removeParty(i) { parties.splice(i,1); renderParties(); }
+function saveParties() { markDone('opt3'); closeModal('m-parties'); }
+
+/* ══ MODAL 4 — Notes & evidence ══ */
+const evidenceFiles = [];
+function handleFiles(files) {
+  [...files].forEach(f => {
+    evidenceFiles.push({ name: f.name, size: (f.size/1024).toFixed(1)+' KB', type: f.name.split('.').pop().toUpperCase() });
+  });
+  renderEvidence();
+}
+function renderEvidence() {
+  document.getElementById('evidence-list').innerHTML = evidenceFiles.map((f,i) => `
+    <div class="evidence-item">
+      <div class="ev-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="#066653" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 2v6h6" stroke="#066653" stroke-width="2" stroke-linecap="round"/></svg>
+      </div>
+      <div>
+        <div class="ev-name">${f.name}</div>
+        <div class="ev-meta">${f.type} · ${f.size}</div>
+      </div>
+      <button class="ind-del2" onclick="evidenceFiles.splice(${i},1);renderEvidence()">✕</button>
+    </div>`).join('');
+}
+function saveNotes() { markDone('opt4'); closeModal('m-notes'); }
+</script>
+
+<!-- ══ ADD CUSTOM ACTIVITY MODAL ══ -->
+<div id="addActOverlay" style="display:none;position:fixed;inset:0;background:rgba(4,38,32,0.45);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);z-index:800;align-items:center;justify-content:center;padding:20px">
+  <div style="background:#fff;border-radius:16px;width:100%;max-width:560px;max-height:90vh;overflow-y:auto;box-shadow:0 32px 80px rgba(0,0,0,0.22);position:relative">
+    <!-- Header -->
+    <div style="padding:28px 32px 20px;border-bottom:1px solid #eaebf0">
+      <button onclick="closeAddModal()" style="position:absolute;top:14px;right:14px;width:34px;height:34px;border:none;background:#eaebf0;border-radius:50%;cursor:pointer;font-size:16px;display:grid;place-items:center;color:#444a51">✕</button>
+      <div style="font-family:var(--font-text);font-size:18px;font-weight:700;color:#252525;letter-spacing:-0.02em;margin-bottom:4px">Add Custom Activity</div>
+      <div style="font-family:var(--font-text);font-size:12px;color:#68727d">Adding to: <strong id="modalEcoLabel" style="color:#066653">—</strong></div>
+    </div>
+    <!-- Body -->
+    <div style="padding:24px 32px;display:flex;flex-direction:column;gap:18px">
+
+      <!-- Activity name -->
+      <div>
+        <label style="font-family:var(--font-text);font-size:12px;font-weight:600;color:#444a51;display:block;margin-bottom:6px">Activity name *</label>
+        <input id="actName" class="fi" type="text" placeholder="e.g. Community-led forest patrol" />
+      </div>
+
+      <!-- Intervention pathway -->
+      <div>
+        <label style="font-family:var(--font-text);font-size:12px;font-weight:600;color:#444a51;display:block;margin-bottom:6px">Intervention pathway *</label>
+        <div class="pw-choice" id="actPwChoice">
+          <button type="button" class="pw-opt pw-protect is-on" data-pw="PROTECT" onclick="selectActPw(this)"><span class="pw-dot"></span>Protect</button>
+          <button type="button" class="pw-opt pw-manage" data-pw="MANAGE" onclick="selectActPw(this)"><span class="pw-dot"></span>Manage</button>
+          <button type="button" class="pw-opt pw-restore" data-pw="RESTORE" onclick="selectActPw(this)"><span class="pw-dot"></span>Restore</button>
+        </div>
+        <div style="font-family:var(--font-text);font-size:11px;color:#8a929c;margin-top:6px">This activity will be listed under the selected pathway section.</div>
+      </div>
+
+      <!-- Recommended indicators — nested under the activity (hierarchical) -->
+      <div class="ind-nest">
+        <div class="ind-nest-tag">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><path d="M6 3v9a4 4 0 0 0 4 4h8" stroke="#066653" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Indicators belong to this activity
+        </div>
+        <label style="font-family: var(--font-text); font-size: 12px; font-weight: 600; color: #444a51; display: block; margin-bottom: 8px">Monitoring indicators — each with its own unit, frequency &amp; data source</label>
+        <div id="indList" style="display:flex;flex-direction:column;gap:6px;margin-bottom:8px"></div>
+        <button onclick="addIndRow('indList')" class="btn-add-act" style="margin-top:0">+ Add indicator</button>
+      </div>
+
+      <!-- Optional indicators -->
+
+    </div>
+    <!-- Footer -->
+    <div style="padding:18px 32px;border-top:1px solid #eaebf0;display:flex;justify-content:flex-end;gap:12px;background:#fafbfc;border-radius:0 0 16px 16px">
+      <button onclick="closeAddModal()" class="ws-btn ws-btn-back">Cancel</button>
+      <button onclick="submitCustomActivity()" class="ws-btn ws-btn-primary">Add activity →</button>
+    </div>
+  </div>
+</div>
+
+<style>
+#addActOverlay.open { display:flex !important; }
+/* Intervention pathway chooser */
+.pw-choice { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+.pw-opt { display:flex; align-items:center; justify-content:center; gap:7px; height:40px; border:1.5px solid #e2e6e4; border-radius:8px; background:#fff; cursor:pointer; font-family:var(--font-text); font-size:12px; font-weight:600; color:#5a6b63; transition:all .15s; }
+.pw-opt:hover { border-color:#c2ccc7; }
+.pw-opt .pw-dot { width:9px; height:9px; border-radius:50%; flex:none; background:#c7cfca; }
+.pw-opt.pw-protect .pw-dot { background:rgb(22,101,52); }
+.pw-opt.pw-manage .pw-dot { background:rgb(146,64,14); }
+.pw-opt.pw-restore .pw-dot { background:rgb(14,116,144); }
+.pw-opt.is-on.pw-protect { border-color:rgb(22,101,52); background:rgb(236,253,243); color:rgb(22,101,52); }
+.pw-opt.is-on.pw-manage { border-color:rgb(146,64,14); background:rgb(254,248,235); color:rgb(146,64,14); }
+.pw-opt.is-on.pw-restore { border-color:rgb(14,116,144); background:rgb(236,250,252); color:rgb(14,116,144); }
+.ind-row { display:flex; gap:8px; align-items:center; }
+.ind-row input { flex:1; height:36px; padding:0 12px; border:1px solid #eaebf0; border-radius:6px; font-family:var(--font-text); font-size:12px; color:#444a51; outline:none; }
+.ind-row input:focus { border-color:#066653; }
+.ind-del { width:30px; height:30px; border:none; background:none; cursor:pointer; color:rgb(172,26,19); border-radius:4px; font-size:14px; flex-shrink:0; display:grid; place-items:center; }
+.ind-del:hover { background:rgb(255,240,240); }
+/* Indicator card — each indicator carries unit, frequency & data source */
+.ind-card { position:relative; background:#fff; border:1px solid #dbe5e1; border-radius:9px; padding:14px 14px 12px; margin-bottom:8px; display:flex; flex-direction:column; gap:10px; }
+.ind-card .ind-del { position:absolute; top:7px; right:7px; }
+.ind-field-row { display:flex; gap:10px; align-items:flex-end; }
+.ind-field { display:flex; flex-direction:column; gap:4px; }
+.ind-field label { font-family:var(--font-text); font-size:10px; font-weight:700; letter-spacing:0.03em; text-transform:uppercase; color:#68727d; }
+.ind-field input, .ind-field select { height:36px; padding:0 10px; border:1px solid #eaebf0; border-radius:6px; font-family:var(--font-text); font-size:12px; color:#444a51; background:#fff; outline:none; width:100%; box-sizing:border-box; }
+.ind-field select { cursor:pointer; }
+.ind-field input:focus, .ind-field select:focus { border-color:#066653; }
+.ind-src { text-overflow:ellipsis; }
+/* Nested indicators box — shows indicators are children of the activity */
+.ind-nest { position:relative; margin-left:14px; padding:14px 16px 16px; border:1px solid #d7e6e0; border-left:3px solid #066653; border-radius:0 10px 10px 0; background:#f6faf8; }
+.ind-nest::before { content:""; position:absolute; left:-14px; top:-12px; width:14px; height:30px; border-left:2px solid #cdd9d4; border-bottom:2px solid #cdd9d4; border-bottom-left-radius:8px; }
+.ind-nest-tag { display:inline-flex; align-items:center; gap:5px; font-family:var(--font-text); font-size:10px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; color:#066653; background:#e7f3ee; border:1px solid #cfe6dd; padding:3px 8px; border-radius:5px; margin-bottom:12px; }
+</style>
+
+<script>
+let activeEcoId = null;
+
+function selectActPw(btn) {
+  document.querySelectorAll('#actPwChoice .pw-opt').forEach(b => b.classList.remove('is-on'));
+  btn.classList.add('is-on');
+}
+function getActPw() {
+  const b = document.querySelector('#actPwChoice .pw-opt.is-on');
+  return b ? b.dataset.pw : 'PROTECT';
+}
+
+function openAddModal(ecoId) {
+  activeEcoId = ecoId;
+  const eco = ecosystems.find(e => e.id === ecoId);
+  document.getElementById('modalEcoLabel').textContent = eco ? eco.name : ecoId;
+  document.getElementById('actName').value = '';
+  selectActPw(document.querySelector('#actPwChoice .pw-opt[data-pw="PROTECT"]'));
+  document.getElementById('indList').innerHTML = '';
+  addIndRow('indList');
+  document.getElementById('addActOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeAddModal() {
+  document.getElementById('addActOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function addIndRow(listId) {
+  const freqOpts = ['<option value="">Frequency…</option>'].concat(FREQ_OPTS.map(o => `<option>${o}</option>`)).join('');
+  const srcOpts = ['<option value="">Select data source…</option>'].concat(METHOD_OPTS.map(o => `<option>${o}</option>`)).join('');
+  const row = document.createElement('div');
+  row.className = 'ind-card';
+  row.innerHTML = `
+    <button class="ind-del" onclick="this.parentElement.remove()" title="Remove indicator">✕</button>
+    <div class="ind-field-row">
+      <div class="ind-field" style="flex:1">
+        <label>Monitoring indicator</label>
+        <input class="ind-name" type="text" placeholder="e.g. Area of habitat restored" />
+      </div>
+      <div class="ind-field" style="width:120px;flex-shrink:0">
+        <label>Unit</label>
+        <select class="ind-unit">
+          <option value="">Unit</option>
+          <option>ha</option><option>km²</option><option>km</option><option>m</option>
+          <option>number</option><option>count</option><option>%</option>
+          <option>tCO₂e</option><option>tCO₂e/yr</option><option>m³</option>
+          <option>index</option><option>score</option><option>species</option>
+          <option>household</option><option>person</option><option>other</option>
+        </select>
+      </div>
+    </div>
+    <div class="ind-field-row">
+      <div class="ind-field" style="flex:1;min-width:0">
+        <label>Benefit category</label>
+        <select class="ind-cat">
+          <option value="Nature">Nature</option>
+          <option value="People">People</option>
+          <option value="Climate">Climate</option>
+        </select>
+      </div>
+      <div class="ind-field" style="width:170px;flex-shrink:0">
+        <label>Monitoring freq.</label>
+        <select class="ind-freq">${freqOpts}</select>
+      </div>
+    </div>
+    <div class="ind-field-row">
+      <div class="ind-field" style="flex:1;min-width:0">
+        <label>Data source</label>
+        <input class="ind-src" type="text" placeholder="e.g. Physical forest inventories using allometric equations" />
+      </div>
+    </div>`;
+  document.getElementById(listId).appendChild(row);
+  row.querySelector('.ind-name').focus();
+}
+
+function submitCustomActivity() {
+  const name = document.getElementById('actName').value.trim();
+  if (!name) { document.getElementById('actName').focus(); document.getElementById('actName').style.borderColor='#e33b32'; return; }
+  const type = 'Recommended';
+  const pw = getActPw();
+  let actFreq = '', actMethod = '';
+  const indMeta = {};
+  const benefitMap = { Nature: [], People: [], Climate: [] };
+  const indicators = [...document.querySelectorAll('#indList .ind-card')].map(row => {
+    const iname = row.querySelector('.ind-name').value.trim();
+    if (!iname) return null;
+    const unit = row.querySelector('.ind-unit').value;
+    const cat  = row.querySelector('.ind-cat').value || 'Nature';
+    const freq = row.querySelector('.ind-freq').value;
+    const src  = row.querySelector('.ind-src').value;
+    if (!actFreq && freq) actFreq = freq;
+    if (!actMethod && src) actMethod = src;
+    const label = unit ? `${iname} (${unit})` : iname;
+    indMeta[label] = { source: src, freq: freq };
+    (benefitMap[cat] || benefitMap.Nature).push(label);
+    return label;
+  }).filter(Boolean);
+  const freq = actFreq || 'Annually';
+  const method = actMethod || (METHOD_OPTS[0] || '—');
+
+  // group indicators into one benefit per chosen category (drives the Step 2 matrix tags)
+  const benefits = ['Nature', 'People', 'Climate']
+    .filter(c => benefitMap[c].length)
+    .map(c => ({ cat: c, benefit: 'Custom indicators', inds: benefitMap[c].slice() }));
+
+  const eco = ecosystems.find(e => e.id === activeEcoId);
+  if (!eco) return;
+
+  const newId = 'custom-' + Date.now();
+  eco.activities.push({
+    id: newId,
+    name,
+    pw,
+    type,
+    checked: true,
+    benefits: benefits.length ? benefits : [{ cat: 'Nature', benefit: 'Custom indicators', inds: ['Custom indicator'] }],
+    indicators: indicators.length ? indicators : ['Custom indicator'],
+    optional: [],
+    indMeta,
+    method,
+    freq
+  });
+
+  closeAddModal();
+  renderActivities();
+}
+
+document.getElementById('addActOverlay').addEventListener('click', e => {
+  if (e.target === document.getElementById('addActOverlay')) closeAddModal();
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAddModal(); });
+
+/* Q-08: honour ?step= URL param (from F04.1 shortcut links) */
+(function () {
+  const n = parseInt(new URLSearchParams(location.search).get('step'));
+  if (!isNaN(n) && n >= 1 && n <= 3) {
+    maxReached = n;
+    goToStep(n);
+  }
+})();
+
+/* ── Export toast ── */
+let _toastTimer = null;
+function showExportToast(kind) {
+  const conf = kind === 'pdf'
+    ? { label: 'Opening print dialog…', file: 'Kubu_Raya_Mangrove_Monitoring_Plan.pdf' }
+    : kind === 'doc'
+    ? { label: 'Word downloaded', file: 'Kubu_Raya_Mangrove_Monitoring_Plan.doc' }
+    : kind === 'xls'
+    ? { label: 'Excel downloaded', file: 'Kubu_Raya_Mangrove_Monitoring_Plan.xls' }
+    : { label: 'Exported to Excel', file: 'Kubu_Raya_Mangrove_Monitoring_Plan.xlsx' };
+  let host = document.getElementById('exportToastHost');
+  if (!host) {
+    host = document.createElement('div');
+    host.id = 'exportToastHost';
+    document.body.appendChild(host);
+  }
+  const toast = document.createElement('div');
+  toast.className = 'export-toast';
+  toast.innerHTML = `
+    <div class="export-toast-ic">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#066653" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="export-toast-body">
+      <div class="export-toast-title">${conf.label}</div>
+      <div class="export-toast-file">${conf.file}</div>
+    </div>
+    <button class="export-toast-x" aria-label="Dismiss">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+    </button>
+    <div class="export-toast-bar"></div>`;
+  host.appendChild(toast);
+  requestAnimationFrame(() => toast.classList.add('in'));
+  const dismiss = () => {
+    toast.classList.remove('in');
+    toast.classList.add('out');
+    setTimeout(() => toast.remove(), 320);
+  };
+  toast.querySelector('.export-toast-x').addEventListener('click', dismiss);
+  setTimeout(dismiss, 4000);
+}
+</script>
+<script>
+/* ════════════════════════════════════════════════════════════
+   DOWNLOAD MONITORING PLAN — collect live plan + export PDF/Excel
+   ════════════════════════════════════════════════════════════ */
+const PLAN_PROJECT = 'Kubu Raya Mangrove';
+const PLAN_FILEBASE = 'Kubu_Raya_Mangrove_Monitoring_Plan';
+const CAT_COLOR = { Nature:'#16653b', People:'#0a436b', Climate:'#c2410c', Custom:'#475569' };
+const CAT_BG    = { Nature:'#dcfce7', People:'#eff6ff', Climate:'#ffedd5', Custom:'#f1f5f9' };
+
+/* Gather selected activities → benefit groups → checked indicators (with data source + frequency) */
+function collectPlan() {
+  const sel = getSelected();
+  const ecoMap = {};
+  let indicators = 0, activities = 0;
+  sel.forEach(a => {
+    const inds = getMatrixInds(a).filter(it => it.checked);
+    if (!inds.length) return;
+    if (!ecoMap[a.eco.id]) ecoMap[a.eco.id] = { id:a.eco.id, name:a.eco.name, activities:[] };
+    const groups = [];
+    inds.forEach(it => {
+      let g = groups.find(x => x.benefit === it.benefit && x.cat === it.cat);
+      if (!g) { g = { benefit:it.benefit, cat:it.cat, items:[] }; groups.push(g); }
+      g.items.push({ label:it.label, source:it.source || '', freq:it.freq || '' });
+      indicators++;
+    });
+    ecoMap[a.eco.id].activities.push({ name:a.name, pw:a.pw || '', method:a.method || '', groups });
+    activities++;
+  });
+  const ecos = Object.values(ecoMap);
+  return { project:PLAN_PROJECT, ecos, counts:{ ecosystems:ecos.length, activities, indicators } };
+}
+
+function triggerDownload(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 3000);
+}
+
+function todayStr() {
+  return new Date().toLocaleDateString('en-GB', { day:'numeric', month:'long', year:'numeric' });
+}
+
+/* ── Excel (.xls via SpreadsheetML-friendly HTML table) ── */
+function downloadPlanExcel() {
+  const plan = collectPlan();
+  if (!plan.counts.indicators) { closeModal('m-download'); return; }
+  let rows = '';
+  plan.ecos.forEach(e => e.activities.forEach(a => a.groups.forEach(g => g.items.forEach(it => {
+    rows += `<tr>
+      <td>${escHtml(e.name)}</td>
+      <td>${escHtml(a.pw)}</td>
+      <td>${escHtml(a.name)}</td>
+      <td>${escHtml(g.cat)}</td>
+      <td>${escHtml(g.benefit)}</td>
+      <td>${escHtml(it.label)}</td>
+      <td>${escHtml(it.source || '—')}</td>
+      <td>${escHtml(it.freq || '—')}</td>
+    </tr>`;
+  }))));
+  const table = `<table border="1" cellspacing="0" cellpadding="6">
+    <thead><tr style="background:#066653;color:#ffffff;font-weight:bold">
+      <th>Ecosystem</th><th>Pathway</th><th>NbS Activity</th><th>Benefit category</th>
+      <th>Benefit</th><th>Monitoring indicator</th><th>Data source</th><th>Monitoring frequency</th>
+    </tr></thead><tbody>${rows}</tbody></table>`;
+  const html = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel"><head><meta charset="utf-8"><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>Monitoring Plan</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head>
+    <body><h2 style="font-family:Arial">Monitoring Plan — ${escHtml(plan.project)}</h2>
+    <p style="font-family:Arial;color:#555">Generated ${todayStr()} · ${plan.counts.ecosystems} ecosystems · ${plan.counts.activities} activities · ${plan.counts.indicators} indicators</p>
+    ${table}</body></html>`;
+  triggerDownload(new Blob([html], { type:'application/vnd.ms-excel' }), PLAN_FILEBASE + '.xls');
+  closeModal('m-download');
+  showExportToast('xls');
+}
+
+/* ── PDF (branded NbS Tool report, printed via hidden iframe) ── */
+function buildPlanDocHTML(plan) {
+  const logo = (document.querySelector('.sitenav-logo img') || {}).src || '';
+  const ecoSections = plan.ecos.map(e => {
+    const bodyRows = e.activities.map(a => {
+      const total = a.groups.reduce((s, g) => s + g.items.length, 0);
+      let printed = 0;
+      return a.groups.map((g, gi) => g.items.map((it, ii) => {
+        let tr = '<tr>';
+        if (printed === 0) {
+          tr += `<td class="c-act" rowspan="${total}"><div class="act-nm">${escHtml(a.name)}</div>${a.pw ? `<span class="pw-pill pw-${a.pw.toLowerCase()}">${escHtml(a.pw)}</span>` : ''}</td>`;
+        }
+        if (ii === 0) {
+          tr += `<td class="c-ben" rowspan="${g.items.length}"><span class="cat-pill" style="color:${CAT_COLOR[g.cat]||'#475569'};background:${CAT_BG[g.cat]||'#f1f5f9'}">${escHtml(g.cat)}</span><div class="ben-nm">${escHtml(g.benefit)}</div></td>`;
+        }
+        tr += `<td>${escHtml(it.label)}</td><td class="c-src">${escHtml(it.source || '—')}</td><td class="c-freq">${escHtml(it.freq || '—')}</td></tr>`;
+        printed++;
+        return tr;
+      }).join('')).join('');
+    }).join('');
+    return `<section class="eco-sec">
+      <h2 class="eco-h">${escHtml(e.name)}<span>${e.activities.length} ${e.activities.length===1?'activity':'activities'}</span></h2>
+      <table class="plan-tbl">
+        <thead><tr><th>NbS Activity</th><th>Benefit</th><th>Monitoring indicator</th><th>Data source</th><th>Frequency</th></tr></thead>
+        <tbody>${bodyRows}</tbody>
+      </table>
+    </section>`;
+  }).join('');
+
+  return `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
+  <title>Monitoring Plan — ${escHtml(plan.project)}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Barlow+Semi+Condensed:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    @page { size:A4; margin:15mm 13mm 17mm; }
+    * { box-sizing:border-box; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+    body { margin:0; font-family:'Poppins',system-ui,sans-serif; color:#252525; font-size:11px; }
+    .cover { display:flex; align-items:flex-start; justify-content:space-between; gap:24px; padding-bottom:18px; border-bottom:3px solid #066653; }
+    .cover img { height:42px; width:auto; }
+    .cover .meta { text-align:right; font-size:10px; color:#68727d; line-height:1.7; }
+    .doc-kicker { font-family:'Barlow Semi Condensed',sans-serif; text-transform:uppercase; letter-spacing:.14em; font-size:11px; font-weight:700; color:#066653; margin:26px 0 4px; }
+    .doc-title { font-family:'Barlow Semi Condensed',sans-serif; font-size:34px; font-weight:700; line-height:1.05; margin:0 0 6px; color:#042620; }
+    .doc-sub { font-size:12px; color:#68727d; margin:0; }
+    .stats { display:flex; gap:10px; margin:20px 0 4px; }
+    .stat { flex:1; border:1px solid #e6ece9; border-radius:10px; padding:12px 14px; background:#f6faf8; }
+    .stat b { display:block; font-family:'Barlow Semi Condensed',sans-serif; font-size:26px; color:#066653; line-height:1; }
+    .stat span { font-size:10px; color:#68727d; text-transform:uppercase; letter-spacing:.06em; }
+    .eco-sec { margin-top:22px; page-break-inside:auto; }
+    .eco-h { font-family:'Barlow Semi Condensed',sans-serif; font-size:17px; font-weight:700; color:#044c3e; margin:0 0 8px; display:flex; align-items:baseline; gap:10px; }
+    .eco-h span { font-family:'Poppins',sans-serif; font-size:10px; font-weight:500; color:#68727d; }
+    table.plan-tbl { width:100%; border-collapse:collapse; }
+    .plan-tbl th { background:#066653; color:#fff; font-size:9.5px; font-weight:600; text-align:left; text-transform:uppercase; letter-spacing:.04em; padding:7px 9px; }
+    .plan-tbl td { border:1px solid #e6ece9; padding:7px 9px; vertical-align:top; font-size:10px; line-height:1.4; }
+    .plan-tbl tr { page-break-inside:avoid; }
+    .c-act { background:#fafdfb; width:21%; }
+    .act-nm { font-weight:600; color:#1a2c24; margin-bottom:5px; }
+    .c-ben { width:21%; }
+    .ben-nm { color:#4a5a52; margin-top:4px; font-size:9.5px; }
+    .c-src { color:#5a6b63; width:23%; }
+    .c-freq { width:13%; white-space:nowrap; }
+    .pw-pill, .cat-pill { display:inline-block; font-size:8px; font-weight:700; letter-spacing:.04em; padding:2px 7px; border-radius:20px; }
+    .pw-protect { background:#dcfce7; color:#166534; }
+    .pw-manage  { background:#fef3c7; color:#92400e; }
+    .pw-restore { background:#e0f7fa; color:#0e7490; }
+    .doc-foot { margin-top:24px; padding-top:12px; border-top:1px solid #e6ece9; font-size:9px; color:#8a939c; line-height:1.5; }
+    @media print { .eco-sec { page-break-inside:auto; } }
+  </style></head>
+  <body>
+    <div class="cover">
+      ${logo ? `<img src="${logo}" alt="SCeNe Coalition">` : '<div></div>'}
+      <div class="meta">Generated ${todayStr()}<br>NbS Tool · Monitoring Plan Development<br>Status: Draft — requires field verification</div>
+    </div>
+    <div class="doc-kicker">Nature-based Solutions · Monitoring Plan</div>
+    <h1 class="doc-title">${escHtml(plan.project)}</h1>
+    <p class="doc-sub">Selected NbS activities, recommended monitoring indicators, data sources and monitoring frequency.</p>
+    <div class="stats">
+      <div class="stat"><b>${plan.counts.ecosystems}</b><span>Ecosystems</span></div>
+      <div class="stat"><b>${plan.counts.activities}</b><span>Activities</span></div>
+      <div class="stat"><b>${plan.counts.indicators}</b><span>Indicators</span></div>
+    </div>
+    ${ecoSections || '<p style="margin-top:24px;color:#68727d">No activities selected.</p>'}
+    <div class="doc-foot">This monitoring plan is generated by the SCeNe Coalition NbS Tool as guidance. Field verification, stakeholder consultation and data-quality review are required before formal reporting. © ${new Date().getFullYear()} SCeNe Coalition.</div>
+  </body></html>`;
+}
+
+/* ── Word (.doc — HTML that Microsoft Word opens natively, NbS Tool layout) ── */
+function buildPlanWordHTML(plan) {
+  const logo = (document.querySelector('.sitenav-logo img') || {}).src || '';
+  const ecoSections = plan.ecos.map(e => {
+    const bodyRows = e.activities.map(a => {
+      const total = a.groups.reduce((s, g) => s + g.items.length, 0);
+      let printed = 0;
+      return a.groups.map(g => g.items.map((it, ii) => {
+        let tr = '<tr>';
+        if (printed === 0) {
+          tr += `<td rowspan="${total}" style="background:#fafdfb;width:21%;border:1px solid #d9e2dd;padding:5pt 6pt;vertical-align:top">`
+            + `<p style="margin:0;font-weight:bold;color:#1a2c24">${escHtml(a.name)}</p>`
+            + (a.pw ? `<p style="margin:4pt 0 0;font-size:7.5pt;font-weight:bold;color:${CAT_COLOR[a.pw==='PROTECT'?'Nature':a.pw==='MANAGE'?'Climate':'People']||'#066653'}">${escHtml(a.pw)}</p>` : '') + '</td>';
+        }
+        if (ii === 0) {
+          tr += `<td rowspan="${g.items.length}" style="width:21%;border:1px solid #d9e2dd;padding:5pt 6pt;vertical-align:top">`
+            + `<p style="margin:0;font-size:7.5pt;font-weight:bold;color:${CAT_COLOR[g.cat]||'#475569'}">${escHtml(g.cat)}</p>`
+            + `<p style="margin:3pt 0 0;color:#4a5a52;font-size:8.5pt">${escHtml(g.benefit)}</p></td>`;
+        }
+        tr += `<td style="border:1px solid #d9e2dd;padding:5pt 6pt;vertical-align:top">${escHtml(it.label)}</td>`
+          + `<td style="border:1px solid #d9e2dd;padding:5pt 6pt;vertical-align:top;color:#5a6b63">${escHtml(it.source || '—')}</td>`
+          + `<td style="border:1px solid #d9e2dd;padding:5pt 6pt;vertical-align:top">${escHtml(it.freq || '—')}</td></tr>`;
+        printed++;
+        return tr;
+      }).join('')).join('');
+    }).join('');
+    return `<h2 style="font-family:'Barlow Semi Condensed',Arial,sans-serif;font-size:14pt;color:#044c3e;margin:18pt 0 6pt">${escHtml(e.name)} `
+      + `<span style="font-family:Poppins,Arial;font-size:8pt;font-weight:normal;color:#68727d">— ${e.activities.length} ${e.activities.length===1?'activity':'activities'}</span></h2>`
+      + `<table style="border-collapse:collapse;width:100%;font-size:8.5pt">`
+      + `<tr><th style="background:#066653;color:#fff;text-align:left;border:1px solid #066653;padding:5pt 6pt">NbS Activity</th>`
+      + `<th style="background:#066653;color:#fff;text-align:left;border:1px solid #066653;padding:5pt 6pt">Benefit</th>`
+      + `<th style="background:#066653;color:#fff;text-align:left;border:1px solid #066653;padding:5pt 6pt">Monitoring indicator</th>`
+      + `<th style="background:#066653;color:#fff;text-align:left;border:1px solid #066653;padding:5pt 6pt">Data source</th>`
+      + `<th style="background:#066653;color:#fff;text-align:left;border:1px solid #066653;padding:5pt 6pt">Frequency</th></tr>`
+      + bodyRows + `</table>`;
+  }).join('');
+
+  const statCell = (n, l) => `<td style="border:1px solid #e6ece9;background:#f6faf8;padding:8pt 10pt;text-align:center">`
+    + `<p style="margin:0;font-family:'Barlow Semi Condensed',Arial;font-size:20pt;color:#066653;font-weight:bold">${n}</p>`
+    + `<p style="margin:2pt 0 0;font-size:7.5pt;color:#68727d;text-transform:uppercase;letter-spacing:.5pt">${l}</p></td>`;
+
+  return `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
+  <head><meta charset="utf-8"><title>Monitoring Plan — ${escHtml(plan.project)}</title>
+  <!--[if gte mso 9]><xml><w:WordDocument><w:View>Print</w:View><w:Zoom>100</w:Zoom></w:WordDocument></xml><![endif]-->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Barlow+Semi+Condensed:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    @page WordSection1 { size:595.3pt 841.9pt; margin:1.4cm 1.2cm; }
+    div.WordSection1 { page:WordSection1; }
+    body { font-family:'Poppins',Arial,sans-serif; font-size:10pt; color:#252525; }
+  </style></head>
+  <body><div class="WordSection1">
+    <table style="width:100%;border-collapse:collapse;border-bottom:2.5pt solid #066653">
+      <tr>
+        <td style="vertical-align:top;padding-bottom:8pt">${logo ? `<img src="${logo}" height="40" alt="SCeNe Coalition">` : ''}</td>
+        <td style="vertical-align:top;text-align:right;font-size:8pt;color:#68727d;padding-bottom:8pt">Generated ${todayStr()}<br>NbS Tool · Monitoring Plan Development<br>Status: Draft — requires field verification</td>
+      </tr>
+    </table>
+    <p style="font-family:'Barlow Semi Condensed',Arial;text-transform:uppercase;letter-spacing:2pt;font-size:9pt;font-weight:bold;color:#066653;margin:16pt 0 2pt">Nature-based Solutions · Monitoring Plan</p>
+    <h1 style="font-family:'Barlow Semi Condensed',Arial;font-size:26pt;color:#042620;margin:0 0 4pt">${escHtml(plan.project)}</h1>
+    <p style="font-size:9.5pt;color:#68727d;margin:0 0 12pt">Selected NbS activities, recommended monitoring indicators, data sources and monitoring frequency.</p>
+    <table style="width:60%;border-collapse:collapse;margin-bottom:6pt">
+      <tr>${statCell(plan.counts.ecosystems,'Ecosystems')}${statCell(plan.counts.activities,'Activities')}${statCell(plan.counts.indicators,'Indicators')}</tr>
+    </table>
+    ${ecoSections || '<p style="color:#68727d">No activities selected.</p>'}
+    <p style="margin-top:18pt;padding-top:8pt;border-top:1px solid #e6ece9;font-size:7.5pt;color:#8a939c">This monitoring plan is generated by the SCeNe Coalition NbS Tool as guidance. Field verification, stakeholder consultation and data-quality review are required before formal reporting. © ${new Date().getFullYear()} SCeNe Coalition.</p>
+  </div></body></html>`;
+}
+
+function downloadPlanWord() {
+  const plan = collectPlan();
+  if (!plan.counts.indicators) { closeModal('m-download'); return; }
+  const html = buildPlanWordHTML(plan);
+  triggerDownload(new Blob(['\ufeff' + html], { type:'application/msword' }), PLAN_FILEBASE + '.doc');
+  closeModal('m-download');
+  showExportToast('doc');
+}
+
+function downloadPlanPDF() {
+  const plan = collectPlan();
+  if (!plan.counts.indicators) { closeModal('m-download'); return; }
+  closeModal('m-download');
+  showExportToast('pdf');
+  const old = document.getElementById('planPrintFrame');
+  if (old) old.remove();
+  const frame = document.createElement('iframe');
+  frame.id = 'planPrintFrame';
+  frame.style.cssText = 'position:fixed;right:0;bottom:0;width:0;height:0;border:0;opacity:0;';
+  document.body.appendChild(frame);
+  const doc = frame.contentWindow.document;
+  doc.open(); doc.write(buildPlanDocHTML(plan)); doc.close();
+  const go = () => { try { frame.contentWindow.focus(); frame.contentWindow.print(); } catch (e) {} };
+  // wait for fonts + logo image
+  frame.onload = () => setTimeout(go, 450);
+  setTimeout(go, 1200); // fallback if onload already fired
+}
+</script>
+<script src="js/nav-mobile.js"></script>
+</body>
+</html>
