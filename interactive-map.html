@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="css/nav.css" />
 <link rel="stylesheet" href="css/f01.css" />
 <link rel="stylesheet" href="css/f01-step1.css" />
+<link rel="stylesheet" href="css/f01-step2.css" />
 <link rel="stylesheet" href="css/genctx.css" />
 <link rel="stylesheet" href="assets/genctx-icons/fig-assets.css" />
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
@@ -21,7 +22,7 @@
   body { background: #eef1ee; overflow: hidden; }
   /* Live OpenStreetMap basemap */
   .map-osm { position: absolute; inset: 0; z-index: 1; background: #aad3df; }
-  .map-bg svg { z-index: 500; }
+  .map-bg svg { z-index: 5; } /* below Data Analyser panel (z-index 25) */
   .leaflet-container { font-family: var(--font-text); background: #aad3df; }
   .leaflet-control-attribution { font-size: 10px; }
 </style>
@@ -70,6 +71,14 @@
 
 <!-- ===== Map workspace ===== -->
 <div class="mapscreen">
+
+  <!-- Analysing overlay (shown while the selected area is being processed) -->
+  <div class="map-loading" id="mapLoading" hidden>
+    <div class="map-loading__box">
+      <span class="map-loading__spin" aria-hidden="true"></span>
+      <p>Analyzing the area</p>
+    </div>
+  </div>
 
   <!-- Live OpenStreetMap basemap + AOI overlay -->
   <div class="map-bg">
@@ -134,7 +143,7 @@
       <div class="da-head__top">
         <span class="da-title">Data Analyser</span>
         <button class="da-hide" id="daHide">Hide
-          <svg viewBox="0 0 24 24"><path d="M14 7l-5 5 5 5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <svg viewBox="0 0 24 24" stroke-width="2.4"><path d="M8 5.5l4 4 4-4M8 18.5l4-4 4 4" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
       </div>
       <div class="da-steps" id="daSteps">
@@ -150,6 +159,24 @@
       </div>
     </header>
 
+    <!-- Sticky context tab bar (step 2 only) -->
+    <div class="da-ctx" id="daCtx" role="tablist" aria-label="Site characterisation context">
+      <button class="da-ctx__nav da-ctx__back" data-ctx-back aria-label="Previous context">
+        <svg viewBox="0 0 24 24" stroke-width="2"><path d="M14 7l-5 5 5 5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Back
+      </button>
+      <div class="da-ctx__tabs">
+        <button role="tab" aria-selected="true" data-ctx="general">General Information</button>
+        <button role="tab" aria-selected="false" data-ctx="nature">Nature</button>
+        <button role="tab" aria-selected="false" data-ctx="people">People</button>
+        <button role="tab" aria-selected="false" data-ctx="climate">Climate</button>
+      </div>
+      <button class="da-ctx__nav da-ctx__next" data-ctx-next aria-label="Next context">
+        Next
+        <svg viewBox="0 0 24 24" stroke-width="2"><path d="M10 7l5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+
     <div class="da-body" id="daBody">
 
       <!-- ============ STEP 1 — SELECT LOCATION ============ -->
@@ -164,7 +191,11 @@
 
           <div class="s1-tip">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 1 4 10.5c-.6.6-1 1.3-1 2.1H9c0-.8-.4-1.5-1-2.1A6 6 0 0 1 12 3Z"/></svg>
-            <p><b>New:</b> search directly by province or district. No file upload needed.</p>
+            <div class="s1-tip__tx">
+              <p class="b">New: search directly by province or district.</p>
+              <p>System will show the administrative boundaries polygon to help you digitize your polygon</p>
+            </div>
+            <span class="s1-tip__badge"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></span></span>
           </div>
 
           <div class="s1-methods">
@@ -179,152 +210,66 @@
               <p>Upload a shapefile for a pre-defined geofenced area</p>
             </button>
           </div>
-
-          <div class="s1-or"><span>Or just search the jurisdiction area</span></div>
-
-          <button class="s1-admincard" data-s1go="admin">
-            <span class="s1-admincard__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 3 6v6c0 5 3.8 8.3 9 10 5.2-1.7 9-5 9-10V6l-9-4Z"/><path d="M9.5 12.5 11 14l3.5-3.5"/></svg></span>
-            <span class="s1-admincard__tx">
-              <span class="t"><h4>Select Administrative Area</h4><span class="s1-newbadge">New</span></span>
-              <p>Find the area (Province, District) for jurisdiction analysis</p>
-            </span>
-          </button>
         </div>
 
         <!-- ---------- 1.1 Draw Polygon ---------- -->
         <div class="s1" data-s1="draw">
-          <div class="s1-drawbox">
-            <div class="s1-drawbox__row">
-              <span class="s1-drawicon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8 9 5l7 3v7l-6 3-6-3Z"/><path d="M17 5h4M19 3v4"/></svg></span>
-              <div class="s1-drawbox__tx">
+          <button class="s1-back" data-s1go="choose"><img src="assets/f01-step1/back-chevron.svg" alt="" /><span>Back</span></button>
+          <div class="s1-draw">
+            <div class="s1-draw__row">
+              <img class="s1-draw__ic" src="assets/f01-step1/draw-polygon.svg" alt="" />
+              <div class="s1-draw__tx">
                 <h4>Draw the polygon</h4>
                 <p>Select any location to start draw polygon. Double click to finish it</p>
               </div>
             </div>
             <div class="s1-btns row">
               <button class="s1-btn s1-btn--ghost" data-s1go="choose">Cancel</button>
-              <button class="s1-btn s1-btn--primary" data-s1go="confirm" data-area="draw">Finish</button>
+              <button class="s1-btn s1-btn--primary" data-s1go="confirm" data-area="draw">Finish drawing</button>
             </div>
           </div>
         </div>
 
         <!-- ---------- 1.2 Upload SHP ---------- -->
         <div class="s1" data-s1="upload">
+          <button class="s1-back" data-s1go="choose"><img src="assets/f01-step1/back-chevron.svg" alt="" /><span>Back</span></button>
           <div class="s1-drop" id="s1Drop">
             <div class="s1-drop__row">
-              <span class="s1-drop__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/><path d="M12 16V4M8 8l4-4 4 4"/></svg></span>
+              <img class="s1-drop__ic" src="assets/f01-step1/upload-shp.svg" alt="" />
               <div class="s1-drop__tx">
                 <h4>Upload SHP File</h4>
-                <p>Drop your SHP file here to generate the Site Characterisation data.
-Format file: .zip (.shp, .shx, .dbf, .prj), .kml, .kmz</p>
+                <p>Drop your SHP file here to generate the Site Characterisation data. <b>Format file: .zip (.shp, .shx, .dbf, .prj), .kml, .kmz</b></p>
               </div>
             </div>
             <button class="s1-btn s1-btn--primary" data-s1go="confirm" data-area="draw">or Click to browse from your computer</button>
           </div>
-          <button class="s1-btn s1-btn--ghost" data-s1go="choose">Cancel</button>
-        </div>
-
-        <!-- ---------- 1.3 Select Administrative Area ---------- -->
-        <div class="s1" data-s1="admin">
-          <div class="s1-adminhead">
-            <span class="s1-adminhead__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 3 6v6c0 5 3.8 8.3 9 10 5.2-1.7 9-5 9-10V6l-9-4Z"/><path d="M9.5 12.5 11 14l3.5-3.5"/></svg></span>
-            <div class="s1-adminhead__tx">
-              <h4>Select Administrative Area</h4>
-              <p>Find the area (Village, District, etc) to direct jurisdiction based analysis</p>
-            </div>
-          </div>
-
-          <div class="s1-search">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
-            <input type="text" id="s1AdminSearch" placeholder="Search province, district, village…" autocomplete="off" />
-          </div>
-          <div class="s1-suggest" id="s1Suggest">
-            <button data-area="DKI Jakarta" data-level="Province" data-size="1.829.241,99 ha">DKI Jakarta <small>Province</small></button>
-            <button data-area="Kubu Raya" data-level="District" data-size="694.412,30 ha">Kubu Raya <small>District</small></button>
-            <button data-area="Bali" data-level="Province" data-size="563.666,00 ha">Bali <small>Province</small></button>
-            <button data-area="Berau" data-level="District" data-size="2.155.760,00 ha">Berau <small>District</small></button>
-          </div>
-
-          <div class="s1-areainfo s1-areainfo--empty" id="s1AreaInfo" data-empty="true">
-            Search and select an administrative area to see its details
-          </div>
-
-          <button class="s1-btn s1-btn--muted" id="s1AdminConfirm" data-s1go="confirm" data-area="admin" disabled>Confirm selected area</button>
         </div>
 
         <!-- ---------- 1.X.1 Confirmation ---------- -->
         <div class="s1" data-s1="confirm">
-          <h3 class="s1-h">Analyze the selected polygon?</h3>
-
-          <div class="s1-confirmcard">
-            <div class="s1-confirmcard__inner">
-              <span class="lbl">The estimation size of selected area is</span>
-              <span class="big" id="s1ConfirmSize">48,421.9 <small>ha</small></span>
-            </div>
-          </div>
-
-          <!-- normal: land-concession toggle -->
-          <div class="s1-concession" id="s1Concession" data-show="normal">
-            <div class="s1-concession__head">
-              <button class="s1-toggle" id="s1ConcessionToggle" aria-pressed="false" aria-label="This area contains land concession" aria-controls="s1ConcessionDetail"></button>
-              <span class="s1-concession__tx">This area contains land concession</span>
-            </div>
-            <div class="s1-concession__detail" id="s1ConcessionDetail">
-              <p class="s1-concession__label">Please specify the concession type:</p>
-              <label class="s1-radio">
-                <input type="radio" name="concessionType" value="Selective Logging" />
-                <span class="s1-radio__dot"></span>
-                <span class="s1-radio__tx">Selective Logging</span>
-              </label>
-              <label class="s1-radio">
-                <input type="radio" name="concessionType" value="Land Clearing" />
-                <span class="s1-radio__dot"></span>
-                <span class="s1-radio__tx">Land Clearing</span>
-              </label>
-            </div>
-          </div>
-
-          <!-- too big: alert -->
-          <div class="s1-alert s1-alert--danger" id="s1TooBig" data-show="toobig" hidden>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4m0 4h.01M10.3 4.3l-7 12A2 2 0 0 0 5 19.5h14a2 2 0 0 0 1.7-3.2l-7-12a2 2 0 0 0-3.4 0Z"/></svg>
-            <div>
-              <h5>The area is too big.</h5>
-              <p>You can only analyse &lt;200.000 ha. <a href="login.html">Sign in→</a> for having up to 500.000 ha analysis.</p>
-            </div>
-          </div>
-
-          <div class="s1-btns">
-            <button class="s1-btn s1-btn--primary" data-s1go="review">Identify the Ecosystem</button>
-            <button class="s1-btn s1-btn--ghost" data-s1go="choose">Re-select Area</button>
-          </div>
-        </div>
-
-        <!-- ---------- 1.X.1.1 Review potential eligibility + Ecosystem ---------- -->
-        <div class="s1" data-s1="review">
-          <div class="s1-review">
-            <h3 class="s1-h s1-eco-title">Type of Ecosystem</h3>
-            <div class="s1-donut-wrap">
-              <div class="s1-donut" style="background:conic-gradient(#077f68 0 26%, #27b973 26% 73%, #6ab2a4 73% 98%, #e6e8ec 98% 100%);">
-                <div class="s1-donut__c"><div class="t">Total</div><div class="v">48,421.9 ha</div></div>
+          <div class="s1-confirm">
+            <div class="s1-confirm__grp">
+              <h3 class="s1-h">Analyze the selected polygon?</h3>
+              <div class="s1-confirmcard">
+                <div class="s1-confirmcard__inner">
+                  <span class="lbl">The estimation size of selected area is</span>
+                  <span class="big" id="s1ConfirmSize">150.000 ha</span>
+                </div>
               </div>
             </div>
-            <div class="s1-rows">
-              <div class="s1-row"><span class="s1-row__nm" style="font-family: Poppins"><span class="s1-row__dot" style="background:#077f68"></span>Mangrove</span><span class="s1-row__v"><span class="val">12,630.0 ha</span><span class="pct">26%</span></span></div>
-              <div class="s1-row"><span class="s1-row__nm" style="font-family: Poppins"><span class="s1-row__dot" style="background:#27b973"></span>Peatland</span><span class="s1-row__v"><span class="val">22,600.2 ha</span><span class="pct">47%</span></span></div>
-              <div class="s1-row"><span class="s1-row__nm" style="font-family: Poppins"><span class="s1-row__dot" style="background:#6ab2a4"></span>Forest</span><span class="s1-row__v"><span class="val">11,942.2 ha</span><span class="pct">25%</span></span></div>
-              <div class="s1-row"><span class="s1-row__nm" style="font-family: Poppins"><span class="s1-row__dot" style="background:#cdd2da"></span>Non-Eligible Area</span><span class="s1-row__v"><span class="val">1,249.5 ha</span><span class="pct">2%</span></span></div>
-            </div>
 
-            <div class="s1-divider"></div>
-
-            <div class="s1-alert s1-alert--warn">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4m0 4h.01M10.3 4.3l-7 12A2 2 0 0 0 5 19.5h14a2 2 0 0 0 1.7-3.2l-7-12a2 2 0 0 0-3.4 0Z"/></svg>
-              <p><b>Disclaimer:</b> All the information in NbS Tool is collected from diverse available sources across South-east Asia. You can go to the <a href="document-generator.html">NbS Tool Form→</a> to edit and modify these with your own data.</p>
+            <!-- shown only when the selected area exceeds the analysis limit -->
+            <div class="s1-alert s1-alert--danger" id="s1TooBig" hidden>
+              <img class="s1-alert__ic" src="assets/f01-step1/alert-toobig.svg" alt="" />
+              <div>
+                <h5>The area is too big.</h5>
+                <p>You can only analyse &lt;<b>200.000 ha</b>. <a href="login.html">Sign in→</a> for having up to <b>500.000 ha</b> analysis.</p>
+              </div>
             </div>
 
             <div class="s1-btns">
-              <button class="s1-btn s1-btn--primary" data-go="2">Analyze Site Characterisation</button>
-              <button class="s1-btn s1-btn--ghost" data-s1go="choose">Re-select Area</button>
+              <button class="s1-btn s1-btn--primary" id="s1Continue">Continue, identify the ecosystem</button>
+              <button class="s1-btn s1-btn--ghost" data-s1go="choose">Re-select area</button>
             </div>
           </div>
         </div>
@@ -332,193 +277,19 @@ Format file: .zip (.shp, .shx, .dbf, .prj), .kml, .kmz</p>
       </div>
 
       <!-- ============ STEP 2 — SITE CHARACTERISATION ============ -->
+      <!-- Tab bar lives above .da-body (sticky). Panes hold exported Figma renders. -->
       <div class="da-step-body" data-step="2">
-        <div class="da-ctx" id="daCtx" role="tablist">
-          <button role="tab" aria-selected="true" data-ctx="general">General Context</button>
-          <button role="tab" aria-selected="false" data-ctx="nature">Nature Context</button>
-          <button role="tab" aria-selected="false" data-ctx="people">People Context</button>
-          <button role="tab" aria-selected="false" data-ctx="climate">Climate Context</button>
-          <button class="da-ctx-next" data-next>Next <svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-        </div>
-
-        <!-- General -->
         <div class="ctx-pane" data-ctx="general">
-         <div class="gc">
-
-          <!-- 1 · Ecosystem -->
-          <section class="gc-sec">
-            <div class="gc-sec__head">
-              <span class="gc-sec__ic"><svg viewBox="0 0 24 24"><path d="M12 3C7 7 6 11 6 14a6 6 0 0 0 12 0c0-3-1-7-6-11Z"/><path d="M12 22v-7"/></svg></span>
-              <div class="gc-sec__tt">
-                <h4>Ecosystem</h4>
-                <p>Dominant ecosystem types detected within the selected project area.</p>
-              </div>
-            </div>
-            <div class="gc-sec__body">
-              <div class="gc-map">
-                <span class="gc-map__tag">Ecosystem map · 2025</span>
-                <img src="assets/genctx/eco-map.png" alt="Ecosystem map of the project area" />
-              </div>
-              <div class="gc-legend">
-                <span class="gc-legend__item"><span class="gc-legend__sw" style="background:#1a6b2e"></span>Forest</span>
-                <span class="gc-legend__item"><span class="gc-legend__sw" style="background:#9cc02b"></span>Mangrove</span>
-                <span class="gc-legend__item"><span class="gc-legend__sw" style="background:#eaf035"></span>Peatland</span>
-                <span class="gc-legend__item"><span class="gc-legend__sw" style="background:#cfd6d3"></span>Non-vegetated</span>
-                <span class="gc-legend__item"><span class="gc-legend__sw" style="background:#9ec9e6"></span>Water</span>
-              </div>
-              <p class="gc-note">In 2025, the project area is dominated by <b>forest ecosystem</b> covering <b>11,942.2 ha (47%)</b>, followed by mangrove (25%) and peatland (26%). The remaining 2% is non-eligible or non-vegetated land.</p>
-            </div>
-          </section>
-
-          <!-- 2 · Land cover -->
-          <section class="gc-sec">
-            <div class="gc-sec__head">
-              <span class="gc-sec__ic"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span>
-              <div class="gc-sec__tt">
-                <h4>Land cover composition</h4>
-                <p>Land-cover classes by share of total project area (RLCMS, 2023).</p>
-              </div>
-            </div>
-            <div class="gc-sec__body">
-              <div class="gc-lc">
-                <div class="gc-lc__row"><span class="gc-lc__ic" data-lc="evergreen"></span><div class="gc-lc__mid"><div class="gc-lc__nm"><b>Evergreen forest</b><span class="ha">11,942.2 ha</span></div><div class="gc-lc__bar"><i style="width:47%;background:#1a6b2e"></i></div></div><span class="gc-lc__pct">47%</span></div>
-                <div class="gc-lc__row"><span class="gc-lc__ic" data-lc="mangrove"></span><div class="gc-lc__mid"><div class="gc-lc__nm"><b>Mangrove</b><span class="ha">6,352.0 ha</span></div><div class="gc-lc__bar"><i style="width:25%;background:#9cc02b"></i></div></div><span class="gc-lc__pct">25%</span></div>
-                <div class="gc-lc__row"><span class="gc-lc__ic" data-lc="shrub"></span><div class="gc-lc__mid"><div class="gc-lc__nm"><b>Shrub &amp; regrowth</b><span class="ha">3,303.0 ha</span></div><div class="gc-lc__bar"><i style="width:13%;background:#bcd45a"></i></div></div><span class="gc-lc__pct">13%</span></div>
-                <div class="gc-lc__row"><span class="gc-lc__ic" data-lc="oil palm"></span><div class="gc-lc__mid"><div class="gc-lc__nm"><b>Oil palm</b><span class="ha">1,778.0 ha</span></div><div class="gc-lc__bar"><i style="width:7%;background:#c98a2b"></i></div></div><span class="gc-lc__pct">7%</span></div>
-                <div class="gc-lc__row"><span class="gc-lc__ic" data-lc="aquaculture"></span><div class="gc-lc__mid"><div class="gc-lc__nm"><b>Aquaculture</b><span class="ha">1,524.0 ha</span></div><div class="gc-lc__bar"><i style="width:6%;background:#5aa6c9"></i></div></div><span class="gc-lc__pct">6%</span></div>
-                <div class="gc-lc__row"><span class="gc-lc__ic" data-lc="water"></span><div class="gc-lc__mid"><div class="gc-lc__nm"><b>Water</b><span class="ha">508.0 ha</span></div><div class="gc-lc__bar"><i style="width:2%;background:#7fbfe0"></i></div></div><span class="gc-lc__pct">2%</span></div>
-              </div>
-            </div>
-          </section>
-
-          <!-- 3 · Topography -->
-          <section class="gc-sec">
-            <div class="gc-sec__head">
-              <span class="gc-sec__ic"><svg viewBox="0 0 24 24"><path d="M3 20h18"/><path d="m6 20 5-11 3 6 2-3 4 8"/></svg></span>
-              <div class="gc-sec__tt">
-                <h4>Topography &amp; terrain</h4>
-                <p>Elevation and slope characteristics derived from the digital elevation model.</p>
-              </div>
-            </div>
-            <div class="gc-sec__body">
-              <div class="gc-map gc-map--terrain">
-                <span class="gc-map__tag">Elevation model</span>
-                <img src="assets/genctx/terrain-sm.jpg" alt="3D terrain elevation model" />
-              </div>
-              <div class="gc-metrics" style="margin-top:12px">
-                <div class="gc-metric"><div class="l">Mean elevation</div><div class="v">186 <small>m asl</small></div></div>
-                <div class="gc-metric"><div class="l">Elevation range</div><div class="v">4–612 <small>m</small></div></div>
-                <div class="gc-metric"><div class="l">Mean slope</div><div class="v">8.4 <small>°</small></div></div>
-                <div class="gc-metric"><div class="l">Dominant aspect</div><div class="v">North-east</div></div>
-              </div>
-            </div>
-          </section>
-
-          <!-- 4 · Hazard map -->
-          <section class="gc-sec">
-            <div class="gc-sec__head">
-              <span class="gc-sec__ic"><svg viewBox="0 0 24 24"><path d="M12 3 3 7v5c0 5 3.8 8.2 9 9 5.2-.8 9-4 9-9V7Z"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg></span>
-              <div class="gc-sec__tt">
-                <h4>Natural hazard exposure</h4>
-                <p>Modelled hazard risk across the project area and surroundings.</p>
-              </div>
-            </div>
-            <div class="gc-sec__body">
-              <div class="gc-map">
-                <span class="gc-map__tag">Risk map</span>
-                <img src="assets/genctx/risk-map.png" alt="Natural hazard risk map" />
-              </div>
-              <div class="gc-risk-legend">
-                <span class="t">Risk level</span>
-                <span class="item"><span class="sw" style="background:#fdf3b4"></span>No risk</span>
-                <span class="item"><span class="sw" style="background:#f5c842"></span>Low risk</span>
-                <span class="item"><span class="sw" style="background:#e8412c"></span>Moderate risk</span>
-                <span class="item"><span class="sw" style="background:#8b1a12"></span>High risk</span>
-                <span class="item"><span class="sw" style="background:#1a1a1a"></span>Very high risk</span>
-              </div>
-            </div>
-          </section>
-
-          <!-- 5 · Natural disasters -->
-          <section class="gc-sec">
-            <div class="gc-sec__head">
-              <span class="gc-sec__ic"><svg viewBox="0 0 24 24"><path d="M3 7h13a3 3 0 1 0-3-3"/><path d="M3 12h17a3 3 0 1 1-3 3"/><path d="M3 17h11a3 3 0 1 1-3 3"/></svg></span>
-              <div class="gc-sec__tt">
-                <h4>Natural disaster history</h4>
-                <p>Recorded exposure to climate-related disaster events.</p>
-              </div>
-            </div>
-            <div class="gc-sec__body">
-              <div class="gc-nd">
-                <div class="gc-nd__row"><span class="gc-nd__ic" data-nd="flood"></span><div class="gc-nd__main"><h5>Flood</h5><p>Seasonal inundation along low-lying river margins during the wet season.</p></div><span class="gc-lvl high">HIGH</span></div>
-                <div class="gc-nd__row"><span class="gc-nd__ic" data-nd="landslide"></span><div class="gc-nd__main"><h5>Landslide</h5><p>Limited exposure; confined to steeper north-eastern slopes.</p></div><span class="gc-lvl low">LOW</span></div>
-                <div class="gc-nd__row"><span class="gc-nd__ic" data-nd="tropical typhoon"></span><div class="gc-nd__main"><h5>Tropical storm</h5><p>Occasional wind and rainfall extremes from regional weather systems.</p></div><span class="gc-lvl mod">MODERATE</span></div>
-                <div class="gc-nd__row"><span class="gc-nd__ic" data-nd="drought"></span><div class="gc-nd__main"><h5>Drought</h5><p>Short dry-season water stress; low overall frequency.</p></div><span class="gc-lvl low">LOW</span></div>
-              </div>
-            </div>
-          </section>
-
-         </div>
+          <img src="assets/f01-step2/sc-general.webp" alt="Site Characterisation — General Context" />
         </div>
-
-        <!-- Nature -->
         <div class="ctx-pane" data-ctx="nature" hidden>
-          <div class="sc-grid">
-            <div class="sc-tile"><div class="l">Area of Habitat</div><div class="v">~960 <small>ha</small></div></div>
-            <div class="sc-tile"><div class="l">Above-ground biomass</div><div class="v">142 <small>t/ha</small></div></div>
-            <div class="sc-tile"><div class="l">Soil organic carbon</div><div class="v">386 <small>tC/ha</small></div></div>
-            <div class="sc-tile"><div class="l">Canopy cover</div><div class="v">76 <small>%</small></div></div>
-          </div>
-          <div class="p-card">
-            <div class="p-card__head"><div class="p-card__title">Biodiversity baseline</div></div>
-            <div class="p-card__body">
-              <div class="sc-list">
-                <div class="row"><span class="nm">IUCN species of concern<small>Within AOI + 5 km buffer</small></span><span class="val">7</span></div>
-                <div class="row"><span class="nm">Key Biodiversity Area overlap</span><span class="val">Partial (north)</span></div>
-                <div class="row"><span class="nm">Ecological connectivity</span><span class="val">High</span></div>
-              </div>
-            </div>
-          </div>
+          <img src="assets/f01-step2/sc-nature.webp" alt="Site Characterisation — Nature Context" />
         </div>
-
-        <!-- People -->
         <div class="ctx-pane" data-ctx="people" hidden>
-          <div class="sc-grid">
-            <div class="sc-tile"><div class="l">Households</div><div class="v">~480</div></div>
-            <div class="sc-tile"><div class="l">Population (5 km buffer)</div><div class="v">2,150</div></div>
-            <div class="sc-tile"><div class="l">Primary livelihood</div><div class="v">Fishing</div></div>
-            <div class="sc-tile"><div class="l">Land tenure</div><div class="v">Mixed / customary</div></div>
-          </div>
-          <div class="p-card">
-            <div class="p-card__head"><div class="p-card__title">Socio-economic baseline</div></div>
-            <div class="p-card__body">
-              <div class="sc-list">
-                <div class="row"><span class="nm">Dependent on coastal resources</span><span class="val">High</span></div>
-                <div class="row"><span class="nm">Aquaculture ponds</span><span class="val">Present (south-east)</span></div>
-                <div class="row"><span class="nm">Community organisations</span><span class="val">3 active</span></div>
-              </div>
-            </div>
-          </div>
+          <img src="assets/f01-step2/sc-people.webp" alt="Site Characterisation — People Context" />
         </div>
-
-        <!-- Climate -->
         <div class="ctx-pane" data-ctx="climate" hidden>
-          <div class="sc-grid">
-            <div class="sc-tile"><div class="l">Annual rainfall</div><div class="v">3,100 <small>mm</small></div></div>
-            <div class="sc-tile"><div class="l">Mean temperature</div><div class="v">27 <small>°C</small></div></div>
-            <div class="sc-tile"><div class="l">Baseline carbon stock</div><div class="v">528 <small>tC/ha</small></div></div>
-            <div class="sc-tile"><div class="l">Köppen class</div><div class="v">Af · Tropical</div></div>
-          </div>
-          <div class="p-card">
-            <div class="p-card__head"><div class="p-card__title">Climate baseline</div></div>
-            <div class="p-card__body">
-              <div class="sc-list">
-                <div class="row"><span class="nm">Sea-level-rise exposure</span><span class="val">Elevated</span></div>
-                <div class="row"><span class="nm">Dry-season length</span><span class="val">~2 months</span></div>
-                <div class="row"><span class="nm">Blue-carbon potential</span><span class="val">Very high</span></div>
-              </div>
-            </div>
-          </div>
+          <img src="assets/f01-step2/sc-climate.webp" alt="Site Characterisation — Climate Context" />
         </div>
       </div>
 
@@ -887,11 +658,11 @@ Format file: .zip (.shp, .shx, .dbf, .prj), .kml, .kmz</p>
     <!-- ===== Per-step footers (step 1 uses in-body sub-flow buttons) ===== -->
     <footer class="da-foot" data-step="2">
       <button class="btn btn-outline" data-go="1">
-        <svg viewBox="0 0 24 24" fill="none"><path d="M21 12a9 9 0 1 1-3.5-7.1M21 4v5h-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg viewBox="0 0 24 24" fill="none"><path d="M14 7l-5 5 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         Reselect Area
       </button>
-      <button class="btn btn-primary grow" data-go="3">Next: Threat Profile
-        <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <button class="btn btn-primary" data-go="4">Select intervention type
+        <svg viewBox="0 0 24 24" fill="none"><path d="M6 7l5 5-5 5M13 7l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
     </footer>
     <footer class="da-foot" data-step="3">
@@ -923,9 +694,15 @@ Format file: .zip (.shp, .shx, .dbf, .prj), .kml, .kmz</p>
 
   <!-- ===== Map controls ===== -->
   <div class="map-controls">
-    <button class="mc-search" aria-label="Search location">
-      <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
-    </button>
+    <div class="mc-searchwrap">
+      <button class="mc-search" aria-label="Search location">
+        <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
+      </button>
+      <div class="mc-searchbar" id="mcSearchBar">
+        <input type="text" id="mcSearchInput" autocomplete="off" placeholder="Search a province or district…" />
+        <div class="mc-results" id="mcResults"></div>
+      </div>
+    </div>
     <div class="mc-group">
       <button class="mc-btn" aria-label="Go to current location">
         <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
@@ -1022,7 +799,7 @@ Format file: .zip (.shp, .shx, .dbf, .prj), .kml, .kmz</p>
   /* ============ Step 1 sub-flow (1.0 → 1.1/1.2/1.3 → 1.X.1 → 1.X.1.1) ============ */
   const mapscreen = document.querySelector('.mapscreen');
   const step1 = document.getElementById('daStep1');
-  const MAP_BY_SUB = { choose:'aoi-hidden', draw:'aoi-drawing', upload:'aoi-hidden', admin:'aoi-hidden', confirm:'aoi-solid', review:'aoi-solid' };
+  const MAP_BY_SUB = { choose:'aoi-hidden', draw:'aoi-drawing', upload:'aoi-hidden', confirm:'aoi-solid' };
   let curSub = 'choose';
   let adminSel = null;
 
@@ -1040,17 +817,13 @@ Format file: .zip (.shp, .shx, .dbf, .prj), .kml, .kmz</p>
 
   function configureConfirm(areaType){
     const sizeEl = document.getElementById('s1ConfirmSize');
-    const concession = document.getElementById('s1Concession');
     const tooBig = document.getElementById('s1TooBig');
-    let tooBigFlag = false, sizeText = '48,421.9 <small>ha</small>';
-    if (areaType === 'admin' && adminSel) {
-      sizeText = adminSel.size.replace(/\s*ha$/, ' <small>ha</small>');
-      const num = parseFloat(adminSel.size.replace(/\./g,'').replace(',', '.')); // ID number format
-      tooBigFlag = num > 200000;
-    }
-    sizeEl.innerHTML = sizeText;
-    concession.hidden = tooBigFlag;
-    tooBig.hidden = !tooBigFlag;
+    const cont = document.getElementById('s1Continue');
+    const num = 150000;                 // Figma demo size for drawn / uploaded areas
+    const isBig = num > 200000;         // limit is 200.000 ha
+    sizeEl.textContent = num.toLocaleString('de-DE') + ' ha';   // 150.000 ha
+    tooBig.hidden = !isBig;             // red "too big" alert
+    if (cont) cont.hidden = isBig;      // hide Continue when over the limit
   }
 
   // sub-flow navigation buttons
@@ -1101,15 +874,16 @@ Format file: .zip (.shp, .shx, .dbf, .prj), .kml, .kmz</p>
     });
   }
 
-  // 1.X.1 — land-concession toggle
-  const concToggle = document.getElementById('s1ConcessionToggle');
-  if (concToggle) {
-    concToggle.addEventListener('click', () => {
-      const on = concToggle.getAttribute('aria-pressed') === 'true';
-      concToggle.setAttribute('aria-pressed', on ? 'false' : 'true');
-      document.getElementById('s1Concession').classList.toggle('on', !on);
-      // clear concession-type choice when switching the toggle off
-      if (on) document.querySelectorAll('input[name="concessionType"]').forEach(r => { r.checked = false; });
+  // 1.X.1 — Continue → "Analyzing the area" overlay → Step 2 (Site Characterisation)
+  const s1Continue = document.getElementById('s1Continue');
+  const mapLoading = document.getElementById('mapLoading');
+  if (s1Continue) {
+    s1Continue.addEventListener('click', () => {
+      if (mapLoading) mapLoading.hidden = false;
+      setTimeout(() => {
+        if (mapLoading) mapLoading.hidden = true;
+        goStep(2);
+      }, 1800);
     });
   }
 
@@ -1123,17 +897,27 @@ Format file: .zip (.shp, .shx, .dbf, .prj), .kml, .kmz</p>
   // initial map state (step 1 = choose → no polygon)
   setMapState(MAP_BY_SUB[curSub]);
 
-  /* Step 2 — context tabs */
+  /* Step 2 — context tabs (sticky bar above the scroll body) */
   const ctx = document.getElementById('daCtx');
   if (ctx) {
-    ctx.querySelectorAll('[data-ctx]').forEach(tab => {
-      tab.addEventListener('click', () => {
-        const key = tab.dataset.ctx;
-        ctx.querySelectorAll('[data-ctx]').forEach(t => t.setAttribute('aria-selected', t === tab ? 'true' : 'false'));
-        panel.querySelectorAll('.da-step-body[data-step="2"] .ctx-pane').forEach(p => { p.hidden = (p.dataset.ctx !== key); });
-      });
+    const tabs = [...ctx.querySelectorAll('[data-ctx]')];
+    const KEYS = tabs.map(t => t.dataset.ctx);
+    function showCtx(key){
+      tabs.forEach(t => t.setAttribute('aria-selected', t.dataset.ctx === key ? 'true' : 'false'));
+      panel.querySelectorAll('.da-step-body[data-step="2"] .ctx-pane').forEach(p => { p.hidden = (p.dataset.ctx !== key); });
+      body.scrollTop = 0;
+    }
+    tabs.forEach(tab => tab.addEventListener('click', () => showCtx(tab.dataset.ctx)));
+    const cur = () => KEYS.indexOf(tabs.find(t => t.getAttribute('aria-selected') === 'true').dataset.ctx);
+    // Back before the first context returns to step 1; Next past the last continues the wizard
+    ctx.querySelector('[data-ctx-back]').addEventListener('click', () => {
+      const i = cur();
+      i === 0 ? goStep(1) : showCtx(KEYS[i - 1]);
     });
-    ctx.querySelector('[data-next]').addEventListener('click', () => goStep(3));
+    ctx.querySelector('[data-ctx-next]').addEventListener('click', () => {
+      const i = cur();
+      i === KEYS.length - 1 ? goStep(4) : showCtx(KEYS[i + 1]);
+    });
   }
 
   /* Step 4 — pathway toggles */
@@ -1221,6 +1005,67 @@ Format file: .zip (.shp, .shx, .dbf, .prj), .kml, .kmz</p>
   setTimeout(function(){ map.invalidateSize(); }, 200);
   window.addEventListener('resize', function(){ map.invalidateSize(); });
   window.nbsMap = map;
+
+  /* ---- Fluid zoom via the custom +/- buttons ---- */
+  var zoomOpts = { animate: true, duration: 0.25 };  // full-step zoom, just eased
+  var zi = document.getElementById('zoomIn'), zo = document.getElementById('zoomOut');
+  if (zi) zi.addEventListener('click', function(){ map.zoomIn(1, zoomOpts); });
+  if (zo) zo.addEventListener('click', function(){ map.zoomOut(1, zoomOpts); });
+
+  /* ---- Location search: open via map button OR the Step 1 tip badge ---- */
+  var wrap = document.querySelector('.mc-searchwrap');
+  var input = document.getElementById('mcSearchInput');
+  var results = document.getElementById('mcResults');
+  if (wrap && input) {
+    var open = function(){ wrap.classList.add('open'); input.focus(); };
+    var close = function(){ wrap.classList.remove('open'); };
+    document.querySelector('.mc-search').addEventListener('click', function(){
+      wrap.classList.contains('open') ? close() : open();
+    });
+    var badge = document.querySelector('.s1-tip__badge');
+    if (badge) badge.addEventListener('click', open);
+
+    var timer;
+    input.addEventListener('input', function(){
+      clearTimeout(timer);
+      var q = input.value.trim();
+      if (q.length < 3) { results.innerHTML = ''; return; }
+      timer = setTimeout(function(){ runSearch(q); }, 350);
+    });
+
+    function runSearch(q){
+      results.innerHTML = '<div class="empty">Searching…</div>';
+      // Nominatim (OpenStreetMap) geocoding — matches the OSM basemap
+      fetch('https://nominatim.openstreetmap.org/search?format=jsonv2&limit=6&q=' + encodeURIComponent(q))
+        .then(function(r){ return r.json(); })
+        .then(function(list){
+          if (!list.length) { results.innerHTML = '<div class="empty">No results found</div>'; return; }
+          results.innerHTML = '';
+          list.forEach(function(p){
+            var b = document.createElement('button');
+            b.textContent = p.display_name;
+            b.addEventListener('click', function(){
+              var flyOpts = { duration: 1.4, easeLinearity: 0.22 }; // smooth zoom+pan easing
+              if (p.boundingbox) {
+                var bb = p.boundingbox.map(Number); // [south, north, west, east]
+                map.flyToBounds([[bb[0], bb[2]], [bb[1], bb[3]]], flyOpts);
+              } else {
+                map.flyTo([parseFloat(p.lat), parseFloat(p.lon)], 11, flyOpts);
+              }
+              input.value = p.display_name.split(',')[0];
+              results.innerHTML = '';
+              close();
+            });
+            results.appendChild(b);
+          });
+        })
+        .catch(function(){ results.innerHTML = '<div class="empty">Search failed, try again</div>'; });
+    }
+
+    document.addEventListener('click', function(e){
+      if (!e.target.closest('.mc-searchwrap') && !e.target.closest('.s1-tip__badge')) close();
+    });
+  }
 })();
 </script>
 

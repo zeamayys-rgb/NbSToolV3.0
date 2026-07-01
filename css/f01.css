@@ -135,7 +135,7 @@
 .da-panel {
   position: absolute;
   left: 96px; top: 0; bottom: 0;
-  width: 430px;
+  width: 450px;
   max-width: calc(100% - 96px);
   display: flex;
   flex-direction: column;
@@ -147,6 +147,9 @@
 }
 /* Steps 2–5 use the wider panel (richer content) */
 .da-panel:not([data-step="1"]) { width: 760px; }
+
+/* Step 1 hugs its content instead of filling the map top-to-bottom */
+.da-panel[data-step="1"] { bottom: auto; }
 
 .da-panel.is-hidden {
   transform: translateX(-110%);
@@ -188,6 +191,7 @@
   flex: none; transition: background var(--motion-fast), border-color var(--motion-fast), color var(--motion-fast), box-shadow var(--motion-fast), transform var(--motion-fast);
 }
 .da-step__num svg { width: 13px; height: 13px; stroke: #066653; fill: none; }
+.da-step.is-done .da-step__num svg { stroke: #fff; }  /* white check on the filled green circle (Figma) */
 .da-step__label {
   font-size: 12px; font-weight: 700; color: #beead5; white-space: nowrap;
   max-width: 0; overflow: hidden; opacity: 0;
@@ -207,33 +211,7 @@
   border-top: 2px dashed rgb(190,202,196);
 }
 
-/* Context tabs (Site Characterisation / step 2) */
-.da-ctx {
-  flex: none;
-  display: flex; align-items: stretch;
-  background: var(--bg-base-main);
-  border-bottom: 1px solid var(--stroke-base);
-  padding: 0 8px;
-}
-.da-ctx button {
-  appearance: none; border: none; background: none; cursor: pointer;
-  font-family: var(--font-text); font-size: 13px; font-weight: 600;
-  color: var(--text-base-second);
-  padding: 14px 14px 12px; position: relative;
-  transition: color var(--motion-fast);
-}
-.da-ctx button:hover { color: var(--text-base-main); }
-.da-ctx button[aria-selected="true"] { color: var(--text-primary); }
-.da-ctx button[aria-selected="true"]::after {
-  content: ""; position: absolute; left: 12px; right: 12px; bottom: -1px; height: 2.5px;
-  background: var(--primary-500); border-radius: 2px;
-}
-.da-ctx .da-ctx-next {
-  margin-left: auto; align-self: center;
-  display: inline-flex; align-items: center; gap: 6px;
-  color: var(--text-primary); font-weight: 700; padding: 8px 12px;
-}
-.da-ctx .da-ctx-next svg { width: 14px; height: 14px; stroke: currentColor; fill: none; }
+/* Context tabs (step 2) live in css/f01-step2.css */
 
 /* Body (scroll region holding all step contents) */
 .da-body {
@@ -625,6 +603,34 @@
 }
 .mc-search:hover { background: #066653; }
 .mc-search svg { width: 22px; height: 22px; stroke: currentColor; fill: none; }
+
+/* expanding location-search bar (opened by .mc-search or the Step 1 tip badge) */
+.mc-searchwrap { position: relative; display: flex; }
+.mc-searchbar {
+  position: absolute; right: 72px; top: 7px; width: 320px;
+  transform-origin: right center; transform: scaleX(0); opacity: 0; pointer-events: none;
+  transition: transform var(--motion-fast), opacity var(--motion-fast);
+}
+.mc-searchwrap.open .mc-searchbar { transform: scaleX(1); opacity: 1; pointer-events: auto; }
+.mc-searchbar input {
+  width: 100%; height: 46px; border-radius: 8px; border: 1px solid #eaebf0;
+  padding: 0 14px; background: #fff; box-shadow: var(--elevation-3); outline: none;
+  font-family: var(--font-text); font-size: 15px; color: #252525;
+}
+.mc-searchbar input::placeholder { color: #98a2b3; }
+.mc-results {
+  margin-top: 6px; background: #fff; border-radius: 8px; overflow: hidden auto; max-height: 264px;
+  box-shadow: var(--elevation-3);
+}
+.mc-results:empty { display: none; }
+.mc-results button {
+  display: block; width: 100%; text-align: left; background: none; border: none; cursor: pointer;
+  padding: 10px 14px; border-bottom: 1px solid #f1f3f5;
+  font-family: var(--font-text); font-size: 14px; line-height: 18px; color: #252525;
+}
+.mc-results button:last-child { border-bottom: none; }
+.mc-results button:hover { background: #f3f8f6; }
+.mc-results .empty { padding: 10px 14px; font-size: 13px; color: #98a2b3; }
 
 .mc-group {
   display: flex; flex-direction: column; gap: 10px;

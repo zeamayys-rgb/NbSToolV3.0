@@ -1,0 +1,112 @@
+/* ============================================================
+   F01 · STEP 2 — SITE CHARACTERISATION  (Figma pixel-perfect)
+   node 222-37959 · panel 222-32666 (810 × full height)
+   Chrome (header 114 + tab bar 52) is sticky above the scroll
+   body; the button block (64) is pinned absolute at the panel
+   bottom. Content per tab = exported Figma render (2×) in
+   assets/f01-step2/.
+   ============================================================ */
+
+/* ---- Panel: 810px wide, full viewport height (100vh minus the 68px site nav) ---- */
+.da-panel[data-step="2"] {
+  width: 810px;
+  max-width: calc(100% - 96px);
+  top: 0; bottom: 0;             /* spans the whole map viewport, top to bottom */
+}
+
+/* ---- Sticky header: step 2 shows ALL stepper labels (Figma Title Panel, 114px) ---- */
+.da-panel[data-step="2"] .da-head { z-index: 3; }
+.da-panel[data-step="2"] .da-step__label { max-width: 170px; opacity: 1; }
+.da-panel[data-step="2"] .da-step:not(.is-active):not(.is-done) .da-step__label {
+  color: #93b0aa;                /* Color/Brunswick/brunswick-3 — upcoming steps */
+  font-weight: 500;
+}
+.da-panel[data-step="2"] .da-step:not(.is-active):not(.is-done) .da-step__num {
+  background: #ffffff; color: #2d3648; border-color: #ffffff;   /* Neutral/800 on white */
+}
+.da-panel[data-step="2"] .da-step.is-active .da-step__label,
+.da-panel[data-step="2"] .da-step.is-done .da-step__label { color: #ffffff; }
+/* "··" two-dot connectors between steps */
+.da-panel[data-step="2"] .da-conn {
+  flex: 0 0 auto; width: 11px; min-width: 11px; margin: 0 8px;
+  border-top: 3.5px dotted #7e9b93;
+}
+
+/* ============================================================
+   Context tab bar — sticky sibling of .da-head (.DA Tab, 52px)
+   ============================================================ */
+.da-ctx { display: none; }                       /* rendered on step 2 only */
+.da-panel[data-step="2"] > .da-ctx {
+  display: flex; align-items: center; gap: 12px;
+  flex: none; z-index: 2;
+  height: 52px; padding: 0 20px;
+  background: #ffffff;
+  border-bottom: 1px solid var(--stroke-base);
+}
+.da-ctx__tabs {
+  display: flex; align-items: center; gap: 14px;
+  margin: 0 auto;
+}
+.da-ctx__tabs button {
+  appearance: none; border: none; background: none; cursor: pointer;
+  font-family: var(--font-text); font-size: 14.5px; font-weight: 600;
+  color: #68727d; line-height: 1;                /* Text & Icons/Light/Base-Second */
+  padding: 9px 14px; border-radius: 8px;         /* Roundness/Inside-M */
+  box-shadow: inset 0 0 0 1.5px transparent;
+  transition: color var(--motion-fast), background var(--motion-fast), box-shadow var(--motion-fast);
+  white-space: nowrap;
+}
+.da-ctx__tabs button:hover { color: var(--text-base-main); }
+.da-ctx__tabs button[aria-selected="true"] {
+  color: #066653; background: #e9f8f1;           /* Primary/600 on Primary/25 */
+  box-shadow: inset 0 0 0 1.5px #6ab2a4;         /* Primary/300 outline pill */
+  font-weight: 700;
+}
+/* Back / Next pill buttons */
+.da-ctx__nav {
+  display: inline-flex; align-items: center; gap: 7px;
+  flex: none; height: 36px; padding: 0 16px;
+  border-radius: 999px; border: 1.5px solid #cbd2e0;   /* Neutral/400 */
+  background: #ffffff; color: #2d3648; cursor: pointer;
+  font-family: var(--font-text); font-size: 14px; font-weight: 700;
+  transition: background var(--motion-fast), border-color var(--motion-fast);
+}
+.da-ctx__nav:hover { background: var(--primary-25); border-color: var(--primary-300); }
+.da-ctx__nav svg { width: 15px; height: 15px; stroke: currentColor; fill: none; }
+.da-ctx__back { padding-left: 12px; }
+.da-ctx__next { padding-right: 12px; }
+
+/* ============================================================
+   Scroll body — flush Figma render per tab
+   ============================================================ */
+.da-panel[data-step="2"] .da-body {
+  padding: 0;
+  padding-bottom: 64px;                          /* clear the absolute button block */
+  gap: 0;
+  background: #f5f6f8;                           /* Background/Base-Fourth */
+}
+.da-panel[data-step="2"] .da-step-body { gap: 0; }
+.ctx-pane[hidden] { display: none; }
+.ctx-pane img { display: block; width: 100%; height: auto; }
+
+/* ============================================================
+   Button block — pinned absolute at the bottom (Figma, 64px)
+   ============================================================ */
+.da-foot[data-step="2"] {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  z-index: 4;
+  padding: 12px;
+  gap: 16px;
+  background: #ffffff;
+  border-top: 1px solid var(--stroke-base);
+}
+.da-foot[data-step="2"] .btn {
+  flex: 1 1 0; height: 40px; padding: 0 16px;
+  font-size: 14px; font-weight: 700;
+}
+.da-foot[data-step="2"] .btn svg { width: 16px; height: 16px; }
+.da-foot[data-step="2"] .btn-primary { background: #077f68; }         /* Green/Primary */
+.da-foot[data-step="2"] .btn-primary:hover { background: #066653; }
+.da-foot[data-step="2"] .btn-outline {
+  border: 1.5px solid #066653; color: #066653;                        /* Primary/600 */
+}
