@@ -260,7 +260,7 @@ section { position: relative; }
 .tcard:hover { transform: translateY(-4px); box-shadow: var(--elevation-3); }
 .tcard::before { content: ""; position: absolute; left: 0; top: 0; height: 4px; width: 100%; }
 .tcard.climate::before { background: linear-gradient(90deg, var(--info-400), #8bb4e6); }
-.tcard.people::before  { background: linear-gradient(90deg, var(--amber-deep), var(--amber-soft)); }
+.tcard.people::before  { background: linear-gradient(90deg, var(--amber-deep), var(--amber)); }
 .tcard.nature::before  { background: linear-gradient(90deg, var(--teal-deep), var(--spring)); }
 .tcard .ic { width: 54px; height: 54px; border-radius: var(--radius-xl); display: grid; place-items: center; margin-bottom: 20px; }
 .tcard .ic svg { width: 28px; height: 28px; }
