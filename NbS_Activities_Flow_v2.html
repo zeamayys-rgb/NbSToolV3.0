@@ -129,9 +129,29 @@
   .hint{color:var(--faint);font-size:12px}
 
   /* ---------- chart ---------- */
-  .scroll{margin-top:8px;background:var(--card);border:1px solid var(--border);
+  .chartwrap{position:relative;margin-top:8px}
+  .scroll{background:var(--card);border:1px solid var(--border);
     border-radius:var(--radius-xl);box-shadow:var(--elev-3);overflow-x:auto;padding:6px}
-  .scroll svg{display:block;max-width:100%;height:auto}
+  .scroll svg{display:block;max-width:100%;height:auto;cursor:grab}
+  .scroll svg:active{cursor:grabbing}
+
+  /* ---------- zoom controls ---------- */
+  .zoombar{position:absolute;top:12px;right:12px;z-index:5;display:flex;align-items:center;gap:2px;
+    background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);
+    box-shadow:var(--elev-4);padding:4px}
+  .zoombar button{appearance:none;cursor:pointer;width:30px;height:30px;border:none;border-radius:var(--radius-md);
+    background:transparent;color:var(--muted);font-size:15px;font-weight:600;line-height:1;font-family:var(--font)}
+  .zoombar button:hover{background:var(--pale-teal);color:var(--primary-600)}
+  .zoombar .zlevel{min-width:46px;text-align:center;font-size:11.5px;font-weight:600;color:var(--faint)}
+
+  /* ---------- site navigation ---------- */
+  .sitenav{margin-top:26px;padding:16px 20px;background:var(--card);border:1px solid var(--border);
+    border-radius:var(--radius-xl);box-shadow:var(--elev-2);
+    display:flex;flex-wrap:wrap;gap:8px 24px;align-items:center;font-size:13px}
+  .sitenav .nav-label{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
+  .sitenav a{color:var(--muted);text-decoration:none;font-weight:500;transition:color .15s ease}
+  .sitenav a:hover{color:var(--primary-600)}
+  .sitenav a.home{color:var(--primary-600);font-weight:600}
 
   .bar{transition:opacity .16s ease}
   .lk{transition:stroke-opacity .16s ease}
@@ -220,15 +240,34 @@
     <span class="key"><span class="swatch" style="background:var(--restore)"></span>Restore</span>
     <span class="key"><span class="swatch" style="background:var(--mixed)"></span>Cross-pathway</span>
     <span class="key"><span class="swatch dash"></span>Indicator not yet defined</span>
-    <span class="hint">Hover or click a node to trace one full path. Click empty space to release.</span>
+    <span class="hint">Hover or click a node to trace one full path. Click empty space to release. Drag to pan &middot; Ctrl/&#8984; + scroll to zoom.</span>
   </div>
 
-  <div class="scroll" id="scroll"></div>
+  <div class="chartwrap">
+    <div class="zoombar" role="group" aria-label="Zoom controls">
+      <button id="zOut" title="Zoom out" aria-label="Zoom out">&minus;</button>
+      <span class="zlevel" id="zLevel">100%</span>
+      <button id="zIn" title="Zoom in" aria-label="Zoom in">+</button>
+      <button id="zReset" title="Reset zoom" aria-label="Reset zoom">&#8634;</button>
+    </div>
+    <div class="scroll" id="scroll"></div>
+  </div>
   <div class="err" id="err"></div>
 
   <footer>
     <b>Data note.</b> This visual is built directly from the <b>FINAL indicators-longform</b> sheet without altering source values. To keep the flow legible, the <b>CODE</b> and <b>Historical_Landcover</b> columns are hidden from the diagram so the view focuses on Pathway through Indicator; both remain intact in the source data. Two transparency adjustments are flagged here: (1) surrounding whitespace in text was trimmed, so a few indicators that were previously double-counted now merge; (2) <b id="missLine">a number of</b> rows do not yet carry an Indicator and are shown as dashed <i>"Belum ada indikator"</i> nodes rather than hidden, so the data gap stays visible. No values are invented.
   </footer>
+
+  <nav class="sitenav" aria-label="Site navigation">
+    <span class="nav-label">Navigate</span>
+    <a class="home" href="index.html">&larr; NbS Tool Home</a>
+    <a href="interactive-map.html">Interactive Map</a>
+    <a href="new-project.html">Data Analyser</a>
+    <a href="dashboard.html">My Projects</a>
+    <a href="document-generator.html">Document Generator</a>
+    <a href="create-monitoring-plan.html">Monitoring Plan</a>
+    <a href="mrv.html">MRV Dashboard</a>
+  </nav>
 </div>
 
 <div class="tt" id="tt"></div>
@@ -333,6 +372,7 @@ let labelMode = 'all';
 let pinned = null;
 let G = null;
 let svgSel = null;
+let zoomBehavior = null;
 const LEAN_HIDE = new Set([2,4,5]);
 
 function rowsFor(){
@@ -380,13 +420,25 @@ function render(){
     .attr('fill',CHART_BG)
     .on('click', clearPin);
 
-  const plot = svg.append('g').attr('transform',`translate(${M.left},${M.top})`);
+  const zoomLayer = svg.append('g').attr('class','zoom-layer');
+  const plot = zoomLayer.append('g').attr('transform',`translate(${M.left},${M.top})`);
 
   const colX = new Array(NLV).fill(null);
   G.nodes.forEach(n=>{ if(colX[n.level]==null) colX[n.level]=(n.x0+n.x1)/2; });
 
+  /* zoom + pan */
+  zoomBehavior = d3.zoom()
+    .scaleExtent([0.5, 6])
+    .filter(ev => !ev.button && (ev.type !== 'wheel' || ev.ctrlKey || ev.metaKey))
+    .on('zoom', ev => {
+      zoomLayer.attr('transform', ev.transform);
+      document.getElementById('zLevel').textContent = Math.round(ev.transform.k*100)+'%';
+    });
+  svg.call(zoomBehavior).on('dblclick.zoom', null);
+  document.getElementById('zLevel').textContent = '100%';
+
   /* headers */
-  const head = svg.append('g').attr('class','heads');
+  const head = zoomLayer.append('g').attr('class','heads');
   head.append('line')
     .attr('x1',M.left-14).attr('x2',W-M.right+14).attr('y1',M.top-18).attr('y2',M.top-18)
     .attr('stroke','#eaecf0').attr('stroke-width',1);
@@ -620,10 +672,24 @@ document.getElementById('lblPills').addEventListener('click', ev=>{
 });
 document.getElementById('resetBtn').addEventListener('click', clearPin);
 
+/* ---------- zoom buttons ---------- */
+const zDur = reduce ? 0 : 160;
+document.getElementById('zIn').addEventListener('click', ()=>{
+  if(svgSel && zoomBehavior) svgSel.transition().duration(zDur).call(zoomBehavior.scaleBy, 1.4);
+});
+document.getElementById('zOut').addEventListener('click', ()=>{
+  if(svgSel && zoomBehavior) svgSel.transition().duration(zDur).call(zoomBehavior.scaleBy, 1/1.4);
+});
+document.getElementById('zReset').addEventListener('click', ()=>{
+  if(svgSel && zoomBehavior) svgSel.transition().duration(zDur).call(zoomBehavior.transform, d3.zoomIdentity);
+});
+
 /* ---------- export ---------- */
 function serializedSVG(){
   const src = svgSel.node().cloneNode(true);
   src.setAttribute('xmlns','http://www.w3.org/2000/svg');
+  const zl = src.querySelector('.zoom-layer');
+  if(zl) zl.removeAttribute('transform');
   const css = `text{font-family:"Poppins",system-ui,sans-serif}`;
   const st=document.createElementNS('http://www.w3.org/2000/svg','style');
   st.textContent=css; src.insertBefore(st, src.firstChild);
