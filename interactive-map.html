@@ -285,6 +285,13 @@
   .activity-item.checked .checkbox{background:var(--primary);border-color:var(--primary);}
   .activity-item.checked .checkbox svg{opacity:1;}
   .activity-label{font-size:12px;font-weight:400;line-height:normal;color:var(--slate);}
+  .act-group{display:flex;flex-direction:column;gap:6px;}
+  .act-group + .act-group{margin-top:10px;padding-top:12px;border-top:1px dashed #e6e9ee;}
+  .act-group__ttl{align-self:flex-start;font-family:'Inter',sans-serif;font-weight:700;font-size:10px;letter-spacing:.5px;text-transform:uppercase;padding:2px 9px;border-radius:20px;}
+  .pw-protect{background:#e9f8f1;color:#044c3e;}
+  .pw-manage{background:#eaf0fb;color:#1d4ed8;}
+  .pw-restore{background:#f7efd8;color:#8a5a00;}
+  .tags .tag.pw-protect,.tags .tag.pw-manage,.tags .tag.pw-restore{font-size:10px;font-weight:600;}
 
   /* ---- divider before duration ---- */
   .divider{height:1px;width:100%;background:var(--stroke);}
@@ -927,32 +934,11 @@
             </div>
             <div class="activity-title">Choose Intervention Activity</div>
           </div>
-          <div class="tags">
-            <span class="tag" style="background:#e9f8f1;color:#044c3e;">Protect</span>
-            <span class="tag" style="background:#e9f8f1;color:#044c3e;">Manage</span>
-            <span class="tag" style="background:#e9f8f1;color:#044c3e;">Restore</span>
-          </div>
+          <div class="tags" data-tags></div>
         </div>
-        <div class="count"><span data-count>2</span> of <b>4</b> Activity is Selected</div>
+        <div class="count"><span data-count>0</span> of <b data-total>0</b> Activity is Selected</div>
       </div>
-      <div class="activity-list">
-        <div class="activity-item" data-activity>
-          <span class="checkbox"><svg viewBox="0 0 14 14" fill="none"><path d="M3 7l2.6 2.6L11 4.5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          <span class="activity-label">Boundary demarcation &amp; legal recognition</span>
-        </div>
-        <div class="activity-item" data-activity>
-          <span class="checkbox"><svg viewBox="0 0 14 14" fill="none"><path d="M3 7l2.6 2.6L11 4.5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          <span class="activity-label">Customary/indigenous rights recognition &amp; FPIC process</span>
-        </div>
-        <div class="activity-item" data-activity>
-          <span class="checkbox"><svg viewBox="0 0 14 14" fill="none"><path d="M3 7l2.6 2.6L11 4.5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          <span class="activity-label">Community-based patrol &amp; monitoring</span>
-        </div>
-        <div class="activity-item" data-activity>
-          <span class="checkbox"><svg viewBox="0 0 14 14" fill="none"><path d="M3 7l2.6 2.6L11 4.5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          <span class="activity-label">Fire prevention infrastructure &amp; early warning</span>
-        </div>
-      </div>
+      <div class="activity-list" data-activity-list></div>
     </div>
   </section>
 
@@ -1085,32 +1071,11 @@
             </div>
             <div class="activity-title">Choose Intervention Activity</div>
           </div>
-          <div class="tags">
-            <span class="tag" style="background:#ecf9f9;color:#0f8a8f;">Protect</span>
-            <span class="tag" style="background:#ecf9f9;color:#0f8a8f;">Manage</span>
-            <span class="tag" style="background:#ecf9f9;color:#0f8a8f;">Restore</span>
-          </div>
+          <div class="tags" data-tags></div>
         </div>
-        <div class="count"><span data-count>2</span> of <b>4</b> Activity is Selected</div>
+        <div class="count"><span data-count>0</span> of <b data-total>0</b> Activity is Selected</div>
       </div>
-      <div class="activity-list">
-        <div class="activity-item" data-activity>
-          <span class="checkbox"><svg viewBox="0 0 14 14" fill="none"><path d="M3 7l2.6 2.6L11 4.5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          <span class="activity-label">Boundary demarcation &amp; legal recognition</span>
-        </div>
-        <div class="activity-item" data-activity>
-          <span class="checkbox"><svg viewBox="0 0 14 14" fill="none"><path d="M3 7l2.6 2.6L11 4.5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          <span class="activity-label">Community-based patrol &amp; monitoring</span>
-        </div>
-        <div class="activity-item" data-activity>
-          <span class="checkbox"><svg viewBox="0 0 14 14" fill="none"><path d="M3 7l2.6 2.6L11 4.5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          <span class="activity-label">Customary/indigenous rights recognition &amp; FPIC process</span>
-        </div>
-        <div class="activity-item" data-activity>
-          <span class="checkbox"><svg viewBox="0 0 14 14" fill="none"><path d="M3 7l2.6 2.6L11 4.5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          <span class="activity-label">Biodiversity baseline &amp; adaptive monitoring system</span>
-        </div>
-      </div>
+      <div class="activity-list" data-activity-list></div>
     </div>
   </section>
 
@@ -1252,32 +1217,11 @@
             </div>
             <div class="activity-title">Choose Intervention Activity</div>
           </div>
-          <div class="tags">
-            <span class="tag" style="background:#faf8ec;color:#8a7a1f;">Protect</span>
-            <span class="tag" style="background:#faf8ec;color:#8a7a1f;">Manage</span>
-            <span class="tag" style="background:#faf8ec;color:#8a7a1f;">Restore</span>
-          </div>
+          <div class="tags" data-tags></div>
         </div>
-        <div class="count"><span data-count>2</span> of <b>4</b> Activity is Selected</div>
+        <div class="count"><span data-count>0</span> of <b data-total>0</b> Activity is Selected</div>
       </div>
-      <div class="activity-list">
-        <div class="activity-item" data-activity>
-          <span class="checkbox"><svg viewBox="0 0 14 14" fill="none"><path d="M3 7l2.6 2.6L11 4.5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          <span class="activity-label">Boundary demarcation &amp; legal recognition</span>
-        </div>
-        <div class="activity-item" data-activity>
-          <span class="checkbox"><svg viewBox="0 0 14 14" fill="none"><path d="M3 7l2.6 2.6L11 4.5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          <span class="activity-label">Customary/indigenous rights recognition &amp; FPIC process</span>
-        </div>
-        <div class="activity-item" data-activity>
-          <span class="checkbox"><svg viewBox="0 0 14 14" fill="none"><path d="M3 7l2.6 2.6L11 4.5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          <span class="activity-label">Community-based patrol &amp; monitoring</span>
-        </div>
-        <div class="activity-item" data-activity>
-          <span class="checkbox"><svg viewBox="0 0 14 14" fill="none"><path d="M3 7l2.6 2.6L11 4.5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          <span class="activity-label">Fire prevention infrastructure &amp; early warning</span>
-        </div>
-      </div>
+      <div class="activity-list" data-activity-list></div>
     </div>
   </section>
 
@@ -1851,34 +1795,62 @@
     panel.querySelectorAll('.t3-alerts__head').forEach(h => h.addEventListener('click', () => h.closest('.t3-alerts').classList.toggle('open')));
   }
 
-  /* Step 4 — pathway selection (from F02-P4) */
-  /* ---- Ecosystem pathway toggle (on/off switch) ---- */
-  function syncActivity(card){
-    var anySelected = card.querySelectorAll('.pathway-opt.selected').length > 0;
-    var activity = card.querySelector('.activity');
-    if (activity) activity.classList.toggle('show', anySelected);
+  /* Step 4 — pathway selection; activities sourced from NbS Activities Matrix */
+  var NBS_ACTIVITIES = {"forest": {"Protect": ["Boundary demarcation & legal recognition", "Community-based patrol & monitoring", "Customary/indigenous rights recognition & FPIC process", "Fire prevention infrastructure & early warning", "Buffer zone establishment & compatible land use", "Biodiversity baseline & adaptive monitoring system"], "Manage": ["Soil rehabilitation & erosion control", "Community-based fire management (degraded areas)", "Assisted Natural Regeneration (ANR)", "Invasive species control & native restoration", "Agricultural burning regulation & no-burn alternatives", "Agroforestry / silvopasture / paludiculture transition", "Riparian buffer & watershed protection within productive landscape", "Climate-smart agriculture (CSA) practices", "Sustainable intensification with soil carbon enhancement", "Payment for Ecosystem Services (PES)", "Pre-restoration ecological assessment for stable non-forest/barren sites"], "Restore": ["Enrichment planting with native species (low-medium density)", "Full reforestation (high-density native species planting)", "Full reforestation of reclaimable/abandoned converted sites", "Riparian zone restoration planting (active)", "Pioneer species establishment (first-stage canopy)", "Native species succession planting (mid-late stage)", "Hydrology / water management for barren restoration", "Forest landscape restoration on stable non-forest sites (full reforestation)"]}, "mangrove": {"Protect": ["Boundary demarcation & legal recognition", "Community-based patrol & monitoring", "Customary/indigenous rights recognition & FPIC process", "Buffer zone establishment & compatible land use", "Biodiversity baseline & adaptive monitoring system"], "Manage": ["Assisted Natural Regeneration (ANR)", "Riparian buffer & watershed protection within productive landscape", "Sustainable intensification with soil carbon enhancement", "Payment for Ecosystem Services (PES)", "Pre-restoration ecological assessment for stable non-forest/barren sites"], "Restore": ["Enrichment planting with native species (low-medium density)", "Full reforestation (high-density native species planting)", "Full reforestation of reclaimable/abandoned converted sites", "Riparian zone restoration planting (active)", "Pioneer species establishment (first-stage canopy)", "Native species succession planting (mid-late stage)", "Forest landscape restoration on stable non-forest sites (full reforestation)", "Wetland forest restoration (peat swamp / mangrove / riparian)"]}, "peat": {"Protect": ["Boundary demarcation & legal recognition", "Community-based patrol & monitoring", "Customary/indigenous rights recognition & FPIC process", "Fire prevention infrastructure & early warning", "Buffer zone establishment & compatible land use", "Biodiversity baseline & adaptive monitoring system"], "Manage": ["Community-based fire management (degraded areas)", "Assisted Natural Regeneration (ANR)", "Agricultural burning regulation & no-burn alternatives", "Riparian buffer & watershed protection within productive landscape", "Sustainable intensification with soil carbon enhancement", "Payment for Ecosystem Services (PES)", "Pre-restoration ecological assessment for stable non-forest/barren sites"], "Restore": ["Enrichment planting with native species (low-medium density)", "Full reforestation (high-density native species planting)", "Full reforestation of reclaimable/abandoned converted sites", "Riparian zone restoration planting (active)", "Pioneer species establishment (first-stage canopy)", "Native species succession planting (mid-late stage)", "Hydrology / water management for barren restoration", "Forest landscape restoration on stable non-forest sites (full reforestation)", "Wetland forest restoration (peat swamp / mangrove / riparian)"]}};
+  var PW_ORDER = ['Protect','Manage','Restore'];
+  var PW_CLASS = { Protect:'pw-protect', Manage:'pw-manage', Restore:'pw-restore' };
+  var checkedActs = new Set();                 // "eco|pathway|activity" ticked
+  function actKey(e,p,a){ return e+'|'+p+'|'+a; }
+  function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  function ecoOf(card){ var o = card.querySelector('[data-eco]'); return o ? o.dataset.eco : ''; }
+  function pwOf(opt){ return opt.querySelector('.opt-name').textContent.trim(); }
+  var CHK = '<span class="checkbox"><svg viewBox="0 0 14 14" fill="none"><path d="M3 7l2.6 2.6L11 4.5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>';
+
+  function renderActivities(card){
+    var eco = ecoOf(card), map = NBS_ACTIVITIES[eco] || {};
+    var sel = [].slice.call(card.querySelectorAll('.pathway-opt.selected'))
+                .map(pwOf).filter(function(p){ return map[p]; })
+                .sort(function(a,b){ return PW_ORDER.indexOf(a) - PW_ORDER.indexOf(b); });
+    card.querySelector('.activity').classList.toggle('show', sel.length > 0);
+    card.querySelector('[data-tags]').innerHTML = sel.map(function(p){
+      return '<span class="tag ' + PW_CLASS[p] + '">' + p + '</span>'; }).join('');
+    var html = '', total = 0, checked = 0;
+    sel.forEach(function(p){
+      html += '<div class="act-group"><div class="act-group__ttl ' + PW_CLASS[p] + '">' + p + '</div>';
+      map[p].forEach(function(a){
+        total++; var on = checkedActs.has(actKey(eco,p,a)); if (on) checked++;
+        html += '<div class="activity-item' + (on ? ' checked' : '') + '" data-activity data-pw="' + p + '" data-act="' + esc(a) + '">'
+              + CHK + '<span class="activity-label">' + esc(a) + '</span></div>';
+      });
+      html += '</div>';
+    });
+    card.querySelector('[data-activity-list]').innerHTML = html;
+    card.querySelector('[data-count]').textContent = checked;
+    var tot = card.querySelector('[data-total]'); if (tot) tot.textContent = total;
   }
-  document.querySelectorAll('[data-pathway]').forEach(function(opt){
-    opt.addEventListener('click', function(e){
+
+  document.querySelectorAll('.eco-card [data-pathway]').forEach(function(opt){
+    opt.addEventListener('click', function(){
       if (opt.dataset.locked === 'true') return; // disabled non-eligible card
-      opt.classList.toggle('selected');
-      syncActivity(opt.closest('.eco-card'));
+      var card = opt.closest('.eco-card'), eco = ecoOf(card), pw = pwOf(opt);
+      var nowOn = !opt.classList.contains('selected');
+      opt.classList.toggle('selected', nowOn);
+      ((NBS_ACTIVITIES[eco] || {})[pw] || []).forEach(function(a){
+        var k = actKey(eco,pw,a); if (nowOn) checkedActs.add(k); else checkedActs.delete(k);
+      });
+      renderActivities(card);
     });
   });
 
-  /* ---- Activity checkbox (on/off) + live count per card ---- */
-  function updateCount(card){
-    var checked = card.querySelectorAll('.activity-item.checked').length;
-    var el = card.querySelector('[data-count]');
-    if (el) el.textContent = checked;
-  }
-  document.querySelectorAll('[data-activity]').forEach(function(item){
-    item.addEventListener('click', function(){
-      item.classList.toggle('checked');
-      updateCount(item.closest('.eco-card'));
+  // checkbox toggle, event-delegated so it survives re-render
+  document.querySelectorAll('.eco-card [data-activity-list]').forEach(function(list){
+    list.addEventListener('click', function(e){
+      var item = e.target.closest('[data-activity]'); if (!item) return;
+      var card = list.closest('.eco-card'), k = actKey(ecoOf(card), item.dataset.pw, item.dataset.act);
+      if (checkedActs.has(k)) checkedActs.delete(k); else checkedActs.add(k);
+      renderActivities(card);
     });
   });
-  document.querySelectorAll('.eco-card').forEach(updateCount);
 
   /* ---- Duration slider ---- */
   var slider = document.getElementById('durationSlider');
