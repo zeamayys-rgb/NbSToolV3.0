@@ -10,6 +10,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="css/tokens.css" />
 <link rel="stylesheet" href="css/nav.css" />
+<link rel="stylesheet" href="css/footer.css" />
 <style>
   body { margin: 0; background: #f7faf8; color: #1c2a23; font-family: var(--font-text, "Poppins", sans-serif); }
   .wrap { max-width: 960px; margin: 0 auto; padding: 0 24px; }
@@ -25,8 +26,7 @@
   .sm-links .id { font-family: "IBM Plex Mono", monospace; font-size: 10.5px; letter-spacing: .1em; color: #1e7a4d; }
   .sm-links .nm { font-size: 14.5px; font-weight: 600; }
   .sm-links .ds { font-size: 13px; color: #6b7d73; line-height: 1.45; }
-  .sm-foot { border-top: 1px solid #dfe8e2; margin-top: 26px; padding: 24px 0 48px; font-family: "IBM Plex Mono", monospace; font-size: 11.5px; color: #7d8f85; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
-  .sm-foot a { color: #1e7a4d; text-decoration: none; }
+  main { padding-bottom: 56px; }
   @media (max-width: 720px){
     .sm-group { grid-template-columns: 1fr; gap: 10px; }
     .sm-links a { grid-template-columns: 44px 1fr; }
@@ -95,11 +95,41 @@
     </div>
   </section>
 
-  <footer class="sm-foot">
-    <span>© 2026 SCeNe Coalition · ASEAN-NbS Tool project</span>
-    <a href="index.html">← Back to home</a>
-  </footer>
 </main>
+
+<footer class="footer" data-screen-label="Footer">
+  <div class="wrap">
+    <div class="footer-head">
+      <div>
+        <img class="footer-logo" src="assets/scene-logo-light.png" alt="SCeNe Coalition" width="150" height="56" loading="lazy" />
+        <p>One standardised platform carrying frontline organisations from a boundary on a map to verified climate, nature and people impact.</p>
+      </div>
+      <div class="footer-coord" aria-hidden="true">1.4078°S · 109.8290°E<br>Design → MRV · Southeast Asia</div>
+    </div>
+
+    <nav class="footer-flow" aria-label="The Design-to-MRV workflow">
+      <a href="interactive-map.html"><span class="fno">F01</span><b>Scope</b><em>Interactive Map</em></a>
+      <a href="new-project.html"><span class="fno">F02</span><b>Analyse</b><em>Data Analyser</em></a>
+      <a href="document-generator.html"><span class="fno">F03</span><b>Document</b><em>Doc Generator</em></a>
+      <a href="dashboard.html"><span class="fno">F04</span><b>Manage</b><em>My Projects</em></a>
+      <a href="create-monitoring-plan.html"><span class="fno">F05</span><b>Plan</b><em>Monitoring Plan</em></a>
+      <a href="mrv.html"><span class="fno">F06</span><b>Verify</b><em>MRV Dashboard</em></a>
+    </nav>
+
+    <div class="footer-bottom">
+      <span>© 2026 SCeNe Coalition · ASEAN-NbS Tool project</span>
+      <nav class="footer-meta" aria-label="Footer links">
+        <a href="index.html#about">About the coalition</a>
+        <a href="NbS_Activities_Flow_v2.html">Activity Matrix</a>
+        <a href="sitemap.html">Sitemap</a>
+      </nav>
+      <div class="soc">
+        <a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.94 5a1.94 1.94 0 11-3.88 0 1.94 1.94 0 013.88 0zM3.4 8.4h3.1V21H3.4V8.4zM9.1 8.4h2.97v1.72h.04c.41-.78 1.42-1.6 2.93-1.6 3.13 0 3.71 2.06 3.71 4.74V21h-3.1v-5.5c0-1.31-.02-3-1.83-3-1.83 0-2.11 1.43-2.11 2.9V21H9.1V8.4z"/></svg></a>
+        <a href="#" aria-label="Website"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.7"/><path d="M3 12h18M12 3c2.5 2.5 2.5 15 0 18M12 3c-2.5 2.5-2.5 15 0 18" stroke="currentColor" stroke-width="1.7"/></svg></a>
+      </div>
+    </div>
+  </div>
+</footer>
 
 </body>
 </html>
