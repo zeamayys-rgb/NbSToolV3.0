@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>F02-P5 &middot; Potential Benefit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Barlow+Semi+Condensed:wght@500;600;700&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --primary-500:#077F68;--primary-600:#066653;--primary-700:#044c3e;--primary-25:#e9f8f1;
+  --success-600:#1f945c;--warning-500:#efa22f;--warning-600:#dc9d24;--warning-700:#8f611c;--warning-25:#fdf6ea;
+  --purple-600:#564efa;--purple-700:#453de3;--purple-50:#ecebff;
+  --ink:#1A202C;--ink-2:#252525;--muted:#68727d;--faint:#c0c2c6;
+  --line:#EAECF0;--line-2:#e5e5e7;--bg:#fff;--bg-2:#fafbfc;--bg-3:#f7f7f8;
+  --r-sm:4px;--r-md:6px;--r-lg:8px;--r-xl:12px;
+  --sh-1:0 1px 2px rgba(16,24,40,.05);--sh-2:0 1px 3px rgba(0,0,0,.08);
+  --sh-3:0 6px 16px -4px rgba(16,24,40,.10),0 2px 6px -2px rgba(16,24,40,.06);
+  --sh-4:0 12px 28px -6px rgba(16,24,40,.16),0 4px 10px -4px rgba(16,24,40,.08);
+  --font:"Poppins",system-ui,sans-serif;--head:"Barlow Semi Condensed","Poppins",sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font);color:var(--ink-2);background:var(--bg-3);-webkit-font-smoothing:antialiased;line-height:1.5;padding:16px 12px 40px}
+.panel{max-width:810px;margin:0 auto;background:var(--bg);border:1px solid var(--line);border-radius:var(--r-xl);box-shadow:var(--sh-3);overflow:hidden}
+
+/* ---------- SUMMARY BAND ---------- */
+.summary{padding:22px 24px;color:#fff;position:relative;overflow:hidden;
+  background:radial-gradient(130% 150% at 100% 0%,#065446 0%,#04342B 52%,#03251e 100%)}
+.summary::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(58% 100% at 10% 130%,rgba(39,185,115,.20),transparent 70%)}
+.sum-top{display:flex;align-items:center;gap:10px;position:relative;flex-wrap:wrap}
+.sum-eyebrow{font:700 11px/1 var(--font);letter-spacing:.14em;text-transform:uppercase;color:#8fe3c6;display:flex;align-items:center;gap:7px}
+.sum-eyebrow .fdot{width:6px;height:6px;border-radius:50%;background:#27b973;box-shadow:0 0 0 3px rgba(39,185,115,.25)}
+.wex{font:600 10px/1 var(--font);letter-spacing:.04em;text-transform:uppercase;color:rgba(255,255,255,.82);
+  border:1px solid rgba(255,255,255,.22);border-radius:999px;padding:5px 10px;background:rgba(255,255,255,.05)}
+h1.sum-title{font:600 27px/1.05 var(--head);margin:10px 0 2px;letter-spacing:.2px;position:relative}
+.sum-sub{font-size:12.5px;color:rgba(255,255,255,.72);max-width:54ch;position:relative}
+.sum-grid{display:grid;grid-template-columns:minmax(0,1.02fr) minmax(0,1.4fr);gap:16px;margin-top:18px;position:relative}
+.carbon-box{background:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,.04));border:1px solid rgba(255,255,255,.16);border-radius:var(--r-lg);padding:16px 18px}
+.carbon-val{font:700 42px/1 var(--head);letter-spacing:.5px;display:flex;align-items:baseline;gap:7px}
+.carbon-val small{font:600 15px/1 var(--font);color:#8fe3c6}
+.carbon-lab{font-size:11px;color:rgba(255,255,255,.66);margin-top:9px;letter-spacing:.02em;text-transform:uppercase;font-weight:600}
+.carbon-rate{display:inline-flex;align-items:center;gap:6px;margin-top:11px;font-size:11.5px;color:#bff0dd;
+  background:rgba(39,185,115,.14);border:1px solid rgba(39,185,115,.28);border-radius:999px;padding:5px 10px}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.stat{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:var(--r-md);padding:11px 13px;display:flex;flex-direction:column;justify-content:center}
+.stat-val{font:700 21px/1 var(--head)}
+.stat-lab{font-size:10.5px;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:.05em;font-weight:600;margin-top:4px}
+.stat.pathways{grid-column:1/-1}.stat.pathways .stat-lab{margin-bottom:8px}
+.pchips{display:flex;gap:6px;flex-wrap:wrap}
+.pchip{font:700 10px/1 var(--font);letter-spacing:.04em;text-transform:uppercase;padding:6px 10px;border-radius:999px;color:#fff;display:inline-flex;gap:5px;align-items:center;box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)}
+.pchip b{font-weight:700}.pchip span{opacity:.82;font-weight:600}
+.pchip.p{background:rgba(7,127,104,.92)}.pchip.m{background:rgba(220,157,36,.94)}.pchip.r{background:rgba(39,185,115,.9)}
+
+/* ---------- TABS ---------- */
+.tabs{display:flex;gap:4px;padding:8px 12px 0;background:var(--bg-2);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+.tab{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;font:600 14px/1 var(--font);color:var(--muted);background:transparent;border:0;padding:13px 10px;border-radius:var(--r-md) var(--r-md) 0 0;border-bottom:2.5px solid transparent;transition:all .16s;position:relative;top:1px}
+.tab .ic{opacity:.7;transition:opacity .16s}
+.tab:hover{color:var(--ink);background:rgba(0,0,0,.02)}
+.tab.active{color:var(--ta);border-bottom-color:var(--ta);background:var(--bg)}
+.tab.active .ic{opacity:1}
+.tab .cnt{font:700 10px/1 var(--font);background:var(--line);color:var(--muted);padding:3px 6px;border-radius:999px}
+.tab.active .cnt{background:var(--ts);color:var(--td)}
+.tab[data-tab="nature"]{--ta:var(--primary-500);--td:var(--primary-700);--ts:var(--primary-25)}
+.tab[data-tab="people"]{--ta:var(--warning-600);--td:var(--warning-700);--ts:var(--warning-25)}
+.tab[data-tab="climate"]{--ta:var(--purple-600);--td:var(--purple-700);--ts:var(--purple-50)}
+
+/* ---------- PANELS ---------- */
+.tabpanel{display:none;padding:20px 24px 8px}
+.tabpanel.active{display:block;animation:fade .28s ease}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+#nature{--accent:var(--primary-500);--accent-deep:var(--primary-700);--accent-soft:var(--primary-25);--accent-line:#c8e9dd;--intro-ink:#215247}
+#people{--accent:var(--warning-600);--accent-deep:var(--warning-700);--accent-soft:var(--warning-25);--accent-line:#f2dcb0;--intro-ink:#7a5518}
+#climate{--accent:var(--purple-600);--accent-deep:var(--purple-700);--accent-soft:var(--purple-50);--accent-line:#d3cffd;--intro-ink:#3a34a0}
+
+.panel-intro{display:flex;align-items:center;gap:12px;margin-bottom:16px;padding:12px 15px;border-radius:var(--r-lg);background:var(--accent-soft);border:1px solid var(--accent-line)}
+.panel-intro .pi-ic{width:30px;height:30px;flex-shrink:0;display:grid;place-items:center;border-radius:var(--r-md);background:#fff;color:var(--accent-deep);box-shadow:var(--sh-1)}
+.panel-intro .pi-txt{flex:1;font-size:12px;color:var(--intro-ink);line-height:1.45}
+.panel-intro b{color:var(--accent-deep);font-weight:600}
+.pi-anchor{display:flex;gap:14px;flex-shrink:0;padding-left:14px;border-left:1px solid var(--accent-line)}
+.pi-a{text-align:right}
+.pi-a .v{font:700 17px/1 var(--head);color:var(--accent-deep)}
+.pi-a .l{font-size:9.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);font-weight:600;margin-top:2px}
+
+/* ---------- SHARED CARD LOOK (standout) ---------- */
+.scard,.face{position:relative;border:1px solid var(--line);border-radius:var(--r-xl);background:var(--bg);
+  padding:17px 19px;box-shadow:var(--sh-2);overflow:hidden}
+.scard{border-left:3px solid var(--accent);margin-bottom:13px;transition:box-shadow .2s,transform .2s,border-color .2s}
+.scard:hover{box-shadow:var(--sh-4);transform:translateY(-3px)}
+.corner{position:absolute;top:0;right:0;width:120px;height:120px;pointer-events:none;
+  background:radial-gradient(120px 120px at 100% 0%,var(--accent-soft),transparent 70%);opacity:.9}
+.card-head{display:flex;gap:12px;align-items:flex-start;margin-bottom:12px;position:relative}
+.card-ic{width:46px;height:46px;flex-shrink:0;display:grid;place-items:center;border-radius:12px;color:var(--accent-deep);
+  background:linear-gradient(155deg,#fff,var(--accent-soft));box-shadow:inset 0 0 0 1px var(--accent-line),var(--sh-1)}
+.card-tt h3{font:600 18px/1.14 var(--head);color:var(--ink);letter-spacing:.1px}
+.tagrow{display:flex;gap:6px;flex-wrap:wrap;margin-top:7px;align-items:center}
+.def{font-size:13px;color:#4a5560;line-height:1.55;position:relative}
+
+/* metric callout — the standout element */
+.metric{position:relative;display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 10px;margin:0 0 12px;
+  padding:12px 15px;border-radius:var(--r-lg);background:var(--accent-soft);border:1px solid var(--accent-line);border-left:3px solid var(--accent)}
+.metric-main{display:flex;align-items:baseline;gap:6px}
+.mnum{font:700 30px/1 var(--head);color:var(--accent-deep);letter-spacing:.3px}
+.munit{font:600 13px/1 var(--font);color:var(--accent-deep);opacity:.85}
+.metric-lab{font-size:11.5px;color:var(--muted);margin-left:auto;text-align:right;max-width:56%}
+
+.narr{margin-top:11px;padding:11px 13px;background:var(--bg-3);border-radius:var(--r-md);border:1px solid var(--line);position:relative}
+.narr-lab{display:inline-flex;align-items:center;gap:4px;font:700 9.5px/1 var(--font);letter-spacing:.1em;text-transform:uppercase;color:var(--accent-deep);margin-bottom:6px}
+.narr-lab .nchev{color:var(--accent)}
+.narr p{font-size:12.5px;color:#4a5560;line-height:1.6}
+.narr b{color:var(--accent-deep);font-weight:600;background:var(--accent-soft);padding:1px 5px;border-radius:4px;white-space:nowrap}
+.formula{margin-top:9px}
+.formula code{font:500 11px/1.4 ui-monospace,Menlo,monospace;color:var(--muted);background:var(--bg-3);border:1px dashed var(--line-2);border-radius:var(--r-sm);padding:7px 10px;display:block;overflow-x:auto}
+.srcline{display:flex;gap:6px;align-items:flex-start;margin-top:10px;font-size:11px;color:var(--muted)}
+.srcline .ic{flex-shrink:0;margin-top:2px;color:var(--faint)}
+.es-row{display:flex;gap:10px;margin:0 0 12px}
+.es{flex:1;background:var(--accent-soft);border:1px solid var(--accent-line);border-left:3px solid var(--accent);border-radius:var(--r-lg);padding:11px 13px}
+.es-lab{font-size:10px;text-transform:uppercase;letter-spacing:.05em;font-weight:600;color:var(--accent-deep)}
+.es-val{display:block;font:700 26px/1 var(--head);color:var(--accent-deep);margin:4px 0 1px}
+.es-sub{font-size:11px;color:var(--muted)}
+.qbadge{display:inline-flex;align-items:center;gap:4px;font:600 10px/1 var(--font);color:var(--success-600);background:var(--primary-25);padding:5px 9px;border-radius:999px}
+
+.pw{font:700 9.5px/1 var(--font);letter-spacing:.05em;text-transform:uppercase;padding:5px 9px;border-radius:999px}
+.pw-gen{background:#f0f1f3;color:#5c656e}
+.pw-protect{background:var(--primary-25);color:var(--primary-700)}
+.pw-manage{background:var(--warning-25);color:var(--warning-700)}
+.pw-restore{background:#e9f8f1;color:var(--success-600)}
+
+/* ---------- FLIP CARDS ---------- */
+.fgrid{display:flex;flex-direction:column;gap:14px}
+.fcard{perspective:1800px}
+.fcard-inner{position:relative;transition:transform .55s cubic-bezier(.2,.7,.2,1);transform-style:preserve-3d}
+.fcard.flipped .fcard-inner{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;display:flex;flex-direction:column}
+.front{border-left:3px solid var(--accent);cursor:pointer;transition:box-shadow .2s,transform .2s}
+.fcard:not(.flipped) .front:hover{box-shadow:var(--sh-4);transform:translateY(-3px)}
+.fcard.answered:not(.flipped) .front{background:linear-gradient(180deg,var(--accent-soft) 0%,#fff 30%)}
+.back{transform:rotateY(180deg);border-left:3px solid var(--accent);background:var(--bg-2)}
+.flip-tab{position:absolute;top:0;right:0;z-index:2;display:inline-flex;align-items:center;gap:5px;
+  font:700 9.5px/1 var(--font);letter-spacing:.06em;text-transform:uppercase;color:#fff;background:var(--accent);
+  padding:6px 11px 6px 12px;border-bottom-left-radius:12px;box-shadow:var(--sh-1)}
+.fcard.answered .flip-tab{background:var(--accent-deep)}
+.face-lab{display:inline-flex;align-items:center;gap:5px;font:700 9.5px/1 var(--font);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
+.face-lab.answered{color:var(--accent-deep)}.face-lab.answered .ic{color:var(--accent)}
+.front-default,.front-answered{flex:1}
+.statement{font:600 18px/1.28 var(--head);color:var(--accent-deep);letter-spacing:.1px}
+.answer-echo{font-size:11.5px;color:var(--muted);margin-top:9px;padding-top:9px;border-top:1px dashed var(--line-2)}
+.answer-echo b{color:#4a5560;font-weight:600}
+.cta{display:flex;align-items:center;justify-content:space-between;margin-top:13px;padding:11px 14px;border-radius:var(--r-md);
+  background:var(--accent-soft);border:1px solid var(--accent-line);color:var(--accent-deep);font:600 12.5px/1 var(--font);transition:.16s}
+.fcard:not(.flipped) .front:hover .cta{background:var(--accent);color:#fff;border-color:var(--accent)}
+.fcard:not(.flipped) .front:hover .cta-chev{transform:translateX(4px)}
+.cta-chev{transition:transform .18s}
+
+.back-head{display:flex;align-items:center;gap:9px;margin-bottom:11px}
+.back-btn{width:27px;height:27px;flex-shrink:0;display:grid;place-items:center;cursor:pointer;background:#fff;border:1px solid var(--line);border-radius:var(--r-sm);color:var(--muted);transition:.15s}
+.back-btn:hover{background:var(--accent-soft);color:var(--accent-deep);border-color:var(--accent-line)}
+.chev-back{transform:rotate(180deg)}.back-lab{margin-bottom:0}
+.prompt{font:600 13.5px/1.45 var(--font);color:var(--ink);margin-bottom:12px}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{display:flex;gap:10px;align-items:flex-start;text-align:left;cursor:pointer;width:100%;background:#fff;border:1px solid var(--line);border-radius:var(--r-md);padding:11px 12px;font:inherit;transition:.15s}
+.opt:hover{border-color:var(--accent);background:var(--accent-soft)}
+.opt-radio{width:16px;height:16px;flex-shrink:0;margin-top:1px;border:2px solid var(--faint);border-radius:50%;transition:.15s;position:relative}
+.opt:hover .opt-radio{border-color:var(--accent)}
+.opt-radio::after{content:"";position:absolute;inset:2.5px;border-radius:50%;background:var(--accent);transform:scale(0);transition:.15s}
+.opt.sel .opt-radio{border-color:var(--accent)}.opt.sel .opt-radio::after{transform:scale(1)}
+.opt.sel{border-color:var(--accent);background:var(--accent-soft)}
+.opt-lab{font-size:12.5px;color:#4a5560;line-height:1.45}
+.optm{display:flex;gap:10px;align-items:flex-start;cursor:pointer;background:#fff;border:1px solid var(--line);border-radius:var(--r-md);padding:10px 12px;transition:.15s;position:relative}
+.optm:hover{border-color:var(--accent);background:var(--accent-soft)}
+.optm input{position:absolute;opacity:0;width:0;height:0}
+.optm-box{width:18px;height:18px;flex-shrink:0;margin-top:1px;border:2px solid var(--faint);border-radius:var(--r-sm);display:grid;place-items:center;color:#fff;transition:.15s}
+.optm-box .ic{opacity:0;transform:scale(.5);transition:.15s}
+.optm input:checked~.optm-box{background:var(--accent);border-color:var(--accent)}
+.optm input:checked~.optm-box .ic{opacity:1;transform:scale(1)}
+.optm input:checked~.optm-body .optm-lab{color:var(--accent-deep)}
+.optm-lab{display:block;font:600 12.5px/1.3 var(--font);color:var(--ink)}
+.optm-desc{display:block;font-size:11px;color:var(--muted);margin-top:2px;line-height:1.4}
+.optm-none{margin-top:2px}
+.apply{margin-top:12px;align-self:flex-start;font:600 12.5px/1 var(--font);color:#fff;background:var(--accent);border:0;border-radius:var(--r-md);padding:11px 18px;cursor:pointer;box-shadow:var(--sh-1);transition:.15s}
+.apply:hover{background:var(--accent-deep)}
+
+/* ---------- FOOTER ---------- */
+.foot{padding:0 24px 22px}
+.disc{border:1px solid var(--line);border-radius:var(--r-lg);background:var(--bg-2);overflow:hidden}
+.disc-btn{width:100%;display:flex;align-items:center;gap:10px;cursor:pointer;background:transparent;border:0;padding:13px 16px;font:600 13px/1 var(--font);color:var(--ink);text-align:left}
+.disc-btn .warn{width:30px;height:30px;flex-shrink:0;display:grid;place-items:center;border-radius:var(--r-md);background:var(--warning-25);color:var(--warning-700)}
+.disc-btn .tgl{margin-left:auto;color:var(--muted);transition:transform .2s}
+.disc.open .disc-btn .tgl{transform:rotate(90deg)}
+.disc-body{display:none;padding:0 16px 15px 56px;font-size:12px;color:var(--muted);line-height:1.6}
+.disc.open .disc-body{display:block}.disc-body p{margin-bottom:8px}.disc-body b{color:#4a5560;font-weight:600}
+.disc-body code{font:500 11px/1.4 ui-monospace,Menlo,monospace;background:var(--bg-3);border:1px solid var(--line);border-radius:3px;padding:1px 5px;color:#4a5560}
+.nav{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;font:600 13px/1 var(--font);cursor:pointer;padding:12px 16px;border-radius:var(--r-md);border:1px solid transparent;transition:.15s;text-decoration:none}
+.btn .ic{width:15px;height:15px}
+.btn-ghost{background:#fff;border-color:var(--line);color:var(--muted)}.btn-ghost:hover{background:var(--bg-3);color:var(--ink)}
+.btn-sec{background:#fff;border-color:var(--primary-600);color:var(--primary-600)}.btn-sec:hover{background:var(--primary-25)}
+.btn-pri{background:var(--primary-600);color:#fff;box-shadow:var(--sh-2);margin-left:auto}.btn-pri:hover{background:var(--primary-700)}
+@media(max-width:640px){
+  .sum-grid{grid-template-columns:1fr}.tab{flex-direction:column;gap:5px;font-size:12px}.tab .cnt{display:none}
+  .pi-anchor{display:none}.metric-lab{max-width:100%}.btn-pri{margin-left:0;width:100%;justify-content:center}
+}
+</style></head>
+<body>
+<main class="panel">
+
+  <header class="summary">
+    <div class="sum-top">
+      <span class="sum-eyebrow"><span class="fdot"></span>F02-P5 &middot; Potential Benefit</span>
+      <span class="wex">Illustrative worked example</span>
+    </div>
+    <h1 class="sum-title">Benefit Summary</h1>
+    <p class="sum-sub">High-level overview of total estimated impact across all pathways and activities for this project area.</p>
+    <div class="sum-grid">
+      <div class="carbon-box">
+        <div class="carbon-val">145,211 <small>tCO&#8322;e</small></div>
+        <div class="carbon-lab">Total estimated carbon benefit over project duration</div>
+        <span class="carbon-rate"><svg class="ic" width="12" height="12" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" d="M0 0h1v15h15v1H0zm10 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V4.9l-3.613 4.417a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61L13.445 4H10.5a.5.5 0 0 1-.5-.5"/></svg>&asymp; 4,840 tCO&#8322;e / year</span>
+      </div>
+      <div class="stat-grid">
+        <div class="stat"><span class="stat-val">9</span><span class="stat-lab">NbS activities</span></div>
+        <div class="stat"><span class="stat-val">30 yr</span><span class="stat-lab">Duration</span></div>
+        <div class="stat"><span class="stat-val">1,200 ha</span><span class="stat-lab">Project area</span></div>
+        <div class="stat"><span class="stat-val">6</span><span class="stat-lab">Communities</span></div>
+        <div class="stat pathways">
+          <span class="stat-lab">Selected pathways &middot; area allocated</span>
+          <div class="pchips">
+            <span class="pchip p"><b>Protect</b><span>620 ha</span></span>
+            <span class="pchip m"><b>Manage</b><span>320 ha</span></span>
+            <span class="pchip r"><b>Restore</b><span>260 ha</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <nav class="tabs" role="tablist">
+    <button class="tab" data-tab="nature" role="tab"><svg class="ic" width="17" height="17" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M8.416.223a.5.5 0 0 0-.832 0l-3 4.5A.5.5 0 0 0 5 5.5h.098L3.076 8.735A.5.5 0 0 0 3.5 9.5h.191l-1.638 3.276a.5.5 0 0 0 .447.724H7V16h2v-2.5h4.5a.5.5 0 0 0 .447-.724L12.31 9.5h.191a.5.5 0 0 0 .424-.765L10.902 5.5H11a.5.5 0 0 0 .416-.777zM6.437 4.758A.5.5 0 0 0 6 4.5h-.066L8 1.401 10.066 4.5H10a.5.5 0 0 0-.424.765L11.598 8.5H11.5a.5.5 0 0 0-.447.724L12.69 12.5H3.309l1.638-3.276A.5.5 0 0 0 4.5 8.5h-.098l2.022-3.235a.5.5 0 0 0 .013-.507"/></svg>Nature<span class="cnt">5</span></button>
+    <button class="tab active" data-tab="people" role="tab"><svg class="ic" width="17" height="17" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1zm-7.978-1L7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002-.014.002zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0M6.936 9.28a6 6 0 0 0-1.23-.247A7 7 0 0 0 5 9c-4 0-5 3-5 4q0 1 1 1h4.216A2.24 2.24 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816M4.92 10A5.5 5.5 0 0 0 4 13H1c0-.26.164-1.03.76-1.724.545-.636 1.492-1.256 3.16-1.275ZM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0m3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4"/></svg>People<span class="cnt">5</span></button>
+    <button class="tab" data-tab="climate" role="tab"><svg class="ic" width="17" height="17" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M5 12.5a1.5 1.5 0 1 1-2-1.415V2.5a.5.5 0 0 1 1 0v8.585A1.5 1.5 0 0 1 5 12.5"/>
+  <path d="M1 2.5a2.5 2.5 0 0 1 5 0v7.55a3.5 3.5 0 1 1-5 0zM3.5 1A1.5 1.5 0 0 0 2 2.5v7.987l-.167.15a2.5 2.5 0 1 0 3.333 0L5 10.486V2.5A1.5 1.5 0 0 0 3.5 1m5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m4.243 1.757a.5.5 0 0 1 0 .707l-.707.708a.5.5 0 1 1-.708-.708l.708-.707a.5.5 0 0 1 .707 0M8 5.5a.5.5 0 0 1 .5-.5 3 3 0 1 1 0 6 .5.5 0 0 1 0-1 2 2 0 0 0 0-4 .5.5 0 0 1-.5-.5M12.5 8a.5.5 0 0 1 .5-.5h1a.5.5 0 1 1 0 1h-1a.5.5 0 0 1-.5-.5m-1.172 2.828a.5.5 0 0 1 .708 0l.707.708a.5.5 0 0 1-.707.707l-.708-.707a.5.5 0 0 1 0-.708M8.5 12a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5"/></svg>Climate<span class="cnt">4</span></button>
+  </nav>
+
+  <section class="tabpanel" id="nature" role="tabpanel">
+    <div class="panel-intro">
+      <span class="pi-ic"><svg class="ic" width="16" height="16" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M8.416.223a.5.5 0 0 0-.832 0l-3 4.5A.5.5 0 0 0 5 5.5h.098L3.076 8.735A.5.5 0 0 0 3.5 9.5h.191l-1.638 3.276a.5.5 0 0 0 .447.724H7V16h2v-2.5h4.5a.5.5 0 0 0 .447-.724L12.31 9.5h.191a.5.5 0 0 0 .424-.765L10.902 5.5H11a.5.5 0 0 0 .416-.777zM6.437 4.758A.5.5 0 0 0 6 4.5h-.066L8 1.401 10.066 4.5H10a.5.5 0 0 0-.424.765L11.598 8.5H11.5a.5.5 0 0 0-.447.724L12.69 12.5H3.309l1.638-3.276A.5.5 0 0 0 4.5 8.5h-.098l2.022-3.235a.5.5 0 0 0 .013-.507"/></svg></span>
+      <span class="pi-txt">Ecological outcomes from conserving, restoring, and sustainably managing this ecosystem.</span>
+      <span class="pi-anchor">
+        <span class="pi-a"><span class="v">880 ha</span><span class="l">Connected</span></span>
+        <span class="pi-a"><span class="v">620 ha</span><span class="l">Safeguarded</span></span>
+      </span>
+    </div>
+    <article class="scard">
+      <span class="corner"></span>
+      <div class="card-head">
+        <span class="card-ic"><svg class="ic" width="21" height="21" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" d="M1 2.5A1.5 1.5 0 0 1 2.5 1h1A1.5 1.5 0 0 1 5 2.5h4.134a1 1 0 1 1 0 1h-2.01q.269.27.484.605C8.246 5.097 8.5 6.459 8.5 8c0 1.993.257 3.092.713 3.7.356.476.895.721 1.787.784A1.5 1.5 0 0 1 12.5 11h1a1.5 1.5 0 0 1 1.5 1.5v1a1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5H6.866a1 1 0 1 1 0-1h1.711a3 3 0 0 1-.165-.2C7.743 11.407 7.5 10.007 7.5 8c0-1.46-.246-2.597-.733-3.355-.39-.605-.952-1-1.767-1.112A1.5 1.5 0 0 1 3.5 5h-1A1.5 1.5 0 0 1 1 3.5zM2.5 2a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm10 10a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5z"/></svg></span>
+        <div class="card-tt"><h3>Maintenance of ecological connectivity</h3><div class="tagrow"><span class="pw pw-gen">General</span><span class="qbadge"><svg class="ic" width="12" height="12" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0"/></svg>Quantifiable</span></div></div>
+      </div>
+      <div class="metric"><div class="metric-main"><span class="mnum">880</span><span class="munit">ha</span></div><div class="metric-lab">contiguous habitat kept connected</div></div><p class="def">The preservation, restoration, and safeguarding of continuous physical and structural pathways across a landscape, allowing the unhindered movement of species, genetic exchange, and ecological processes between fragmented habitats.</p><div class="narr"><span class="narr-lab"><svg class="nchev" width="11" height="11" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"/></svg>Estimated statement</span><p>Conserving this <b>forest</b> ecosystem maintains ecological connectivity across an estimated <b>880 ha</b> of contiguous habitat, reducing fragmentation over the project&rsquo;s <b>30-year</b> duration.</p></div>
+    </article><article class="scard">
+      <span class="corner"></span>
+      <div class="card-head">
+        <span class="card-ic"><svg class="ic" width="21" height="21" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M.036 3.314a.5.5 0 0 1 .65-.278l1.757.703a1.5 1.5 0 0 0 1.114 0l1.014-.406a2.5 2.5 0 0 1 1.857 0l1.015.406a1.5 1.5 0 0 0 1.114 0l1.014-.406a2.5 2.5 0 0 1 1.857 0l1.015.406a1.5 1.5 0 0 0 1.114 0l1.757-.703a.5.5 0 1 1 .372.928l-1.758.703a2.5 2.5 0 0 1-1.857 0l-1.014-.406a1.5 1.5 0 0 0-1.114 0l-1.015.406a2.5 2.5 0 0 1-1.857 0l-1.014-.406a1.5 1.5 0 0 0-1.114 0l-1.015.406a2.5 2.5 0 0 1-1.857 0L.314 3.964a.5.5 0 0 1-.278-.65m0 3a.5.5 0 0 1 .65-.278l1.757.703a1.5 1.5 0 0 0 1.114 0l1.014-.406a2.5 2.5 0 0 1 1.857 0l1.015.406a1.5 1.5 0 0 0 1.114 0l1.014-.406a2.5 2.5 0 0 1 1.857 0l1.015.406a1.5 1.5 0 0 0 1.114 0l1.757-.703a.5.5 0 1 1 .372.928l-1.758.703a2.5 2.5 0 0 1-1.857 0l-1.014-.406a1.5 1.5 0 0 0-1.114 0l-1.015.406a2.5 2.5 0 0 1-1.857 0l-1.014-.406a1.5 1.5 0 0 0-1.114 0l-1.015.406a2.5 2.5 0 0 1-1.857 0L.314 6.964a.5.5 0 0 1-.278-.65m0 3a.5.5 0 0 1 .65-.278l1.757.703a1.5 1.5 0 0 0 1.114 0l1.014-.406a2.5 2.5 0 0 1 1.857 0l1.015.406a1.5 1.5 0 0 0 1.114 0l1.014-.406a2.5 2.5 0 0 1 1.857 0l1.015.406a1.5 1.5 0 0 0 1.114 0l1.757-.703a.5.5 0 1 1 .372.928l-1.758.703a2.5 2.5 0 0 1-1.857 0l-1.014-.406a1.5 1.5 0 0 0-1.114 0l-1.015.406a2.5 2.5 0 0 1-1.857 0l-1.014-.406a1.5 1.5 0 0 0-1.114 0l-1.015.406a2.5 2.5 0 0 1-1.857 0L.314 9.964a.5.5 0 0 1-.278-.65m0 3a.5.5 0 0 1 .65-.278l1.757.703a1.5 1.5 0 0 0 1.114 0l1.014-.406a2.5 2.5 0 0 1 1.857 0l1.015.406a1.5 1.5 0 0 0 1.114 0l1.014-.406a2.5 2.5 0 0 1 1.857 0l1.015.406a1.5 1.5 0 0 0 1.114 0l1.757-.703a.5.5 0 1 1 .372.928l-1.758.703a2.5 2.5 0 0 1-1.857 0l-1.014-.406a1.5 1.5 0 0 0-1.114 0l-1.015.406a2.5 2.5 0 0 1-1.857 0l-1.014-.406a1.5 1.5 0 0 0-1.114 0l-1.015.406a2.5 2.5 0 0 1-1.857 0l-1.757-.703a.5.5 0 0 1-.278-.65"/></svg></span>
+        <div class="card-tt"><h3>Protection of watershed function</h3><div class="tagrow"><span class="pw pw-gen">General</span><span class="qbadge"><svg class="ic" width="12" height="12" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0"/></svg>Quantifiable</span></div></div>
+      </div>
+      <div class="es-row"><div class="es"><span class="es-lab">Reducing</span><span class="es-val">0.1%</span><span class="es-sub">potential erosion</span></div><div class="es"><span class="es-lab">Improving</span><span class="es-val">1.2%</span><span class="es-sub">water yield</span></div></div><p class="def">The preservation and restoration of a landscape&rsquo;s natural capacity to capture, store, filter, and safely release water &mdash; regulating hydrological cycles, mitigating floods, and maintaining downstream water quality.</p>
+    </article><article class="scard">
+      <span class="corner"></span>
+      <div class="card-head">
+        <span class="card-ic"><svg class="ic" width="21" height="21" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M6.174 1.184a2 2 0 0 1 3.652 0A2 2 0 0 1 12.99 3.01a2 2 0 0 1 1.826 3.164 2 2 0 0 1 0 3.652 2 2 0 0 1-1.826 3.164 2 2 0 0 1-3.164 1.826 2 2 0 0 1-3.652 0A2 2 0 0 1 3.01 12.99a2 2 0 0 1-1.826-3.164 2 2 0 0 1 0-3.652A2 2 0 0 1 3.01 3.01a2 2 0 0 1 3.164-1.826M8 1a1 1 0 0 0-.998 1.03l.01.091q.017.116.054.296c.049.241.122.542.213.887.182.688.428 1.513.676 2.314L8 5.762l.045-.144c.248-.8.494-1.626.676-2.314.091-.345.164-.646.213-.887a5 5 0 0 0 .064-.386L9 2a1 1 0 0 0-1-1M2 9l.03-.002.091-.01a5 5 0 0 0 .296-.054c.241-.049.542-.122.887-.213a61 61 0 0 0 2.314-.676L5.762 8l-.144-.045a61 61 0 0 0-2.314-.676 17 17 0 0 0-.887-.213 5 5 0 0 0-.386-.064L2 7a1 1 0 1 0 0 2m7 5-.002-.03a5 5 0 0 0-.064-.386 16 16 0 0 0-.213-.888 61 61 0 0 0-.676-2.314L8 10.238l-.045.144c-.248.8-.494 1.626-.676 2.314-.091.345-.164.646-.213.887a5 5 0 0 0-.064.386L7 14a1 1 0 1 0 2 0m-5.696-2.134.025-.017a5 5 0 0 0 .303-.248c.184-.164.408-.377.661-.629A61 61 0 0 0 5.96 9.23l.103-.111-.147.033a61 61 0 0 0-2.343.572c-.344.093-.64.18-.874.258a5 5 0 0 0-.367.138l-.027.014a1 1 0 1 0 1 1.732zM4.5 14.062a1 1 0 0 0 1.366-.366l.014-.027q.014-.03.036-.084a5 5 0 0 0 .102-.283c.078-.233.165-.53.258-.874a61 61 0 0 0 .572-2.343l.033-.147-.11.102a61 61 0 0 0-1.743 1.667 17 17 0 0 0-.629.66 5 5 0 0 0-.248.304l-.017.025a1 1 0 0 0 .366 1.366m9.196-8.196a1 1 0 0 0-1-1.732l-.025.017a5 5 0 0 0-.303.248 17 17 0 0 0-.661.629A61 61 0 0 0 10.04 6.77l-.102.111.147-.033a61 61 0 0 0 2.342-.572c.345-.093.642-.18.875-.258a5 5 0 0 0 .367-.138zM11.5 1.938a1 1 0 0 0-1.366.366l-.014.027q-.014.03-.036.084a5 5 0 0 0-.102.283c-.078.233-.165.53-.258.875a61 61 0 0 0-.572 2.342l-.033.147.11-.102a61 61 0 0 0 1.743-1.667c.252-.253.465-.477.629-.66a5 5 0 0 0 .248-.304l.017-.025a1 1 0 0 0-.366-1.366M14 9a1 1 0 0 0 0-2l-.03.002a5 5 0 0 0-.386.064c-.242.049-.543.122-.888.213-.688.182-1.513.428-2.314.676L10.238 8l.144.045c.8.248 1.626.494 2.314.676.345.091.646.164.887.213a5 5 0 0 0 .386.064zM1.938 4.5a1 1 0 0 0 .393 1.38l.084.035q.108.045.283.103c.233.078.53.165.874.258a61 61 0 0 0 2.343.572l.147.033-.103-.111a61 61 0 0 0-1.666-1.742 17 17 0 0 0-.66-.629 5 5 0 0 0-.304-.248l-.025-.017a1 1 0 0 0-1.366.366m2.196-1.196.017.025a5 5 0 0 0 .248.303c.164.184.377.408.629.661A61 61 0 0 0 6.77 5.96l.111.102-.033-.147a61 61 0 0 0-.572-2.342c-.093-.345-.18-.642-.258-.875a5 5 0 0 0-.138-.367l-.014-.027a1 1 0 1 0-1.732 1m9.928 8.196a1 1 0 0 0-.366-1.366l-.027-.014a5 5 0 0 0-.367-.138c-.233-.078-.53-.165-.875-.258a61 61 0 0 0-2.342-.572l-.147-.033.102.111a61 61 0 0 0 1.667 1.742c.253.252.477.465.66.629a5 5 0 0 0 .304.248l.025.017a1 1 0 0 0 1.366-.366m-3.928 2.196a1 1 0 0 0 1.732-1l-.017-.025a5 5 0 0 0-.248-.303 17 17 0 0 0-.629-.661A61 61 0 0 0 9.23 10.04l-.111-.102.033.147a61 61 0 0 0 .572 2.342c.093.345.18.642.258.875a5 5 0 0 0 .138.367zM8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/></svg></span>
+        <div class="card-tt"><h3>Enhanced biodiversity &amp; ecosystem function</h3><div class="tagrow"><span class="pw pw-gen">General</span><span class="qbadge"><svg class="ic" width="12" height="12" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0"/></svg>Quantifiable</span></div></div>
+      </div>
+      <div class="metric"><div class="metric-main"><span class="mnum">620</span><span class="munit">ha</span></div><div class="metric-lab">suitable habitat safeguarded vs. BAU</div></div><p class="def">The systemic recovery of species richness, abundance, and complex ecological interactions &mdash; producing a resilient ecosystem capable of self-regulation and intense carbon sequestration.</p><div class="narr"><span class="narr-lab"><svg class="nchev" width="11" height="11" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"/></svg>Estimated statement</span><p>Conserving this <b>forest</b> ecosystem safeguards an estimated <b>620 ha</b> of suitable habitat versus a business-as-usual scenario, avoiding roughly <b>174 ha</b> of habitat loss over the project&rsquo;s <b>30-year</b> duration.</p></div><div class="formula"><code>avoided_loss_ha = &Sigma; (habitat pixel area &times; deforestation risk) across the project area</code></div>
+    </article><article class="scard">
+      <span class="corner"></span>
+      <div class="card-head">
+        <span class="card-ic"><svg class="ic" width="21" height="21" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M8 16c3.314 0 6-2 6-5.5 0-1.5-.5-4-2.5-6 .25 1.5-1.25 2-1.25 2C11 4 9 .5 6 0c.357 2 .5 4-2 6-1.25 1-2 2.729-2 4.5C2 14 4.686 16 8 16m0-1c-1.657 0-3-1-3-2.75 0-.75.25-2 1.25-3C6.125 10 7 10.5 7 10.5c-.375-1.25.5-3.25 2-3.5-.179 1-.25 2 1 3 .625.5 1 1.364 1 2.25C11 14 9.657 15 8 15"/></svg></span>
+        <div class="card-tt"><h3>Reduced vulnerability to fire, pests &amp; disease</h3><div class="tagrow"><span class="pw pw-protect">Protect</span><span class="qbadge"><svg class="ic" width="12" height="12" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0"/></svg>Quantifiable</span></div></div>
+      </div>
+      <div class="metric"><div class="metric-main"><span class="mnum">23</span><span class="munit">species</span></div><div class="metric-lab">reduced extinction risk (IUCN STAR)</div></div><p class="def">The systemic enhancement of ecosystem and community resilience against catastrophic environmental disturbances, biological infestations, and climate-driven pathogens.</p><div class="narr"><span class="narr-lab"><svg class="nchev" width="11" height="11" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"/></svg>Estimated statement</span><p>Protecting this ecosystem can reduce extinction risk for an estimated <b>23</b> threatened species&rsquo; habitat over <b>30 years</b> of project duration.</p></div>
+    </article><article class="scard">
+      <span class="corner"></span>
+      <div class="card-head">
+        <span class="card-ic"><svg class="ic" width="21" height="21" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" d="M0 0h1v15h15v1H0zm10 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V4.9l-3.613 4.417a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61L13.445 4H10.5a.5.5 0 0 1-.5-.5"/></svg></span>
+        <div class="card-tt"><h3>Improved forest productivity &amp; regeneration</h3><div class="tagrow"><span class="pw pw-restore">Restore</span><span class="pw pw-manage">Manage</span><span class="qbadge"><svg class="ic" width="12" height="12" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0"/></svg>Quantifiable</span></div></div>
+      </div>
+      <div class="metric"><div class="metric-main"><span class="mnum">580</span><span class="munit">ha</span></div><div class="metric-lab">under active restoration &amp; management</div></div><p class="def">The measurable acceleration of natural or assisted ecological growth, biomass accumulation, and structural recovery within a forest ecosystem over time.</p><div class="narr"><span class="narr-lab"><svg class="nchev" width="11" height="11" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"/></svg>Estimated statement</span><p>Restoring and sustainably managing this <b>forest</b> ecosystem can contribute to the recovery of an estimated <b>17</b> threatened species&rsquo; habitat over <b>30 years</b> of project duration.</p></div>
+    </article>
+  </section>
+
+  <section class="tabpanel active" id="people" role="tabpanel">
+    <div class="panel-intro">
+      <span class="pi-ic"><svg class="ic" width="16" height="16" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1zm-7.978-1L7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002-.014.002zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0M6.936 9.28a6 6 0 0 0-1.23-.247A7 7 0 0 0 5 9c-4 0-5 3-5 4q0 1 1 1h4.216A2.24 2.24 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816M4.92 10A5.5 5.5 0 0 0 4 13H1c0-.26.164-1.03.76-1.724.545-.636 1.492-1.256 3.16-1.275ZM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0m3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4"/></svg></span>
+      <span class="pi-txt">Social outcomes for communities. Each card shows a <b>general benefit</b> &mdash; tap it to run a short <b>assessment</b> and turn it into a project-specific statement.</span>
+      <span class="pi-anchor">
+        <span class="pi-a"><span class="v">3,400</span><span class="l">Beneficiaries</span></span>
+        <span class="pi-a"><span class="v">850</span><span class="l">Households</span></span>
+      </span>
+    </div>
+    <div class="fgrid"><article class="fcard" data-key="food_water" data-mode="single">
+      <div class="fcard-inner">
+        <div class="face front">
+          <span class="corner"></span>
+          <span class="flip-tab"><svg class="ic" width="12" height="12" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0"/>
+  <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1z"/>
+  <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z"/></svg>Assess</span>
+          <div class="card-head">
+            <span class="card-ic"><svg class="ic" width="21" height="21" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" d="M7.21.8C7.69.295 8 0 8 0q.164.544.371 1.038c.812 1.946 2.073 3.35 3.197 4.6C12.878 7.096 14 8.345 14 10a6 6 0 0 1-12 0C2 6.668 5.58 2.517 7.21.8m.413 1.021A31 31 0 0 0 5.794 3.99c-.726.95-1.436 2.008-1.96 3.07C3.304 8.133 3 9.138 3 10c0 0 2.5 1.5 5 .5s5-.5 5-.5c0-1.201-.796-2.157-2.181-3.7l-.03-.032C9.75 5.11 8.5 3.72 7.623 1.82z"/>
+  <path fill-rule="evenodd" d="M4.553 7.776c.82-1.641 1.717-2.753 2.093-3.13l.708.708c-.29.29-1.128 1.311-1.907 2.87z"/></svg></span>
+            <div class="card-tt"><h3>Enhanced food &amp; water security</h3><div class="tagrow"><span class="pw pw-gen">General</span></div></div>
+          </div>
+          <div class="metric"><div class="metric-main"><span class="mnum">850</span><span class="munit">households</span></div><div class="metric-lab">with secured year-round access</div></div>
+          <div class="front-default">
+            <span class="face-lab">General benefit</span>
+            <p class="def">The guaranteed year-round, climate-resilient community access to critical nutritional and hydrological resources by stabilizing and restoring vital ecosystem functions.</p>
+          </div>
+          <div class="front-answered" hidden>
+            <span class="face-lab answered"><svg class="ic" width="13" height="13" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0"/>
+  <path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0z"/></svg>Your benefit statement</span>
+            <p class="statement"></p>
+            <p class="answer-echo"></p>
+          </div>
+          <div class="cta"><span class="cta-txt"><span class="c-def">Tap to assess this benefit</span><span class="c-ans" hidden>Re-assess</span></span><svg class="cta-chev" width="15" height="15" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"/></svg></div>
+        </div>
+        <div class="face back">
+          <span class="corner"></span>
+          <div class="back-head">
+            <button class="back-btn" type="button" aria-label="Back"><svg class="chev-back" width="14" height="14" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"/></svg></button>
+            <span class="face-lab back-lab"><svg class="ic" width="12" height="12" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0"/>
+  <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1z"/>
+  <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z"/></svg>Benefit assessment</span>
+          </div>
+          <p class="prompt">Do households have year-round access to clean water and sufficient food?</p>
+          <div class="opts"><button class="opt" type="button" data-statement="Maintain food and water security" data-answer="Yes"><span class="opt-radio"></span><span class="opt-lab">Yes</span></button><button class="opt" type="button" data-statement="Enhance food and water security" data-answer="No"><span class="opt-radio"></span><span class="opt-lab">No</span></button></div>
+          
+        </div>
+      </div>
+    </article><article class="fcard" data-key="livelihood" data-mode="multi">
+      <div class="fcard-inner">
+        <div class="face front">
+          <span class="corner"></span>
+          <span class="flip-tab"><svg class="ic" width="12" height="12" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0"/>
+  <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1z"/>
+  <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z"/></svg>Assess</span>
+          <div class="card-head">
+            <span class="card-ic"><svg class="ic" width="21" height="21" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M5.757 1.071a.5.5 0 0 1 .172.686L3.383 6h9.234L10.07 1.757a.5.5 0 1 1 .858-.514L13.783 6H15.5a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H.5a.5.5 0 0 1-.5-.5v-1A.5.5 0 0 1 .5 6h1.717L5.07 1.243a.5.5 0 0 1 .686-.172zM3.394 15l-1.48-6h-.97l1.525 6.426a.75.75 0 0 0 .729.574h9.606a.75.75 0 0 0 .73-.574L15.056 9h-.972l-1.479 6z"/></svg></span>
+            <div class="card-tt"><h3>Sustainable livelihood opportunities</h3><div class="tagrow"><span class="pw pw-manage">Manage</span><span class="pw pw-restore">Restore</span></div></div>
+          </div>
+          <div class="metric"><div class="metric-main"><span class="mnum">620</span><span class="munit">people</span></div><div class="metric-lab">engaged in nature-based livelihoods</div></div>
+          <div class="front-default">
+            <span class="face-lab">General benefit</span>
+            <p class="def">The generation of climate-adaptive, nature-positive revenue streams that allow households to withstand economic shocks without degrading or depleting the local natural resource base.</p>
+          </div>
+          <div class="front-answered" hidden>
+            <span class="face-lab answered"><svg class="ic" width="13" height="13" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0"/>
+  <path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0z"/></svg>Your benefit statement</span>
+            <p class="statement"></p>
+            <p class="answer-echo"></p>
+          </div>
+          <div class="cta"><span class="cta-txt"><span class="c-def">Tap to assess this benefit</span><span class="c-ans" hidden>Re-assess</span></span><svg class="cta-chev" width="15" height="15" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"/></svg></div>
+        </div>
+        <div class="face back">
+          <span class="corner"></span>
+          <div class="back-head">
+            <button class="back-btn" type="button" aria-label="Back"><svg class="chev-back" width="14" height="14" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"/></svg></button>
+            <span class="face-lab back-lab"><svg class="ic" width="12" height="12" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0"/>
+  <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1z"/>
+  <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z"/></svg>Benefit assessment</span>
+          </div>
+          <p class="prompt">Which of the following best describes most households&rsquo; primary source of livelihood?</p>
+          <div class="opts"><label class="optm"><input type="checkbox" value="NTFP"><span class="optm-box"><svg class="ic" width="12" height="12" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0"/></svg></span><span class="optm-body"><span class="optm-lab">NTFP</span><span class="optm-desc">Harvesting and selling Non-Timber Forest Products (fruits, nuts, medicinal plants, resin) integrated into the forest mix.</span></span></label><label class="optm"><input type="checkbox" value="Nursery work"><span class="optm-box"><svg class="ic" width="12" height="12" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0"/></svg></span><span class="optm-body"><span class="optm-lab">Nursery work</span><span class="optm-desc">Seedling production &mdash; soil preparation, bagging, watering, and weeding.</span></span></label><label class="optm"><input type="checkbox" value="Planting work"><span class="optm-box"><svg class="ic" width="12" height="12" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0"/></svg></span><span class="optm-body"><span class="optm-lab">Planting work</span><span class="optm-desc">Site preparation, transporting seedlings, digging, and planting.</span></span></label><label class="optm optm-none"><input type="checkbox" value="__none__"><span class="optm-box"><svg class="ic" width="12" height="12" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0"/></svg></span><span class="optm-body"><span class="optm-lab">None of the above</span></span></label></div>
+          <button class="apply" type="button">Apply assessment</button>
+        </div>
+      </div>
+    </article><article class="fcard" data-key="social" data-mode="single">
+      <div class="fcard-inner">
+        <div class="face front">
+          <span class="corner"></span>
+          <span class="flip-tab"><svg class="ic" width="12" height="12" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0"/>
+  <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1z"/>
+  <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z"/></svg>Assess</span>
+          <div class="card-head">
+            <span class="card-ic"><svg class="ic" width="21" height="21" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" d="M6 3.5A1.5 1.5 0 0 1 7.5 2h1A1.5 1.5 0 0 1 10 3.5v1A1.5 1.5 0 0 1 8.5 6v1H14a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0V8h-5v.5a.5.5 0 0 1-1 0V8h-5v.5a.5.5 0 0 1-1 0v-1A.5.5 0 0 1 2 7h5.5V6A1.5 1.5 0 0 1 6 4.5zM8.5 5a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5zM0 11.5A1.5 1.5 0 0 1 1.5 10h1A1.5 1.5 0 0 1 4 11.5v1A1.5 1.5 0 0 1 2.5 14h-1A1.5 1.5 0 0 1 0 12.5zm1.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm4.5.5A1.5 1.5 0 0 1 7.5 10h1a1.5 1.5 0 0 1 1.5 1.5v1A1.5 1.5 0 0 1 8.5 14h-1A1.5 1.5 0 0 1 6 12.5zm1.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm4.5.5a1.5 1.5 0 0 1 1.5-1.5h1a1.5 1.5 0 0 1 1.5 1.5v1a1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5zm1.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5z"/></svg></span>
+            <div class="card-tt"><h3>Strengthened social capital &amp; governance</h3><div class="tagrow"><span class="pw pw-gen">General</span></div></div>
+          </div>
+          <div class="metric"><div class="metric-main"><span class="mnum">6</span><span class="munit">community groups</span></div><div class="metric-lab">strengthened across the AOI</div></div>
+          <div class="front-default">
+            <span class="face-lab">General benefit</span>
+            <p class="def">The advancement of community cohesion, institutional trust, and localized legislative and operational capacity to independently manage resources, enforce laws, and resolve conflicts.</p>
+          </div>
+          <div class="front-answered" hidden>
+            <span class="face-lab answered"><svg class="ic" width="13" height="13" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0"/>
+  <path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0z"/></svg>Your benefit statement</span>
+            <p class="statement"></p>
+            <p class="answer-echo"></p>
+          </div>
+          <div class="cta"><span class="cta-txt"><span class="c-def">Tap to assess this benefit</span><span class="c-ans" hidden>Re-assess</span></span><svg class="cta-chev" width="15" height="15" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"/></svg></div>
+        </div>
+        <div class="face back">
+          <span class="corner"></span>
+          <div class="back-head">
+            <button class="back-btn" type="button" aria-label="Back"><svg class="chev-back" width="14" height="14" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"/></svg></button>
+            <span class="face-lab back-lab"><svg class="ic" width="12" height="12" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0"/>
+  <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1z"/>
+  <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z"/></svg>Benefit assessment</span>
+          </div>
+          <p class="prompt">To what extent has the project strengthened local social capital and governance capacity (community trust, leadership, and collective decision-making)?</p>
+          <div class="opts"><button class="opt" type="button" data-statement="Sustain social capital and governance capacity" data-answer="Local institutions and leaders now manage resources independentl"><span class="opt-radio"></span><span class="opt-lab">Local institutions and leaders now manage resources independently, trust within the community has grown, and collective decision-making is strong and inclusive.</span></button><button class="opt" type="button" data-statement="Optimise social capital and governance capacity" data-answer="Community groups or leadership exist, but they still heavily rel"><span class="opt-radio"></span><span class="opt-lab">Community groups or leadership exist, but they still heavily rely on outside support to resolve conflicts, make decisions, or manage resources effectively.</span></button><button class="opt" type="button" data-statement="Convene social capital and governance capacity" data-answer="There has been no meaningful improvement in community cooperatio"><span class="opt-radio"></span><span class="opt-lab">There has been no meaningful improvement in community cooperation, trust, or leadership capacity; decision-making remains weak or fragmented.</span></button></div>
+          
+        </div>
+      </div>
+    </article><article class="fcard" data-key="equity" data-mode="single">
+      <div class="fcard-inner">
+        <div class="face front">
+          <span class="corner"></span>
+          <span class="flip-tab"><svg class="ic" width="12" height="12" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0"/>
+  <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1z"/>
+  <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z"/></svg>Assess</span>
+          <div class="card-head">
+            <span class="card-ic"><svg class="ic" width="21" height="21" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M7.5 1.018a7 7 0 0 0-4.79 11.566L7.5 7.793zm1 0V7.5h6.482A7 7 0 0 0 8.5 1.018M14.982 8.5H8.207l-4.79 4.79A7 7 0 0 0 14.982 8.5M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8"/></svg></span>
+            <div class="card-tt"><h3>Equitable benefit-sharing mechanisms</h3><div class="tagrow"><span class="pw pw-gen">General</span></div></div>
+          </div>
+          <div class="metric"><div class="metric-main"><span class="mnum">850</span><span class="munit">households</span></div><div class="metric-lab">within the benefit-sharing scope</div></div>
+          <div class="front-default">
+            <span class="face-lab">General benefit</span>
+            <p class="def">The establishment of transparent, inclusive, and legally binding institutional frameworks that distribute project-generated rewards and resource rights fairly while actively preventing elite capture.</p>
+          </div>
+          <div class="front-answered" hidden>
+            <span class="face-lab answered"><svg class="ic" width="13" height="13" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0"/>
+  <path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0z"/></svg>Your benefit statement</span>
+            <p class="statement"></p>
+            <p class="answer-echo"></p>
+          </div>
+          <div class="cta"><span class="cta-txt"><span class="c-def">Tap to assess this benefit</span><span class="c-ans" hidden>Re-assess</span></span><svg class="cta-chev" width="15" height="15" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"/></svg></div>
+        </div>
+        <div class="face back">
+          <span class="corner"></span>
+          <div class="back-head">
+            <button class="back-btn" type="button" aria-label="Back"><svg class="chev-back" width="14" height="14" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"/></svg></button>
+            <span class="face-lab back-lab"><svg class="ic" width="12" height="12" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0"/>
+  <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1z"/>
+  <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z"/></svg>Benefit assessment</span>
+          </div>
+          <p class="prompt">How transparent is the process for distributing financial and non-financial benefits to local stakeholders?</p>
+          <div class="opts"><button class="opt" type="button" data-statement="Maintain equitable benefit-sharing mechanism" data-answer="Highly Transparent  distribution rules, financial records, and b"><span class="opt-radio"></span><span class="opt-lab">Highly Transparent &mdash; distribution rules, financial records, and beneficiary lists are fully public, clearly understood, and easy to access.</span></button><button class="opt" type="button" data-statement="Increase equitable benefit-sharing mechanism" data-answer="Partially Transparent  some information is shared, but the exact"><span class="opt-radio"></span><span class="opt-lab">Partially Transparent &mdash; some information is shared, but the exact criteria for who gets how much remains unclear to most people.</span></button><button class="opt" type="button" data-statement="Establish equitable benefit-sharing mechanism" data-answer="Not Transparent  the process is handled behind closed doors with"><span class="opt-radio"></span><span class="opt-lab">Not Transparent &mdash; the process is handled behind closed doors with no clear records or community oversight.</span></button></div>
+          
+        </div>
+      </div>
+    </article><article class="fcard" data-key="tenure" data-mode="single">
+      <div class="fcard-inner">
+        <div class="face front">
+          <span class="corner"></span>
+          <span class="flip-tab"><svg class="ic" width="12" height="12" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0"/>
+  <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1z"/>
+  <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z"/></svg>Assess</span>
+          <div class="card-head">
+            <span class="card-ic"><svg class="ic" width="21" height="21" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10"/>
+  <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/></svg></span>
+            <div class="card-tt"><h3>Land tenure &amp; cultural heritage</h3><div class="tagrow"><span class="pw pw-protect">Protect</span></div></div>
+          </div>
+          <div class="metric"><div class="metric-main"><span class="mnum">620</span><span class="munit">ha</span></div><div class="metric-lab">of customary land under recognition</div></div>
+          <div class="front-default">
+            <span class="face-lab">General benefit</span>
+            <p class="def">The formalization, legal protection, and enforcement of a community&rsquo;s rights to possess, use, and manage land and natural resources &mdash; safeguarding customary traditions, sacred sites, and knowledge tied to the landscape.</p>
+          </div>
+          <div class="front-answered" hidden>
+            <span class="face-lab answered"><svg class="ic" width="13" height="13" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0"/>
+  <path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0z"/></svg>Your benefit statement</span>
+            <p class="statement"></p>
+            <p class="answer-echo"></p>
+          </div>
+          <div class="cta"><span class="cta-txt"><span class="c-def">Tap to assess this benefit</span><span class="c-ans" hidden>Re-assess</span></span><svg class="cta-chev" width="15" height="15" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"/></svg></div>
+        </div>
+        <div class="face back">
+          <span class="corner"></span>
+          <div class="back-head">
+            <button class="back-btn" type="button" aria-label="Back"><svg class="chev-back" width="14" height="14" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"/></svg></button>
+            <span class="face-lab back-lab"><svg class="ic" width="12" height="12" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0"/>
+  <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1z"/>
+  <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z"/></svg>Benefit assessment</span>
+          </div>
+          <p class="prompt">What is the status of land tenure formalization for Indigenous Peoples and Local Communities (IPLCs) within the project area?</p>
+          <div class="opts"><button class="opt" type="button" data-statement="Preserve land security, resource tenure and cultural heritage preservation" data-answer="Explicit legal titles are fully recognized and enforced."><span class="opt-radio"></span><span class="opt-lab">Explicit legal titles are fully recognized and enforced.</span></button><button class="opt" type="button" data-statement="Increase enforcement of land security, resource tenure and cultural heritage preservation" data-answer="Legal recognition exists, but enforcement / boundary disputes ar"><span class="opt-radio"></span><span class="opt-lab">Legal recognition exists, but enforcement / boundary disputes are common.</span></button><button class="opt" type="button" data-statement="Establish legal recognition of land security, resource tenure and cultural heritage preservation" data-answer="Customary rights are recognized informally, but no legal titles "><span class="opt-radio"></span><span class="opt-lab">Customary rights are recognized informally, but no legal titles exist.</span></button><button class="opt" type="button" data-statement="Recognise land security, resource tenure and cultural heritage preservation" data-answer="Land tenure is insecure or unrecognized."><span class="opt-radio"></span><span class="opt-lab">Land tenure is insecure or unrecognized.</span></button></div>
+          
+        </div>
+      </div>
+    </article></div>
+  </section>
+
+  <section class="tabpanel" id="climate" role="tabpanel">
+    <div class="panel-intro">
+      <span class="pi-ic"><svg class="ic" width="16" height="16" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M5 12.5a1.5 1.5 0 1 1-2-1.415V2.5a.5.5 0 0 1 1 0v8.585A1.5 1.5 0 0 1 5 12.5"/>
+  <path d="M1 2.5a2.5 2.5 0 0 1 5 0v7.55a3.5 3.5 0 1 1-5 0zM3.5 1A1.5 1.5 0 0 0 2 2.5v7.987l-.167.15a2.5 2.5 0 1 0 3.333 0L5 10.486V2.5A1.5 1.5 0 0 0 3.5 1m5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5m4.243 1.757a.5.5 0 0 1 0 .707l-.707.708a.5.5 0 1 1-.708-.708l.708-.707a.5.5 0 0 1 .707 0M8 5.5a.5.5 0 0 1 .5-.5 3 3 0 1 1 0 6 .5.5 0 0 1 0-1 2 2 0 0 0 0-4 .5.5 0 0 1-.5-.5M12.5 8a.5.5 0 0 1 .5-.5h1a.5.5 0 1 1 0 1h-1a.5.5 0 0 1-.5-.5m-1.172 2.828a.5.5 0 0 1 .708 0l.707.708a.5.5 0 0 1-.707.707l-.708-.707a.5.5 0 0 1 0-.708M8.5 12a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5"/></svg></span>
+      <span class="pi-txt">Climate-mitigation and disaster-risk outcomes across the project area.</span>
+      <span class="pi-anchor">
+        <span class="pi-a"><span class="v">42,011</span><span class="l">tCO&#8322;e avoided</span></span>
+        <span class="pi-a"><span class="v">103,200</span><span class="l">tCO&#8322;e stored</span></span>
+      </span>
+    </div>
+    <article class="scard">
+      <span class="corner"></span>
+      <div class="card-head">
+        <span class="card-ic"><svg class="ic" width="21" height="21" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" d="M8 14.933a1 1 0 0 0 .1-.025q.114-.034.294-.118c.24-.113.547-.29.893-.533a10.7 10.7 0 0 0 2.287-2.233c1.527-1.997 2.807-5.031 2.253-9.188a.48.48 0 0 0-.328-.39c-.651-.213-1.75-.56-2.837-.855C9.552 1.29 8.531 1.067 8 1.067zM5.072.56C6.157.265 7.31 0 8 0s1.843.265 2.928.56c1.11.3 2.229.655 2.887.87a1.54 1.54 0 0 1 1.044 1.262c.596 4.477-.787 7.795-2.465 9.99a11.8 11.8 0 0 1-2.517 2.453 7 7 0 0 1-1.048.625c-.28.132-.581.24-.829.24s-.548-.108-.829-.24a7 7 0 0 1-1.048-.625 11.8 11.8 0 0 1-2.517-2.453C1.928 10.487.545 7.169 1.141 2.692A1.54 1.54 0 0 1 2.185 1.43 63 63 0 0 1 5.072.56"/></svg></span>
+        <div class="card-tt"><h3>Enhanced resilience to climate hazards</h3><div class="tagrow"><span class="pw pw-gen">General</span><span class="qbadge"><svg class="ic" width="12" height="12" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0"/></svg>Quantifiable</span></div></div>
+      </div>
+      <div class="metric"><div class="metric-main"><span class="mnum">3,400</span><span class="munit">people</span></div><div class="metric-lab">at reduced disaster exposure</div></div><p class="def">The reduction in people&rsquo;s and assets&rsquo; exposure to climate hazards achieved by using healthy ecosystems as natural buffers.</p><div class="narr"><span class="narr-lab"><svg class="nchev" width="11" height="11" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"/></svg>Estimated statement</span><p>Implementing NbS here reduces disaster exposure across an estimated <b>1,200 ha</b>, helping lower risk for an estimated <b>3,400 people</b> (&asymp; <b>850 households</b>) across <b>6 communities</b> over the project&rsquo;s <b>30-year</b> duration.</p></div><div class="srcline"><svg class="ic" width="12" height="12" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+  <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/></svg><span>ADPC Climate Disaster Risk &middot; SIGnal Forest Cover &middot; Gridded World Pop</span></div>
+    </article><article class="scard">
+      <span class="corner"></span>
+      <div class="card-head">
+        <span class="card-ic"><svg class="ic" width="21" height="21" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9.5 12.5a1.5 1.5 0 1 1-2-1.415V6.5a.5.5 0 0 1 1 0v4.585a1.5 1.5 0 0 1 1 1.415"/>
+  <path d="M5.5 2.5a2.5 2.5 0 0 1 5 0v7.55a3.5 3.5 0 1 1-5 0zM8 1a1.5 1.5 0 0 0-1.5 1.5v7.987l-.167.15a2.5 2.5 0 1 0 3.333 0l-.166-.15V2.5A1.5 1.5 0 0 0 8 1"/></svg></span>
+        <div class="card-tt"><h3>Microclimate regulation</h3><div class="tagrow"><span class="pw pw-gen">General</span><span class="qbadge"><svg class="ic" width="12" height="12" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0"/></svg>Quantifiable</span></div></div>
+      </div>
+      <div class="metric"><div class="metric-main"><span class="mnum">580</span><span class="munit">ha</span></div><div class="metric-lab">tree-cover increase (&asymp; 48% of AOI)</div></div><p class="def">The moderation of local temperatures by vegetation &mdash; through canopy shading and evapotranspiration &mdash; buffering the area within and around it against heat extremes.</p><div class="narr"><span class="narr-lab"><svg class="nchev" width="11" height="11" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"/></svg>Estimated statement</span><p>Conserving this <b>forest</b> ecosystem, with an estimated <b>580 ha</b> of tree-cover increase (&asymp; <b>48%</b> of the AOI), helps regulate the local microclimate and buffers the surrounding area against heat extremes over the project&rsquo;s <b>30-year</b> duration.</p></div><div class="srcline"><svg class="ic" width="12" height="12" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+  <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/></svg><span>SIGnal forest-cover benchmark &middot; De&nbsp;Frenne et&nbsp;al. (2019), <i>Nature Ecology &amp; Evolution</i></span></div>
+    </article><article class="scard">
+      <span class="corner"></span>
+      <div class="card-head">
+        <span class="card-ic"><svg class="ic" width="21" height="21" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" d="M3.112 5.112a3 3 0 0 0-.17.613C1.266 6.095 0 7.555 0 9.318 0 11.366 1.708 13 3.781 13H11l-1-1H3.781C2.231 12 1 10.785 1 9.318c0-1.365 1.064-2.513 2.46-2.666l.446-.05v-.447q0-.113.018-.231zm2.55-1.45-.725-.725A5.5 5.5 0 0 1 8 2c2.69 0 4.923 2 5.166 4.579C14.758 6.804 16 8.137 16 9.773a3.2 3.2 0 0 1-1.516 2.711l-.733-.733C14.498 11.378 15 10.626 15 9.773c0-1.216-1.02-2.228-2.313-2.228h-.5v-.5C12.188 4.825 10.328 3 8 3c-.875 0-1.678.26-2.339.661z"/>
+  <path d="m13.646 14.354-12-12 .708-.708 12 12z"/></svg></span>
+        <div class="card-tt"><h3>Reduced emissions from deforestation &amp; degradation</h3><div class="tagrow"><span class="pw pw-protect">Protect</span><span class="qbadge"><svg class="ic" width="12" height="12" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0"/></svg>Quantifiable</span></div></div>
+      </div>
+      <div class="metric"><div class="metric-main"><span class="mnum">42,011</span><span class="munit">tCO&#8322;e</span></div><div class="metric-lab">avoided over the project duration</div></div><p class="def">The greenhouse-gas emissions avoided by protecting this ecosystem from deforestation or degradation &mdash; keeping stored carbon locked in vegetation and soil rather than released to the atmosphere.</p><div class="narr"><span class="narr-lab"><svg class="nchev" width="11" height="11" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"/></svg>Estimated statement</span><p>Protecting this <b>forest</b> ecosystem through the selected activities can avoid an estimated <b>42,011 t CO&#8322;e</b> of emissions over the <b>30 years</b> of project duration.</p></div><div class="srcline"><svg class="ic" width="12" height="12" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+  <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/></svg><span>Through: boundary demarcation &amp; legal recognition; community-based patrol; fire prevention &amp; early warning</span></div>
+    </article><article class="scard">
+      <span class="corner"></span>
+      <div class="card-head">
+        <span class="card-ic"><svg class="ic" width="21" height="21" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M8.186 1.113a.5.5 0 0 0-.372 0L1.846 3.5l2.404.961L10.404 2zm3.564 1.426L5.596 5 8 5.961 14.154 3.5zm3.25 1.7-6.5 2.6v7.922l6.5-2.6V4.24zM7.5 14.762V6.838L1 4.239v7.923zM7.443.184a1.5 1.5 0 0 1 1.114 0l7.129 2.852A.5.5 0 0 1 16 3.5v8.662a1 1 0 0 1-.629.928l-7.185 2.874a.5.5 0 0 1-.372 0L.63 13.09a1 1 0 0 1-.63-.928V3.5a.5.5 0 0 1 .314-.464z"/></svg></span>
+        <div class="card-tt"><h3>Increased carbon sequestration &amp; storage</h3><div class="tagrow"><span class="pw pw-restore">Restore</span><span class="pw pw-manage">Manage</span><span class="qbadge"><svg class="ic" width="12" height="12" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0"/></svg>Quantifiable</span></div></div>
+      </div>
+      <div class="metric"><div class="metric-main"><span class="mnum">103,200</span><span class="munit">tCO&#8322;e</span></div><div class="metric-lab">sequestered over the project duration</div></div><p class="def">The additional greenhouse gases removed from the atmosphere as this ecosystem is restored or sustainably managed &mdash; drawing carbon into growing vegetation and soil where it is stored over time.</p><div class="narr"><span class="narr-lab"><svg class="nchev" width="11" height="11" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"/></svg>Estimated statement</span><p>Restoring and sustainably managing this <b>forest</b> ecosystem can sequester an estimated <b>103,200 t CO&#8322;e</b> over the project&rsquo;s <b>30-year</b> duration (68,640 restore + 34,560 manage).</p></div><div class="srcline"><svg class="ic" width="12" height="12" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+  <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/></svg><span>Cook-Patton et&nbsp;al. (2020) natural-regrowth rates &middot; assisted regeneration, enrichment planting, agroforestry</span></div>
+    </article>
+  </section>
+
+  <div class="foot">
+    <div class="disc" id="disc">
+      <button class="disc-btn" type="button">
+        <span class="warn"><svg class="ic" width="16" height="16" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+  <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/></svg></span>Assumptions, methodology &amp; disclaimer<svg class="tgl" width="16" height="16" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"/></svg>
+      </button>
+      <div class="disc-body">
+        <p>Figures are an <b>illustrative worked example</b> for a 1,200 ha / 30-year project (Protect 620 ha, Manage 320 ha, Restore 260 ha). Carbon uses a forest stock of ~154 tC/ha with <b>0.4%/yr</b> avoided deforestation (Protect) and natural-regrowth sequestration of <b>8.8</b> (Restore) / <b>3.6</b> (Manage) tCO&#8322;e/ha/yr &mdash; giving <code>42,011 avoided + 103,200 sequestered = 145,211 tCO&#8322;e</code>.</p>
+        <p>Quantifiable benefits are limited by the availability of adequate project-level data; to firm up the numbers, collect data following the <b>Monitoring Plan</b> guidance. Scores are <b>qualitative indicators</b>, not certified outputs. Sources: Cook-Patton et&nbsp;al. (2020), SIGnal, ADPC, Gridded World Pop &middot; <b>ASEAN NbS / EbA toolkit</b>.</p>
+      </div>
+    </div>
+    <div class="nav">
+      <a class="btn btn-ghost" href="#"><svg class="chev-back" width="15" height="15" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"/></svg>Back to Intervention</a>
+      <a class="btn btn-sec" href="#">Generate Screening Report</a>
+      <a class="btn btn-pri" href="#">Continue to Monitoring Plan<svg class="ic" width="15" height="15" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"/></svg></a>
+    </div>
+  </div>
+
+</main>
+<script>
+(function(){
+  var tabs=[].slice.call(document.querySelectorAll('.tab'));
+  var panels=[].slice.call(document.querySelectorAll('.tabpanel'));
+  tabs.forEach(function(t){t.addEventListener('click',function(){
+    tabs.forEach(function(x){x.classList.remove('active')});
+    panels.forEach(function(p){p.classList.remove('active')});
+    t.classList.add('active');document.getElementById(t.dataset.tab).classList.add('active');
+    requestAnimationFrame(sizeAll);
+  });});
+
+  var cards=[].slice.call(document.querySelectorAll('.fcard'));
+  function faceHeight(face){var s=face.style,pp=s.position,pv=s.visibility;
+    s.position='relative';s.visibility='hidden';s.height='auto';var h=face.offsetHeight;
+    s.position=pp;s.visibility=pv;s.height='';return h;}
+  function sizeCard(c){var i=c.querySelector('.fcard-inner');
+    i.style.height=Math.max(faceHeight(c.querySelector('.front')),faceHeight(c.querySelector('.back')))+'px';}
+  function sizeAll(){cards.forEach(sizeCard);}
+
+  cards.forEach(function(card){
+    var front=card.querySelector('.front'),backBtn=card.querySelector('.back-btn'),mode=card.dataset.mode;
+    function flip(on){card.classList.toggle('flipped',on);requestAnimationFrame(function(){sizeCard(card)});}
+    front.addEventListener('click',function(){flip(true)});
+    backBtn.addEventListener('click',function(e){e.stopPropagation();flip(false)});
+    function apply(text,echo){
+      card.querySelector('.statement').innerHTML=text;
+      card.querySelector('.answer-echo').innerHTML=echo?'<b>Assessment:</b> '+echo:'';
+      card.querySelector('.front-default').hidden=true;
+      card.querySelector('.front-answered').hidden=false;
+      card.querySelector('.c-def').hidden=true;card.querySelector('.c-ans').hidden=false;
+      card.classList.add('answered');flip(false);
+    }
+    if(mode==='single'){
+      var opts=[].slice.call(card.querySelectorAll('.opt'));
+      opts.forEach(function(o){o.addEventListener('click',function(){
+        opts.forEach(function(x){x.classList.remove('sel')});o.classList.add('sel');
+        apply(o.dataset.statement,o.dataset.answer);});});
+    }else{
+      var apbtn=card.querySelector('.apply');
+      var boxes=[].slice.call(card.querySelectorAll('.optm input'));
+      var none=card.querySelector('.optm-none input');
+      boxes.forEach(function(b){b.addEventListener('change',function(){
+        if(b===none&&b.checked){boxes.forEach(function(x){if(x!==none)x.checked=false});}
+        else if(b!==none&&b.checked&&none.checked){none.checked=false;}});});
+      apbtn.addEventListener('click',function(){
+        var sel=boxes.filter(function(b){return b.checked&&b.value!=='__none__'}).map(function(b){return b.value});
+        var all=['NTFP','Nursery work','Planting work'];
+        var missing=all.filter(function(a){return sel.indexOf(a)<0});
+        var text,echo;
+        if(sel.length===0){text='Cultivate livelihood opportunities through NTFP, Nursery and Planting work';echo='None of the above';}
+        else if(missing.length===0){text='Maintain livelihood opportunities through NTFP, Nursery and Planting work';echo=sel.join(', ');}
+        else{text='Expand livelihood opportunities through '+joinNice(missing);echo=sel.join(', ');}
+        apply(text,echo);
+      });
+    }
+  });
+  function joinNice(a){if(a.length===1)return a[0];
+    if(a.length===2)return a[0].replace(' work','')+' and '+a[1];
+    return a.slice(0,-1).map(function(x){return x.replace(' work','')}).join(', ')+' and '+a[a.length-1];}
+
+  var disc=document.getElementById('disc');
+  disc.querySelector('.disc-btn').addEventListener('click',function(){disc.classList.toggle('open')});
+
+  window.addEventListener('load',sizeAll);
+  window.addEventListener('resize',function(){requestAnimationFrame(sizeAll)});
+  requestAnimationFrame(sizeAll);
+  if(document.fonts&&document.fonts.ready){document.fonts.ready.then(function(){setTimeout(sizeAll,60)})}
+  setTimeout(sizeAll,400);
+})();
+</script>
+</body></html>
