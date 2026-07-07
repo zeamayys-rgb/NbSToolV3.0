@@ -31,7 +31,12 @@
       <span class="brand-version"><span class="dot" style="width:6px;height:6px;border-radius:50%;background:currentColor"></span>Version 3.0 · Foundation</span>
     </div>
 
-    <nav class="nav">
+    <div class="view-tabs" role="tablist">
+      <button type="button" class="active" data-view="foundations">Foundations</button>
+      <button type="button" data-view="components">Components</button>
+    </div>
+
+    <nav class="nav active" data-nav="foundations">
       <div class="nav-label">Foundations</div>
       <a href="#identity" class="active"><span class="dot"></span>Identity</a>
       <a href="#color"><span class="dot"></span>Color</a>
@@ -39,11 +44,31 @@
       <a href="#spacing"><span class="dot"></span>Spacing &amp; Layout</a>
       <a href="#radius"><span class="dot"></span>Radius</a>
       <a href="#elevation"><span class="dot"></span>Elevation</a>
-      <div class="nav-label">Patterns</div>
-      <a href="#components"><span class="dot"></span>Components</a>
-      <a href="#nbs"><span class="dot"></span>NbS-specific</a>
-      <a href="#states"><span class="dot"></span>States</a>
+      <div class="nav-label">Principles</div>
+      <a href="#states"><span class="dot"></span>Interaction states</a>
       <a href="#rules"><span class="dot"></span>Rules</a>
+    </nav>
+
+    <nav class="nav" data-nav="components">
+      <div class="nav-label">Core</div>
+      <a href="#c-nav"><span class="dot"></span>Navigation</a>
+      <a href="#c-buttons"><span class="dot"></span>Buttons</a>
+      <a href="#c-badges"><span class="dot"></span>Badges &amp; Status</a>
+      <a href="#c-forms"><span class="dot"></span>Form Controls</a>
+      <a href="#c-search"><span class="dot"></span>Search &amp; Toolbar</a>
+      <a href="#c-tabs"><span class="dot"></span>Tabs &amp; Chips</a>
+      <a href="#c-stepper"><span class="dot"></span>Stepper</a>
+      <div class="nav-label">Data display</div>
+      <a href="#c-cards"><span class="dot"></span>Cards &amp; Stats</a>
+      <a href="#c-tables"><span class="dot"></span>Tables &amp; Pagination</a>
+      <a href="#c-timeline"><span class="dot"></span>Timeline &amp; Empty</a>
+      <div class="nav-label">Feedback &amp; overlays</div>
+      <a href="#c-accordion"><span class="dot"></span>Accordion</a>
+      <a href="#c-feedback"><span class="dot"></span>Alerts &amp; Toasts</a>
+      <a href="#c-modals"><span class="dot"></span>Modals</a>
+      <a href="#c-upload"><span class="dot"></span>Upload &amp; Progress</a>
+      <div class="nav-label">Signature</div>
+      <a href="#c-nbs"><span class="dot"></span>NbS-specific</a>
     </nav>
 
     <button class="theme-toggle" id="themeToggle" type="button">
@@ -55,6 +80,11 @@
   <!-- ============ MAIN ============ -->
   <main class="main">
     <div class="content">
+
+    <!-- ================================================== -->
+    <!-- VIEW 1 — FOUNDATIONS                               -->
+    <!-- ================================================== -->
+    <div class="view active" id="view-foundations">
 
       <!-- HERO -->
       <header class="hero" id="identity">
@@ -154,36 +184,214 @@
         <div class="elev-grid" id="elevGrid"></div>
       </section>
 
-      <!-- ===== COMPONENTS ===== -->
-      <section class="section" id="components">
+      <!-- ===== STATES ===== -->
+      <section class="section" id="states">
         <div class="section-head">
           <div class="section-num">06</div>
           <div>
-            <h2>Components</h2>
-            <p>Core library patterns composed entirely from the tokens above. Compose from these first; promote any pattern used 3+ times.</p>
+            <h2>Interaction states</h2>
+            <p>Derive every state from the system tokens — step fills one shade darker on hover, add a 3px low-opacity ring on focus. See the Components tab for these states applied live per component.</p>
+          </div>
+        </div>
+        <table class="states">
+          <thead><tr><th>State</th><th>Treatment</th></tr></thead>
+          <tbody>
+            <tr><td class="st-name">Hover</td><td>Step the fill one shade darker (<code>primary-600 → primary-700</code>); neutral fills go to <code>bg-base-third</code>.</td></tr>
+            <tr><td class="st-name">Focus</td><td>3px ring in the relevant family at 15% opacity — <code>ring-primary</code> for brand inputs, <code>ring-purple</code> for informational.</td></tr>
+            <tr><td class="st-name">Active / pressed</td><td>Step two shades darker (<code>primary-800</code>); optional inset shadow.</td></tr>
+            <tr><td class="st-name">Selected</td><td><code>text-primary</code> / <code>stroke-primary</code> on <code>bg-primary-second</code>.</td></tr>
+            <tr><td class="st-name">Disabled</td><td><code>text-disabled</code> on <code>bg-disabled</code>, no pointer events.</td></tr>
+            <tr><td class="st-name">Error</td><td><code>stroke-danger</code> border + <code>text-danger</code> on <code>bg-danger-second</code>.</td></tr>
+            <tr><td class="st-name">Success</td><td><code>text-success</code> / <code>stroke-success</code> on <code>bg-success-second</code>.</td></tr>
+            <tr><td class="st-name">Warning</td><td><code>text-warning</code> / <code>stroke-warning</code> on <code>bg-warning-second</code>.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- ===== RULES ===== -->
+      <section class="section" id="rules">
+        <div class="section-head">
+          <div class="section-num">07</div>
+          <div>
+            <h2>Rules</h2>
+            <p>The short version. The full reference lives in DESIGN.md at the repo root.</p>
+          </div>
+        </div>
+        <div class="rules">
+          <div class="rule-col do">
+            <h4><svg class="mk" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.6"/><path d="M8 12l3 3 5-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Do</h4>
+            <ul>
+              <li><svg class="mk" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Use the primary family for brand actions; reserve success / danger / warning / purple for their semantics.</li>
+              <li><svg class="mk" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Pair each <code>*-main</code> color with its <code>*-second</code> tint for subtle backgrounds.</li>
+              <li><svg class="mk" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Acumin Pro Condensed for display/headlines, Poppins for body/UI.</li>
+              <li><svg class="mk" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Snap spacing to the 4px scale; default controls <code>radius-md</code>, cards <code>radius-lg</code>.</li>
+              <li><svg class="mk" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Honor both light and dark values when building themed components.</li>
+              <li><svg class="mk" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Compose from the Components tab first; promote any pattern used 3+ times.</li>
+            </ul>
+          </div>
+          <div class="rule-col dont">
+            <h4><svg class="mk" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.6"/><path d="M9 9l6 6M15 9l-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Don't</h4>
+            <ul>
+              <li><svg class="mk" viewBox="0 0 24 24" fill="none"><path d="M7 7l10 10M17 7L7 17" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>Introduce hexes outside the palette — use the nearest primitive step or adjust opacity.</li>
+              <li><svg class="mk" viewBox="0 0 24 24" fill="none"><path d="M7 7l10 10M17 7L7 17" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>Repurpose semantic colors (e.g. danger for non-error emphasis).</li>
+              <li><svg class="mk" viewBox="0 0 24 24" fill="none"><path d="M7 7l10 10M17 7L7 17" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>Bring back legacy fonts (Roboto, Lato, DM Sans, IBM Plex, SF Pro, Inter for body).</li>
+              <li><svg class="mk" viewBox="0 0 24 24" fill="none"><path d="M7 7l10 10M17 7L7 17" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>Invent spacing or radii outside the scales — add to DESIGN.md first if genuinely needed.</li>
+              <li><svg class="mk" viewBox="0 0 24 24" fill="none"><path d="M7 7l10 10M17 7L7 17" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>Flatten the shadow system into single hard shadows.</li>
+              <li><svg class="mk" viewBox="0 0 24 24" fill="none"><path d="M7 7l10 10M17 7L7 17" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>Fork a new variant of an existing component — extend the documented one instead.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+    </div><!-- /view-foundations -->
+
+    <!-- ================================================== -->
+    <!-- VIEW 2 — COMPONENTS                                -->
+    <!-- ================================================== -->
+    <div class="view" id="view-components">
+
+      <header class="hero" id="c-identity">
+        <div class="eyebrow">Component Library · Interactions &amp; States</div>
+        <h1>Every reusable component, live.</h1>
+        <p>The shared patterns used across the V3 screens — Interactive Map, Data Analyser, Dashboard, Monitoring Plan, MRV, Auth and Settings — composed entirely from the foundation tokens. Everything here is interactive: hover, click, toggle, open and drag the demos. Grey <em>state matrices</em> show the forced hover / focus / active / disabled treatments side by side.</p>
+        <div class="meta">
+          <span class="meta-chip">15 component families</span>
+          <span class="meta-chip">Live interactions</span>
+          <span class="meta-chip">Light + Dark</span>
+          <span class="meta-chip">Token-only styling</span>
+        </div>
+      </header>
+
+      <!-- ===== NAVIGATION ===== -->
+      <section class="section" id="c-nav">
+        <div class="section-head">
+          <div class="section-num">01</div>
+          <div>
+            <h2>Navigation</h2>
+            <p>The global top bar (<code>.sitenav</code>, on all 11 screens), breadcrumb bar (<code>.crumbbar</code>) and the profile dropdown menu. Active link: <code>text-primary</code> + 2px bottom stroke. Collapses to a burger at ≤860px.</p>
           </div>
         </div>
 
-        <div class="subhead">Buttons</div>
+        <div class="subhead">Top navigation bar</div>
         <div class="demo">
-          <span class="demo-label">Hierarchy</span>
+          <div class="ds-nav">
+            <div class="brand-mark">
+              <div class="brand-logo" style="width:32px;height:32px">
+                <svg viewBox="0 0 24 24" fill="none" style="width:18px;height:18px"><path d="M12 21C12 21 4 16.5 4 10C4 6 7 3.5 12 3.5C17 3.5 20 6 20 10C20 16.5 12 21 12 21Z" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/><path d="M12 21V11M12 11C12 9 10.5 7.5 8.5 7.5M12 11C12 8.5 14 6.5 16.5 6.5" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <div class="brand-name" style="font-size:18px">NbS Tool</div>
+            </div>
+            <div class="ds-nav-links">
+              <a class="ds-nav-link" href="javascript:void(0)">Home</a>
+              <a class="ds-nav-link active" href="javascript:void(0)">Interactive Map</a>
+              <a class="ds-nav-link" href="javascript:void(0)">My Projects</a>
+              <a class="ds-nav-link" href="javascript:void(0)">MRV</a>
+            </div>
+            <div class="ds-nav-actions">
+              <button class="btn btn-secondary btn-sm" type="button">Sign up</button>
+              <button class="btn btn-primary btn-sm" type="button">Log in</button>
+              <span class="avatar sm">AB</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="demo" style="align-items:flex-start">
+          <div style="display:flex;flex-direction:column;gap:var(--space-12)">
+            <span class="demo-label">Breadcrumbs</span>
+            <div class="crumbs">
+              <a href="javascript:void(0)">My Projects</a>
+              <span class="sep">/</span>
+              <a href="javascript:void(0)">Mangrove Restoration — Java</a>
+              <span class="sep">/</span>
+              <span class="cur">Monitoring Plan</span>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:var(--space-12);margin-left:auto">
+            <span class="demo-label">Profile dropdown (open)</span>
+            <div class="menu">
+              <div class="m-head">
+                <span class="avatar">AB</span>
+                <div><div class="m-name">Abe Besrat</div><div class="m-mail">abe@scene-coalition.org</div></div>
+              </div>
+              <a href="javascript:void(0)"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.8"/><path d="M4 20c1.5-3.5 4.5-5 8-5s6.5 1.5 8 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Account settings</a>
+              <a href="javascript:void(0)"><svg viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="16" height="16" rx="3" stroke="currentColor" stroke-width="1.8"/><path d="M8 10h8M8 14h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>My projects</a>
+              <a class="logout" href="javascript:void(0)"><svg viewBox="0 0 24 24" fill="none"><path d="M15 4h3a2 2 0 012 2v12a2 2 0 01-2 2h-3M10 8l-4 4 4 4M6 12h9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Log out</a>
+            </div>
+          </div>
+        </div>
+        <div class="note"><strong>States</strong> — link hover: <code>bg-base-third</code>; active link: <code>text-primary</code> + bottom stroke; menu item hover: <code>bg-base-third</code>; logout hover: <code>bg-danger-second</code>.</div>
+      </section>
+
+      <!-- ===== BUTTONS ===== -->
+      <section class="section" id="c-buttons">
+        <div class="section-head">
+          <div class="section-num">02</div>
+          <div>
+            <h2>Buttons</h2>
+            <p>One <code>.btn</code> base, four intents, three sizes, plus 32px icon buttons for table rows. Hover steps the fill one shade darker, active two; focus adds <code>ring-primary</code>. Hover the live row to feel the transitions.</p>
+          </div>
+        </div>
+
+        <div class="subhead">Hierarchy (live)</div>
+        <div class="demo">
           <button class="btn btn-primary" type="button">Start Using NbS Tool</button>
           <button class="btn btn-secondary" type="button">Export AOI</button>
           <button class="btn btn-ghost" type="button">Show More</button>
           <button class="btn btn-danger" type="button">Leave anyway</button>
-          <button class="btn btn-disabled" type="button" disabled>Disabled</button>
+          <button class="btn" type="button" disabled>Disabled</button>
         </div>
+
+        <div class="subhead">State matrix</div>
         <div class="demo">
-          <span class="demo-label">Sizes &amp; icon</span>
+          <div class="state-grid">
+            <span class="sg-h"></span><span class="sg-h">Default</span><span class="sg-h">Hover</span><span class="sg-h">Focus</span><span class="sg-h">Active</span><span class="sg-h">Disabled</span>
+            <span class="sg-r">Primary</span>
+            <button class="btn btn-primary" type="button">Save</button>
+            <button class="btn btn-primary sx-hover" type="button">Save</button>
+            <button class="btn btn-primary sx-focus" type="button">Save</button>
+            <button class="btn btn-primary sx-active" type="button">Save</button>
+            <button class="btn" type="button" disabled>Save</button>
+            <span class="sg-r">Secondary</span>
+            <button class="btn btn-secondary" type="button">Cancel</button>
+            <button class="btn btn-secondary sx-hover" type="button">Cancel</button>
+            <button class="btn btn-secondary sx-focus" type="button">Cancel</button>
+            <button class="btn btn-secondary sx-hover" type="button">Cancel</button>
+            <button class="btn" type="button" disabled>Cancel</button>
+            <span class="sg-r">Danger</span>
+            <button class="btn btn-danger" type="button">Delete</button>
+            <button class="btn btn-danger sx-hover" type="button">Delete</button>
+            <button class="btn btn-danger sx-focus" type="button">Delete</button>
+            <button class="btn btn-danger sx-active" type="button">Delete</button>
+            <button class="btn" type="button" disabled>Delete</button>
+          </div>
+        </div>
+
+        <div class="subhead">Sizes, icon &amp; icon-only</div>
+        <div class="demo">
           <button class="btn btn-primary btn-sm" type="button">Small</button>
           <button class="btn btn-primary" type="button">
             <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             Generate Map
           </button>
           <button class="btn btn-primary btn-lg" type="button">Large</button>
+          <button class="iconbtn" type="button" aria-label="Edit"><svg viewBox="0 0 24 24" fill="none"><path d="M4 20h4L19 9a2.4 2.4 0 00-4-3L4 16v4z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></button>
+          <button class="iconbtn" type="button" aria-label="Duplicate"><svg viewBox="0 0 24 24" fill="none"><rect x="8" y="8" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M16 8V6a2 2 0 00-2-2H6a2 2 0 00-2 2v8a2 2 0 002 2h2" stroke="currentColor" stroke-width="1.8"/></svg></button>
+          <button class="iconbtn danger" type="button" aria-label="Delete"><svg viewBox="0 0 24 24" fill="none"><path d="M5 7h14M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </div>
+        <div class="note"><strong>Variant map</strong> — landing pages use the pill <code>.cbtn</code> family and MRV uses <code>.hero-btn</code>; both are page-local skins of this hierarchy. New screens use <code>.btn</code>.</div>
+      </section>
+
+      <!-- ===== BADGES ===== -->
+      <section class="section" id="c-badges">
+        <div class="section-head">
+          <div class="section-num">03</div>
+          <div>
+            <h2>Badges &amp; Status</h2>
+            <p>Semantic badges plus the project-lifecycle status set used on the Dashboard and project tables. Pill radius, 12px/600, optional leading dot.</p>
+          </div>
         </div>
 
-        <div class="subhead">Badges &amp; tags</div>
+        <div class="subhead">Semantic</div>
         <div class="demo">
           <span class="badge badge-primary"><span class="bd-dot"></span>Protect</span>
           <span class="badge badge-success"><span class="bd-dot"></span>Verified · Tier 3</span>
@@ -193,28 +401,411 @@
           <span class="badge badge-neutral">Draft</span>
         </div>
 
-        <div class="subhead">Inputs</div>
+        <div class="subhead">Project lifecycle (Dashboard)</div>
+        <div class="demo">
+          <span class="badge badge-neutral"><span class="bd-dot"></span>Draft</span>
+          <span class="badge badge-purple"><span class="bd-dot"></span>Generated</span>
+          <span class="badge badge-warning"><span class="bd-dot"></span>Monitoring</span>
+          <span class="badge badge-primary"><span class="bd-dot"></span>Completed</span>
+          <span class="badge badge-success"><span class="bd-dot"></span>Verified</span>
+        </div>
+        <div class="note"><strong>Mapping</strong> — Draft → neutral · Generated → purple · Monitoring → warning · Completed → primary · Verified → success. Badges are static: no hover or focus states.</div>
+      </section>
+
+      <!-- ===== FORM CONTROLS ===== -->
+      <section class="section" id="c-forms">
+        <div class="section-head">
+          <div class="section-num">04</div>
+          <div>
+            <h2>Form Controls</h2>
+            <p>Text inputs with leading/trailing adornments, select, textarea, checkbox, radio, toggle switch and range slider. Focus always shows <code>ring-primary</code>; errors switch the border and ring to the danger family.</p>
+          </div>
+        </div>
+
+        <div class="subhead">Text inputs (live focus)</div>
         <div class="demo" style="align-items:flex-start">
           <div class="field">
-            <label for="i1">Project name</label>
-            <input class="input" id="i1" type="text" placeholder="e.g. Mangrove Restoration — Java" />
+            <label for="fi1">Project name</label>
+            <input class="input" id="fi1" type="text" placeholder="e.g. Mangrove Restoration — Java" />
             <span class="hint">Used across the project dashboard.</span>
           </div>
           <div class="field">
-            <label for="i2">Area of interest</label>
-            <input class="input is-error" id="i2" type="text" value="0.0 ha" />
+            <label for="fi2">Area of interest</label>
+            <input class="input is-error" id="fi2" type="text" value="0.0 ha" />
             <span class="hint err">Select an area on the map first.</span>
           </div>
-          <div class="field" style="width:auto;justify-content:flex-end">
-            <label>&nbsp;</label>
-            <div style="display:flex;flex-direction:column;gap:12px">
-              <label class="check on"><span class="box"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Vegetation cover</label>
-              <label class="check"><span class="box"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>GEDSI indicators</label>
+          <div class="field">
+            <label for="fi3">Reference ID</label>
+            <input class="input" id="fi3" type="text" value="NBS-2026-0042" disabled />
+            <span class="hint">Disabled — system generated.</span>
+          </div>
+        </div>
+
+        <div class="subhead">Adornments, select &amp; textarea</div>
+        <div class="demo" style="align-items:flex-start">
+          <div class="field">
+            <label for="fi4">Search location</label>
+            <div class="inputbox has-lead">
+              <svg class="lead" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/><path d="M20 20l-3.5-3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+              <input class="input" id="fi4" type="text" placeholder="Kalimantan, Indonesia" />
+            </div>
+          </div>
+          <div class="field">
+            <label for="fi5">Password</label>
+            <div class="inputbox has-trail">
+              <input class="input" id="fi5" type="password" value="hunter-green" />
+              <button class="trail-btn" type="button" data-pw="fi5">Show</button>
+            </div>
+          </div>
+          <div class="field">
+            <label for="fi6">Ecosystem type</label>
+            <div class="selectbox">
+              <select class="input" id="fi6">
+                <option>Mangrove</option><option>Tropical forest</option><option>Peatland</option><option>Coastal wetland</option>
+              </select>
+              <svg class="chev" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+          </div>
+          <div class="field" style="width:100%;max-width:400px">
+            <label for="fi7">Project description</label>
+            <textarea class="input" id="fi7" placeholder="Describe the intervention area, target ecosystem and community context…"></textarea>
+          </div>
+        </div>
+
+        <div class="subhead">Checkbox · Radio · Toggle (click them)</div>
+        <div class="demo" style="align-items:flex-start;gap:var(--space-48)">
+          <div style="display:flex;flex-direction:column;gap:var(--space-12)">
+            <span class="demo-label">Checkboxes</span>
+            <label class="check on"><span class="box"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Vegetation cover</label>
+            <label class="check"><span class="box"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>GEDSI indicators</label>
+            <label class="check"><span class="box"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Soil carbon</label>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:var(--space-12)">
+            <span class="demo-label">Radios</span>
+            <label class="radio"><input type="radio" name="tier" checked /><span class="rdot"></span><span>Tier 1 — system data</span></label>
+            <label class="radio"><input type="radio" name="tier" /><span class="rdot"></span><span>Tier 2 — national data</span></label>
+            <label class="radio"><input type="radio" name="tier" disabled /><span class="rdot"></span><span>Tier 3 — field verified</span></label>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:var(--space-12)">
+            <span class="demo-label">Toggle switches</span>
+            <div class="tgl-row"><button class="tgl" type="button" aria-pressed="true" aria-label="Email notifications"></button>Email notifications</div>
+            <div class="tgl-row"><button class="tgl" type="button" aria-pressed="false" aria-label="Public project page"></button>Public project page</div>
+            <div class="tgl-row"><button class="tgl" type="button" aria-pressed="false" disabled aria-label="Auto-verification"></button>Auto-verification</div>
+          </div>
+        </div>
+
+        <div class="subhead">Range slider &amp; loading</div>
+        <div class="demo" style="gap:var(--space-48)">
+          <div class="range-wrap">
+            <div class="range-head"><span>Monitoring duration</span><span class="val"><b id="rangeVal">10</b> yrs</span></div>
+            <input type="range" class="range" id="rangeDemo" min="1" max="30" value="10" />
+          </div>
+          <div style="display:flex;align-items:center;gap:var(--space-12);font-size:13px;color:var(--text-base-second)">
+            <span class="spinner" aria-hidden="true"></span>Loading admin boundaries…
+          </div>
+        </div>
+        <div class="note"><strong>States</strong> — focus: <code>stroke-primary</code> + <code>ring-primary</code> · error: <code>stroke-danger</code> + <code>ring-danger</code> · disabled: <code>bg-disabled</code> / <code>text-disabled</code>. Checked fills are always <code>bg-primary-main</code>.</div>
+      </section>
+
+      <!-- ===== SEARCH & TOOLBAR ===== -->
+      <section class="section" id="c-search">
+        <div class="section-head">
+          <div class="section-num">05</div>
+          <div>
+            <h2>Search &amp; Toolbar</h2>
+            <p>The pill search box (Dashboard, Interactive Map) and the grid/list view toggle. Search gets the primary ring on <code>:focus-within</code>.</p>
+          </div>
+        </div>
+        <div class="demo">
+          <div class="searchbox">
+            <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/><path d="M20 20l-3.5-3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            <input type="text" placeholder="Search projects…" aria-label="Search projects" />
+          </div>
+          <div class="viewtoggle" role="group" aria-label="View mode">
+            <button type="button" class="on" aria-label="Grid view"><svg viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.8"/><rect x="13" y="4" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.8"/><rect x="4" y="13" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.8"/><rect x="13" y="13" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.8"/></svg></button>
+            <button type="button" aria-label="List view"><svg viewBox="0 0 24 24" fill="none"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+          </div>
+          <div class="selectbox" style="width:180px">
+            <select class="input" aria-label="Sort projects">
+              <option>Last updated</option><option>Name A–Z</option><option>Area (ha)</option>
+            </select>
+            <svg class="chev" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== TABS & CHIPS ===== -->
+      <section class="section" id="c-tabs">
+        <div class="section-head">
+          <div class="section-num">06</div>
+          <div>
+            <h2>Tabs &amp; Chips</h2>
+            <p>Underline tabs for content panes (Data Analyser, project detail), segmented controls for exclusive modes (Auth, report views), filter chips for multi-select filtering (MRV). All three are live — click around.</p>
+          </div>
+        </div>
+
+        <div class="subhead">Underline tabs</div>
+        <div class="demo">
+          <div class="tabs-underline" role="tablist">
+            <button class="tab active" type="button" role="tab" aria-selected="true">Climate</button>
+            <button class="tab" type="button" role="tab" aria-selected="false">Nature</button>
+            <button class="tab" type="button" role="tab" aria-selected="false">People</button>
+          </div>
+        </div>
+
+        <div class="subhead">Segmented control</div>
+        <div class="demo">
+          <div class="seg" role="tablist">
+            <button class="active" type="button">Log in</button>
+            <button type="button">Sign up</button>
+          </div>
+          <div class="seg" role="tablist">
+            <button class="active" type="button">Map</button>
+            <button type="button">Table</button>
+            <button type="button">Report</button>
+          </div>
+        </div>
+
+        <div class="subhead">Filter chips (multi-select)</div>
+        <div class="demo">
+          <button class="fchip active" type="button">All ecosystems</button>
+          <button class="fchip" type="button">Mangrove</button>
+          <button class="fchip" type="button">Peatland</button>
+          <button class="fchip" type="button">Tropical forest</button>
+          <button class="fchip" type="button">Coastal wetland</button>
+        </div>
+        <div class="note"><strong>States</strong> — tab hover: <code>text-base-main</code>; selected tab: <code>text-primary</code> + 2px <code>stroke-primary</code>. Chip hover: <code>primary-300</code> border; selected chip: solid <code>bg-primary-main</code>.</div>
+      </section>
+
+      <!-- ===== STEPPER ===== -->
+      <section class="section" id="c-stepper">
+        <div class="section-head">
+          <div class="section-num">07</div>
+          <div>
+            <h2>Stepper</h2>
+            <p>The wizard progress pattern of the Design-to-MRV flow. Three step states — done (check on <code>primary-100</code>), current (<code>bg-success-second</code> pill), todo (muted) — joined by dashed dividers.</p>
+          </div>
+        </div>
+        <div class="demo">
+          <div class="stepper">
+            <span class="step done"><span class="n"><svg viewBox="0 0 24 24" fill="none" style="width:12px;height:12px"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Select Location</span>
+            <span class="step-div"></span>
+            <span class="step current"><span class="n">2</span>Analyse Baseline</span>
+            <span class="step-div"></span>
+            <span class="step todo"><span class="n">3</span>Select Pathway</span>
+            <span class="step-div"></span>
+            <span class="step todo"><span class="n">4</span>Document</span>
+          </div>
+        </div>
+        <div class="note"><strong>Variants</strong> — the map wizard (<code>.da-steps</code>) collapses todo labels to numerals; the Doc Generator uses a vertical rail (<code>.snav-item</code>); the Monitoring Plan uses a 5-step version. All share these three states.</div>
+      </section>
+
+      <!-- ===== CARDS & STATS ===== -->
+      <section class="section" id="c-cards">
+        <div class="section-head">
+          <div class="section-num">08</div>
+          <div>
+            <h2>Cards &amp; Stats</h2>
+            <p>KPI cards (MRV dashboard), ecosystem icon chips (Dashboard, Map) and avatars. Cards rest on <code>elevation-2</code> and never exceed <code>radius-xl</code>.</p>
+          </div>
+        </div>
+
+        <div class="subhead">KPI cards</div>
+        <div class="demo">
+          <div class="kpi-grid">
+            <div class="kpi-card">
+              <span class="kpi-icon green"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21C12 21 4 16.5 4 10C4 6 7 3.5 12 3.5C17 3.5 20 6 20 10C20 16.5 12 21 12 21Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></span>
+              <div><div class="kpi-value">1,248<small>ha</small></div><div class="kpi-label">Area under restoration</div></div>
+              <span class="kpi-trend up">▲ 12% vs last quarter</span>
+            </div>
+            <div class="kpi-card">
+              <span class="kpi-icon blue"><svg viewBox="0 0 24 24" fill="none"><path d="M4 18c2-6 6-10 8-10s6 4 8 10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M4 21h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+              <div><div class="kpi-value">92.4<small>tC/ha</small></div><div class="kpi-label">Mean carbon stock</div></div>
+              <span class="kpi-trend up">▲ 3.1 tC/ha</span>
+            </div>
+            <div class="kpi-card">
+              <span class="kpi-icon amber"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 7v5l3 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+              <div><div class="kpi-value">7<small>of 12</small></div><div class="kpi-label">Indicators due this cycle</div></div>
+              <span class="kpi-trend flat">— unchanged</span>
+            </div>
+            <div class="kpi-card">
+              <span class="kpi-icon violet"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.8"/><path d="M4 20c1.5-3.5 4.5-5 8-5s6.5 1.5 8 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+              <div><div class="kpi-value">340</div><div class="kpi-label">Households engaged</div></div>
+              <span class="kpi-trend up">▲ 28 new</span>
             </div>
           </div>
         </div>
 
-        <div class="subhead">Alerts</div>
+        <div class="subhead">Ecosystem chips &amp; avatars</div>
+        <div class="demo" style="gap:var(--space-48)">
+          <div style="display:flex;gap:var(--space-12);align-items:center">
+            <span class="eco mangrove" title="Mangrove"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21V9M12 9C12 6 9.5 4 6.5 4c0 3 2 5.5 5.5 5.5M12 9c0-3 2.5-5 5.5-5 0 3-2 5.5-5.5 5.5M7 21c1.5-2 3-3 5-3s3.5 1 5 3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="eco forest" title="Tropical forest"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3l5 7h-3l4 6h-5v5h-2v-5H6l4-6H7l5-7z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></span>
+            <span class="eco peat" title="Peatland"><svg viewBox="0 0 24 24" fill="none"><path d="M4 15c2-1.5 4-1.5 6 0s4 1.5 6 0 3-1 4 0M4 19c2-1.5 4-1.5 6 0s4 1.5 6 0 3-1 4 0M12 11V4M9 7l3-3 3 3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="eco coastal" title="Coastal wetland"><svg viewBox="0 0 24 24" fill="none"><path d="M3 17c2-2 4-2 6 0s4 2 6 0 4-2 6 0M3 21c2-2 4-2 6 0s4 2 6 0 4-2 6 0M17 8a5 5 0 00-10 0" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></span>
+          </div>
+          <div style="display:flex;gap:var(--space-16);align-items:center">
+            <span class="avatar sm">RD</span>
+            <span class="avatar">AB</span>
+            <span class="avatar lg">SC</span>
+            <div class="av-stack">
+              <span class="avatar sm">AB</span>
+              <span class="avatar sm violet">RD</span>
+              <span class="avatar sm amber">TN</span>
+              <span class="avatar sm more">+4</span>
+            </div>
+          </div>
+        </div>
+        <div class="note"><strong>Ecosystem tints</strong> — mangrove → success · forest → primary · peat → warning · coastal → info. Avatar stacks overlap −8px with a 2px surface border; overflow renders as a neutral <code>+N</code> chip.</div>
+      </section>
+
+      <!-- ===== TABLES ===== -->
+      <section class="section" id="c-tables">
+        <div class="section-head">
+          <div class="section-num">09</div>
+          <div>
+            <h2>Tables &amp; Pagination</h2>
+            <p>The project table pattern (Dashboard, MRV indicators): uppercase 11px headers on <code>bg-base-second</code>, sortable columns, row hover, and inline cells for status, progress, collaborators and actions.</p>
+          </div>
+        </div>
+        <div class="demo col">
+          <div class="ds-table-card">
+            <table class="ds-table">
+              <thead>
+                <tr>
+                  <th class="sortable" data-sort>Project <span class="ar">↓</span></th>
+                  <th>Status</th>
+                  <th>Progress</th>
+                  <th>Area</th>
+                  <th>Team</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span class="proj-cell"><span class="eco mangrove"><svg viewBox="0 0 24 24" fill="none" style="width:18px;height:18px"><path d="M12 21V9M12 9C12 6 9.5 4 6.5 4c0 3 2 5.5 5.5 5.5M12 9c0-3 2.5-5 5.5-5 0 3-2 5.5-5.5 5.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Mangrove Restoration — Java</span></td>
+                  <td><span class="badge badge-success"><span class="bd-dot"></span>Verified</span></td>
+                  <td><span class="mini-bar"><i style="width:88%"></i></span></td>
+                  <td>412 ha</td>
+                  <td><div class="av-stack"><span class="avatar sm">AB</span><span class="avatar sm violet">RD</span><span class="avatar sm more">+2</span></div></td>
+                  <td><div class="row-actions"><button class="iconbtn" type="button" aria-label="Edit"><svg viewBox="0 0 24 24" fill="none"><path d="M4 20h4L19 9a2.4 2.4 0 00-4-3L4 16v4z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></button><button class="iconbtn danger" type="button" aria-label="Delete"><svg viewBox="0 0 24 24" fill="none"><path d="M5 7h14M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div></td>
+                </tr>
+                <tr>
+                  <td><span class="proj-cell"><span class="eco peat"><svg viewBox="0 0 24 24" fill="none" style="width:18px;height:18px"><path d="M4 15c2-1.5 4-1.5 6 0s4 1.5 6 0 3-1 4 0M4 19c2-1.5 4-1.5 6 0s4 1.5 6 0 3-1 4 0" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></span>Peatland Rewetting — Riau</span></td>
+                  <td><span class="badge badge-warning"><span class="bd-dot"></span>Monitoring</span></td>
+                  <td><span class="mini-bar"><i style="width:54%"></i></span></td>
+                  <td>1,080 ha</td>
+                  <td><div class="av-stack"><span class="avatar sm amber">TN</span><span class="avatar sm">SC</span></div></td>
+                  <td><div class="row-actions"><button class="iconbtn" type="button" aria-label="Edit"><svg viewBox="0 0 24 24" fill="none"><path d="M4 20h4L19 9a2.4 2.4 0 00-4-3L4 16v4z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></button><button class="iconbtn danger" type="button" aria-label="Delete"><svg viewBox="0 0 24 24" fill="none"><path d="M5 7h14M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div></td>
+                </tr>
+                <tr>
+                  <td><span class="proj-cell"><span class="eco coastal"><svg viewBox="0 0 24 24" fill="none" style="width:18px;height:18px"><path d="M3 17c2-2 4-2 6 0s4 2 6 0 4-2 6 0M17 8a5 5 0 00-10 0" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></span>Coastal Buffer — Mekong Delta</span></td>
+                  <td><span class="badge badge-neutral"><span class="bd-dot"></span>Draft</span></td>
+                  <td><span class="mini-bar"><i style="width:12%"></i></span></td>
+                  <td>96 ha</td>
+                  <td><div class="av-stack"><span class="avatar sm">AB</span></div></td>
+                  <td><div class="row-actions"><button class="iconbtn" type="button" aria-label="Edit"><svg viewBox="0 0 24 24" fill="none"><path d="M4 20h4L19 9a2.4 2.4 0 00-4-3L4 16v4z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></button><button class="iconbtn danger" type="button" aria-label="Delete"><svg viewBox="0 0 24 24" fill="none"><path d="M5 7h14M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="pager">
+            <span class="info">Showing 1 to 3 of 24 projects</span>
+            <div class="pages">
+              <button class="pg" type="button" aria-label="Previous page"><svg viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              <button class="pg on" type="button">1</button>
+              <button class="pg" type="button">2</button>
+              <button class="pg" type="button">3</button>
+              <button class="pg" type="button" aria-label="Next page"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            </div>
+          </div>
+        </div>
+        <div class="note"><strong>Interactions</strong> — row hover: <code>bg-base-second</code>; sortable header click flips the arrow; page buttons move the solid <code>bg-primary-main</code> state. Tables scroll horizontally under 640px — never reflow columns.</div>
+      </section>
+
+      <!-- ===== TIMELINE & EMPTY ===== -->
+      <section class="section" id="c-timeline">
+        <div class="section-head">
+          <div class="section-num">10</div>
+          <div>
+            <h2>Timeline &amp; Empty state</h2>
+            <p>The vertical monitoring timeline (MRV, project detail) with done / active / upcoming nodes, and the empty state for zero-data views.</p>
+          </div>
+        </div>
+        <div class="demo" style="align-items:flex-start;gap:var(--space-48)">
+          <div class="timeline">
+            <div class="tl-item">
+              <span class="tl-dot done"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              <div class="tl-title">Baseline established</div>
+              <div class="tl-meta">Jan 2026 · Tier 1 system data</div>
+            </div>
+            <div class="tl-item">
+              <span class="tl-dot done"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              <div class="tl-title">Monitoring plan approved</div>
+              <div class="tl-meta">Mar 2026 · 12 indicators</div>
+            </div>
+            <div class="tl-item">
+              <span class="tl-dot active"></span>
+              <div class="tl-title">First monitoring cycle</div>
+              <div class="tl-meta">In progress · due Sep 2026</div>
+            </div>
+            <div class="tl-item">
+              <span class="tl-dot"></span>
+              <div class="tl-title">Tier 3 field verification</div>
+              <div class="tl-meta">Scheduled · 2027</div>
+            </div>
+          </div>
+          <div class="empty" style="flex:1;min-width:260px">
+            <span class="ic"><svg viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="16" height="16" rx="3" stroke="currentColor" stroke-width="1.8"/><path d="M8 10h8M8 14h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+            <h3>No projects yet</h3>
+            <p>Draw an area of interest on the Interactive Map to start your first Design-to-MRV workflow.</p>
+            <button class="btn btn-primary" type="button">Open Interactive Map</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== ACCORDION ===== -->
+      <section class="section" id="c-accordion">
+        <div class="section-head">
+          <div class="section-num">11</div>
+          <div>
+            <h2>Accordion</h2>
+            <p>Progressive disclosure for methods and FAQ content (Monitoring Plan). Chevron rotates 180° when open. Click to toggle.</p>
+          </div>
+        </div>
+        <div class="demo col" style="gap:var(--space-8)">
+          <div class="accordion open">
+            <button class="acc-head" type="button" aria-expanded="true">How is above-ground biomass estimated?
+              <svg class="acc-chev" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <div class="acc-body">Tier 1 uses regional allometric models on harmonised satellite layers (30m). Upgrading to Tier 2/3 replaces these with national datasets or field plots, and the analyser recomputes carbon stock automatically.</div>
+          </div>
+          <div class="accordion">
+            <button class="acc-head" type="button" aria-expanded="false">Which indicators are mandatory?
+              <svg class="acc-chev" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <div class="acc-body">Vegetation cover, above-ground biomass and carbon stock are mandatory. Socio-economic and GEDSI indicators are additional and unlock the People benefit report.</div>
+          </div>
+          <div class="accordion">
+            <button class="acc-head" type="button" aria-expanded="false">Can I export the monitoring plan?
+              <svg class="acc-chev" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <div class="acc-body">Yes — the Document Generator exports the full plan as a donor-ready PDF, including the AOI map, baseline read-out and indicator schedule.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== ALERTS & TOASTS ===== -->
+      <section class="section" id="c-feedback">
+        <div class="section-head">
+          <div class="section-num">12</div>
+          <div>
+            <h2>Alerts &amp; Toasts</h2>
+            <p>Inline alerts carry a colored left border + icon per semantic family. Toasts confirm background actions: a dark pill for quick confirmations, a white card for undoable ones.</p>
+          </div>
+        </div>
+
+        <div class="subhead">Inline alerts</div>
         <div class="demo col">
           <div class="alert info">
             <svg class="ic" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 11v5M12 8h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
@@ -238,31 +829,99 @@
           </div>
         </div>
 
-        <div class="subhead">Stepper</div>
+        <div class="subhead">Toasts</div>
+        <div class="demo" style="align-items:flex-start">
+          <div style="display:flex;flex-direction:column;gap:var(--space-12)">
+            <span class="demo-label">Dark pill (auto-dismiss)</span>
+            <div class="toast" style="align-self:flex-start">
+              <svg class="t-ic" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M8 12l3 3 5-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Changes saved
+            </div>
+            <button class="btn btn-secondary btn-sm" type="button" id="toastBtn" style="align-self:flex-start">Trigger live toast</button>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:var(--space-12)">
+            <span class="demo-label">Card toast (undoable)</span>
+            <div class="card-toast">
+              <svg class="ct-ic" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M8 12l3 3 5-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <div><h6>Project deleted</h6><p>"Coastal Buffer — Mekong Delta" was removed. <a href="javascript:void(0)" style="color:var(--text-primary);font-weight:600">Undo</a></p></div>
+              <svg class="x" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== MODALS ===== -->
+      <section class="section" id="c-modals">
+        <div class="section-head">
+          <div class="section-num">13</div>
+          <div>
+            <h2>Modals</h2>
+            <p>Centered <code>radius-xl</code> card on a blurred scrim, <code>elevation-6</code>. Scale-in on open; closes via ✕, cancel, or scrim click. Destructive confirmations lead with a danger icon.</p>
+          </div>
+        </div>
+        <div class="demo" style="align-items:flex-start">
+          <div class="ds-modal static">
+            <button class="modal-x" type="button" aria-label="Close"><svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+            <div class="modal-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 4l9 16H3L12 4z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 10v4M12 17h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+            <h3 class="modal-title">Leave without saving?</h3>
+            <p class="modal-desc">If you leave now you'll lose the current baseline analysis. Save your analysis before exiting.</p>
+            <div class="modal-btns">
+              <button class="btn btn-secondary" type="button">Keep editing</button>
+              <button class="btn btn-danger" type="button">Leave anyway</button>
+            </div>
+          </div>
+          <button class="btn btn-primary" type="button" id="openModal">Open live modal</button>
+        </div>
+      </section>
+
+      <!-- ===== UPLOAD & PROGRESS ===== -->
+      <section class="section" id="c-upload">
+        <div class="section-head">
+          <div class="section-num">14</div>
+          <div>
+            <h2>Upload &amp; Progress</h2>
+            <p>The dashed dropzone (Monitoring Plan import) turns teal on hover / drag-over. Progress bars share one track; the semantic fill tells the story. Drag a file over the zone to see the state.</p>
+          </div>
+        </div>
+
+        <div class="subhead">Dropzone</div>
         <div class="demo">
-          <div class="stepper">
-            <span class="step done"><span class="n"><svg viewBox="0 0 24 24" fill="none" style="width:12px;height:12px"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Select Location</span>
-            <span class="step-div"></span>
-            <span class="step current"><span class="n">2</span>Analyse Baseline</span>
-            <span class="step-div"></span>
-            <span class="step todo"><span class="n">3</span>Select Pathway</span>
-            <span class="step-div"></span>
-            <span class="step todo"><span class="n">4</span>Document</span>
+          <div class="dropzone" id="dropzone" role="button" tabindex="0" aria-label="Upload a file">
+            <span class="dz-ic"><svg viewBox="0 0 24 24" fill="none"><path d="M12 16V5M8 9l4-4 4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 15v3a2 2 0 002 2h12a2 2 0 002-2v-3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+            <h6>Drop your shapefile or GeoJSON here</h6>
+            <p>or <span style="color:var(--text-primary);font-weight:600">browse files</span> · max 50 MB</p>
+            <div class="fmt-chips"><span class="fmt-chip">.SHP</span><span class="fmt-chip">.GEOJSON</span><span class="fmt-chip">.KML</span><span class="fmt-chip">.CSV</span></div>
+          </div>
+        </div>
+
+        <div class="subhead">Progress bars</div>
+        <div class="demo col" style="gap:var(--space-24)">
+          <div class="prog">
+            <div class="prog-head"><span>Processing boundary…</span><b>64%</b></div>
+            <div class="prog-track"><div class="prog-fill" style="width:64%"></div></div>
+          </div>
+          <div class="prog">
+            <div class="prog-head"><span>Indicators verified</span><b>10 of 12</b></div>
+            <div class="prog-track"><div class="prog-fill success" style="width:83%"></div></div>
+          </div>
+          <div class="prog">
+            <div class="prog-head"><span>Monitoring cycle — data collected</span><b>38%</b></div>
+            <div class="prog-track"><div class="prog-fill warning" style="width:38%"></div></div>
           </div>
         </div>
       </section>
 
       <!-- ===== NBS-SPECIFIC ===== -->
-      <section class="section" id="nbs">
+      <section class="section" id="c-nbs">
         <div class="section-head">
-          <div class="section-num">07</div>
+          <div class="section-num">15</div>
           <div>
             <h2>NbS-specific patterns</h2>
-            <p>The signature surfaces of the tool: the Data Analyser panel (the technical baseline read-out) and the Interactive Map layer controls.</p>
+            <p>The signature surfaces of the tool: the Data Analyser panel, the Interactive Map layer controls, and the selectable pathway cards. Pathway language is fixed: <strong>Protect · Manage · Restore</strong>.</p>
           </div>
         </div>
 
-        <div class="subhead">Data Analyser panel</div>
+        <div class="subhead">Data Analyser panel &amp; layer toggles</div>
         <div class="demo" style="align-items:flex-start;gap:var(--space-32)">
           <div class="analyzer">
             <div class="title-panel">
@@ -306,69 +965,52 @@
             </div>
           </div>
         </div>
-        <div class="note">Pathway language is fixed: <strong>Protect · Manage · Restore</strong>. The triple-benefit framing (Climate · People · Nature) drives the analyser tabs. Mandatory inputs (vegetation cover, biomass, carbon stocks) read as primary metrics; additional inputs (socio-economic, GEDSI) as secondary.</div>
+
+        <div class="subhead">Pathway cards (click to select)</div>
+        <div class="demo">
+          <div class="pw-cards">
+            <button class="pw" type="button" aria-pressed="true">
+              <span class="pw-check"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              <span class="pw-name"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7l8-4z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>Protect</span>
+              <span class="pw-desc">Safeguard intact ecosystems with high existing carbon stock and biodiversity value.</span>
+            </button>
+            <button class="pw" type="button" aria-pressed="false">
+              <span class="pw-check"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              <span class="pw-name"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.7"/><path d="M12 7v5l3 3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>Manage</span>
+              <span class="pw-desc">Improve practices on working land to sustain yields while reducing degradation.</span>
+            </button>
+            <button class="pw" type="button" aria-pressed="false">
+              <span class="pw-check"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              <span class="pw-name"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21C12 21 4 16.5 4 10C4 6 7 3.5 12 3.5C17 3.5 20 6 20 10C20 16.5 12 21 12 21Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>Restore</span>
+              <span class="pw-desc">Re-establish ecosystem function on degraded land through active or assisted regeneration.</span>
+            </button>
+          </div>
+        </div>
+        <div class="note">The triple-benefit framing (Climate · People · Nature) drives the analyser tabs. Mandatory inputs (vegetation cover, biomass, carbon stocks) read as primary metrics; additional inputs (socio-economic, GEDSI) as secondary. Selected pathway: <code>stroke-primary</code> border on <code>bg-success-second</code> + <code>ring-primary</code>.</div>
       </section>
 
-      <!-- ===== STATES ===== -->
-      <section class="section" id="states">
-        <div class="section-head">
-          <div class="section-num">08</div>
-          <div>
-            <h2>Interaction states</h2>
-            <p>Derive every state from the system tokens — step fills one shade darker on hover, add a 3px low-opacity ring on focus.</p>
-          </div>
-        </div>
-        <table class="states">
-          <thead><tr><th>State</th><th>Treatment</th></tr></thead>
-          <tbody>
-            <tr><td class="st-name">Hover</td><td>Step the fill one shade darker (<code>primary-600 → primary-700</code>); neutral fills go to <code>bg-base-third</code>.</td></tr>
-            <tr><td class="st-name">Focus</td><td>3px ring in the relevant family at 15% opacity — <code>ring-primary</code> for brand inputs, <code>ring-purple</code> for informational.</td></tr>
-            <tr><td class="st-name">Active / pressed</td><td>Step two shades darker (<code>primary-800</code>); optional inset shadow.</td></tr>
-            <tr><td class="st-name">Selected</td><td><code>text-primary</code> / <code>stroke-primary</code> on <code>bg-primary-second</code>.</td></tr>
-            <tr><td class="st-name">Disabled</td><td><code>text-disabled</code> on <code>bg-disabled</code>, no pointer events.</td></tr>
-            <tr><td class="st-name">Error</td><td><code>stroke-danger</code> border + <code>text-danger</code> on <code>bg-danger-second</code>.</td></tr>
-            <tr><td class="st-name">Success</td><td><code>text-success</code> / <code>stroke-success</code> on <code>bg-success-second</code>.</td></tr>
-            <tr><td class="st-name">Warning</td><td><code>text-warning</code> / <code>stroke-warning</code> on <code>bg-warning-second</code>.</td></tr>
-          </tbody>
-        </table>
-      </section>
-
-      <!-- ===== RULES ===== -->
-      <section class="section" id="rules">
-        <div class="section-head">
-          <div class="section-num">09</div>
-          <div>
-            <h2>Rules</h2>
-            <p>The short version. The full reference lives in DESIGN.md at the repo root.</p>
-          </div>
-        </div>
-        <div class="rules">
-          <div class="rule-col do">
-            <h4><svg class="mk" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.6"/><path d="M8 12l3 3 5-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Do</h4>
-            <ul>
-              <li><svg class="mk" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Use the primary family for brand actions; reserve success / danger / warning / purple for their semantics.</li>
-              <li><svg class="mk" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Pair each <code>*-main</code> color with its <code>*-second</code> tint for subtle backgrounds.</li>
-              <li><svg class="mk" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Acumin Pro Condensed for display/headlines, Poppins for body/UI.</li>
-              <li><svg class="mk" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Snap spacing to the 4px scale; default controls <code>radius-md</code>, cards <code>radius-lg</code>.</li>
-              <li><svg class="mk" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Honor both light and dark values when building themed components.</li>
-            </ul>
-          </div>
-          <div class="rule-col dont">
-            <h4><svg class="mk" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.6"/><path d="M9 9l6 6M15 9l-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Don't</h4>
-            <ul>
-              <li><svg class="mk" viewBox="0 0 24 24" fill="none"><path d="M7 7l10 10M17 7L7 17" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>Introduce hexes outside the palette — use the nearest primitive step or adjust opacity.</li>
-              <li><svg class="mk" viewBox="0 0 24 24" fill="none"><path d="M7 7l10 10M17 7L7 17" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>Repurpose semantic colors (e.g. danger for non-error emphasis).</li>
-              <li><svg class="mk" viewBox="0 0 24 24" fill="none"><path d="M7 7l10 10M17 7L7 17" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>Bring back legacy fonts (Roboto, Lato, DM Sans, IBM Plex, SF Pro, Inter for body).</li>
-              <li><svg class="mk" viewBox="0 0 24 24" fill="none"><path d="M7 7l10 10M17 7L7 17" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>Invent spacing or radii outside the scales — add to DESIGN.md first if genuinely needed.</li>
-              <li><svg class="mk" viewBox="0 0 24 24" fill="none"><path d="M7 7l10 10M17 7L7 17" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>Flatten the shadow system into single hard shadows.</li>
-            </ul>
-          </div>
-        </div>
-      </section>
+    </div><!-- /view-components -->
 
     </div>
   </main>
 </div>
+
+<!-- Live modal demo -->
+<div class="ds-overlay" id="dsOverlay" aria-hidden="true">
+  <div class="ds-modal" role="dialog" aria-modal="true" aria-labelledby="dsModalTitle">
+    <button class="modal-x" type="button" data-close aria-label="Close"><svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+    <div class="modal-icon primary"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M8 12l3 3 5-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <h3 class="modal-title" id="dsModalTitle">Monitoring plan ready</h3>
+    <p class="modal-desc">Your Design-to-MRV workflow is up to date. Export it as a donor-ready document or continue to indicator scheduling.</p>
+    <div class="modal-btns">
+      <button class="btn btn-secondary" type="button" data-close>Close</button>
+      <button class="btn btn-primary" type="button" data-close>Export document</button>
+    </div>
+  </div>
+</div>
+
+<!-- Live toast host -->
+<div class="toast-host" id="toastHost" aria-live="polite"></div>
 
 <script>
 /* NbS Design System — token data (mirrors tokens.css / DESIGN.md §11) */
@@ -453,7 +1095,7 @@ window.NBS = {
 };
 </script>
 <script>
-/* NbS Design System — render token galleries, theme toggle, scroll-spy */
+/* NbS Design System — render token galleries, theme toggle, view tabs, scroll-spy */
 (function () {
   const N = window.NBS;
   const $ = (s) => document.querySelector(s);
@@ -552,19 +1194,130 @@ window.NBS = {
     syncLabel();
   });
 
+  // ---- View tabs (Foundations / Components) ----
+  const vtabs = [...document.querySelectorAll(".view-tabs button")];
+  function setView(name) {
+    vtabs.forEach((b) => b.classList.toggle("active", b.dataset.view === name));
+    document.querySelectorAll(".view").forEach((v) => v.classList.toggle("active", v.id === "view-" + name));
+    document.querySelectorAll(".nav[data-nav]").forEach((n) => n.classList.toggle("active", n.dataset.nav === name));
+  }
+  vtabs.forEach((b) => b.addEventListener("click", () => { setView(b.dataset.view); window.scrollTo({ top: 0 }); }));
+  // Nav links: make sure their view is visible before the anchor jump
+  document.querySelectorAll(".nav[data-nav] a").forEach((a) => {
+    a.addEventListener("click", () => setView(a.closest(".nav").dataset.nav));
+  });
+  // Deep-link: #c-* hashes open the components view
+  if (location.hash.startsWith("#c-")) setView("components");
+
   // ---- Scroll-spy nav ----
   const links = [...document.querySelectorAll(".nav a")];
   const map = new Map(links.map((a) => [a.getAttribute("href").slice(1), a]));
   const obs = new IntersectionObserver((entries) => {
     entries.forEach((e) => {
       if (e.isIntersecting) {
-        links.forEach((l) => l.classList.remove("active"));
         const a = map.get(e.target.id);
-        if (a) a.classList.add("active");
+        if (!a) return;
+        a.closest(".nav").querySelectorAll("a").forEach((l) => l.classList.remove("active"));
+        a.classList.add("active");
       }
     });
   }, { rootMargin: "-20% 0px -70% 0px" });
   document.querySelectorAll("section.section, header.hero").forEach((s) => { if (s.id) obs.observe(s); });
+
+  // ---- Component gallery interactions (event delegation) ----
+  document.addEventListener("click", (e) => {
+    const tab = e.target.closest(".tabs-underline .tab");
+    if (tab) {
+      tab.parentElement.querySelectorAll(".tab").forEach((t) => { t.classList.remove("active"); t.setAttribute("aria-selected", "false"); });
+      tab.classList.add("active"); tab.setAttribute("aria-selected", "true");
+      return;
+    }
+    const seg = e.target.closest(".seg button");
+    if (seg) {
+      seg.parentElement.querySelectorAll("button").forEach((b) => b.classList.remove("active"));
+      seg.classList.add("active");
+      return;
+    }
+    const chip = e.target.closest(".fchip");
+    if (chip) { chip.classList.toggle("active"); return; }
+    const check = e.target.closest("label.check");
+    if (check) { check.classList.toggle("on"); return; }
+    const tgl = e.target.closest(".tgl:not(:disabled)");
+    if (tgl) { tgl.setAttribute("aria-pressed", tgl.getAttribute("aria-pressed") !== "true"); return; }
+    const pw = e.target.closest(".pw");
+    if (pw) { pw.setAttribute("aria-pressed", pw.getAttribute("aria-pressed") !== "true"); return; }
+    const acc = e.target.closest(".acc-head");
+    if (acc) {
+      const box = acc.closest(".accordion");
+      box.classList.toggle("open");
+      acc.setAttribute("aria-expanded", box.classList.contains("open"));
+      return;
+    }
+    const pg = e.target.closest(".pg");
+    if (pg && /^\d+$/.test(pg.textContent.trim())) {
+      pg.parentElement.querySelectorAll(".pg").forEach((p) => p.classList.remove("on"));
+      pg.classList.add("on");
+      return;
+    }
+    const vt = e.target.closest(".viewtoggle button");
+    if (vt) {
+      vt.parentElement.querySelectorAll("button").forEach((b) => b.classList.remove("on"));
+      vt.classList.add("on");
+      return;
+    }
+    const sortTh = e.target.closest("th.sortable");
+    if (sortTh) {
+      const ar = sortTh.querySelector(".ar");
+      if (ar) ar.textContent = ar.textContent === "↓" ? "↑" : "↓";
+      return;
+    }
+    const pwBtn = e.target.closest(".trail-btn[data-pw]");
+    if (pwBtn) {
+      const input = document.getElementById(pwBtn.dataset.pw);
+      const show = input.type === "password";
+      input.type = show ? "text" : "password";
+      pwBtn.textContent = show ? "Hide" : "Show";
+      return;
+    }
+  });
+
+  // Range slider fill + value
+  const range = $("#rangeDemo");
+  if (range) {
+    const sync = () => {
+      const pct = ((range.value - range.min) / (range.max - range.min)) * 100;
+      range.style.setProperty("--pct", pct + "%");
+      $("#rangeVal").textContent = range.value;
+    };
+    range.addEventListener("input", sync);
+    sync();
+  }
+
+  // Dropzone drag states (visual demo only)
+  const dz = $("#dropzone");
+  if (dz) {
+    ["dragenter", "dragover"].forEach((ev) => dz.addEventListener(ev, (e) => { e.preventDefault(); dz.classList.add("dragover"); }));
+    ["dragleave", "drop"].forEach((ev) => dz.addEventListener(ev, (e) => { e.preventDefault(); dz.classList.remove("dragover"); }));
+  }
+
+  // Live modal
+  const overlay = $("#dsOverlay");
+  $("#openModal")?.addEventListener("click", () => { overlay.classList.add("open"); overlay.setAttribute("aria-hidden", "false"); });
+  overlay?.addEventListener("click", (e) => {
+    if (e.target === overlay || e.target.closest("[data-close]")) {
+      overlay.classList.remove("open");
+      overlay.setAttribute("aria-hidden", "true");
+    }
+  });
+
+  // Live toast
+  $("#toastBtn")?.addEventListener("click", () => {
+    const host = $("#toastHost");
+    const t = el("div", "toast", `<svg class="t-ic" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M8 12l3 3 5-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Changes saved`);
+    host.appendChild(t);
+    requestAnimationFrame(() => t.classList.add("show"));
+    setTimeout(() => { t.classList.remove("show"); setTimeout(() => t.remove(), 250); }, 2400);
+  });
 })();
 </script>
 <footer class="footer" data-screen-label="Footer">
