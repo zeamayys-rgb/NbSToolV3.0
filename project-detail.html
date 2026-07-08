@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="css/f041.css" />
 <link rel="stylesheet" href="css/nav.css" />
 <link rel="stylesheet" href="css/footer.css" />
+<link rel="stylesheet" href="css/analysis-shared.css" />
 <style>
 /* ── NbS Design summary (F05.0 framework) ── */
 .nds-eco-strip { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:20px; }
@@ -85,7 +86,7 @@
 .nds-toast-t { font-size:13px; font-weight:700; color:var(--text-base-main); }
 .nds-toast-f { font-size:11px; color:var(--text-base-second); margin-top:1px; }
 
-/* ── Analysis · Site Characterisation (Figma General Context) ── */
+/* ── Analysis tab — side nav + panes (pane content comes from the shared analyser component) ── */
 .an2 { display:grid; grid-template-columns:250px 1fr; gap:28px; align-items:start; }
 .an2-nav { position:sticky; top:84px; align-self:start; border:1px solid var(--stroke-base); border-radius:14px; background:var(--bg-base-main); padding:10px; box-shadow:var(--elevation-2); }
 .an2-step__hd { display:flex; align-items:center; gap:11px; width:100%; background:none; border:none; cursor:pointer; padding:11px 10px; border-radius:10px; text-align:left; font-family:var(--font-text); transition:background .15s; }
@@ -109,95 +110,7 @@
 .an2-title { text-align:center; font-family:var(--font-text); font-size:22px; font-weight:700; color:var(--text-base-main); letter-spacing:-0.02em; margin:2px 0 10px; }
 .an2-rule { width:118px; height:3px; margin:0 auto 26px; border-radius:2px; background:linear-gradient(90deg,#e9ee2f,#a7cf4e,#1a6b2e); }
 
-.gcard { border:1px solid var(--stroke-base); border-radius:14px; background:var(--bg-base-main); padding:22px 24px; margin-bottom:20px; box-shadow:var(--elevation-1); }
-.gcard__eyebrow { display:flex; align-items:center; gap:8px; font-size:12px; font-weight:700; letter-spacing:.055em; text-transform:uppercase; color:var(--text-primary); margin-bottom:18px; }
-.gcard__eyebrow svg { width:16px; height:16px; flex:none; }
-.gcard h4 { font-family:var(--font-text); font-size:16px; font-weight:700; color:var(--text-base-main); margin:0 0 8px; }
-.gcard p { font-family:var(--font-text); font-size:13px; line-height:1.6; color:var(--text-base-second); margin:0 0 10px; }
-.gcard p b { color:var(--text-base-main); font-weight:600; }
-.g-split { display:grid; grid-template-columns:1fr 1fr; gap:24px; align-items:center; }
-.g-img { border-radius:12px; overflow:hidden; position:relative; border:1px solid var(--stroke-base); background:var(--bg-base-third); }
-.g-img img { width:100%; height:100%; object-fit:cover; display:block; }
-.g-img__tag { position:absolute; left:10px; top:10px; font-size:10px; font-weight:600; color:#fff; background:rgba(4,38,32,.62); padding:3px 9px; border-radius:20px; backdrop-filter:blur(2px); }
-
-/* Donut */
-.g-donut-wrap { display:flex; align-items:center; gap:20px; }
-.donut { width:172px; height:172px; border-radius:50%; flex:none; position:relative; }
-.donut::after { content:""; position:absolute; inset:30px; border-radius:50%; background:var(--bg-base-main); box-shadow:inset 0 0 0 1px var(--stroke-base); }
-.donut__c { position:absolute; inset:0; display:grid; place-items:center; text-align:center; z-index:1; }
-.donut__c .l { font-size:11px; color:var(--text-base-second); }
-.donut__c .v { font-size:17px; font-weight:700; color:var(--text-base-main); letter-spacing:-0.02em; }
-.g-legend { display:flex; flex-direction:column; gap:9px; }
-.g-legend .li { display:flex; align-items:center; gap:9px; font-size:12.5px; color:var(--text-base-main); }
-.g-legend .sw { width:13px; height:13px; border-radius:3px; flex:none; }
-.g-legend .pc { margin-left:auto; font-weight:600; color:var(--text-base-second); font-variant-numeric:tabular-nums; }
-
-/* Slope list */
-.g-slope { display:flex; flex-direction:column; gap:2px; }
-.g-slope .row { display:grid; grid-template-columns:20px 1fr auto auto; align-items:center; gap:12px; padding:9px 4px; border-bottom:1px solid var(--stroke-base); font-size:13px; }
-.g-slope .row:last-child { border-bottom:none; }
-.g-slope .sw { width:13px; height:13px; border-radius:3px; }
-.g-slope .nm { color:var(--text-base-main); font-weight:500; }
-.g-slope .ha { color:var(--text-base-second); font-variant-numeric:tabular-nums; }
-.g-slope .pc { background:var(--bg-base-third); border-radius:6px; padding:2px 8px; font-size:11px; font-weight:700; color:var(--text-base-main); font-variant-numeric:tabular-nums; min-width:42px; text-align:center; }
-
-/* Deforestation stats */
-.g-defo { display:grid; grid-template-columns:1fr 1fr; gap:22px; margin-bottom:6px; }
-.g-defo .big { font-size:26px; font-weight:700; color:var(--text-base-main); letter-spacing:-0.02em; margin-top:2px; }
-.g-defo .big small { font-size:14px; font-weight:600; color:var(--text-base-second); }
-
-/* Land cover tiles */
-.g-lc { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
-.g-lc__tile { display:flex; align-items:center; gap:13px; padding:12px 14px; border:1px solid var(--stroke-base); border-radius:12px; background:var(--bg-base-main); }
-.g-lc__ic { width:46px; height:46px; border-radius:11px; flex:none; display:grid; place-items:center; background:var(--bg-success-second); color:var(--text-primary); }
-.g-lc__ic svg { width:26px; height:26px; }
-.g-lc__nm { font-size:12.5px; color:var(--text-base-second); margin-bottom:2px; }
-.g-lc__v { font-size:15px; font-weight:700; color:var(--text-base-main); letter-spacing:-0.01em; }
-.g-lc__v small { font-size:11px; font-weight:600; color:var(--text-base-second); margin-left:5px; }
-
-/* Disaster cards */
-.g-nd { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; }
-.g-nd__card { border:1px solid var(--stroke-base); border-radius:12px; overflow:hidden; background:var(--bg-base-main); }
-.g-nd__img { height:104px; background:var(--bg-base-third); position:relative; }
-.g-nd__img img { width:100%; height:100%; object-fit:cover; display:block; }
-.g-nd__b { padding:11px 13px 13px; }
-.g-nd__nm { font-size:13px; font-weight:700; color:var(--text-base-main); margin-bottom:5px; }
-.g-nd__lvl { display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.03em; border-radius:20px; padding:2px 9px; }
-.g-nd__lvl.high { background:var(--bg-danger-second); color:var(--text-danger); }
-.g-nd__lvl.mod { background:rgb(255,237,213); color:rgb(194,65,12); }
-.g-nd__lvl.low { background:var(--bg-success-second); color:var(--text-primary); }
-.g-nd__lvl .d { width:6px; height:6px; border-radius:50%; background:currentColor; }
-
-.g-src { display:flex; align-items:center; gap:6px; margin-top:16px; padding-top:13px; border-top:1px solid var(--stroke-base); font-size:11.5px; color:var(--text-base-third); }
-.g-src b { color:var(--text-base-second); font-weight:600; }
-.g-src a { color:var(--text-primary); font-weight:600; text-decoration:underline; text-underline-offset:2px; cursor:pointer; }
-
-/* compact context panes */
-.g-sc { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:20px; }
-.g-sc__t { border:1px solid var(--stroke-base); border-radius:12px; background:var(--bg-base-second); padding:15px 16px; }
-.g-sc__t .l { font-size:12px; color:var(--text-base-second); margin-bottom:6px; }
-.g-sc__t .v { font-size:24px; font-weight:700; color:var(--text-base-main); letter-spacing:-0.03em; }
-.g-sc__t .v small { font-size:13px; font-weight:600; color:var(--text-base-second); }
-.g-rows { display:flex; flex-direction:column; }
-.g-rows .r { display:flex; align-items:center; justify-content:space-between; gap:14px; padding:12px 2px; border-bottom:1px solid var(--stroke-base); font-size:13px; }
-.g-rows .r:last-child { border-bottom:none; }
-.g-rows .nm { color:var(--text-base-main); }
-.g-rows .nm small { display:block; color:var(--text-base-third); font-size:11px; margin-top:1px; }
-.g-rows .val { font-weight:600; color:var(--text-base-main); }
-.g-threat { display:flex; gap:15px; padding:18px; border:1px solid var(--stroke-base); border-radius:12px; margin-bottom:14px; }
-.g-threat__ic { width:42px; height:42px; border-radius:11px; flex:none; display:grid; place-items:center; }
-.g-threat__ic.high { background:var(--bg-danger-second); color:var(--text-danger); }
-.g-threat__ic.mod { background:rgb(255,237,213); color:rgb(194,65,12); }
-.g-threat__ic.low { background:var(--bg-success-second); color:var(--text-primary); }
-.g-threat__ic svg { width:22px; height:22px; }
-.g-threat__m { flex:1; min-width:0; }
-.g-threat__top { display:flex; align-items:center; gap:10px; margin-bottom:6px; }
-.g-threat__top h4 { margin:0; font-size:15px; }
-.g-threat__meta { display:flex; flex-wrap:wrap; gap:8px 26px; margin-top:10px; }
-.g-threat__meta .m { font-size:12px; color:var(--text-base-second); }
-.g-threat__meta .m b { display:block; color:var(--text-base-main); font-weight:600; font-size:13px; margin-top:1px; }
-
-@media (max-width:880px){ .an2 { grid-template-columns:1fr; } .an2-nav { position:static; } .g-split,.g-defo { grid-template-columns:1fr; } .g-lc,.g-nd,.g-sc { grid-template-columns:repeat(2,1fr); } }
+@media (max-width:880px){ .an2 { grid-template-columns:1fr; } .an2-nav { position:static; } }
 </style>
 </head>
 <body data-screen-label="F04.1 — Project Detail" style="background-color:rgb(249,249,249)">
@@ -719,6 +632,10 @@
   </section>
 
   <!-- ===== ANALYSIS ===== -->
+  <!-- Mirrors the Data Analyser (interactive-map.html) steps 2, 3 & 5.
+       Content + behavior come from the shared component (js/analysis-shared.js
+       + css/analysis-shared.css) — edit there and both pages update.
+       The side navigation below is page-specific and replaces the analyser tab bars. -->
   <section class="panel" id="p-analysis">
     <div class="an2">
       <!-- Sticky left nav -->
@@ -736,257 +653,96 @@
           </div>
         </div>
         <div class="an2-step" id="an2-step-2">
-          <button class="an2-step__hd" onclick="an2Go('threat')">
-            <span class="an2-num">2</span><span class="an2-step__lbl">Threat Profile</span>
-            <svg class="an2-chev" viewBox="0 0 24 24" fill="none" style="transform:rotate(-90deg)"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <button class="an2-step__hd" onclick="an2ToggleStep(2)">
+            <span class="an2-num">2</span><span class="an2-step__lbl">Threats Profile</span>
+            <svg class="an2-chev" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </button>
+          <div class="an2-subs">
+            <button class="an2-sub" data-pane="threat-overview" onclick="an2Go('threat-overview')">Overview</button>
+            <button class="an2-sub" data-pane="threat-forest" onclick="an2Go('threat-forest')">Forest</button>
+            <button class="an2-sub" data-pane="threat-mangrove" onclick="an2Go('threat-mangrove')">Mangrove</button>
+            <button class="an2-sub" data-pane="threat-peatland" onclick="an2Go('threat-peatland')">Peatland</button>
+          </div>
         </div>
         <div class="an2-step" id="an2-step-3">
-          <button class="an2-step__hd" onclick="an2Go('benefit')">
+          <button class="an2-step__hd" onclick="an2ToggleStep(3)">
             <span class="an2-num">3</span><span class="an2-step__lbl">Potential Benefit</span>
-            <svg class="an2-chev" viewBox="0 0 24 24" fill="none" style="transform:rotate(-90deg)"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <svg class="an2-chev" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </button>
+          <div class="an2-subs">
+            <button class="an2-sub" data-pane="benefit-nature" onclick="an2Go('benefit-nature')">Nature</button>
+            <button class="an2-sub" data-pane="benefit-people" onclick="an2Go('benefit-people')">People</button>
+            <button class="an2-sub" data-pane="benefit-climate" onclick="an2Go('benefit-climate')">Climate</button>
+          </div>
         </div>
       </aside>
 
-      <!-- Content -->
+      <!-- Content — mounted from the shared Data Analyser component -->
       <div class="an2-main">
-
-        <!-- ══ GENERAL CONTEXT ══ -->
-        <div class="an2-pane active" data-pane="general">
-          <div class="an2-title" id="an2Title">Site Characterisation: General Context</div>
+        <div class="an2-pane active" data-pane="site">
+          <div class="an2-title">Site Characterisation: General Information</div>
           <div class="an2-rule"></div>
-
-          <!-- Administrative & ecosystem -->
-          <div class="gcard">
-            <div class="gcard__eyebrow"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 11v5M12 8h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Administrative and ecosystem type information</div>
-            <div class="g-split">
-              <div class="g-img" style="aspect-ratio:4/3"><span class="g-img__tag">Ecosystem map · 2025</span><img src="assets/genctx/eco-map.png" alt="Ecosystem map of the project area" /></div>
-              <div>
-                <h4>Ecosystem Type Identification</h4>
-                <p>In 2025, the project area is dominated by <b>dryland forest</b> ecosystem covering <b>22,758.3 ha (47%)</b> of the total area, followed by peatland and mangrove.</p>
-                <div class="g-donut-wrap">
-                  <div class="donut" style="background:conic-gradient(#e9ee2f 0 25%,#a7cf4e 25% 51%,#1a6b2e 51% 98%,#d3d8d6 98% 100%)">
-                    <div class="donut__c"><div><div class="l">Total</div><div class="v">48,421.9 ha</div></div></div>
-                  </div>
-                  <div class="g-legend">
-                    <span class="li"><span class="sw" style="background:#e9ee2f"></span>Mangrove<span class="pc">25%</span></span>
-                    <span class="li"><span class="sw" style="background:#a7cf4e"></span>Peatland<span class="pc">26%</span></span>
-                    <span class="li"><span class="sw" style="background:#1a6b2e"></span>Dryland Forest<span class="pc">47%</span></span>
-                    <span class="li"><span class="sw" style="background:#d3d8d6"></span>Non-Eligible Area<span class="pc">2%</span></span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <h4 style="margin-top:22px">Administrative Information</h4>
-            <p>This project area is majorly located in <b>Kabupaten Kubu Raya, Kalimantan Barat</b> with an approximate total area of <b>48,421.9 ha</b>. Within this province, the area also overlaps with Kabupaten Mempawah (1,204 ha) and Kabupaten Ketapang (863 ha). This project area overlaps with <b>2,140 ha</b> of protected areas, designated as <b>National Park</b>.</p>
-            <div class="g-src"><b>Data source:</b> KLHK Land Cover, RLCMS · 2024. <a>See more</a></div>
-          </div>
-
-          <!-- Topography / slope -->
-          <div class="gcard">
-            <div class="gcard__eyebrow"><svg viewBox="0 0 24 24" fill="none"><path d="M3 20h18M6 20l5-11 3 6 2-3 4 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Topography &amp; slope</div>
-            <div class="g-img" style="aspect-ratio:16/6;margin-bottom:18px"><span class="g-img__tag">Elevation model</span><img src="assets/genctx/terrain-sm.jpg" alt="3D terrain elevation model" /></div>
-            <div class="g-split" style="align-items:center">
-              <div>
-                <p style="margin-bottom:12px">The slope of the area consists of:</p>
-                <div class="g-slope">
-                  <div class="row"><span class="sw" style="background:#14532d"></span><span class="nm">Flat</span><span class="ha">19,368.8 ha</span><span class="pc">40%</span></div>
-                  <div class="row"><span class="sw" style="background:#256d3a"></span><span class="nm">Undulating</span><span class="ha">13,558.1 ha</span><span class="pc">28%</span></div>
-                  <div class="row"><span class="sw" style="background:#4f9e5f"></span><span class="nm">Rolling</span><span class="ha">8,715.9 ha</span><span class="pc">18%</span></div>
-                  <div class="row"><span class="sw" style="background:#86c393"></span><span class="nm">Moderately Steep</span><span class="ha">4,358.0 ha</span><span class="pc">9%</span></div>
-                  <div class="row"><span class="sw" style="background:#c3e3cb"></span><span class="nm">Steep</span><span class="ha">2,421.1 ha</span><span class="pc">5%</span></div>
-                </div>
-              </div>
-              <div class="g-donut-wrap" style="justify-content:center">
-                <div class="donut" style="background:conic-gradient(#14532d 0 40%,#256d3a 40% 68%,#4f9e5f 68% 86%,#86c393 86% 95%,#c3e3cb 95% 100%)">
-                  <div class="donut__c"><div><div class="l">Slope</div><div class="v">Class</div></div></div>
-                </div>
-              </div>
-            </div>
-            <div class="g-src"><b>Data source:</b> DEMNAS Elevation · 2023. <a>See more</a></div>
-          </div>
-
-          <!-- Deforestation -->
-          <div class="gcard">
-            <div class="gcard__eyebrow"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3v18M12 8c-3.5 0-6-2.4-6-6 3.5 0 6 2.5 6 6ZM12 13c3.5 0 6-2.4 6-6-3.5 0-6 2.5-6 6Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>Deforestation analysis</div>
-            <h4>Historical Deforestation</h4>
-            <div class="g-defo">
-              <div>
-                <p style="margin:0">In the past <b>10 years</b>, the annual historical rate of deforestation is <b>0.47%</b>.</p>
-                <div class="big">269.9 ha/year <small>(0.47% / year)</small></div>
-              </div>
-              <div>
-                <p style="margin:0">Meanwhile, the <b>total deforestation</b> of the area from <b>2014 – 2023</b> is:</p>
-                <div class="big">1,929.9 <small>ha</small></div>
-              </div>
-            </div>
-            <div class="g-split" style="margin-top:20px">
-              <div class="g-img" style="aspect-ratio:4/3;max-width:300px"><span class="g-img__tag">Risk map</span><img src="assets/genctx/risk-map.png" alt="Deforestation risk map" /></div>
-              <div>
-                <h4>Deforestation Risk</h4>
-                <p>Assuming no interventions are made (Business-as-Usual scenario), the majority of the selected area has a <b>moderate</b> risk of deforestation, concentrated along the eastern margin.</p>
-                <div class="g-legend" style="flex-direction:row;flex-wrap:wrap;gap:8px 18px">
-                  <span class="li"><span class="sw" style="background:#e8412c;border-radius:50%"></span>High Risk</span>
-                  <span class="li"><span class="sw" style="background:#f5c842;border-radius:50%"></span>Moderate Risk</span>
-                  <span class="li"><span class="sw" style="background:#fdf3b4;border-radius:50%"></span>Low Risk</span>
-                </div>
-              </div>
-            </div>
-            <div class="g-src"><b>Data source:</b> UDEF-A Risk Model (VM0048) · 2024. <a>See more</a></div>
-          </div>
-
-          <!-- Land cover -->
-          <div class="gcard">
-            <div class="gcard__eyebrow"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/><rect x="14" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/><rect x="3" y="14" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/><rect x="14" y="14" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/></svg>Land cover class</div>
-            <p style="margin-bottom:16px">The major land cover categories in the selected area are:</p>
-            <div class="g-lc">
-              <div class="g-lc__tile"><span class="g-lc__ic"><svg viewBox="0 0 24 24" fill="none"><path d="M3 14c3-3 6-3 9 0M3 18c3-3 6-3 9 0" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M13 10c3-2 6-1 8 2-2 3-5 4-8 2z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><circle cx="17" cy="11.5" r="1" fill="currentColor"/></svg></span><div><div class="g-lc__nm">Aquaculture</div><div class="g-lc__v">6,053.0 ha<small>12.5%</small></div></div></div>
-              <div class="g-lc__tile"><span class="g-lc__ic"><svg viewBox="0 0 24 24" fill="none"><circle cx="18" cy="6" r="2.5" stroke="currentColor" stroke-width="1.7"/><path d="M3 18c2-2 4-2 6 0s4 2 6 0 4-2 6 0" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M4 21c2-1.5 4-1.5 6 0" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></span><div><div class="g-lc__nm">Barren</div><div class="g-lc__v">1,452.7 ha<small>3%</small></div></div></div>
-              <div class="g-lc__tile"><span class="g-lc__ic"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21V9" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M12 9a4 4 0 1 1 4-4 4 4 0 0 1-4 4Z" stroke="currentColor" stroke-width="1.7"/><path d="M9 21h6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></span><div><div class="g-lc__nm">Rubber</div><div class="g-lc__v">3,389.5 ha<small>7%</small></div></div></div>
-              <div class="g-lc__tile"><span class="g-lc__ic"><svg viewBox="0 0 24 24" fill="none"><path d="M6 21V11M12 21V8M18 21V11" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M6 11c-1.5-1-1.5-3 0-4 1.5 1 1.5 3 0 4ZM12 8c-1.5-1-1.5-3 0-4 1.5 1 1.5 3 0 4ZM18 11c-1.5-1-1.5-3 0-4 1.5 1 1.5 3 0 4Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></span><div><div class="g-lc__nm">Crop Plantation</div><div class="g-lc__v">2,905.3 ha<small>6%</small></div></div></div>
-              <div class="g-lc__tile"><span class="g-lc__ic"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21v-3M7 18h10l-3-4h2l-4-5h1.5L12 3 7.5 6H9l-4 5h2l-3 4Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></span><div><div class="g-lc__nm">Evergreen</div><div class="g-lc__v">22,758.3 ha<small>47%</small></div></div></div>
-              <div class="g-lc__tile"><span class="g-lc__ic"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21V9" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M12 9c0-3 3-5 6-5-1 3-3 5-6 5ZM12 9c0-3-3-5-6-5 1 3 3 5 6 5ZM12 9c2-2 5-2 7-1-1 2-4 3-7 1ZM12 9c-2-2-5-2-7-1 1 2 4 3 7 1Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></span><div><div class="g-lc__nm">Oil palm</div><div class="g-lc__v">4,358.0 ha<small>9%</small></div></div></div>
-            </div>
-            <div class="g-src"><b>Data source:</b> RLCMS Land Cover · 2023. <a>See more</a></div>
-          </div>
-
-          <!-- Natural disaster -->
-          <div class="gcard">
-            <div class="gcard__eyebrow"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3l9 16H3l9-16Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 10v4M12 17h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Natural disaster risk</div>
-            <p style="margin-bottom:16px">The selected area is susceptible to several natural disaster risks, including:</p>
-            <div class="g-nd">
-              <div class="g-nd__card"><div class="g-nd__img"><img src="assets/genctx-icons/assets/1d0b51938b0d9b33.png" alt="Flood" /></div><div class="g-nd__b"><div class="g-nd__nm">Flood</div><span class="g-nd__lvl high"><span class="d"></span>High risk</span></div></div>
-              <div class="g-nd__card"><div class="g-nd__img"><img src="assets/genctx-icons/assets/landslide.jpg" alt="Landslide" /></div><div class="g-nd__b"><div class="g-nd__nm">Landslide</div><span class="g-nd__lvl low"><span class="d"></span>Low risk</span></div></div>
-              <div class="g-nd__card"><div class="g-nd__img"><img src="assets/genctx-icons/assets/83928a4e30c7d5f0.png" alt="Tropical typhoon" /></div><div class="g-nd__b"><div class="g-nd__nm">Tropical Typhoon</div><span class="g-nd__lvl mod"><span class="d"></span>Moderate risk</span></div></div>
-              <div class="g-nd__card"><div class="g-nd__img"><img src="assets/genctx-icons/assets/22cf7464d36d3b46.png" alt="Drought" /></div><div class="g-nd__b"><div class="g-nd__nm">Drought</div><span class="g-nd__lvl low"><span class="d"></span>Low risk</span></div></div>
-            </div>
-            <div class="g-src"><b>Data source:</b> BNPB InaRISK · 2023. <a>See more</a></div>
-          </div>
+          <div data-nbs="site"></div>
         </div>
-
-        <!-- ══ NATURE ══ -->
-        <div class="an2-pane" data-pane="nature">
-          <div class="an2-title">Site Characterisation: Nature Context</div>
-          <div class="an2-rule"></div>
-          <div class="gcard">
-            <div class="gcard__eyebrow"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21V11M12 11C8 11 5 8 5 4c4 0 7 3 7 7ZM12 11c0-4 3-7 7-7 0 4-3 7-7 7Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>Ecological baseline</div>
-            <div class="g-sc">
-              <div class="g-sc__t"><div class="l">Area of Habitat</div><div class="v">960 <small>ha</small></div></div>
-              <div class="g-sc__t"><div class="l">Above-ground biomass</div><div class="v">142 <small>t/ha</small></div></div>
-              <div class="g-sc__t"><div class="l">Soil organic carbon</div><div class="v">386 <small>tC/ha</small></div></div>
-              <div class="g-sc__t"><div class="l">Canopy cover</div><div class="v">76 <small>%</small></div></div>
-            </div>
-            <h4>Biodiversity baseline</h4>
-            <div class="g-rows">
-              <div class="r"><span class="nm">IUCN species of concern<small>Within AOI + 5 km buffer</small></span><span class="val">7</span></div>
-              <div class="r"><span class="nm">Endangered tree species richness</span><span class="val">Moderate–High</span></div>
-              <div class="r"><span class="nm">Key Biodiversity Area overlap</span><span class="val">Partial (north)</span></div>
-              <div class="r"><span class="nm">Forest Landscape Integrity Index</span><span class="val">6.8 / 10</span></div>
-              <div class="r"><span class="nm">Ecological connectivity</span><span class="val">High</span></div>
-            </div>
-            <div class="g-src"><b>Data source:</b> IUCN AoH, KBA, FLII · 2023. <a>See more</a></div>
-          </div>
-        </div>
-
-        <!-- ══ PEOPLE ══ -->
-        <div class="an2-pane" data-pane="people">
-          <div class="an2-title">Site Characterisation: People Context</div>
-          <div class="an2-rule"></div>
-          <div class="gcard">
-            <div class="gcard__eyebrow"><svg viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3" stroke="currentColor" stroke-width="1.7"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6M16 5.5a3 3 0 0 1 0 5.5M21 20c0-2.5-1.5-4.7-3.7-5.6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>Socio-economic baseline</div>
-            <div class="g-sc">
-              <div class="g-sc__t"><div class="l">Households</div><div class="v">480</div></div>
-              <div class="g-sc__t"><div class="l">Population (5 km)</div><div class="v">2,150</div></div>
-              <div class="g-sc__t"><div class="l">Primary livelihood</div><div class="v" style="font-size:18px">Fishing</div></div>
-              <div class="g-sc__t"><div class="l">Land tenure</div><div class="v" style="font-size:16px">Mixed / customary</div></div>
-            </div>
-            <h4>Community profile</h4>
-            <div class="g-rows">
-              <div class="r"><span class="nm">Dependent on coastal resources</span><span class="val">High</span></div>
-              <div class="r"><span class="nm">Indigenous / customary presence</span><span class="val">Present</span></div>
-              <div class="r"><span class="nm">Aquaculture ponds</span><span class="val">Present (south-east)</span></div>
-              <div class="r"><span class="nm">Community organisations</span><span class="val">3 active</span></div>
-            </div>
-            <div class="g-src"><b>Data source:</b> BPS Census, Ethnicity layer · 2023. <a>See more</a></div>
-          </div>
-        </div>
-
-        <!-- ══ CLIMATE ══ -->
-        <div class="an2-pane" data-pane="climate">
-          <div class="an2-title">Site Characterisation: Climate Context</div>
-          <div class="an2-rule"></div>
-          <div class="gcard">
-            <div class="gcard__eyebrow"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.7"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>Climate baseline</div>
-            <div class="g-sc">
-              <div class="g-sc__t"><div class="l">Annual rainfall</div><div class="v">3,100 <small>mm</small></div></div>
-              <div class="g-sc__t"><div class="l">Mean temperature</div><div class="v">27 <small>°C</small></div></div>
-              <div class="g-sc__t"><div class="l">Baseline carbon stock</div><div class="v">528 <small>tC/ha</small></div></div>
-              <div class="g-sc__t"><div class="l">Köppen class</div><div class="v" style="font-size:16px">Af · Tropical</div></div>
-            </div>
-            <h4>Climate exposure</h4>
-            <div class="g-rows">
-              <div class="r"><span class="nm">Current carbon storage</span><span class="val">Very high</span></div>
-              <div class="r"><span class="nm">Dry-season length</span><span class="val">~2 months</span></div>
-              <div class="r"><span class="nm">Frequency of land fires</span><span class="val">Low–Moderate</span></div>
-              <div class="r"><span class="nm">Sea-level-rise exposure</span><span class="val">Elevated</span></div>
-            </div>
-            <div class="g-src"><b>Data source:</b> WorldClim, Global Carbon layers · 2023. <a>See more</a></div>
-          </div>
-        </div>
-
-        <!-- ══ THREAT PROFILE ══ -->
         <div class="an2-pane" data-pane="threat">
-          <div class="an2-title">Threat Profile</div>
+          <div class="an2-title">Threats Profile: Overview</div>
           <div class="an2-rule"></div>
-          <div class="gcard">
-            <div class="gcard__eyebrow"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3l9 16H3l9-16Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 10v4M12 17h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Pressures detected across the project area</div>
-            <div class="g-threat"><span class="g-threat__ic high"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21V8M12 12C8.5 12 6 9.6 6 6c3.5 0 6 2.5 6 6ZM3 21h18" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div class="g-threat__m"><div class="g-threat__top"><h4>Deforestation &amp; forest loss</h4><span class="g-nd__lvl high"><span class="d"></span>High</span></div><p style="margin:0">Sustained clearing along the eastern margin, driven by aquaculture conversion. UDEF-A flags this area above the regional median.</p><div class="g-threat__meta"><span class="m">Annual loss rate<b>1.8% / yr</b></span><span class="m">5-year trend<b>↑ Increasing</b></span><span class="m">Risk class<b>VM0048 high</b></span></div></div></div>
-            <div class="g-threat"><span class="g-threat__ic mod"><svg viewBox="0 0 24 24" fill="none"><path d="M12 22c4 0 7-2.6 7-6.5 0-3-2-5.4-3-7-.4 1.6-1.4 2.5-2.4 2.8C14 8 13 4.5 10.5 2 11 5 8 6.5 6.5 9.5 5.6 11.2 5 13 5 15.5 5 19.4 8 22 12 22Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></span><div class="g-threat__m"><div class="g-threat__top"><h4>Fire risk &amp; hotspots</h4><span class="g-nd__lvl mod"><span class="d"></span>Medium</span></div><p style="margin:0">Seasonal hotspots concentrated in drained, degraded margins. Burned-area extent remains contained but trends with dry-season length.</p><div class="g-threat__meta"><span class="m">Hotspots (12 mo)<b>14</b></span><span class="m">Burned area<b>23 ha</b></span><span class="m">Peak month<b>Aug–Sep</b></span></div></div></div>
-            <div class="g-threat"><span class="g-threat__ic mod"><svg viewBox="0 0 24 24" fill="none"><path d="M3 16c1.5 0 2.2-1 3.5-1s2 1 3.5 1 2.2-1 3.5-1 2 1 3.5 1M3 20c1.5 0 2.2-1 3.5-1s2 1 3.5 1 2.2-1 3.5-1 2 1 3.5 1" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></span><div class="g-threat__m"><div class="g-threat__top"><h4>Flood &amp; disaster risk</h4><span class="g-nd__lvl mod"><span class="d"></span>Medium</span></div><p style="margin:0">Low-lying terrain with elevated tidal-flood and sea-level-rise exposure. Landslide risk negligible given flat topography.</p><div class="g-threat__meta"><span class="m">Flood exposure<b>High (coastal)</b></span><span class="m">Landslide<b>Low</b></span><span class="m">SLR sensitivity<b>Elevated</b></span></div></div></div>
-            <div class="g-src"><b>Data source:</b> UDEF-A, InaRISK, MODIS fire · 2024. <a>See more</a></div>
+          <div class="t3" id="an2T3">
+            <div data-nbs="threat-sections"></div>
           </div>
         </div>
-
-        <!-- ══ POTENTIAL BENEFIT ══ -->
         <div class="an2-pane" data-pane="benefit">
-          <div class="an2-title">Potential Benefit</div>
+          <div class="an2-title">Potential Benefit: Nature</div>
           <div class="an2-rule"></div>
-          <div class="gcard">
-            <div class="gcard__eyebrow"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>Projected triple-benefit outcomes</div>
-            <div class="g-sc" style="grid-template-columns:repeat(3,1fr)">
-              <div class="g-sc__t" style="background:var(--bg-success-second);border-color:var(--primary-100)"><div class="l" style="color:var(--text-primary);font-weight:700">CLIMATE</div><div class="v">126 <small>ktCO₂e</small></div><div class="l" style="margin-top:6px">Carbon sequestration (10 yr)</div></div>
-              <div class="g-sc__t"><div class="l" style="font-weight:700">PEOPLE</div><div class="v">1,850</div><div class="l" style="margin-top:6px">Households benefiting</div></div>
-              <div class="g-sc__t"><div class="l" style="font-weight:700">NATURE</div><div class="v">+34 <small>%</small></div><div class="l" style="margin-top:6px">Biodiversity uplift</div></div>
-            </div>
-            <h4>Expected outcomes by benefit category</h4>
-            <div class="g-rows">
-              <div class="r"><span class="nm">Avoided emissions vs. Business-as-Usual</span><span class="val">126 ktCO₂e</span></div>
-              <div class="r"><span class="nm">Mangrove &amp; forest area under improved management</span><span class="val">1,490 ha</span></div>
-              <div class="r"><span class="nm">Sustainable livelihood beneficiaries</span><span class="val">1,850 households</span></div>
-              <div class="r"><span class="nm">Ecological connectivity restored</span><span class="val">+34%</span></div>
-            </div>
-            <div class="g-src"><b>Data source:</b> NbS benefit projection model · 2024. <a>See more</a></div>
+          <div class="p5" id="an2P5">
+            <div data-nbs="benefit-content"></div>
           </div>
         </div>
-
       </div>
+
     </div>
   </section>
 
+  <script src="js/analysis-shared.js"></script>
   <script>
-  function an2Go(pane) {
-    document.querySelectorAll('#p-analysis .an2-pane').forEach(function (p) { p.classList.toggle('active', p.dataset.pane === pane); });
-    document.querySelectorAll('#p-analysis .an2-sub').forEach(function (b) { b.classList.toggle('active', b.dataset.pane === pane); });
-    var isSite = ['general','nature','people','climate'].indexOf(pane) !== -1;
-    document.querySelector('#an2-step-1 .an2-step__hd').classList.toggle('active', isSite);
-    document.querySelector('#an2-step-2 .an2-step__hd').classList.toggle('active', pane === 'threat');
-    document.querySelector('#an2-step-3 .an2-step__hd').classList.toggle('active', pane === 'benefit');
-    if (isSite) document.getElementById('an2-step-1').classList.add('open');
+  var AN2_VIEWS = {
+    'general':          { pane:'site',    step:1, title:'Site Characterisation: General Information' },
+    'nature':           { pane:'site',    step:1, title:'Site Characterisation: Nature' },
+    'people':           { pane:'site',    step:1, title:'Site Characterisation: People' },
+    'climate':          { pane:'site',    step:1, title:'Site Characterisation: Climate' },
+    'threat-overview':  { pane:'threat',  step:2, title:'Threats Profile: Overview' },
+    'threat-forest':    { pane:'threat',  step:2, title:'Threats Profile: Forest' },
+    'threat-mangrove':  { pane:'threat',  step:2, title:'Threats Profile: Mangrove' },
+    'threat-peatland':  { pane:'threat',  step:2, title:'Threats Profile: Peatland' },
+    'benefit-nature':   { pane:'benefit', step:3, title:'Potential Benefit: Nature' },
+    'benefit-people':   { pane:'benefit', step:3, title:'Potential Benefit: People' },
+    'benefit-climate':  { pane:'benefit', step:3, title:'Potential Benefit: Climate' }
+  };
+  var an2T3 = nbsInitThreat(document.getElementById('an2T3'));
+  var an2P5 = nbsInitBenefit(document.getElementById('an2P5'));
+  function an2Go(key) {
+    var view = AN2_VIEWS[key]; if (!view) return;
+    document.querySelectorAll('#p-analysis .an2-pane').forEach(function (p) { p.classList.toggle('active', p.dataset.pane === view.pane); });
+    document.querySelectorAll('#p-analysis .an2-sub').forEach(function (b) { b.classList.toggle('active', b.dataset.pane === key); });
+    for (var i = 1; i <= 3; i++) {
+      var step = document.getElementById('an2-step-' + i);
+      step.querySelector('.an2-step__hd').classList.toggle('active', view.step === i);
+      if (view.step === i) step.classList.add('open');
+    }
+    var pane = document.querySelector('#p-analysis .an2-pane[data-pane="' + view.pane + '"]');
+    pane.querySelector('.an2-title').textContent = view.title;
+    if (view.pane === 'site') nbsShowSitePane(pane, key);
+    if (view.pane === 'threat') an2T3.show(key.replace('threat-', ''));
+    if (view.pane === 'benefit') an2P5.show(key.replace('benefit-', ''));
   }
   function an2ToggleStep(n) {
-    if (n === 1) document.getElementById('an2-step-1').classList.toggle('open');
+    var step = document.getElementById('an2-step-' + n);
+    var opening = !step.classList.contains('open');
+    step.classList.toggle('open');
+    if (opening) { var first = step.querySelector('.an2-sub'); if (first) an2Go(first.dataset.pane); }
   }
+  /* flip cards need re-measuring if the Analysis tab is opened after a resize */
+  document.getElementById('tab-analysis').addEventListener('click', function () { requestAnimationFrame(an2P5.sizeAll); });
   </script>
 
 
