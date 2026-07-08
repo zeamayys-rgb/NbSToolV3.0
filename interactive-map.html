@@ -221,22 +221,31 @@
   .dm-opt__tx{display:flex;flex-direction:column;gap:4px;}
   .dm-opt__tx b{font-size:17px;font-weight:700;color:#1a202c;}
   .dm-opt__tx span{font-size:14px;color:#68727d;line-height:1.45;}
-  .dm-note{display:flex;gap:12px;align-items:flex-start;background:#fdf6ea;border-radius:10px;padding:14px 16px;margin-top:4px;}
-  .dm-note svg{width:22px;height:22px;flex:none;stroke:#efa22f;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
-  .dm-note p{font-size:13.5px;color:#8f611c;line-height:1.5;}
+  .dm-note{display:flex;gap:12px;align-items:flex-start;background:var(--bg-warning-second,#fdf6ea);border-radius:10px;padding:14px 16px;margin-top:4px;}
+  .dm-note svg{width:22px;height:22px;flex:none;stroke:var(--text-warning,#efa22f);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+  .dm-note p{margin:0;font-size:14px;color:var(--warning-700,#8f611c);line-height:22px;}
   /* leave modal */
   .dm-head--icon{border-bottom:none;padding-bottom:0;margin-bottom:0;}
   .dm-warn{width:56px;height:56px;flex:none;display:grid;place-items:center;border-radius:12px;background:#fdf6ea;color:#efa22f;}
   .dm-warn svg{width:28px;height:28px;stroke:#efa22f;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
   .dm-info{display:flex;gap:12px;align-items:flex-start;background:#f7f8fa;border:1px solid #eaecf0;border-radius:10px;padding:14px 16px;margin:18px 0;}
   .dm-info svg{width:20px;height:20px;flex:none;stroke:#066653;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;}
-  .dm-info p{font-size:13.5px;color:#4a5560;line-height:1.5;}
+  .dm-info p{margin:0;font-size:14px;color:var(--text-base-second,#4a5560);line-height:22px;}
   .dm-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:9px;font:600 15px/1 'Poppins',sans-serif;border-radius:10px;padding:15px;cursor:pointer;border:1px solid transparent;transition:.15s;}
   .dm-btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
   .dm-btn--primary{background:#066653;color:#fff;}
   .dm-btn--primary:hover{background:#044c3e;}
   .dm-btn--ghost{background:#fff;border-color:#e5e7eb;color:#68727d;margin-top:10px;}
   .dm-btn--ghost:hover{background:#f5f6f8;color:#252525;}
+  /* save-project (Add new Project) modal — Figma 2136-61751 */
+  .dm-field{display:flex;flex-direction:column;gap:8px;}
+  .dm-field label{font-size:15px;font-weight:600;color:#1a202c;}
+  .dm-field input,.dm-field textarea{font:500 15px/1.5 'Poppins',sans-serif;color:#1a202c;background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:14px 16px;width:100%;transition:.15s;}
+  .dm-field textarea{resize:vertical;min-height:120px;}
+  .dm-field input::placeholder,.dm-field textarea::placeholder{color:#9aa4af;}
+  .dm-field input:focus,.dm-field textarea:focus{outline:none;border-color:#066653;box-shadow:0 0 0 3px rgba(6,102,83,.12);}
+  .dm-foot{display:flex;justify-content:flex-end;gap:12px;padding-top:18px;border-top:1px solid #eaecf0;margin-top:20px;}
+  .dm-foot .dm-btn{width:auto;padding:13px 22px;margin-top:0;}
 
   /* Step 3 — Threats Profile & NbS Screening Overview (Figma 302-78413) */
   .da-panel[data-step="3"] { width: 810px; }
@@ -1942,7 +1951,7 @@
       <button class="dm-x" type="button" data-dm-close aria-label="Close"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
     </div>
     <div class="dm-body">
-      <button class="dm-opt" type="button" onclick="window.location.href='dashboard.html'">
+      <button class="dm-opt" type="button" id="dmOptSave">
         <span class="dm-opt__ic"><svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg></span>
         <span class="dm-opt__tx"><b>Save to my Project</b><span>Create a pre-feasibility study draft from your site characterisation data.</span></span>
       </button>
@@ -1958,6 +1967,33 @@
         <svg viewBox="0 0 24 24"><path d="M12 3 2 20h20z"/><path d="M12 9v5M12 17.5h.01"/></svg>
         <p>You can return to this step anytime from the Data Analyser panel. Generated outputs are saved to your project portfolio.</p>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Add new Project — name & description modal (Figma 2136-61751) ===== -->
+<div class="dm-overlay" id="dmSave" aria-hidden="true">
+  <div class="dm" role="dialog" aria-modal="true" aria-labelledby="dmSaveTitle">
+    <div class="dm-head">
+      <div>
+        <h3 id="dmSaveTitle" style="margin-top:0">Add new Project</h3>
+        <p class="dm-sub">Give the project name and description.</p>
+      </div>
+      <button class="dm-x" type="button" data-dm-close aria-label="Close"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </div>
+    <div class="dm-body">
+      <div class="dm-field">
+        <label for="dmSaveName">Project name</label>
+        <input type="text" id="dmSaveName" placeholder="e.g. Kubu Raya Mangrove" />
+      </div>
+      <div class="dm-field">
+        <label for="dmSaveDesc">Description</label>
+        <textarea id="dmSaveDesc" rows="4" placeholder="Briefly describe the project goal, site, and communities involved."></textarea>
+      </div>
+    </div>
+    <div class="dm-foot">
+      <button class="dm-btn dm-btn--ghost" type="button" data-dm-close>Cancel</button>
+      <button class="dm-btn dm-btn--primary" type="button" id="dmSaveGo"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Save to My Project</button>
     </div>
   </div>
 </div>
@@ -2320,14 +2356,21 @@
   /* ===== Step 5 modals: Finish chooser + Leave-without-saving guard ===== */
   const dmFinish = document.getElementById('dmFinish');
   const dmLeave = document.getElementById('dmLeave');
+  const dmSave = document.getElementById('dmSave');
   function dmOpen(m){ if (m) m.classList.add('show'); }
   function dmClose(m){ if (m) m.classList.remove('show'); }
-  [dmFinish, dmLeave].forEach(m => {
+  [dmFinish, dmLeave, dmSave].forEach(m => {
     if (!m) return;
     m.addEventListener('click', e => { if (e.target === m) dmClose(m); });
     m.querySelectorAll('[data-dm-close]').forEach(b => b.addEventListener('click', () => dmClose(m)));
   });
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') { dmClose(dmFinish); dmClose(dmLeave); } });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') { dmClose(dmFinish); dmClose(dmLeave); dmClose(dmSave); } });
+
+  // "Save to my Project" → name the project, then continue to its detail page
+  const dmOptSave = document.getElementById('dmOptSave');
+  if (dmOptSave) dmOptSave.addEventListener('click', () => { dmClose(dmFinish); dmOpen(dmSave); });
+  const dmSaveGo = document.getElementById('dmSaveGo');
+  if (dmSaveGo) dmSaveGo.addEventListener('click', () => { window.location.href = 'project-detail.html'; });
 
   const finishBtn = document.getElementById('finishAnalysis');
   if (finishBtn) finishBtn.addEventListener('click', () => dmOpen(dmFinish));
