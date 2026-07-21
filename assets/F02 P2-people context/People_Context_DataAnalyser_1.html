@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Data Analyser — Site Characterisation: People Context</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Barlow+Semi+Condensed:wght@500;600;700&display=swap" rel="stylesheet" />
+<style>
+  /* ============ NbS Tool V3 — design tokens ============ */
+  :root{
+    --primary-600:#066653; --primary-500:#077f68; --primary-700:#044c3e;
+    --text-main:#252525; --text-second:#68727d; --text-third:#c0c2c6;
+    --stroke-base:#eaecf0; --bg-base-main:#ffffff; --bg-base-second:#fafbfc; --bg-base-third:#f7f7f8;
+    /* tertiary / amber accent used by People metric cards */
+    --amber-border:#f3912a; --amber-value:#c27422;
+    /* chart palette (Demography) */
+    --age-young:#ff925c; --age-mid:#c96432; --age-old:#7d3e1f;
+    /* neutral chart text */
+    --chart-axis:#677389; --neutral-800:#354152; --neutral-900:#20293a; --neutral-1000:#111729;
+    /* Acumin substitute — Barlow Semi Condensed (condensed display face) */
+    --font-display:'Barlow Semi Condensed', sans-serif;
+    --font-ui:'Poppins', sans-serif;
+    --radius-lg:8px; --radius-md:6px; --radius-sm:4px; --radius-xl:12px;
+    --elev-2:0px 1px 3px 0px rgba(0,0,0,.08);
+    --elev-4:0px 4px 12px 0px rgba(0,0,0,.04);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:var(--font-ui); color:var(--text-main);
+    background:#e9edf0; padding:40px 24px;
+    display:flex; justify-content:center;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ---------- Panel shell (810px wide, slot 770, content 730) ---------- */
+  .da-panel{
+    width:810px; background:var(--bg-base-main);
+    border-radius:var(--radius-xl); overflow:hidden;
+    box-shadow:var(--elev-4); display:flex; flex-direction:column;
+  }
+
+  /* ----- Title panel (teal) ----- */
+  .da-head{background:var(--primary-600); color:#fff;}
+  .da-head-top{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:20px 20px 0 20px;
+  }
+  .da-head-top h1{font-family:var(--font-ui); font-weight:600; font-size:20px; line-height:28px;}
+  .btn-hide{
+    display:inline-flex; align-items:center; gap:6px;
+    background:rgba(255,255,255,.14); color:#fff;
+    border:1px solid rgba(255,255,255,.3); border-radius:var(--radius-md);
+    font-size:12px; font-weight:500; padding:4px 10px; cursor:pointer;
+  }
+  /* stepper */
+  .stepper{display:flex; align-items:center; gap:8px; padding:16px 20px 18px 20px;}
+  .step{display:flex; align-items:center; gap:8px; font-size:12px; font-weight:500; color:rgba(255,255,255,.6); white-space:nowrap;}
+  .step .n{
+    width:22px; height:22px; border-radius:50%; display:grid; place-items:center;
+    font-size:11px; font-weight:600; border:1px solid rgba(255,255,255,.4); color:rgba(255,255,255,.7);
+  }
+  .step.done{color:#fff;} .step.done .n{background:#fff; color:var(--primary-700); border-color:#fff;}
+  .step.current{color:#fff;} .step.current .n{background:#fff; color:var(--primary-700); border-color:#fff;}
+  .step-div{flex:1; height:1px; background:rgba(255,255,255,.35); min-width:14px;}
+
+  /* ----- Tabs ----- */
+  .da-tabs{display:flex; gap:24px; padding:0 20px; background:var(--bg-base-main); border-bottom:1px solid var(--stroke-base);}
+  .da-tab{padding:14px 0; font-size:14px; font-weight:500; color:var(--text-second); cursor:pointer; border-bottom:2px solid transparent;}
+  .da-tab.active{color:var(--primary-600); border-bottom-color:var(--primary-600); font-weight:600;}
+
+  /* ----- Content slot (20px pad → 770px slot) ----- */
+  .da-body{padding:20px;}
+  .da-section-title{
+    text-align:center; font-family:var(--font-display); font-weight:600;
+    font-size:24px; line-height:30px; letter-spacing:-.5px; color:var(--text-main);
+    padding:6px 0 4px;
+  }
+  .da-section-title .rule{display:block; width:120px; height:3px; margin:8px auto 0;
+    background:linear-gradient(90deg,var(--primary-500),var(--age-mid)); border-radius:2px;}
+
+  /* a "Section Information" card = the 730px boxes */
+  .info-card{
+    border:1px solid var(--stroke-base); border-radius:var(--radius-lg);
+    background:var(--bg-base-main); padding:20px; margin-top:20px;
+  }
+  .section-header{display:flex; align-items:center; gap:6px; margin-bottom:20px;}
+  .section-header .eyebrow{
+    font-size:11px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:var(--primary-600);
+  }
+  .info-dot{width:16px; height:16px; border-radius:50%; background:var(--primary-600); color:#fff;
+    display:grid; place-items:center; font-size:10px; font-weight:700;}
+
+  /* ---------- DEMOGRAPHY section ---------- */
+  .demo-intro{font-size:14px; line-height:22px; color:var(--text-main); margin-bottom:20px;}
+  .demo-intro b{font-weight:600;}
+
+  /* metric cards row — 3 across, 20px gap */
+  .metric-row{display:flex; gap:20px; margin-bottom:30px;}
+  .metric-card{
+    flex:1; border:1px solid var(--amber-border); border-radius:var(--radius-xl);
+    padding:12px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px;
+    text-align:center;
+  }
+  .metric-card .label{font-size:14px; font-weight:500; color:var(--text-main);}
+  .metric-card .ic{width:50px; height:50px; color:var(--amber-value);}
+  .metric-card .val{
+    font-family:var(--font-display); font-weight:600; font-size:24px; line-height:30px;
+    letter-spacing:-.24px; color:var(--amber-value);
+  }
+
+  /* chart block heading with left accent bar */
+  .chart-head{border-left:8px solid var(--age-mid); padding-left:20px; margin-bottom:20px;}
+  .chart-head .t{font-size:14px; font-weight:500; line-height:22px; color:var(--text-main);}
+  .chart-head .s{font-size:11px; line-height:18px; color:var(--text-second); margin-top:4px;}
+
+  /* bar chart */
+  .barchart-wrap{margin-bottom:20px;}
+  .barchart{display:flex; height:246px;}
+  .bar-yaxis-label{
+    writing-mode:vertical-rl; transform:rotate(180deg);
+    font-size:14px; font-weight:500; color:var(--chart-axis); letter-spacing:-.42px;
+    display:grid; place-items:center; width:18px; margin-right:6px;
+  }
+  .bar-yvals{display:flex; flex-direction:column; justify-content:space-between; align-items:flex-end;
+    font-size:12px; color:var(--chart-axis); letter-spacing:-.36px; padding:0 6px 28px 0; height:100%; width:24px;}
+  .bar-plot{flex:1; display:flex; flex-direction:column;}
+  .bar-grid{
+    flex:1; display:flex; align-items:flex-end; gap:6px; padding-bottom:6px;
+    background:
+      linear-gradient(var(--stroke-base),var(--stroke-base)) left bottom/100% 1px no-repeat,
+      repeating-linear-gradient(to top, transparent, transparent 53px, var(--bg-base-third) 53px, var(--bg-base-third) 54px);
+    border-left:1px solid var(--stroke-base);
+  }
+  .bar{flex:1; border-radius:3px 3px 0 0;}
+  .bar-xaxis{display:flex; gap:6px; padding-top:6px;}
+  .bar-xlabel{flex:1; text-align:center; font-size:10px; color:var(--chart-axis); letter-spacing:-.3px;
+    transform:rotate(-.5deg);}
+
+  /* chart legend (bordered, orange) */
+  .chart-legend{
+    display:inline-flex; gap:30px; align-items:center; padding:12px;
+    border:1px solid var(--age-young); border-radius:var(--radius-sm); margin:0 auto;
+  }
+  .legend-row{display:flex; align-items:center; gap:8px;}
+  .legend-swatch{width:16px; height:16px; border-radius:5px;}
+  .legend-row span{font-size:12px; font-weight:500; color:var(--chart-axis); letter-spacing:-.6px;}
+  .center{display:flex; justify-content:center;}
+
+  /* population pyramid */
+  .pyramid-block{display:flex; flex-direction:column; align-items:center; gap:44px; padding:7px 0;}
+  .pyramid-area{width:492px; position:relative;}
+  .pyramid{display:flex; flex-direction:column; gap:1px;}
+  .pyr-row{display:flex; align-items:center; justify-content:center; height:27px;}
+  .pyr-bar{height:27px; border:.5px solid var(--neutral-800);}
+  .pyr-center{width:0; border-left:1px dashed #9aa3b2; align-self:stretch;}
+  .pyr-labels{display:flex; margin-top:12px; font-size:14px; font-weight:500; color:var(--neutral-900); letter-spacing:-.42px;}
+  .pyr-labels .ml{flex:1;} .pyr-labels .fl{flex:1; text-align:right;}
+  .pyramid-legend{
+    position:absolute; top:106px; right:0; width:134px;
+    border:1px solid var(--age-young); border-radius:var(--radius-sm); padding:12px;
+    display:flex; flex-direction:column; gap:30px; background:var(--bg-base-main);
+  }
+  .pyramid-legend .legend-row span{color:#04473a; font-size:14px; letter-spacing:-.42px;}
+  .pyramid-legend .legend-swatch{border-radius:4px;}
+
+  .data-source{font-size:12px; color:var(--text-second); margin-top:20px; padding-top:0;}
+  .data-source a{color:var(--text-main); font-style:italic; text-decoration:underline;}
+
+  /* ---------- VULNERABILITY section (2×2 grid) ---------- */
+  .vuln-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:30px;}
+  .vuln-cell{display:flex; flex-direction:column; justify-content:space-between; gap:14px;}
+  .vuln-title{display:flex; align-items:center; gap:5px;}
+  .vuln-title .t{font-size:16px; font-weight:500; line-height:24px; color:var(--text-main);}
+  .vuln-title .alert{width:18px; height:18px; color:var(--text-second);}
+  .vuln-desc{font-size:14px; line-height:22px; color:#2d3648;}
+  .vuln-gauge{margin-top:8px;}
+  .gauge-track-wrap{position:relative; padding-top:34px;}
+  .gauge-track{
+    height:26px; border-radius:0;
+    background:linear-gradient(90deg,#077f68 0%, #f4fb72 50%, #ff3f3f 100%);
+    position:relative;
+  }
+  .gauge-cap{position:absolute; top:-5px; width:5px; height:36px; background:var(--text-second);}
+  .gauge-cap.l{left:0;} .gauge-cap.r{right:0;}
+  /* marker badge + needle */
+  .gauge-marker{position:absolute; top:0; transform:translateX(-50%); display:flex; flex-direction:column; align-items:center;}
+  .gauge-badge{
+    background:#010101; color:#fff; font-family:var(--font-display); font-weight:600;
+    font-size:20px; line-height:24px; letter-spacing:-.2px; padding:2px 10px; border-radius:var(--radius-md);
+    white-space:nowrap;
+  }
+  .gauge-needle{width:0; height:0; border-left:6px solid transparent; border-right:6px solid transparent;
+    border-top:8px solid #010101;}
+  .gauge-scale{display:flex; justify-content:space-between; font-size:12px; font-weight:500; color:var(--text-second); margin-top:7px;}
+</style>
+</head>
+<body>
+
+<div class="da-panel">
+
+  <!-- ===== Title panel ===== -->
+  <div class="da-head">
+    <div class="da-head-top">
+      <h1>Data Analyser</h1>
+      <button class="btn-hide" type="button">Hide
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M7 10l5 5 5-5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+    <div class="stepper">
+      <span class="step done"><span class="n"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Select Location</span>
+      <span class="step-div"></span>
+      <span class="step current"><span class="n">2</span>Site Characterisation</span>
+      <span class="step-div"></span>
+      <span class="step"><span class="n">3</span>Threat Profile</span>
+      <span class="step-div"></span>
+      <span class="step"><span class="n">4</span>Select Intervention</span>
+      <span class="step-div"></span>
+      <span class="step"><span class="n">5</span>Potential Benefit</span>
+    </div>
+  </div>
+
+  <!-- ===== Tabs ===== -->
+  <div class="da-tabs">
+    <span class="da-tab">General Context</span>
+    <span class="da-tab">Nature Context</span>
+    <span class="da-tab active">People Context</span>
+    <span class="da-tab">Climate Context</span>
+  </div>
+
+  <!-- ===== Content slot ===== -->
+  <div class="da-body">
+    <div class="da-section-title">Site Characterisation: People Context<span class="rule"></span></div>
+
+    <!-- ========= SECTION 1 — DEMOGRAPHY ========= -->
+    <div class="info-card">
+      <div class="section-header">
+        <span class="eyebrow">Demography</span>
+        <span class="info-dot">i</span>
+      </div>
+
+      <p class="demo-intro">Based on gridded world population data, the selected area has an estimated total population of <b>[Total Population]</b>, comprising <b>[Male Population]</b> males and <b>[Female Population]</b> females.</p>
+
+      <!-- metric cards -->
+      <div class="metric-row">
+        <div class="metric-card">
+          <span class="label">Total Population</span>
+          <svg class="ic" viewBox="0 0 24 24" fill="none"><path d="M9 11a3 3 0 100-6 3 3 0 000 6zM17 11a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM3 19c0-2.8 2.7-5 6-5s6 2.2 6 5M15 14c2.5 0 4.5 1.7 4.5 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span class="val">102,000,000 People</span>
+        </div>
+        <div class="metric-card">
+          <span class="label">Population Density</span>
+          <svg class="ic" viewBox="0 0 24 24" fill="none"><path d="M3 21V8l5-3 5 3 5-3v16M3 21h18M8 5v16M13 8v13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span class="val">322 people/km²</span>
+        </div>
+        <div class="metric-card">
+          <span class="label">Population Growth</span>
+          <svg class="ic" viewBox="0 0 24 24" fill="none"><path d="M3 17l6-6 4 4 8-8M21 7v5M21 7h-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span class="val">12%/year</span>
+        </div>
+      </div>
+
+      <!-- bar chart -->
+      <div class="barchart-wrap">
+        <div class="chart-head">
+          <div class="t">Indonesian Population Distribution by Age Group (in Thousands)</div>
+          <div class="s">Showing the full picture of demographic age in the jurisdiction, by the availability of age group within the statistics.</div>
+        </div>
+        <div class="barchart">
+          <div class="bar-yaxis-label">Number of Population (in thousand)</div>
+          <div class="bar-yvals"><span>40</span><span>30</span><span>20</span><span>10</span><span>0</span></div>
+          <div class="bar-plot">
+            <div class="bar-grid" id="barGrid"></div>
+            <div class="bar-xaxis" id="barX"></div>
+          </div>
+        </div>
+        <div class="center" style="margin-top:16px;">
+          <div class="chart-legend">
+            <div class="legend-row"><span class="legend-swatch" style="background:var(--age-young)"></span><span>Age 0-14</span></div>
+            <div class="legend-row"><span class="legend-swatch" style="background:var(--age-mid)"></span><span>Age 15-44</span></div>
+            <div class="legend-row"><span class="legend-swatch" style="background:var(--age-old)"></span><span>Age 45-59+</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- population pyramid -->
+      <div class="pyramid-block">
+        <div class="chart-head" style="width:100%;">
+          <div class="t">Malaysia Population Pyramid (by Age Group and Gender)</div>
+          <div class="s">Showing the full picture of demographic age (both sexes: Male/Female) in the jurisdiction, by the availability of age group within the statistics</div>
+        </div>
+        <div class="pyramid-area">
+          <div class="pyramid" id="pyramid"></div>
+          <div class="pyr-labels"><span class="ml">Male</span><span class="fl">Female</span></div>
+          <div class="pyramid-legend">
+            <div class="legend-row"><span class="legend-swatch" style="background:var(--age-old)"></span><span>Age 45-85+</span></div>
+            <div class="legend-row"><span class="legend-swatch" style="background:var(--age-mid)"></span><span>Age 15-44</span></div>
+            <div class="legend-row"><span class="legend-swatch" style="background:var(--age-young)"></span><span>Age 0-14</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="data-source">Data source: [Data] [Source_data] [Year] <a href="#">See more</a></div>
+    </div>
+
+    <!-- ========= SECTION 2 — VULNERABILITY ASSESSMENT ========= -->
+    <div class="info-card">
+      <div class="section-header">
+        <span class="eyebrow">Vulnerability Assessment</span>
+        <span class="info-dot">i</span>
+      </div>
+
+      <div class="vuln-grid">
+        <!-- Physical (col 1, row 1) -->
+        <div class="vuln-cell">
+          <div>
+            <div class="vuln-title">
+              <span class="t">Physical Vulnerability</span>
+              <svg class="alert" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 8v5M12 16h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            </div>
+            <p class="vuln-desc">The selected area demonstrates a [Vulnerability Class] level of physical vulnerability to climate hazards</p>
+          </div>
+          <div class="vuln-gauge">
+            <div class="gauge-track-wrap">
+              <div class="gauge-track">
+                <span class="gauge-cap l"></span><span class="gauge-cap r"></span>
+                <div class="gauge-marker" style="left:50%;">
+                  <span class="gauge-badge">Moderate</span><span class="gauge-needle"></span>
+                </div>
+              </div>
+            </div>
+            <div class="gauge-scale"><span>Very Low</span><span>Very High</span></div>
+          </div>
+        </div>
+
+        <!-- Economic (col 2, row 1) -->
+        <div class="vuln-cell">
+          <div>
+            <div class="vuln-title">
+              <span class="t">Economic Vulnerability</span>
+              <svg class="alert" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 8v5M12 16h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            </div>
+            <p class="vuln-desc">The selected area has a [Vulnerability Class] level of economic vulnerability to climate hazards</p>
+          </div>
+          <div class="vuln-gauge">
+            <div class="gauge-track-wrap">
+              <div class="gauge-track">
+                <span class="gauge-cap l"></span><span class="gauge-cap r"></span>
+                <div class="gauge-marker" style="left:50%;">
+                  <span class="gauge-badge">Moderate</span><span class="gauge-needle"></span>
+                </div>
+              </div>
+            </div>
+            <div class="gauge-scale"><span>Very Low</span><span>Very High</span></div>
+          </div>
+        </div>
+
+        <!-- Environmental (col 1, row 2) -->
+        <div class="vuln-cell">
+          <div>
+            <div class="vuln-title">
+              <span class="t">Environmental Vulnerability</span>
+              <svg class="alert" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 8v5M12 16h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            </div>
+            <p class="vuln-desc">The environmental conditions in the selected area are classified as having a [Vulnerability Class] level of vulnerability to climate hazards</p>
+          </div>
+          <div class="vuln-gauge">
+            <div class="gauge-track-wrap">
+              <div class="gauge-track">
+                <span class="gauge-cap l"></span><span class="gauge-cap r"></span>
+                <div class="gauge-marker" style="left:8%;">
+                  <span class="gauge-badge">Very Low</span><span class="gauge-needle"></span>
+                </div>
+              </div>
+            </div>
+            <div class="gauge-scale"><span>Very Low</span><span>Very High</span></div>
+          </div>
+        </div>
+
+        <!-- Social (col 2, row 2) -->
+        <div class="vuln-cell">
+          <div>
+            <div class="vuln-title">
+              <span class="t">Social Vulnerability</span>
+              <svg class="alert" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 8v5M12 16h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            </div>
+            <p class="vuln-desc">Communities in the selected area have a [Vulnerability Class] level of social vulnerability to climate hazards</p>
+          </div>
+          <div class="vuln-gauge">
+            <div class="gauge-track-wrap">
+              <div class="gauge-track">
+                <span class="gauge-cap l"></span><span class="gauge-cap r"></span>
+                <div class="gauge-marker" style="left:92%;">
+                  <span class="gauge-badge">Very High</span><span class="gauge-needle"></span>
+                </div>
+              </div>
+            </div>
+            <div class="gauge-scale"><span>Very Low</span><span>Very High</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="data-source">Data source: [Data] [Source_data] [Year] <a href="#">See more</a></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  /* Bar chart — heights derived from Figma bar pixel heights (max 214px = ~43k), colored by age band */
+  const bars = [
+    {label:'0-4',   h:91,  c:'young'},
+    {label:'5-9',   h:188, c:'young'},
+    {label:'10-14', h:176, c:'young'},
+    {label:'15-19', h:193, c:'mid'},
+    {label:'20-24', h:214, c:'mid'},
+    {label:'25-29', h:193, c:'mid'},
+    {label:'30-34', h:180, c:'mid'},
+    {label:'35-39', h:159, c:'mid'},
+    {label:'40-44', h:142, c:'mid'},
+    {label:'45-49', h:101, c:'old'},
+    {label:'50-54', h:65,  c:'old'},
+    {label:'55-59', h:74,  c:'old'}
+  ];
+  const colMap = {young:'var(--age-young)', mid:'var(--age-mid)', old:'var(--age-old)'};
+  const grid = document.getElementById('barGrid');
+  const xax  = document.getElementById('barX');
+  const maxH = 214;
+  bars.forEach(b=>{
+    const bar = document.createElement('div');
+    bar.className='bar';
+    bar.style.height = (b.h/maxH*100)+'%';
+    bar.style.background = colMap[b.c];
+    grid.appendChild(bar);
+    const lab = document.createElement('div');
+    lab.className='bar-xlabel'; lab.textContent=b.label;
+    xax.appendChild(lab);
+  });
+
+  /* Population pyramid — widths from Figma (px out of 493). young=ff925c, mid=c96432, old=7d3e1f
+     Rows top→bottom = oldest→youngest. left/width pairs mirror around center (x=246). */
+  const pyr = [
+    {w:7,   c:'old'},
+    {w:21,  c:'old'},
+    {w:53,  c:'old'},
+    {w:85,  c:'old'},
+    {w:131, c:'old'},
+    {w:183, c:'old'},
+    {w:218, c:'mid'},
+    {w:263, c:'mid'},
+    {w:283, c:'mid'},
+    {w:313, c:'mid'},
+    {w:349, c:'mid'},
+    {w:393, c:'mid'},
+    {w:435, c:'young'},
+    {w:493, c:'young'}
+  ];
+  const pCol = {young:'#ff925c', mid:'#c96432', old:'#7d3e1f'};
+  const pwrap = document.getElementById('pyramid');
+  const FULL = 493;
+  pyr.forEach(r=>{
+    const row = document.createElement('div');
+    row.className='pyr-row';
+    const half = (r.w/FULL*100)/2; // each side share
+    const left = document.createElement('div');
+    left.className='pyr-bar';
+    left.style.width = half+'%';
+    left.style.background = pCol[r.c];
+    left.style.borderRadius='2px 0 0 2px';
+    const right = document.createElement('div');
+    right.className='pyr-bar';
+    right.style.width = half+'%';
+    right.style.background = pCol[r.c];
+    right.style.borderRadius='0 2px 2px 0';
+    const center = document.createElement('div');
+    center.className='pyr-center';
+    row.appendChild(left); row.appendChild(center); row.appendChild(right);
+    pwrap.appendChild(row);
+  });
+</script>
+</body>
+</html>

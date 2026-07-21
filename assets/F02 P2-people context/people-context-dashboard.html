@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NbS Tool v3 — People Context (Panel Data Analyzer)</title>
+<style>
+  :root{
+    --ink-900:#1B2A24;--ink-700:#374151;--ink-500:#6B7280;--ink-400:#9CA3AF;--line:#E7EBE9;
+    --green:#0B5D3F;--green-50:#EAF4EF;--green-600:#12764F;
+    --emp:#6D5BD0;--emp-50:#F0EEFB;--edu:#2F6FED;--edu-50:#EAF1FD;
+    --eco:#E8912D;--eco-50:#FDF2E4;--hea:#D64550;--hea-50:#FCECED;
+    --hou:#0E8C8C;--hou-50:#E5F4F4;
+    --font:'Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    --shadow:0 1px 3px rgba(16,24,40,.06),0 4px 16px rgba(16,24,40,.05);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:var(--font);background:#F3F5F4;color:var(--ink-700);font-size:14px;line-height:1.55;}
+  b,strong{color:var(--ink-900);font-weight:600;}
+  .wrap{max-width:960px;margin:0 auto;padding:0 16px 60px;}
+  .appbar{background:var(--green);color:#fff;padding:14px 22px;display:flex;align-items:center;justify-content:space-between;}
+  .appbar h1{font-size:16px;font-weight:700;}
+  .country-pick{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3);border-radius:999px;padding:5px 8px 5px 14px;}
+  .country-pick select{background:transparent;border:none;color:#fff;font-family:inherit;font-weight:600;font-size:13.5px;outline:none;cursor:pointer;}
+  .country-pick select option{color:#111;}
+  .stepper{background:var(--green-600);color:#DCEBE4;display:flex;gap:6px;flex-wrap:wrap;padding:10px 22px;font-size:12.5px;}
+  .stepper .s{display:flex;align-items:center;gap:7px;opacity:.7;}
+  .stepper .s.active{opacity:1;color:#fff;font-weight:600;}
+  .stepper .n{width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,.25);display:grid;place-items:center;font-size:11px;font-weight:700;}
+  .stepper .s.active .n{background:#fff;color:var(--green);}
+  .stepper .sep{opacity:.4;}
+  .subnav{background:#fff;border-bottom:1px solid var(--line);display:flex;gap:26px;justify-content:center;padding:12px;font-size:14px;}
+  .subnav a{text-decoration:none;color:var(--ink-500);font-weight:500;}
+  .subnav a.active{color:var(--green);font-weight:700;border-bottom:2.5px solid var(--green);padding-bottom:10px;}
+  .pagehead{text-align:center;padding:20px 0 6px;}
+  .pagehead h2{font-size:20px;font-weight:700;color:var(--ink-900);}
+  .pagehead .rule{width:120px;height:3px;margin:8px auto 0;border-radius:3px;background:linear-gradient(90deg,var(--green),var(--eco),var(--edu));}
+  .coverage{background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:18px;margin:16px 0;}
+  .coverage .lbl{font-size:11px;font-weight:700;letter-spacing:.08em;color:var(--ink-500);text-transform:uppercase;margin-bottom:6px;}
+  .coverage .desc{font-size:12.5px;color:var(--ink-500);margin-bottom:14px;}
+  .cov-opts{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+  .cov{border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;}
+  .cov.on{border-color:var(--green);background:var(--green-50);}
+  .cov .t{font-weight:700;color:var(--ink-900);font-size:13.5px;}
+  .cov .s{font-size:11.5px;color:var(--ink-500);margin-top:3px;}
+
+  .sec{background:#fff;border-radius:16px;box-shadow:var(--shadow);margin:16px 0;overflow:hidden;border:1px solid var(--line);}
+  .sec-head{display:flex;align-items:center;gap:9px;padding:14px 20px;font-weight:700;font-size:13px;letter-spacing:.05em;text-transform:uppercase;}
+  .sec-head .ico{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;color:#fff;font-size:14px;}
+  .sec-head .info{margin-left:auto;width:18px;height:18px;border-radius:50%;border:1.5px solid currentColor;display:grid;place-items:center;font-size:11px;font-style:italic;opacity:.6;}
+  .sec-body{padding:14px 20px 20px;}
+  .narr{background:#F8FAF9;border:1px solid var(--line);border-left:3px solid var(--green);border-radius:10px;padding:11px 14px;font-size:12.8px;color:var(--ink-700);margin-bottom:14px;}
+  .narr .nl{font-size:9.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-400);display:block;margin-bottom:4px;}
+
+  .grid{display:grid;gap:12px;}
+  .g2{grid-template-columns:1fr 1fr;}.g3{grid-template-columns:repeat(3,1fr);}.g4{grid-template-columns:repeat(4,1fr);}
+  @media(max-width:720px){.g2,.g3,.g4,.cov-opts{grid-template-columns:1fr;}}
+
+  .card{border:1px solid var(--line);border-radius:12px;padding:13px 15px;display:flex;flex-direction:column;}
+  .card .ct{font-size:12px;font-weight:700;color:var(--ink-900);display:flex;align-items:center;gap:6px;}
+  .card .cu{font-size:10.5px;color:var(--ink-400);margin-top:1px;}
+  .card .cbody{flex:1;margin:10px 0 8px;display:flex;flex-direction:column;justify-content:center;}
+  .card .big{font-size:24px;font-weight:800;color:var(--ink-900);}
+  .card .big.pct{color:var(--accent,#0B5D3F);}
+  .card .cf{font-size:9.5px;color:var(--ink-400);border-top:1px dashed var(--line);padding-top:7px;margin-top:auto;line-height:1.35;}
+  .chip{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:7px;font-size:13px;}
+
+  .ranked{list-style:none;}
+  .ranked li{display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px dashed var(--line);font-size:12.5px;}
+  .ranked li:last-child{border-bottom:none;}
+  .ranked .rk{width:20px;height:20px;border-radius:6px;font-weight:700;display:grid;place-items:center;font-size:11px;flex:none;}
+  .ranked .nm{flex:1;color:var(--ink-900);}.ranked .vl{font-weight:600;}
+  .tag{font-size:9.5px;font-weight:600;padding:2px 7px;border-radius:999px;}
+  .tag.cont{background:#FDE8E8;color:#C0392B;}.tag.non{background:#E6F4EA;color:#1E7E4B;}
+  .legend{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;font-size:11px;color:var(--ink-500);margin-top:8px;}
+  .legend .li{display:flex;align-items:center;gap:5px;}.legend .sw{width:10px;height:10px;border-radius:3px;}
+  .barrow{display:flex;align-items:center;gap:9px;margin:6px 0;font-size:11.5px;}
+  .barrow .bn{width:130px;color:var(--ink-700);}
+  .barrow .bt2{flex:1;height:9px;border-radius:5px;background:#EEF1F0;overflow:hidden;display:block;}
+  .barrow .bf{display:block;height:100%;border-radius:5px;}
+  .barrow .bv{width:52px;text-align:right;font-weight:600;color:var(--ink-900);}
+  .vt{font-weight:700;color:var(--ink-900);font-size:12.5px;}
+  .vd{font-size:11px;color:var(--ink-500);margin:2px 0 20px;}
+  .gauge{position:relative;height:11px;border-radius:6px;background:linear-gradient(90deg,#1E9E5A,#8FD14F,#F4D03F,#EB984E,#E1523D);}
+  .gauge .mk{position:absolute;top:-4px;width:3px;height:19px;background:#111;border-radius:2px;transform:translateX(-50%);}
+  .gauge-lab{position:absolute;top:-26px;transform:translateX(-50%);background:#111;color:#fff;font-size:10px;font-weight:600;padding:2px 7px;border-radius:5px;white-space:nowrap;}
+  .gscale{display:flex;justify-content:space-between;font-size:10px;color:var(--ink-400);margin-top:5px;}
+  .disc{background:#FCF3E4;border:1px solid #F0DDBB;border-radius:10px;padding:11px 13px;font-size:11.5px;color:#8A6D2F;margin-top:14px;}
+  .footbtns{display:flex;gap:12px;margin-top:20px;}
+  .footbtns button{flex:1;border-radius:12px;padding:14px;font-weight:700;font-size:14px;font-family:inherit;cursor:pointer;border:1px solid var(--green);}
+  .btn-out{background:#fff;color:var(--green);}.btn-fill{background:var(--green);color:#fff;border:none;}
+</style>
+</head>
+<body>
+  <div class="appbar"><h1>Data Analyser</h1>
+    <div class="country-pick"><span id="flag">🇮🇩</span><select id="countrySel" onchange="render(this.value)"></select></div>
+  </div>
+  <div class="stepper">
+    <span class="s"><span class="n">✓</span> Select Location</span><span class="sep">···</span>
+    <span class="s active"><span class="n">2</span> Site Characterisation</span><span class="sep">···</span>
+    <span class="s"><span class="n">3</span> Threat Profile</span><span class="sep">···</span>
+    <span class="s"><span class="n">4</span> Select Intervention</span><span class="sep">···</span>
+    <span class="s"><span class="n">5</span> Potential Benefit</span>
+  </div>
+  <div class="subnav"><a href="#">General Context</a><a href="#">Nature Context</a><a href="#" class="active">People Context</a><a href="#">Climate Context</a></div>
+  <div class="wrap">
+    <div class="pagehead"><h2>Site Characterisation: People Context</h2><div class="rule"></div></div>
+    <div id="app"></div>
+    <div class="footbtns"><button class="btn-out">↻ Reselect Area</button><button class="btn-fill">Select Intervention Type »</button></div>
+  </div>
+<script>
+/* ---------------- chart builders ---------------- */
+function donut(segs,center,size){size=size||130;const tot=segs.reduce((a,s)=>a+s.val,0)||1;let a=-Math.PI/2;const R=size*0.4,r=size*0.24,cx=size/2,cy=size/2;let p='';
+ segs.forEach(s=>{const ang=s.val/tot*2*Math.PI,a2=a+ang;const x1=cx+R*Math.cos(a),y1=cy+R*Math.sin(a),x2=cx+R*Math.cos(a2),y2=cy+R*Math.sin(a2),xi2=cx+r*Math.cos(a2),yi2=cy+r*Math.sin(a2),xi1=cx+r*Math.cos(a),yi1=cy+r*Math.sin(a),big=ang>Math.PI?1:0;
+  p+=`<path d="M${x1} ${y1} A${R} ${R} 0 ${big} 1 ${x2} ${y2} L${xi2} ${yi2} A${r} ${r} 0 ${big} 0 ${xi1} ${yi1} Z" fill="${s.color}"/>`;a=a2;});
+ const c=center?`<text x="${cx}" y="${cy-2}" text-anchor="middle" font-size="8" fill="#6B7280">${center.top||''}</text><text x="${cx}" y="${cy+12}" text-anchor="middle" font-size="13" font-weight="700" fill="#1B2A24">${center.mid||''}</text>`:'';
+ return `<svg viewBox="0 0 ${size} ${size}" width="${size}" height="${size}">${p}${c}</svg>`;}
+function pyramid(rows,bands){const max=Math.max(...rows.flatMap(r=>[r.male,r.female]))||1;const W=300,H=210,cx=W/2,bh=H/rows.length-2,gap=9;
+ const col=i=>{const a=rows[i].age;const n=parseInt(a);if(a.includes('45')||n>=45)return bands[2];if(n>=15)return bands[1];return bands[0];};let s='';
+ rows.forEach((r,i)=>{const y=i*(bh+2);const lw=(r.male/max)*(cx-gap),rw=(r.female/max)*(cx-gap);
+  s+=`<rect x="${cx-gap-lw}" y="${y}" width="${lw}" height="${bh}" fill="${col(i)}" rx="1.5"/><rect x="${cx+gap}" y="${y}" width="${rw}" height="${bh}" fill="${col(i)}" opacity=".62" rx="1.5"/><text x="${cx}" y="${y+bh-1}" text-anchor="middle" font-size="7" fill="#6B7280">${r.age}</text>`;});
+ s+=`<text x="${gap}" y="${H+2}" font-size="8.5" fill="#6B7280">Male</text><text x="${W-gap}" y="${H+2}" text-anchor="end" font-size="8.5" fill="#6B7280">Female</text>`;
+ return `<svg viewBox="0 0 ${W} ${H+8}" width="100%">${s}</svg>`;}
+function stackedBar(segs){const tot=segs.reduce((a,s)=>a+s.val,0)||1;let x=0,s='';segs.forEach(g=>{const w=g.val/tot*100;s+=`<rect x="${x}" y="0" width="${w}" height="26" fill="${g.color}"/><text x="${x+w/2}" y="17" text-anchor="middle" font-size="9" fill="#fff" font-weight="600">${Math.round(w)}%</text>`;x+=w;});return `<svg viewBox="0 0 100 26" width="100%" height="26" preserveAspectRatio="none" style="border-radius:6px">${s}</svg>`;}
+function bars(items,color){const max=Math.max(...items.map(i=>i.val))||1;const W=Math.max(200,items.length*44),bw=W/items.length*0.5;let s='';
+ items.forEach((it,i)=>{const h=(it.val/max)*84;const x=i*(W/items.length)+(W/items.length-bw)/2,y=96-h;s+=`<rect x="${x}" y="${y}" width="${bw}" height="${h}" rx="3" fill="${color}"/><text x="${x+bw/2}" y="${y-4}" text-anchor="middle" font-size="8.5" font-weight="700" fill="#1B2A24">${it.val}${it.suf||''}</text><text x="${x+bw/2}" y="112" text-anchor="middle" font-size="7.5" fill="#6B7280">${it.label}</text>`;});
+ return `<svg viewBox="0 0 ${W} 118" width="100%">${s}</svg>`;}
+function line(series,color){const W=280,H=84,pad=6,ys=series.map(p=>p.y),mn=Math.min(...ys),mx=Math.max(...ys)||1;
+ const pts=series.map((p,i)=>[pad+i/(series.length-1)*(W-2*pad),H-pad-((p.y-mn)/((mx-mn)||1))*(H-2*pad)]);
+ const d=pts.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' ');
+ return `<svg viewBox="0 0 ${W} ${H}" width="100%" height="84"><path d="${d} L${W-pad} ${H-pad} L${pad} ${H-pad} Z" fill="${color}22"/><path d="${d}" fill="none" stroke="${color}" stroke-width="2"/>${pts.map(p=>`<circle cx="${p[0]}" cy="${p[1]}" r="2.3" fill="${color}"/>`).join('')}</svg>`;}
+function gaugeHtml(level){const m={'Very Low':8,'Low':30,'Moderate':50,'High':72,'Very High':92},pos=m[level]??50;return `<div class="gauge"><div class="gauge-lab" style="left:${pos}%">${level}</div><div class="mk" style="left:${pos}%"></div></div><div class="gscale"><span>Very Low</span><span>Very High</span></div>`;}
+function barRow(n,pct,color,val){return `<div class="barrow"><span class="bn">${n}</span><span class="bt2"><span class="bf" style="width:${Math.min(pct,100)}%;background:${color}"></span></span><span class="bv">${val}</span></div>`;}
+
+/* ---------------- card factory ---------------- */
+function card(accent,c){
+ const src=(c.src||'').replace(/^[^·]*\.csv\s*·\s*/,'').trim();
+ const foot=`<div class="cf">${[src,c.years].filter(Boolean).join(' · ')}</div>`;
+ let body='';
+ switch(c.viz){
+  case 'bignumber': body=`<div class="big">${c.value}</div>`;break;
+  case 'kpi': case 'iconstat': body=`<div class="big">${c.value}</div>`;break;
+  case 'statpct': body=`<div class="big pct" style="--accent:${accent}">${c.value}</div>`;break;
+  case 'ranked': body=`<ul class="ranked">${c.items.map((it,i)=>`<li><span class="rk" style="background:${accent}1A;color:${accent}">${i+1}</span><span class="nm">${it.n}</span>${it.tag?`<span class="tag ${it.tag}">${it.tag==='cont'?'Contagious':'Non-Cont.'}</span>`:`<span class="vl">${it.v||''}</span>`}</li>`).join('')}</ul>`;break;
+  case 'stackedbar': body=`${stackedBar(c.segs)}<div class="legend">${c.segs.map(s=>`<span class="li"><span class="sw" style="background:${s.color}"></span>${s.label}</span>`).join('')}</div>`;break;
+  case 'donut': body=`<div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:center">${donut(c.segs.map(s=>({val:s.val,color:s.color})),{top:c.segs[0].label.split(' ')[0],mid:c.segs[0].val+'%'},120)}<div style="font-size:11px">${c.segs.map(s=>`<div style="display:flex;align-items:center;gap:6px;margin:2px 0"><span class="sw" style="width:9px;height:9px;border-radius:3px;background:${s.color}"></span>${s.label} <b style="margin-left:auto">${s.val}%</b></div>`).join('')}</div></div>`;break;
+  case 'line': case 'trend': body=line(c.series,accent);break;
+  case 'groupedbar': body=bars(c.items,accent);break;
+  case 'pictogram': body=c.items.map(it=>barRow(it.n,it.v,accent,it.v+'%')).join('');break;
+  case 'agesex': body=`${pyramid(c.rows,['#7FC0A6','#2E8B67','#0B5D3F'])}<div class="legend"><span class="li"><span class="sw" style="background:#7FC0A6"></span>0–14</span><span class="li"><span class="sw" style="background:#2E8B67"></span>15–44</span><span class="li"><span class="sw" style="background:#0B5D3F"></span>45–90+</span></div>`;break;
+ }
+ return `<div class="card" style="--accent:${accent}"><div class="ct">${c.t}</div>${c.unit?`<div class="cu">${c.unit}</div>`:''}<div class="cbody">${body}</div>${foot}</div>`;
+}
+function vulnCard(t,desc,lvl){return `<div class="card"><div class="vt">${t}</div><div class="vd">${desc}</div>${gaugeHtml(lvl)}<div class="cf" style="margin-top:10px">ADPC harmonised vulnerability indices</div></div>`;}
+
+/* ---------------- SECTION META ---------------- */
+const SEC={demography:{c:'#0B5D3F',bg:'var(--green-50)',ico:'👥',t:'Social (Demography)'},
+ employment:{c:'#6D5BD0',bg:'var(--emp-50)',ico:'💼',t:'Employment'},
+ education:{c:'#2F6FED',bg:'var(--edu-50)',ico:'🎓',t:'Education'},
+ economy:{c:'#E8912D',bg:'var(--eco-50)',ico:'💰',t:'Economy'},
+ health:{c:'#D64550',bg:'var(--hea-50)',ico:'➕',t:'Health'},
+ housing:{c:'#0E8C8C',bg:'var(--hou-50)',ico:'💧',t:'Housing & Human Settlements'}};
+
+/* regional demography block builder (same layers for every country) */
+function demoSection(d){
+ const s=SEC.demography;
+ const pop=card('#0B5D3F',{t:'Estimated Populations',viz:'bignumber',value:d.pop,unit:'people (Male '+d.male+' · Female '+d.female+')',gran:'~100 m grid',src:'WorldPop (constrained 2015–2030, R2025A v1)'});
+ const age=card('#0B5D3F',{t:'Estimated Age Group',viz:'agesex',rows:d.agesex,unit:'male & female by age group',gran:'~100 m grid',src:'WorldPop age–sex breakdown, R2025A v1'});
+ const v=d.vuln;
+ return `<div class="sec">${head(s)}<div class="sec-body">
+   <div class="narr"><span class="nl">Narrative — Demography (regional layers)</span>Based on gridded world population data, the selected area has an estimated total population of <b>${d.pop}</b>, comprising of <b>${d.male}</b> males and <b>${d.female}</b> females. Vulnerability to climate hazards is scored from Very Low to Very High from ADPC harmonised indices.</div>
+   <div class="grid g2">${pop}${age}</div>
+   <div class="grid g2" style="margin-top:12px">
+     ${vulnCard('Physical Vulnerability','The selected area demonstrates a '+v.p.toLowerCase()+' level of physical vulnerability to climate hazards.',v.p)}
+     ${vulnCard('Environmental Vulnerability','Environmental conditions are classified as '+v.e.toLowerCase()+' vulnerability to climate hazards.',v.e)}
+     ${vulnCard('Economic Vulnerability','The selected area has a '+v.ec.toLowerCase()+' level of economic vulnerability to climate hazards.',v.ec)}
+     ${vulnCard('Social Vulnerability','Communities have a '+v.s.toLowerCase()+' level of social vulnerability to climate hazards.',v.s)}
+   </div></div></div>`;
+}
+function head(s){return `<div class="sec-head" style="background:${s.bg};color:${s.c}"><span class="ico" style="background:${s.c}">${s.ico}</span>${s.t}<span class="info">i</span></div>`;}
+function section(key,narr,cards,cols){const s=SEC[key];
+ return `<div class="sec">${head(s)}<div class="sec-body"><div class="narr"><span class="nl">Narrative — ${s.t}</span>${narr}</div>
+  <div class="grid g${cols||2}">${cards.map(c=>card(s.c,c)).join('')}</div></div></div>`;}
+
+/* ---------------- PER-COUNTRY SPEC DATA ---------------- */
+/* Each country lists ONLY the indicators available per the Go/No-go spec. Values are illustrative samples. */
+const DEMO_DEFAULT=[{age:'0-4',male:14,female:13},{age:'5-9',male:15,female:14},{age:'10-14',male:14,female:13},{age:'15-19',male:13,female:12},{age:'20-24',male:12,female:12},{age:'25-29',male:11,female:11},{age:'30-34',male:10,female:10},{age:'35-39',male:9,female:9},{age:'40-44',male:8,female:8},{age:'45-49',male:6,female:6},{age:'50-54',male:5,female:5},{age:'55-90+',male:4,female:5}];
+
+const C={};
+
+C.Indonesia={flag:'🇮🇩',cur:'Rp (IDR)',
+ demo:{pop:'252,400',male:'127,500',female:'124,900',agesex:DEMO_DEFAULT,vuln:{p:'Moderate',e:'Very Low',ec:'Moderate',s:'Very High'}},
+ build(){return demoSection(this.demo)
+ +section('employment',`In <b>West Kalimantan</b> Province, the unemployment rate is <b>5.2%</b> of the labour force; the employment rate is <b>94.8%</b> of the working-age population aged 15+; the underemployment rate is <b>8.7%</b>; the top three industries are Agriculture & Fishing, Wholesale & Retail, and Manufacturing; and employment is split 54% agriculture, 26% industry, 20% services (as of 2024).`,
+  [{t:'Unemployment Rate',viz:'statpct',value:'5.2%',unit:'% of labour force',gran:'adm1 (province/state)',src:'demographic_unemployment_rate_open.csv · BPS',years:'2016–2024'},
+   {t:'Employment Rate',viz:'statpct',value:'94.8%',unit:'% of community',gran:'adm1 (province/state)',src:'demographic_employment_status.csv · BPS',years:'2017–2024'},
+   {t:'Underemployment Rate',viz:'statpct',value:'8.7%',unit:'% of labour force',gran:'adm1 (province/state)',src:'demographic_underemployment_rate.csv · BPS',years:'2017–2023'},
+   {t:'Top 3 Industries / Occupations',viz:'ranked',items:[{n:'Agriculture & Fishing',v:'41.3%'},{n:'Wholesale & Retail',v:'17.6%'},{n:'Manufacturing',v:'9.8%'}],gran:'adm1 (province/state)',src:'demographic_job_sex.csv · BPS',years:'2019–2023'},
+   {t:'Employment by Sector',viz:'stackedbar',segs:[{label:'Agriculture',val:54,color:'#6D5BD0'},{label:'Industry',val:26,color:'#9B8BE0'},{label:'Services',val:20,color:'#C9C0F2'}],unit:'% of employed persons',gran:'adm1 (province/state)',src:'demographic_employment_informal_nonagri.csv · BPS',years:'2015–2022'}])
+ +section('education',`In West Kalimantan, <b>148,300</b> people have completed schooling (most commonly at primary level); the literacy rate is <b>94.6%</b> of people aged 15+ (96.1% male, 93.1% female), as of 2023.`,
+  [{t:'Population Educated (School)',viz:'kpi',value:'148,300',unit:'people',gran:'adm2+ (district)',src:'demographic_school.csv · BPS',years:'2019–2022'},
+   {t:'Literacy Rate',viz:'statpct',value:'94.6%',unit:'% of community aged 15+',gran:'adm1 (province/state)',src:'education_literacy_rate.csv · BPS',years:'2009–2023'}])
+ +section('economy',`In West Kalimantan, the average household income is <b>Rp 2.94 M/month</b>; the top contributing industries to GDP are Agriculture (28%), Mining (20%), Manufacturing (17%); and the Gini ratio is <b>0.32</b>, indicating moderate income inequality, as of 2023.`,
+  [{t:'Average Household Income',viz:'kpi',value:'Rp 2.94 M',unit:'Rp (IDR) / month',gran:'adm1 (province/state)',src:'economy_income_net.csv · BPS',years:'2017–2023'},
+   {t:'Contributing Industries',viz:'donut',segs:[{label:'Agriculture',val:28,color:'#E8912D'},{label:'Mining',val:20,color:'#C77D2E'},{label:'Manufacturing',val:17,color:'#EBB35B'},{label:'Trade',val:15,color:'#D9A441'},{label:'Others',val:20,color:'#E8C79A'}],unit:'% of local GDP',gran:'adm1 (province/state)',src:'economy_gdp_distribution.csv · BPS',years:'2016–2023'},
+   {t:'Income Inequality (Gini)',viz:'line',series:[{y:33},{y:32.5},{y:32},{y:31.9},{y:31.8}],unit:'Gini index 0–1',gran:'adm1 (province/state)',src:'economy_gini_ratio.csv · BPS',years:'2013–2023'}],1)
+ +section('health',`In Kapuas Hulu District, West Kalimantan, stunting prevalence is <b>24.5%</b> of children under five; the five most common diseases are Acute Respiratory Infection, Hypertension, Pulmonary TB, Diabetes Mellitus, and Pneumonia, as of 2023.`,
+  [{t:'Stunting Prevalence (under 5)',viz:'groupedbar',items:[{label:'Stunting',val:24.5,suf:'%'},{label:'Wasting',val:7.2,suf:'%'},{label:'Underweight',val:16.1,suf:'%'},{label:'Overweight',val:3.4,suf:'%'}],unit:'% of children',gran:'adm2+ (district)',src:'health_nutrition_child_status.csv · BPS'},
+   {t:'Top 5 Common Diseases',viz:'ranked',items:[{n:'Acute Resp. Infection',tag:'cont'},{n:'Hypertension',tag:'non'},{n:'Pulmonary TB',tag:'cont'},{n:'Diabetes Mellitus',tag:'non'},{n:'Pneumonia',tag:'cont'}],gran:'adm1 (province/state)',src:'health_disease.csv · BPS',years:'2018–2023'}])
+ +section('housing',`In West Kalimantan, the top drinking water sources are Refill Water (32%), Borehole/Pump (27%), Piped (25%); <b>78.4%</b> of households have safely managed drinking water; wastewater is managed via 44% to river, 31% covered tank, 16% on the ground; toilet facilities are 58% private w/ septic tank, 19% shared, 14% public, as of 2023.`,
+  [{t:'Top 3 Drinking Water Sources',viz:'pictogram',items:[{n:'Refill Water',v:32},{n:'Borehole / Pump',v:27},{n:'Piped (Ledeng)',v:25}],gran:'adm1 (province/state)',src:'hhs_water_drinking_source.csv · BPS'},
+   {t:'Households with Access to Water',viz:'statpct',value:'78.4%',unit:'% of households (safely managed)',gran:'adm1 (province/state)',src:'hhs_water_drinking_improved.csv · BPS',years:'2002–2023'},
+   {t:'Wastewater Management Type',viz:'donut',segs:[{label:'To river',val:44,color:'#0E8C8C'},{label:'Covered tank',val:31,color:'#3AA6A6'},{label:'On the ground',val:16,color:'#8FD0D0'},{label:'Other',val:9,color:'#C7E7E7'}],unit:'% of households',gran:'adm1 (province/state)',src:'hhs_waste_water_disposal.csv · BPS',years:'2018–2023'},
+   {t:'Toilet Facility Categories',viz:'ranked',items:[{n:'Private w/ septic tank',v:'58%'},{n:'Shared facility',v:'19%'},{n:'Public facility',v:'14%'},{n:'Open / none',v:'9%'}],gran:'adm1 (province/state)',src:'hhs_sanitation_access_status.csv · BPS'}]);}};
+
+C.Malaysia={flag:'🇲🇾',cur:'RM (MYR)',
+ demo:{pop:'188,600',male:'96,100',female:'92,500',agesex:DEMO_DEFAULT,vuln:{p:'Moderate',e:'Low',ec:'Low',s:'Moderate'}},
+ build(){return demoSection(this.demo)
+ +section('employment',`In <b>Selangor</b> State, the unemployment rate is <b>3.3%</b> of the labour force; the top three industries are Manufacturing, Wholesale & Retail, and Construction; and employment is split 11% agriculture, 36% industry, 53% services (as of 2022).`,
+  [{t:'Unemployment Rate',viz:'statpct',value:'3.3%',unit:'% of labour force',gran:'adm1 (province/state)',src:'demographic_unemployment_sex_rate.csv · DOSM',years:'1982–2020'},
+   {t:'Top 3 Industries / Occupations',viz:'ranked',items:[{n:'Manufacturing',v:'23.5%'},{n:'Wholesale & Retail',v:'19.2%'},{n:'Construction',v:'9.7%'}],gran:'adm1 (province/state)',src:'demographic_employment_occupation.csv · DOSM',years:'2011–2022'},
+   {t:'Employment by Sector',viz:'stackedbar',segs:[{label:'Agriculture',val:11,color:'#6D5BD0'},{label:'Industry',val:36,color:'#9B8BE0'},{label:'Services',val:53,color:'#C9C0F2'}],unit:'% of employed persons',gran:'adm1 (province/state)',src:'demographic_employment_industry.csv · DOSM',years:'2010–2022'}])
+ +section('education',`In Selangor State, <b>3.9 M</b> people have completed schooling (most commonly at secondary level); and <b>520,000</b> students are enrolled (primary, secondary, tertiary), as of 2021.`,
+  [{t:'Population Educated (School)',viz:'kpi',value:'3.9 M',unit:'people',gran:'adm1 (province/state)',src:'education_school_student_primary.csv · DOSM',years:'2000–2021'},
+   {t:'Number of Students Enrolled',viz:'kpi',value:'520,000',unit:'people',gran:'adm1 (province/state)',src:'education_school_student_pre.csv · DOSM',years:'2003–2021'}])
+ +section('economy',`In Selangor State, the average household income is <b>RM 8,479/month</b>; the top contributing industries to GDP are Services (58%), Manufacturing (24%), Agriculture (9%); and the Gini ratio is <b>0.40</b>, indicating moderate income inequality, as of 2022.`,
+  [{t:'Average Household Income',viz:'kpi',value:'RM 8,479',unit:'RM (MYR) / month',gran:'adm1 (province/state)',src:'economy_household_income_gross_mean.csv · DOSM',years:'1970–2022'},
+   {t:'Contributing Industries',viz:'donut',segs:[{label:'Services',val:58,color:'#E8912D'},{label:'Manufacturing',val:24,color:'#C77D2E'},{label:'Agriculture',val:9,color:'#EBB35B'},{label:'Mining',val:6,color:'#D9A441'},{label:'Others',val:3,color:'#E8C79A'}],unit:'% of local GDP',gran:'adm1 (province/state)',src:'economy_gdp_activities_constant.csv · DOSM',years:'2015–2022'},
+   {t:'Income Inequality (Gini)',viz:'line',series:[{y:42},{y:41},{y:40.5},{y:40.2},{y:40}],unit:'Gini index 0–1',gran:'adm1 (province/state)',src:'economy_gini_coefficient.csv · DOSM',years:'1970–2022'}],1)
+ +section('health',`In Selangor State, there are <b>220</b> health facilities (hospitals, health centres, clinics); and stunting prevalence is <b>18.2%</b> of children under five, as of 2019.`,
+  [{t:'Number of Health Facilities',viz:'iconstat',value:'220',unit:'count (hospitals, centres, clinics)',gran:'adm1 (province/state)',src:'health_hospital_facilities.csv · DOSM',years:'2000–2021'},
+   {t:'Stunting Prevalence (under 5)',viz:'groupedbar',items:[{label:'Stunting',val:18.2,suf:'%'},{label:'Wasting',val:6.1,suf:'%'},{label:'Underweight',val:12.5,suf:'%'}],unit:'% of children',gran:'adm1 (province/state)',src:'health_child_stunting.csv · DOSM',years:'2015–2019'}])
+ +section('housing',`In Selangor State, housing is 62% landed / 20% flats / 18% other; top water sources are Piped treated (96%); clean water production ~1,990 M L/day; <b>96.4%</b> have safe drinking water; permanent reserved forests cover 250,300 ha, as of 2021.`,
+  [{t:'House Types Distribution',viz:'donut',segs:[{label:'Landed',val:62,color:'#0E8C8C'},{label:'Flats',val:20,color:'#3AA6A6'},{label:'Other',val:18,color:'#8FD0D0'}],unit:'% of households',gran:'adm1 (province/state)',src:'hhs_housing_unit.csv · DOSM',years:'2005–2021'},
+   {t:'Top 3 Drinking Water Sources',viz:'pictogram',items:[{n:'Piped (treated)',v:96},{n:'Borehole',v:2},{n:'Rainwater',v:1}],gran:'adm1 (province/state)',src:'hhs_water_drinking.csv · DOSM',years:'2019–2021'},
+   {t:'Clean Water Supply Production',viz:'trend',series:[{y:1500},{y:1650},{y:1780},{y:1900},{y:1990}],unit:'litres per day',gran:'adm1 (province/state)',src:'hhs_clean_water_supply.csv · DOSM',years:'2000–2016'},
+   {t:'Households with Access to Water',viz:'statpct',value:'96.4%',unit:'% of households',gran:'adm1 (province/state)',src:'hhs_water_treated_pipe.csv · DOSM',years:'2000–2022'},
+   {t:'Toilet Facility Categories',viz:'ranked',items:[{n:'Private flush',v:'92%'},{n:'Shared',v:'6%'},{n:'Other',v:'2%'}],gran:'adm1 (province/state)',src:'hhs_sanitary_latrines.csv · DOSM',years:'2000–2016'},
+   {t:'Permanent Reserved Forests',viz:'kpi',value:'250,300 ha',unit:'hectares',gran:'adm1 (province/state)',src:'other_forest_reserve.csv · DOSM',years:'2003–2021'}]);}};
+
+C.Singapore={flag:'🇸🇬',cur:'SGD',
+ demo:{pop:'5.92 M',male:'2.90 M',female:'3.02 M',agesex:[{age:'0-4',male:8,female:8},{age:'5-14',male:10,female:10},{age:'15-24',male:11,female:11},{age:'25-34',male:13,female:13},{age:'35-44',male:12,female:12},{age:'45-54',male:11,female:11},{age:'55-64',male:9,female:9},{age:'65-90+',male:7,female:9}],vuln:{p:'Moderate',e:'Very Low',ec:'Low',s:'Moderate'}},
+ build(){return demoSection(this.demo)
+ +section('employment',`Singapore is a city-state, so national figures provide complete coverage: the unemployment rate is <b>1.9%</b> of the labour force; the employment rate is <b>67.1%</b> of the working-age population aged 15+; and the underemployment rate is <b>2.8%</b>, as of 2025.`,
+  [{t:'Unemployment Rate',viz:'statpct',value:'1.9%',unit:'% of labour force',gran:'national',src:'demographic_unemployment_rate.csv · SingStat',years:'1992–2025'},
+   {t:'Employment Rate',viz:'statpct',value:'67.1%',unit:'% of community',gran:'national',src:'demographic_employment_rate.csv · SingStat',years:'1990–2025'},
+   {t:'Underemployment Rate',viz:'statpct',value:'2.8%',unit:'% of labour force',gran:'national',src:'time_related_underemployment.csv · SingStat',years:'2023–2025'}],3)
+ +section('education',`Singapore is a city-state: <b>4.21 M</b> people have completed schooling; the literacy rate is <b>97.6%</b> of people aged 15+ (98.9% male, 96.4% female); and <b>462,000</b> students are enrolled, as of 2024.`,
+  [{t:'Population Educated (School)',viz:'kpi',value:'4.21 M',unit:'people',gran:'national',src:'education_school_enrolment.csv · SingStat',years:'1990–2024'},
+   {t:'Literacy Rate',viz:'statpct',value:'97.6%',unit:'% of community aged 15+',gran:'national',src:'education_literacy_rate.csv · SingStat',years:'1960–2021'},
+   {t:'Number of Students Enrolled',viz:'kpi',value:'462,000',unit:'people',gran:'national',src:'education_student_enrolment.csv · SingStat',years:'1990–2024'}],3)
+ +section('economy',`Singapore is a city-state: the median monthly household income is <b>SGD 11,300</b>; and the Gini ratio is <b>0.37</b>, indicating moderate income inequality, as of 2025.`,
+  [{t:'Average Household Income',viz:'kpi',value:'SGD 11,300',unit:'SGD / month',gran:'national',src:'economy_household_income.csv · SingStat',years:'2000–2025'},
+   {t:'Income Inequality (Gini)',viz:'line',series:[{y:0.39},{y:0.38},{y:0.375},{y:0.37},{y:0.37}],unit:'Gini index 0–1',gran:'national',src:'gini_coefficient.csv · SingStat',years:'2015–2025'}])
+ +section('health',`In the selected planning area, there are <b>168</b> health facilities. Singapore is a city-state: disability prevalence is <b>3.4%</b> of the population; and the five most common diseases are Hypertension, Hyperlipidaemia, Diabetes, Asthma/COPD, Ischaemic Heart Disease, as of 2024.`,
+  [{t:'Number of Health Facilities',viz:'iconstat',value:'168',unit:'count (hospitals, centres, clinics)',gran:'adm1 (province/state)',src:'health_facilities.csv · SingStat',years:'2020–2023'},
+   {t:'Disability Prevalence',viz:'groupedbar',items:[{label:'0-4',val:2.2,suf:'%'},{label:'5-9',val:3.4,suf:'%'},{label:'10-14',val:4.2,suf:'%'},{label:'15+',val:23.5,suf:'%'}],unit:'% of population by age band',gran:'national',src:'health_disability.csv · SingStat',years:'2020'},
+   {t:'Top 5 Common Diseases',viz:'ranked',items:[{n:'Hypertension',tag:'non'},{n:'Hyperlipidaemia',tag:'non'},{n:'Diabetes Mellitus',tag:'non'},{n:'Asthma / COPD',tag:'non'},{n:'Ischaemic Heart Disease',tag:'non'}],gran:'national',src:'health_common_diseases.csv · SingStat',years:'2010–2024'}])
+ +section('housing',`Singapore is a city-state: housing is 75% HDB flats / 20% condos / 5% landed; permanent reserved forests cover 3,347 ha. Water: local catchment 40%, NEWater 35%, desalinated 25%; <b>100%</b> households have safe water; wastewater is 99% public sewerage, as of 2025.`,
+  [{t:'House Types Distribution',viz:'donut',segs:[{label:'HDB flats',val:75,color:'#0E8C8C'},{label:'Condo / apartment',val:20,color:'#3AA6A6'},{label:'Landed',val:5,color:'#8FD0D0'}],unit:'% of households',gran:'national',src:'housing_types.csv · SingStat',years:'2019–2024'},
+   {t:'Top 3 Drinking Water Sources',viz:'pictogram',items:[{n:'Local catchment',v:40},{n:'NEWater (recycled)',v:35},{n:'Desalinated',v:25}],gran:'adm1 (province/state)',src:'water_drinking_sources.csv · SingStat',years:'2000–2025'},
+   {t:'Clean Water Supply Production',viz:'trend',series:[{y:1600},{y:1700},{y:1800},{y:1900},{y:1990}],unit:'litres per day',gran:'adm1 (province/state)',src:'water_clean_supply.csv · SingStat',years:'2000–2025'},
+   {t:'Households with Access to Water',viz:'statpct',value:'100%',unit:'% of households',gran:'adm1 (province/state)',src:'water_household_access.csv · SingStat',years:'2000–2025'},
+   {t:'Wastewater Management Type',viz:'donut',segs:[{label:'Public sewerage',val:99,color:'#0E8C8C'},{label:'On-site septic',val:1,color:'#8FD0D0'}],unit:'% of households',gran:'adm1 (province/state)',src:'sanitation_wastewater_management.csv · SingStat',years:'2000–2025'},
+   {t:'Toilet Facility Categories',viz:'ranked',items:[{n:'Private flush (public sewer)',v:'99.2%'},{n:'Private flush (septic)',v:'0.6%'},{n:'Shared / other',v:'0.2%'}],gran:'adm1 (province/state)',src:'sanitation_toilet_facilities.csv · SingStat',years:'2000–2025'},
+   {t:'Permanent Reserved Forests',viz:'kpi',value:'3,347 ha',unit:'hectares',gran:'national',src:'land_forest_reserves.csv · SingStat',years:'2000–2023'}]);}};
+
+C.Thailand={flag:'🇹🇭',cur:'Baht (THB)',
+ demo:{pop:'1,290,000',male:'638,000',female:'652,000',agesex:DEMO_DEFAULT,vuln:{p:'High',e:'Moderate',ec:'Moderate',s:'Moderate'}},
+ build(){return demoSection(this.demo)
+ +section('employment',`In <b>Chiang Rai</b> Province, the unemployment rate is <b>1.1%</b> of the labour force; the employment rate is <b>98.9%</b> of the working-age population; the top three industries are Agriculture, Wholesale & Retail, Manufacturing; and employment is split 45% agriculture, 22% industry, 33% services (as of 2023).`,
+  [{t:'Unemployment Rate',viz:'statpct',value:'1.1%',unit:'% of labour force',gran:'adm1 (province/state)',src:'demographic_unemployment_rate.csv · NSO Thailand',years:'2015–2023'},
+   {t:'Employment Rate',viz:'statpct',value:'98.9%',unit:'% of community',gran:'adm1 (province/state)',src:'demographic_employment_status.csv · NSO Thailand',years:'2022–2023'},
+   {t:'Top 3 Industries / Occupations',viz:'ranked',items:[{n:'Agriculture',v:'44.6%'},{n:'Wholesale & Retail',v:'16.8%'},{n:'Manufacturing',v:'11.4%'}],gran:'adm1 (province/state)',src:'demographic_employment_occupation.csv · NSO Thailand',years:'2022–2023'},
+   {t:'Employment by Sector',viz:'stackedbar',segs:[{label:'Agriculture',val:45,color:'#6D5BD0'},{label:'Industry',val:22,color:'#9B8BE0'},{label:'Services',val:33,color:'#C9C0F2'}],unit:'% of employed persons',gran:'adm1 (province/state)',src:'demographic_employment_economic_activity.csv · NSO Thailand',years:'2022–2023'}])
+ +section('education',`In Chiang Rai Province, <b>980,000</b> people have completed schooling; the literacy rate is <b>93.5%</b> of people aged 15+ (95.2% male, 91.9% female); and <b>96,000</b> students are enrolled, as of 2023.`,
+  [{t:'Population Educated (School)',viz:'kpi',value:'980,000',unit:'people',gran:'adm1 (province/state)',src:'education_attaintment.csv · NSO Thailand'},
+   {t:'Literacy Rate',viz:'statpct',value:'93.5%',unit:'% of community aged 15+',gran:'adm1 (province/state)',src:'education_literacy.csv · NSO Thailand',years:'2014–2018'},
+   {t:'Number of Students Enrolled',viz:'kpi',value:'96,000',unit:'people',gran:'adm1 (province/state)',src:'education_student_size.csv · NSO Thailand',years:'2022–2023'}],3)
+ +section('economy',`In Chiang Rai Province, the average household income is <b>฿ 27,352/month</b>; and the top contributing industries to GRDP are Agriculture (34%), Services (31%), Manufacturing (20%), valued at current prices, as of 2023.`,
+  [{t:'Average Household Income',viz:'kpi',value:'฿ 27,352',unit:'Baht (THB) / month',gran:'adm1 (province/state)',src:'economy_household_income_monthly.csv · NSO Thailand',years:'2004–2023'},
+   {t:'Contributing Industries',viz:'donut',segs:[{label:'Agriculture',val:34,color:'#E8912D'},{label:'Services',val:31,color:'#C77D2E'},{label:'Manufacturing',val:20,color:'#EBB35B'},{label:'Tourism',val:10,color:'#D9A441'},{label:'Others',val:5,color:'#E8C79A'}],unit:'% of GRDP',gran:'adm1 (province/state)',src:'economy_gpp_per_capita_product.csv · NSO Thailand',years:'1995–2022'}])
+ +section('health',`In Chiang Rai District, stunting prevalence is <b>13.4%</b> of children under five. In Chiang Rai Province, disability prevalence is <b>4.9%</b>; and the five most common diseases are Dengue, Hypertension, Diabetes, Influenza, and TB, as of 2020–2024.`,
+  [{t:'Stunting Prevalence (under 5)',viz:'groupedbar',items:[{label:'Stunting',val:13.4,suf:'%'},{label:'Wasting',val:5.2,suf:'%'},{label:'Underweight',val:8.1,suf:'%'}],unit:'% of children',gran:'adm2+ (district)',src:'health_malnutrition.csv · NSO Thailand',years:'2019–2024'},
+   {t:'Disability Prevalence',viz:'groupedbar',items:[{label:'Phys',val:4.9,suf:'%'},{label:'Sens',val:2.1,suf:'%'},{label:'Cog',val:1.4,suf:'%'}],unit:'% of population',gran:'adm1 (province/state)',src:'health_disabled.csv · NSO Thailand',years:'2012–2022'},
+   {t:'Top 5 Common Diseases',viz:'ranked',items:[{n:'Dengue',tag:'cont'},{n:'Hypertension',tag:'non'},{n:'Diabetes',tag:'non'},{n:'Influenza',tag:'cont'},{n:'Tuberculosis',tag:'cont'}],gran:'adm1 (province/state)',src:'health_disease_outpatient.csv · NSO Thailand',years:'2016–2020'}])
+ +section('housing',`In Chiang Rai Province, clean water supply production is <b>720 M L/day</b>. In the selected sub-district, wastewater is managed via 52% septic tank, 28% to river, 14% on ground, as of 2021.`,
+  [{t:'Clean Water Supply Production',viz:'trend',series:[{y:600},{y:640},{y:680},{y:700},{y:720}],unit:'litres per day',gran:'adm1 (province/state)',src:'hhs_water_production_usage.csv · NSO Thailand',years:'2012–2021'},
+   {t:'Wastewater Management Type',viz:'donut',segs:[{label:'Septic tank',val:52,color:'#0E8C8C'},{label:'To river',val:28,color:'#3AA6A6'},{label:'On ground',val:14,color:'#8FD0D0'},{label:'Other',val:6,color:'#C7E7E7'}],unit:'% of households',gran:'adm2+ (district)',src:'hhs_water_environmental_impact.csv · NSO Thailand'}]);}};
+
+C.Philippines={flag:'🇵🇭',cur:'PhP (PHP)',
+ demo:{pop:'1,100,000',male:'558,000',female:'542,000',agesex:DEMO_DEFAULT,vuln:{p:'Very High',e:'High',ec:'Moderate',s:'High'}},
+ build(){return demoSection(this.demo)
+ +section('employment',`At the national level (finest available in the Philippines for this indicator), the employment rate is <b>95.5%</b> of the working-age population aged 15+, as of 2022.`,
+  [{t:'Employment Rate',viz:'statpct',value:'95.5%',unit:'% of community',gran:'national',src:'economy_employment_status.csv · PSA',years:'2013–2022'}],1)
+ +section('education',`At the national level, the literacy rate is <b>96.4%</b> of people aged 15+ (96.1% male, 96.7% female), as of 2019.`,
+  [{t:'Literacy Rate',viz:'statpct',value:'96.4%',unit:'% of community aged 15+',gran:'national',src:'education_literacy_rate.csv · PSA',years:'2008–2019'}],1)
+ +section('economy',`At the national level, the average household income is <b>₱ 18,400/month</b>. In MIMAROPA Region, the Gini ratio is <b>0.42</b>, indicating moderate income inequality, as of 2021.`,
+  [{t:'Average Household Income',viz:'kpi',value:'₱ 18,400',unit:'PhP (PHP) / month',gran:'national',src:'economy_income_expenditure.csv · PSA',years:'2012–2021'},
+   {t:'Income Inequality (Gini)',viz:'line',series:[{y:44},{y:43},{y:42.5},{y:42},{y:42}],unit:'Gini index 0–1',gran:'adm1 (province/state)',src:'economy_gini_coefficient.csv · PSA',years:'2021'}])
+ +section('health',`At the national level, there are <b>1,224</b> health facilities; and stunting prevalence is <b>26.7%</b> of children under five, as of 2019–2022.`,
+  [{t:'Number of Health Facilities',viz:'iconstat',value:'1,224',unit:'count (hospitals, centres, clinics)',gran:'national',src:'health_hospital.csv · PSA',years:'2005–2022'},
+   {t:'Stunting Prevalence (under 5)',viz:'groupedbar',items:[{label:'Stunting',val:26.7,suf:'%'},{label:'Wasting',val:5.5,suf:'%'},{label:'Underweight',val:19.1,suf:'%'}],unit:'% of children',gran:'national',src:'health_prevalance_malnutrition.csv · PSA',years:'2005–2019'}])
+ +section('housing',`At the national level, the top drinking water sources are Piped into dwelling (55%), Tubed/piped well (18%), Protected spring (9%); and toilet facilities are 79% water-sealed, 12% closed pit, 9% shared/other, as of 2020.`,
+  [{t:'Top 3 Drinking Water Sources',viz:'pictogram',items:[{n:'Piped into dwelling',v:55},{n:'Tubed / piped well',v:18},{n:'Protected spring',v:9}],gran:'national',src:'hhs_drinking_water_supply.csv · PSA',years:'2020'},
+   {t:'Toilet Facility Categories',viz:'ranked',items:[{n:'Water-sealed',v:'79%'},{n:'Closed pit',v:'12%'},{n:'Shared / other',v:'9%'}],gran:'national',src:'hhs_facility_toilet.csv · PSA',years:'2020'}]);}};
+
+C.Laos={flag:'🇱🇦',cur:'Kip (LAK)',
+ demo:{pop:'7,500,000',male:'3,730,000',female:'3,770,000',agesex:DEMO_DEFAULT,vuln:{p:'High',e:'High',ec:'High',s:'High'}},
+ build(){return demoSection(this.demo)
+ +section('employment',`At the national level, the unemployment rate is <b>2.5%</b> of the labour force. In the selected province, the employment rate is <b>97.5%</b>; and employment is split 61% agriculture, 16% industry, 23% services, as of 2024.`,
+  [{t:'Unemployment Rate',viz:'statpct',value:'2.5%',unit:'% of labour force',gran:'national',src:'employment_unemployment_rate.csv · Lao Statistics Bureau',years:'2018–2024'},
+   {t:'Employment Rate',viz:'statpct',value:'97.5%',unit:'% of community',gran:'adm1 (province/state)',src:'demographic_employment_rate.csv · Lao Statistics Bureau',years:'2024'},
+   {t:'Employment by Sector',viz:'stackedbar',segs:[{label:'Agriculture',val:61,color:'#6D5BD0'},{label:'Industry',val:16,color:'#9B8BE0'},{label:'Services',val:23,color:'#C9C0F2'}],unit:'% of employed persons',gran:'adm1 (province/state)',src:'demographic_employment_by_sector.csv · Lao Statistics Bureau',years:'2024'}],3)
+ +section('education',`At the national level, the literacy rate is <b>87.1%</b> of people aged 15+ (90.5% male, 83.8% female), as of 2023.`,
+  [{t:'Literacy Rate',viz:'statpct',value:'87.1%',unit:'% of community aged 15+',gran:'national',src:'education_literacy_rate.csv · Lao Statistics Bureau',years:'2023'}],1)
+ +section('economy',`At the national level, the top contributing industries to GDP are Agriculture (39%), Services (32%), Industry (23%), valued in Kip at current prices; and the Gini ratio is <b>0.39</b>, indicating high income inequality, as of 2024.`,
+  [{t:'Contributing Industries',viz:'donut',segs:[{label:'Agriculture',val:39,color:'#E8912D'},{label:'Services',val:32,color:'#C77D2E'},{label:'Industry',val:23,color:'#EBB35B'},{label:'Mining',val:4,color:'#D9A441'},{label:'Others',val:2,color:'#E8C79A'}],unit:'% of GDP',gran:'national',src:'economy_gdp_by_industry.csv · Lao Statistics Bureau',years:'2021–2024'},
+   {t:'Income Inequality (Gini)',viz:'line',series:[{y:40},{y:39.5},{y:39.2},{y:39},{y:39}],unit:'Gini index 0–1',gran:'national',src:'economy_gini_coefficient.csv · Lao Statistics Bureau',years:'2024'}])
+ +section('health',`In the selected province, there are <b>90</b> health facilities; and the five most common diseases are Malaria, Dengue, Diarrhoeal Disease, TB, Hypertension. Nationally, stunting prevalence is <b>30.2%</b> of children under five, as of 2024.`,
+  [{t:'Number of Health Facilities',viz:'iconstat',value:'90',unit:'count (hospitals, centres, clinics)',gran:'adm1 (province/state)',src:'health_facilities.csv · Lao Statistics Bureau',years:'2024'},
+   {t:'Stunting Prevalence (under 5)',viz:'groupedbar',items:[{label:'Stunting',val:30.2,suf:'%'},{label:'Wasting',val:9.1,suf:'%'},{label:'Underweight',val:21.1,suf:'%'}],unit:'% of children',gran:'national',src:'health_child_stunting.csv · Lao Statistics Bureau',years:'2024'},
+   {t:'Top 5 Common Diseases',viz:'ranked',items:[{n:'Malaria',tag:'cont'},{n:'Dengue',tag:'cont'},{n:'Diarrhoeal Disease',tag:'cont'},{n:'Tuberculosis',tag:'cont'},{n:'Hypertension',tag:'non'}],gran:'adm1 (province/state)',src:'health_common_diseases.csv · Lao Statistics Bureau',years:'2024'}])
+ +section('housing',`At the national level, <b>82.4%</b> of households have safe drinking water; toilet facilities are 68% improved, 20% shared, 12% none. In the selected province, permanent reserved forests cover <b>1.2 M ha</b>, as of 2024.`,
+  [{t:'Households with Access to Water',viz:'statpct',value:'82.4%',unit:'% of households',gran:'national',src:'water_drinking_improved.csv · Lao Statistics Bureau',years:'2018–2024'},
+   {t:'Toilet Facility Categories',viz:'ranked',items:[{n:'Improved',v:'68%'},{n:'Shared',v:'20%'},{n:'None',v:'12%'}],gran:'national',src:'sanitation_toilet_access.csv · Lao Statistics Bureau',years:'2018–2024'},
+   {t:'Permanent Reserved Forests',viz:'kpi',value:'1.2 M ha',unit:'hectares',gran:'adm1 (province/state)',src:'land_forest_reserves.csv · Lao Statistics Bureau',years:'2021–2024'}],3);}};
+
+C.Cambodia={flag:'🇰🇭',cur:'Riel (KHR)',
+ demo:{pop:'1,010,000',male:'498,000',female:'512,000',agesex:DEMO_DEFAULT,vuln:{p:'High',e:'High',ec:'High',s:'High'}},
+ build(){return demoSection(this.demo)
+ +section('employment',`At the national level (finest available in Cambodia), the unemployment rate is <b>0.7%</b> of the labour force; and the top three industries are Agriculture, Tourism & Services, Manufacturing, as of 2021.`,
+  [{t:'Unemployment Rate',viz:'statpct',value:'0.7%',unit:'% of labour force',gran:'national',src:'unemployment_rate.csv · NIS Cambodia',years:'2021'},
+   {t:'Top 3 Industries / Occupations',viz:'ranked',items:[{n:'Agriculture',v:'52.7%'},{n:'Tourism & Services',v:'24.9%'},{n:'Manufacturing',v:'12.3%'}],gran:'national',src:'employment_occupation.csv · NIS Cambodia',years:'2019'}])
+ +section('education',`In the selected province, <b>62,000</b> students are enrolled (primary, secondary, tertiary), as of 2021.`,
+  [{t:'Number of Students Enrolled',viz:'kpi',value:'62,000',unit:'people',gran:'adm1 (province/state)',src:'education_student_enrolment.csv · NIS Cambodia',years:'2021'}],1)
+ +section('health',`In the selected province, stunting prevalence is <b>29.9%</b> of children under five, as of 2021.`,
+  [{t:'Stunting Prevalence (under 5)',viz:'groupedbar',items:[{label:'Stunting',val:29.9,suf:'%'},{label:'Wasting',val:9.6,suf:'%'},{label:'Underweight',val:21.5,suf:'%'}],unit:'% of children',gran:'adm1 (province/state)',src:'child_stunting.csv · NIS Cambodia',years:'2021'}],1)
+ +section('housing',`In the selected province, housing is 64% wood, 22% concrete, 14% other; <b>79.1%</b> of households have safe drinking water; and toilet facilities are 71% improved, 18% shared, 11% open, as of 2021.`,
+  [{t:'House Types Distribution',viz:'donut',segs:[{label:'Wood',val:64,color:'#0E8C8C'},{label:'Concrete',val:22,color:'#3AA6A6'},{label:'Other',val:14,color:'#8FD0D0'}],unit:'% of households',gran:'adm1 (province/state)',src:'housing_types.csv · NIS Cambodia',years:'2016'},
+   {t:'Households with Access to Water',viz:'statpct',value:'79.1%',unit:'% of households',gran:'adm1 (province/state)',src:'water_drinking_improved.csv · NIS Cambodia',years:'2021'},
+   {t:'Toilet Facility Categories',viz:'ranked',items:[{n:'Improved',v:'71%'},{n:'Shared',v:'18%'},{n:'Open / none',v:'11%'}],gran:'adm1 (province/state)',src:'toilet_facilities.csv · NIS Cambodia',years:'2021'}],3);}};
+
+C.Myanmar={flag:'🇲🇲',cur:'Kyat (MMK)',
+ demo:{pop:'1,180,000',male:'578,000',female:'602,000',agesex:DEMO_DEFAULT,vuln:{p:'High',e:'High',ec:'Very High',s:'Very High'}},
+ build(){return demoSection(this.demo)
+ +section('employment',`In <b>Taunggyi</b> Township, Shan State, the unemployment rate is <b>2.2%</b> of the labour force; and the employment rate is <b>97.8%</b> of the working-age population aged 15+, as of 2014.`,
+  [{t:'Unemployment Rate',viz:'statpct',value:'2.2%',unit:'% of labour force',gran:'adm2+ (district)',src:'demographic_unemployment_rate.csv · MIMU / DoP',years:'2014'},
+   {t:'Employment Rate',viz:'statpct',value:'97.8%',unit:'% of community',gran:'adm2+ (district)',src:'demographic_employment_rate.csv · MIMU / DoP',years:'2014'}])
+ +section('education',`In Taunggyi Township, Shan State, <b>940,000</b> people have completed schooling; the literacy rate is <b>89.5%</b> of people aged 15+ (92.4% male, 86.9% female); and <b>70,000</b> students are enrolled, as of 2013–2019.`,
+  [{t:'Population Educated (School)',viz:'kpi',value:'940,000',unit:'people',gran:'adm2+ (district)',src:'education_school_enrolment.csv · MIMU / DoP',years:'2013–2019'},
+   {t:'Literacy Rate',viz:'statpct',value:'89.5%',unit:'% of community aged 15+',gran:'adm2+ (district)',src:'MIMU / Dept. of Population',years:'2014–2019'},
+   {t:'Number of Students Enrolled',viz:'kpi',value:'70,000',unit:'people',gran:'adm2+ (district)',src:'education_student_enrolment.csv · MIMU / DoP',years:'2013–2019'}],3)
+ +section('health',`In Taunggyi Township, Shan State, there are <b>120</b> health facilities; disability prevalence is <b>4.6%</b>. In Shan State, stunting prevalence is <b>34.1%</b>; and the five most common diseases are Malaria, Dengue, TB, Acute Resp. Infection, Hypertension, as of 2014–2020.`,
+  [{t:'Number of Health Facilities',viz:'iconstat',value:'120',unit:'count (hospitals, centres, clinics)',gran:'adm2+ (district)',src:'health_facilities.csv · MIMU / DoP',years:'2014–2020'},
+   {t:'Stunting Prevalence (under 5)',viz:'groupedbar',items:[{label:'Stunting',val:34.1,suf:'%'},{label:'Wasting',val:7.0,suf:'%'},{label:'Underweight',val:19.2,suf:'%'}],unit:'% of children',gran:'adm1 (province/state)',src:'health_child_stunting.csv · MIMU / DoP',years:'2014–2015'},
+   {t:'Disability Prevalence',viz:'groupedbar',items:[{label:'Phys',val:4.6,suf:'%'},{label:'Sens',val:2.3,suf:'%'},{label:'Cog',val:1.7,suf:'%'}],unit:'% of population',gran:'adm2+ (district)',src:'health_disability.csv · MIMU / DoP',years:'2014–2019'},
+   {t:'Top 5 Common Diseases',viz:'ranked',items:[{n:'Malaria',tag:'cont'},{n:'Dengue',tag:'cont'},{n:'Tuberculosis',tag:'cont'},{n:'Acute Resp. Infection',tag:'cont'},{n:'Hypertension',tag:'non'}],gran:'adm1 (province/state)',src:'health_common_diseases.csv · MIMU / DoP',years:'2015–2019'}])
+ +section('housing',`In Taunggyi Township, Shan State, housing is 58% bamboo/wood, 30% brick, 12% other; top water sources are Tube well (42%), Piped (30%), Protected well (18%); <b>70.2%</b> have safe water; wastewater is 45% pit, 30% none, 25% other; clean water production ~180 M L/day, as of 2014–2019.`,
+  [{t:'House Types Distribution',viz:'donut',segs:[{label:'Bamboo / wood',val:58,color:'#0E8C8C'},{label:'Brick',val:30,color:'#3AA6A6'},{label:'Other',val:12,color:'#8FD0D0'}],unit:'% of households',gran:'adm2+ (district)',src:'housing_types.csv · MIMU / DoP',years:'2014–2019'},
+   {t:'Top 3 Drinking Water Sources',viz:'pictogram',items:[{n:'Tube well',v:42},{n:'Piped',v:30},{n:'Protected well',v:18}],gran:'adm2+ (district)',src:'water_drinking_sources.csv · MIMU / DoP',years:'2014–2019'},
+   {t:'Clean Water Supply Production',viz:'trend',series:[{y:140},{y:150},{y:165},{y:175},{y:180}],unit:'litres per day',gran:'adm1 (province/state)',src:'water_clean_supply.csv · MIMU / DoP',years:'2014–2019'},
+   {t:'Households with Access to Water',viz:'statpct',value:'70.2%',unit:'% of households',gran:'adm2+ (district)',src:'MIMU / Dept. of Population',years:'2014–2019'},
+   {t:'Wastewater Management Type',viz:'donut',segs:[{label:'Pit latrine',val:45,color:'#0E8C8C'},{label:'None',val:30,color:'#3AA6A6'},{label:'Other',val:25,color:'#8FD0D0'}],unit:'% of households',gran:'adm2+ (district)',src:'sanitation_wastewater_management.csv · MIMU / DoP',years:'2014–2017'},
+   {t:'Toilet Facility Categories',viz:'ranked',items:[{n:'Improved',v:'55%'},{n:'Shared',v:'20%'},{n:'Open / none',v:'25%'}],gran:'adm2+ (district)',src:'sanitation_toilet_usage.csv · MIMU / DoP',years:'2014–2017'}]);}};
+
+C.Brunei={flag:'🇧🇳',cur:'BND',
+ demo:{pop:'460,000',male:'238,000',female:'222,000',agesex:DEMO_DEFAULT,vuln:{p:'Low',e:'Low',ec:'Low',s:'Moderate'}},
+ build(){return demoSection(this.demo)
+ +section('employment',`In <b>Brunei-Muara</b> District (daerah), the unemployment rate is <b>6.9%</b>; the employment rate is <b>93.1%</b>; the underemployment rate is <b>3.4%</b>; employment is split 2% agriculture, 39% industry, 59% services. Nationally, the top three industries are Public Administration, Oil & Gas, Retail & Services, as of 2022.`,
+  [{t:'Unemployment Rate',viz:'statpct',value:'6.9%',unit:'% of labour force',gran:'adm1 (province/state)',src:'unemployment_rate.csv · DEPS Brunei',years:'2014–2022'},
+   {t:'Employment Rate',viz:'statpct',value:'93.1%',unit:'% of community',gran:'adm1 (province/state)',src:'employment_to_population_ratio.csv · DEPS Brunei',years:'2014–2022'},
+   {t:'Underemployment Rate',viz:'statpct',value:'3.4%',unit:'% of labour force',gran:'adm1 (province/state)',src:'DEPS Brunei',years:'2014–2022'},
+   {t:'Top 3 Industries / Occupations',viz:'ranked',items:[{n:'Public Administration',v:'26.1%'},{n:'Oil & Gas',v:'18.7%'},{n:'Retail & Services',v:'15.2%'}],gran:'national',src:'employment_by_sub_sector.csv · DEPS Brunei',years:'2014–2022'},
+   {t:'Employment by Sector',viz:'stackedbar',segs:[{label:'Agriculture',val:2,color:'#6D5BD0'},{label:'Industry',val:39,color:'#9B8BE0'},{label:'Services',val:59,color:'#C9C0F2'}],unit:'% of employed persons',gran:'adm1 (province/state)',src:'employment_by_sector.csv · DEPS Brunei',years:'2014–2022'}])
+ +section('education',`At the national level, <b>380,000</b> people have completed schooling; the literacy rate is <b>97.2%</b> (98.1% male, 96.2% female); and <b>42,000</b> students are enrolled, as of 2024.`,
+  [{t:'Population Educated (School)',viz:'kpi',value:'380,000',unit:'people',gran:'national',src:'education_school_enrolment.csv · DEPS Brunei',years:'2020–2024'},
+   {t:'Literacy Rate',viz:'statpct',value:'97.2%',unit:'% of community aged 15+',gran:'national',src:'DEPS Brunei',years:'1971–2021'},
+   {t:'Number of Students Enrolled',viz:'kpi',value:'42,000',unit:'people',gran:'national',src:'education_student_enrolment.csv · DEPS Brunei',years:'2020–2024'}],3)
+ +section('economy',`At the national level, the average household income is <b>B$ 4,650/month</b>; the top contributing industries to GDP are Oil & Gas (52%), Services (30%), Manufacturing (12%); and the Gini ratio is <b>0.34</b>, indicating moderate income inequality, as of 2024.`,
+  [{t:'Average Household Income',viz:'kpi',value:'B$ 4,650',unit:'BND / month',gran:'national',src:'income_by_household.csv · DEPS Brunei',years:'2005–2015'},
+   {t:'Contributing Industries',viz:'donut',segs:[{label:'Oil & Gas',val:52,color:'#E8912D'},{label:'Services',val:30,color:'#C77D2E'},{label:'Manufacturing',val:12,color:'#EBB35B'},{label:'Construction',val:4,color:'#D9A441'},{label:'Others',val:2,color:'#E8C79A'}],unit:'% of GDP',gran:'national',src:'economy_gdp_by_industry.csv · DEPS Brunei',years:'2020–2024'},
+   {t:'Income Inequality (Gini)',viz:'line',series:[{y:35},{y:34.5},{y:34.2},{y:34},{y:34}],unit:'Gini index 0–1',gran:'national',src:'economy_income_by_decile.csv · DEPS Brunei',years:'2005–2010'}],1)
+ +section('health',`At the national level, there are <b>60</b> health facilities; and stunting prevalence is <b>19.7%</b> of children under five, as of 2022.`,
+  [{t:'Number of Health Facilities',viz:'iconstat',value:'60',unit:'count (hospitals, centres, clinics)',gran:'national',src:'health_facilities.csv · DEPS Brunei',years:'2000–2025'},
+   {t:'Stunting Prevalence (under 5)',viz:'groupedbar',items:[{label:'Stunting',val:19.7,suf:'%'},{label:'Wasting',val:6.5,suf:'%'},{label:'Underweight',val:12.0,suf:'%'}],unit:'% of children',gran:'national',src:'health_stunting_edata.csv · DEPS Brunei',years:'2016–2022'}])
+ +section('housing',`In Brunei-Muara District, housing is 70% detached / 20% terrace / 10% other. Nationally, top water source is Piped treated (99%); clean water production ~230 M L/day; <b>99.4%</b> have safe water; permanent reserved forests cover <b>235,500 ha</b>, as of 2025.`,
+  [{t:'House Types Distribution',viz:'donut',segs:[{label:'Detached',val:70,color:'#0E8C8C'},{label:'Terrace',val:20,color:'#3AA6A6'},{label:'Other',val:10,color:'#8FD0D0'}],unit:'% of households',gran:'adm1 (province/state)',src:'housing_types.csv · DEPS Brunei',years:'1991–2021'},
+   {t:'Top 3 Drinking Water Sources',viz:'pictogram',items:[{n:'Piped (treated)',v:99},{n:'Rainwater',v:1}],gran:'national',src:'water_drinking_access_edata.csv · DEPS Brunei',years:'2016–2025'},
+   {t:'Clean Water Supply Production',viz:'trend',series:[{y:190},{y:205},{y:218},{y:225},{y:230}],unit:'litres per day',gran:'national',src:'water_production_consumption.csv · DEPS Brunei',years:'1977–2025'},
+   {t:'Households with Access to Water',viz:'statpct',value:'99.4%',unit:'% of households',gran:'national',src:'water_drinking_improved.csv · DEPS Brunei',years:'2016–2025'},
+   {t:'Toilet Facility Categories',viz:'ranked',items:[{n:'Private flush',v:'98%'},{n:'Shared',v:'1.5%'},{n:'Other',v:'0.5%'}],gran:'national',src:'sanitation_toilet_access.csv · DEPS Brunei',years:'2010–2023'},
+   {t:'Permanent Reserved Forests',viz:'kpi',value:'235,500 ha',unit:'hectares',gran:'national',src:'land_forest_reserves_edata.csv · DEPS Brunei',years:'2010–2025'}]);}};
+
+C.Vietnam={flag:'🇻🇳',cur:'VND',
+ demo:{pop:'1,360,000',male:'678,000',female:'682,000',agesex:DEMO_DEFAULT,vuln:{p:'High',e:'Moderate',ec:'Low',s:'Moderate'}},
+ build(){return demoSection(this.demo)
+ +section('employment',`In <b>Quảng Ninh</b> Province, Northeast Region, the unemployment rate is <b>2.3%</b>; the underemployment rate is <b>2.0%</b>; and employment is split 37% agriculture, 29% industry, 34% services, as of 2022.`,
+  [{t:'Unemployment Rate',viz:'statpct',value:'2.3%',unit:'% of labour force',gran:'adm1 (province/state)',src:'demographic_unemployment_sex.csv · GSO',years:'2018–2022'},
+   {t:'Underemployment Rate',viz:'statpct',value:'2.0%',unit:'% of labour force',gran:'adm1 (province/state)',src:'demographic_underemployment_sex.csv · GSO',years:'2018–2022'},
+   {t:'Employment by Sector',viz:'stackedbar',segs:[{label:'Agriculture',val:37,color:'#6D5BD0'},{label:'Industry',val:29,color:'#9B8BE0'},{label:'Services',val:34,color:'#C9C0F2'}],unit:'% of employed persons',gran:'adm1 (province/state)',src:'demographic_employment_informal.csv · GSO',years:'2018–2022'}],3)
+ +section('education',`In Quảng Ninh Province, Northeast Region, <b>1.1 M</b> people have completed schooling; the literacy rate is <b>95.8%</b> (97.0% male, 94.6% female); and <b>110,000</b> students are enrolled, as of 2021–2023.`,
+  [{t:'Population Educated (School)',viz:'kpi',value:'1.1 M',unit:'people',gran:'adm1 (province/state)',src:'education_general_pupils.csv · GSO',years:'2002–2021'},
+   {t:'Literacy Rate',viz:'statpct',value:'95.8%',unit:'% of community aged 15+',gran:'adm1 (province/state)',src:'GSO',years:'2006–2023'},
+   {t:'Number of Students Enrolled',viz:'kpi',value:'110,000',unit:'people',gran:'adm1 (province/state)',src:'education_vocational.csv · GSO'}],3)
+ +section('economy',`In Quảng Ninh Province, the average household income is <b>₫ 4.67 M/month</b>; the top contributing industries to GDP are Industry (40%), Services (33%), Agriculture (20%); and the Gini ratio is <b>0.36</b>, indicating moderate income inequality, as of 2023.`,
+  [{t:'Average Household Income',viz:'kpi',value:'₫ 4.67 M',unit:'VND / month',gran:'adm1 (province/state)',src:'economy_income_monthly_per_capita.csv · GSO'},
+   {t:'Contributing Industries',viz:'donut',segs:[{label:'Industry',val:40,color:'#E8912D'},{label:'Services',val:33,color:'#C77D2E'},{label:'Agriculture',val:20,color:'#EBB35B'},{label:'Mining',val:5,color:'#D9A441'},{label:'Others',val:2,color:'#E8C79A'}],unit:'% of GDP',gran:'adm1 (province/state)',src:'economy_commodity_production.csv · GSO'},
+   {t:'Income Inequality (Gini)',viz:'line',series:[{y:38},{y:37},{y:36.5},{y:36},{y:36}],unit:'Gini index 0–1',gran:'adm1 (province/state)',src:'economy_gini_index.csv · GSO',years:'2018–2023'}],1)
+ +section('health',`In Quảng Ninh Province, Northeast Region, there are <b>175</b> health facilities; and stunting prevalence is <b>18.9%</b> of children under five, as of 2022.`,
+  [{t:'Number of Health Facilities',viz:'iconstat',value:'175',unit:'count (hospitals, centres, clinics)',gran:'adm1 (province/state)',src:'health_establishment.csv · GSO'},
+   {t:'Stunting Prevalence (under 5)',viz:'groupedbar',items:[{label:'Stunting',val:18.9,suf:'%'},{label:'Wasting',val:5.8,suf:'%'},{label:'Underweight',val:11.5,suf:'%'}],unit:'% of children',gran:'adm1 (province/state)',src:'health_malnutrition_rate.csv · GSO',years:'2021–2022'}])
+ +section('housing',`In Quảng Ninh Province, housing is 68% permanent, 24% semi-permanent, 8% temporary; clean water production ~640 M L/day; and toilet facilities are 82% flush, 12% pit, 6% other, as of 2018–2023.`,
+  [{t:'House Types Distribution',viz:'donut',segs:[{label:'Permanent',val:68,color:'#0E8C8C'},{label:'Semi-permanent',val:24,color:'#3AA6A6'},{label:'Temporary',val:8,color:'#8FD0D0'}],unit:'% of households',gran:'adm1 (province/state)',src:'hhs_structure.csv · GSO'},
+   {t:'Clean Water Supply Production',viz:'trend',series:[{y:520},{y:560},{y:600},{y:625},{y:640}],unit:'litres per day',gran:'adm1 (province/state)',src:'hhs_clean_water_centralized.csv · GSO',years:'2016–2022'},
+   {t:'Toilet Facility Categories',viz:'ranked',items:[{n:'Flush toilet',v:'82%'},{n:'Pit latrine',v:'12%'},{n:'Other',v:'6%'}],gran:'adm1 (province/state)',src:'hhs_toilet_usage.csv · GSO',years:'2018–2023'}],3);}};
+
+C['Timor-Leste']={flag:'🇹🇱',cur:'USD',
+ demo:{pop:'320,000',male:'163,000',female:'157,000',agesex:DEMO_DEFAULT,vuln:{p:'High',e:'High',ec:'Very High',s:'High'}},
+ build(){return demoSection(this.demo)
+ +section('employment',`In <b>Dili</b> Municipality, the employment rate is <b>95.1%</b> of the working-age population aged 15+, as of 2022.`,
+  [{t:'Employment Rate',viz:'statpct',value:'95.1%',unit:'% of community',gran:'adm1 (province/state)',src:'demographic_employment_rate.csv · NSD Timor-Leste',years:'2022'}],1)
+ +section('education',`At the national level, <b>210,000</b> people have completed schooling; the literacy rate is <b>68.1%</b> (71.9% male, 64.2% female). In Dili Municipality, <b>26,000</b> students are enrolled, as of 2015–2023.`,
+  [{t:'Population Educated (School)',viz:'kpi',value:'210,000',unit:'people',gran:'national',src:'education_school_enrolment.csv · NSD Timor-Leste',years:'2015'},
+   {t:'Literacy Rate',viz:'statpct',value:'68.1%',unit:'% of community aged 15+',gran:'national',src:'education_literacy_rate.csv · NSD Timor-Leste',years:'2015'},
+   {t:'Number of Students Enrolled',viz:'kpi',value:'26,000',unit:'people',gran:'adm1 (province/state)',src:'education_student_enrolment.csv · NSD Timor-Leste',years:'2022–2023'}],3)
+ +section('health',`In Dili Municipality, there are <b>40</b> health facilities (hospitals, health centres, clinics), as of 2023.`,
+  [{t:'Number of Health Facilities',viz:'iconstat',value:'40',unit:'count (hospitals, centres, clinics)',gran:'adm1 (province/state)',src:'health_facilities.csv · NSD Timor-Leste',years:'2021–2023'}],1)
+ +section('housing',`At the national level, housing is 55% bamboo/palm, 30% concrete, 15% other. In Dili Municipality, <b>74.9%</b> of households have safe drinking water, as of 2015–2022.`,
+  [{t:'House Types Distribution',viz:'donut',segs:[{label:'Bamboo / palm',val:55,color:'#0E8C8C'},{label:'Concrete',val:30,color:'#3AA6A6'},{label:'Other',val:15,color:'#8FD0D0'}],unit:'% of households',gran:'national',src:'housing_types.csv · NSD Timor-Leste',years:'2015'},
+   {t:'Households with Access to Water',viz:'statpct',value:'74.9%',unit:'% of households',gran:'adm1 (province/state)',src:'water_drinking_improved.csv · NSD Timor-Leste',years:'2021–2022'}]);}};
+
+/* ---------------- render ---------------- */
+const ORDER=['Indonesia','Malaysia','Singapore','Thailand','Philippines','Vietnam','Laos','Cambodia','Myanmar','Brunei','Timor-Leste'];
+function render(name){const d=C[name];document.getElementById('flag').textContent=d.flag;document.getElementById('app').innerHTML=d.build();}
+const sel=document.getElementById('countrySel');
+ORDER.forEach(n=>{const o=document.createElement('option');o.value=n;o.textContent=n;sel.appendChild(o);});
+const initC=decodeURIComponent((location.hash||'').replace('#',''));
+const start=C[initC]?initC:'Indonesia';
+sel.value=start;render(start);
+</script>
+</body>
+</html>
