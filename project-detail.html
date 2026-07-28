@@ -13,6 +13,8 @@
 <link rel="stylesheet" href="css/nav.css" />
 <link rel="stylesheet" href="css/footer.css" />
 <link rel="stylesheet" href="css/analysis-shared.css" />
+<link rel="stylesheet" href="css/genctx.css" />
+<link rel="stylesheet" href="css/people-context.css" />
 <style>
 /* ── NbS Design summary (F05.0 framework) ── */
 .nds-eco-strip { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:20px; }
@@ -312,10 +314,9 @@
             <span class="doc-col-head">Action</span>
           </div>
           <div class="doc-row">
-            <div class="doc-name">Pre Feasibility Study</div>
+            <div class="doc-name">Feasibility Study</div>
             <div><span class="doc-badge is-draft">Draft</span></div>
             <div style="display:flex;gap:6px;align-items:center">
-              <button class="btn btn-sm btn-secondary btn-brand-outline"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg>View</button>
               <a href="document-generator.html" class="btn btn-sm btn-primary" style="text-decoration:none"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" stroke="white" stroke-width="2" stroke-linecap="round"/><path d="M18.5 2.5a2.1 2.1 0 013 3L12 15l-4 1 1-4 9.5-9.5z" stroke="white" stroke-width="2" stroke-linejoin="round"/></svg>Edit</a>
               <button class="btn btn-sm btn-primary" ><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Download</button>
             </div>
@@ -324,17 +325,7 @@
             <div class="doc-name">MRV Report</div>
             <div><span class="doc-badge is-final">Final</span></div>
             <div style="display:flex;gap:6px;align-items:center">
-              <button class="btn btn-sm btn-secondary btn-brand-outline"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg>View</button>
               <a href="mrv.html" class="btn btn-sm btn-primary" style="text-decoration:none"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" stroke="white" stroke-width="2" stroke-linecap="round"/><path d="M18.5 2.5a2.1 2.1 0 013 3L12 15l-4 1 1-4 9.5-9.5z" stroke="white" stroke-width="2" stroke-linejoin="round"/></svg>Edit</a>
-              <button class="btn btn-sm btn-primary" ><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Download</button>
-            </div>
-          </div>
-          <div class="doc-row">
-            <div class="doc-name">Monitoring Plan</div>
-            <div><span class="doc-badge is-final">Final</span></div>
-            <div style="display:flex;gap:6px;align-items:center">
-              <button class="btn btn-sm btn-secondary btn-brand-outline" onclick="openMonitoringModal()"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg>View</button>
-              <a href="create-monitoring-plan.html" class="btn btn-sm btn-primary" style="text-decoration:none"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" stroke="white" stroke-width="2" stroke-linecap="round"/><path d="M18.5 2.5a2.1 2.1 0 013 3L12 15l-4 1 1-4 9.5-9.5z" stroke="white" stroke-width="2" stroke-linejoin="round"/></svg>Edit</a>
               <button class="btn btn-sm btn-primary" ><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Download</button>
             </div>
           </div>
@@ -624,7 +615,7 @@
       <div class="timeline">
         <div class="tl-item"><div class="act"><b>Rina Sari</b> added a monitoring entry — <b>Plot B3 survival rate 82%</b></div><div class="meta">2 hours ago</div></div>
         <div class="tl-item"><div class="act"><b>Adi Mantri</b> sent the project to the <b>NbS Incubator</b> for review</div><div class="meta">Yesterday · 16:40</div></div>
-        <div class="tl-item"><div class="act"><b>Adi Mantri</b> generated <b>General Pre-FS Report v1</b></div><div class="meta">3 days ago</div></div>
+        <div class="tl-item"><div class="act"><b>Adi Mantri</b> generated <b>General FS Report v1</b></div><div class="meta">3 days ago</div></div>
         <div class="tl-item"><div class="act"><b>Jie Xien Pho</b> was added as a <b>Viewer</b></div><div class="meta">5 days ago</div></div>
         <div class="tl-item"><div class="act"><b>Adi Mantri</b> created the project from an Area of Interest</div><div class="meta">12 Mar 2024</div></div>
       </div>
@@ -704,6 +695,7 @@
   </section>
 
   <script src="js/analysis-shared.js"></script>
+  <script src="js/people-context.js"></script>
   <script>
   var AN2_VIEWS = {
     'general':          { pane:'site',    step:1, title:'Site Characterisation: General Information' },

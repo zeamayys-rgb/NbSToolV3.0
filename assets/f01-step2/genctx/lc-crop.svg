@@ -1,0 +1,17 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Group">
+<path id="Vector" d="M70.6667 0H9.33333C4.17868 0 0 4.17868 0 9.33333V70.6667C0 75.8213 4.17868 80 9.33333 80H70.6667C75.8213 80 80 75.8213 80 70.6667V9.33333C80 4.17868 75.8213 0 70.6667 0Z" fill="#E8F4E0"/>
+<g id="Group_2">
+<path id="Vector_2" d="M18.6667 34.6667L25.3333 48H12L18.6667 34.6667Z" fill="#2D7A2E"/>
+<path id="Vector_3" d="M40 32L48 46.6667H32L40 32Z" fill="#2D7A2E"/>
+<path id="Vector_4" d="M61.3333 34.6667L68 48H54.6667L61.3333 34.6667Z" fill="#2D7A2E"/>
+<path id="Vector_5" opacity="0.55" d="M29.3333 52L34.6667 62.6667H24L29.3333 52Z" fill="#2D7A2E"/>
+<path id="Vector_6" opacity="0.55" d="M50.6667 52L56 62.6667H45.3333L50.6667 52Z" fill="#2D7A2E"/>
+</g>
+<g id="Group_3">
+<path id="Vector_7" d="M18.6667 48V54.6667" stroke="#2D7A2E" stroke-width="2" stroke-linecap="round"/>
+<path id="Vector_8" d="M40 46.6667V54.6667" stroke="#2D7A2E" stroke-width="2" stroke-linecap="round"/>
+<path id="Vector_9" d="M61.3333 48V54.6667" stroke="#2D7A2E" stroke-width="2" stroke-linecap="round"/>
+</g>
+</g>
+</svg>

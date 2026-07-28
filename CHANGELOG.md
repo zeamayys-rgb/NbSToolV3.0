@@ -7,6 +7,7 @@ Prepared for developer handoff to Claude Code.
 **Sessions covered:**
 - F03 / F04.1 / F05.0 chat session
 - Session — July 1, 2026
+- Sessions — July 2–28, 2026 (Part 2, below)
 
 ---
 
@@ -125,3 +126,59 @@ Prepared for developer handoff to Claude Code.
 - Analysis-tab figures (areas, percentages, baselines) are self-consistent **sample data** — replace with real values when available.
 - Generated landslide image is illustrative; swap for a real photo if available.
 - F05.0 on-disk filename (`F05.0 Create New Project From Scratch.html`) still reflects the old title; rename to match "Import Existing Project to NbS Tool" if desired, updating any links.
+
+---
+
+# Part 2 — Sessions July 2–28, 2026
+
+Work after the Part 1 handoff. Paths below are the current repo layout (root-level pages, `js/`, `css/`, `assets/`), not the old `design-system/` layout.
+
+## Home, Sitemap & Footer
+
+22. **Home page refreshed** (`index.html`, `css/home.css`) — copy and layout updates across two passes (July 2 & 6).
+23. **Sitemap page added** (`sitemap.html`) — full page map of the tool, linked from home.
+24. **Standardised footer rolled out site-wide** (`css/footer.css`) — added to all 15+ pages (dashboard, login, account settings, MRV, monitoring form, document generator, etc.), including an Activity Matrix link.
+25. **`.gitignore` added** — `.DS_Store` removed from the repo and ignored.
+
+## F01 / F02 — Interactive Map & Data Analyser
+**File:** `interactive-map.html`
+
+26. **Step 1 upload states** — new SVG assets for upload SHP, draw polygon, back chevron, and "area too big" alert (`assets/f01-step1/`).
+27. **Step 2 — Site Characterisation implemented from Figma** — first as exported Figma renders (`sc-general/nature/people/climate.webp`), later rebuilt as live HTML (see item 36).
+28. **Steps 3 & 4 (Threat Profile / Pathway Selection) updated**, including a disturbance map asset and the standalone reference mock `F02-P4_Pathway_Selection.html`.
+29. **Phases 4 & 5 (Data Analyser) updated**, with standalone reference mock `F02-P5_Potential_Benefit_1.html`.
+30. **Activity list rebuilt from the Activity Matrix** — eligible activities now derive from the matrix instead of a hard-coded list.
+31. **Project naming prompt after saving** — saving an analysis now asks for a project name before it lands in My Projects.
+
+## Activity Matrix
+
+32. **`NbS_Activities_Flow_v2.html` added** — interactive activity-matrix flow, linked from the footer; later rebuilt from the ELIGIBLE activities-longform dataset (8 decision levels).
+33. **Source workbook committed** — `assets/documents/Activities Deep Dive.xlsx`.
+
+## Design System
+
+34. **`design-system.html` expanded** into a full styleguide (foundation tokens, components) backed by new `css/styleguide.css`.
+
+## Project Detail & shared analysis code
+
+35. **Analysis panes extracted to shared modules** — `js/analysis-shared.js` + `css/analysis-shared.css`, loaded by both `interactive-map.html` and `project-detail.html`, so Step 2 / analysis content is written once (~900 lines removed from each page).
+
+## People Context (F02 P2) — July 21
+
+36. **Per-country People Context mockups added** (`assets/F02 P2-people context/`) — ASEAN overview, dashboard, Data Analyser variant, and 11 country pages (Brunei, Cambodia, Indonesia, Laos, Malaysia, Myanmar, Philippines, Singapore, Thailand, Vietnam).
+37. **GUI Design Document PDF** committed alongside them for reference.
+
+## In progress — uncommitted (as of July 28)
+
+38. **Terminology change: "Pre-Feasibility Study" → "Feasibility Study"** across `index.html`, `project-detail.html`, `new-project.html`, `sitemap.html`, `F02-P4_Pathway_Selection.html` (doc names, tags, disclaimers, download buttons).
+39. **Step 2 context panes rebuilt as live HTML from Figma** in `js/analysis-shared.js` — the static `.webp` renders replaced by real card markup for General Context (ecosystem type, admin & zoning, terrain, deforestation, landcover, disaster risk) and Nature Context (habitat area, key species, conservation significance, FLII, KBA, endangered trees), with new asset packs `assets/f01-step2/genctx/`, `natctx/`, `climctx/` and styles in `css/genctx.css`.
+40. **People Context styles/logic extracted to shared files** — new `css/people-context.css` + `js/people-context.js`; `People_Context_ASEAN.html` slimmed by ~670 lines and `project-detail.html` now loads both.
+41. **F03 socio-economic form: structured inputs** (`js/f03-app.js`, `css/f03.css`) — replaced free-text questions with a population matrix by age × education × gender (auto-totalled), plus Disabilities (number), Employment Status, IP&LC / ethnicity groups, Household by Livelihood (derived from the Social section), and an Indigenous Land Tenure paragraph.
+42. **Project detail cleanup** — Monitoring Plan document row removed from Project Documents.
+43. **New benefit icons** — `assets/asset/Property 1=Climate/Nature/People/general.svg` (untracked, not yet wired in).
+
+## Open items / notes (Part 2)
+
+- Items 38–43 are **uncommitted** — commit or discard before the next handoff.
+- `assets/F02 P2-people context/People_Asean revised .zip` is untracked — extract or delete; don't commit the zip.
+- Climate Context pane still pending the same live-HTML rebuild as General/Nature (item 39); `climctx/` assets are already in place.

@@ -14,8 +14,8 @@
 <link rel="stylesheet" href="css/f01-step1.css" />
 <link rel="stylesheet" href="css/f01-step2.css" />
 <link rel="stylesheet" href="css/analysis-shared.css" />
+<link rel="stylesheet" href="css/people-context.css" />
 <link rel="stylesheet" href="css/genctx.css" />
-<link rel="stylesheet" href="assets/genctx-icons/fig-assets.css" />
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <style>
@@ -133,38 +133,30 @@
   }
 
   /* ---- header row ---- */
-  .eco-head{display:flex;gap:16px;align-items:flex-start;}
-  .eco-ident{display:flex;gap:4px;align-items:flex-start;width:170px;flex:none;}
-  .eco-icon{width:64px;height:64px;flex:none;display:flex;align-items:center;justify-content:center;}
-  .eco-icon svg{display:block;width:64px;height:64px;}
-  .eco-titles{display:flex;flex-direction:column;gap:1.3px;}
+  .eco-head{display:flex;gap:16px;align-items:stretch;}
+  .eco-ident{display:flex;gap:12px;align-items:center;width:178px;flex:none;}
+  .eco-icon{width:48px;height:48px;flex:none;display:flex;align-items:center;justify-content:center;}
+  .eco-icon svg,.eco-icon img{display:block;width:48px;height:48px;}
+  .eco-titles{display:flex;flex-direction:column;gap:4px;}
   .eco-name{font-size:18px;font-weight:600;line-height:28px;color:var(--ink);}
-  .eco-ha{font-size:12px;font-weight:700;line-height:18.6px;color:var(--ink);}
-  .eco-area{font-size:12px;font-weight:400;line-height:20px;color:var(--text-second);}
-
-  .vdiv{width:1px;align-self:stretch;background:var(--stroke);flex:none;margin:0 0;}
-
-  .eco-dist{display:flex;flex-direction:column;gap:8px;width:200px;flex:none;justify-content:center;}
-  .pill-dist{
+  .eco-status{
     display:inline-flex;align-items:center;align-self:flex-start;
     border-radius:999px;padding:2px 10px 3px;
     font-family:'Inter',sans-serif;font-weight:600;font-size:11px;
     letter-spacing:.44px;text-transform:uppercase;line-height:17px;white-space:nowrap;
   }
-  .dist-low{background:#ecf2e2;color:#486831;}
-  .dist-mod{background:#faebd8;color:#8b4f12;}
-  .dist-high{background:#f8e0d8;color:#862f1a;}
-  .dist-ha{font-size:11px;font-weight:700;line-height:17px;color:var(--ink);}
+  .eco-status--ok{background:#ecf2e2;color:#486831;}
+  .eco-status--bad{background:#ffefee;color:#e33b32;}
+
+  .vdiv{width:1px;align-self:stretch;background:var(--eco);flex:none;}
+
+  .eco-stats{flex:1 1 0;min-width:0;display:flex;gap:16px;align-items:center;}
+  .eco-stat{flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:8px;}
+  .eco-stat__ttl{font-size:11px;font-weight:500;line-height:16.5px;color:#252525;}
+  .eco-stat .bar{height:8px;}
+  .eco-stat__row{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:10px;font-weight:400;line-height:18px;color:#68727d;}
   .bar{background:#eef1f5;height:6px;border-radius:3px;overflow:hidden;width:100%;}
   .bar > span{display:block;height:100%;border-radius:3px;}
-  .dist-cap{font-size:11px;font-weight:400;line-height:17px;color:var(--slate);}
-
-  .eco-press{flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:10px;}
-  .press-label{font-family:'Inter',sans-serif;font-weight:700;font-size:11px;letter-spacing:.66px;text-transform:uppercase;line-height:17px;color:var(--slate);}
-  .press-chips{display:flex;flex-wrap:wrap;gap:6px;align-items:center;}
-  .press-chip{display:inline-flex;gap:4px;align-items:flex-end;background:var(--chip-bg);border-radius:999px;padding:3px 8px;}
-  .press-chip .num{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:10px;line-height:15.5px;color:var(--slate-2);}
-  .press-chip .txt{font-size:12px;font-weight:500;line-height:20px;color:var(--slate-3);}
 
   /* ---- intervention selector ---- */
   .interv{display:flex;flex-direction:column;gap:12px;}
@@ -172,22 +164,46 @@
   .pathway-row{display:flex;gap:12px;align-items:stretch;}
   .pathway-opt{
     flex:1 1 0;min-width:0;position:relative;
-    background:#fff;border:2px solid var(--card-stroke);border-radius:10px;
+    background:var(--eco-soft);border:2px solid var(--card-stroke);border-radius:10px;
     padding:12px 8px 12px 12px;display:flex;flex-direction:column;gap:8px;
     cursor:pointer;transition:border-color .15s ease,background .15s ease;
   }
   .pathway-opt:hover{border-color:var(--eco);}
-  .pathway-opt.selected{background:var(--eco-soft);border-color:var(--eco);}
-  .pathway-opt.disabled{cursor:not-allowed;opacity:1;}
+  .pathway-opt.selected{border-color:var(--eco);}
+  .pathway-opt.disabled{cursor:not-allowed;background:#f1f2f4;border-color:var(--card-stroke);}
   .pathway-opt.disabled:hover{border-color:var(--card-stroke);}
+  .pathway-opt.disabled .opt-name{opacity:.6;border-bottom-color:#98a2b3;}
+  .pathway-opt.disabled .opt-ha{color:#98a2b3;}
+  .pathway-opt.disabled .opt-icon{opacity:.45;filter:grayscale(1);}
   .opt-top{display:flex;gap:7px;align-items:flex-start;width:100%;}
-  .opt-icon{width:42px;height:42px;flex:none;display:flex;align-items:center;justify-content:center;}
-  .opt-icon svg{display:block;width:42px;height:42px;}
+  .opt-icon{width:42px;height:42px;flex:none;display:flex;align-items:center;justify-content:center;color:var(--eco);}
+  .opt-icon svg,.opt-icon img{display:block;width:42px;height:42px;}
   .opt-meta{flex:1 1 0;min-width:0;display:flex;flex-direction:column;}
-  .opt-name{font-size:16px;font-weight:600;line-height:24px;color:var(--text-main);}
+  .opt-name{
+    font-size:16px;font-weight:600;line-height:24px;color:var(--text-main);
+    align-self:flex-start;border-bottom:1px dashed #68727d;cursor:help;
+  }
   .opt-ha{font-size:13px;font-weight:700;line-height:20px;color:var(--text-main);}
   .opt-elig{font-size:12px;font-weight:400;line-height:20px;color:var(--text-second);}
   .opt-disabled-elig{color:#b42318;}
+
+  /* hover tooltips: pathway description + ineligibility reason */
+  .pw-tip{
+    position:absolute;left:14px;top:calc(100% + 4px);z-index:40;width:262px;
+    background:#fff;border:1px solid #979aa0;border-radius:0 6px 6px 6px;padding:12px;
+    display:none;flex-direction:column;gap:4px;text-align:left;cursor:default;
+    box-shadow:0 4px 12px rgba(15,20,25,.08);
+  }
+  .pw-tip b{font-size:12px;font-weight:500;line-height:20px;color:#252525;}
+  .pw-tip b strong{font-weight:700;}
+  .pw-tip span{font-size:11px;font-weight:400;line-height:18px;color:#68727d;}
+  .pw-tip--desc{flex-direction:row;align-items:flex-start;gap:14px;width:340px;border-radius:8px;}
+  .pw-tip__ic{flex:none;width:34px;display:flex;justify-content:center;color:var(--eco);}
+  .pw-tip__ic svg{width:34px;height:34px;}
+  .pw-tip__txt{display:flex;flex-direction:column;gap:2px;min-width:0;}
+  .opt-name:hover + .pw-tip--desc{display:flex;}
+  .pathway-opt.disabled:hover .pw-tip--why{display:flex;}
+  .pathway-opt.disabled .opt-name:hover + .pw-tip--desc{display:none;}
 
   /* switch */
   .switch{
@@ -220,8 +236,14 @@
   .activity-head{
     display:flex;align-items:center;justify-content:space-between;
     border-bottom:1px solid var(--stroke);padding-bottom:13px;gap:12px;
+    cursor:pointer;user-select:none;
   }
-  .activity-head-left{display:flex;gap:12px;align-items:center;}
+  .activity-head-left{display:flex;gap:12px;align-items:center;flex:1;}
+  .activity-chev{flex:none;display:flex;align-items:center;transition:transform .15s ease;}
+  .activity.collapsed .activity-chev{transform:rotate(180deg);}
+  .activity.collapsed .activity-list{display:none;}
+  .activity.collapsed .activity-head{border-bottom:none;padding-bottom:0;}
+  .activity.show.collapsed{gap:0;}
   .activity-titlewrap{display:flex;gap:8px;align-items:center;}
   .activity-ic{width:15px;height:15px;flex:none;display:flex;align-items:center;justify-content:center;}
   .activity-title{font-size:13px;font-weight:700;line-height:normal;color:var(--text-main);}
@@ -272,6 +294,38 @@
   .duration-val{width:40px;flex:none;display:flex;flex-direction:column;gap:2px;white-space:nowrap;}
   .duration-num{font-family:'Inter','Poppins',sans-serif;font-weight:700;font-size:28px;line-height:38px;letter-spacing:-.42px;color:var(--eco-forest);font-stretch:condensed;}
   .duration-unit{font-family:'Inter',sans-serif;font-weight:500;font-size:12px;line-height:12px;color:var(--slate);}
+
+  /* ---- potential nbs carbon project ---- */
+  .carbon{background:#fcfcfd;border:1px solid #c1c3c7;border-radius:6px;padding:20px;display:flex;flex-direction:column;gap:16px;}
+  .carbon-head{display:flex;gap:10px;align-items:flex-start;}
+  .carbon-ic{width:44px;height:44px;flex:none;}
+  .carbon-ic svg{display:block;width:44px;height:44px;}
+  .carbon-txt{flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:4px;}
+  .carbon-title{font-size:16px;font-weight:500;line-height:24px;color:#252525;}
+  .carbon-q{font-size:14px;font-weight:500;line-height:normal;color:#68727d;}
+  .carbon-right{flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:10px;}
+  .carbon-toggle{position:static;cursor:pointer;flex:none;}
+  .carbon.on .carbon-toggle{background:#077f68;}
+  .carbon.on .carbon-toggle .knob{transform:translateX(13.09px);}
+  .carbon-noyes{font-size:11px;font-weight:400;line-height:15.4px;color:#68727d;}
+  .carbon-body{display:none;flex-direction:column;gap:16px;}
+  .carbon.on .carbon-body{display:flex;}
+  .carbon-divider{height:1px;background:var(--stroke);}
+  .crisk{display:flex;gap:12px;align-items:flex-start;}
+  .crisk-text{width:272px;flex:none;display:flex;flex-direction:column;gap:3px;}
+  .crisk-title{font-size:14px;font-weight:600;line-height:22px;color:#0f1419;}
+  .crisk-desc{font-size:12px;font-weight:400;line-height:20px;color:#4a5468;}
+  .crisk-field{flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:8px;}
+  .crisk-label{align-self:flex-start;font-size:13px;font-weight:400;line-height:19px;color:#252525;border-bottom:1px dashed #252525;padding-bottom:3px;}
+  .crisk-input{display:flex;align-items:stretch;gap:8px;background:#fff;border:1px solid #eaebf0;border-radius:6px;padding:0 0 0 16px;cursor:text;overflow:hidden;}
+  .crisk-input input{flex:1 1 0;min-width:0;border:none;outline:none;background:transparent;font-family:inherit;font-size:12px;line-height:17.4px;color:#252525;padding:9px 0;-moz-appearance:textfield;appearance:textfield;}
+  .crisk-input input::-webkit-outer-spin-button,.crisk-input input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0;}
+  .crisk-input > span:not(.crisk-step){font-size:12px;color:#68727d;align-self:center;}
+  .crisk-step{flex:none;width:34px;display:flex;flex-direction:column;background:#efeff1;border-left:1px solid #eaebf0;}
+  .crisk-step button{flex:1;border:none;background:none;margin:0;padding:0;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#252525;}
+  .crisk-step button:hover{background:#e2e3e6;}
+  .crisk-step button + button{border-top:1px solid #dcdee2;}
+  .crisk-hint{font-size:11px;font-weight:400;line-height:15.4px;color:#68727d;}
 
   /* ---- alert ---- */
   .alert{
@@ -416,22 +470,28 @@
       </div>
     </header>
 
-    <!-- Sticky context tab bar (step 2 only) -->
-    <div class="da-ctx" id="daCtx" role="tablist" aria-label="Site characterisation context">
-      <button class="da-ctx__nav da-ctx__back" data-ctx-back aria-label="Previous context">
-        <svg viewBox="0 0 24 24" stroke-width="2"><path d="M14 7l-5 5 5 5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        Back
-      </button>
-      <div class="da-ctx__tabs">
-        <button role="tab" aria-selected="true" data-ctx="general">General Information</button>
-        <button role="tab" aria-selected="false" data-ctx="nature">Nature</button>
-        <button role="tab" aria-selected="false" data-ctx="people">People</button>
-        <button role="tab" aria-selected="false" data-ctx="climate">Climate</button>
+    <!-- Sticky context bar (step 2 only): title row + tab bar (Figma 3892-42176 / 3892-42177) -->
+    <div class="da-ctx" id="daCtx" aria-label="Site characterisation context">
+      <div class="da-ctx__title">
+        <button class="da-ctx__nav da-ctx__back" data-ctx-back aria-label="Previous context">
+          <svg viewBox="0 0 24 24" stroke-width="2"><path d="M14 7l-5 5 5 5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Back
+        </button>
+        <div class="da-ctx__tt">
+          <h3 id="daCtxTitle">Site Characterisation: General Context</h3>
+          <img src="assets/f01-step2/genctx/title-line.svg" alt="" />
+        </div>
+        <button class="da-ctx__nav da-ctx__next" data-ctx-next aria-label="Next context">
+          Next
+          <svg viewBox="0 0 24 24" stroke-width="2"><path d="M10 7l5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
       </div>
-      <button class="da-ctx__nav da-ctx__next" data-ctx-next aria-label="Next context">
-        Next
-        <svg viewBox="0 0 24 24" stroke-width="2"><path d="M10 7l5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </button>
+      <div class="da-ctx__tabs" role="tablist">
+        <button role="tab" aria-selected="true" data-ctx="general"><img class="ic" src="assets/asset/Property%201=general.svg" alt="" />General</button>
+        <button role="tab" aria-selected="false" data-ctx="nature"><img class="ic" src="assets/asset/Property%201=Nature.svg" alt="" />Nature</button>
+        <button role="tab" aria-selected="false" data-ctx="people"><img class="ic" src="assets/asset/Property%201=People.svg" alt="" />People</button>
+        <button role="tab" aria-selected="false" data-ctx="climate"><img class="ic" src="assets/asset/Property%201=Climate.svg" alt="" />Climate</button>
+      </div>
     </div>
 
     <div class="da-body" id="daBody">
@@ -571,32 +631,23 @@
   <section class="eco-card" style="--eco:var(--eco-forest);--eco-soft:#e6f1eb;">
     <div class="eco-head">
       <div class="eco-ident">
-        <div class="eco-icon">
-          <svg width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect width="38" height="38" rx="6" fill="#E6F0E0"></rect>
-<path d="M27.2094 15.1712C28.3591 18.4083 26.8832 21.7389 23.8345 22.8587C23.2546 23.0717 22.6558 23.1674 22.0367 23.1404C21.7942 23.1298 21.5538 23.1045 21.5532 22.7964C21.5526 22.4921 21.7923 22.4611 22.0337 22.4421C24.661 22.2353 26.3781 20.6727 26.8406 18.0725C27.2128 15.9795 25.9398 13.5335 24.0073 12.7065C23.5569 12.5138 23.3551 12.2686 23.2529 11.7755C22.8208 9.69038 21.0269 8.2916 18.9199 8.32387C16.8387 8.35576 15.1143 9.81872 14.7065 11.937C14.6354 12.3063 14.4941 12.5091 14.1447 12.6603C12.3625 13.4315 11.4709 14.8574 11.1906 16.7349C10.8472 19.0345 12.2812 21.3178 14.2057 22.0833C14.7818 22.3124 15.3816 22.4025 15.9927 22.4389C16.2509 22.4543 16.5254 22.4709 16.5161 22.803C16.5068 23.1366 16.2226 23.1325 15.9702 23.1407C13.4665 23.2214 11.0548 21.2505 10.5319 18.7066C9.96757 15.9615 11.2602 13.1272 13.6341 12.065C13.9523 11.9227 13.9808 11.6619 14.0523 11.3975C14.6171 9.30781 16.3752 7.79511 18.4958 7.57404C20.5224 7.36275 22.6775 8.44317 23.4765 10.3437C23.9283 11.4183 24.4915 12.2031 25.487 12.8037C26.3368 13.3163 26.8321 14.203 27.2094 15.1712Z" fill="#2C6639"></path>
-<path d="M16.6555 20.1477C16.3067 19.802 15.9834 19.4832 15.6623 19.1622C15.489 18.989 15.358 18.783 15.5595 18.569C15.7771 18.3377 16.0086 18.4458 16.1972 18.6385C16.9774 19.4354 17.7533 20.2366 18.5307 21.0363C18.5827 21.0162 18.6347 20.9962 18.6866 20.9762C18.6866 20.7109 18.6873 20.4457 18.6865 20.1805C18.6834 19.1341 18.6742 18.0877 18.6803 17.0414C18.6818 16.7736 18.639 16.4019 19.0591 16.4402C19.4398 16.475 19.3894 16.829 19.3902 17.1046C19.3932 18.1873 19.3891 19.2702 19.3946 20.3529C19.3955 20.5205 19.3431 20.6985 19.4797 20.9131C19.8923 20.5257 20.2962 20.1534 20.6919 19.7725C21.019 19.4577 21.3321 19.1283 21.6596 18.814C21.8784 18.604 22.1233 18.2564 22.437 18.5764C22.7291 18.8744 22.3902 19.1069 22.1898 19.3114C21.7744 19.7356 21.3947 20.2123 20.9205 20.5581C19.6437 21.4894 19.2255 22.684 19.3601 24.2525C19.4985 25.8648 19.4041 27.4984 19.3832 29.1223C19.3776 29.5576 19.5186 29.6948 19.9514 29.6915C22.1868 29.6748 24.4223 29.6841 26.6578 29.6848C26.7974 29.6848 26.9376 29.6816 27.0766 29.692C27.3074 29.7092 27.5012 29.8068 27.508 30.0596C27.5149 30.3159 27.3227 30.4178 27.0924 30.4395C26.9538 30.4526 26.8133 30.4477 26.6736 30.4477C21.6089 30.4496 16.5442 30.4514 11.4795 30.4518C11.3053 30.4518 11.1295 30.4507 10.9572 30.4284C10.7498 30.4015 10.5808 30.2957 10.5782 30.0661C10.5755 29.8352 10.7433 29.7285 10.9511 29.7006C11.1058 29.6798 11.2645 29.6844 11.4215 29.6843C13.622 29.6831 15.8227 29.6681 18.0229 29.6942C18.5176 29.7001 18.6803 29.5083 18.6794 29.0622C18.6749 26.9151 18.6741 24.7681 18.6718 22.6211C18.6714 22.2332 18.5259 21.937 18.2222 21.6698C17.6854 21.1977 17.1929 20.6752 16.6555 20.1477Z" fill="#2C6639"></path>
-</svg>
-        </div>
+        <div class="eco-icon"><img src="assets/asset/ECOSYSTEM%20ICON_Ecosystem%20Type=Forest,%20Filled=No.svg" alt="" width="48" height="48"></div>
         <div class="eco-titles">
           <div class="eco-name">Forest</div>
-          <div class="eco-ha mono">20,942.2 ha</div>
-          <div class="eco-area">40% of area</div>
+          <span class="eco-status eco-status--ok">Non-Disturbed</span>
         </div>
       </div>
       <div class="vdiv"></div>
-      <div class="eco-dist">
-        <span class="pill-dist dist-low">● Low Disturbance</span>
-        <div class="dist-ha mono">4,638.4 ha</div>
-        <div class="bar"><span style="width:12%;background:#7ba05b;"></span></div>
-        <div class="dist-cap mono">12% of forest is disturbeb</div>
-      </div>
-      <div class="eco-press">
-        <div class="press-label">main pressure:</div>
-        <div class="press-chips">
-          <span class="press-chip"><span class="num">01</span><span class="txt">Plantation</span></span>
-          <span class="press-chip"><span class="num">02</span><span class="txt">Urban dev.</span></span>
-          <span class="press-chip"><span class="num">03</span><span class="txt">Agriculture</span></span>
+      <div class="eco-stats">
+        <div class="eco-stat">
+          <div class="eco-stat__ttl">Total Forest Area</div>
+          <div class="bar"><span style="width:40%;background:var(--eco);"></span></div>
+          <div class="eco-stat__row"><span class="mono">20,942.2 ha</span><span>40% of total area</span></div>
+        </div>
+        <div class="eco-stat">
+          <div class="eco-stat__ttl">Disturbeb Area of Forest Ecosystem</div>
+          <div class="bar"><span style="width:12%;background:var(--eco);"></span></div>
+          <div class="eco-stat__row"><span class="mono">4,638.4 ha</span><span>12% of forest is disturbeb</span></div>
         </div>
       </div>
     </div>
@@ -607,16 +658,10 @@
         <!-- Protect -->
         <div class="pathway-opt" data-pathway data-eco="forest">
           <div class="opt-top">
-            <div class="opt-icon">
-              <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M19.6866 3.14462C21.2895 2.08655 22.8086 1.02414 24.3836 0.0517136C24.6176 -0.0928786 25.1687 0.0926708 25.4777 0.281323C27.4983 1.51749 29.4313 2.90943 31.5115 4.03203C33.7939 5.26448 36.2619 6.09232 38.8391 6.52299C40.3856 6.78115 41.9345 7.02875 43.4847 7.26333C44.2883 7.38496 44.4342 7.91802 44.4329 8.60685C44.4261 12.9483 44.4671 17.2898 44.4174 21.6307C44.3852 24.4772 44.3982 27.3418 44.0774 30.1629C43.7615 32.9399 42.6203 35.4985 40.9869 37.7959C38.5661 41.2003 35.3782 43.7763 31.8931 45.9917C29.7429 47.3588 27.5088 48.595 25.2903 49.8516C25.0197 50.0049 24.54 50.0577 24.2794 49.9224C18.8488 47.1075 13.6758 43.8973 9.61538 39.2393C6.60377 35.7846 5.07655 31.6504 5.03187 27.0551C4.97168 20.8848 5.01512 14.7126 5.01574 8.5417C5.01574 7.46067 5.2199 7.36262 6.30838 7.24099C7.95661 7.05668 9.64765 6.91953 11.2152 6.42618C13.8191 5.60641 16.3405 4.52228 18.8941 3.54178C19.1467 3.44373 19.3794 3.2948 19.6866 3.14462ZM15.8688 6.63904C12.8901 7.83177 9.78542 8.50632 6.56095 8.85756C6.5504 9.07042 6.53365 9.24976 6.53365 9.42911C6.53302 15.1656 6.51068 20.9034 6.55164 26.6399C6.56033 27.8699 6.67948 29.1253 6.95253 30.3224C7.709 33.6393 9.27965 36.5373 11.6366 39.0227C15.2774 42.8622 19.7281 45.5697 24.2645 48.1606C24.5164 48.3045 25.0067 48.2561 25.2797 48.1047C28.9473 46.0736 32.4945 43.8631 35.7022 41.1364C40.5016 37.0561 43.0348 31.9911 42.8244 25.5955C42.7047 21.9404 42.8102 18.2778 42.8139 14.6183C42.8151 12.7287 42.8139 10.8397 42.8139 8.90162C42.5284 8.84763 42.2895 8.80854 42.0531 8.75641C39.6322 8.22396 37.1661 7.8417 34.803 7.11998C31.3234 6.05756 28.1399 4.34045 25.2493 2.10145C25.0408 1.9401 24.5313 1.94506 24.2893 2.08779C23.4305 2.59542 22.6727 3.28487 21.7922 3.74409C19.8876 4.73762 17.9316 5.63123 15.8688 6.63904Z" fill="#066653"></path>
-<path d="M15.9331 6.60244C17.9319 5.63125 19.8886 4.73763 21.7925 3.7441C22.6725 3.28488 23.4302 2.59543 24.2897 2.08781C24.5317 1.94446 25.0405 1.94011 25.2497 2.10146C28.1409 4.34047 31.3238 6.05758 34.8033 7.11999C37.1664 7.84171 39.6326 8.22398 42.0534 8.75643C42.2898 8.80855 42.5294 8.84765 42.8142 8.90164C42.8142 10.8397 42.8155 12.7287 42.8142 14.6183C42.8111 18.2778 42.705 21.9404 42.8248 25.5955C43.0351 31.9911 40.5014 37.0562 35.7025 41.1364C32.4948 43.8632 28.9476 46.0736 25.2801 48.1047C25.007 48.2555 24.5168 48.3046 24.2648 48.1606C19.7285 45.5697 15.2772 42.8622 11.6369 39.0227C9.27999 36.5374 7.70933 33.6399 6.95286 30.3224C6.67981 29.1253 6.56066 27.8699 6.55197 26.6399C6.51102 20.9034 6.53336 15.1663 6.53398 9.42912C6.53398 9.24978 6.55073 9.07043 6.56128 8.85758C9.78575 8.50634 12.8905 7.83178 15.9331 6.60244ZM25.3248 10.8601C21.898 10.5219 18.5966 12.7144 17.6378 15.7322C17.3616 16.601 17.155 17.4239 16.1441 18.0041C11.5451 20.6446 10.6713 27.3157 14.7224 31.2967C16.45 32.9939 18.5786 33.864 21.0385 33.6027C21.409 33.5636 22.0116 33.051 22.0128 32.755C22.0159 32.1822 21.4295 32.163 20.892 32.1189C19.9513 32.0407 18.9652 31.9532 18.1001 31.6107C15.7463 30.6792 14.3662 28.9143 13.8443 26.3985C13.2479 23.5228 14.821 19.8472 17.8227 18.7718C18.4762 18.5372 18.9559 18.1431 18.81 17.3296C18.7784 17.1515 18.7877 16.9492 18.838 16.776C19.9469 12.931 24.0911 11.3622 27.4241 13.0762C29.2219 14.0008 30.1689 15.5622 30.5139 17.5058C30.6188 18.0966 30.8757 18.4857 31.4373 18.7066C33.8036 19.6356 35.0801 21.3881 35.6293 23.8654C36.5428 27.9816 33.412 32.2734 28.5834 32.14C28.1825 32.1289 27.771 32.4981 27.3639 32.6905C27.6935 33.0014 27.9957 33.3532 28.3643 33.6064C28.5412 33.7281 28.8577 33.7219 29.091 33.6747C30.1999 33.4507 31.3734 33.357 32.3949 32.9176C36.5918 31.1117 38.2679 26.4178 36.835 22.3754C35.9675 19.9285 34.3776 18.109 31.8767 17.2551C31.5559 14.21 29.2176 11.3349 25.3248 10.8601ZM26.3332 29.2221C26.1321 29.5045 25.9317 29.7862 25.7306 30.0686C25.6555 29.9953 25.5811 29.9221 25.506 29.8495C25.506 28.4247 25.4991 26.9999 25.5091 25.575C25.5134 24.9917 25.5134 24.3873 24.7259 24.3953C23.9701 24.4034 24.0116 25.0023 24.0135 25.5428C24.0191 26.98 24.0154 28.4172 24.0154 30.0282C23.1062 29.0757 22.3566 28.2596 21.5716 27.4796C21.2048 27.1153 20.8151 26.6989 20.2473 27.2841C19.6714 27.878 20.1486 28.1684 20.5135 28.5414C21.5039 29.5541 22.5254 30.5427 23.4351 31.6237C23.7709 32.0227 23.9719 32.6514 23.9868 33.1826C24.0489 35.3198 24.0303 37.4602 24.0042 39.5986C23.9974 40.1758 24.1122 40.5984 24.7588 40.5773C25.3868 40.5568 25.5277 40.1354 25.5159 39.5558C25.4849 38.0373 25.6543 36.4995 25.4706 35.0033C25.2044 32.84 26.0347 31.2818 27.6258 29.9631C28.1781 29.5051 28.7193 28.9975 29.1251 28.4154C29.3045 28.1578 29.2697 27.5751 29.0922 27.2872C28.8198 26.8447 28.417 27.0576 28.1043 27.3958C27.5594 27.9866 26.9984 28.5637 26.3332 29.2221Z" fill="#F9F8F8"></path>
-<path d="M25.4037 10.8825C29.2171 11.3343 31.5554 14.2094 31.8768 17.2545C34.3777 18.1084 35.9682 19.9279 36.8352 22.3748C38.2681 26.4172 36.5919 31.1111 32.395 32.917C31.3736 33.3564 30.2007 33.4501 29.0911 33.6741C28.8578 33.7212 28.5419 33.7275 28.3644 33.6058C27.9952 33.3526 27.693 33.0008 27.3641 32.6899C27.7705 32.4975 28.182 32.1283 28.5835 32.1394C33.4121 32.2735 36.5429 27.981 35.6294 23.8648C35.0796 21.3875 33.8037 19.6356 31.4375 18.706C30.8759 18.4851 30.619 18.096 30.5141 17.5052C30.1697 15.5616 29.2227 14.0002 27.4243 13.0756C24.0912 11.3616 19.9471 12.9304 18.8381 16.7754C18.7878 16.9492 18.7785 17.1509 18.8102 17.329C18.9554 18.1419 18.4763 18.5366 17.8229 18.7712C14.8212 19.8466 13.2474 23.5222 13.8444 26.3979C14.3663 28.9131 15.7464 30.6786 18.1002 31.6101C18.9653 31.952 19.9508 32.0401 20.8922 32.1183C21.4296 32.163 22.016 32.1816 22.0129 32.7544C22.0117 33.0504 21.4091 33.563 21.0386 33.6021C18.5787 33.8634 16.4495 32.9933 14.7225 31.2961C10.6714 27.3151 11.5452 20.644 16.1442 18.0035C17.1551 17.4233 17.3618 16.6004 17.6379 15.7316C18.5961 12.7144 21.8975 10.522 25.4037 10.8825Z" fill="#066653"></path>
-<path d="M26.389 29.1843C26.999 28.5637 27.5594 27.9866 28.1055 27.3958C28.4183 27.0576 28.821 26.8453 29.0934 27.2872C29.2709 27.5751 29.3057 28.1578 29.1263 28.4154C28.7205 28.9975 28.1794 29.5051 27.627 29.9631C26.0359 31.2818 25.2056 32.84 25.4718 35.0033C25.6561 36.4995 25.4867 38.0373 25.5171 39.5558C25.5289 40.1354 25.388 40.5574 24.76 40.5773C24.1134 40.5984 23.998 40.1758 24.0054 39.5986C24.0321 37.4602 24.0501 35.3198 23.988 33.1826C23.9725 32.6514 23.7715 32.0227 23.4364 31.6237C22.5266 30.5421 21.5051 29.5535 20.5147 28.5414C20.1498 28.1684 19.6726 27.878 20.2485 27.2841C20.8163 26.6989 21.206 27.1153 21.5728 27.4796C22.3578 28.2596 23.1081 29.0757 24.0166 30.0282C24.0166 28.4166 24.0203 26.98 24.0147 25.5428C24.0122 25.0023 23.9713 24.4028 24.7271 24.3953C25.5146 24.3873 25.5146 24.9917 25.5103 25.575C25.5004 26.9999 25.5072 28.4247 25.5072 29.8495C25.5823 29.9227 25.6567 29.9953 25.7318 30.0686C25.9323 29.7862 26.1327 29.5039 26.389 29.1843Z" fill="#066653"></path>
-</svg>
-            </div>
+            <div class="opt-icon"><img src="assets/asset/NBS%20PATHWAY%20ICON_Intervention%20Pathway=PROTECT,%20Filled=Yes,%20Ecosystem=Forest.svg" alt="" width="42" height="42"></div>
             <div class="opt-meta">
               <div class="opt-name">Protect</div>
+              <div class="pw-tip pw-tip--desc"><span class="pw-tip__ic"></span><span class="pw-tip__txt"><b>What is <strong>protect</strong> pathway?</b><span>The Protect pathway establishes a defensive shield over lands identified by 2014–2024 data as persisting forests. By securing these uninterrupted, decade-long canopies, this strategy locks in critical carbon stocks and safeguards baseline biodiversity from future fragmentation.</span></span></div>
               <div class="opt-ha mono">13,942.2 ha</div>
             </div>
           </div>
@@ -626,17 +671,10 @@
         <!-- Manage -->
         <div class="pathway-opt" data-pathway data-eco="forest">
           <div class="opt-top">
-            <div class="opt-icon">
-              <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-<circle cx="24.9531" cy="25.042" r="24.125" fill="#F9F8F8"></circle>
-<path d="M16.1719 3.17763C12.9244 4.43325 10.2057 6.33513 7.83192 8.77325C5.06817 11.6139 3.29816 15.0276 2.27816 18.7914C1.42129 21.9526 1.02567 25.2051 1.81129 28.4776C2.14317 29.8539 2.53129 31.2176 2.80129 32.6058C2.85941 32.9108 2.52192 33.2933 2.36817 33.6401C2.06067 33.4751 1.56192 33.377 1.47754 33.1345C0.148167 29.3364 -0.359958 25.4845 0.266292 21.4351C1.07442 16.202 3.12192 11.6176 6.72942 7.77013C9.83817 4.45763 13.6163 2.23138 18.015 0.984501C21.5532 -0.0179992 25.1157 -0.272374 28.7138 0.302001C32.7432 0.945126 36.4782 2.43888 39.69 4.972C41.5575 6.44388 43.2038 8.19387 44.9457 9.8145C44.9457 9.07075 44.9569 8.16138 44.9419 7.25263C44.9325 6.73075 45.0488 6.20325 45.6469 6.3195C45.9563 6.3795 46.3838 6.917 46.3913 7.24638C46.4269 8.8045 46.3688 10.3683 46.2563 11.9233C46.2375 12.1833 45.7763 12.6295 45.5363 12.6195C43.9519 12.5545 42.3675 12.4226 40.7963 12.2195C40.5263 12.1851 40.3144 11.7039 40.0763 11.4289C40.3669 11.2101 40.65 10.8176 40.9463 10.8064C41.7788 10.7758 42.6169 10.9039 43.62 10.982C41.2707 7.73138 38.3288 5.357 34.8244 3.75013C28.74 0.960751 22.515 0.789501 16.1719 3.17763Z" fill="#066653"></path>
-<path d="M47.9511 27.7564C47.9511 26.1451 48.0261 24.6158 47.9249 23.0976C47.8461 21.9001 47.5517 20.7164 47.3474 19.527C47.3324 19.4383 47.2349 19.3583 47.2349 19.2739C47.2311 18.6645 46.8317 17.7845 47.7636 17.6514C48.5586 17.5376 48.5493 18.3764 48.7274 18.9745C49.4624 21.4576 49.5505 23.9908 49.4605 26.5495C49.2955 31.2339 47.773 35.4539 45.1611 39.3176C42.1967 43.7008 38.1242 46.6601 33.2305 48.4989C29.6624 49.8395 25.9536 50.2183 22.1417 49.817C17.5536 49.3345 13.4211 47.7426 9.79486 44.932C8.19924 43.6945 6.79112 42.2151 5.21424 40.7689C5.21424 41.5633 5.20111 42.3508 5.21799 43.1376C5.23111 43.7114 5.07174 44.152 4.41737 44.1314C3.81549 44.1126 3.68987 43.6795 3.69549 43.1526C3.70862 41.747 3.70674 40.342 3.70111 38.9364C3.69924 38.1851 4.04236 37.8526 4.80361 37.9358C6.10486 38.0783 7.40612 38.1945 8.70737 38.3339C9.21549 38.3889 9.77049 38.4583 9.69549 39.1708C9.62049 39.8814 9.06924 39.6876 8.61549 39.677C7.99486 39.6626 7.37236 39.6733 6.55299 39.6733C7.00861 40.2233 7.36486 40.7026 7.77174 41.1345C10.7286 44.2758 14.2667 46.4326 18.4499 47.5733C21.3111 48.3533 24.1799 48.6114 27.1274 48.282C36.3167 47.2545 42.6261 42.317 46.3124 33.9895C47.1599 32.0745 47.4205 29.8989 47.9511 27.7564Z" fill="#066653"></path>
-<path d="M33.2737 19.4263C32.4262 18.9913 31.4212 18.7607 30.915 18.1307C30.4125 17.5032 30.5231 16.4245 30.1688 15.6307C29.1263 13.2951 26.6962 11.8926 24.2737 12.112C21.4837 12.3645 19.395 14.0051 18.6938 16.6001C18.3881 17.7245 17.8763 18.4626 16.7925 19.107C14.2069 20.647 13.0725 23.1388 13.4981 26.107C13.8769 28.7463 15.3019 30.7963 17.91 31.757C18.7931 32.082 19.7681 32.2013 20.7113 32.2988C21.3 32.3595 21.9881 32.3326 21.9994 33.0313C22.0125 33.7026 21.3075 33.842 20.7375 33.8538C17.9813 33.9113 15.66 32.9357 13.9069 30.787C12.2381 28.7407 11.565 26.3163 11.9925 23.7595C12.4538 21.0107 13.8319 18.7532 16.5075 17.5045C16.7325 17.4001 16.9631 17.1007 17.01 16.8576C17.5988 13.7576 19.5356 11.762 22.425 10.8901C26.3231 9.71322 30.2944 11.5457 31.8038 15.6338C32.1544 16.5845 32.505 17.2738 33.5006 17.7763C35.9306 19.0026 37.1456 21.1238 37.53 23.8176C38.0269 27.3213 36.8944 30.1126 34.1325 32.2657C32.5538 33.4951 30.7294 33.9563 28.7513 33.8507C28.5675 33.8407 28.3462 33.8332 28.2112 33.7326C27.9187 33.5145 27.6694 33.237 27.4031 32.9832C27.7537 32.747 28.0781 32.3832 28.4625 32.2995C29.5669 32.0595 30.7781 32.137 31.7981 31.7226C34.8544 30.4807 36.4669 27.3657 36.0619 24.212C35.8088 22.2301 34.9406 20.6438 33.2737 19.4263Z" fill="#066653"></path>
-<path d="M20.1797 27.5958C20.6466 27.0939 21.0234 27.1595 21.4453 27.5958C22.2253 28.4014 23.0503 29.167 23.9522 30.0426C23.9522 28.5576 23.9578 27.1458 23.9484 25.7333C23.9447 25.1608 23.9916 24.6614 24.7472 24.6414C25.5272 24.6208 25.4578 25.1614 25.4578 25.667C25.4578 27.1183 25.4578 28.5701 25.4578 30.2258C26.3391 29.3039 27.0628 28.5133 27.8259 27.7595C28.1897 27.3995 28.6228 26.9183 29.1553 27.4933C29.6184 27.9933 29.3241 28.3939 28.9153 28.827C27.8466 29.9589 26.8172 31.1289 25.8122 32.3183C25.6041 32.5645 25.4766 32.9589 25.4728 33.2864C25.4447 35.5001 25.4428 37.7139 25.4709 39.9276C25.4784 40.5101 25.3528 40.9433 24.7097 40.9251C24.0759 40.9076 23.9372 40.4551 23.9428 39.8783C23.9634 37.6333 23.9784 35.3876 23.9353 33.1433C23.9278 32.7301 23.7403 32.2364 23.4684 31.9289C22.5103 30.8458 21.4528 29.8501 20.4947 28.7676C20.2603 28.5051 20.2584 28.0364 20.1797 27.5958Z" fill="#066653"></path>
-</svg>
-            </div>
+            <div class="opt-icon"><img src="assets/asset/NBS%20PATHWAY%20ICON_Intervention%20Pathway=MANAGE,%20Filled=Yes,%20Ecosystem=Forest.svg" alt="" width="42" height="42"></div>
             <div class="opt-meta">
               <div class="opt-name">Manage</div>
+              <div class="pw-tip pw-tip--desc"><span class="pw-tip__ic"></span><span class="pw-tip__txt"><b>What is <strong>manage</strong> pathway?</b><span>The Manage pathway balances human livelihood with ecological health on lands that transitioned into active use over the last decade. Rather than forcing rewilding, it implements sustainable agroecological and smart farming practices to maintain economic productivity while reducing environmental footprints.</span></span></div>
               <div class="opt-ha mono">13,942.2 ha</div>
             </div>
           </div>
@@ -646,19 +684,10 @@
         <!-- Restore -->
         <div class="pathway-opt" data-pathway data-eco="forest">
           <div class="opt-top">
-            <div class="opt-icon">
-              <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M18.5664 10.5532L24.9727 1.86566L29.8789 6.74066L33.5039 13.3032L33.1602 16.7407L29.4102 22.3344L24.9727 23.0219L20.9727 22.3344L18.5664 19.3969L17.3477 15.9594L18.5664 10.5532Z" fill="#F9F8F8"></path>
-<path d="M13.5735 49.6638C10.281 49.6925 10.7948 49.9181 10.7591 47.0225C10.7423 45.5244 10.7198 44.0244 10.7798 42.5288C10.8154 41.6319 10.5023 40.9288 9.99414 40.2269C8.49227 38.1494 7.00914 36.0569 5.55602 33.9444C4.64289 32.6194 4.21539 31.1275 4.17977 29.5113C4.14039 27.7069 3.94915 25.9 4.0129 24.1006C4.11602 21.1819 4.73477 18.3388 5.69664 15.5788C6.19727 14.145 7.02976 13.5044 8.23726 13.5644C9.20101 13.6119 10.3091 14.4706 10.5454 15.6556C10.7835 16.8525 10.8416 18.1025 10.8248 19.3275C10.8023 20.8169 10.6185 22.3038 10.4985 23.8819C12.6941 23.3494 13.7198 24.7913 14.6704 26.1719C16.0148 28.1256 17.5635 29.8525 19.3316 31.4419C21.8573 33.7119 22.5885 36.645 22.2848 40.005C22.0579 42.5138 22.2154 45.0569 22.2041 47.5844C22.1929 49.88 22.4085 49.5956 20.2241 49.6263C18.0379 49.6569 15.8516 49.6519 13.5735 49.6638ZM20.6948 44.0238C20.7116 42.7138 20.5935 41.3844 20.7754 40.0969C21.2441 36.7838 20.3141 34.0456 17.7135 31.925C16.2735 30.75 15.0416 29.4125 14.0235 27.8519C13.4648 26.995 12.7841 26.2069 12.0829 25.46C11.8916 25.2569 11.3591 25.1719 11.1023 25.2906C10.8491 25.4075 10.656 25.8369 10.6054 26.1563C10.5548 26.4656 10.6504 26.8425 10.7966 27.1325C11.7491 29.015 12.7204 30.8894 13.716 32.7494C13.9785 33.2413 14.1435 33.67 13.566 34.01C12.921 34.3894 12.6829 33.8344 12.4466 33.435C11.7323 32.225 11.0123 31.0156 10.371 29.7663C9.73165 28.5169 8.99289 27.2794 9.06601 25.7906C9.10351 25.0169 9.16164 24.245 9.20664 23.4713C9.28164 22.1669 9.42415 20.8606 9.40352 19.5575C9.38102 18.3013 9.2479 17.0375 9.02665 15.8013C8.97227 15.5075 8.38352 15.1463 8.02352 15.1263C7.75539 15.1119 7.30726 15.5513 7.20601 15.8719C6.76351 17.2781 6.37726 18.7056 6.04726 20.1438C5.42476 22.8588 5.09476 25.6075 5.51664 28.3856C5.71539 29.69 5.78102 31.1206 6.38477 32.235C7.54165 34.3688 8.94976 36.3863 10.4254 38.3219C11.6104 39.8763 12.4673 41.4156 12.2573 43.4569C12.1241 44.7544 12.2216 46.0763 12.2273 47.3875C12.2273 47.6525 12.2741 47.9175 12.2966 48.16C15.1241 48.16 17.8616 48.16 20.6948 48.16C20.6948 46.8156 20.6948 45.5131 20.6948 44.0238Z" fill="#066653"></path>
-<path d="M41.0458 39.1644C39.5533 40.6713 39.2852 42.4582 39.424 44.4175C39.5271 45.8463 39.4108 47.2894 39.4615 48.7238C39.4858 49.42 39.2271 49.67 38.5633 49.6669C35.3477 49.6525 32.1302 49.6513 28.9127 49.6494C28.3821 49.6494 28.1421 49.4532 28.159 48.8725C28.1983 47.4375 28.2077 46 28.174 44.565C28.1383 43.0719 28.1102 41.5732 27.9546 40.0894C27.5383 36.1094 28.834 32.9575 31.969 30.3725C33.5121 29.1 34.5977 27.28 35.9308 25.7425C36.4633 25.1282 37.0408 24.5063 37.7196 24.0782C38.2127 23.7663 38.9046 23.7675 39.6096 23.605C39.6096 22.8782 39.6321 21.9232 39.6058 20.9688C39.5665 19.5075 39.4146 18.0444 39.4596 16.5869C39.5027 15.1394 40.7383 13.3838 42.3396 13.5519C43.414 13.665 43.9615 14.3263 44.3177 15.2138C45.8758 19.1063 46.2415 23.1719 46.2752 27.3338C46.3071 31.3457 44.6515 34.5813 42.2608 37.5869C41.8615 38.0888 41.4808 38.6057 41.0458 39.1644ZM37.5377 33.8775C37.1852 33.8894 36.8308 33.9019 36.4783 33.9138C36.5102 33.4938 36.4221 33.0132 36.5965 32.665C37.5846 30.7038 38.6308 28.7719 39.6658 26.8344C39.9958 26.2169 39.7671 25.6357 39.2833 25.3744C38.9608 25.2 38.3683 25.3869 37.9577 25.5575C37.6727 25.6757 37.4608 26.02 37.2696 26.2994C35.764 28.4957 34.1571 30.5819 32.0833 32.3088C29.8465 34.1713 29.1902 36.7319 29.3327 39.5488C29.419 41.2594 29.5277 42.9694 29.5858 44.6813C29.6252 45.8263 29.5933 46.9738 29.5933 48.1419C32.4546 48.1419 35.1827 48.1419 37.9465 48.1419C37.9465 46.1375 37.9315 44.2025 37.9577 42.2682C37.9633 41.8144 37.9821 41.2807 38.2108 40.9232C39.2646 39.2857 40.4346 37.7232 41.4883 36.0857C42.4765 34.5494 43.8133 33.0544 44.2015 31.3594C44.7546 28.945 44.6496 26.3657 44.6946 23.855C44.7171 22.5932 44.5427 21.3063 44.2858 20.0669C43.9877 18.6269 43.5565 17.2063 43.0765 15.8138C42.7296 14.8094 41.8427 14.7188 41.3233 15.6382C41.0046 16.1994 40.8171 16.9138 40.8152 17.56C40.804 19.9919 40.8902 22.4244 40.9502 24.8563C40.9671 25.5288 41.2558 26.3088 41.0102 26.8544C39.9565 29.1907 38.749 31.4582 37.5377 33.8775Z" fill="#066653"></path>
-<path d="M32.2893 20.4875C31.1362 21.795 29.8087 22.6975 28.1662 23.1481C27.6525 23.2888 27.2625 23.2569 27.105 22.7956C26.9587 22.3694 26.9568 21.9688 27.6487 21.7669C29.7187 21.1638 31.3125 19.955 32.0906 17.8394C32.6287 16.3775 32.6362 14.86 32.205 13.4413C30.9431 9.3044 28.2712 6.05502 25.2975 3.0269C25.2543 2.98377 25.1906 2.96252 25.0762 2.89752C22.1156 5.80877 19.4775 8.9769 18.1743 13.0094C17.3381 15.5981 17.5631 18.1506 19.6706 20.1175C20.5406 20.9281 21.7425 21.3819 22.9068 22.065C23.0475 23.185 22.9012 23.305 21.705 22.9788C18.0581 21.9825 15.7724 18.11 16.3893 14.2794C16.9762 10.6238 18.9693 7.72002 21.1987 4.94002C22.2056 3.68315 23.3718 2.5519 24.465 1.36377C24.9 0.891271 25.2506 0.861271 25.7493 1.37877C28.1399 3.85877 30.4181 6.41065 32.1018 9.45565C33.4237 11.85 34.2468 14.3619 33.7743 17.08C33.5718 18.2444 32.8218 19.3131 32.2893 20.4875Z" fill="#066653"></path>
-<path d="M22.9066 14.3088C23.3997 14.8319 23.8422 15.3063 24.4366 15.9432C24.4366 14.2638 24.4309 12.7594 24.4384 11.2557C24.4403 10.7788 24.2828 10.1619 25.0497 10.1388C25.8597 10.1138 25.8822 10.7288 25.8841 11.3144C25.8878 12.7969 25.8859 14.2794 25.8859 15.9907C26.5741 15.2907 27.0672 14.7044 27.6559 14.2394C27.8716 14.0688 28.3816 14.0588 28.6403 14.1969C29.1016 14.4438 29.0022 14.7969 28.6253 15.1632C27.9034 15.8644 27.2697 16.6576 26.5347 17.3432C26.0303 17.8132 25.8859 18.3113 25.8934 18.9844C25.9272 21.7925 25.8991 24.6013 25.8934 27.4094C25.8916 27.9457 25.9234 28.5488 25.1641 28.5519C24.3934 28.555 24.4366 27.9569 24.4384 27.4107C24.4422 24.6019 24.4216 21.7932 24.4478 18.985C24.4553 18.2969 24.3409 17.7525 23.7766 17.2732C23.1034 16.7013 22.4809 16.0525 21.9259 15.365C21.6878 15.0707 21.4647 14.47 21.6072 14.2263C21.9185 13.6963 22.4434 13.8457 22.9066 14.3088Z" fill="#066653"></path>
-<path d="M20.6916 44.1175C20.6916 45.5138 20.6916 46.8157 20.6916 48.16C17.8585 48.16 15.121 48.16 12.2935 48.16C12.271 47.9182 12.2241 47.6532 12.2241 47.3875C12.2185 46.0763 12.121 44.7544 12.2541 43.4569C12.4641 41.4157 11.6072 39.8763 10.4222 38.3219C8.94661 36.3863 7.53849 34.3688 6.38162 32.235C5.77787 31.1207 5.71223 29.69 5.51348 28.3857C5.09161 25.6075 5.42161 22.8582 6.04411 20.1438C6.37411 18.7063 6.76036 17.2788 7.20286 15.8719C7.30411 15.5507 7.75224 15.1113 8.02036 15.1263C8.38036 15.1457 8.96912 15.5075 9.02349 15.8013C9.24474 17.0375 9.37787 18.3013 9.40037 19.5575C9.42099 20.8607 9.27848 22.1669 9.20348 23.4713C9.15848 24.2444 9.10036 25.0169 9.06286 25.7907C8.98973 27.2794 9.72849 28.5169 10.3679 29.7663C11.0091 31.0157 11.7291 32.2257 12.4435 33.435C12.6797 33.835 12.9179 34.3894 13.5629 34.01C14.1404 33.67 13.9754 33.2419 13.7129 32.7494C12.7172 30.8888 11.746 29.015 10.7935 27.1325C10.6472 26.8432 10.5516 26.4657 10.6022 26.1563C10.6529 25.8369 10.846 25.4075 11.0991 25.2907C11.356 25.1719 11.8885 25.2563 12.0797 25.46C12.781 26.2075 13.4616 26.995 14.0204 27.8519C15.0385 29.4125 16.2704 30.75 17.7104 31.925C20.311 34.0457 21.241 36.7838 20.7722 40.0969C20.5904 41.3838 20.7085 42.7132 20.6916 44.1175Z" fill="#F9F8F8"></path>
-<path d="M41.3262 15.6372C41.8455 14.7182 42.7322 14.8088 43.0791 15.8129C43.559 17.2053 43.9899 18.626 44.2881 20.0659C44.5449 21.3057 44.7197 22.5922 44.6972 23.8539C44.6522 26.3646 44.7572 28.9445 44.2041 31.3588C43.8159 33.0538 42.4793 34.5492 41.4912 36.0854C40.4375 37.7227 39.2675 39.2856 38.2138 40.9223C37.9852 41.2797 37.9656 41.8134 37.9599 42.267C37.9337 44.2014 37.9492 46.1374 37.9492 48.1411H29.5957C29.5957 46.9732 29.6282 45.8259 29.5888 44.6811C29.5307 42.9693 29.4212 41.2589 29.3349 39.5483C29.1924 36.7314 29.8491 34.1705 32.0859 32.3081C34.1597 30.5812 35.7668 28.4945 37.2724 26.2983C37.4635 26.0191 37.6753 25.6747 37.9599 25.5571C38.3706 25.3865 38.9636 25.1991 39.2861 25.3735C39.7698 25.6347 39.9986 26.2161 39.6689 26.8334C38.6339 28.7709 37.5877 30.7026 36.5996 32.6645C36.4252 33.0126 36.5133 33.4941 36.4814 33.9135C36.8338 33.9023 37.1879 33.8889 37.5703 33.8139C38.7515 31.4579 39.959 29.1906 41.0127 26.8539C41.2583 26.3084 40.9701 25.5283 40.9531 24.8559C40.8931 22.424 40.8071 19.9909 40.8183 17.559C40.8203 16.9129 41.0075 16.1989 41.3262 15.6372ZM36.791 43.1831C37.0785 43.6756 37.2995 44.2489 37.3545 44.7993C37.497 46.2411 36.6659 46.8859 35.4922 47.2221C34.6934 47.4508 33.724 47.3845 32.914 47.1577C32.3891 47.0113 31.7932 46.412 31.6133 45.8852C31.4798 45.4912 31.3674 45.0886 31.2695 44.6811C31.3675 45.0892 31.4796 45.4926 31.6133 45.8872C31.7933 46.414 32.39 47.0134 32.915 47.1596C33.725 47.3864 34.6945 47.4522 35.4931 47.2241C36.6667 46.8878 37.497 46.243 37.3545 44.8012C37.2995 44.2502 37.079 43.676 36.791 43.1831ZM30.8388 42.2661C30.8991 42.7234 30.9681 43.1827 31.0508 43.6391C30.968 43.1821 30.8992 42.7221 30.8388 42.2641C30.8248 42.1589 30.8133 42.0533 30.8017 41.9477C30.8134 42.0539 30.8247 42.1602 30.8388 42.2661ZM43.2793 29.2622C43.4393 29.8328 43.4352 30.4567 43.2871 31.0209C42.8615 32.6358 42.0526 33.8679 40.5508 34.7104C40.1443 34.9394 40.0508 35.7327 39.8203 36.27C39.5747 36.845 39.4332 37.4948 39.0732 37.9848C38.3777 38.9334 37.5421 39.7792 36.7978 40.6928C36.4026 41.1756 36.2418 41.6659 36.3388 42.1889C36.2426 41.6666 36.4031 41.1769 36.7978 40.6948C37.5422 39.7811 38.3786 38.9349 39.0742 37.9868C39.4341 37.4968 39.5747 36.8469 39.8203 36.2719C40.0509 35.7345 40.145 34.9412 40.5517 34.7123C42.0535 33.8699 42.8614 32.6377 43.2871 31.0229C43.4353 30.458 43.4398 29.8333 43.2793 29.2622ZM30.6055 38.4438C30.6065 38.4639 30.6095 38.484 30.6113 38.5043C30.6095 38.4833 30.6066 38.4626 30.6055 38.4418V38.4438ZM39.1904 34.3588C38.9182 34.8718 38.4572 35.2393 37.6494 35.3061C37.6677 35.3064 37.6864 35.3078 37.7051 35.3081C38.4684 35.2468 38.9196 34.8767 39.1904 34.3588ZM42.9619 28.5375C42.9802 28.5668 42.9975 28.5965 43.0146 28.6264C42.9975 28.5965 42.9803 28.5667 42.9619 28.5375Z" fill="#F9F8F8"></path>
-</svg>
-            </div>
+            <div class="opt-icon"><img src="assets/asset/NBS%20PATHWAY%20ICON_Intervention%20Pathway=RESTORE,%20Filled=Yes,%20Ecosystem=Forest.svg" alt="" width="42" height="42"></div>
             <div class="opt-meta">
               <div class="opt-name">Restore</div>
+              <div class="pw-tip pw-tip--desc"><span class="pw-tip__ic"></span><span class="pw-tip__txt"><b>What is <strong>restore</strong> pathway?</b><span>The Restore pathway actively heals heavily impacted or vulnerable landscapes, targeting <i>degraded vegetation, barren lands, and long-term non-forested areas</i>. Crucially, it also reclaims active use lands that pose an ecological liability due to medium-to-high flood risks or proximity to water bodies, transforming them back into natural buffers.</span></span></div>
               <div class="opt-ha mono">13,942.2 ha</div>
             </div>
           </div>
@@ -683,6 +712,7 @@
           <div class="tags" data-tags></div>
         </div>
         <div class="count"><span data-count>0</span> of <b data-total>0</b> Activity is Selected</div>
+        <span class="activity-chev"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 5.25 7 9.25l4-4" stroke="#0f1419" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
       </div>
       <div class="activity-list" data-activity-list></div>
     </div>
@@ -692,32 +722,23 @@
   <section class="eco-card" style="--eco:var(--eco-mangrove);--eco-soft:#e4f0ef;">
     <div class="eco-head">
       <div class="eco-ident">
-        <div class="eco-icon">
-          <svg width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect width="38" height="38" rx="6" fill="#DDF1EF"></rect>
-<path d="M18.2668 19.813C18.378 19.8884 18.4616 19.9441 18.6484 20.0687C18.6484 19.2824 18.6484 18.5905 18.6484 17.8986C18.6484 17.7239 18.6348 17.548 18.6506 17.3748C18.7164 16.6554 18.5239 16.0628 18.0947 15.4394C16.5954 13.2616 16.7279 10.5101 18.3261 8.45515C18.8724 7.75276 19.13 7.75217 19.6995 8.45196C21.3077 10.428 21.4026 13.4256 19.882 15.5254C19.5443 15.9919 19.3858 16.4477 19.4066 17.019C19.4413 17.9757 19.4161 18.9346 19.4161 20.018C20.0047 19.5984 20.5112 19.3406 20.6564 18.6153C21.1574 16.1122 23.4294 14.2732 25.9328 14.2682C26.7527 14.2665 26.8891 14.4236 26.7694 15.2313C26.4641 17.2905 24.6815 19.2086 22.6518 19.6574C22.4309 19.7063 22.1939 19.8029 21.9849 19.7647C20.8921 19.565 20.2908 20.3605 19.6021 20.9365C19.1335 21.3284 19.3952 22.0719 19.9951 22.2336C22.7244 22.9692 24.1799 24.915 24.9631 27.4913C25.0382 27.738 24.9893 27.9704 24.7059 28.026C24.389 28.0881 24.2913 27.8346 24.2182 27.5915C23.8447 26.3484 23.2507 25.2336 22.29 24.3425C21.7169 23.8109 21.1027 23.3357 20.2083 23.125C20.99 24.3337 21.4508 25.5661 21.6961 26.8784C21.7408 27.1173 21.7486 27.3633 21.7705 27.6063C21.7908 27.8301 21.7002 27.992 21.4709 28.0205C21.2405 28.0492 21.1146 27.9026 21.0728 27.6915C20.995 27.2981 20.9447 26.8986 20.8534 26.5086C20.5842 25.3574 20.1526 24.2777 19.3932 23.3526C19.2859 23.222 19.209 23.0523 18.9822 22.9933C18.2985 23.5798 17.9024 24.3716 17.5715 25.1989C17.2853 25.9145 17.1107 26.6623 17.0241 27.4296C17.0006 27.638 16.9812 27.8534 16.7732 27.9777C16.6603 28.0451 16.5418 28.0558 16.4284 27.9779C16.2628 27.8641 16.2316 27.6926 16.2563 27.5128C16.4431 26.155 16.7655 24.8402 17.4861 23.6513C17.573 23.5078 17.7239 23.3906 17.704 23.1231C16.6816 23.4269 15.9029 24.0431 15.2384 24.811C14.5549 25.6007 14.1011 26.5235 13.7977 27.5209C13.7155 27.7911 13.6439 28.1256 13.2646 28.0103C12.8861 27.8952 13.0082 27.5723 13.0901 27.3042C13.885 24.7007 15.451 22.8636 18.1834 22.1879C18.6997 22.0602 18.8757 21.3576 18.4598 20.9657C18.0541 20.5833 17.6019 20.2503 17.1688 19.8972C17.0053 19.764 16.8067 19.7806 16.6162 19.7875C13.9507 19.8832 11.6668 17.6603 11.2744 14.9685C11.2009 14.464 11.3638 14.292 11.9148 14.2705C14.4865 14.17 16.7946 15.9274 17.4185 18.5291C17.5514 19.0833 17.7824 19.4904 18.2668 19.813ZM18.7514 15.1007C19.0228 15.4468 19.1877 15.2134 19.3469 14.9873C20.5438 13.2867 20.5188 10.8831 19.2862 9.19843C19.2075 9.09093 19.1522 8.94612 18.9835 8.94653C17.5199 10.3584 17.4034 12.9761 18.7514 15.1007ZM12.4462 16.2807C12.6021 16.5522 12.7315 16.8435 12.9182 17.0918C13.7122 18.1479 14.7023 18.8988 16.0749 18.9956C16.6662 19.0372 16.7791 18.9053 16.5799 18.3334C15.9547 16.5395 14.6943 15.4439 12.8337 15.0759C12.0992 14.9307 11.9903 15.1022 12.2604 15.8197C12.3094 15.9499 12.3639 16.0781 12.4462 16.2807ZM22.2493 18.9782C24.0447 18.5917 25.1973 17.4718 25.8396 15.7937C26.1059 15.098 25.9684 14.9406 25.2235 15.077C23.9668 15.3069 22.948 15.9456 22.2 16.9811C21.7826 17.559 21.444 18.1832 21.3993 18.9126C21.6762 19.0644 21.9208 18.994 22.2493 18.9782Z" fill="#1A9E96"></path>
-<path d="M16.1145 29.2117C15.4409 29.1393 14.8658 29.2832 14.3067 29.5794C13.1137 30.2114 11.9143 30.2597 10.7145 29.5659C9.94375 29.1202 9.13494 29.0455 8.30369 29.4065C8.0947 29.4972 7.88323 29.5282 7.75914 29.2879C7.61851 29.0156 7.79607 28.8593 8.01407 28.7506C9.04183 28.2377 10.0449 28.3535 11.0173 28.9007C11.6814 29.2744 12.3667 29.4522 13.1266 29.2566C13.4357 29.1771 13.7162 29.0407 13.9923 28.8926C15.1646 28.2641 16.341 28.2636 17.4913 28.917C18.4999 29.4899 19.4776 29.4667 20.472 28.9074C21.6371 28.252 22.8112 28.2746 23.9643 28.9251C24.935 29.4728 25.8782 29.4567 26.8469 28.9216C27.8298 28.3785 28.8532 28.2314 29.9068 28.7327C30.1283 28.8381 30.3933 28.9458 30.254 29.267C30.1227 29.5699 29.8835 29.5032 29.6341 29.4017C28.8458 29.081 28.0652 29.1002 27.3146 29.5168C26.0346 30.227 24.7766 30.2403 23.4825 29.5164C22.6362 29.0431 21.736 29.0543 20.8779 29.5352C19.6334 30.2325 18.3944 30.2606 17.1396 29.5704C16.8336 29.4021 16.5098 29.2691 16.1145 29.2117Z" fill="#1A9E96"></path>
-</svg>
-        </div>
+        <div class="eco-icon"><img src="assets/asset/ECOSYSTEM%20ICON_Ecosystem%20Type=Mangrove,%20Filled=No.svg" alt="" width="48" height="48"></div>
         <div class="eco-titles">
           <div class="eco-name">Mangrove</div>
-          <div class="eco-ha mono">30,000.0 ha</div>
-          <div class="eco-area">35% of area</div>
+          <span class="eco-status eco-status--ok">Non-Disturbed</span>
         </div>
       </div>
       <div class="vdiv"></div>
-      <div class="eco-dist">
-        <span class="pill-dist dist-mod">● Moderate Disturbance</span>
-        <div class="dist-ha mono">2,731.3 ha</div>
-        <div class="bar"><span style="width:28%;background:#c97a2b;"></span></div>
-        <div class="dist-cap mono">28% of mangrove is disturbeb</div>
-      </div>
-      <div class="eco-press">
-        <div class="press-label">main pressure:</div>
-        <div class="press-chips">
-          <span class="press-chip"><span class="num">01</span><span class="txt">Grazing</span></span>
-          <span class="press-chip"><span class="num">03</span><span class="txt">Invasive species</span></span>
-          <span class="press-chip"><span class="num">02</span><span class="txt">Urban dev.</span></span>
+      <div class="eco-stats">
+        <div class="eco-stat">
+          <div class="eco-stat__ttl">Total Mangrove Area</div>
+          <div class="bar"><span style="width:35%;background:var(--eco);"></span></div>
+          <div class="eco-stat__row"><span class="mono">30,000.0 ha</span><span>35% of total area</span></div>
+        </div>
+        <div class="eco-stat">
+          <div class="eco-stat__ttl">Disturbeb Area of Mangrove Ecosystem</div>
+          <div class="bar"><span style="width:28%;background:var(--eco);"></span></div>
+          <div class="eco-stat__row"><span class="mono">2,731.3 ha</span><span>28% of mangrove is disturbeb</span></div>
         </div>
       </div>
     </div>
@@ -728,25 +749,10 @@
         <!-- Protect -->
         <div class="pathway-opt" data-pathway data-eco="mangrove">
           <div class="opt-top">
-            <div class="opt-icon">
-              <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M15.3832 5.96536C17.4611 4.95589 19.4951 4.02704 21.4743 2.99435C22.3891 2.51703 23.1767 1.8004 24.0702 1.27277C24.3218 1.12377 24.8508 1.11925 25.0682 1.28696C28.0738 3.61423 31.3825 5.39902 34.9996 6.50331C37.4562 7.25348 40.0199 7.65082 42.5364 8.20425C42.7822 8.25844 43.0312 8.29907 43.3273 8.35519C43.3273 10.3696 43.3286 12.3331 43.3273 14.2972C43.3241 18.1009 43.2138 21.9079 43.3383 25.7071C43.557 32.3548 40.923 37.6195 35.9344 41.8606C32.5998 44.6948 28.9124 46.9924 25.0998 49.1036C24.816 49.2604 24.3063 49.3113 24.0444 49.1617C19.3287 46.4687 14.7013 43.6544 10.9171 39.6636C8.46697 37.0803 6.8342 34.0686 6.04781 30.6203C5.76397 29.376 5.6401 28.0712 5.63107 26.7927C5.5885 20.8301 5.61172 14.8668 5.61237 8.90346C5.61237 8.71705 5.62978 8.53064 5.64075 8.30939C8.99274 7.94431 12.2202 7.24316 15.3832 5.96536Z" fill="#F9F8F8"></path>
-<path d="M42.7073 8.81793C39.7043 8.45279 36.7426 7.9214 33.8836 6.88016C30.7901 5.75334 27.9189 4.22074 25.2779 2.26758C24.7336 1.86488 24.3857 1.87843 23.858 2.27682C20.7577 4.61913 17.3021 6.30813 13.599 7.41956C11.6557 8.00329 9.60893 8.24159 7.60897 8.63752C7.27955 8.70279 6.95135 8.77421 6.53819 8.86042C6.53819 9.196 6.53819 9.52851 6.53819 9.86039C6.53757 15.7667 6.48154 21.6735 6.55666 27.5786C6.60345 31.2368 7.84665 34.5353 10.072 37.4527C10.556 38.0876 11.0276 38.7317 11.5695 39.4582C10.9482 39.6608 10.527 39.7981 10.043 39.9564C8.13359 37.683 6.54804 35.2348 5.73402 32.2878C5.15275 30.1844 5.00128 28.0755 5.00435 25.9265C5.01359 20.1132 5.03329 14.2999 5.00004 8.48665C4.99573 7.65108 5.31469 7.34875 6.06775 7.2373C7.87929 6.96945 9.72346 6.80689 11.4851 6.34077C14.2406 5.6111 16.9573 4.69795 19.4154 3.19921C20.911 2.28729 22.366 1.3064 23.8057 0.307655C24.3925 -0.0993559 24.8099 -0.116594 25.406 0.340907C28.4989 2.71524 31.8443 4.60436 35.6231 5.71332C38.0042 6.41158 40.3859 7.00393 42.8674 7.17326C43.642 7.22622 44.3809 7.40602 44.1359 8.54269C43.5158 8.0741 43.1223 8.51498 42.7073 8.81793Z" fill="#1A9E96"></path>
-<path d="M27.6003 26.0072C27.394 26.2424 27.1871 26.4783 26.9112 26.6618C26.6064 25.9838 26.2764 26.1279 25.8885 26.4733C25.16 27.1211 24.4174 27.7522 23.6804 28.3902C23.4704 28.1703 23.2309 27.9714 23.0548 27.7276C22.1693 26.5035 21.1195 25.966 19.4761 25.9025C16.8019 25.7997 14.9681 24.0811 13.9435 21.6459C13.5378 20.681 13.3955 19.5991 13.1886 18.5591C13.076 17.9926 13.4362 17.7057 13.9756 17.6613C17.731 17.3535 20.9606 19.3774 22.0954 23.0916C22.4501 24.2523 22.3959 25.6347 23.8934 26.3299C23.8934 25.2702 23.8165 24.2154 23.9125 23.1772C24.0418 21.7764 23.6348 20.6409 22.8066 19.5C20.1749 15.8763 21.0832 11.6393 23.9464 8.63383C24.4322 8.12399 24.846 8.16464 25.2456 8.63076C28.2924 12.1861 29.0091 15.7026 26.338 19.6514C25.6705 20.6379 25.2696 21.5455 25.3534 22.7314C25.4322 23.849 25.3706 24.9764 25.3706 26.28C26.1083 25.5546 26.9734 25.1624 26.9919 24.0485C27.253 24.6716 27.4266 25.3391 27.6003 26.0072ZM25.3719 18.4932C27.4254 15.8085 26.6939 11.9078 24.4919 10.14C22.1669 12.8018 21.7346 16.0912 24.5344 19.6976C24.8029 19.3276 25.0609 18.9717 25.3719 18.4932ZM20.4083 22.3866C19.1454 20.1668 17.3043 18.9396 14.6824 18.9643C14.6332 22.0683 17.4121 24.9136 21.0856 24.6957C20.8787 23.9438 20.6817 23.2246 20.4083 22.3866Z" fill="#1A9E96"></path>
-<path d="M36.2671 43.702C34.37 44.7481 32.5616 44.54 30.7919 43.5893C29.6133 42.9563 28.473 42.9656 27.316 43.6078C25.4546 44.641 23.5833 44.5905 21.7361 43.5942C20.5551 42.9575 19.443 42.9846 18.2608 43.6287C16.3809 44.6521 14.4641 44.593 12.5897 43.5727C11.4746 42.9656 10.3964 43.0167 9.2776 43.5776C8.88044 43.7771 8.38907 43.9323 7.96482 43.8861C7.65325 43.8522 7.37986 43.4588 7.08984 43.226C7.30351 42.9686 7.46914 42.6269 7.74131 42.4729C8.21112 42.2069 8.76222 42.0881 9.25297 41.8529C10.8656 41.0795 12.3262 41.5844 13.7824 42.3209C14.9099 42.891 16.041 42.8652 17.2066 42.3424C17.9997 41.9865 18.847 41.5709 19.6832 41.5401C20.5464 41.5081 21.499 41.7624 22.2828 42.1521C23.7397 42.8769 25.1529 43.0167 26.5512 42.2026C28.3073 41.1805 30.0056 41.2224 31.7143 42.239C33.1022 43.0653 34.4889 42.8449 35.7961 42.1374C37.4204 41.2587 38.9721 41.2211 40.5608 42.1657C40.7855 42.2993 41.1143 42.2648 41.3268 42.4089C41.5872 42.5856 41.9536 42.872 41.9487 43.1047C41.9437 43.3633 41.5761 43.8245 41.3606 43.8282C40.812 43.8368 40.2104 43.7426 39.719 43.5049C38.5319 42.9292 37.4291 42.9495 36.2671 43.702Z" fill="#1A9E96"></path>
-<path d="M42.7127 8.90351C43.1247 8.51497 43.5181 8.0741 44.1247 8.61473C44.1949 15.1435 44.3845 21.6717 44.1493 28.1839C43.9898 32.6 42.2183 36.5562 39.1839 39.8603C37.4524 39.4145 37.4776 39.4348 38.6303 38.0574C40.9141 35.3272 42.1801 32.1628 42.5299 28.629C42.6118 27.8064 42.7097 26.9801 42.7115 26.1556C42.7257 20.434 42.7171 14.7119 42.7127 8.90351Z" fill="#1A9E96"></path>
-<path d="M27.6872 25.9979C27.4286 25.3397 27.255 24.6716 27.0234 23.9795C27.0961 21.2339 30.1034 18.0985 32.6791 17.8466C33.4685 17.7697 34.269 17.641 35.0485 17.7124C35.3576 17.7407 35.8607 18.2401 35.8711 18.5387C35.9684 21.3293 34.1723 24.7572 31.0215 25.5983C29.9778 25.8772 28.8578 25.8661 27.6872 25.9979ZM32.9075 22.8884C33.8367 21.7591 34.5454 20.5399 34.5959 19.0165C31.1767 18.7746 27.9828 21.7265 28.4218 24.6168C29.9938 24.6488 31.3632 24.3114 32.9075 22.8884Z" fill="#1A9E96"></path>
-<path d="M23.6844 28.424C24.4189 27.7516 25.1615 27.1204 25.89 26.4727C26.2779 26.1279 26.6085 25.9838 26.8524 26.6765C26.3832 27.3169 25.9047 27.8895 25.4165 28.4739C25.9909 28.6838 26.5445 28.8864 27.1578 29.19C27.0925 29.6696 26.9688 30.0483 26.7828 30.4246C26.656 30.5354 26.5907 30.6487 26.4614 30.7885C26.047 30.9289 25.6966 31.0434 25.3469 31.1579C25.0766 30.8507 24.8069 30.544 24.5033 30.1986C22.5742 32.7977 21.7281 35.6997 21.5101 38.8209C21.4954 39.0352 21.5699 39.316 21.4603 39.4508C21.2398 39.7236 20.9221 39.9182 20.6444 40.1448C20.44 39.8806 20.0373 39.5943 20.0637 39.356C20.2331 37.8431 20.3544 36.3 20.7712 34.8469C21.1918 33.3808 21.9375 32.007 22.4849 30.5329C22.4288 30.4732 22.4245 30.4861 22.4787 30.4855C22.9208 29.8322 23.3087 29.1789 23.6967 28.5262C23.6961 28.5268 23.6868 28.4585 23.6844 28.424Z" fill="#1A9E96"></path>
-<path d="M30.2391 47.075C28.5471 48.0165 26.9252 48.9457 25.2713 49.8139C24.9517 49.9814 24.4166 50.0762 24.1346 49.9223C21.9148 48.7105 19.732 47.4303 17.5399 46.168C17.4931 46.1416 17.4734 46.0689 17.4414 46.0172C18.3687 45.1853 18.8718 45.1637 19.8601 45.7592C21.1538 46.5387 22.4955 47.2382 23.7904 48.0171C24.3452 48.3509 24.8199 48.3219 25.3519 48.0091C26.5976 47.2764 27.9344 46.6717 29.0852 45.8152C30.0834 45.072 30.882 45.3349 31.9879 45.9143C31.3518 46.3386 30.8253 46.6902 30.2391 47.075Z" fill="#1A9E96"></path>
-<path d="M26.8438 30.4283C26.9675 30.049 27.0919 29.6703 27.2169 29.2245C29.651 29.9381 31.4132 31.5649 32.7716 33.6536C33.936 35.4454 34.7875 37.3641 35.0486 39.5303C35.125 40.1633 34.9341 40.6103 34.4446 40.6196C34.141 40.6257 33.673 40.09 33.5443 39.7082C33.2063 38.7083 33.1496 37.6011 32.7383 36.6412C31.5752 33.9282 29.84 31.7041 26.893 30.7078C26.845 30.7799 26.853 30.7774 26.9066 30.7306C26.9213 30.5988 26.8825 30.5133 26.8438 30.4283Z" fill="#1A9E96"></path>
-<path d="M22.4224 30.4868C22.4224 30.4868 22.4267 30.4738 22.4304 30.4677C20.17 31.4516 18.3923 32.9818 17.1245 35.119C16.2895 36.526 15.7883 38.0365 15.5913 39.6448C15.5192 40.2335 15.3382 40.739 14.7046 40.6269C14.1202 40.5229 13.8863 40.1165 14.0365 39.3868C14.7151 36.0956 16.0543 33.1973 18.6959 31.0169C19.2488 30.56 19.8627 30.177 20.529 29.8101C21.2143 30.0681 21.8183 30.2774 22.4224 30.4868Z" fill="#1A9E96"></path>
-<path d="M25.3555 31.2257C25.696 31.044 26.0457 30.9295 26.5217 30.8088C26.7163 30.794 26.7846 30.7854 26.8536 30.7768C26.8536 30.7768 26.8456 30.7793 26.845 30.7756C27.2754 31.8476 27.8449 32.8913 28.106 34.0076C28.5327 35.8327 28.7784 37.7021 29.0395 39.5617C29.066 39.7501 28.6799 40.1633 28.4712 40.1731C28.2292 40.1848 27.9121 39.909 27.7409 39.675C27.6171 39.5063 27.6688 39.2021 27.659 38.9577C27.5494 36.2065 26.76 33.6591 25.3555 31.2257Z" fill="#1A9E96"></path>
-<path d="M22.4771 30.4868C21.8189 30.278 21.2148 30.0687 20.5898 29.794C21.564 29.3353 22.559 28.9418 23.6243 28.5379C23.3071 29.1801 22.9192 29.8328 22.4771 30.4868Z" fill="#1A9E96"></path>
-<path d="M26.9074 30.7306C26.7848 30.7854 26.7165 30.794 26.5859 30.7829C26.5896 30.6493 26.6549 30.536 26.7824 30.4252C26.8827 30.5132 26.9215 30.5988 26.9074 30.7306Z" fill="#F9F8F8"></path>
-</svg>
-            </div>
+            <div class="opt-icon"><img src="assets/asset/NBS%20PATHWAY%20ICON_Intervention%20Pathway=PROTECT,%20Filled=Yes,%20Ecosystem=Mangrove.svg" alt="" width="42" height="42"></div>
             <div class="opt-meta">
               <div class="opt-name">Protect</div>
+              <div class="pw-tip pw-tip--desc"><span class="pw-tip__ic"></span><span class="pw-tip__txt"><b>What is <strong>protect</strong> pathway?</b><span>The Protect pathway establishes a defensive shield over lands identified by 2014–2024 data as persisting forests. By securing these uninterrupted, decade-long canopies, this strategy locks in critical carbon stocks and safeguards baseline biodiversity from future fragmentation.</span></span></div>
               <div class="opt-ha mono">15,000.0 ha</div>
             </div>
           </div>
@@ -756,20 +762,10 @@
         <!-- Manage -->
         <div class="pathway-opt" data-pathway data-eco="mangrove">
           <div class="opt-top">
-            <div class="opt-icon">
-              <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-<circle cx="24.8412" cy="25.0531" r="23.9584" fill="#F9F8F8"></circle>
-<path d="M23.8454 8.25137C24.175 7.76723 24.4684 7.35276 24.7682 6.92914C27.4452 10.1042 27.5919 13.7057 24.7682 16.9842C22.559 14.2926 22.1423 11.3019 23.8454 8.25137Z" fill="#F9F8F8"></path>
-<path d="M21.1097 21.9497C17.7981 21.726 15.4966 19.6064 14.7891 15.9407C17.3548 15.4438 20.2914 17.5435 21.1353 19.7077C21.4272 20.4609 21.9238 21.1766 21.1097 21.9497Z" fill="#F9F8F8"></path>
-<path d="M34.5216 17.5647C33.5184 20.3175 31.0306 22.0903 28.5429 21.8691C28.1399 18.9099 30.9055 16.2279 34.897 15.867C34.7782 16.4414 34.67 16.9662 34.5216 17.5647Z" fill="#F9F8F8"></path>
-<path d="M33.5177 38.6753C32.6519 38.3246 31.8531 38.018 31.0822 37.6487C30.0134 37.1367 28.9687 37.2515 27.993 37.8008C26.0155 38.9137 24.0213 39.0738 22.0307 37.9411C20.6938 37.1795 19.4574 37.2068 18.1241 37.9417C16.1634 39.0211 14.1989 38.9745 12.2568 37.8002C11.8565 37.5575 11.3016 37.5792 10.8733 37.3675C10.3259 37.0982 9.83614 36.7158 9.28125 36.3571C10.4115 35.5266 11.4636 35.7333 12.5212 36.2379C12.9346 36.4347 13.3554 36.6178 13.7576 36.8338C15.2752 37.6456 16.601 36.8797 17.9677 36.3583C18.733 36.0666 19.5281 35.8487 20.4722 35.5452C20.5392 32.839 21.3418 30.1434 22.9115 27.5049C21.6825 27.5781 20.9023 28.2273 20.1761 28.8561C18.2079 30.5624 16.8747 32.6541 16.4483 35.2858C16.3105 36.138 15.6104 35.7147 15.1132 35.6954C14.7278 32.6174 18.2489 26.5093 24.0399 25.5627C23.2951 24.718 22.6433 23.9229 21.919 23.201C21.7514 23.0335 21.3325 23.0645 21.0345 23.0887C17.3477 23.391 14.266 20.2236 13.8377 17.1568C13.8302 17.096 13.8098 17.037 13.793 16.9774C13.2418 14.9006 13.5211 14.6052 15.683 14.7206C19.5914 14.9292 22.4031 18.1133 22.7718 21.5817C22.8444 22.2619 23.5446 22.8752 23.9561 23.5195C24.0566 23.4779 24.1572 23.4363 24.2596 23.3947C24.2596 21.6797 24.4216 19.9437 24.1907 18.2604C24.0753 17.4138 23.2448 16.6659 22.7439 15.8701C20.6826 12.6022 21.7607 8.69068 24.0957 6.2725C24.5929 5.75919 25.1068 5.77657 25.5835 6.28801C27.8887 8.76268 28.8924 11.5812 27.6094 14.8702C27.2314 15.8447 26.4959 16.6764 25.9801 17.6056C25.766 17.9892 25.604 18.4528 25.591 18.8848C25.5444 20.3707 25.5724 21.8591 25.5724 23.548C26.3432 22.6102 27.1905 22.1093 27.3376 20.74C27.6169 18.1232 29.3002 16.2742 31.7134 15.2917C32.7599 14.8665 33.987 14.8528 35.1414 14.7461C35.8974 14.6759 36.2885 15.1191 36.201 15.9068C35.795 19.6054 33.2664 23.0415 28.8216 23.0986C28.3896 23.1042 27.8813 23.3332 27.5443 23.6188C26.913 24.155 26.3823 24.8092 25.7697 25.4591C30.9202 26.9487 33.8287 30.3594 34.8286 35.5024C33.4433 36.0703 33.4712 36.0231 33.1975 34.8656C32.4191 31.5728 30.518 29.1186 27.4828 27.5793C27.3339 27.5042 27.1346 27.5322 26.7641 27.4906C28.2276 30.1043 29.1494 32.7298 29.1587 35.4037C30.5087 35.9108 31.8102 36.2975 33.0168 36.8834C34.1825 37.4495 35.1712 37.0268 36.2065 36.6413C37.4876 36.1647 38.7036 35.4099 40.182 36.0132C40.6736 36.2137 41.1931 36.2925 41.0237 36.961C40.8449 37.6711 40.1969 37.7679 39.6942 37.5339C38.8264 37.1304 38.117 37.4774 37.3964 37.7989C36.1823 38.342 34.9776 38.8727 33.5177 38.6753ZM22.7774 31.129C22.4776 32.6584 22.1685 34.1865 21.8967 35.7209C21.8687 35.8785 22.0158 36.169 22.1592 36.2385C23.3677 36.8232 24.5129 37.5122 25.9988 36.938C27.6821 36.2888 27.7249 36.3776 27.6355 34.5732C27.4977 31.8124 26.4903 29.3737 24.7288 26.8923C24.0287 28.3751 23.4105 29.6785 22.7774 31.129ZM23.7178 14.9633C24.0827 15.5542 24.4477 16.1445 24.8257 16.7571C27.7491 13.0845 27.2165 10.22 24.7791 7.48779C23.0213 9.72909 22.405 12.1491 23.7178 14.9633ZM15.3404 17.7719C16.1001 20.2416 18.7908 22.0261 21.2431 21.6866C21.6267 19.3497 18.7107 15.6827 14.8898 16.1538C15.0313 16.6603 15.1672 17.1438 15.3404 17.7719ZM29.397 18.9854C29.0637 19.8624 28.7285 20.7394 28.3617 21.7015C32.3204 21.7859 34.8752 18.5248 34.6219 15.993C32.4564 16.1687 30.6874 17.0023 29.397 18.9854Z" fill="#1A9E96"></path>
-<path d="M43.2854 10.7817C42.0509 9.46712 40.9206 8.03272 39.5613 6.86149C36.4834 4.20744 32.8356 2.53718 28.8564 1.91836C20.2071 0.574574 12.8297 3.17462 7.01076 9.74953C4.63478 12.4327 3.14328 15.6386 2.26625 19.151C1.38736 22.6697 1.35198 26.1747 1.97205 29.7107C2.09867 30.4345 2.3128 31.1514 2.56977 31.8403C2.79694 32.4492 2.70383 32.9191 2.08563 33.0879C1.54005 33.2368 1.3315 32.8495 1.16578 32.3263C-0.107866 28.321 -0.346208 24.2307 0.491716 20.1528C1.60895 14.7138 4.11527 9.99222 8.3533 6.2619C10.962 3.96599 13.9004 2.27153 17.1999 1.25174C20.5572 0.213336 23.9983 -0.370732 27.5213 0.262366C35.7273 1.73711 38.9282 3.55448 44.762 10.0152C44.762 8.98981 44.7043 8.07431 44.7937 7.17307C44.8253 6.8528 45.168 6.37114 45.4473 6.30846C46.0189 6.18059 46.2405 6.64301 46.2386 7.17804C46.2386 8.66644 46.2442 10.1548 46.2256 11.6432C46.2182 12.2819 45.9407 12.7282 45.2164 12.6469C43.7454 12.4799 42.2687 12.3223 40.8108 12.0696C40.5315 12.0212 40.3248 11.5526 40.0846 11.2777C40.3601 11.0735 40.632 10.7048 40.9113 10.6979C41.6133 10.6806 42.3209 10.827 43.1514 10.927C43.3264 10.935 43.3767 10.9232 43.4269 10.9115C43.3804 10.8686 43.332 10.8252 43.2854 10.7817Z" fill="#1A9E96"></path>
-<path d="M31.3732 49.1326C28.4424 49.9606 25.5506 50.1232 22.5844 49.9221C19.0129 49.68 15.7525 48.5628 12.654 46.8851C9.79577 45.3371 7.4589 43.1418 5.31381 40.7304C5.23747 40.6435 5.15368 40.5616 4.91906 40.3145C4.91906 41.2809 4.90788 42.0649 4.92278 42.8488C4.93395 43.3882 4.87064 43.8841 4.19658 43.904C3.52624 43.9238 3.41824 43.4552 3.42197 42.8997C3.435 41.4423 3.44058 39.985 3.42382 38.5276C3.41637 37.8597 3.705 37.5333 4.36975 37.5935C5.78491 37.7213 7.20007 37.8436 8.60964 38.0168C9.09564 38.0763 9.46061 38.3315 9.3973 38.9503C9.33026 39.5908 8.87405 39.4617 8.49792 39.4518C7.76241 39.4319 7.02876 39.3717 6.09215 39.3165C7.03063 40.335 7.83317 41.3076 8.74185 42.1716C11.7267 45.0125 15.2367 46.9534 19.242 47.9067C21.6217 48.4728 24.0479 48.6007 26.517 48.443C30.2616 48.2047 33.6468 47.0117 36.8253 45.118C41.2161 42.5006 44.2791 38.7243 46.2362 34.0518C47.6699 30.6269 48.3608 27.0431 47.925 23.3221C47.7537 21.8628 47.3627 20.4297 47.0704 18.9853C46.9624 18.4615 46.8115 17.8731 47.5284 17.7104C48.195 17.559 48.3663 18.0177 48.5283 18.6117C49.2918 21.4091 49.707 24.237 49.4072 27.1337C48.4539 36.3769 43.8732 43.1989 35.6318 47.5064C34.3153 48.1947 32.848 48.5963 31.3732 49.1326Z" fill="#1A9E96"></path>
-<path d="M43.2566 10.8078C43.3311 10.8252 43.3795 10.8686 43.4261 10.9121C43.3758 10.9239 43.3255 10.9357 43.2287 10.9208C43.1859 10.8941 43.2306 10.8345 43.2566 10.8078Z" fill="#F9F8F8"></path>
-</svg>
-            </div>
+            <div class="opt-icon"><img src="assets/asset/NBS%20PATHWAY%20ICON_Intervention%20Pathway=MANAGE,%20Filled=Yes,%20Ecosystem=Mangrove.svg" alt="" width="42" height="42"></div>
             <div class="opt-meta">
               <div class="opt-name">Manage</div>
+              <div class="pw-tip pw-tip--desc"><span class="pw-tip__ic"></span><span class="pw-tip__txt"><b>What is <strong>manage</strong> pathway?</b><span>The Manage pathway balances human livelihood with ecological health on lands that transitioned into active use over the last decade. Rather than forcing rewilding, it implements sustainable agroecological and smart farming practices to maintain economic productivity while reducing environmental footprints.</span></span></div>
               <div class="opt-ha mono">10,000.0 ha</div>
             </div>
           </div>
@@ -779,26 +775,16 @@
         <!-- Restore — NON-ELIGIBLE / DISABLED EXAMPLE -->
         <div class="pathway-opt disabled" data-pathway data-eco="mangrove" data-locked="true">
           <div class="opt-top">
-            <div class="opt-icon" style="opacity:.45;">
-              <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M18.7184 27.9958C19.7595 27.5898 20.7391 27.2204 21.9266 26.7728C22.0133 24.7111 22.5754 22.441 23.9328 20.3661C21.4765 20.7246 18.6497 24.0376 18.0208 27.6609C17.587 27.4355 17.1984 27.2343 16.7501 27.0017C17.9756 22.6392 20.4192 19.5449 25.0841 18.4394C24.4353 17.6978 23.9509 16.8778 23.237 16.4133C22.6712 16.0452 21.8254 16.0988 21.0988 15.9898C18.4383 15.5897 16.864 13.9149 15.9585 11.5291C15.7 10.8483 15.6729 10.0771 15.5645 9.3433C15.4723 8.71492 15.8555 8.49923 16.4031 8.42573C18.9353 8.08714 22.1652 9.91203 23.1647 12.2755C23.349 12.7075 23.5027 13.1702 23.5605 13.6323C23.7123 14.8131 24.2292 15.7584 25.2576 16.5133C25.2576 14.8637 25.3498 13.2557 25.2088 11.6676C25.1582 11.0983 24.5726 10.5609 24.1877 10.0392C21.8507 6.85569 22.6243 3.21435 24.963 0.579744C25.6408 -0.184793 26.0439 -0.190819 26.6801 0.547811C27.8947 1.95639 28.7134 3.58186 28.8978 5.42844C29.0659 7.125 28.4477 8.7119 27.4555 10.0271C26.6259 11.1266 26.2987 12.2219 26.4054 13.5516C26.4813 14.4782 26.4198 15.415 26.4198 16.629C27.1175 15.7193 27.976 15.3481 28.0628 14.157C28.2959 10.9712 31.9288 8.08594 35.1189 8.40766C35.7099 8.4673 36.2305 8.66792 36.1365 9.38728C35.8057 11.9207 34.8803 14.1564 32.462 15.3536C31.5619 15.7988 30.4576 15.8253 29.4509 16.0651C29.0803 16.1536 28.6375 16.2115 28.3809 16.4489C27.7483 17.032 27.206 17.7116 26.5499 18.4394C30.8787 19.4347 33.3422 22.2055 34.6544 26.1631C34.9508 27.0566 34.2423 27.1042 33.6676 27.4072C32.7385 24.0828 31.0576 21.4403 27.6543 20.2667C28.8472 22.3242 29.5123 24.5208 29.7003 26.7451C31.2113 27.3361 32.6663 27.9067 34.1212 28.4754C33.5826 29.5827 33.0512 29.8424 31.9867 29.1405C30.6184 28.2386 29.3225 28.3103 27.9561 29.011C26.3313 29.8448 24.7245 29.7008 23.1665 28.8622C22.0621 28.2669 21.0175 28.2971 19.9348 28.9007C19.5263 29.1279 19.0636 29.2761 18.61 29.3966C17.6412 29.6532 17.4641 29.5544 16.8821 28.5435C17.4858 28.37 18.0714 28.2013 18.7184 27.9958ZM25.1131 20.7397C24.0069 22.3844 23.5551 24.2605 23.2351 26.1721C23.1701 26.5637 23.19 27.1825 23.4303 27.3771C24.86 28.5356 26.3891 28.5441 27.9507 27.4946C28.1152 27.3837 28.2652 27.1186 28.2688 26.9216C28.323 24.2677 27.3687 21.9597 25.7854 19.7871C25.5685 20.1149 25.3896 20.3854 25.1131 20.7397ZM24.9829 2.72815C23.5659 5.28022 23.9202 7.84133 25.7981 10.1458C28.1983 7.33887 28.0736 4.25603 25.7981 1.53707C25.5432 1.89916 25.2938 2.25401 24.9829 2.72815ZM22.1597 14.8818C22.7706 14.2257 22.3495 13.6166 22.1019 12.9756C21.3862 11.1338 18.8955 9.34691 16.7194 9.76984C17.3195 12.8888 19.2715 14.6926 22.1597 14.8818ZM34.5098 11.1067C34.6038 10.6609 34.696 10.2151 34.7972 9.72707C31.3956 10.0331 29.0388 12.3123 29.3822 14.8264C31.5023 15.0144 33.6224 13.5076 34.5098 11.1067Z" fill="#1A9E96"></path>
-<path d="M20.2666 45.1148C20.2666 46.4608 20.2666 47.7157 20.2666 49.0116C17.5356 49.0116 14.8968 49.0116 12.1712 49.0116C12.1495 48.7785 12.1043 48.523 12.1043 48.267C12.0989 47.003 12.0049 45.7287 12.1332 44.478C12.3357 42.5103 11.5097 41.0265 10.3674 39.5281C8.94495 37.6623 7.58758 35.7175 6.47241 33.6606C5.89042 32.5864 5.82715 31.2074 5.63557 29.95C5.2289 27.272 5.547 24.6218 6.14706 22.0052C6.46517 20.6195 6.8375 19.2435 7.26405 17.8873C7.36165 17.5777 7.79363 17.1541 8.05209 17.1686C8.39911 17.1873 9.32993 17.6042 9.38235 17.8873C9.59562 19.079 10.0705 20.3553 10.0922 21.5663C10.112 22.8224 9.68248 24.3455 9.61018 25.6028C9.5668 26.3481 9.09315 26.7027 9.05701 27.4485C8.98652 28.8836 9.69865 30.0765 10.315 31.2809C10.9331 32.4852 11.6272 33.6516 12.3158 34.8174C12.5435 35.203 12.3321 35.1831 12.9539 34.8174C13.5106 34.4896 13.3877 34.6628 13.1346 34.188C12.1749 32.3945 11.2331 30.9118 10.315 29.0972C10.174 28.8182 10.4921 28.0992 10.5409 27.801C10.5897 27.4931 10.4812 26.8602 10.7252 26.7475C10.9729 26.633 11.7808 26.9334 11.9651 27.1298C12.6411 27.8504 13.2972 28.6095 13.8358 29.4355C14.8172 30.9399 16.5964 32.0011 17.9845 33.1337C20.4914 35.1779 21.2379 38.1336 20.786 41.3273C20.6107 42.5678 20.2829 43.7611 20.2666 45.1148Z" fill="#F9F8F8"></path>
-<path d="M42.0149 16.9274C42.5156 16.0413 43.6902 16.682 44.0247 17.6501C44.4874 18.9924 44.9024 20.3626 45.1897 21.7507C45.4373 22.9459 45.606 24.1857 45.5843 25.402C45.5409 27.822 45.6418 30.3082 45.1087 32.6354C44.7346 34.2692 43.4459 35.7103 42.4934 37.1911C41.4777 38.7696 40.35 40.2773 39.3343 41.8551C39.114 42.1997 39.0955 42.7138 39.0901 43.151C39.0648 45.0157 39.0794 46.8817 39.0794 48.8132H31.0276C31.0276 47.6872 31.0578 46.5809 31.0198 45.4772C30.9638 43.8271 30.8588 42.1788 30.7757 40.53C30.6383 37.8146 31.2718 35.3458 33.428 33.5505C35.4267 31.886 36.9758 29.8753 38.427 27.7585C38.6114 27.4892 38.8154 27.1559 39.0901 27.0426C39.4859 26.8782 40.0576 26.6988 40.3684 26.8669C40.8344 27.1188 41.0546 27.6791 40.7366 28.2741C39.739 30.1417 38.7301 32.0032 37.7776 33.8942C37.6096 34.2298 37.6951 34.6941 37.6643 35.0983C38.0039 35.0873 38.3135 34.622 38.6819 34.5495C39.8206 32.2782 40.5725 30.5266 41.5882 28.2741C41.8249 27.7481 41.9912 27.0151 41.9749 26.3669C41.917 24.0227 40.7258 21.7111 40.7366 19.3669C40.7388 18.7438 41.7077 17.4689 42.0149 16.9274ZM38.3977 45.0456C38.4491 45.2277 38.4881 45.4106 38.5061 45.5915C38.6435 46.9813 37.8426 47.6033 36.7112 47.9274C35.9413 48.1479 35.0067 48.0836 34.2259 47.8649C33.72 47.724 33.1457 47.1471 32.972 46.6393C32.8066 46.151 32.6736 45.6486 32.5628 45.1403C32.6737 45.6491 32.8064 46.1515 32.972 46.6403C33.1455 47.1482 33.7208 47.7259 34.2268 47.8669C35.0074 48.0854 35.9415 48.1491 36.7112 47.9294C37.8427 47.6052 38.6435 46.9833 38.5061 45.5934C38.488 45.4119 38.4494 45.2283 38.3977 45.0456ZM32.3929 44.2594C32.4149 44.3882 32.4378 44.5168 32.4622 44.6452C32.4378 44.5168 32.4149 44.3882 32.3929 44.2594ZM37.8548 43.8571C37.8917 43.9144 37.9272 43.9739 37.9622 44.0339C37.9275 43.9744 37.8923 43.9158 37.8557 43.8591C37.8227 43.8076 37.7923 43.7564 37.764 43.7057C37.792 43.7558 37.8221 43.8063 37.8548 43.8571ZM44.1477 30.401C44.3703 31.0058 44.3862 31.694 44.2249 32.3092C43.8146 33.866 43.0349 35.0538 41.5872 35.8659C41.1951 36.0865 41.1044 36.8517 40.8821 37.3698C40.6454 37.924 40.5104 38.5508 40.1634 39.0231C39.4928 39.9376 38.6866 40.7527 37.969 41.6335C37.5865 42.1007 37.4317 42.5752 37.5276 43.0817C37.4324 42.5759 37.588 42.1021 37.97 41.6354C38.6874 40.7548 39.4929 39.9388 40.1634 39.0251C40.5104 38.5527 40.6463 37.926 40.8831 37.3717C41.1054 36.8536 41.196 36.0883 41.5882 35.8678C43.0358 35.0557 43.8146 33.8679 44.2249 32.3112C44.3864 31.6953 44.3709 31.0063 44.1477 30.401ZM32.1214 41.9919C32.133 42.1839 32.1451 42.3757 32.1624 42.5671C32.145 42.3758 32.133 42.1839 32.1214 41.9919ZM32.0003 39.4655C32.0052 39.5581 32.0201 39.6546 32.0247 39.7438C32.0202 39.6536 32.0052 39.5559 32.0003 39.4626V39.4655ZM40.3265 35.4255C40.0713 35.974 39.6195 36.3738 38.7845 36.4411C38.8041 36.4415 38.8241 36.4428 38.844 36.443C39.6292 36.38 40.0723 35.978 40.3265 35.4255Z" fill="#F9F8F8"></path>
-<path d="M31.1237 47.2201C31.8521 47.5014 32.5335 47.7189 33.1607 48.0407C34.8415 48.9004 36.4285 48.4546 37.9449 47.678C39.4035 46.9315 40.75 47.1315 42.129 47.8298C42.4562 47.9949 42.8701 47.984 43.2008 48.1437C43.5009 48.2895 43.7412 48.5576 44.0087 48.7715C43.7702 49.0372 43.5153 49.5402 43.2966 49.5258C42.6062 49.4788 41.9067 49.295 41.2488 49.0576C40.3036 48.716 39.389 48.6395 38.4781 49.1034C37.2002 49.7553 35.8591 50.1734 34.4258 49.9174C33.5655 49.7637 32.707 49.4769 31.9099 49.1112C30.8761 48.6359 29.9127 48.6196 28.9204 49.1528C26.6901 50.3499 24.4561 50.1933 22.2294 49.1432C21.1919 48.654 20.1762 48.6473 19.1387 49.1673C17.0692 50.2053 14.9799 50.3276 12.8833 49.2227C11.5765 48.5335 10.3095 48.7666 9.02804 49.3366C8.63945 49.5089 8.15868 49.5649 7.73574 49.5233C7.54235 49.5041 7.26761 49.1311 7.24412 48.8968C7.22062 48.6696 7.41583 48.2829 7.61464 48.1967C8.33942 47.8828 9.10757 47.6731 9.85584 47.4111C11.1987 46.9411 12.4621 47.2448 13.6568 47.8629C15.1769 48.6498 16.6354 48.7172 18.1663 47.8647C19.8436 46.9297 21.5697 46.9086 23.2795 47.8461C24.8393 48.7016 26.3485 48.6443 27.9752 47.8696C28.897 47.4298 30.0194 47.4117 31.1237 47.2201Z" fill="#1A9E96"></path>
-<path d="M25.0124 2.66854C25.2925 2.25404 25.542 1.89919 25.7968 1.5365C28.0723 4.25485 28.197 7.3383 25.7968 10.1452C23.9189 7.84077 23.5646 5.28025 25.0124 2.66854Z" fill="#F9F8F8"></path>
-<path d="M22.0795 14.8836C19.2708 14.6932 17.3188 12.8894 16.7188 9.76983C18.8949 9.3469 21.3855 11.1338 22.1012 12.9756C22.3489 13.6166 22.77 14.2257 22.0795 14.8836Z" fill="#F9F8F8"></path>
-<path d="M34.476 11.1694C33.6211 13.5082 31.5009 15.0143 29.3808 14.8264C29.0374 12.3123 31.3943 10.0337 34.7959 9.72705C34.6947 10.2151 34.6025 10.6609 34.476 11.1694Z" fill="#F9F8F8"></path>
-<path d="M32.4673 32.4795C34.4265 30.8998 35.8237 28.9207 37.2678 26.9759C38.0323 25.9487 39.0174 25.2739 40.6151 25.7498C40.4741 23.8858 40.3621 22.1019 40.1922 20.324C40.0819 19.1546 40.2301 18.0641 40.8627 17.058C41.3815 16.232 42.1297 15.7645 43.0985 15.8048C44.051 15.844 44.6511 16.4224 44.9999 17.2972C45.8982 19.551 46.5344 21.8778 46.6465 24.3009C46.7459 26.4511 46.67 28.6098 46.6808 30.7642C46.6917 33.0886 45.6542 35.0135 44.3529 36.8269C43.2503 38.3638 42.1026 39.8676 40.982 41.393C40.4579 42.1082 40.1199 42.8829 40.2012 43.8095C40.25 44.3716 40.2103 44.9416 40.2103 45.4778C39.0246 45.7561 38.9161 45.6139 38.8077 44.5964C38.6035 42.7142 39.2469 41.2231 40.4127 39.7501C41.9273 37.8342 43.3064 35.7876 44.5228 33.6705C45.0541 32.7445 45.1517 31.5125 45.2403 30.4027C45.3795 28.6748 45.4572 26.9265 45.356 25.1986C45.2132 22.723 44.7613 20.283 43.7654 17.9864C43.6281 17.6701 43.2594 17.2357 43.0063 17.2417C42.6665 17.2496 42.2183 17.5598 42.0303 17.8707C41.7809 18.2816 41.62 18.8202 41.6291 19.301C41.6526 20.712 41.8026 22.1206 41.8586 23.5309C41.9201 25.051 42.0827 26.5897 41.9128 28.0874C41.7936 29.1387 41.264 30.1714 40.7814 31.1462C40.1542 32.418 39.4096 33.6338 38.6812 34.8526C38.4625 35.2165 38.1932 35.6973 37.6311 35.399C37.0618 35.0954 37.1955 34.6243 37.4467 34.1622C38.4047 32.3969 39.3662 30.6323 40.3169 28.8628C40.4127 28.6839 40.5302 28.4555 40.494 28.2802C40.4109 27.8814 40.3133 27.238 40.0856 27.1723C39.6897 27.059 39.0174 27.1542 38.7643 27.435C37.8733 28.4206 37.1521 29.5581 36.2882 30.5702C35.52 31.4709 34.723 32.3782 33.8048 33.1157C31.2816 35.1406 30.3852 37.7469 30.6834 40.89C30.8081 42.2052 30.7954 43.533 30.8424 44.8554C30.8623 45.3627 30.6924 45.8405 30.1339 45.7447C29.8574 45.6971 29.4652 45.2139 29.4507 44.9109C29.3477 42.9004 29.2899 40.8851 29.3025 38.8717C29.3188 36.2714 30.4321 34.1742 32.4673 32.4795Z" fill="#1A9E96"></path>
-<path d="M8.98088 17.7375C8.0356 16.8736 7.68497 16.9025 7.26745 18.0153C5.70585 22.1681 5.16904 26.4203 5.6697 30.8738C6.01672 33.9717 7.9615 36.0611 9.58275 38.3987C10.3907 39.5633 11.4137 40.6284 11.9721 41.8997C12.3897 42.8504 12.2595 44.0589 12.2722 45.1536C12.274 45.3416 11.7715 45.6808 11.5022 45.6802C11.2926 45.6796 11.0829 45.2614 10.8769 45.0259C10.8624 45.009 10.8696 44.9662 10.875 44.9373C11.2944 42.8196 10.0997 41.3665 8.91943 39.8247C7.50241 37.9764 6.14142 36.0557 5.02444 34.0193C4.45149 32.9734 4.4063 31.6161 4.21472 30.3852C3.69238 27.0343 4.184 23.7532 5.03348 20.5143C5.32628 19.4022 5.6733 18.2996 6.08178 17.2254C6.45411 16.2494 7.23129 15.7319 8.29405 15.7976C9.29898 15.8596 10.1394 16.694 10.5316 17.6893C11.1299 19.21 10.6943 20.7173 10.631 22.2356C10.5841 23.373 10.622 24.5135 10.622 25.7046C12.0481 25.3479 13.1018 26.0233 13.9224 27.1511C15.5454 29.3815 17.3926 31.3805 19.4295 33.2596C21.4954 35.1628 22.0449 37.798 21.9039 40.5646C21.8316 42.0045 21.7557 43.4456 21.7358 44.8867C21.7268 45.4289 21.5442 45.7946 21.0165 45.8055C20.4381 45.8175 20.2266 45.4464 20.2628 44.8596C20.3477 43.5107 20.3332 42.1545 20.4471 40.8086C20.7273 37.5245 19.6826 34.8471 16.9534 32.9078C15.1695 31.6408 14.1953 29.6894 12.8253 28.0729C12.556 27.756 12.2993 27.4012 11.9631 27.1758C11.195 26.6643 10.4142 27.062 10.5479 27.9603C10.6744 28.8164 11.0124 29.6701 11.4046 30.4515C12.0661 31.7715 12.8722 33.0198 13.55 34.3326C13.6693 34.5652 13.5663 35.1465 13.3892 35.2423C13.1542 35.3695 12.5469 35.2893 12.4439 35.1056C11.2926 33.0415 10.1033 30.9859 9.15619 28.826C8.81459 28.0506 9.06402 27.0011 9.10017 26.0787C9.16885 24.34 9.26645 22.6019 9.37128 20.865C9.43454 19.8173 9.58636 18.7665 8.98088 17.7375Z" fill="#1A9E96"></path>
-</svg>
-            </div>
+            <div class="opt-icon"><img src="assets/asset/NBS%20PATHWAY%20ICON_Intervention%20Pathway=RESTORE,%20Filled=Yes,%20Ecosystem=Mangrove.svg" alt="" width="42" height="42"></div>
             <div class="opt-meta">
-              <div class="opt-name" style="color:#98a2b3;">Restore</div>
-              <div class="opt-ha mono" style="color:#98a2b3;">120.0 ha</div>
+              <div class="opt-name">Restore</div>
+              <div class="pw-tip pw-tip--desc"><span class="pw-tip__ic"></span><span class="pw-tip__txt"><b>What is <strong>restore</strong> pathway?</b><span>The Restore pathway actively heals heavily impacted or vulnerable landscapes, targeting <i>degraded vegetation, barren lands, and long-term non-forested areas</i>. Crucially, it also reclaims active use lands that pose an ecological liability due to medium-to-high flood risks or proximity to water bodies, transforming them back into natural buffers.</span></span></div>
+              <div class="opt-ha mono">120.0 ha</div>
             </div>
           </div>
           <div class="switch locked"><span class="knob"></span></div>
-          <div class="opt-elig opt-disabled-elig">&lt;1% of area — not eligible to restore</div>
+          <div class="opt-elig opt-disabled-elig">Non Eligible</div>
+          <div class="pw-tip pw-tip--why"><b>Why I can’t select this intervention?</b><span>These areas are ineligible because the mangrove remains intact and does not show sufficient signs of degradation.</span></div>
         </div>
       </div>
     </div>
@@ -820,6 +806,7 @@
           <div class="tags" data-tags></div>
         </div>
         <div class="count"><span data-count>0</span> of <b data-total>0</b> Activity is Selected</div>
+        <span class="activity-chev"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 5.25 7 9.25l4-4" stroke="#0f1419" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
       </div>
       <div class="activity-list" data-activity-list></div>
     </div>
@@ -829,38 +816,23 @@
   <section class="eco-card" style="--eco:var(--eco-peat);--eco-soft:#f0eee4;">
     <div class="eco-head">
       <div class="eco-ident">
-        <div class="eco-icon">
-          <svg width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect width="38" height="38" rx="6" fill="#F5EFD2"></rect>
-<path d="M15.291 22.8268C16.7093 22.8233 16.7751 22.7341 16.3908 21.4531C15.6979 19.1433 14.4858 17.1754 12.5095 15.7079C12.2772 15.5354 12.0663 15.3217 12.2759 15.0349C12.5101 14.7143 12.7923 14.879 13.0375 15.0595C15.1667 16.6264 16.4901 18.7235 17.2007 21.2212C17.3057 21.5904 17.3976 21.9633 17.4913 22.3356C17.5589 22.6039 17.6769 22.7964 18.0085 22.7539C18.3477 22.7104 18.3281 22.4682 18.3135 22.2359C18.2689 21.528 18.2033 20.8213 18.1688 20.1131C17.9792 16.2299 18.767 12.5633 20.6958 9.15418C20.8446 8.8912 21.0488 8.63428 21.3898 8.83378C21.7241 9.02933 21.6027 9.30736 21.4439 9.58245C19.6842 12.6306 18.9652 15.9373 18.9927 19.4141C19.0005 20.3893 19.1338 21.3635 19.206 22.3383C19.2217 22.55 19.2858 22.7157 19.5291 22.7462C19.768 22.7761 19.9581 22.7108 20.0335 22.4636C20.0949 22.262 20.1476 22.0575 20.1964 21.8525C20.8316 19.1868 22.1276 16.924 24.3668 15.244C24.6749 15.0129 25.075 14.5986 25.4125 15.0513C25.7551 15.5109 25.1792 15.6857 24.8993 15.8986C22.7797 17.5109 21.5895 19.6829 20.9792 22.2011C20.8574 22.7035 21.0155 22.8509 21.6445 22.8219C23.768 22.7243 25.8903 22.8835 28.0132 22.8331C28.1882 22.8289 28.365 22.8314 28.5385 22.8511C28.7599 22.8763 28.8885 23.006 28.8989 23.2321C28.9093 23.4568 28.7986 23.6038 28.5786 23.6462C28.4274 23.6754 28.2691 23.677 28.114 23.677C22.0533 23.6777 15.9925 23.6772 9.93172 23.6742C9.75793 23.6741 9.57921 23.6644 9.41162 23.6238C9.20016 23.5725 9.07917 23.4197 9.10246 23.1976C9.12297 23.002 9.26003 22.8881 9.44862 22.8604C9.62097 22.8351 9.79807 22.8351 9.9731 22.8347C11.727 22.8307 13.481 22.829 15.291 22.8268Z" fill="#BEA001"></path>
-<path d="M12.6871 28.3783C13.341 28.3749 13.9434 28.375 14.5459 28.374C14.8407 28.3735 15.12 28.4308 15.1396 28.7788C15.1603 29.1445 14.8684 29.2065 14.5813 29.2105C13.979 29.2189 13.3764 29.214 12.774 29.2084C12.505 29.2059 12.2495 29.1466 12.2143 28.8287C12.1827 28.5435 12.3758 28.4217 12.6871 28.3783Z" fill="#BEA001"></path>
-<path d="M17.613 29.0162C17.4207 28.5933 17.6385 28.4091 17.9727 28.3933C18.6508 28.3612 19.3315 28.3744 20.0109 28.3846C20.2468 28.3881 20.4276 28.5137 20.4405 28.7654C20.4518 28.9841 20.309 29.1666 20.1047 29.17C19.2825 29.1838 18.448 29.3873 17.613 29.0162Z" fill="#BEA001"></path>
-<path d="M10.6806 26.5508C10.5136 26.5362 10.3963 26.5322 10.2851 26.5046C10.0765 26.4529 9.93468 26.3215 9.95041 26.1008C9.96829 25.85 10.1496 25.7339 10.3857 25.7309C11.0619 25.7224 11.7382 25.7227 12.4144 25.7308C12.6498 25.7336 12.8381 25.8454 12.8517 26.0971C12.8671 26.3807 12.6637 26.5186 12.4128 26.5296C11.8536 26.5541 11.293 26.5458 10.6806 26.5508Z" fill="#BEA001"></path>
-<path d="M25.4078 26.4289C25.1183 25.9868 25.3122 25.7596 25.7229 25.7364C26.3805 25.6993 27.0419 25.7224 27.7016 25.7284C27.9446 25.7306 28.1183 25.8558 28.1404 26.1005C28.1633 26.3557 27.9898 26.5048 27.7557 26.5171C26.9849 26.5576 26.2109 26.6401 25.4078 26.4289Z" fill="#BEA001"></path>
-<path d="M22.8026 26.527C22.135 26.5437 21.5155 26.5586 20.8962 26.5527C20.6174 26.55 20.3124 26.5013 20.303 26.1465C20.2923 25.7424 20.6189 25.7244 20.9205 25.7224C21.5015 25.7187 22.0826 25.7219 22.6637 25.723C22.8881 25.7235 23.104 25.7613 23.1764 26.0068C23.2576 26.2822 23.1097 26.4397 22.8026 26.527Z" fill="#BEA001"></path>
-<path d="M24.984 28.3721C25.3589 28.3778 25.735 28.3784 25.7144 28.8055C25.6945 29.2162 25.3148 29.2082 24.9985 29.2107C24.4924 29.2146 23.986 29.2193 23.4801 29.2092C23.1754 29.2032 22.85 29.1522 22.8637 28.7618C22.8762 28.4058 23.1841 28.3768 23.4691 28.3748C23.9558 28.3714 24.4425 28.3726 24.984 28.3721Z" fill="#BEA001"></path>
-<path d="M15.2982 26.485C14.9315 26.0044 15.03 25.7532 15.5725 25.7305C16.1749 25.7053 16.7792 25.7219 17.3827 25.7253C17.6395 25.7267 17.8639 25.8101 17.8788 26.0987C17.8952 26.4172 17.6576 26.5421 17.3843 26.5466C16.7047 26.5578 16.0232 26.5972 15.2982 26.485Z" fill="#BEA001"></path>
-</svg>
-        </div>
+        <div class="eco-icon"><img src="assets/asset/ECOSYSTEM%20ICON_Ecosystem%20Type=Peatland,%20Filled=No.svg" alt="" width="48" height="48"></div>
         <div class="eco-titles">
           <div class="eco-name">Peatland</div>
-          <div class="eco-ha mono">15,000.5 ha</div>
-          <div class="eco-area">25% of area</div>
+          <span class="eco-status eco-status--bad">Disturbed</span>
         </div>
       </div>
       <div class="vdiv"></div>
-      <div class="eco-dist">
-        <span class="pill-dist dist-high">● High Disturbance</span>
-        <div class="dist-ha mono">7,484.3 ha</div>
-        <div class="bar"><span style="width:80%;background:#b0432c;"></span></div>
-        <div class="dist-cap mono">80% of peatland is disturbeb</div>
-      </div>
-      <div class="eco-press">
-        <div class="press-label">main pressure:</div>
-        <div class="press-chips">
-          <span class="press-chip"><span class="num">01</span><span class="txt">Agriculture</span></span>
-          <span class="press-chip"><span class="num">02</span><span class="txt">Urban dev.</span></span>
-          <span class="press-chip"><span class="num">03</span><span class="txt">Pollution</span></span>
+      <div class="eco-stats">
+        <div class="eco-stat">
+          <div class="eco-stat__ttl">Total Peatland Area</div>
+          <div class="bar"><span style="width:25%;background:var(--eco);"></span></div>
+          <div class="eco-stat__row"><span class="mono">15,000.5 ha</span><span>25% of total area</span></div>
+        </div>
+        <div class="eco-stat">
+          <div class="eco-stat__ttl">Disturbeb Area of Peatland Ecosystem</div>
+          <div class="bar"><span style="width:80%;background:var(--eco);"></span></div>
+          <div class="eco-stat__row"><span class="mono">7,484.3 ha</span><span>80% of peatland is disturbeb</span></div>
         </div>
       </div>
     </div>
@@ -871,22 +843,10 @@
         <!-- Protect -->
         <div class="pathway-opt" data-pathway data-eco="peat">
           <div class="opt-top">
-            <div class="opt-icon">
-              <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M14.0162 42.9397C11.2526 40.7316 8.7411 38.39 7.08343 35.268C5.81378 32.8801 5.06434 30.3327 5.03962 27.639C4.98155 21.2178 5.03962 14.7965 5.00008 8.37411C4.9939 7.40904 5.34236 7.10692 6.24997 6.98953C8.4711 6.70224 10.7207 6.47363 12.8812 5.92005C16.5487 4.98032 19.9827 3.44437 23.1608 1.33816C25.7712 -0.391172 24.9044 -0.514743 27.7304 1.38141C30.6009 3.30721 33.6752 4.86292 37.0709 5.62348C39.6102 6.19251 42.1816 6.62934 44.7531 7.03773C45.6348 7.17736 45.7552 7.65124 45.754 8.36237C45.7453 13.0246 45.783 17.6856 45.7324 22.349C45.7052 24.9019 45.7089 27.4752 45.3839 30.0003C45.0064 32.9332 43.7083 35.5454 41.8962 37.9204C39.2821 41.3494 35.8414 43.7856 32.3129 46.1185C30.3117 47.4395 28.2389 48.6585 26.1524 49.8459C25.786 50.0535 25.0774 50.0535 24.7258 49.833C21.1485 47.5877 17.612 45.2776 14.0162 42.9397ZM44.0624 23.5594C44.0624 18.5981 44.0624 13.6369 44.0624 8.76582C41.2753 8.18011 38.5142 7.74453 35.8389 7.00189C32.3351 6.02941 29.0933 4.41808 26.1605 2.2402C25.631 1.84725 25.2411 1.86951 24.6776 2.22291C23.0873 3.22134 21.4859 4.22099 19.8078 5.05693C17.1264 6.3927 14.3029 7.36333 11.3329 7.86131C9.73891 8.12822 8.14612 8.40377 6.54283 8.67748C6.53232 8.83811 6.51749 8.95859 6.51749 9.08031C6.51749 14.9127 6.49587 20.7451 6.5385 26.5787C6.54715 27.7681 6.70408 28.9741 6.9506 30.1393C7.6432 33.4127 9.22239 36.2343 11.5937 38.5889C15.5126 42.4776 20.1557 45.3697 24.9149 48.0851C25.204 48.2501 25.783 48.1685 26.0999 47.9832C27.9639 46.8976 29.8212 45.7935 31.6234 44.6079C34.7138 42.5758 37.6825 40.393 40.0927 37.533C42.1026 35.1488 43.4637 32.4439 43.89 29.372C44.1482 27.5203 44.0185 25.6155 44.0624 23.5594Z" fill="#BEA001"></path>
-<path d="M44.0614 23.6484C44.0176 25.6156 44.1473 27.5204 43.8897 29.3727C43.4628 32.4446 42.1023 35.1488 40.0924 37.5337C37.6822 40.3943 34.7135 42.5765 31.6231 44.6086C29.8209 45.7942 27.9636 46.8983 26.0996 47.9838C25.7827 48.1692 25.2038 48.2507 24.9146 48.0858C20.156 45.3697 15.5123 42.4776 11.5934 38.5896C9.22149 36.235 7.64229 33.4133 6.95031 30.14C6.70379 28.9748 6.54624 27.7687 6.53821 26.5794C6.49558 20.7458 6.5172 14.9134 6.5172 9.08097C6.5172 8.95987 6.53203 8.83878 6.54253 8.67814C8.14583 8.40443 9.73862 8.12948 11.3326 7.86196C14.3026 7.36398 17.1261 6.39274 19.8075 5.05759C21.4856 4.22166 23.087 3.22138 24.6774 2.22357C25.2408 1.87017 25.6307 1.84791 26.1602 2.24086C29.093 4.41812 32.3349 6.03007 35.8386 7.00255C38.5139 7.74519 41.275 8.18077 44.0621 8.76648C44.0608 13.6369 44.0608 18.5982 44.0614 23.6484ZM20.924 19.8413C20.6935 19.5577 20.4903 19.2463 20.2277 18.9967C19.2373 18.0557 18.2444 17.1141 17.204 16.2306C17.065 16.112 16.5348 16.2324 16.3866 16.4104C16.2389 16.5865 16.284 16.9905 16.3588 17.2642C16.4057 17.4366 16.6578 17.5571 16.8252 17.6924C19.7248 20.0247 21.4189 23.0744 22.214 26.6758C21.1612 26.7907 21.2335 26.711 20.4983 26.0407C19.4047 25.0441 18.2129 24.1507 17.0297 23.256C16.5855 22.9206 16.022 22.7908 15.7236 23.4562C15.4487 24.0697 15.9578 24.2563 16.3822 24.5473C17.2633 25.1497 18.0807 25.8442 18.9246 26.5016C18.8746 26.5887 18.8252 26.6758 18.7751 26.7629C16.9321 26.7629 15.0885 26.7796 13.2455 26.7536C12.5819 26.7444 11.9863 26.8889 11.9752 27.6149C11.9628 28.4243 12.6653 28.3891 13.256 28.3891C14.7073 28.3891 16.1586 28.3928 17.6099 28.3928C24.3104 28.3909 31.0108 28.3891 37.7113 28.3872C38.3242 28.3872 39.0285 28.3242 39.0149 27.5704C39.0026 26.8574 38.3495 26.7314 37.7002 26.7444C36.5584 26.7685 35.4154 26.7481 34.273 26.7481C33.4352 26.7462 32.5974 26.7481 31.7596 26.7481C31.722 26.6424 31.6849 26.5368 31.6472 26.4311C32.5023 25.7941 33.3129 25.0805 34.2285 24.5486C34.8254 24.202 34.8822 23.7596 34.611 23.3537C34.4775 23.1535 33.7726 23.0793 33.539 23.2462C32.4356 24.037 31.2382 24.7932 30.4004 25.8269C29.6954 26.6956 29.035 26.8476 28.0508 26.6566C29.1036 22.8124 30.8706 19.5058 34.2464 17.2303C34.4985 17.0597 34.5041 16.5247 34.6246 16.1577C34.2403 16.0984 33.8004 15.8945 33.4834 16.015C32.9879 16.2022 32.5517 16.5803 32.1316 16.9281C29.19 19.3587 27.5818 22.6024 26.5123 26.1766C26.4407 26.4157 26.2053 26.6047 26.0459 26.8179C25.774 25.812 25.6535 24.9539 25.6616 24.0963C25.6801 22.1903 25.6152 20.2651 25.8537 18.3813C26.2084 15.5856 27.1988 12.9598 28.4944 10.4489C28.6198 10.2054 28.3819 9.7748 28.3127 9.43128C27.9667 9.52087 27.6071 9.57708 27.2822 9.71548C27.1401 9.77602 27.0418 9.9929 26.9714 10.1597C26.3325 11.6697 25.5386 13.1389 25.1055 14.7076C24.1349 18.2219 23.7524 21.827 24.0292 25.4827C24.0521 25.7812 24.0323 26.0833 24.0323 26.1401C23.0636 24.189 22.0169 22.0791 20.924 19.8413ZM23.6462 34.9493C23.4188 35.2977 23.1914 35.6456 22.9635 35.9922C23.3515 36.2387 23.7197 36.644 24.1312 36.694C25.045 36.8053 25.9804 36.7311 26.9065 36.7441C27.5349 36.7552 28.018 36.568 28.0421 35.855C28.0668 35.1179 27.5756 34.9419 26.9504 34.9419C25.9013 34.9419 24.851 34.9326 23.6462 34.9493ZM29.0313 30.8604C28.5697 30.8567 28.0508 30.7195 27.6627 30.8864C27.2599 31.0606 26.7706 31.4906 26.7051 31.8755C26.6155 32.3982 27.0882 32.6942 27.6899 32.6775C28.705 32.6497 29.7208 32.6645 30.7365 32.6738C31.3068 32.6812 31.6793 32.494 31.7176 31.8588C31.7584 31.1811 31.3568 30.916 30.7791 30.8678C30.2583 30.8233 29.7319 30.8567 29.0313 30.8604ZM24.2535 32.4353C24.6829 31.6704 24.442 30.916 23.6703 30.8586C22.5989 30.7789 21.5097 30.7603 20.4445 30.8697C20.1047 30.903 19.6426 31.3905 19.5629 31.7421C19.5091 31.9793 20.0176 32.5996 20.2938 32.6126C21.5702 32.667 22.8535 32.5687 24.2535 32.4353ZM16.2426 36.6588C17.3189 36.6866 18.402 36.7941 19.4683 36.7033C19.8631 36.6699 20.4723 36.2214 20.5378 35.8773C20.6645 35.2125 20.0744 34.9548 19.4548 34.9456C18.5607 34.9307 17.6599 34.8751 16.7752 34.966C16.3921 35.0049 15.938 35.2922 15.7199 35.6066C15.613 35.7623 15.972 36.2387 16.2426 36.6588ZM34.278 34.927C33.3549 34.9252 32.4195 34.8362 31.5137 34.9604C31.106 35.016 30.4918 35.4571 30.4399 35.7957C30.3485 36.3925 30.852 36.7534 31.5162 36.7441C32.3781 36.7348 33.2505 36.8257 34.0969 36.7126C34.5313 36.6533 35.1324 36.3326 35.2789 35.9755C35.5136 35.4009 34.9965 35.066 34.278 34.927ZM13.9121 30.8493C13.2467 30.8289 12.7123 31.0699 12.7401 31.7977C12.7679 32.5162 13.2968 32.7127 13.9751 32.6793C14.7728 32.6386 15.576 32.6367 16.3736 32.683C17.0341 32.7201 17.5524 32.4513 17.5697 31.844C17.5876 31.1978 17.0792 30.8345 16.3853 30.8437C15.6167 30.853 14.8475 30.8493 13.9121 30.8493ZM35.7045 32.6725C36.2884 32.6707 36.8933 32.7615 37.4493 32.6373C37.7984 32.5576 38.3118 32.1628 38.3217 31.8928C38.3335 31.5703 37.9152 30.9704 37.6378 30.9426C36.5454 30.8332 35.4284 30.8351 34.3379 30.9537C34.0475 30.9852 33.6348 31.5654 33.6027 31.9225C33.5508 32.4971 34.0389 32.7115 34.6042 32.6762C34.9094 32.6559 35.2177 32.6725 35.7045 32.6725Z" fill="#F9F8F8"></path>
-<path d="M20.949 19.9043C22.0185 22.0791 23.0657 24.1896 24.0339 26.1401C24.0339 26.0827 24.0536 25.7805 24.0308 25.4827C23.754 21.8276 24.137 18.2225 25.107 14.7076C25.5401 13.1389 26.3341 11.6703 26.9729 10.1597C27.0434 9.99351 27.1416 9.77602 27.2837 9.71547C27.6087 9.57708 27.9683 9.52086 28.3142 9.43127C28.3834 9.77479 28.6213 10.2054 28.4959 10.4489C27.2009 12.9598 26.2105 15.5856 25.8552 18.3813C25.6161 20.2657 25.681 22.1903 25.6631 24.0963C25.6551 24.9539 25.7755 25.812 26.0474 26.8179C26.2068 26.6047 26.4422 26.4157 26.5139 26.1766C27.584 22.603 29.1922 19.3587 32.1331 16.9281C32.5532 16.5797 32.9888 16.2022 33.4849 16.015C33.8019 15.8945 34.2418 16.0984 34.6261 16.1577C34.5056 16.5247 34.5001 17.0597 34.248 17.2303C30.8721 19.5051 29.1057 22.8124 28.0523 26.6566C29.0365 26.8475 29.697 26.6955 30.4019 25.8269C31.2397 24.7932 32.4371 24.037 33.5405 23.2462C33.7735 23.0793 34.4784 23.1535 34.6125 23.3537C34.8837 23.7596 34.8269 24.202 34.2301 24.5486C33.3144 25.0805 32.5038 25.7935 31.6487 26.4311C31.6864 26.5368 31.7241 26.6424 31.7612 26.7481C32.599 26.7481 33.4368 26.7462 34.2745 26.7481C35.4169 26.7481 36.5599 26.7685 37.7017 26.7444C38.351 26.7314 39.0041 26.8574 39.0165 27.5704C39.0301 28.3242 38.3257 28.3872 37.7128 28.3872C31.0123 28.3891 24.3119 28.3909 17.6114 28.3928C16.1601 28.3928 14.7088 28.3891 13.2575 28.3891C12.6669 28.3891 11.9644 28.4243 11.9767 27.6149C11.9878 26.8889 12.5834 26.7444 13.247 26.7536C15.09 26.7796 16.933 26.7629 18.7767 26.7629C18.8267 26.6758 18.8761 26.5887 18.9262 26.5016C18.0828 25.8442 17.2648 25.1491 16.3838 24.5473C15.9599 24.2563 15.4502 24.0691 15.7252 23.4562C16.0236 22.7914 16.5877 22.9206 17.0313 23.256C18.2144 24.1507 19.4062 25.0441 20.4998 26.0407C21.235 26.711 21.1621 26.7907 22.2156 26.6758C21.4204 23.0744 19.7263 20.0247 16.8268 17.6924C16.6593 17.5571 16.4072 17.4366 16.3603 17.2642C16.2855 16.9899 16.2404 16.5865 16.3881 16.4104C16.5364 16.2324 17.0665 16.112 17.2055 16.2306C18.2459 17.1141 19.2388 18.0557 20.2292 18.9967C20.4924 19.2463 20.6963 19.5577 20.949 19.9043Z" fill="#BEA001"></path>
-<path d="M23.7242 34.9399C24.8517 34.9325 25.9021 34.9418 26.9518 34.9418C27.5764 34.9418 28.0682 35.1179 28.0435 35.855C28.0188 36.568 27.5356 36.7552 26.9079 36.744C25.9818 36.7311 25.0457 36.8052 24.1326 36.694C23.7211 36.644 23.3528 36.238 22.9648 35.9921C23.1916 35.6455 23.4196 35.2977 23.7242 34.9399Z" fill="#BEA001"></path>
-<path d="M29.1226 30.8585C29.7349 30.8567 30.2607 30.8233 30.7803 30.8678C31.3579 30.916 31.7602 31.181 31.7188 31.8588C31.6805 32.4945 31.3079 32.6811 30.7376 32.6737C29.7219 32.6644 28.7062 32.6496 27.6911 32.6774C27.0899 32.6941 26.6167 32.3975 26.7062 31.8755C26.7717 31.4899 27.2617 31.0605 27.6639 30.8863C28.0531 30.7195 28.5721 30.8567 29.1226 30.8585Z" fill="#BEA001"></path>
-<path d="M24.1945 32.4797C22.8538 32.5687 21.5705 32.6669 20.2934 32.6132C20.0179 32.6002 19.5088 31.9799 19.5625 31.7426C19.6429 31.3905 20.1044 30.9036 20.4442 30.8702C21.51 30.7609 22.5986 30.7794 23.6699 30.8591C24.4422 30.916 24.6832 31.6697 24.1945 32.4797Z" fill="#BEA001"></path>
-<path d="M16.1837 36.6149C15.9742 36.2387 15.6153 35.7629 15.7228 35.6072C15.9409 35.2921 16.395 35.0048 16.778 34.9665C17.6628 34.8757 18.5636 34.9313 19.4576 34.9461C20.0773 34.9554 20.6673 35.2131 20.5407 35.8778C20.4746 36.2226 19.866 36.6705 19.4712 36.7039C18.4042 36.7941 17.3211 36.6866 16.1837 36.6149Z" fill="#BEA001"></path>
-<path d="M34.3577 34.9288C34.9978 35.066 35.5149 35.4015 35.2795 35.9755C35.1331 36.3332 34.5319 36.6532 34.0976 36.7126C33.2511 36.8256 32.3787 36.7348 31.5168 36.7441C30.8521 36.7533 30.3485 36.3919 30.4406 35.7957C30.4925 35.4565 31.1072 35.016 31.5144 34.9604C32.4207 34.8362 33.3555 34.9251 34.3577 34.9288Z" fill="#BEA001"></path>
-<path d="M13.9986 30.8492C14.8506 30.8492 15.6198 30.8529 16.3884 30.8437C17.0823 30.8344 17.5914 31.1977 17.5728 31.844C17.5555 32.4519 17.0365 32.7201 16.3767 32.683C15.5797 32.6366 14.7759 32.6385 13.9782 32.6793C13.2992 32.7126 12.7704 32.5162 12.7432 31.7976C12.716 31.0698 13.2498 30.8288 13.9986 30.8492Z" fill="#BEA001"></path>
-<path d="M35.6144 32.6725C35.2171 32.6725 34.9088 32.6558 34.603 32.6762C34.0383 32.7114 33.5495 32.4964 33.6014 31.9225C33.6342 31.5647 34.0463 30.9852 34.3367 30.9537C35.4272 30.835 36.5448 30.8332 37.6366 30.9426C37.914 30.9704 38.3329 31.5709 38.3205 31.8928C38.3106 32.1634 37.7972 32.5576 37.4481 32.6373C36.8927 32.7615 36.2878 32.6706 35.6144 32.6725Z" fill="#BEA001"></path>
-</svg>
-            </div>
+            <div class="opt-icon"><img src="assets/asset/NBS%20PATHWAY%20ICON_Intervention%20Pathway=PROTECT,%20Filled=Yes,%20Ecosystem=Peatland.svg" alt="" width="42" height="42"></div>
             <div class="opt-meta">
               <div class="opt-name">Protect</div>
+              <div class="pw-tip pw-tip--desc"><span class="pw-tip__ic"></span><span class="pw-tip__txt"><b>What is <strong>protect</strong> pathway?</b><span>The Protect pathway establishes a defensive shield over lands identified by 2014–2024 data as persisting forests. By securing these uninterrupted, decade-long canopies, this strategy locks in critical carbon stocks and safeguards baseline biodiversity from future fragmentation.</span></span></div>
               <div class="opt-ha mono">8,000.5 ha</div>
             </div>
           </div>
@@ -896,23 +856,10 @@
         <!-- Manage -->
         <div class="pathway-opt" data-pathway data-eco="peat">
           <div class="opt-top">
-            <div class="opt-icon">
-              <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-<circle cx="25.3677" cy="24.7849" r="24.1607" fill="#F9F8F8"></circle>
-<path d="M22.7301 24.6396C22.9343 25.2957 23.1348 25.8789 23.3777 26.5902C23.4917 26.3732 23.5543 26.3051 23.5579 26.2352C23.6536 23.3997 23.5745 20.5446 23.8799 17.7311C24.2128 14.6694 25.313 11.7946 26.9539 9.16269C27.2262 8.72485 27.6199 8.29008 28.2306 8.73098C28.5949 8.99405 28.7089 9.2792 28.4127 9.73421C27.2556 11.5193 26.4977 13.4785 25.9439 15.5303C25.1621 18.4265 25.0002 21.3663 25.1879 24.3416C25.2486 25.2847 25.3111 26.2297 25.5576 27.3095C25.7158 27.0998 25.9568 26.914 26.0194 26.681C27.0441 22.8306 28.8304 19.431 31.8584 16.7665C32.4416 16.2533 33.113 15.8455 33.7201 15.3598C34.1359 15.025 34.502 15.0121 34.8166 15.4426C35.1367 15.8804 35.0594 16.2772 34.6252 16.6286C33.7164 17.3675 32.7469 18.0518 31.9393 18.8919C29.6858 21.2363 28.352 24.0736 27.6861 27.2985C28.6611 27.4604 29.3436 27.3445 30.0666 26.4952C31.0214 25.3755 32.2834 24.5078 33.4626 23.5953C33.8655 23.2826 34.4689 23.0986 34.7982 23.7388C35.1035 24.3293 34.6381 24.6378 34.1874 24.8732C33.0891 25.4509 32.1546 26.2027 31.3727 27.3795C33.7955 27.3795 36.0749 27.3795 38.356 27.3813C38.6301 27.3813 38.9778 27.2967 39.1655 27.4291C39.4488 27.6315 39.8001 27.9976 39.7873 28.2784C39.7762 28.5433 39.3513 28.8193 39.0643 29.0265C38.9429 29.1148 38.7074 29.0431 38.5234 29.0431C29.4172 29.0431 20.311 29.0394 11.2066 29.0486C10.6105 29.0486 10.0402 29.0394 10.0163 28.2895C9.9924 27.4953 10.5903 27.3923 11.2213 27.3923C13.5208 27.3942 15.8204 27.3942 18.2266 27.3942C17.3547 26.1972 16.33 25.3221 15.0809 24.7205C14.5566 24.4704 14.2824 24.1356 14.5731 23.5953C14.8619 23.0581 15.2722 23.117 15.8149 23.358C17.4466 24.0859 18.6718 25.2921 19.7664 26.6307C20.2687 27.2445 20.7617 27.5444 21.7201 27.2611C21.3982 26.2149 21.1535 25.1339 20.7414 24.122C19.6156 21.3675 18.0556 18.922 15.5132 17.2265C15.0477 16.9156 14.746 16.3882 15.0864 15.9264C15.469 15.4095 16.0356 15.6064 16.5323 15.9614C19.0085 17.7232 20.7157 20.0914 21.9758 22.8147C22.2408 23.3911 22.4762 23.981 22.7301 24.6396Z" fill="#BEA001"></path>
-<path d="M32.4967 48.742C28.6298 49.9629 24.7334 50.2463 20.8407 49.5748C15.0826 48.5838 10.2131 45.8385 6.23209 41.5466C5.61949 40.8886 5.02161 40.2153 4.17169 39.5628C4.17169 40.3533 4.18273 41.1443 4.16802 41.9347C4.15882 42.448 4.22872 43.0287 3.42664 43.0177C2.60799 43.0066 2.72206 42.4032 2.71838 41.9016C2.71102 40.4618 2.71654 39.0201 2.73494 37.5803C2.74597 36.7089 3.08446 36.4385 3.94725 36.5562C5.36746 36.7494 6.79687 36.9058 8.20603 37.1596C8.48198 37.2093 8.6917 37.6324 8.93085 37.882C8.62547 38.1064 8.31641 38.5204 8.01287 38.5185C7.19607 38.5112 6.3811 38.3272 5.43553 38.1947C6.98083 40.4066 8.79288 42.1665 10.8238 43.7039C13.3644 45.6287 16.2103 46.9692 19.2917 47.7088C22.0328 48.3649 24.8125 48.547 27.6584 48.2202C33.2951 47.5714 38.0064 45.1345 41.9414 41.1633C44.8904 38.188 46.7852 34.6081 47.8099 30.5148C48.6377 27.2108 48.6432 23.9338 48.0858 20.6225C47.9644 19.9075 47.7473 19.1992 47.5027 18.5136C47.3021 17.9507 47.5652 17.6275 48.0177 17.5797C48.2827 17.5539 48.7591 17.8372 48.8456 18.0838C49.9696 21.3087 50.2327 24.6317 49.804 28.0093C49.3331 31.7198 48.1244 35.1747 46.1174 38.3376C43.1611 42.9913 39.0752 46.2573 33.915 48.1914C33.4643 48.3594 33.0173 48.5415 32.4967 48.742Z" fill="#BEA001"></path>
-<path d="M19.3579 0.697265C22.1026 0.0484845 24.783 -0.174115 27.5296 0.142303C31.0396 0.547025 34.3399 1.53553 37.4213 3.25989C40.0962 4.75736 42.4049 6.70125 44.4267 8.99468C44.6217 9.21666 44.8222 9.43496 45.1957 9.85072C45.1957 8.79599 45.2012 7.96018 45.192 7.12498C45.1883 6.5688 45.3704 6.11441 45.9757 6.08682C46.6655 6.05554 46.6747 6.57371 46.6674 7.09678C46.649 8.59793 46.6324 10.1003 46.6637 11.6008C46.6766 12.2827 46.4227 12.5685 45.7475 12.4974C44.2593 12.341 42.7636 12.238 41.2901 12.0037C40.9571 11.951 40.694 11.4524 40.3997 11.1593C40.7437 10.9839 41.084 10.6718 41.4336 10.6595C42.2761 10.6301 43.1205 10.7411 44.0606 10.8024C40.7695 6.81163 36.8142 3.98226 31.873 2.52158C28.1937 1.43312 24.4794 1.13142 20.7413 1.8777C15.0549 3.01276 10.2663 5.74831 6.61097 10.3247C4.14585 13.408 2.56376 16.9217 1.83894 20.7721C1.40478 23.0741 1.11044 25.4331 1.6844 27.7903C1.97139 28.9652 2.23446 30.153 2.40555 31.3482C2.44786 31.6517 2.17191 32.1662 1.90148 32.3024C1.54827 32.4808 1.13435 32.4091 0.979822 31.7799C0.168539 28.498 -0.287696 25.2393 0.201649 21.8158C1.16562 15.0618 4.26726 9.59501 9.53232 5.32642C12.2752 3.10229 15.4541 1.71214 18.8244 0.731609C18.966 0.691137 19.1279 0.718728 19.3579 0.697265Z" fill="#BEA001"></path>
-<path d="M29.6988 33.541C28.8802 33.5355 28.148 33.5484 27.4158 33.5208C26.8989 33.5024 26.45 33.3571 26.4059 32.7157C26.3581 32.0411 26.8014 31.7229 27.3368 31.6953C28.5215 31.6309 29.7209 31.6106 30.8983 31.7284C31.2441 31.7633 31.7335 32.2913 31.8016 32.6586C31.8935 33.1535 31.4649 33.5245 30.8854 33.5355C30.5193 33.5447 30.1532 33.5392 29.6988 33.541Z" fill="#BEA001"></path>
-<path d="M38.9236 31.9522C39.4515 32.8604 39.2124 33.4803 38.3018 33.5337C37.1759 33.5999 36.0427 33.5687 34.9131 33.5447C34.3888 33.5337 34.0761 33.2485 34.0448 32.6881C34.0154 32.1343 34.3392 31.7431 34.7991 31.7394C36.1549 31.7314 37.5107 31.8418 38.9236 31.9522Z" fill="#BEA001"></path>
-<path d="M21.9775 33.4914C21.0945 33.4877 20.2998 33.4748 19.5051 33.4858C18.9476 33.4932 18.6607 33.2522 18.6239 32.6844C18.5889 32.1251 18.8869 31.7799 19.38 31.7615C20.6291 31.7136 21.8819 31.7118 23.131 31.7707C23.6406 31.7964 24.0085 32.2048 23.8043 32.7248C23.681 33.0376 23.3002 33.308 22.9709 33.4638C22.7208 33.5815 22.3712 33.4895 21.9775 33.4914Z" fill="#BEA001"></path>
-<path d="M11.2792 31.943C12.7619 31.8675 14.1858 31.7921 15.606 31.8455C15.8304 31.8528 16.1892 32.4452 16.1892 32.7684C16.191 33.0057 15.7237 33.4374 15.4459 33.4539C14.2299 33.5294 13.0029 33.5257 11.7832 33.4705C10.9296 33.4325 10.7309 32.8419 11.2792 31.943Z" fill="#BEA001"></path>
-<path d="M23.3572 37.8691C22.6398 37.9225 22.2718 37.6833 22.2939 36.9977C22.3141 36.3379 22.7777 36.2128 23.2928 36.2073C24.4555 36.1944 25.6181 36.2018 26.7808 36.2202C27.3456 36.2312 27.7374 36.5274 27.7282 37.1063C27.7209 37.7005 27.3364 37.9059 26.744 37.8856C25.6439 37.8489 24.5419 37.8709 23.3572 37.8691Z" fill="#BEA001"></path>
-<path d="M32.3183 37.8672C31.8934 37.8654 31.5089 37.9703 31.2384 37.8378C30.9257 37.6851 30.5559 37.3485 30.51 37.0455C30.475 36.8082 30.876 36.2753 31.1078 36.2625C32.4121 36.1852 33.7275 36.1686 35.03 36.2661C35.2985 36.2864 35.6867 36.853 35.7309 37.2037C35.7879 37.6637 35.4034 37.9077 34.8736 37.8801C34.0531 37.8396 33.2289 37.8672 32.3183 37.8672Z" fill="#BEA001"></path>
-<path d="M14.3801 36.5249C14.8731 36.3796 15.3091 36.2324 15.7506 36.2159C16.6981 36.1791 17.6473 36.2067 18.5966 36.2122C19.165 36.214 19.555 36.5047 19.5642 37.0633C19.5716 37.6465 19.2018 37.8961 18.5929 37.8759C17.5535 37.8409 16.5104 37.8703 15.471 37.8685C14.3231 37.8673 14.209 37.7367 14.3801 36.5249Z" fill="#BEA001"></path>
-</svg>
-            </div>
+            <div class="opt-icon"><img src="assets/asset/NBS%20PATHWAY%20ICON_Intervention%20Pathway=MANAGE,%20Filled=Yes,%20Ecosystem=Peatland.svg" alt="" width="42" height="42"></div>
             <div class="opt-meta">
               <div class="opt-name">Manage</div>
+              <div class="pw-tip pw-tip--desc"><span class="pw-tip__ic"></span><span class="pw-tip__txt"><b>What is <strong>manage</strong> pathway?</b><span>The Manage pathway balances human livelihood with ecological health on lands that transitioned into active use over the last decade. Rather than forcing rewilding, it implements sustainable agroecological and smart farming practices to maintain economic productivity while reducing environmental footprints.</span></span></div>
               <div class="opt-ha mono">5,000.0 ha</div>
             </div>
           </div>
@@ -922,25 +869,10 @@
         <!-- Restore -->
         <div class="pathway-opt" data-pathway data-eco="peat">
           <div class="opt-top">
-            <div class="opt-icon">
-              <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M43.6953 16.4594C44.2147 15.5401 45.8756 15.9239 46.2227 16.9281C46.7026 18.3205 47.1335 19.7412 47.4316 21.181C47.6885 22.4209 47.8633 23.7074 47.8408 24.9691C47.7958 27.4797 47.9008 30.0596 47.3477 32.474C46.9595 34.169 45.6229 35.6643 44.6348 37.2006C43.5812 38.8379 43.2714 40.1732 42.2178 41.8099C41.9891 42.1673 41.1097 42.9284 41.1035 43.3822C41.0773 45.3166 42.2178 46.3931 42.2178 48.3969H38.3926C38.4752 48.3798 38.5571 48.362 38.6367 48.3392C39.8103 48.003 40.6405 47.3581 40.498 45.9164C40.4774 45.7094 40.4324 45.4994 40.3701 45.2914C40.4321 45.4988 40.4774 45.708 40.498 45.9144C40.6405 47.3563 39.8095 48.001 38.6357 48.3373C38.5533 48.3609 38.4686 48.3794 38.3828 48.3969H38.3926C37.8265 48.5134 37.197 48.4996 36.6074 48.3969H36.6172C36.4255 48.3638 36.2373 48.3231 36.0576 48.2728C35.5327 48.1264 34.9368 47.5271 34.7568 47.0004C34.6664 46.7334 34.5861 46.4624 34.5127 46.1888C34.5862 46.4631 34.6662 46.7348 34.7568 47.0023C34.9368 47.5292 35.5336 48.1285 36.0586 48.2748C36.235 48.3242 36.4193 48.3641 36.6074 48.3969H32.2109C32.2109 47.2287 32.7718 46.9403 32.7324 45.7953C32.6743 44.0836 32.5648 42.3739 32.4785 40.6635C32.336 37.8466 32.9927 35.2857 35.2295 33.4232C37.3032 31.6963 38.9104 29.6097 40.416 27.4135C40.6071 27.1343 40.8189 26.7899 41.1035 26.6722C41.5141 26.5016 42.1072 26.3143 42.4297 26.4887C42.9133 26.7498 43.1422 27.3313 42.8125 27.9486C41.7775 29.8861 40.7313 31.8178 39.7432 33.7797C39.5688 34.1278 39.6569 34.6093 39.625 35.0287C39.9774 35.0174 40.3315 35.004 40.7139 34.9291C41.895 32.5729 42.6416 30.2854 43.6953 27.9486C43.9408 27.4031 44.1135 26.6434 44.0967 25.9711C44.0367 23.5392 43.9507 21.1061 43.9619 18.6742C43.9636 18.0279 43.3766 17.0211 43.6953 16.4594ZM33.7637 39.3529C33.7249 39.4997 33.7662 39.687 33.7744 39.85C33.8344 41.0279 33.8268 42.2152 33.9824 43.3812C34.0427 43.8386 34.1117 44.2979 34.1943 44.7543C34.1116 44.2973 34.0428 43.8373 33.9824 43.3793C33.8268 42.2139 33.8344 41.0259 33.7744 39.848C33.7662 39.6852 33.7257 39.4993 33.7637 39.3529ZM39.8984 44.2406C39.9489 44.3244 39.9987 44.4101 40.0449 44.4984C39.9987 44.4101 39.949 44.3244 39.8984 44.2406ZM46.5303 30.975C46.5629 31.3663 46.5282 31.7643 46.4307 32.1361C46.005 33.7509 45.197 34.9831 43.6953 35.8256C43.2885 36.0543 43.1945 36.8476 42.9639 37.3851C42.7183 37.96 42.5776 38.61 42.2178 39.1C41.5222 40.0486 40.6857 40.8943 39.9414 41.808C39.5486 42.2878 39.3882 42.7749 39.4814 43.2943C39.3889 42.7756 39.5491 42.2892 39.9414 41.8099C40.6858 40.8962 41.5222 40.05 42.2178 39.1019C42.5777 38.612 42.7183 37.962 42.9639 37.3871C43.1945 36.8496 43.2884 36.0553 43.6953 35.8265C45.1969 34.9841 46.005 33.7528 46.4307 32.1381C46.5284 31.7657 46.5631 31.3669 46.5303 30.975ZM42.4473 35.224C42.1965 35.8645 41.727 36.3438 40.7939 36.4213C40.812 36.4216 40.8302 36.423 40.8486 36.4232C41.73 36.3526 42.1958 35.8705 42.4473 35.224ZM46.4229 30.3773C46.4345 30.4188 46.4462 30.4603 46.4561 30.5023C46.4461 30.4603 46.4345 30.4188 46.4229 30.3773ZM46.1055 29.6527C46.1238 29.6819 46.1411 29.7117 46.1582 29.7416C46.141 29.7117 46.1238 29.6819 46.1055 29.6527Z" fill="#F9F8F8"></path>
-<path d="M5.33722 15.8148C4.81784 14.8955 3.93018 14.9862 3.58331 15.9906C3.10335 17.3829 2.67245 18.8036 2.37433 20.2435C2.11748 21.4833 1.94269 22.7698 1.96515 24.0316C2.01015 26.5422 1.90519 29.1221 2.45831 31.5365C2.84643 33.2314 3.79735 35.5481 4.78546 37.0843C5.83921 38.7218 6.53542 39.7599 7.58917 41.3968C7.81804 41.7541 8.69626 41.9913 8.70245 42.4447C8.7287 44.379 8.44954 46.315 8.44952 48.3187H18.1507C18.1506 47.1506 17.6738 46.1238 17.7132 44.9788C17.7713 43.267 18.0644 41.4512 18.1507 39.7406C18.2932 36.9237 16.8134 34.3482 14.5765 32.4857C12.5028 30.7588 10.8965 28.6721 9.39093 26.4759C9.19972 26.1966 8.98738 25.8522 8.70245 25.7347C8.292 25.5641 7.69985 25.3771 7.37726 25.5511C6.89356 25.8123 6.66459 26.3936 6.99444 27.0111C8.02944 28.9486 8.3198 31.3773 9.30792 33.3392C9.48245 33.6871 10.1501 33.6718 10.1819 34.0911C9.82944 34.0799 9.4746 34.0665 9.0921 33.9915C7.9111 31.6355 7.89577 29.6085 6.8421 27.2718C6.59658 26.7261 6.82522 25.663 6.8421 24.9906C6.9021 22.5587 6.85335 20.1412 6.8421 17.7093C6.84023 17.0631 5.65597 16.3766 5.33722 15.8148ZM16.0423 38.4154C16.0811 38.5621 16.0398 38.7494 16.0316 38.9124C15.9716 40.0904 15.9791 41.2776 15.8235 42.4437C15.6623 43.6667 15.4428 44.9023 15.0491 46.0648C14.8691 46.5916 14.2733 47.1909 13.7484 47.3372C12.9384 47.5641 11.9689 47.6298 11.1702 47.4017C10.3451 47.1653 9.69126 46.7759 9.42413 46.0648C9.69162 46.7747 10.345 47.1635 11.1692 47.3997C11.9679 47.6284 12.9375 47.5621 13.7474 47.3353C14.2724 47.189 14.8691 46.5897 15.0491 46.0628C15.4428 44.9004 15.6623 43.6647 15.8235 42.4417C15.9791 41.2763 15.9716 40.0884 16.0316 38.9105C16.0397 38.7476 16.0803 38.5617 16.0423 38.4154ZM6.75616 36.222C6.78301 36.3005 6.81149 36.3762 6.8421 36.4476C7.08769 37.0225 7.22831 37.6725 7.58819 38.1624C8.28376 39.1111 9.12023 39.9568 9.86456 40.8704C10.072 41.1238 10.2142 41.3798 10.2894 41.6409C10.2141 41.3804 10.0715 41.1252 9.86456 40.8724C9.12029 39.9588 8.28469 39.1123 7.58917 38.1644C7.22917 37.6744 7.08773 37.0245 6.8421 36.4495C6.81126 36.3777 6.78318 36.3011 6.75616 36.222ZM3.47198 31.5365C3.91931 32.9862 4.71544 34.1053 6.11066 34.888C6.44653 35.0768 6.57047 35.6499 6.73273 36.1468C6.57077 35.6504 6.44704 35.0777 6.11163 34.889C4.71583 34.106 3.9192 32.9871 3.47198 31.5365ZM7.3587 34.2865C7.60948 34.9271 8.07957 35.4064 9.013 35.4837C8.99459 35.4841 8.97605 35.4855 8.95733 35.4857C8.07594 35.415 7.61018 34.933 7.3587 34.2865ZM3.3753 31.1986C3.39041 31.2559 3.40805 31.3121 3.42413 31.3685C3.40823 31.3127 3.39025 31.2572 3.3753 31.2005C3.36723 31.1697 3.36202 31.1379 3.3548 31.1068C3.3619 31.1373 3.36739 31.1684 3.3753 31.1986ZM4.82257 29.6566C4.89203 29.8229 4.95926 29.9943 5.02472 30.1663C4.95927 29.9944 4.89197 29.823 4.82257 29.6566Z" fill="#F9F8F8"></path>
-<path d="M32.2016 12.02C29.7641 15.0256 28.4178 18.4475 27.5947 22.1168C28.5641 22.3456 29.2316 22.2087 29.8184 21.3018C30.7334 19.8831 32.1191 18.9087 33.6116 18.1287C34.0016 17.9262 34.5528 17.5212 34.851 18.2243C35.0778 18.7587 34.8322 19.1425 34.3016 19.495C33.3847 20.1043 32.5578 20.8518 31.7084 21.5581C31.5547 21.6856 31.4722 21.8956 31.266 22.2025C33.1428 22.2025 34.8772 22.2025 36.6097 22.2025C36.8291 22.2025 37.1235 22.1181 37.251 22.2268C37.521 22.4556 37.8359 22.7706 37.8809 23.0831C37.9091 23.295 37.536 23.6137 37.281 23.7931C37.131 23.8981 36.8553 23.8306 36.6378 23.8306C28.9522 23.8268 21.2666 23.8231 13.5809 23.8175C12.9566 23.8175 12.1522 23.8868 12.1485 23.0493C12.1447 22.2587 12.8872 22.2006 13.5585 22.21C15.1185 22.2287 16.6803 22.2156 18.3585 22.2156C17.6572 21.0818 16.8303 20.2218 15.7522 19.5993C15.4859 19.4437 15.1016 19.3218 15.0041 19.0875C14.8822 18.7987 14.9216 18.3718 15.0528 18.0756C15.1147 17.9387 15.6078 17.8506 15.8159 17.9425C17.5409 18.705 18.8591 19.9737 19.9785 21.4562C20.5785 22.2468 20.5559 22.2637 21.7203 22.1418C20.6122 16.9393 18.5028 12.2993 14.4172 8.73122C13.9766 8.34622 13.5922 7.86058 14.0441 7.42433C14.2672 7.20933 15.0866 7.29996 15.4072 7.54808C17.9291 9.50183 19.6841 12.0875 21.0041 14.9412C21.7859 16.6337 22.2847 18.455 22.9203 20.2168C22.986 20.4006 23.1172 20.56 23.3178 20.8987C23.3178 19.0543 23.2691 17.415 23.3253 15.7787C23.481 11.2606 24.3828 6.90371 26.3366 2.80121C26.5428 2.36746 26.8297 1.74558 27.5291 2.10995C28.1891 2.45308 27.9416 2.99747 27.7072 3.47997C25.2791 8.47934 24.6866 13.7806 25.0991 19.2475C25.1628 20.085 25.2322 20.9212 25.3278 21.755C25.3466 21.9218 25.491 22.0737 25.6316 22.3306C26.2541 20.5031 26.7378 18.7981 27.4091 17.1693C28.9653 13.3893 31.0803 9.98933 34.4497 7.51683C34.4985 7.48058 34.5341 7.38809 34.5772 7.38684C34.9991 7.37809 35.5578 7.2137 35.8128 7.42058C36.3172 7.8287 35.8616 8.23497 35.5316 8.57559C34.4347 9.70747 33.3416 10.8393 32.2016 12.02ZM23.4322 21.2812C23.4135 21.1781 23.3947 21.075 23.3778 20.9718C23.3403 20.9775 23.3028 20.9831 23.2653 20.9887C23.2953 21.1181 23.3253 21.2456 23.4322 21.2812Z" fill="#BEA001"></path>
-<path d="M33.817 35.41C32.7689 37.6062 32.4782 39.8106 32.8251 42.1737C33.0632 43.795 32.9957 45.47 32.9564 47.1194C32.9489 47.4325 32.4351 47.7344 32.1539 48.0412C31.9439 47.7469 31.5707 47.4675 31.5463 47.1606C31.3757 44.9587 31.2013 42.7525 31.1732 40.5468C31.1357 37.4693 31.8726 34.58 34.2988 32.505C36.3332 30.7637 37.8614 28.6575 39.397 26.5212C40.3701 25.1681 41.1614 24.8606 42.652 25.1156C42.607 24.1337 42.5526 23.1762 42.5245 22.2181C42.4739 20.5987 42.2207 18.9481 42.4495 17.3662C42.7682 15.1718 44.7651 13.9387 46.2614 15.11C46.8426 15.5656 47.2982 16.345 47.5157 17.0662C48.9482 21.8131 49.5895 26.63 48.8807 31.6056C48.4326 34.7375 46.5014 37.0237 44.8514 39.49C44.2364 40.41 43.507 41.2575 42.9426 42.2037C42.6407 42.7118 42.4757 43.3525 42.4307 43.945C42.3501 45.0018 42.4551 46.07 42.3839 47.1275C42.3614 47.4387 42.007 47.7294 41.8045 48.0269C41.5439 47.7419 41.0807 47.4737 41.0507 47.1669C40.7751 44.1887 41.1876 41.4656 43.267 39.0181C44.7745 37.2412 45.8732 35.0975 47.002 33.0343C47.4276 32.2531 47.5739 31.2387 47.587 30.3262C47.6226 28.0887 47.6563 25.8306 47.407 23.6112C47.1782 21.565 46.5782 19.5612 46.1432 17.5393C46.1226 17.4475 46.1245 17.3406 46.0757 17.2693C45.7795 16.8418 45.7045 15.9781 44.9845 16.2668C44.5232 16.4506 43.9739 17.1043 43.9514 17.5712C43.8576 19.4343 43.9832 21.3081 43.9757 23.1768C43.9645 25.375 44.5907 27.6244 43.5145 29.7475C42.7382 31.2825 41.9751 32.8231 41.1576 34.335C40.8576 34.8918 40.6926 35.9675 39.697 35.3168C38.8289 34.7506 39.6951 34.1381 39.9407 33.6018C40.7826 31.7612 41.6714 29.94 42.5507 28.1162C42.8376 27.5256 42.7889 27.005 42.2076 26.66C41.5701 26.2831 41.1389 26.7237 40.792 27.1737C40.1714 27.9737 39.6426 28.8475 38.9882 29.6175C37.972 30.815 36.8807 31.9468 35.827 33.1143C35.1613 33.8506 34.507 34.6025 33.817 35.41Z" fill="#BEA001"></path>
-<path d="M8.70935 41.8625C8.83873 42.2787 9.00749 42.625 9.01499 42.9756C9.04874 44.3175 9.01873 45.6612 9.0356 47.0031C9.04123 47.5075 9.00561 48.03 8.39061 48.0356C7.74186 48.0412 7.64999 47.5069 7.65561 46.9637C7.66499 45.9031 7.74185 44.8331 7.62935 43.7831C7.55248 43.0825 7.3181 42.3325 6.94123 41.7406C5.40935 39.3362 3.68623 37.0462 2.25936 34.5837C1.61811 33.4743 1.31998 32.0781 1.19248 30.7812C0.839977 27.2375 0.920604 23.6937 1.8656 20.2206C2.20498 18.9743 2.50498 17.7093 2.95873 16.5025C3.49123 15.0856 4.17935 14.6393 5.31748 14.7068C6.26998 14.7631 7.05561 15.625 7.55623 16.7962C8.25936 18.4437 7.66686 20.0625 7.64061 21.6931C7.61999 22.8118 7.53561 23.9306 7.47748 25.1187C8.90436 24.7081 9.86999 25.2593 10.6406 26.3218C11.5781 27.6131 12.4875 28.9325 13.5018 30.1618C14.175 30.9768 14.9962 31.6725 15.7762 32.3937C18.1181 34.5618 19.0144 37.3 18.9487 40.4093C18.9037 42.5606 18.8231 44.7106 18.735 46.8581C18.7237 47.1468 18.6506 47.4825 18.48 47.6956C18.3356 47.8775 17.9475 48.0556 17.7806 47.9825C17.5556 47.8812 17.2987 47.54 17.295 47.2987C17.2744 45.4581 17.1319 43.5937 17.3681 41.7812C17.8312 38.2318 16.9593 35.2218 14.1731 32.945C12.5793 31.6406 11.4262 30.0343 10.29 28.3743C9.87561 27.7706 9.40124 27.1862 8.85749 26.6987C8.25936 26.1625 7.49248 26.5019 7.53748 27.3081C7.57685 28.0219 7.78499 28.7681 8.09436 29.4162C8.82374 30.9381 9.65998 32.4094 10.4475 33.9044C10.5187 34.0394 10.605 34.1969 10.5956 34.3394C10.5731 34.6619 10.4962 34.9787 10.4419 35.2987C10.08 35.1843 9.51561 35.1787 9.38623 34.9406C8.25748 32.8325 7.19248 30.6881 6.14435 28.5387C6.00373 28.2518 6.01498 27.8718 6.02811 27.5362C6.14061 24.5131 6.29061 21.4925 6.37499 18.4675C6.38999 17.9331 6.22686 17.3544 5.99623 16.8687C5.85748 16.5781 5.42248 16.2537 5.12998 16.2612C4.82623 16.2687 4.35749 16.6025 4.26374 16.8912C3.79874 18.3306 3.3656 19.7869 3.05248 21.2637C2.80123 22.4425 2.7281 23.6606 2.59497 24.8637C2.08122 29.5131 2.7131 33.8593 5.80123 37.6281C6.86623 38.9312 7.7231 40.4006 8.70935 41.8625Z" fill="#BEA001"></path>
-<path d="M22.9805 28.3412C22.0599 28.345 21.2217 28.36 20.3855 28.3468C19.823 28.3393 19.2399 28.1556 19.223 27.5412C19.208 26.9137 19.7049 26.6175 20.3574 26.6306C21.1936 26.6493 22.0317 26.6156 22.868 26.6362C23.3855 26.6493 23.963 26.5968 24.0324 27.3725C24.098 28.1031 23.6236 28.255 22.9805 28.3412Z" fill="#BEA001"></path>
-<path d="M30.6556 28.1724C29.4144 28.2437 28.2369 28.3393 27.0669 28.2868C26.7913 28.2756 26.3244 27.7693 26.3281 27.4943C26.3319 27.2056 26.7707 26.7056 27.0575 26.6775C28.1038 26.5725 29.1688 26.5724 30.2206 26.6437C31.0194 26.6974 31.175 27.2581 30.6556 28.1724Z" fill="#BEA001"></path>
-<path d="M22.5156 31.7518C22.525 31.0437 22.8831 30.8168 23.4756 30.8225C24.5313 30.8337 25.5925 30.7625 26.6388 30.86C26.9875 30.8918 27.4975 31.2743 27.5856 31.5943C27.7506 32.1831 27.2313 32.5012 26.7044 32.5256C25.5888 32.5762 24.4656 32.5912 23.3556 32.5106C23.0613 32.4887 22.7969 32.0687 22.5156 31.7518Z" fill="#BEA001"></path>
-<path d="M16.437 28.3937C16.1989 28.3993 16.0395 28.3731 15.8895 28.4012C14.6652 28.6281 13.9995 28.0225 13.6133 26.8043C14.712 26.5062 15.807 26.5418 16.8833 26.7818C17.0689 26.8231 17.3108 27.3781 17.2414 27.6081C17.1495 27.9137 16.7745 28.1331 16.437 28.3937Z" fill="#BEA001"></path>
-<path d="M35.8855 26.5306C36.1986 26.6337 36.4348 26.7368 36.6767 26.8418C36.0298 28.0806 34.4811 28.6824 33.3111 28.1593C33.0748 28.0543 32.7861 27.5537 32.8592 27.3743C32.998 27.0387 33.3523 26.6212 33.6729 26.5649C34.3648 26.4424 35.0942 26.5287 35.8855 26.5306Z" fill="#BEA001"></path>
-<path d="M20.0969 32.2824C18.8087 32.9106 18.4656 32.7456 17.3125 30.8749C18.2275 30.8749 19.0656 30.7399 19.8306 30.9181C20.4175 31.0549 20.4025 31.7068 20.0969 32.2824Z" fill="#BEA001"></path>
-<path d="M30.2075 30.9275C31.1375 30.8787 32.0038 30.8787 33.1307 30.8787C32.2888 31.4881 32.0694 32.5562 30.9669 32.5131C30.6219 32.5 30.1438 32.2919 29.9919 32.0237C29.855 31.78 30.08 31.3337 30.2075 30.9275Z" fill="#BEA001"></path>
-<path d="M23.3931 21.328C23.3256 21.2455 23.2956 21.1181 23.2656 20.9887C23.3031 20.9831 23.3406 20.9774 23.3781 20.9718C23.395 21.0749 23.4137 21.178 23.3931 21.328Z" fill="#F9F8F8"></path>
-</svg>
-            </div>
+            <div class="opt-icon"><img src="assets/asset/NBS%20PATHWAY%20ICON_Intervention%20Pathway=RESTORE,%20Filled=Yes,%20Ecosystem=Peatland.svg" alt="" width="42" height="42"></div>
             <div class="opt-meta">
               <div class="opt-name">Restore</div>
+              <div class="pw-tip pw-tip--desc"><span class="pw-tip__ic"></span><span class="pw-tip__txt"><b>What is <strong>restore</strong> pathway?</b><span>The Restore pathway actively heals heavily impacted or vulnerable landscapes, targeting <i>degraded vegetation, barren lands, and long-term non-forested areas</i>. Crucially, it also reclaims active use lands that pose an ecological liability due to medium-to-high flood risks or proximity to water bodies, transforming them back into natural buffers.</span></span></div>
               <div class="opt-ha mono">2,000.0 ha</div>
             </div>
           </div>
@@ -966,6 +898,7 @@
           <div class="tags" data-tags></div>
         </div>
         <div class="count"><span data-count>0</span> of <b data-total>0</b> Activity is Selected</div>
+        <span class="activity-chev"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 5.25 7 9.25l4-4" stroke="#0f1419" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
       </div>
       <div class="activity-list" data-activity-list></div>
     </div>
@@ -995,6 +928,51 @@
     </div>
   </div>
 
+  <!-- ============================= POTENTIAL NBS CARBON PROJECT ============================= -->
+  <div class="carbon" id="carbonSection">
+    <div class="carbon-head">
+      <div class="carbon-ic">
+        <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M40.5763 24.3238L32.3263 19.4425C32.1063 19.3188 31.8725 19.25 31.625 19.25C31.3775 19.25 31.1437 19.3188 30.9237 19.4425L22.6737 24.3238C22.2612 24.5713 22 25.025 22 25.5062V34.9938C22 35.475 22.2612 35.9287 22.6737 36.1762L30.9237 41.0575C31.1437 41.1813 31.3775 41.25 31.625 41.25C31.8725 41.25 32.1063 41.1813 32.3263 41.0575L40.5763 36.1762C40.9888 35.9287 41.25 35.475 41.25 34.9938V25.5062C41.25 25.025 40.9888 24.5713 40.5763 24.3238ZM38.5 34.21L31.625 38.28L24.75 34.21V26.29L31.625 22.22L38.5 26.29V34.21Z" fill="#33A0FF"/>
+          <path d="M32.1769 6.14625C31.2832 6.14625 30.4169 6.27 29.5919 6.5175C28.8768 5.59285 27.9601 4.8435 26.9117 4.32645C25.8634 3.80941 24.7109 3.5383 23.5419 3.53375C21.9332 3.53375 20.4069 4.02875 19.1144 4.95C17.5809 3.53929 15.5744 2.75437 13.4907 2.75H13.4769C11.2494 2.75 9.15942 3.61625 7.57817 5.1975C6.53593 6.23346 5.7909 7.5302 5.42085 8.95236C5.0508 10.3745 5.0693 11.8699 5.47442 13.2825C4.62431 13.9791 3.9401 14.8564 3.47154 15.8506C3.00299 16.8448 2.76185 17.9309 2.76567 19.03C2.76567 23.1138 6.05192 26.4412 10.1082 26.4412H10.4932C11.163 27.6779 12.1537 28.7111 13.3612 29.4321C14.5686 30.1532 15.9481 30.5355 17.3544 30.5387C18.0007 30.5387 18.6469 30.4563 19.2519 30.305V27.4038C18.6607 27.6513 18.0144 27.7887 17.3544 27.7887C15.2507 27.7887 13.3394 26.455 12.6244 24.4887L12.2119 23.375L11.0569 23.6087C10.7407 23.6775 10.4244 23.705 10.1082 23.705C7.57817 23.705 5.51567 21.6012 5.51567 19.03C5.51567 17.38 6.39567 15.8262 7.82567 14.9875L8.88442 14.3687L8.38942 13.2413C8.07317 12.54 7.92192 11.7975 7.92192 11.0275C7.92192 9.55625 8.48567 8.18125 9.53067 7.13625C10.5894 6.0775 11.9919 5.5 13.4769 5.5C15.1957 5.5 16.8594 6.325 17.9044 7.68625L18.7294 8.7725L20.3794 7.4525C21.2732 6.69625 22.3869 6.28375 23.5419 6.28375C25.3157 6.28375 26.9657 7.27375 27.8594 8.855L28.4782 9.955L29.6194 9.4325C30.4169 9.075 31.2832 8.89625 32.1769 8.89625C35.6694 8.89625 38.5019 11.77 38.5019 15.29C38.4994 16.7011 38.0251 18.0708 37.1544 19.1812L39.5607 20.57C40.6565 19.0279 41.243 17.1818 41.2382 15.29C41.2382 10.2437 37.1682 6.14625 32.1632 6.14625H32.1769Z" fill="#33A0FF"/>
+          <path d="M16.518 17.114C16.518 16.162 16.7373 15.308 17.176 14.552C17.624 13.796 18.226 13.208 18.982 12.788C19.7473 12.3587 20.5827 12.144 21.488 12.144C22.524 12.144 23.4433 12.4007 24.246 12.914C25.058 13.418 25.646 14.1367 26.01 15.07H24.092C23.84 14.5567 23.49 14.174 23.042 13.922C22.594 13.67 22.076 13.544 21.488 13.544C20.844 13.544 20.27 13.6887 19.766 13.978C19.262 14.2673 18.8653 14.6827 18.576 15.224C18.296 15.7653 18.156 16.3953 18.156 17.114C18.156 17.8327 18.296 18.4627 18.576 19.004C18.8653 19.5453 19.262 19.9653 19.766 20.264C20.27 20.5533 20.844 20.698 21.488 20.698C22.076 20.698 22.594 20.572 23.042 20.32C23.49 20.068 23.84 19.6853 24.092 19.172H26.01C25.646 20.1053 25.058 20.824 24.246 21.328C23.4433 21.832 22.524 22.084 21.488 22.084C20.5733 22.084 19.738 21.874 18.982 21.454C18.226 21.0247 17.624 20.432 17.176 19.676C16.7373 18.92 16.518 18.066 16.518 17.114Z" fill="#33A0FF"/>
+        </svg>
+      </div>
+      <div class="carbon-txt">
+        <div class="carbon-title">Potential NbS Carbon Project</div>
+        <div class="carbon-q">Do you interested to treat project as potential nbs carbon project?</div>
+      </div>
+      <div class="carbon-right">
+        <div class="switch carbon-toggle" id="carbonToggle"><span class="knob"></span></div>
+        <div class="carbon-noyes">No / Yes</div>
+      </div>
+    </div>
+    <div class="carbon-body">
+      <div class="carbon-divider"></div>
+      <div class="crisk">
+        <div class="crisk-text">
+          <div class="crisk-title">Carbon Risk Assumption</div>
+          <div class="crisk-desc">Apply adjustments to estimated GHG reductions or removals to reflect uncertainty, leakage, and buffer pool deduction.</div>
+        </div>
+        <div class="crisk-field">
+          <span class="crisk-label">Leakage deduction</span>
+          <label class="crisk-input"><input type="text" inputmode="decimal" value="15,0" placeholder="15,0" data-dec="1"><span>%</span><span class="crisk-step"><button type="button" data-step="1" aria-label="Increase"><svg width="12" height="8" viewBox="0 0 12 8" fill="none"><path d="M1.5 6.25 6 1.75l4.5 4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button type="button" data-step="-1" aria-label="Decrease"><svg width="12" height="8" viewBox="0 0 12 8" fill="none"><path d="M1.5 1.75 6 6.25l4.5-4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button></span></label>
+          <div class="crisk-hint">1-100%, default 15%</div>
+        </div>
+        <div class="crisk-field">
+          <span class="crisk-label">Uncertainty</span>
+          <label class="crisk-input"><input type="text" inputmode="decimal" value="10,00" placeholder="10,00" data-dec="2"><span>%</span><span class="crisk-step"><button type="button" data-step="1" aria-label="Increase"><svg width="12" height="8" viewBox="0 0 12 8" fill="none"><path d="M1.5 6.25 6 1.75l4.5 4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button type="button" data-step="-1" aria-label="Decrease"><svg width="12" height="8" viewBox="0 0 12 8" fill="none"><path d="M1.5 1.75 6 6.25l4.5-4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button></span></label>
+          <div class="crisk-hint">1-100%, default 10%</div>
+        </div>
+        <div class="crisk-field">
+          <span class="crisk-label">Buffer pool deduction</span>
+          <label class="crisk-input"><input type="text" inputmode="numeric" value="12" placeholder="12" data-dec="0"><span>%</span><span class="crisk-step"><button type="button" data-step="1" aria-label="Increase"><svg width="12" height="8" viewBox="0 0 12 8" fill="none"><path d="M1.5 6.25 6 1.75l4.5 4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button type="button" data-step="-1" aria-label="Decrease"><svg width="12" height="8" viewBox="0 0 12 8" fill="none"><path d="M1.5 1.75 6 6.25l4.5-4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button></span></label>
+          <div class="crisk-hint">1-100%, default 12%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- ============================= ALERT ============================= -->
   <div class="alert">
     <div class="alert-ic">
@@ -1006,7 +984,7 @@
     </div>
     <div class="alert-body">
       <span class="lead">Disclaimer: </span><b>Field verification required</b><br>
-      All the information in NbS Tool are purposed to support your pre-feasibility study. Always verify before use it!
+      All the information in NbS Tool are purposed to support your feasibility study. Always verify before use it!
     </div>
   </div>
 
@@ -1026,11 +1004,10 @@
 
     <!-- ===== Per-step footers (step 1 uses in-body sub-flow buttons) ===== -->
     <footer class="da-foot" data-step="2">
-      <button class="btn btn-outline" data-go="1">
-        <svg viewBox="0 0 24 24" fill="none"><path d="M14 7l-5 5 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        Reselect Area
+      <button class="btn btn-outline" data-go="1">Reselect Area
+        <svg viewBox="0 0 24 24" fill="none"><path d="M21 12a9 9 0 1 1-3.5-7.1M21 4v5h-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
-      <button class="btn btn-primary" data-go="4">Select intervention type
+      <button class="btn btn-primary" data-go="3">Analyse The Threat Profile
         <svg viewBox="0 0 24 24" fill="none"><path d="M6 7l5 5-5 5M13 7l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
     </footer>
@@ -1136,11 +1113,11 @@
     <div class="dm-body">
       <button class="dm-opt" type="button" id="dmOptSave">
         <span class="dm-opt__ic"><svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg></span>
-        <span class="dm-opt__tx"><b>Save to my Project</b><span>Create a pre-feasibility study draft from your site characterisation data.</span></span>
+        <span class="dm-opt__tx"><b>Save to my Project</b><span>Create a feasibility study draft from your site characterisation data.</span></span>
       </button>
       <button class="dm-opt" type="button" onclick="window.location.href='document-generator.html'">
         <span class="dm-opt__ic"><svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg></span>
-        <span class="dm-opt__tx"><b>Generate Document (Pre Feasibility)</b><span>Select suitable activities and metric indicators to track over time.</span></span>
+        <span class="dm-opt__tx"><b>Generate Document (Feasibility)</b><span>Select suitable activities and metric indicators to track over time.</span></span>
       </button>
       <button class="dm-opt" type="button" onclick="window.location.href='create-monitoring-plan.html'">
         <span class="dm-opt__ic"><svg viewBox="0 0 24 24"><path d="M4 19V5M4 19h16M8 15l3-4 3 3 4-6"/></svg></span>
@@ -1200,6 +1177,7 @@
 </div>
 
 <script src="js/analysis-shared.js"></script>
+<script src="js/people-context.js"></script>
 <script>
 (function(){
   /* Profile dropdown handled by nav-mobile.js (Q-03) */
@@ -1351,9 +1329,12 @@
   if (ctx) {
     const tabs = [...ctx.querySelectorAll('[data-ctx]')];
     const KEYS = tabs.map(t => t.dataset.ctx);
+    const CTX_TITLES = { general: 'General Context', nature: 'Nature Context', people: 'People Context', climate: 'Climate Context' };
+    const ctxTitle = document.getElementById('daCtxTitle');
     function showCtx(key){
       tabs.forEach(t => t.setAttribute('aria-selected', t.dataset.ctx === key ? 'true' : 'false'));
       panel.querySelectorAll('.da-step-body[data-step="2"] .ctx-pane').forEach(p => { p.hidden = (p.dataset.ctx !== key); });
+      if (ctxTitle) ctxTitle.textContent = 'Site Characterisation: ' + CTX_TITLES[key];
       body.scrollTop = 0;
     }
     tabs.forEach(tab => tab.addEventListener('click', () => showCtx(tab.dataset.ctx)));
@@ -1365,7 +1346,7 @@
     });
     ctx.querySelector('[data-ctx-next]').addEventListener('click', () => {
       const i = cur();
-      i === KEYS.length - 1 ? goStep(4) : showCtx(KEYS[i + 1]);
+      i === KEYS.length - 1 ? goStep(3) : showCtx(KEYS[i + 1]);
     });
   }
 
@@ -1407,6 +1388,17 @@
     var tot = card.querySelector('[data-total]'); if (tot) tot.textContent = total;
   }
 
+  // pathway description tooltip icons
+  var PW_TIP_ICONS = {
+    Protect: '<svg width="42" height="42" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18.896 3.01878C20.4348 2.00303 21.8932 0.983118 23.4052 0.0495865C23.6298 -0.089222 24.1588 0.0889054 24.4555 0.270012C26.3952 1.45674 28.251 2.79299 30.2479 3.87069C32.439 5.05384 34.8083 5.84857 37.2825 6.26201C38.7671 6.50984 40.254 6.74754 41.7422 6.97273C42.5137 7.0895 42.6537 7.60125 42.6525 8.26252C42.6459 12.4304 42.6853 16.5982 42.6376 20.7654C42.6066 23.4981 42.6191 26.2481 42.3111 28.9563C42.0079 31.6223 40.9123 34.0785 39.3443 36.284C37.0203 39.5522 33.96 42.0252 30.6143 44.152C28.55 45.4644 26.4053 46.6511 24.2756 47.8575C24.0158 48.0046 23.5553 48.0553 23.3051 47.9254C18.0917 45.2231 13.1256 42.1413 9.22764 37.6697C6.33649 34.3532 4.87037 30.3843 4.82747 25.9728C4.76968 20.0493 4.81139 14.1241 4.81198 8.19997C4.81198 7.16218 5.00798 7.06805 6.05292 6.95129C7.63522 6.77435 9.25862 6.64269 10.7635 6.16908C13.2632 5.3821 15.6837 4.34133 18.1352 3.40005C18.3777 3.30593 18.6011 3.16295 18.896 3.01878ZM15.231 6.37342C12.3714 7.51844 9.39088 8.16601 6.29539 8.5032C6.28526 8.70754 6.26917 8.87971 6.26917 9.05188C6.26858 14.5589 6.24713 20.0672 6.28645 25.5743C6.29479 26.755 6.40917 27.9602 6.6713 29.1094C7.39751 32.2937 8.90534 35.0758 11.168 37.4618C14.6632 41.1476 18.9359 43.7469 23.2908 46.2341C23.5327 46.3723 24.0033 46.3258 24.2654 46.1805C27.7863 44.2306 31.1916 42.1086 34.271 39.4909C38.8784 35.5738 41.3103 30.7114 41.1083 24.5716C40.9933 21.0627 41.0946 17.5466 41.0982 14.0335C41.0994 12.2195 41.0982 10.406 41.0982 8.5455C40.8242 8.49367 40.5948 8.45614 40.3678 8.4061C38.0438 7.89495 35.6763 7.52797 33.4077 6.83512C30.0674 5.8152 27.0112 4.16678 24.2362 2.01733C24.0361 1.86244 23.547 1.8672 23.3146 2.00422C22.4901 2.49154 21.7627 3.15342 20.9173 3.59427C19.089 4.54805 17.2112 5.40593 15.231 6.37342Z" fill="currentColor"/></svg>',
+    Manage: '<svg width="42" height="42" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15.525 3.05052C12.4074 4.25592 9.79744 6.08172 7.51864 8.42232C4.86544 11.1493 3.16624 14.4265 2.18704 18.0397C1.36444 21.0745 0.984639 24.1969 1.73884 27.3385C2.05744 28.6597 2.43004 29.9689 2.68924 31.3015C2.74504 31.5943 2.42104 31.9615 2.27344 32.2945C1.97824 32.1361 1.49944 32.0419 1.41844 31.8091C0.142241 28.1629 -0.34556 24.4651 0.25564 20.5777C1.03144 15.5539 2.99704 11.1529 6.46024 7.45932C9.44464 4.27932 13.0716 2.14212 17.2944 0.945121C20.691 -0.0172793 24.111 -0.261479 27.5652 0.289921C31.4334 0.907321 35.019 2.34132 38.1024 4.77312C39.8952 6.18612 41.4756 7.86612 43.1478 9.42192C43.1478 8.70792 43.1586 7.83492 43.1442 6.96252C43.1352 6.46152 43.2468 5.95512 43.821 6.06672C44.118 6.12432 44.5284 6.64032 44.5356 6.95652C44.5698 8.45232 44.514 9.95352 44.406 11.4463C44.388 11.6959 43.9452 12.1243 43.7148 12.1147C42.1938 12.0523 40.6728 11.9257 39.1644 11.7307C38.9052 11.6977 38.7018 11.2357 38.4732 10.9717C38.7522 10.7617 39.024 10.3849 39.3084 10.3741C40.1076 10.3447 40.9122 10.4677 41.8752 10.5427C39.6198 7.42212 36.7956 5.14272 33.4314 3.60012C27.5904 0.922321 21.6144 0.757921 15.525 3.05052Z" fill="currentColor"/><path d="M46.0324 26.6459C46.0324 25.0991 46.1045 23.6309 46.0073 22.1735C45.9317 21.0239 45.6491 19.8875 45.4529 18.7457C45.4385 18.6605 45.3448 18.5837 45.3448 18.5027C45.3412 17.9177 44.9578 17.0729 45.8524 16.9451C46.6156 16.8359 46.6067 17.6411 46.7777 18.2153C47.4833 20.5991 47.5679 23.0309 47.4815 25.4873C47.3231 29.9843 45.8615 34.0355 43.3541 37.7447C40.5083 41.9525 36.5986 44.7935 31.9006 46.5587C28.4752 47.8457 24.9148 48.2093 21.2554 47.8241C16.8508 47.3609 12.8836 45.8327 9.40244 43.1345C7.87064 41.9465 6.51885 40.5263 5.00505 39.1379C5.00505 39.9005 4.99244 40.6565 5.00864 41.4119C5.02124 41.9627 4.86825 42.3857 4.24005 42.3659C3.66225 42.3479 3.54165 41.9321 3.54705 41.4263C3.55965 40.0769 3.55784 38.7281 3.55244 37.3787C3.55064 36.6575 3.88004 36.3383 4.61084 36.4181C5.86004 36.5549 7.10925 36.6665 8.35845 36.8003C8.84625 36.8531 9.37905 36.9197 9.30705 37.6037C9.23505 38.2859 8.70584 38.0999 8.27024 38.0897C7.67444 38.0759 7.07684 38.0861 6.29024 38.0861C6.72764 38.6141 7.06964 39.0743 7.46024 39.4889C10.2988 42.5045 13.6954 44.5751 17.7113 45.6701C20.458 46.4189 23.212 46.6667 26.0416 46.3505C34.8634 45.3641 40.9204 40.6241 44.4592 32.6297C45.2729 30.7913 45.523 28.7027 46.0324 26.6459Z" fill="currentColor"/></svg>',
+    Restore: '<svg width="42" height="42" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13.0304 47.6772C9.86963 47.7048 10.3628 47.9214 10.3286 45.1416C10.3124 43.7034 10.2908 42.2634 10.3484 40.8276C10.3826 39.9666 10.082 39.2916 9.59422 38.6178C8.15242 36.6234 6.72862 34.6146 5.33362 32.5866C4.45702 31.3146 4.04662 29.8824 4.01242 28.3308C3.97462 26.5986 3.79103 24.864 3.85223 23.1366C3.95123 20.3346 4.54522 17.6052 5.46862 14.9556C5.94922 13.5792 6.74842 12.9642 7.90762 13.0218C8.83282 13.0674 9.89663 13.8918 10.1234 15.0294C10.352 16.1784 10.4078 17.3784 10.3916 18.5544C10.37 19.9842 10.1936 21.4116 10.0784 22.9266C12.1862 22.4154 13.1708 23.7996 14.0834 25.125C15.374 27.0006 16.8608 28.6584 18.5582 30.1842C20.9828 32.3634 21.6848 35.1792 21.3932 38.4048C21.1754 40.8132 21.3266 43.2546 21.3158 45.681C21.305 47.8848 21.512 47.6118 19.415 47.6412C17.3162 47.6706 15.2174 47.6658 13.0304 47.6772ZM19.8668 42.2628C19.883 41.0052 19.7696 39.729 19.9442 38.493C20.3942 35.3124 19.5014 32.6838 17.0048 30.648C15.6224 29.52 14.4398 28.236 13.4624 26.7378C12.926 25.9152 12.2726 25.1586 11.5994 24.4416C11.4158 24.2466 10.9046 24.165 10.658 24.279C10.415 24.3912 10.2296 24.8034 10.181 25.11C10.1324 25.407 10.2242 25.7688 10.3646 26.0472C11.279 27.8544 12.2114 29.6538 13.1672 31.4394C13.4192 31.9116 13.5776 32.3232 13.0232 32.6496C12.404 33.0138 12.1754 32.481 11.9486 32.0976C11.2628 30.936 10.5716 29.775 9.95603 28.5756C9.34223 27.3762 8.63302 26.1882 8.70322 24.759C8.73922 24.0162 8.79502 23.2752 8.83822 22.5324C8.91022 21.2802 9.04703 20.0262 9.02723 18.7752C9.00563 17.5692 8.87782 16.356 8.66542 15.1692C8.61322 14.8872 8.04802 14.5404 7.70242 14.5212C7.44502 14.5074 7.01482 14.9292 6.91762 15.237C6.49282 16.587 6.12201 17.9574 5.80521 19.338C5.20761 21.9444 4.89081 24.5832 5.29581 27.2502C5.48661 28.5024 5.54962 29.8758 6.12922 30.9456C7.23982 32.994 8.59162 34.9308 10.0082 36.789C11.1458 38.2812 11.9684 39.759 11.7668 41.7186C11.639 42.9642 11.7326 44.2332 11.738 45.492C11.738 45.7464 11.783 46.0008 11.8046 46.2336C14.519 46.2336 17.147 46.2336 19.8668 46.2336C19.8668 44.943 19.8668 43.6926 19.8668 42.2628Z" fill="currentColor"/><path d="M39.4059 37.5978C37.9731 39.0444 37.7157 40.7598 37.8489 42.6408C37.9479 44.0124 37.8363 45.3978 37.8849 46.7748C37.9083 47.4432 37.6599 47.6832 37.0227 47.6802C33.9357 47.6664 30.8469 47.6652 27.7581 47.6634C27.2487 47.6634 27.0183 47.475 27.0345 46.9176C27.0723 45.54 27.0813 44.16 27.0489 42.7824C27.0147 41.349 26.9877 39.9102 26.8383 38.4858C26.4387 34.665 27.6825 31.6392 30.6921 29.1576C32.1735 27.936 33.2157 26.1888 34.4955 24.7128C35.0067 24.123 35.5611 23.526 36.2127 23.115C36.6861 22.8156 37.3503 22.8168 38.0271 22.6608C38.0271 21.963 38.0487 21.0462 38.0235 20.13C37.9857 18.7272 37.8399 17.3226 37.8831 15.9234C37.9245 14.5338 39.1107 12.8484 40.6479 13.0098C41.6793 13.1184 42.2049 13.7532 42.5469 14.6052C44.0427 18.342 44.3937 22.245 44.4261 26.2404C44.4567 30.0918 42.8673 33.198 40.5723 36.0834C40.1889 36.5652 39.8235 37.0614 39.4059 37.5978ZM36.0381 32.5224C35.6997 32.5338 35.3595 32.5458 35.0211 32.5572C35.0517 32.154 34.9671 31.6926 35.1345 31.3584C36.0831 29.4756 37.0875 27.621 38.0811 25.761C38.3979 25.1682 38.1783 24.6102 37.7139 24.3594C37.4043 24.192 36.8355 24.3714 36.4413 24.5352C36.1677 24.6486 35.9643 24.9792 35.7807 25.2474C34.3353 27.3558 32.7927 29.3586 30.8019 31.0164C28.6545 32.8044 28.0245 35.2626 28.1613 37.9668C28.2441 39.609 28.3485 41.2506 28.4043 42.894C28.4421 43.9932 28.4115 45.0948 28.4115 46.2162C31.1583 46.2162 33.7773 46.2162 36.4305 46.2162C36.4305 44.292 36.4161 42.4344 36.4413 40.5774C36.4467 40.1418 36.4647 39.6294 36.6843 39.2862C37.6959 37.7142 38.8191 36.2142 39.8307 34.6422C40.7793 33.1674 42.0627 31.7322 42.4353 30.105C42.9663 27.7872 42.8655 25.311 42.9087 22.9008C42.9303 21.6894 42.7629 20.454 42.5163 19.2642C42.2301 17.8818 41.8161 16.518 41.3553 15.1812C41.0223 14.217 40.1709 14.13 39.6723 15.0126C39.3663 15.5514 39.1863 16.2372 39.1845 16.8576C39.1737 19.1922 39.2565 21.5274 39.3141 23.862C39.3303 24.5076 39.6075 25.2564 39.3717 25.7802C38.3601 28.023 37.2009 30.1998 36.0381 32.5224Z" fill="currentColor"/><path d="M19.866 42.353C19.866 43.6934 19.866 44.9432 19.866 46.2338C17.1462 46.2338 14.5182 46.2338 11.8038 46.2338C11.7822 46.0016 11.7372 45.7472 11.7372 45.4922C11.7318 44.2334 11.6382 42.9644 11.766 41.7188C11.9676 39.7592 11.145 38.2814 10.0074 36.7892C8.59078 34.931 7.23898 32.9942 6.12838 30.9458C5.54878 29.876 5.48577 28.5026 5.29497 27.2504C4.88997 24.5834 5.20677 21.944 5.80437 19.3382C6.12117 17.9582 6.49198 16.5878 6.91678 15.2372C7.01398 14.9288 7.44418 14.507 7.70158 14.5214C8.04718 14.54 8.61238 14.8874 8.66458 15.1694C8.87698 16.3562 9.00479 17.5694 9.02639 18.7754C9.04619 20.0264 8.90938 21.2804 8.83738 22.5326C8.79418 23.2748 8.73838 24.0164 8.70238 24.7592C8.63218 26.1884 9.34138 27.3764 9.95518 28.5758C10.5708 29.7752 11.262 30.9368 11.9478 32.0978C12.1746 32.4818 12.4032 33.014 13.0224 32.6498C13.5768 32.3234 13.4184 31.9124 13.1664 31.4396C12.2106 29.6534 11.2782 27.8546 10.3638 26.0474C10.2234 25.7696 10.1316 25.4072 10.1802 25.1102C10.2288 24.8036 10.4142 24.3914 10.6572 24.2792C10.9038 24.1652 11.415 24.2462 11.5986 24.4418C12.2718 25.1594 12.9252 25.9154 13.4616 26.738C14.439 28.2362 15.6216 29.5202 17.004 30.6482C19.5006 32.684 20.3934 35.3126 19.9434 38.4932C19.7688 39.7286 19.8822 41.0048 19.866 42.353Z" fill="#F9F8F8"/><path d="M39.6731 15.0117C40.1717 14.1293 41.0227 14.2165 41.3557 15.1806C41.8165 16.5174 42.2306 17.8812 42.5168 19.2636C42.7634 20.454 42.931 21.689 42.9094 22.9004C42.8662 25.3105 42.9667 27.7867 42.4358 30.1045C42.0631 31.7316 40.7798 33.1668 39.8313 34.6416C38.8197 36.2135 37.6963 37.7138 36.6848 39.2851C36.4652 39.6283 36.447 40.1415 36.4416 40.5771C36.4164 42.434 36.4309 44.2923 36.4309 46.2158H28.4123C28.4123 45.0945 28.4433 43.9927 28.4055 42.8935C28.3497 41.2501 28.2451 39.608 28.1623 37.9658C28.0256 35.2617 28.6556 32.8035 30.8029 31.0156C32.7936 29.3579 34.3362 27.3553 35.7815 25.247C35.965 24.9789 36.1681 24.647 36.4416 24.5341C36.8358 24.3703 37.4055 24.191 37.7151 24.3584C38.1793 24.6092 38.399 25.168 38.0822 25.7607C37.0887 27.6206 36.0835 29.4741 35.135 31.3574C34.9676 31.6916 35.0523 32.154 35.0217 32.5566C35.3601 32.5458 35.7004 32.5339 36.0676 32.4619C37.2016 30.1999 38.3607 28.0227 39.3723 25.7793C39.6079 25.2555 39.3309 24.5068 39.3147 23.8613C39.2571 21.5269 39.174 19.1918 39.1848 16.8574C39.1866 16.237 39.3671 15.5511 39.6731 15.0117Z" fill="#F9F8F8"/></svg>'
+  };
+  document.querySelectorAll('.pathway-opt').forEach(function(opt){
+    var slot = opt.querySelector('.pw-tip__ic');
+    if (slot) slot.innerHTML = PW_TIP_ICONS[pwOf(opt)] || '';
+  });
+
   document.querySelectorAll('.eco-card [data-pathway]').forEach(function(opt){
     opt.addEventListener('click', function(){
       if (opt.dataset.locked === 'true') return; // disabled non-eligible card
@@ -1427,6 +1419,37 @@
       var card = list.closest('.eco-card'), k = actKey(ecoOf(card), item.dataset.pw, item.dataset.act);
       if (checkedActs.has(k)) checkedActs.delete(k); else checkedActs.add(k);
       renderActivities(card);
+    });
+  });
+
+  // collapse/expand activity section via its head
+  document.querySelectorAll('.eco-card .activity-head').forEach(function(head){
+    head.addEventListener('click', function(){
+      head.closest('.activity').classList.toggle('collapsed');
+    });
+  });
+
+  /* ---- Potential NbS carbon project toggle ---- */
+  document.getElementById('carbonToggle').addEventListener('click', function(){
+    document.getElementById('carbonSection').classList.toggle('on');
+  });
+  function criskParse(inp){ return parseFloat(String(inp.value).replace(',', '.')); }
+  function criskSet(inp, v){
+    v = Math.min(100, Math.max(1, v)); // 1-100%
+    inp.value = v.toFixed(+inp.dataset.dec).replace('.', ',');
+  }
+  document.querySelectorAll('.crisk-step button').forEach(function(b){
+    b.addEventListener('click', function(e){
+      e.preventDefault();
+      var inp = b.closest('.crisk-input').querySelector('input');
+      var v = criskParse(inp);
+      criskSet(inp, (isNaN(v) ? 0 : v) + (b.dataset.step === '1' ? 1 : -1));
+    });
+  });
+  document.querySelectorAll('.crisk-input input').forEach(function(inp){
+    inp.addEventListener('blur', function(){
+      var v = criskParse(inp);
+      criskSet(inp, isNaN(v) ? parseFloat(inp.defaultValue.replace(',', '.')) : v);
     });
   });
 
@@ -1498,27 +1521,6 @@
   const dmLeaveGo = document.getElementById('dmLeaveGo');
   if (dmLeaveSave) dmLeaveSave.addEventListener('click', () => { window.location.href = 'dashboard.html'; });
   if (dmLeaveGo) dmLeaveGo.addEventListener('click', () => { window.location.href = pendingHref || 'index.html'; });
-})();
-</script>
-
-<!-- General Context: Figma land-cover & natural-disaster icon components -->
-<script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" crossorigin="anonymous"></script>
-<script src="assets/genctx-icons/Components.bundle.js"></script>
-<script>
-(function(){
-  function mount(){
-    if (!window.React || !window.ReactDOM || !window.IconLandCover) { return setTimeout(mount, 60); }
-    document.querySelectorAll('.gc-lc__ic[data-lc]').forEach(el => {
-      if (el.dataset.mounted) return; el.dataset.mounted = '1';
-      ReactDOM.createRoot(el).render(React.createElement(window.IconLandCover, { property1: el.dataset.lc }));
-    });
-    document.querySelectorAll('.gc-nd__ic[data-nd]').forEach(el => {
-      if (el.dataset.mounted) return; el.dataset.mounted = '1';
-      ReactDOM.createRoot(el).render(React.createElement(window.IconNaturalDisaster, { property1: el.dataset.nd }));
-    });
-  }
-  mount();
 })();
 </script>
 

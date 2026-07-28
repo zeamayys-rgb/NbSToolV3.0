@@ -33,50 +33,11 @@
     { k: 'cGriev', q: 'Describe the grievance and feedback mechanism*', type: 'ta', ph: 'How can communities raise concerns and receive timely responses?' }
   ];
   var GEN_STEPS = [
-    { id: 1, label: 'Demography', sub: 'Population & structure', secKey: 'demography' },
-    { id: 2, label: 'Social', sub: 'Employment, education, health', secKey: 'social' },
-    { id: 3, label: 'Economics', sub: 'Income, poverty & GDP', secKey: 'economics' },
-    { id: 4, label: 'Housing & Settlements', sub: 'Services & dwellings', secKey: 'housing' }
-  ];
-  var GEN_STEPS_OLD = [
-    { id: 1, label: 'Project Overview', sub: 'Basic Info', fields: [
-      { k: 'gName', q: 'Project name*', type: 'text', ph: 'e.g. Kubu Raya Mangrove Restoration Project' },
-      { k: 'gDesc', q: 'Project description*', type: 'ta', ph: 'Describe objectives, activities and expected outcomes...' },
-      { k: 'gCountry', q: 'Country*', type: 'sel', opts: ['Indonesia', 'Malaysia', 'Philippines', 'Vietnam', 'Thailand', 'Cambodia', 'Myanmar', 'Laos'] },
-      { k: 'gProv', q: 'Province / Region*', type: 'text', ph: 'e.g. West Kalimantan' },
-      { k: 'gArea', q: 'Total project area (ha)*', type: 'text', ph: 'e.g. 2,500' },
-      { k: 'gStart', q: 'Project start date*', type: 'date' },
-      { k: 'gEnd', q: 'Project end date*', type: 'date' }
-    ] },
-    { id: 2, label: 'Site & Ecosystem', sub: 'Habitat & Site', fields: [
-      { k: 'sEco', q: 'Primary ecosystem type*', type: 'sel', opts: ['Mangrove', 'Tropical Forest', 'Peatland', 'Grassland', 'Seagrass Meadow', 'Freshwater Wetland', 'Montane Forest', 'Agroforestry'] },
-      { k: 'sAct', q: 'NbS activity type*', type: 'sel', opts: ['Restore', 'Protect', 'Manage', 'Restore & Protect'] },
-      { k: 'sDriver', q: 'Primary deforestation / degradation driver*', type: 'sel', opts: ['Agricultural Expansion', 'Illegal Logging', 'Charcoal Production', 'Aquaculture', 'Urban Expansion', 'Fire', 'Peat Drainage', 'Other'] },
-      { k: 'sInteg', q: 'Forest / habitat integrity level*', type: 'sel', opts: ['Low (suitable for restoration)', 'Medium', 'High (suitable for protection)'] },
-      { k: 'sKBA', q: 'Is the project area within a Key Biodiversity Area (KBA)?*', type: 'sel', opts: ['Yes', 'No', 'Partially'] },
-      { k: 'sDesc', q: 'Site description*', type: 'ta', auto: true, ph: 'Describe the biophysical characteristics of the project site...' }
-    ] },
-    { id: 3, label: 'Carbon & Climate', sub: 'Carbon Data', fields: [
-      { k: 'cStd', q: 'Carbon standard*', type: 'sel', opts: ['Verra VCS', 'Gold Standard', 'Plan Vivo', 'Social Carbon', 'Other'] },
-      { k: 'cMeth', q: 'Applicable methodology*', type: 'sel', opts: ['VM0007 REDD+', 'VM0015 Avoided Deforestation', 'VM0033 Tidal Wetlands', 'VM0047 ARR', 'Plan Vivo Standard', 'Other'] },
-      { k: 'cBase', q: 'Baseline carbon stock (tCO₂e/ha)*', type: 'text', ph: 'e.g. 150' },
-      { k: 'cReduc', q: 'Estimated annual net GHG reductions (tCO₂e/year)*', type: 'text', ph: 'e.g. 125,000' },
-      { k: 'cDesc', q: 'Describe the carbon accounting approach*', type: 'ta', auto: true, ph: 'Explain baseline scenario, project activity and GHG calculation methodology...' }
-    ] },
-    { id: 4, label: 'Biodiversity', sub: 'Species Data', fields: [
-      { k: 'bKey', q: 'Key biodiversity features*', type: 'ta', ph: 'List key flora and fauna species present in the project area...' },
-      { k: 'bIUCN', q: 'IUCN Red Listed species present*', type: 'ta', ph: 'List threatened, endangered, or critically endangered species...' },
-      { k: 'bHab', q: 'Habitat condition assessment*', type: 'sel', opts: ['Good (minimal degradation)', 'Fair (some degradation)', 'Poor (heavily degraded)', 'Very Poor (near total degradation)'] },
-      { k: 'bThreat', q: 'Key threats to biodiversity*', type: 'ta', ph: 'Describe main threats affecting biodiversity in the project area...' }
-    ] },
-    { id: 5, label: 'Socio-economic', sub: 'BPS Indicators', fields: [] },
-    { id: 6, label: 'Safeguards & Governance', sub: 'Governance', fields: [
-      { k: 'sgEnv', q: 'Environmental safeguards compliance*', type: 'sel', opts: ['Fully compliant', 'Partially compliant', 'Under review', 'Not assessed'] },
-      { k: 'sgSoc', q: 'Social safeguards compliance*', type: 'sel', opts: ['Fully compliant', 'Partially compliant', 'Under review', 'Not assessed'] },
-      { k: 'sgMon', q: 'Monitoring plan description*', type: 'ta', ph: 'Describe monitoring approach, indicators, and reporting frequency...' },
-      { k: 'sgVer', q: 'Verification body*', type: 'text', ph: 'e.g. Bureau Veritas, SCS Global Services, DNV' },
-      { k: 'sgGov', q: 'Project governance structure*', type: 'ta', ph: 'Describe organizational structure, roles, and decision-making processes...' }
-    ] }
+    { id: 1, label: 'Demography', sub: 'Population & villages', secKey: 'demography' },
+    { id: 2, label: 'Social', sub: 'Employment, livelihood & services', secKey: 'social' },
+    { id: 3, label: 'Economics', sub: 'Income & poverty', secKey: 'economics' },
+    { id: 4, label: 'Housing and Settlements', sub: 'Electricity & WASH', secKey: 'housing' },
+    { id: 5, label: 'Governance', sub: 'Legal, benefit sharing & MRV', secKey: 'governance' }
   ];
   var CCB_STEPS = [
     { id: 1, label: 'Basic Information', sub: 'Project & Document Details' },
@@ -97,79 +58,70 @@
   var DEFAULT_TA = {
     existBio: 'The forests in the project area are classified as [forest type 1], [forest type 2], and [forest type 3]. The most important characteristics of vegetation are described in Section 2.1.5. The section lists alternative land use scenarios to the project activity resulting from the additionality analysis. The scenarios are:',
     currBio: 'The selected area is located within [KBA name] Key Biodiversity Area and has overlapped area by [x] ha. According to the Forest Landscape Integrity Index, the average forest integrity in the regions is: [FLII Scores]. [x]% of forest within the project area has low integrity, meaning it may be suitable for a forest restoration project.',
-    optCrit: 'The project does not seek to validate Gold Level for exceptional biodiversity benefits',
-    // Socio-economic narrative (auto) prefills
-    seHealthDisease: 'Common endemic infectious diseases reported in the selected area include [Disease 1], [Disease 2], and [Disease 3].',
-    seIplc: '[IP&LC / Ethnicity] in the selected area identify as Indigenous Peoples or members of local communities.'
+    optCrit: 'The project does not seek to validate Gold Level for exceptional biodiversity benefits'
   };
 
-  /* ── Socio-economic indicators (F03 General Template — BPS) ──
-     ui: 'input'  = long-answer textbox, example shown as placeholder
-          'auto'  = narrative auto-generated, prefilled & editable
-          'select'= single-selection dropdown                         */
+  /* ── Socio-economic form (F03 Form Generator — General Template) ──
+     ui: 'number'    = single numeric fill-in-the-blank
+         'short'     = short answer (max 20 words)
+         'para'      = long paragraph answer (max 100 words), example as placeholder
+         'matrix'    = population by age × education × gender table (auto-totalled)
+         'villages'  = number + names of villages
+         'employment'= employed / unemployed / economically inactive numbers
+         'livelihood'= households per type of livelihood table (auto-totalled)
+         'hhtable'   = households by dominant livelihood table (auto share %)
+         'currency'  = currency dropdown + amount
+         'iplc'      = repeatable "Community X consists of N individuals" rows   */
+  var CURRENCIES = ['BND', 'KHR', 'IDR', 'LAK', 'MYR', 'MMK', 'PHP', 'SGD', 'THB', 'USD', 'VND', 'GBP'];
+  var LIVELIHOODS = ['Formal sectors', 'Informal sectors', 'Entrepreneur', 'Fishery / aquaculture', 'NbS — agroforestry', 'NbS — reforestation', 'NbS — mangrove restoration', 'NbS — NTFP', 'NbS — forest patrol and protection', 'NbS — seedling nursery'];
+  var HH_LIVELIHOODS = ['Agriculture / agroforestry', 'Forestry / NbS', 'Fishery / aquaculture', 'Other'];
+  var MX_AGES = ['0–14 years old', '15–44 years old', '45 & beyond'];
+  var MX_EDUS = ['Primary education', 'Secondary education', 'Higher education'];
   var SOCIO = [
     { key: 'demography', title: 'Demography', subs: [
-      { title: 'Total Populations', inds: [
-        { k: 'sePopTotal', name: 'Total populations', level: 'Desa/Kelurahan', req: 'Mandatory', ui: 'input', prompt: 'State the total population and its breakdown by sex.', example: 'e.g. According to BPS, the selected area has a total population of 12,480, comprising 6,310 males and 6,170 females.' },
-        { k: 'sePopHh', name: 'Household population & number of households', level: 'Desa/Kelurahan', req: 'Optional', ui: 'input', prompt: 'Report household members and the number of households.', example: 'e.g. According to BPS, the selected Desa/Kelurahan contains 11,920 household members across 3,140 households.' },
-        { k: 'sePopGrowth', name: 'Population growth', level: 'Desa/Kelurahan', req: 'Optional', ui: 'select', prompt: 'Select the population growth trend between census rounds.', opts: ['High growth (> 2% / year)', 'Moderate growth (1–2% / year)', 'Low growth (< 1% / year)', 'Stable (≈ 0%)', 'Declining (negative growth)'] }
-      ] },
-      { title: 'Gender Disaggregation', inds: [
-        { k: 'seGender', name: 'Gender disaggregation (% Male / % Female)', level: 'Desa/Kelurahan', req: 'Mandatory', ui: 'select', prompt: 'Select the sex distribution of the population (male / female only).', opts: ['Male majority (> 55% male)', 'Balanced (≈ 50% / 50%)', 'Female majority (> 55% female)'] }
-      ] },
-      { title: 'Age Group', inds: [
-        { k: 'seAge', name: 'Age group (5-year bands, 0–4 … 75+)', level: 'Desa/Kelurahan', req: 'Mandatory', ui: 'select', prompt: 'Select the dominant age structure.', opts: ['Predominantly young (0–14 dominant)', 'Predominantly working age (15–64 dominant)', 'Ageing population (65+ significant)', 'Balanced age structure'] }
-      ] },
-      { title: 'Population Density', inds: [
-        { k: 'seDensity', name: 'Population density', level: 'Desa/Kelurahan', req: 'Mandatory', ui: 'input', prompt: 'Enter the population density (persons per km²).', example: 'e.g. The selected Desa/Kelurahan has a population density of 245 persons per square kilometre (according to BPS).' }
-      ] },
-      { title: 'Disability', inds: [
-        { k: 'seDisability', name: 'Disabilities (disabilitas / tanpa disabilitas)', level: 'Kabupaten/Kota', req: 'Optional', ui: 'input', prompt: 'Report the share of persons with disabilities.', example: 'e.g. According to BPS, 2.3% of the population in the selected Kabupaten/Kota are persons with disabilities.' }
+      { title: '', inds: [
+        { k: 'seMatrix', name: 'Population by Age, Education & Gender', ui: 'matrix', prompt: 'Fill the table with the number of people for each age group, highest education level and gender. Total population, gender disaggregation, education level and age group are combined into one table (auto-totalled).' },
+        { k: 'seVillages', name: 'Number of Villages', ui: 'villages', prompt: 'How many villages are located within the project area? Please provide the names of the villages.' },
+        { k: 'seYearSource', name: 'Year of Data Source', ui: 'number', plain: true, prompt: 'What is the reference year of the population data used?', example: 'e.g. 2025' },
+        { k: 'seHouseholds', name: 'Household Population & Number of Households', ui: 'number', prompt: 'How many households are located within the project area?', example: 'e.g. 3.140' },
+        { k: 'seDisabilities', name: 'Disabilities', ui: 'number', prompt: 'How many people with disabilities reside within the project area?', example: 'e.g. 46' }
       ] }
     ] },
     { key: 'social', title: 'Social', subs: [
-      { title: 'Employment', inds: [
-        { k: 'seEmpStatus', name: 'Employment status (% formal / informal workers)', level: 'Kabupaten/Kota', req: 'Review', ui: 'input', prompt: 'Report the formal / informal employment split.', example: 'e.g. According to BPS, 38% of the labour force is in formal employment and 62% in informal employment.' },
-        { k: 'seEmpSector', name: 'Employment by sector (Agriculture / Forestry / Fisheries)', level: 'Kabupaten/Kota', req: 'Optional', ui: 'input', prompt: 'Report employment shares in agriculture, forestry and fisheries.', example: 'e.g. According to BPS, 41% of employed persons work in agriculture, 6% in forestry, and 18% in fisheries.' }
-      ] },
-      { title: 'Education', inds: [
-        { k: 'seEduLevel', name: 'Education level (none, SD, SMP, SMA, D1/D2 … S3)', level: 'Kabupaten/Kota', req: 'Mandatory', ui: 'input', prompt: 'Report educational attainment by highest level completed.', example: 'e.g. According to BPS, educational attainment is 8% with no schooling, 34% primary (SD), 22% junior secondary (SMP), 28% senior secondary (SMA), and 8% diploma or university.' },
-        { k: 'seEduSchools', name: 'Number of schools', level: 'Desa/Kelurahan', req: 'Optional', ui: 'input', prompt: 'Report the number of schools by level.', example: 'e.g. The selected area is served by 14 schools, including 9 primary, 3 secondary, and 2 senior/high schools (according to BPS).' },
-        { k: 'seEduEnrol', name: 'School enrolment & participation rate', level: 'Kabupaten/Kota', req: 'Optional', ui: 'input', prompt: 'Report school enrolment and participation rates.', example: 'e.g. According to BPS, the school enrolment rate is 94% and the participation rate 89% among school-age children.' }
-      ] },
-      { title: 'Health', inds: [
-        { k: 'seHealthFac', name: 'Health facilities', level: 'Desa/Kelurahan', req: 'Mandatory', ui: 'input', prompt: 'Report the number of health facilities.', example: 'e.g. Health services in the selected area are supported by 1 hospital, 4 clinics, and 2 community health centres (according to BPS).' },
-        { k: 'seHealthWork', name: 'Medical workers', level: 'Desa/Kelurahan', req: 'Mandatory', ui: 'input', prompt: 'Report the number of medical workers.', example: 'e.g. Healthcare in the selected area is supported by 6 doctors, 28 nurses, and 12 midwives (according to BPS).' },
-        { k: 'seHealthDisease', name: 'Endemic infectious diseases (dengue, malaria, hepatitis, TBC)', level: 'Kabupaten/Kota', req: 'Review', ui: 'auto' }
-      ] },
-      { title: 'IP&LC or Ethnicity Identification', inds: [
-        { k: 'seIplc', name: 'IP&LC or ethnicity identification', level: 'Desa/Kelurahan', req: 'Review', ui: 'auto' }
+      { title: '', inds: [
+        { k: 'seEmployment', name: 'Employment Status', ui: 'employment', prompt: 'How many people are employed, unemployed, or economically inactive within the project area?' },
+        { k: 'seLivelihood', name: 'Type of Livelihood (Agriculture, Forestry, Fishery)', ui: 'livelihood', prompt: 'Fill the table with the number of households for each type of livelihood.' },
+        { k: 'seSchools', name: 'Number of Schools within Project Area', ui: 'number', prompt: 'How many schools within the project area?', example: 'e.g. 14' },
+        { k: 'seHealthFac', name: 'Health Facility within Project Area', ui: 'number', prompt: 'How many health facilities within the project area?', example: 'e.g. 5' },
+        { k: 'seDiseases', name: 'Endemic Infectious Diseases', ui: 'short', prompt: 'Is there any endemic or infectious diseases within the project area? If yes, what are those? (short answer, max 20 words)', example: 'e.g. dengue, malaria, hepatitis, tuberculosis' },
+        { k: 'seIplc', name: 'IP&LC or Ethnicity Identification', ui: 'iplc', prompt: 'Specify the Indigenous Peoples and Local Communities (IP&LCs) or ethnic groups present within the project area, and indicate the number of people or households belonging to each group.' },
+        { k: 'seSocialForestry', name: 'Social Forestry Beneficiaries', ui: 'number', prompt: 'How many households within the project area are beneficiaries to social forestry?', example: 'e.g. 210' }
       ] }
     ] },
     { key: 'economics', title: 'Economics', subs: [
-      { title: 'Household Economy', inds: [
-        { k: 'seHhIncome', name: 'Household income & expenditure (Susenas)', level: 'Kabupaten/Kota', req: 'Mandatory', ui: 'input', prompt: 'Report average household income and expenditure.', example: 'e.g. Household economic conditions indicate an average income of IDR 3,200,000 and average expenditure of IDR 2,750,000 per household (according to BPS).' },
-        { k: 'seHhLivelihood', name: 'Household based on livelihood', level: 'Kabupaten/Kota', req: 'Optional', ui: 'select', prompt: 'Select the dominant household livelihood.', opts: ['Agriculture', 'Fisheries', 'Forestry', 'Services / trade', 'Mixed livelihoods'] }
-      ] },
-      { title: 'Poverty & Food Security', inds: [
-        { k: 'sePoverty', name: '% population in poverty', level: 'Kabupaten/Kota', req: 'Optional', ui: 'select', prompt: 'Select the poverty incidence band.', opts: ['Very low (< 5%)', 'Low (5–10%)', 'Moderate (10–20%)', 'High (> 20%)'] },
-        { k: 'seUndernourish', name: '% undernourished', level: 'Kabupaten/Kota', req: 'Optional', ui: 'input', prompt: 'Report the share of undernourished population.', example: 'e.g. According to BPS, 7.4% of the population in the selected Kabupaten/Kota is undernourished, indicating food-security concerns.' },
-        { k: 'seLowIncome', name: 'Low-income household coverage', level: 'Kabupaten/Kota', req: 'Optional', ui: 'input', prompt: 'Report the share of low-income households.', example: 'e.g. An estimated 21% of households in the selected Kabupaten/Kota are low-income (according to BPS).' }
-      ] },
-      { title: 'GDP', inds: [
-        { k: 'seGdp', name: 'GDP / GRDP', level: 'Kabupaten/Kota', req: 'Optional', ui: 'input', prompt: 'Report the gross domestic / regional product.', example: 'e.g. The selected area records a GDP of IDR 18.6 trillion (according to BPS).' }
-      ] },
-      { title: 'Gini Ratio Line', inds: [
-        { k: 'seGini', name: 'Gini ratio line', level: 'Kabupaten/Kota', req: 'Optional', ui: 'input', prompt: 'Report the Gini ratio (income inequality).', example: 'e.g. Income inequality in the selected area is reflected by a Gini ratio of 0.34 (according to BPS).' }
+      { title: '', inds: [
+        { k: 'seHhLivelihood', name: 'Household Based on Livelihood', ui: 'hhtable', prompt: 'Breakdown of households by dominant livelihood (derived from the livelihood table in the Social section).' },
+        { k: 'seIncome', name: 'Average Household Income', ui: 'currency', prompt: 'What is the average household income of the community within the project area?', example: 'e.g. 3.200.000' },
+        { k: 'seExpenditure', name: 'Average Household Expenditure', ui: 'currency', prompt: 'What is the average household expenditure of the community within the project area?', example: 'e.g. 2.750.000' },
+        { k: 'sePoverty', name: 'Number of Households in Poverty', ui: 'number', prompt: 'How many households within the project area living in poverty?', example: 'e.g. 640' },
+        { k: 'seUndernourished', name: 'Number of Undernourished Households', ui: 'number', prompt: 'How many undernourished households in the project area?', example: 'e.g. 220' }
       ] }
     ] },
-    { key: 'housing', title: 'Housing & Settlements', subs: [
-      { title: 'Basic Services', inds: [
-        { k: 'seElectricity', name: '% households with access to electricity', level: 'Desa/Kelurahan', req: 'Mandatory', ui: 'input', prompt: 'Report household access to electricity.', example: 'e.g. Access to electricity covers 96% of households in the selected area (according to BPS).' },
-        { k: 'seWash', name: '% households with access to WASH', level: 'Desa/Kelurahan', req: 'Mandatory', ui: 'input', prompt: 'Report household access to water and sanitation (WASH).', example: 'e.g. Access to WASH (clean water and sanitation) covers 82% of households in the selected area (according to BPS).' }
-      ] },
-      { title: 'Housing', inds: [
-        { k: 'seHousing', name: 'Housing (PODES facilities; dwelling via Susenas)', level: 'Desa/Kelurahan', req: 'Review', ui: 'select', prompt: 'Select the dominant housing / dwelling type.', opts: ['Permanent (brick / concrete)', 'Semi-permanent', 'Non-permanent (wood / bamboo)', 'Mixed housing types'] }
+    { key: 'housing', title: 'Housing and Settlements', subs: [
+      { title: '', inds: [
+        { k: 'seElectricity', name: 'Number of Households with Access to Electricity', ui: 'number', prompt: 'How many households are in the project area with access to electricity?', example: 'e.g. 3.000' },
+        { k: 'seWash', name: 'Number of Households with Access to WASH', ui: 'number', prompt: 'How many households in the project area are living with access to WASH?', example: 'e.g. 2.600' }
+      ] }
+    ] },
+    { key: 'governance', title: 'Governance', subs: [
+      { title: '', inds: [
+        { k: 'seLegal', name: 'Forestry Legal Framework', ui: 'para', prompt: 'Elaborate the applicable forestry legal framework governing the project, including formal statement of conservation group, its organisation structure along with working/management plan. (long paragraph, max 100 words)', example: 'e.g. The project is located within a designated Social Forestry area established under the Decree of the Minister of Environment and Forestry No. 116 of 2024. It is managed by a legally recognised Village Forest Management Institution with a defined organisational structure and an approved Village Forest Management Plan and Annual Work Plan guiding restoration, conservation, and community engagement activities.' },
+        { k: 'seBenefit', name: 'Benefit Sharing Mechanism', ui: 'para', prompt: 'Elaborate existing benefit-sharing mechanism established for the project. It covers number of beneficiaries, type of benefit and the mechanism on benefit determination and disbursement. (long paragraph, max 100 words)', example: 'e.g. A benefit-sharing mechanism is established through the Village Forest Management Institution, covering 320 beneficiary households. Benefits include carbon-revenue shares, agroforestry income, and livelihood grants; allocation is decided in a participatory village assembly and disbursed annually via the institution’s managed account — 60% to community members, 25% to institutional operations, and 15% to a village conservation fund.' },
+        { k: 'seTenure', name: 'Indigenous Land Tenure', ui: 'para', prompt: 'Please describe relevant land governance, land use, or customary/community tenure considerations. (long paragraph, max 100 words)', example: 'e.g. The project is located on land managed under customary tenure or an ancestral domain by Indigenous People and Local Communities, recognised under national law (e.g. the Indigenous Peoples’ Rights Act (IPRA) of 1997 and covered by a Certificate of Ancestral Domain Title (CADT) in the Philippines). The area is managed through a recognised Indigenous governance structure (e.g. Indigenous Cultural Community), with project activities implemented following Free, Prior and Informed Consent (FPIC), and the community’s approved management plan (e.g. the Ancestral Domain Sustainable Development and Protection Plan (ADSDPP)).' },
+        { k: 'seMrv', name: 'MRV Institutional Capacity', ui: 'para', prompt: 'If the community is assigned to conduct MRV process, elaborate the steps they would take and what instrument they would use. (long paragraph, max 100 words)', example: 'e.g. The project will establish a monitoring, reporting, and verification (MRV) team comprising community representatives (e.g. the Village Forest Management Institution), local government agencies (e.g. the Forest Management Unit or the District Forestry Office), and technical partners (e.g. NGOs/CSOs or local universities). Standard operating procedures (SOPs) will guide data collection, quality assurance, reporting, and verification.', note: 'To develop a detailed Monitoring Plan, including Monitoring, Reporting, and Verification (MRV) indicators, please proceed to the <a href="create-monitoring-plan.html" style="color:#066653;font-weight:600">Monitoring Plan</a> feature.' },
+        { k: 'seSafeguard', name: 'Safeguard Information System', ui: 'para', prompt: 'Please describe any existing safeguard, risk management, or community feedback system relevant to the project area, including responsible actors and supporting procedures where available. (long paragraph, max 100 words)', example: 'e.g. A safeguard information system is coordinated by the project proponent together with the Village Forest Management Institution, recording how social and environmental safeguards are addressed and respected, drawing on national REDD+ Safeguards Information System guidance. It is updated periodically and made accessible to community members through village meetings.' },
+        { k: 'seGrievance', name: 'Grievance Redress Mechanism', ui: 'para', prompt: 'Please describe any available mechanism for receiving and responding to community feedback, concerns, or complaints related to the project. (long paragraph, max 100 words)', example: 'e.g. Community members can submit complaints through village facilitators, a suggestion box, or a dedicated contact number. Grievances are logged, acknowledged within seven days, and resolved by a village grievance committee; unresolved cases are escalated to the project proponent and, where needed, the relevant district authority.' },
+        { k: 'seAdaptive', name: 'Adaptive Management Response Time', ui: 'para', prompt: 'How long does it take for the community to respond emerging issues within the project area? (long paragraph, max 100 words)', example: 'e.g. The community typically responds within two to four weeks. Routine matters are handled at monthly institution meetings, while urgent issues (fire, illegal logging, flooding) trigger an immediate response by the village patrol team, followed by coordination with the project proponent and local government for adaptive management.' }
       ] }
     ] }
   ];
@@ -179,7 +131,7 @@
   var step = 1;
   var modal = null;
   var openSub = { s1: true, s2: true };
-  var openSec = { demography: true, social: false, economics: false, housing: false };
+  var openSec = { demography: true, social: false, economics: false, housing: false, governance: false };
   var fd = {};
   function lsKey() { return view === 'ccb' ? 'f03_ccb' : 'f03_gen'; }
   function loadFd() { try { fd = JSON.parse(localStorage.getItem(lsKey()) || '{}'); } catch (e) { fd = {}; } }
@@ -190,8 +142,8 @@
   document.body.appendChild(modalRoot);
 
   /* ── field renderers (structure only; values set in populate) ── */
-  function frow(q, hint, inner) {
-    return '<div class="frow"><div class="frow-lbl"><div class="frow-q" style="font-size:13px;font-weight:400">' + q + '</div>' +
+  function frow(q, hint, inner, cls) {
+    return '<div class="frow' + (cls ? ' ' + cls : '') + '"><div class="frow-lbl"><div class="frow-q" style="font-size:13px;font-weight:400">' + q + '</div>' +
       (hint ? '<div class="frow-hint">' + hint + '</div>' : '') + '</div><div class="frow-inp">' + inner + '</div></div>';
   }
   function fieldInput(f, scope) {
@@ -288,25 +240,140 @@
     return s1 + s2;
   }
 
-  /* ── Socio-economic (general step 5) ── */
+  /* ── Socio-economic form widgets ── */
+  function numIn(k, ph, label, plain) {
+    // plain = integer without thousand separator (e.g. a year)
+    return '<input class="fi fi-num" type="text" inputmode="numeric"' + (plain ? ' data-plain="1"' : '') + ' placeholder="' + esc(ph || '0') + '" data-scope="fd" data-k="' + k + '" aria-label="' + esc(label || k) + '" />';
+  }
+  /* format value with "." thousand separators; flag & strip non-numeric input */
+  function formatNumInput(el) {
+    var raw = el.value;
+    var invalid = /[^\d.,\s]/.test(raw);
+    el.classList.toggle('fi-invalid', invalid);
+    var err = el.nextElementSibling;
+    var hasErr = !!(err && err.classList && err.classList.contains('fi-num-err'));
+    if (invalid && !hasErr) {
+      err = document.createElement('span');
+      err.className = 'fi-num-err';
+      err.textContent = 'Unaccepted format — numbers only';
+      el.parentNode.insertBefore(err, el.nextSibling);
+    } else if (!invalid && hasErr) { err.remove(); }
+    var digits = raw.replace(/\D/g, '');
+    var formatted = el.hasAttribute('data-plain') ? digits : digits.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    if (formatted !== raw) {
+      var digitsBefore = raw.slice(0, el.selectionStart || 0).replace(/\D/g, '').length;
+      el.value = formatted;
+      var pos = 0, seen = 0;
+      while (pos < formatted.length && seen < digitsBefore) { if (/\d/.test(formatted[pos])) seen++; pos++; }
+      el.setSelectionRange(pos, pos);
+    }
+  }
+  function matrixHTML(ind) {
+    var sexes = [['m', 'Male (M)'], ['f', 'Female (F)'], ['o', 'Other (O)']];
+    var h = '<div class="se-tbl-wrap"><table class="se-tbl"><thead><tr><th>Age of group</th><th>Highest education level</th>' +
+      sexes.map(function (s) { return '<th>' + s[1] + '</th>'; }).join('') + '<th>Total (M+F+O)</th></tr></thead><tbody>';
+    MX_AGES.forEach(function (age, ai) {
+      MX_EDUS.forEach(function (edu, ei) {
+        h += '<tr>' + (ei === 0 ? '<td rowspan="3" class="se-tbl-age">' + esc(age) + '</td>' : '') +
+          '<td>' + esc(edu) + '</td>' +
+          sexes.map(function (s) { return '<td>' + numIn(ind.k + '_a' + ai + '_e' + ei + '_' + s[0], '0', age + ' ' + edu + ' ' + s[1]) + '</td>'; }).join('') +
+          '<td class="se-tbl-tot" data-mxt="a' + ai + '_e' + ei + '_t">0</td></tr>';
+      });
+      h += '<tr class="se-tbl-sub"><td colspan="2">Subtotal — ' + esc(age) + '</td>' +
+        sexes.map(function (s) { return '<td data-mxt="a' + ai + '_' + s[0] + '">0</td>'; }).join('') +
+        '<td data-mxt="a' + ai + '_t">0</td></tr>';
+    });
+    h += '<tr class="se-tbl-grand"><td colspan="2">Total population in the project area</td>' +
+      sexes.map(function (s) { return '<td data-mxt="g_' + s[0] + '">0</td>'; }).join('') +
+      '<td data-mxt="g_t">0</td></tr></tbody></table></div>';
+    return h;
+  }
+  function livelihoodHTML(ind) {
+    return '<div class="se-tbl-wrap"><table class="se-tbl"><thead><tr><th>Type of livelihood</th><th>Number of households</th></tr></thead><tbody>' +
+      LIVELIHOODS.map(function (lv, i) {
+        return '<tr><td>' + esc(lv) + '</td><td>' + numIn(ind.k + '_' + i, '0', lv) + '</td></tr>';
+      }).join('') +
+      '<tr class="se-tbl-grand"><td>Total households</td><td data-lvt="total">0</td></tr></tbody></table></div>';
+  }
+  function hhTableHTML(ind) {
+    return '<div class="se-tbl-wrap"><table class="se-tbl"><thead><tr><th>Livelihood</th><th>Households</th><th>Share</th></tr></thead><tbody>' +
+      HH_LIVELIHOODS.map(function (lv, i) {
+        return '<tr><td>' + esc(lv) + '</td><td>' + numIn(ind.k + '_' + i, '0', lv) + '</td><td class="se-tbl-tot" data-hhsh="' + i + '">—</td></tr>';
+      }).join('') + '</tbody></table></div>';
+  }
+  function iplcHTML(ind) {
+    var rows = fd[ind.k];
+    if (!Array.isArray(rows) || !rows.length) rows = [{}];
+    var h = rows.map(function (r, i) {
+      var sc = 'data-scope="iplc" data-i="' + i + '"';
+      return '<div class="se-iplc-row">Community <input class="fi" style="flex:1" placeholder="name" aria-label="Community name" ' + sc + ' data-k="name" /> consists of ' +
+        '<input class="fi fi-num" type="text" inputmode="numeric" style="width:90px" placeholder="0" aria-label="Number of individuals" ' + sc + ' data-k="num" /> individuals' +
+        (i > 0 ? '<button class="bio-del" aria-label="Remove community" data-act="delIplc" data-i="' + i + '">✕</button>' : '') + '</div>';
+    }).join('');
+    return h + '<button class="btn-add" data-act="addIplc">+ Add community</button>';
+  }
   function seFieldInput(ind) {
     var d = 'data-scope="fd" data-k="' + ind.k + '"';
     var al = ' aria-label="' + esc(ind.name) + '"';
-    if (ind.ui === 'auto') {
-      return '<textarea class="fi-ta auto" rows="3" ' + d + al + '></textarea>' +
-        '<div class="fi-sub">Auto-generated based on project data. You may edit based on your conditions.</div>';
+    if (ind.ui === 'matrix') return matrixHTML(ind);
+    if (ind.ui === 'livelihood') return livelihoodHTML(ind);
+    if (ind.ui === 'hhtable') return hhTableHTML(ind);
+    if (ind.ui === 'iplc') return iplcHTML(ind);
+    if (ind.ui === 'villages') {
+      return '<div class="fi-grid2"><div class="fi-col"><label>Number of villages</label>' + numIn(ind.k + '_num', 'e.g. 12', 'Number of villages') + '</div>' +
+        '<div class="fi-col"><label>Name of villages</label><input class="fi" placeholder="e.g. Phum Sambor, Teluk Pambang Village, Barangay Kobongcog" aria-label="Name of villages" data-scope="fd" data-k="' + ind.k + '_names" /></div></div>';
     }
-    if (ind.ui === 'select') {
-      var opts = '<option value="">— Select</option>' +
-        (ind.opts || []).map(function (o) { return '<option>' + esc(o) + '</option>'; }).join('');
-      return '<select class="fi" style="font-size:12px" ' + d + al + '>' + opts + '</select>';
+    if (ind.ui === 'employment') {
+      return '<div class="fi-grid2" style="grid-template-columns:1fr 1fr 1fr"><div class="fi-col"><label>Employed</label>' + numIn(ind.k + '_emp', '0', 'Employed') + '</div>' +
+        '<div class="fi-col"><label>Unemployed</label>' + numIn(ind.k + '_unemp', '0', 'Unemployed') + '</div>' +
+        '<div class="fi-col"><label>Economically inactive</label>' + numIn(ind.k + '_inactive', '0', 'Economically inactive') + '</div></div>';
     }
-    return '<textarea class="fi-ta" rows="3" placeholder="' + esc(ind.example || '') + '" ' + d + al + '></textarea>';
+    if (ind.ui === 'currency') {
+      var cur = '<select class="fi" style="font-size:12px;width:100px" aria-label="Currency" data-scope="fd" data-k="' + ind.k + '_cur"><option value="">Currency</option>' +
+        CURRENCIES.map(function (c) { return '<option>' + c + '</option>'; }).join('') + '</select>';
+      return '<div style="display:flex;gap:8px">' + cur + numIn(ind.k + '_amt', ind.example || '0', ind.name) + '</div>';
+    }
+    if (ind.ui === 'short') return '<textarea class="fi-ta" rows="2" placeholder="' + esc(ind.example || '') + '" ' + d + al + '></textarea>';
+    if (ind.ui === 'para') {
+      return '<textarea class="fi-ta" rows="5" placeholder="' + esc(ind.example || '') + '" ' + d + al + '></textarea>' +
+        '<div class="fi-sub">Max 100 words.</div>';
+    }
+    return numIn(ind.k, ind.example, ind.name, ind.plain);
   }
   function seRow(ind) {
-    var meta = '<div class="se-meta"><span class="se-badge lvl">' + esc(ind.level) + '</span></div>' +
-      (ind.prompt ? '<div class="se-prompt">' + esc(ind.prompt) + '</div>' : '');
-    return frow(esc(ind.name), meta, seFieldInput(ind));
+    var meta = ind.prompt ? '<div class="se-prompt">' + esc(ind.prompt) + '</div>' : '';
+    var note = ind.note ? '<div class="fi-sub" style="margin-top:8px">' + ind.note + '</div>' : '';
+    return frow(esc(ind.name), meta, seFieldInput(ind) + note, ind.ui === 'matrix' ? 'frow-stack' : '');
+  }
+  function toNum(v) { return parseInt(String(v == null ? '' : v).replace(/[^0-9]/g, ''), 10) || 0; }
+  function sep(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }
+  function setCell(attr, id, txt) {
+    var el = root.querySelector('[' + attr + '="' + id + '"]');
+    if (el) el.textContent = txt;
+  }
+  function recalcTables() {
+    if (view === 'ccb') return;
+    var g = { m: 0, f: 0, o: 0 };
+    MX_AGES.forEach(function (_, ai) {
+      var s = { m: 0, f: 0, o: 0 };
+      MX_EDUS.forEach(function (_, ei) {
+        var rt = 0;
+        ['m', 'f', 'o'].forEach(function (x) {
+          var v = toNum(fd['seMatrix_a' + ai + '_e' + ei + '_' + x]);
+          s[x] += v; rt += v;
+        });
+        setCell('data-mxt', 'a' + ai + '_e' + ei + '_t', sep(rt));
+      });
+      ['m', 'f', 'o'].forEach(function (x) { g[x] += s[x]; setCell('data-mxt', 'a' + ai + '_' + x, sep(s[x])); });
+      setCell('data-mxt', 'a' + ai + '_t', sep(s.m + s.f + s.o));
+    });
+    ['m', 'f', 'o'].forEach(function (x) { setCell('data-mxt', 'g_' + x, sep(g[x])); });
+    setCell('data-mxt', 'g_t', sep(g.m + g.f + g.o));
+    var lvTotal = LIVELIHOODS.reduce(function (n, _, i) { return n + toNum(fd['seLivelihood_' + i]); }, 0);
+    setCell('data-lvt', 'total', sep(lvTotal));
+    var hhVals = HH_LIVELIHOODS.map(function (_, i) { return toNum(fd['seHhLivelihood_' + i]); });
+    var hhTotal = hhVals.reduce(function (a, b) { return a + b; }, 0);
+    hhVals.forEach(function (v, i) { setCell('data-hhsh', i, hhTotal ? Math.round(v / hhTotal * 100) + '%' : '—'); });
   }
   function seSection(sec) {
     var open = !!openSec[sec.key];
@@ -326,10 +393,10 @@
   function genSocioStepHTML() {
     var sec = SOCIO[step - 1];
     if (!sec) return '';
-    return '<p class="se-intro">Socio-economic indicators for <strong>' + esc(sec.title) + '</strong> are drawn from official statistics (BPS). ' +
-      'Fields are auto-filled from project data where available, and you can edit any of them.</p>' +
+    return '<p class="se-intro">Socio-economic form for <strong>' + esc(sec.title) + '</strong>. ' +
+      'Fill in the fields below — tables are totalled automatically, and you can edit any answer at any time.</p>' +
       sec.subs.map(function (sub) {
-        return '<div class="se-subsec"><div class="se-subsec-title">' + esc(sub.title) + '</div>' +
+        return '<div class="se-subsec">' + (sub.title ? '<div class="se-subsec-title">' + esc(sub.title) + '</div>' : '') +
           sub.inds.map(seRow).join('') + '</div>';
       }).join('');
   }
@@ -361,7 +428,14 @@
     return Object.keys(fd).filter(function (k) { return fd[k] && String(fd[k]).trim(); }).length;
   }
 
-  function isFilled(k) { var v = fd[k]; return v != null && String(v).trim() !== ''; }
+  function isFilled(k) {
+    var v = fd[k];
+    if (Array.isArray(v)) return v.some(function (r) { return r && Object.keys(r).some(function (x) { return String(r[x] || '').trim(); }); });
+    if (v != null && String(v).trim() !== '') return true;
+    // composite widgets store sub-values as "<k>_suffix"
+    for (var kk in fd) { if (kk.indexOf(k + '_') === 0 && fd[kk] != null && String(fd[kk]).trim() !== '') return true; }
+    return false;
+  }
   function socioKeys(sec) {
     var ks = [];
     sec.subs.forEach(function (sub) { sub.inds.forEach(function (ind) { ks.push(ind.k); }); });
@@ -409,8 +483,8 @@
       '<div class="doc-card-badge">CCB Standard</div><div class="doc-card-title">Climate, Community and Biodiversity (CCB) Standard</div>' +
       '<div class="doc-card-desc">Generate a Climate, Community and Biodiversity (CCB) Standards project document. Covers 5 sections: Basic Information, General Description, Climate/Carbon Accounting, Community Impacts, and Biodiversity/Nature criteria — including full flora and fauna inventories.</div></div>' +
       '<div class="doc-card" data-act="pick" data-doc="general" style="padding:24px"><div class="doc-card-icon"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M3 9h18M9 21V9" stroke="currentColor" stroke-width="2"/></svg></div>' +
-      '<div class="doc-card-badge">Socio-Economic</div><div class="doc-card-title">Pre Feasibility Document</div>' +
-      '<div class="doc-card-desc">Socio-economic data entry drawn from official statistics (BPS), covering 4 sections: Demography, Social, Economics, and Housing & Settlements.</div></div>' +
+      '<div class="doc-card-badge">Socio-Economic</div><div class="doc-card-title">Feasibility Document</div>' +
+      '<div class="doc-card-desc">Socio-economic data entry covering 5 sections: Demography, Social, Economics, Housing and Settlements, and Governance.</div></div>' +
       '</div></div>';
   }
 
@@ -419,7 +493,7 @@
     var steps = isCcb ? CCB_STEPS : GEN_STEPS;
     var isLast = step === steps.length;
     var title = isCcb ? 'Generate Project Document' : 'Socio-Economic — Form Data Entry';
-    var badge = isCcb ? 'CCB Standard v3.1' : 'Pre-feasibility Document Template';
+    var badge = isCcb ? 'CCB Standard v3.1' : 'Feasibility Document Template';
     var secHd = isCcb ? CCB_TITLES[step - 1] : (GEN_STEPS[step - 1] ? GEN_STEPS[step - 1].label : '');
     var prev = step > 1 ? '<button class="btn-draft" data-act="prev">← Previous</button>' : '';
     var nextIcon = isLast ? '' : '<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
@@ -453,12 +527,18 @@
       var r = (fd[bt] || [{}])[i] || {};
       inp.value = r[k] || '';
     });
+    root.querySelectorAll('[data-scope="iplc"]').forEach(function (inp) {
+      var i = +inp.getAttribute('data-i'), k = inp.getAttribute('data-k');
+      var r = (fd.seIplc || [{}])[i] || {};
+      inp.value = r[k] || '';
+    });
   }
 
   function render() {
     if (view === 'picker') { root.innerHTML = pickerHTML(); modalRoot.innerHTML = ''; return; }
     root.innerHTML = formHTML();
     populate();
+    recalcTables();
   }
 
   function updateProgress() {
@@ -505,8 +585,8 @@
         '<div class="modal-btns"><button class="mb-solid full" data-act="processing">Download CCB Document</button></div></div>');
     } else if (modal === 'dl') {
       h = ov('<div class="f03-modal">' + modalX() + '<div class="modal-icon">' + DL_ICON + '</div>' +
-        '<div class="modal-title">Generate Pre Feasibility Document</div>' +
-        '<p class="modal-desc">Your socio-economic project data will be compiled into a Pre Feasibility document. The document will be sent to your registered email address.</p>' +
+        '<div class="modal-title">Generate Feasibility Document</div>' +
+        '<p class="modal-desc">Your socio-economic project data will be compiled into a Feasibility document. The document will be sent to your registered email address.</p>' +
         '<div class="modal-btns"><button class="mb-solid full" data-act="processing">Generate Document</button></div></div>');
     } else if (modal === 'processing') {
       var procDesc = view === 'ccb'
@@ -530,12 +610,15 @@
   root.addEventListener('input', function (e) {
     var t = e.target, sc = t.getAttribute && t.getAttribute('data-scope');
     if (!sc) return;
+    if (t.classList && t.classList.contains('fi-num')) formatNumInput(t);
     var k = t.getAttribute('data-k');
     if (sc === 'fd') { fd[k] = t.value; }
     else if (sc === 'prop') { var pi = +t.getAttribute('data-i'); fd.proponents = fd.proponents || [{}]; fd.proponents[pi] = fd.proponents[pi] || {}; fd.proponents[pi][k] = t.value; }
     else if (sc === 'bio') { var bt = t.getAttribute('data-bt'), bi = +t.getAttribute('data-i'); fd[bt] = fd[bt] || [{}]; fd[bt][bi] = fd[bt][bi] || {}; fd[bt][bi][k] = t.value; }
+    else if (sc === 'iplc') { var ii = +t.getAttribute('data-i'); fd.seIplc = fd.seIplc || [{}]; fd.seIplc[ii] = fd.seIplc[ii] || {}; fd.seIplc[ii][k] = t.value; }
     save();
     updateProgress();
+    if (sc === 'fd' && /^se(Matrix|Livelihood|HhLivelihood)_/.test(k)) recalcTables();
   });
   root.addEventListener('change', function (e) {
     var t = e.target;
@@ -553,7 +636,7 @@
     var act = e.target.closest('[data-act]');
     if (!act) return;
     var a = act.getAttribute('data-act');
-    if (a === 'pick') { view = act.getAttribute('data-doc'); step = 1; openSub = { s1: true, s2: true }; openSec = { demography: true, social: false, economics: false, housing: false }; loadFd(); render(); }
+    if (a === 'pick') { view = act.getAttribute('data-doc'); step = 1; openSub = { s1: true, s2: true }; openSec = { demography: true, social: false, economics: false, housing: false, governance: false }; loadFd(); render(); }
     else if (a === 'toDetail') { window.location.href = 'project-detail.html'; }
     else if (a === 'back' || a === 'backToPicker') { view = 'picker'; modal = null; step = 1; render(); }
     else if (a === 'save') { modal = 'save'; renderModal(); }
@@ -566,6 +649,8 @@
     }
     else if (a === 'addProp') { fd.proponents = (fd.proponents || [{}]).concat([{}]); save(); render(); }
     else if (a === 'delProp') { var di = +act.getAttribute('data-i'); fd.proponents = (fd.proponents || [{}]).filter(function (_, j) { return j !== di; }); save(); render(); }
+    else if (a === 'addIplc') { fd.seIplc = (fd.seIplc || [{}]).concat([{}]); save(); render(); }
+    else if (a === 'delIplc') { var ri = +act.getAttribute('data-i'); fd.seIplc = (fd.seIplc || [{}]).filter(function (_, j) { return j !== ri; }); save(); render(); }
     else if (a === 'addBio') { var abt = act.getAttribute('data-bt'); fd[abt] = (fd[abt] || [{}]).concat([{}]); save(); render(); }
     else if (a === 'delBio') { var bt2 = act.getAttribute('data-bt'), dbi = +act.getAttribute('data-i'); fd[bt2] = (fd[bt2] || [{}]).filter(function (_, j) { return j !== dbi; }); save(); render(); }
     else if (a === 'toggleSub') { var sub = act.getAttribute('data-sub'); openSub[sub] = !openSub[sub]; render(); }

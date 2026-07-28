@@ -7,7 +7,7 @@
 
 /* ---- Step 2 — Site Characterisation context panes (Figma renders) ---- */
 .ctx-pane[hidden] { display: none; }
-.ctx-pane img { display: block; width: 100%; height: auto; }
+.ctx-pane > img { display: block; width: 100%; height: auto; }
 
 /* ---- Step 5 — Potential Benefit (.p5) ---- */
   .p5{font-family:'Poppins',sans-serif;color:#252525;line-height:1.5;width:100%;
@@ -31,18 +31,12 @@
   .p5 .wex{font:600 9px/1 'Poppins';letter-spacing:.04em;text-transform:uppercase;color:#8f611c;background:#fdf6ea;border:1px solid #f2dcb0;border-radius:999px;padding:4px 9px;}
   .p5 .sum-title{font:600 16px/1.2 'Poppins';color:#1a202c;margin:1px 0;}
   .p5 .sum-sub{display:none;}
-  .p5 .sum-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:12px;margin-top:11px;}
-  .p5 .carbon-box{background:#f3faf7;border:1px solid #cfe9df;border-radius:8px;padding:12px 14px;display:flex;flex-direction:column;justify-content:center;}
-  .p5 .carbon-val{font:700 27px/1 'Poppins';color:#044c3e;display:flex;align-items:baseline;gap:6px;letter-spacing:-.5px;}
-  .p5 .carbon-val small{font:600 13px/1 'Poppins';color:#077f68;}
-  .p5 .carbon-lab{font-size:10.5px;color:#68727d;margin-top:6px;text-transform:uppercase;letter-spacing:.02em;font-weight:600;}
-  .p5 .carbon-rate{display:inline-flex;align-items:center;gap:5px;margin-top:8px;font-size:11px;color:#066653;background:#e9f8f1;border:1px solid #cfe9df;border-radius:999px;padding:4px 9px;align-self:flex-start;}
-  .p5 .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
+  .p5 .stat-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) minmax(0,1.7fr);gap:7px;margin-top:11px;}
   .p5 .stat{background:#fafbfc;border:1px solid #eaecf0;border-radius:6px;padding:8px 11px;display:flex;flex-direction:column;justify-content:center;}
   .p5 .stat-val{font:700 17px/1 'Poppins';color:#1a202c;}
   .p5 .stat-lab{font-size:9.5px;color:#68727d;text-transform:uppercase;letter-spacing:.04em;font-weight:600;margin-top:3px;}
-  .p5 .stat.pathways{grid-column:1/-1;}
-  .p5 .stat.pathways .stat-lab{margin-bottom:7px;}
+  .p5 .stat.pathways .stat-lab{margin:0 0 6px;}
+  @media (max-width:560px){ .p5 .stat-grid{grid-template-columns:1fr 1fr;} .p5 .stat.pathways{grid-column:1/-1;} }
   .p5 .pchips{display:flex;gap:6px;flex-wrap:wrap;}
   .p5 .pchip{font:700 10px/1 'Poppins';letter-spacing:.03em;text-transform:uppercase;padding:5px 9px;border-radius:999px;display:inline-flex;gap:5px;align-items:center;}
   .p5 .pchip span{opacity:.72;font-weight:600;}
@@ -128,6 +122,7 @@
   .p5 .fcard.answered:not(.flipped) .front{background:linear-gradient(180deg,var(--accent-soft) 0%,#fff 32%);}
   .p5 .back{transform:rotateY(180deg);background:#fafbfc;}
   .p5 .flip-tab{position:absolute;top:0;right:0;z-index:2;display:inline-flex;align-items:center;gap:5px;font:700 9.5px/1 'Poppins';letter-spacing:.05em;text-transform:uppercase;color:#fff;background:var(--accent-deep);padding:6px 11px 6px 12px;border-bottom-left-radius:10px;}
+  .p5 .flip-tab .ft-txt:empty{display:none;}
   .p5 .face-lab{display:inline-flex;align-items:center;gap:5px;font:700 9.5px/1 'Poppins';letter-spacing:.09em;text-transform:uppercase;color:#68727d;margin-bottom:7px;}
   .p5 .face-lab.answered{color:var(--accent-deep);}
   .p5 .face-lab.answered .ic{color:var(--accent);}
@@ -144,6 +139,11 @@
   .p5 .back-btn:hover{background:var(--accent-soft);color:var(--accent-deep);border-color:var(--accent-line);}
   .p5 .chev-back{transform:rotate(180deg);}
   .p5 .back-lab{margin-bottom:0;}
+  /* Reset sits in the back-face header row (top-right) so it adds no extra line;
+     only shown once the card carries a specification. */
+  .p5 .reset-btn{margin-left:auto;display:none;align-items:center;gap:5px;flex:none;cursor:pointer;background:#fff;border:1px solid #e5e7eb;border-radius:4px;color:#68727d;font:700 9.5px/1 'Poppins';letter-spacing:.06em;text-transform:uppercase;padding:7px 9px;transition:.15s;}
+  .p5 .reset-btn:hover{background:var(--accent-soft);color:var(--accent-deep);border-color:var(--accent-line);}
+  .p5 .fcard.answered .reset-btn{display:inline-flex;}
   .p5 .prompt{font:600 13px/1.45 'Poppins';color:#1a202c;margin-bottom:12px;}
   .p5 .opts{display:flex;flex-direction:column;gap:8px;}
   .p5 .opt{display:flex;gap:10px;align-items:flex-start;text-align:left;cursor:pointer;width:100%;background:#fff;border:1px solid #e5e7eb;border-radius:6px;padding:11px 12px;font:inherit;transition:.15s;}

@@ -1,105 +1,470 @@
 /* ============================================================
-   F02 · Step 2 — General Context  (pixel-faithful from Figma)
-   Scoped to .ctx-pane[data-ctx="general"] inside the Data Analyser
+   F02 · Step 2 — General Context  (Figma node 3892-33528)
+   Live rebuild of the six section cards, scoped under .gc inside
+   .ctx-pane[data-ctx="general"]. Assets: assets/f01-step2/genctx/.
+   Loaded by interactive-map.html and project-detail.html.
    ============================================================ */
 
-.gc { display: flex; flex-direction: column; gap: 14px; }
+.gc { display: flex; flex-direction: column; gap: 20px; padding: 20px; }
 
-/* ---------- Section card ---------- */
-.gc-sec {
-  border: 1px solid #e1e6e4;
-  border-radius: 10px;
-  background: #fff;
-  overflow: hidden;
+/* ---------- Section card (.base Section Information Data Analyser) ---------- */
+.gc-card {
+  display: flex; flex-direction: column; gap: 20px;
+  padding: 20px;
+  border: 3px solid #f1f4f8;                       /* Neutral/200 */
+  border-radius: 8px;
+  background: linear-gradient(-68deg, #ffffff 0.5%, rgba(255,255,255,0.14) 112%);
 }
-.gc-sec__head {
-  display: flex; align-items: flex-start; gap: 11px;
-  padding: 14px 16px;
+.gc-card__head { display: flex; align-items: center; gap: 5px; }
+.gc-card__head h4 {
+  margin: 0; font-family: var(--font-text); font-size: 14px; font-weight: 600;
+  line-height: 22px; color: #066653; text-transform: uppercase;
 }
-.gc-sec__ic {
-  flex: none; width: 34px; height: 34px; border-radius: 8px;
+.gc-info { width: 20px; height: 20px; flex: none; cursor: pointer; }
+
+/* Sub-blocks inside a card (Administration, Historical Deforestation, …) */
+.gc-block { display: flex; flex-direction: column; gap: 4px; }
+.gc-sub {
+  margin: 0; font-family: var(--font-text); font-size: 16px; font-weight: 500;
+  line-height: 24px; color: #252525;
+}
+.gc-p { margin: 0; font-size: 14px; line-height: 22px; color: #252525; }
+.gc-p b { font-weight: 700; }
+.gc-p--lg { font-size: 16px; line-height: 1.42; color: #2d3648; letter-spacing: -0.01em; }
+
+/* Italic footnote link line */
+.gc-note-it { margin: 8px 0 0; font-size: 12px; line-height: 20px; font-style: italic; font-weight: 500; color: #68727d; }
+.gc-note-it a { color: #252525; text-decoration: underline; }
+.gc-note-it--center { align-self: center; text-align: center; }
+
+/* ---------- Disclaimer alert (Widget= Alert) ---------- */
+.gc-alert {
+  display: flex; align-items: flex-start; gap: 8px;
+  padding: 10px; border-radius: 6px;
+  background: #fdf6ea; border: 1px solid #efa22f;   /* Warning/500 */
+}
+.gc-alert img { width: 30px; height: 30px; flex: none; }
+.gc-alert p { margin: 0; font-size: 12px; line-height: 20px; font-weight: 500; color: #252525; }
+.gc-alert a { color: #8f611c; font-weight: 700; text-decoration: underline; }
+
+/* ---------- Data source line ---------- */
+.gc-src { margin: 0; font-size: 11px; line-height: 18px; color: #68727d; }
+.gc-src b { font-weight: 700; }
+.gc-src a { color: inherit; font-style: italic; text-decoration: underline; }
+
+/* ============================================================
+   1 · Ecosystem type identification
+   ============================================================ */
+.gc-eco { display: flex; gap: 20px; align-items: flex-start; }
+.gc-eco__map {
+  margin: 0; flex: 1 1 0; min-width: 0; height: 293px;
+  border: 1.5px solid #ffffff; border-radius: 12px; overflow: hidden;
+  background: rgba(255,255,255,0.1);
+  box-shadow: 1.5px 3px 3px rgba(0,0,0,0.07), 11px 8px 14px rgba(0,0,0,0.07);
+}
+.gc-eco__map img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.gc-eco__side { flex: none; width: 355px; display: flex; flex-direction: column; gap: 16px; }
+.gc-eco__chartrow { display: flex; gap: 10px; align-items: flex-end; }
+.gc-donut { position: relative; width: 184px; height: 184px; flex: none; }
+.gc-donut img { display: block; width: 100%; height: 100%; }
+.gc-donut__c {
+  position: absolute; inset: 0; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; text-align: center; color: #252525;
+}
+.gc-donut__c span { font-size: 16px; font-weight: 500; line-height: 1.3; }
+.gc-donut__c b { font-family: var(--font-display); font-size: 20px; font-weight: 700; letter-spacing: -0.01em; }
+.gc-legend { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.gc-legend li { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 500; color: #000; white-space: nowrap; }
+.gc-legend i { width: 12px; height: 12px; border-radius: 3px; flex: none; }
+
+/* ============================================================
+   2 · Administration & zoning — table
+   ============================================================ */
+.gc-table {
+  width: 100%; margin-top: 8px;
+  border-collapse: separate; border-spacing: 0;
+  border-radius: 6px; overflow: hidden;
+  font-size: 13px; line-height: 20px;
+}
+.gc-table th, .gc-table td {
+  height: 40px; padding: 8px 12px; text-align: left;
+  border: 1px solid #eaebf0;                        /* Stroke/base */
+}
+.gc-table th { background: #066653; color: #ffffff; font-weight: 500; }
+.gc-table th:first-child { width: 154px; }
+.gc-table th:last-child { width: 120px; }
+.gc-table td { background: #ffffff; color: #2d3648; font-weight: 400; }
+.gc-table tbody tr:nth-child(even) td { background: #f5f6f9; }
+
+/* ============================================================
+   3 · Terrain
+   ============================================================ */
+.gc-terrain { margin: 0; height: 162px; border-radius: 6px; overflow: hidden; background: #000; }
+.gc-terrain img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.gc-slopes { display: flex; flex-direction: column; gap: 12px; padding: 12px 0; }
+.gc-slope .l {
+  display: flex; align-items: baseline; justify-content: space-between;
+  margin-bottom: 4px; font-family: var(--font-override); font-size: 12px;
+}
+.gc-slope .l span { color: #4d4d4d; }
+.gc-slope .l b { color: #333333; font-weight: 500; }
+.gc-slope .t { height: 8px; border-radius: 4px; background: #f2f2f2; overflow: hidden; }
+.gc-slope .t i { display: block; height: 100%; border-radius: 4px; }
+
+/* ============================================================
+   4 · Deforestation analysis
+   ============================================================ */
+.gc-def { display: flex; gap: 20px; align-items: stretch; margin-top: 8px; }
+.gc-def__map {
+  margin: 0; flex: none; width: 355px; height: 238px;
+  border: 1.5px solid #ffffff; border-radius: 12px; overflow: hidden;
+  box-shadow: 1.5px 3px 3px rgba(0,0,0,0.07), 11px 8px 14px rgba(0,0,0,0.07);
+}
+.gc-def__map--plain { border: none; box-shadow: none; height: 247px; width: 350px; }
+.gc-def__map img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.gc-def__side {
+  flex: 1 1 0; min-width: 0;
+  display: flex; flex-direction: column; justify-content: space-between; gap: 12px;
+}
+.gc-big {
+  margin: 4px 0 0; font-family: var(--font-display); font-weight: 600;
+  font-size: 24px; line-height: 30px; color: #252525; letter-spacing: -0.01em;
+}
+.gc-big small { font-size: 24px; font-weight: 400; }
+.gc-chip {
+  align-self: flex-start;
+  display: flex; gap: 10px; align-items: center;
+  padding: 4px 10px; border-radius: 4px;
+  background: #fafbfc; border: 1px solid #efeff1;
+}
+.gc-chip span { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 500; color: #4a5468; white-space: nowrap; }
+.gc-chip i { width: 12px; height: 12px; border-radius: 50%; flex: none; }
+
+/* ============================================================
+   5 · Landcover
+   ============================================================ */
+.gc-lcgrid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 16px 10px; margin-top: 8px; width: 100%;
+}
+.gc-lcitem { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.gc-lcitem > img { width: 80px; height: 80px; flex: none; }
+.gc-lcitem > div { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.gc-lcitem span { font-size: 14px; font-weight: 500; line-height: 22px; color: #252525; }
+.gc-lcitem b { font-family: var(--font-display); font-size: 24px; font-weight: 600; line-height: 30px; color: #20293a; letter-spacing: -0.01em; }
+.gc-lcitem em {
+  align-self: flex-start; font-style: normal;
+  font-family: var(--font-override); font-size: 14px; font-weight: 500; line-height: 20px; color: #252525;
+  background: #f5f6f8; border-radius: 8px; padding: 2px 8px;
+}
+
+/* ============================================================
+   6 · Natural disaster risk
+   ============================================================ */
+.gc-ndgrid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 16px 12px; margin-top: 8px; width: 100%;
+}
+.gc-nditem { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.gc-nditem figure { margin: 0; height: 98px; border-radius: 6px; overflow: hidden; }
+.gc-nditem figure img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.gc-nditem span { font-size: 14px; font-weight: 500; line-height: 22px; color: #252525; }
+.gc-nditem b { font-family: var(--font-display); font-size: 24px; font-weight: 600; line-height: 30px; color: #20293a; letter-spacing: -0.01em; }
+
+/* ============================================================
+   NATURE CONTEXT  (Figma node 3892-33553)
+   Reuses .gc-card / .gc-alert / .gc-src above; .nc* = Nature-only.
+   Assets: assets/f01-step2/natctx/
+   ============================================================ */
+
+/* ---------- 1 · Habitat area ---------- */
+.nc-habitat { display: flex; gap: 20px; align-items: stretch; margin-top: 8px; }
+.nc-habitat__grid { flex: 1 1 0; min-width: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.nc-stat {
+  position: relative; overflow: hidden;
+  display: flex; flex-direction: column; align-items: flex-start;
+  padding: 8px 16px 8px 12px;
+  border: 1px solid #e2e8ef; border-radius: 8px;   /* Neutral/300 */
+}
+.nc-stat span { font-size: 14px; font-weight: 500; line-height: 22px; color: #252525; }
+.nc-stat b {
+  font-family: var(--font-display); font-size: 28px; font-weight: 500;
+  line-height: 36px; color: #066653; letter-spacing: -0.015em;
+}
+.nc-stat img { position: absolute; right: 0; top: -2px; width: 80px; height: 74px; }
+.nc-total {
+  flex: none; width: 141px;
+  display: flex; flex-direction: column; justify-content: space-between;
+  padding: 12px; border-radius: 8px; background: #04473a;
+}
+.nc-total span { font-size: 16px; font-weight: 500; line-height: 1.45; color: #e2e7f0; letter-spacing: -0.03em; }
+.nc-total b {
+  display: block; font-family: var(--font-display); font-size: 32px; font-weight: 600;
+  line-height: 42px; color: #feffff; letter-spacing: -0.015em;
+}
+.nc-total em {
+  display: block; font-style: normal; font-family: var(--font-display);
+  font-size: 24px; font-weight: 400; line-height: 30px; color: #feffff; letter-spacing: -0.01em;
+}
+
+/* ---------- 2 · Indicative key species presence ---------- */
+.nc-splists { display: flex; flex-direction: column; gap: 16px; margin-top: 8px; }
+.nc-splist {
+  display: flex; align-items: center; gap: 20px;
+  padding: 8px 16px 8px 12px;
+  border: 1px solid #e2e8ef; border-radius: 8px;
+}
+.nc-splist__ic { width: 80px; height: 74px; flex: none; }
+.nc-splist__id { flex: none; width: 140px; }
+.nc-splist__id span { display: block; font-size: 14px; font-weight: 500; line-height: 22px; color: #252525; }
+.nc-splist__id b {
+  font-family: var(--font-display); font-size: 28px; font-weight: 500;
+  line-height: 36px; color: #066653; letter-spacing: -0.015em;
+}
+.nc-splist ul {
+  flex: 1 1 0; min-width: 0; list-style: none; margin: 0; padding: 0 0 0 20px;
+  display: flex; flex-direction: column; gap: 4px;
+  border-left: 1px solid #e2e8ef;
+}
+.nc-splist li {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 12px; font-weight: 500; line-height: 20px; color: #4a5468;
+}
+.nc-splist li::before {
+  content: ''; width: 10px; height: 10px; border-radius: 50%; flex: none;
+  background: var(--dot, #1da3dc);
+}
+.nc-splist li i { font-style: normal; }
+.nc-splist li em { font-style: italic; }
+
+/* ---------- 3 · Conservation significance ---------- */
+.nc-cons { display: flex; gap: 20px; align-items: stretch; }
+.nc-radar {
+  position: relative; margin: 0; flex: none; width: 299px; height: 247px;
+  border-radius: 6px; overflow: hidden; background: #1f1f1e;
+}
+/* Exact Figma crop — the source render carries a caption above the chart
+   that the design frames out. */
+.nc-radar img { position: absolute; left: -22px; top: -49px; width: 357px; height: 365px; }
+.nc-cons__side { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; justify-content: space-between; gap: 12px; }
+.gc-chip--sq i { border-radius: 3px; }
+
+/* ---------- 4 · Forest Landscape Integrity Index ---------- */
+.nc-flii { display: flex; gap: 20px; align-items: flex-start; }
+.nc-flii > .gc-p { flex: 1 1 0; min-width: 0; color: #2d3648; }
+.nc-score {
+  flex: none; width: 170px; height: 168px;
+  display: flex; flex-direction: column; justify-content: space-between;
+  padding: 12px; border-radius: 8px; background: #04473a;
+}
+.nc-score__t { font-size: 16px; font-weight: 500; line-height: 1.45; color: #e2e7f0; letter-spacing: -0.03em; }
+.nc-score b {
+  display: block; font-family: var(--font-display); font-size: 40px; font-weight: 600;
+  line-height: 48px; color: #feffff; letter-spacing: -0.02em;
+}
+.nc-score p { margin: 0; font-size: 11px; line-height: 18px; color: #f9f9f9; opacity: .7; }
+/* Level pills — shared by the score card and the gauge */
+.nc-pill {
+  display: inline-flex; align-items: center; justify-content: center;
+  height: 25px; padding: 4px 18px; border-radius: 16px;
+  font-family: var(--font-text); font-size: 14px; font-weight: 600; font-style: normal;
+  line-height: 22px; white-space: nowrap;
+}
+.nc-pill--high { background: #e9f8f1; border: 1px solid #27b973; color: #104a2e; }
+.nc-pill--med  { background: #fdf6ea; border: 1px solid #efa22f; color: #604113; }
+.nc-pill--low  { background: #ffefee; border: 1px solid #e33b32; color: #901f1b; }
+.nc-score .nc-pill { color: #111729; }
+/* Vertical gradient gauge with tick marks and range labels */
+.nc-gauge { position: relative; flex: none; width: 226px; height: 168px; }
+.nc-gauge__bar {
+  position: absolute; left: 49px; top: 0; width: 15px; height: 168px;
+  background: linear-gradient(0deg, #bf0039 0%, #f9e682 56.4%, #ffef5c 62.5%, #d1c662 79.1%, #30b85e 100%);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.13);
+}
+.nc-gauge__tick { position: absolute; left: 12px; display: flex; align-items: center; gap: 7px; }
+.nc-gauge__tick span {
+  width: 32px; text-align: right;
+  font-size: 14px; font-weight: 500; line-height: 22px; color: #111729;
+}
+.nc-gauge__tick::after { content: ''; width: 30px; height: 3px; background: #444a51; }
+.nc-gauge .nc-pill { position: absolute; left: 85px; width: 75px; padding: 4px 6px; }
+.nc-gauge__rng {
+  position: absolute; left: 168px;
+  font-size: 12px; font-weight: 500; line-height: 20px; color: #979aa0; white-space: nowrap;
+}
+
+/* ---------- 5 · Key Biodiversity Area ---------- */
+.nc-kba {
+  position: relative; height: 284px; margin-top: 8px;
+  border: 2px solid #f1f4f8; border-radius: 12px; overflow: hidden;
+  box-shadow: 2px 4px 4px rgba(0,0,0,0.07), 14px 10px 18px rgba(0,0,0,0.07);
+}
+.nc-kba > img { position: absolute; left: 0; top: -23.5%; width: 100%; height: auto; }
+.nc-kba__card {
+  position: absolute; left: 20px; top: 20px;
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  padding: 8px; border-radius: 10px; background: #ffffff; text-align: center;
+}
+.nc-kba__card span { font-size: 14px; font-weight: 600; line-height: 22px; color: #252525; }
+.nc-kba__card b {
+  font-family: var(--font-display); font-size: 32px; font-weight: 600;
+  line-height: 42px; color: #252525; letter-spacing: -0.015em;
+}
+.nc-kba__lg {
+  position: absolute; left: 20px; bottom: 17px;
+  display: flex; align-items: center; gap: 10px;
+  font-size: 12px; font-weight: 600; color: #20293a; letter-spacing: -0.05em;
+}
+.nc-kba__lg i { width: 16px; height: 16px; border-radius: 50%; background: #04473a; flex: none; }
+
+/* ---------- 6 · Endangered tree species ---------- */
+.nc-tree {
+  display: flex; gap: 16px; align-items: stretch;
+  padding: 12px; border-radius: 8px; background: #04473a;
+}
+.nc-tree img {
+  flex: none; width: 200px; height: 88px; object-fit: cover;
+  border-radius: 6px; background: #ffffff;
+}
+.nc-tree > div { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 10px; justify-content: center; }
+.nc-tree span { font-size: 11px; font-weight: 500; line-height: 18px; color: #ffffff; }
+.nc-tree b {
+  font-family: var(--font-display); font-size: 40px; font-weight: 600;
+  line-height: 48px; color: #feffff; letter-spacing: -0.02em;
+}
+
+/* ============================================================
+   CLIMATE CONTEXT  (Figma node 3892-33578)
+   Reuses .gc-card / .gc-alert / .gc-src above; .cl* = Climate-only.
+   Charts are CSS bars — no chart library. Assets: assets/f01-step2/climctx/
+   ============================================================ */
+
+/* ---------- 1 · Carbon information ---------- */
+.cl-carbon { display: flex; gap: 20px; align-items: flex-start; margin-top: 8px; }
+.cl-carbon > .gc-p { flex: 1 1 0; min-width: 0; }
+.cl-total {
+  flex: none; width: 250px;
+  display: flex; flex-direction: column; gap: 6px;
+  padding: 12px 16px; border-radius: 8px; background: #0d4c72;
+}
+.cl-total span { font-size: 14px; font-weight: 500; line-height: 22px; color: #e2e7f0; }
+.cl-total b {
+  font-family: var(--font-display); font-size: 26px; font-weight: 600;
+  line-height: 34px; color: #ffffff; letter-spacing: -0.015em;
+}
+.cl-total em { font-style: normal; font-size: 15px; font-weight: 400; }
+.cl-pool { margin: 8px 0 0; border-radius: 6px; overflow: hidden; }
+.cl-pool img { display: block; width: 100%; height: auto; }
+
+/* ---------- 2 · Soil classification ---------- */
+.cl-soil { display: flex; gap: 20px; align-items: stretch; margin-top: 8px; }
+.cl-soil__list { flex: none; width: 419px; display: flex; flex-direction: column; gap: 12px; }
+.cl-soilrow {
+  display: flex; align-items: center; gap: 13px;
+  padding: 10px 10px 10px 16px; border-radius: 12px; background: #f8f9fc;
+}
+.cl-soilrow.is-top { border-left: 3px solid var(--c); padding-left: 13px; }
+.cl-soilrow .n {
+  flex: none; width: 30px; height: 30px; border-radius: 4px; background: var(--c);
   display: grid; place-items: center;
-  background: #e9f8f1; color: #066653;
+  font-size: 14px; line-height: 22px; color: #ffffff;
 }
-.gc-sec__ic svg { width: 19px; height: 19px; stroke: currentColor; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
-.gc-sec__tt { flex: 1; min-width: 0; }
-.gc-sec__tt h4 {
-  margin: 1px 0 2px; font-family: var(--font-display, 'Poppins');
-  font-size: 15px; font-weight: 600; color: #04473a; letter-spacing: -0.01em;
+.cl-soilrow > div { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.cl-soilrow b { font-size: 14px; font-weight: 400; line-height: 22px; color: #000000; }
+.cl-soilrow i { display: block; height: 6px; border-radius: 4px; background: #e8eaed; }
+.cl-soilrow s { display: block; height: 100%; border-radius: 4px; background: var(--c); }
+.cl-soilrow em {
+  flex: none; font-style: normal; font-family: var(--font-display);
+  font-size: 20px; font-weight: 600; line-height: 28px; color: var(--c); letter-spacing: -0.01em;
 }
-.gc-sec__tt p { margin: 0; font-size: 12px; line-height: 1.45; color: #5b6b66; }
-.gc-sec__body { padding: 0 16px 16px; }
+.cl-dominant {
+  flex: 1 1 0; min-width: 0;
+  display: flex; flex-direction: column; justify-content: space-between; gap: 12px;
+  padding: 12px; border-radius: 8px; background: #6c8f4f;
+}
+.cl-dominant__t { font-size: 16px; font-weight: 500; line-height: 1.45; color: #e2e7f0; letter-spacing: -0.03em; }
+.cl-dominant b {
+  display: block; font-family: var(--font-display); font-size: 32px; font-weight: 600;
+  line-height: 42px; color: #feffff; letter-spacing: -0.015em;
+}
+.cl-dominant em {
+  display: inline-block; font-style: normal; margin-top: 4px;
+  font-family: var(--font-override); font-size: 14px; font-weight: 500; line-height: 20px; color: #252525;
+  background: #f5f6f8; border-radius: 8px; padding: 2px 8px;
+}
+.cl-dominant hr { width: 100%; height: 0; margin: 0; border: none; border-top: 1px solid rgba(255,255,255,0.35); }
+.cl-dominant p { margin: 0; font-size: 14px; line-height: 22px; color: #ffffff; }
 
-/* ---------- Map / image frame ---------- */
-.gc-map {
-  position: relative; border-radius: 8px; overflow: hidden;
-  border: 1px solid #e1e6e4; background: #eef3f1;
+/* ---------- 3 · Annual climate ledger ---------- */
+.cl-ledger { display: flex; gap: 20px; align-items: flex-start; }
+.cl-metric { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+.cl-metric__ic {
+  width: 40px; height: 40px; border-radius: 8px; border: 1px solid #e2e8ef;
+  display: grid; place-items: center; flex: none;
 }
-.gc-map img { display: block; width: 100%; height: auto; }
-.gc-map--terrain { background: #000; }
-.gc-map__tag {
-  position: absolute; left: 10px; top: 10px;
-  background: rgba(255,255,255,0.92); color: #04473a;
-  font-size: 11px; font-weight: 600; padding: 4px 9px; border-radius: 999px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+.cl-metric__ic img { width: 24px; height: 24px; }
+
+/* ---------- Shared CSS bar chart ---------- */
+.cl-chart {
+  position: relative; margin-top: 12px;
+  display: grid; grid-template-columns: 14px 34px 1fr; grid-template-rows: 1fr auto;
+  column-gap: 6px;
 }
-
-/* ---------- Legend ---------- */
-.gc-legend { display: flex; flex-wrap: wrap; gap: 8px 16px; margin-top: 12px; }
-.gc-legend__item { display: flex; align-items: center; gap: 7px; font-size: 12px; color: #344b44; }
-.gc-legend__sw { width: 13px; height: 13px; border-radius: 3px; flex: none; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.08); }
-
-/* ---------- Narrative callout ---------- */
-.gc-note {
-  margin-top: 12px; padding: 11px 13px;
-  background: #f3f8f6; border: 1px solid #e1e6e4; border-radius: 8px;
-  font-size: 12.5px; line-height: 1.55; color: #344b44;
+.cl-chart__ytitle {
+  grid-column: 1; grid-row: 1; align-self: center; justify-self: center;
+  writing-mode: vertical-rl; transform: rotate(180deg);
+  font-size: 10px; font-weight: 500; color: #1a202c; letter-spacing: -0.03em; white-space: nowrap;
 }
-.gc-note b { color: #04473a; font-weight: 600; }
-
-/* ---------- Land-cover composition rows ---------- */
-.gc-lc { display: flex; flex-direction: column; gap: 10px; }
-.gc-lc__row { display: grid; grid-template-columns: 38px 1fr auto; align-items: center; gap: 12px; }
-.gc-lc__ic { width: 38px; height: 38px; flex: none; overflow: hidden; }
-.gc-lc__ic > * { transform: scale(0.475); transform-origin: top left; }
-.gc-lc__mid { min-width: 0; }
-.gc-lc__nm { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-bottom: 5px; }
-.gc-lc__nm b { font-size: 13px; font-weight: 600; color: #243832; }
-.gc-lc__nm .ha { font-size: 11.5px; color: #6b7d77; }
-.gc-lc__bar { height: 7px; border-radius: 999px; background: #edf1ef; overflow: hidden; }
-.gc-lc__bar i { display: block; height: 100%; border-radius: 999px; }
-.gc-lc__pct { font-family: var(--font-display, 'Poppins'); font-size: 14px; font-weight: 600; color: #04473a; min-width: 38px; text-align: right; }
-
-/* ---------- Metric rows (topography) ---------- */
-.gc-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
-.gc-metric {
-  border: 1px solid #e6ebe9; border-radius: 8px; padding: 10px 12px; background: #fafcfb;
+/* Y tick labels sit against the plot's gridlines, so first/last align to edges */
+.cl-chart__y {
+  grid-column: 2; grid-row: 1; list-style: none; margin: 0; padding: 0;
+  display: flex; flex-direction: column; justify-content: space-between; align-items: flex-end;
+  font-size: 10.4px; font-weight: 500; color: #717d96; letter-spacing: -0.03em;
 }
-.gc-metric .l { font-size: 11px; color: #6b7d77; margin-bottom: 3px; }
-.gc-metric .v { font-family: var(--font-display, 'Poppins'); font-size: 17px; font-weight: 600; color: #04473a; }
-.gc-metric .v small { font-size: 11px; font-weight: 500; color: #6b7d77; }
-
-/* ---------- Natural-disaster rows ---------- */
-.gc-nd { display: flex; flex-direction: column; gap: 10px; }
-.gc-nd__row {
-  display: grid; grid-template-columns: 52px 1fr auto; align-items: center; gap: 13px;
-  border: 1px solid #e6ebe9; border-radius: 9px; padding: 9px 12px 9px 9px; background: #fafcfb;
+.cl-chart__y li { line-height: 1; transform: translateY(-50%); }
+.cl-chart__y li:first-child { transform: none; }
+.cl-chart__y li:last-child { transform: translateY(-100%); }
+/* Plot area: dotted horizontal gridlines + solid axes */
+.cl-chart__plot {
+  grid-column: 3; grid-row: 1; position: relative;
+  height: 159px; display: flex; align-items: flex-end; justify-content: space-between;
+  padding: 0 6px;
+  border-left: 1.5px solid #717d96; border-bottom: 1.5px solid #717d96;
+  /* dotted gridlines: one dot per tile, so the tile grid reads as dotted rows.
+     A linear-gradient can't do this — it has no vertical variation and fills
+     each tile into a solid column. */
+  background-image: radial-gradient(circle at 1px 0.5px, #cfd8e3 0.6px, transparent 0.7px);
+  background-size: 6px 7.23px;
 }
-.gc-nd__ic { width: 52px; height: 70px; border-radius: 7px; overflow: hidden; flex: none; background: #eef3f1; }
-.gc-nd__ic > * { transform: scale(0.325); transform-origin: top left; }
-.gc-nd__main { min-width: 0; }
-.gc-nd__main h5 { margin: 0 0 2px; font-size: 13px; font-weight: 600; color: #243832; }
-.gc-nd__main p { margin: 0; font-size: 11.5px; line-height: 1.4; color: #6b7d77; }
-.gc-lvl {
-  flex: none; font-size: 11px; font-weight: 700; letter-spacing: 0.02em;
-  padding: 4px 10px; border-radius: 999px; white-space: nowrap;
+.cl-chart__plot i { display: block; width: 8px; flex: none; background: var(--bar, #125e92); }
+.cl-chart__x {
+  grid-column: 3; grid-row: 2; list-style: none; margin: 4px 0 0; padding: 0 6px;
+  display: flex; justify-content: space-between;
+  font-size: 10.4px; font-weight: 500; color: #717d96; letter-spacing: -0.03em;
 }
-.gc-lvl.low  { background: #e7f6ec; color: #1c7d43; }
-.gc-lvl.mod  { background: #fdf0d8; color: #b3791b; }
-.gc-lvl.high { background: #fde8e4; color: #c5371f; }
+.cl-chart__x li { width: 8px; flex: none; transform: rotate(-45deg); transform-origin: center; white-space: nowrap; }
+.cl-chart--prec .cl-chart__plot i { --bar: #125e92; }
+.cl-chart--temp .cl-chart__plot i { --bar: #4591c5; }
 
-/* risk-level legend (vertical scale) */
-.gc-risk-legend { display: flex; flex-direction: column; gap: 6px; margin-top: 12px; }
-.gc-risk-legend .t { font-size: 11px; font-weight: 700; color: #344b44; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 1px; }
-.gc-risk-legend .item { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #344b44; }
-.gc-risk-legend .sw { width: 22px; height: 12px; border-radius: 3px; flex: none; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.08); }
+/* ---------- 4 · Fire susceptibility ---------- */
+.cl-fire { display: flex; gap: 20px; align-items: stretch; }
+.cl-fire__graph { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 16px; }
+.cl-chart--fire .cl-chart__plot { height: 176px; }
+.cl-chart--fire .cl-chart__plot i { --bar: #ac1a13; width: 9px; }
+.cl-chart--fire .cl-chart__x li { width: auto; transform: none; }
+.cl-chart__xtitle {
+  margin: 0; text-align: center; font-size: 10px; font-weight: 500;
+  color: #1a202c; letter-spacing: -0.03em;
+}
+.cl-burned {
+  flex: none; width: 200px;
+  display: flex; flex-direction: column; justify-content: space-between; gap: 16px;
+  padding: 12px; border-radius: 8px; border: 1px solid #db2222;
+}
+.cl-burned > img { width: 82px; height: 82px; flex: none; }
+.cl-burned p { margin: 0 0 4px; font-size: 14px; line-height: 22px; color: #68727d; }
+.cl-burned p b { font-weight: 700; }
+.cl-burned__v {
+  font-family: var(--font-display); font-size: 24px; font-weight: 600;
+  line-height: 30px; color: #252525; letter-spacing: -0.01em;
+}
