@@ -39,6 +39,11 @@
   --gray-950: #181818;
 
   /* ---------- Primary (brand teal-green) ---------- */
+  /* --primary-750: deep header surface (Data Analyser head, reopen tab) —
+     promoted from the previously hardcoded #04473a (F-01) */
+  --primary-750: #04473a;
+  /* --text-title: shared step/page title ink (A-01/A-03) */
+  --text-title: #2d3648;
   --primary-25:  #e9f8f1;
   --primary-50:  #d4f1e3;
   --primary-100: #beead5;

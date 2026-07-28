@@ -143,6 +143,8 @@
       color: #98a0aa; transition: border-color .15s, box-shadow .15s;
     }
     .mx-search:focus-within { border-color: #066653; box-shadow: var(--ring-primary); color: #066653; }
+    #step2Filters .mx-search { align-self: flex-end; flex: 0 0 300px; min-width: 0; }
+    #step2Filters .fpill::before { display: none; }
     .mx-search svg { flex: none; }
     .mx-search input {
       flex: 1; min-width: 0; border: none; outline: none; background: transparent;
@@ -321,6 +323,11 @@
         </div>
         <div class="mx-filterbar" id="step2Filters">
           <div class="ws-filters">
+            <div class="mx-search">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4.3-4.3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              <input id="mxSearchInput" type="search" autocomplete="off" placeholder="Search activities, benefits or indicators…" />
+            </div>
+            <div class="filter-divider"></div>
             <div class="filter-group">
               <span class="filter-label">Ecosystem</span>
               <div class="fpill-row">
@@ -347,10 +354,6 @@
                 <button class="fpill ben-climate active" type="button" data-fkind="ben" data-fval="Climate">Climate</button>
               </div>
             </div>
-          </div>
-          <div class="mx-search">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4.3-4.3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-            <input id="mxSearchInput" type="search" autocomplete="off" placeholder="Search activities, benefits or indicators…" />
           </div>
         </div>
         <div class="ws-body">

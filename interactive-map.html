@@ -28,7 +28,6 @@
   .leaflet-control-attribution { font-size: 10px; }
 
   /* Step 5 — Potential Benefit — clean style matching Site Characterisation (step 2) */
-  .da-panel[data-step="5"] { width: 810px; }
   /* .p5 styles live in css/analysis-shared.css (shared with project-detail.html) */
 
   /* ===== Data Analyser modals (Finish / Leave) ===== */
@@ -79,265 +78,8 @@
   .dm-foot .dm-btn{width:auto;padding:13px 22px;margin-top:0;}
 
   /* Step 3 — Threats Profile & NbS Screening Overview (Figma 302-78413) */
-  .da-panel[data-step="3"] { width: 810px; }
   /* .t3 styles live in css/analysis-shared.css (shared with project-detail.html) */
-  /* Step 4 — Pathway Selection (from F02-P4_Pathway_Selection.html) */
-  .da-panel[data-step="4"] { width: 810px; }
-  .pathway{
-    /* ecosystem accents */
-    --eco-forest:#1f6b47;
-    --eco-mangrove:#1a9e96;
-    --eco-peat:#bea001;
-    /* neutrals & text */
-    --text-main:#252525;
-    --text-second:#68727d;
-    --ink:#0f1419;
-    --slate:#4a5468;
-    --slate-2:#5f6b7e;
-    --slate-3:#2a3441;
-    --stroke:#eaebf0;
-    --card-stroke:#e2e6ec;
-    --chip-bg:#eef1f5;
-    --primary:#066653;
-    --primary-700:#044c3e;
-    --warning:#efa22f;
-    --warning-bg:#fdf6ea;
-    --switch-off:#e2e6ec;
-  }
-  .mono{font-family:'JetBrains Mono',monospace;}
-
-  /* ---------- shell ---------- */
-  .pathway{
-    width:100%;
-    max-width:770px;
-    display:flex;
-    flex-direction:column;
-    gap:18px;
-  }
-
-  /* ---- DA title ---- */
-  .pw4-title{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;margin-bottom:2px;}
-  .pw4-title h2{margin:0;font-family:'Poppins',sans-serif;font-weight:600;font-size:20px;line-height:1.2;letter-spacing:-.2px;color:#2d3648;text-align:center;}
-  .pw4-title .rule{width:100px;height:3px;border-radius:2px;background:linear-gradient(90deg,#077f68 0%,#efa22f 50%,#3b82f6 100%);}
-
-  /* ---------- ecosystem card ---------- */
-  .eco-card{
-    background:#fff;
-    border:2px solid var(--eco);
-    border-top:5px solid var(--eco);
-    border-radius:16px;
-    padding:16px 17px 17px 17px;
-    display:flex;
-    flex-direction:column;
-    gap:20px;
-  }
-
-  /* ---- header row ---- */
-  .eco-head{display:flex;gap:16px;align-items:stretch;}
-  .eco-ident{display:flex;gap:12px;align-items:center;width:178px;flex:none;}
-  .eco-icon{width:48px;height:48px;flex:none;display:flex;align-items:center;justify-content:center;}
-  .eco-icon svg,.eco-icon img{display:block;width:48px;height:48px;}
-  .eco-titles{display:flex;flex-direction:column;gap:4px;}
-  .eco-name{font-size:18px;font-weight:600;line-height:28px;color:var(--ink);}
-  .eco-status{
-    display:inline-flex;align-items:center;align-self:flex-start;
-    border-radius:999px;padding:2px 10px 3px;
-    font-family:'Inter',sans-serif;font-weight:600;font-size:11px;
-    letter-spacing:.44px;text-transform:uppercase;line-height:17px;white-space:nowrap;
-  }
-  .eco-status--ok{background:#ecf2e2;color:#486831;}
-  .eco-status--bad{background:#ffefee;color:#e33b32;}
-
-  .vdiv{width:1px;align-self:stretch;background:var(--eco);flex:none;}
-
-  .eco-stats{flex:1 1 0;min-width:0;display:flex;gap:16px;align-items:center;}
-  .eco-stat{flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:8px;}
-  .eco-stat__ttl{font-size:11px;font-weight:500;line-height:16.5px;color:#252525;}
-  .eco-stat .bar{height:8px;}
-  .eco-stat__row{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:10px;font-weight:400;line-height:18px;color:#68727d;}
-  .bar{background:#eef1f5;height:6px;border-radius:3px;overflow:hidden;width:100%;}
-  .bar > span{display:block;height:100%;border-radius:3px;}
-
-  /* ---- intervention selector ---- */
-  .interv{display:flex;flex-direction:column;gap:12px;}
-  .interv-title{font-size:13px;font-weight:700;line-height:normal;color:var(--text-main);}
-  .pathway-row{display:flex;gap:12px;align-items:stretch;}
-  .pathway-opt{
-    flex:1 1 0;min-width:0;position:relative;
-    background:var(--eco-soft);border:2px solid var(--card-stroke);border-radius:10px;
-    padding:12px 8px 12px 12px;display:flex;flex-direction:column;gap:8px;
-    cursor:pointer;transition:border-color .15s ease,background .15s ease;
-  }
-  .pathway-opt:hover{border-color:var(--eco);}
-  .pathway-opt.selected{border-color:var(--eco);}
-  .pathway-opt.disabled{cursor:not-allowed;background:#f1f2f4;border-color:var(--card-stroke);}
-  .pathway-opt.disabled:hover{border-color:var(--card-stroke);}
-  .pathway-opt.disabled .opt-name{opacity:.6;border-bottom-color:#98a2b3;}
-  .pathway-opt.disabled .opt-ha{color:#98a2b3;}
-  .pathway-opt.disabled .opt-icon{opacity:.45;filter:grayscale(1);}
-  .opt-top{display:flex;gap:7px;align-items:flex-start;width:100%;}
-  .opt-icon{width:42px;height:42px;flex:none;display:flex;align-items:center;justify-content:center;color:var(--eco);}
-  .opt-icon svg,.opt-icon img{display:block;width:42px;height:42px;}
-  .opt-meta{flex:1 1 0;min-width:0;display:flex;flex-direction:column;}
-  .opt-name{
-    font-size:16px;font-weight:600;line-height:24px;color:var(--text-main);
-    align-self:flex-start;border-bottom:1px dashed #68727d;cursor:help;
-  }
-  .opt-ha{font-size:13px;font-weight:700;line-height:20px;color:var(--text-main);}
-  .opt-elig{font-size:12px;font-weight:400;line-height:20px;color:var(--text-second);}
-  .opt-disabled-elig{color:#b42318;}
-
-  /* hover tooltips: pathway description + ineligibility reason */
-  .pw-tip{
-    position:absolute;left:14px;top:calc(100% + 4px);z-index:40;width:262px;
-    background:#fff;border:1px solid #979aa0;border-radius:0 6px 6px 6px;padding:12px;
-    display:none;flex-direction:column;gap:4px;text-align:left;cursor:default;
-    box-shadow:0 4px 12px rgba(15,20,25,.08);
-  }
-  .pw-tip b{font-size:12px;font-weight:500;line-height:20px;color:#252525;}
-  .pw-tip b strong{font-weight:700;}
-  .pw-tip span{font-size:11px;font-weight:400;line-height:18px;color:#68727d;}
-  .pw-tip--desc{flex-direction:row;align-items:flex-start;gap:14px;width:340px;border-radius:8px;}
-  .pw-tip__ic{flex:none;width:34px;display:flex;justify-content:center;color:var(--eco);}
-  .pw-tip__ic svg{width:34px;height:34px;}
-  .pw-tip__txt{display:flex;flex-direction:column;gap:2px;min-width:0;}
-  .opt-name:hover + .pw-tip--desc{display:flex;}
-  .pathway-opt.disabled:hover .pw-tip--why{display:flex;}
-  .pathway-opt.disabled .opt-name:hover + .pw-tip--desc{display:none;}
-
-  /* switch */
-  .switch{
-    position:absolute;top:12px;right:11.79px;
-    width:31.091px;height:18px;border-radius:999px;background:#c1c3c7;
-    padding:1.636px;display:flex;align-items:center;transition:background .15s ease;
-  }
-  .switch .knob{
-    width:14.727px;height:14.727px;border-radius:7.364px;background:#fff;
-    box-shadow:0px .818px 1.636px 0px rgba(15,20,25,.04),0px .818px 2.455px 0px rgba(15,20,25,.06);
-    transition:transform .15s ease;
-  }
-  .pathway-opt.selected .switch{background:var(--eco);}
-  .pathway-opt.selected .switch .knob{transform:translateX(13.09px);}
-  .switch.locked{background:#c1c3c7;}
-
-  /* disabled "not eligible" badge */
-  .ineligible-badge{
-    display:inline-flex;align-items:center;gap:4px;align-self:flex-start;
-    background:#fdecec;color:#b42318;border-radius:6px;padding:2px 7px;
-    font-size:10px;font-weight:600;line-height:16px;
-  }
-
-  /* ---- choose activity ---- */
-  .activity{display:none;}
-  .activity.show{
-    background:#fff;border:1px solid var(--stroke);border-radius:10px;
-    padding:17px;display:flex;flex-direction:column;gap:10px;
-  }
-  .activity-head{
-    display:flex;align-items:center;justify-content:space-between;
-    border-bottom:1px solid var(--stroke);padding-bottom:13px;gap:12px;
-    cursor:pointer;user-select:none;
-  }
-  .activity-head-left{display:flex;gap:12px;align-items:center;flex:1;}
-  .activity-chev{flex:none;display:flex;align-items:center;transition:transform .15s ease;}
-  .activity.collapsed .activity-chev{transform:rotate(180deg);}
-  .activity.collapsed .activity-list{display:none;}
-  .activity.collapsed .activity-head{border-bottom:none;padding-bottom:0;}
-  .activity.show.collapsed{gap:0;}
-  .activity-titlewrap{display:flex;gap:8px;align-items:center;}
-  .activity-ic{width:15px;height:15px;flex:none;display:flex;align-items:center;justify-content:center;}
-  .activity-title{font-size:13px;font-weight:700;line-height:normal;color:var(--text-main);}
-  .tags{display:flex;gap:8px;align-items:center;}
-  .tag{border-radius:20px;padding:3.5px 10px;font-size:10px;font-weight:600;line-height:normal;white-space:nowrap;}
-  .count{background:#f1f4f8;border-radius:20px;padding:3px 10px 4px;font-size:11px;font-weight:600;letter-spacing:.5px;color:var(--primary);line-height:normal;white-space:nowrap;}
-  .count b{font-weight:700;}
-
-  .activity-list{display:flex;flex-direction:column;gap:8px;padding-top:4px;}
-  .activity-item{
-    display:flex;gap:8px;align-items:center;
-    padding:6px 8px;border-radius:6px;cursor:pointer;transition:background .12s ease;
-  }
-  .activity-item:hover{background:#fafbfc;}
-  .checkbox{
-    width:14px;height:14px;flex:none;border-radius:2.5px;
-    border:1px solid #767676;background:#fff;position:relative;transition:background .12s ease,border-color .12s ease;
-  }
-  .checkbox svg{position:absolute;inset:0;opacity:0;transition:opacity .12s ease;}
-  .activity-item.checked .checkbox{background:var(--primary);border-color:var(--primary);}
-  .activity-item.checked .checkbox svg{opacity:1;}
-  .activity-label{font-size:12px;font-weight:400;line-height:normal;color:var(--slate);}
-  .act-group{display:flex;flex-direction:column;gap:6px;}
-  .act-group + .act-group{margin-top:10px;padding-top:12px;border-top:1px dashed #e6e9ee;}
-  .act-group__ttl{align-self:flex-start;font-family:'Inter',sans-serif;font-weight:700;font-size:10px;letter-spacing:.5px;text-transform:uppercase;padding:2px 9px;border-radius:20px;}
-  .pw-protect{background:#e9f8f1;color:#044c3e;}
-  .pw-manage{background:#eaf0fb;color:#1d4ed8;}
-  .pw-restore{background:#f7efd8;color:#8a5a00;}
-  .tags .tag.pw-protect,.tags .tag.pw-manage,.tags .tag.pw-restore{font-size:10px;font-weight:600;}
-
-  /* ---- divider before duration ---- */
-  .divider{height:1px;width:100%;background:var(--stroke);}
-
-  /* ---- duration ---- */
-  .duration{display:flex;gap:20px;align-items:flex-start;}
-  .duration-text{width:251px;flex:none;display:flex;flex-direction:column;gap:3px;}
-  .duration-title{font-size:14px;font-weight:600;line-height:22px;color:var(--ink);}
-  .duration-q{font-size:12px;font-weight:400;line-height:20px;color:var(--slate);}
-  .duration-ctrl{flex:1 1 0;min-width:0;display:flex;gap:20px;align-items:center;height:42px;}
-  .slider-wrap{flex:1 1 0;min-width:0;position:relative;height:35px;}
-  .slider{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:3px;background:var(--switch-off);position:absolute;top:2px;left:0;margin:0;cursor:pointer;}
-  .slider:focus{outline:none;}
-  .slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:20px;height:20px;border-radius:10px;background:var(--eco-forest);border:none;box-shadow:0 0 0 4px #fff,0 1px 4px rgba(0,0,0,.2);cursor:pointer;}
-  .slider::-moz-range-thumb{width:20px;height:20px;border-radius:10px;background:var(--eco-forest);border:none;box-shadow:0 0 0 4px #fff,0 1px 4px rgba(0,0,0,.2);cursor:pointer;}
-  .slider-fill{position:absolute;top:2px;left:0;height:6px;border-radius:3px;background:var(--eco-forest);pointer-events:none;}
-  .ticks{position:absolute;left:0;right:0;top:18px;display:flex;justify-content:space-between;}
-  .ticks span{font-family:'JetBrains Mono',monospace;font-weight:500;font-size:11px;line-height:17px;color:var(--slate);}
-  .duration-val{width:40px;flex:none;display:flex;flex-direction:column;gap:2px;white-space:nowrap;}
-  .duration-num{font-family:'Inter','Poppins',sans-serif;font-weight:700;font-size:28px;line-height:38px;letter-spacing:-.42px;color:var(--eco-forest);font-stretch:condensed;}
-  .duration-unit{font-family:'Inter',sans-serif;font-weight:500;font-size:12px;line-height:12px;color:var(--slate);}
-
-  /* ---- potential nbs carbon project ---- */
-  .carbon{background:#fcfcfd;border:1px solid #c1c3c7;border-radius:6px;padding:20px;display:flex;flex-direction:column;gap:16px;}
-  .carbon-head{display:flex;gap:10px;align-items:flex-start;}
-  .carbon-ic{width:44px;height:44px;flex:none;}
-  .carbon-ic svg{display:block;width:44px;height:44px;}
-  .carbon-txt{flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:4px;}
-  .carbon-title{font-size:16px;font-weight:500;line-height:24px;color:#252525;}
-  .carbon-q{font-size:14px;font-weight:500;line-height:normal;color:#68727d;}
-  .carbon-right{flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:10px;}
-  .carbon-toggle{position:static;cursor:pointer;flex:none;}
-  .carbon.on .carbon-toggle{background:#077f68;}
-  .carbon.on .carbon-toggle .knob{transform:translateX(13.09px);}
-  .carbon-noyes{font-size:11px;font-weight:400;line-height:15.4px;color:#68727d;}
-  .carbon-body{display:none;flex-direction:column;gap:16px;}
-  .carbon.on .carbon-body{display:flex;}
-  .carbon-divider{height:1px;background:var(--stroke);}
-  .crisk{display:flex;gap:12px;align-items:flex-start;}
-  .crisk-text{width:272px;flex:none;display:flex;flex-direction:column;gap:3px;}
-  .crisk-title{font-size:14px;font-weight:600;line-height:22px;color:#0f1419;}
-  .crisk-desc{font-size:12px;font-weight:400;line-height:20px;color:#4a5468;}
-  .crisk-field{flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:8px;}
-  .crisk-label{align-self:flex-start;font-size:13px;font-weight:400;line-height:19px;color:#252525;border-bottom:1px dashed #252525;padding-bottom:3px;}
-  .crisk-input{display:flex;align-items:stretch;gap:8px;background:#fff;border:1px solid #eaebf0;border-radius:6px;padding:0 0 0 16px;cursor:text;overflow:hidden;}
-  .crisk-input input{flex:1 1 0;min-width:0;border:none;outline:none;background:transparent;font-family:inherit;font-size:12px;line-height:17.4px;color:#252525;padding:9px 0;-moz-appearance:textfield;appearance:textfield;}
-  .crisk-input input::-webkit-outer-spin-button,.crisk-input input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0;}
-  .crisk-input > span:not(.crisk-step){font-size:12px;color:#68727d;align-self:center;}
-  .crisk-step{flex:none;width:34px;display:flex;flex-direction:column;background:#efeff1;border-left:1px solid #eaebf0;}
-  .crisk-step button{flex:1;border:none;background:none;margin:0;padding:0;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#252525;}
-  .crisk-step button:hover{background:#e2e3e6;}
-  .crisk-step button + button{border-top:1px solid #dcdee2;}
-  .crisk-hint{font-size:11px;font-weight:400;line-height:15.4px;color:#68727d;}
-
-  /* ---- alert ---- */
-  .alert{
-    background:var(--warning-bg);border:1px solid var(--warning);border-radius:6px;
-    padding:10px;display:flex;gap:8px;align-items:flex-start;justify-content:center;overflow:hidden;
-  }
-  .alert-ic{width:30px;height:30px;flex:none;display:flex;align-items:center;justify-content:center;}
-  .alert-body{flex:1 1 0;min-width:0;font-size:12px;line-height:20px;color:var(--text-main);}
-  .alert-body .lead{font-weight:500;}
-  .alert-body b{font-weight:700;}
 </style>
-<link id="gfont-Poppins" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&amp;display=swap">
 </head>
 <template id="__bundler_thumbnail">
   <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
@@ -466,33 +208,9 @@
         <span class="da-conn"></span>
         <button class="da-step" data-goto="4"><span class="da-step__num">4</span><span class="da-step__label">Select Intervention</span></button>
         <span class="da-conn"></span>
-        <button class="da-step" data-goto="5"><span class="da-step__num">5</span><span class="da-step__label">Potential benefit</span></button>
+        <button class="da-step" data-goto="5"><span class="da-step__num">5</span><span class="da-step__label">Potential Benefit</span></button>
       </div>
     </header>
-
-    <!-- Sticky context bar (step 2 only): title row + tab bar (Figma 3892-42176 / 3892-42177) -->
-    <div class="da-ctx" id="daCtx" aria-label="Site characterisation context">
-      <div class="da-ctx__title">
-        <button class="da-ctx__nav da-ctx__back" data-ctx-back aria-label="Previous context">
-          <svg viewBox="0 0 24 24" stroke-width="2"><path d="M14 7l-5 5 5 5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          Back
-        </button>
-        <div class="da-ctx__tt">
-          <h3 id="daCtxTitle">Site Characterisation: General Context</h3>
-          <img src="assets/f01-step2/genctx/title-line.svg" alt="" />
-        </div>
-        <button class="da-ctx__nav da-ctx__next" data-ctx-next aria-label="Next context">
-          Next
-          <svg viewBox="0 0 24 24" stroke-width="2"><path d="M10 7l5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-      </div>
-      <div class="da-ctx__tabs" role="tablist">
-        <button role="tab" aria-selected="true" data-ctx="general"><img class="ic" src="assets/asset/Property%201=general.svg" alt="" />General</button>
-        <button role="tab" aria-selected="false" data-ctx="nature"><img class="ic" src="assets/asset/Property%201=Nature.svg" alt="" />Nature</button>
-        <button role="tab" aria-selected="false" data-ctx="people"><img class="ic" src="assets/asset/Property%201=People.svg" alt="" />People</button>
-        <button role="tab" aria-selected="false" data-ctx="climate"><img class="ic" src="assets/asset/Property%201=Climate.svg" alt="" />Climate</button>
-      </div>
-    </div>
 
     <div class="da-body" id="daBody">
 
@@ -502,7 +220,7 @@
         <!-- ---------- 1.0 Choose your analysis area ---------- -->
         <div class="s1 active" data-s1="choose">
           <div class="s1-head">
-            <h3 class="s1-h">Choose your analysis area</h3>
+            <h2 class="s1-h">Choose your analysis area</h2>
             <p class="s1-sub">Pick a method to define the polygon area or geographic boundary for Nature, People &amp; Climate analysis.</p>
           </div>
 
@@ -566,11 +284,11 @@
         <div class="s1" data-s1="confirm">
           <div class="s1-confirm">
             <div class="s1-confirm__grp">
-              <h3 class="s1-h">Analyze the selected polygon?</h3>
+              <h2 class="s1-h">Analyze the selected polygon?</h2>
               <div class="s1-confirmcard">
                 <div class="s1-confirmcard__inner">
                   <span class="lbl">The estimation size of selected area is</span>
-                  <span class="big" id="s1ConfirmSize">150.000 ha</span>
+                  <span class="big" id="s1ConfirmSize">150,000 ha</span>
                 </div>
               </div>
             </div>
@@ -580,7 +298,7 @@
               <img class="s1-alert__ic" src="assets/f01-step1/alert-toobig.svg" alt="" />
               <div>
                 <h5>The area is too big.</h5>
-                <p>You can only analyse &lt;<b>200.000 ha</b>. <a href="login.html">Sign in→</a> for having up to <b>500.000 ha</b> analysis.</p>
+                <p>You can only analyse &lt;<b>200,000 ha</b>. <a href="login.html">Sign in→</a> for having up to <b>500,000 ha</b> analysis.</p>
               </div>
             </div>
 
@@ -594,9 +312,33 @@
       </div>
 
       <!-- ============ STEP 2 — SITE CHARACTERISATION ============ -->
-      <!-- Tab bar lives above .da-body (sticky). Panes hold exported Figma renders. -->
+      <!-- Standalone title section (scrolls) + sticky underline tabs (matches step 5).
+           Panes hold exported Figma renders. -->
       <div class="da-step-body" data-step="2">
-        <div data-nbs="site"></div>
+        <div class="da-ctx" id="daCtx" aria-label="Site characterisation context">
+          <div class="da-ctx__title">
+            <button class="da-ctx__nav da-ctx__back" data-ctx-back aria-label="Previous context">
+              <svg viewBox="0 0 24 24" stroke-width="2"><path d="M14 7l-5 5 5 5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Back
+            </button>
+            <div class="da-ctx__tt">
+              <h2 id="daCtxTitle">Site Characterisation: General Context</h2>
+              <p>Baseline conditions of your selected area.</p>
+            </div>
+            <button class="da-ctx__nav da-ctx__next" data-ctx-next aria-label="Next context">
+              Next
+              <svg viewBox="0 0 24 24" stroke-width="2"><path d="M10 7l5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+          <div class="da-ctx__tabs" role="tablist">
+            <button role="tab" aria-selected="true" data-ctx="general"><img class="ic" src="assets/asset/Property%201=general.svg" alt="" />General</button>
+            <button role="tab" aria-selected="false" data-ctx="nature"><img class="ic" src="assets/asset/Property%201=Nature.svg" alt="" />Nature</button>
+            <button role="tab" aria-selected="false" data-ctx="people"><img class="ic" src="assets/asset/Property%201=People.svg" alt="" />People</button>
+            <button role="tab" aria-selected="false" data-ctx="climate"><img class="ic" src="assets/asset/Property%201=Climate.svg" alt="" />Climate</button>
+          </div>
+          <!-- panes live inside .da-ctx so the sticky tabs can stick for the whole scroll -->
+          <div data-nbs="site"></div>
+        </div>
       </div>
 
       <!-- ============ STEP 3 — THREAT PROFILE (Figma 302-78413) ============ -->
@@ -606,9 +348,8 @@
           <div class="t3-head">
             <button class="t3-nav" data-go="2"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M14 7l-5 5 5 5"/></svg> Back</button>
             <div class="t3-titles">
-              <h3>Threats Profile and NbS Screening Overview</h3>
-              <p>Integrated screening summary condition for ecosystem:<br>forest, mangrove, and peatland.</p>
-              <span class="t3-rule"></span>
+              <h2>Threats Profile and NbS Screening Overview</h2>
+              <p>Integrated screening summary condition for the ecosystem.</p>
             </div>
             <button class="t3-nav" data-go="4">Next <svg viewBox="0 0 24 24" stroke-width="2"><path d="M10 7l5 5-5 5"/></svg></button>
           </div>
@@ -622,9 +363,13 @@
 <div class="pathway" id="pathway">
 
   <!-- ===================== DA TITLE ===================== -->
-  <div class="pw4-title">
-    <h2>Design your Nature-based Solution (NbS) Pathway</h2>
-    <div class="rule"></div>
+  <div class="t3-head">
+    <button class="t3-nav" data-go="3"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M14 7l-5 5 5 5"/></svg> Back</button>
+    <div class="t3-titles">
+      <h2>Design your Nature-based Solution (NbS) Pathway</h2>
+      <p>Choose a pathway for each ecosystem, then select its activities.</p>
+    </div>
+    <button class="t3-nav" data-go="5">Next <svg viewBox="0 0 24 24" stroke-width="2"><path d="M10 7l5 5-5 5"/></svg></button>
   </div>
 
   <!-- ============================= FOREST ============================= -->
@@ -642,18 +387,18 @@
         <div class="eco-stat">
           <div class="eco-stat__ttl">Total Forest Area</div>
           <div class="bar"><span style="width:40%;background:var(--eco);"></span></div>
-          <div class="eco-stat__row"><span class="mono">20,942.2 ha</span><span>40% of total area</span></div>
+          <div class="eco-stat__row"><span>20,942.2 ha</span><span>40% of total area</span></div>
         </div>
         <div class="eco-stat">
-          <div class="eco-stat__ttl">Disturbeb Area of Forest Ecosystem</div>
+          <div class="eco-stat__ttl">Disturbed Area of Forest Ecosystem</div>
           <div class="bar"><span style="width:12%;background:var(--eco);"></span></div>
-          <div class="eco-stat__row"><span class="mono">4,638.4 ha</span><span>12% of forest is disturbeb</span></div>
+          <div class="eco-stat__row"><span>4,638.4 ha</span><span>12% of forest is disturbed</span></div>
         </div>
       </div>
     </div>
 
     <div class="interv">
-      <div class="interv-title">Select Intervention for Forest Ecosystem :</div>
+      <div class="interv-title">Select Intervention for Forest Ecosystem:</div>
       <div class="pathway-row">
         <!-- Protect -->
         <div class="pathway-opt" data-pathway data-eco="forest">
@@ -711,7 +456,7 @@
           </div>
           <div class="tags" data-tags></div>
         </div>
-        <div class="count"><span data-count>0</span> of <b data-total>0</b> Activity is Selected</div>
+        <div class="count"><span data-count>0</span> of <b data-total>0</b> Activities Selected</div>
         <span class="activity-chev"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 5.25 7 9.25l4-4" stroke="#0f1419" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
       </div>
       <div class="activity-list" data-activity-list></div>
@@ -733,18 +478,18 @@
         <div class="eco-stat">
           <div class="eco-stat__ttl">Total Mangrove Area</div>
           <div class="bar"><span style="width:35%;background:var(--eco);"></span></div>
-          <div class="eco-stat__row"><span class="mono">30,000.0 ha</span><span>35% of total area</span></div>
+          <div class="eco-stat__row"><span>30,000.0 ha</span><span>35% of total area</span></div>
         </div>
         <div class="eco-stat">
-          <div class="eco-stat__ttl">Disturbeb Area of Mangrove Ecosystem</div>
+          <div class="eco-stat__ttl">Disturbed Area of Mangrove Ecosystem</div>
           <div class="bar"><span style="width:28%;background:var(--eco);"></span></div>
-          <div class="eco-stat__row"><span class="mono">2,731.3 ha</span><span>28% of mangrove is disturbeb</span></div>
+          <div class="eco-stat__row"><span>2,731.3 ha</span><span>28% of mangrove is disturbed</span></div>
         </div>
       </div>
     </div>
 
     <div class="interv">
-      <div class="interv-title">Select Intervention for Mangrove Ecosystem :</div>
+      <div class="interv-title">Select Intervention for Mangrove Ecosystem:</div>
       <div class="pathway-row">
         <!-- Protect -->
         <div class="pathway-opt" data-pathway data-eco="mangrove">
@@ -805,7 +550,7 @@
           </div>
           <div class="tags" data-tags></div>
         </div>
-        <div class="count"><span data-count>0</span> of <b data-total>0</b> Activity is Selected</div>
+        <div class="count"><span data-count>0</span> of <b data-total>0</b> Activities Selected</div>
         <span class="activity-chev"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 5.25 7 9.25l4-4" stroke="#0f1419" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
       </div>
       <div class="activity-list" data-activity-list></div>
@@ -827,18 +572,18 @@
         <div class="eco-stat">
           <div class="eco-stat__ttl">Total Peatland Area</div>
           <div class="bar"><span style="width:25%;background:var(--eco);"></span></div>
-          <div class="eco-stat__row"><span class="mono">15,000.5 ha</span><span>25% of total area</span></div>
+          <div class="eco-stat__row"><span>15,000.5 ha</span><span>25% of total area</span></div>
         </div>
         <div class="eco-stat">
-          <div class="eco-stat__ttl">Disturbeb Area of Peatland Ecosystem</div>
+          <div class="eco-stat__ttl">Disturbed Area of Peatland Ecosystem</div>
           <div class="bar"><span style="width:80%;background:var(--eco);"></span></div>
-          <div class="eco-stat__row"><span class="mono">7,484.3 ha</span><span>80% of peatland is disturbeb</span></div>
+          <div class="eco-stat__row"><span>7,484.3 ha</span><span>80% of peatland is disturbed</span></div>
         </div>
       </div>
     </div>
 
     <div class="interv">
-      <div class="interv-title">Select Intervention for Peatland Ecosystem :</div>
+      <div class="interv-title">Select Intervention for Peatland Ecosystem:</div>
       <div class="pathway-row">
         <!-- Protect -->
         <div class="pathway-opt" data-pathway data-eco="peat">
@@ -897,7 +642,7 @@
           </div>
           <div class="tags" data-tags></div>
         </div>
-        <div class="count"><span data-count>0</span> of <b data-total>0</b> Activity is Selected</div>
+        <div class="count"><span data-count>0</span> of <b data-total>0</b> Activities Selected</div>
         <span class="activity-chev"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 5.25 7 9.25l4-4" stroke="#0f1419" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
       </div>
       <div class="activity-list" data-activity-list></div>
@@ -916,9 +661,9 @@
     <div class="duration-ctrl">
       <div class="slider-wrap">
         <div class="slider-fill" id="sliderFill"></div>
-        <input type="range" class="slider" id="durationSlider" min="20" max="70" step="1" value="30" />
+        <input type="range" class="slider" id="durationSlider" min="10" max="70" step="1" value="30" />
         <div class="ticks">
-          <span>20</span><span>30</span><span>40</span><span>50</span><span>60</span><span>70</span>
+          <span>10</span><span>20</span><span>30</span><span>40</span><span>50</span><span>60</span><span>70</span>
         </div>
       </div>
       <div class="duration-val">
@@ -940,7 +685,7 @@
       </div>
       <div class="carbon-txt">
         <div class="carbon-title">Potential NbS Carbon Project</div>
-        <div class="carbon-q">Do you interested to treat project as potential nbs carbon project?</div>
+        <div class="carbon-q">Do you want to treat this as a potential NbS carbon project?</div>
       </div>
       <div class="carbon-right">
         <div class="switch carbon-toggle" id="carbonToggle"><span class="knob"></span></div>
@@ -956,16 +701,28 @@
         </div>
         <div class="crisk-field">
           <span class="crisk-label">Leakage deduction</span>
-          <label class="crisk-input"><input type="text" inputmode="decimal" value="15,0" placeholder="15,0" data-dec="1"><span>%</span><span class="crisk-step"><button type="button" data-step="1" aria-label="Increase"><svg width="12" height="8" viewBox="0 0 12 8" fill="none"><path d="M1.5 6.25 6 1.75l4.5 4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button type="button" data-step="-1" aria-label="Decrease"><svg width="12" height="8" viewBox="0 0 12 8" fill="none"><path d="M1.5 1.75 6 6.25l4.5-4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button></span></label>
+          <div class="crisk-tip">
+            <b>What is leakage deduction?</b>
+            <span>Emissions that shift outside your project boundary because of the intervention, for example, logging pressure moving to a neighbouring area. Applied as a percentage of gross reduction.</span>
+          </div>
+          <label class="crisk-input"><input type="text" inputmode="decimal" value="15.0" placeholder="15.0" data-dec="1"><span>%</span><span class="crisk-step"><button type="button" data-step="1" aria-label="Increase"><svg width="12" height="8" viewBox="0 0 12 8" fill="none"><path d="M1.5 6.25 6 1.75l4.5 4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button type="button" data-step="-1" aria-label="Decrease"><svg width="12" height="8" viewBox="0 0 12 8" fill="none"><path d="M1.5 1.75 6 6.25l4.5-4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button></span></label>
           <div class="crisk-hint">1-100%, default 15%</div>
         </div>
         <div class="crisk-field">
           <span class="crisk-label">Uncertainty</span>
-          <label class="crisk-input"><input type="text" inputmode="decimal" value="10,00" placeholder="10,00" data-dec="2"><span>%</span><span class="crisk-step"><button type="button" data-step="1" aria-label="Increase"><svg width="12" height="8" viewBox="0 0 12 8" fill="none"><path d="M1.5 6.25 6 1.75l4.5 4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button type="button" data-step="-1" aria-label="Decrease"><svg width="12" height="8" viewBox="0 0 12 8" fill="none"><path d="M1.5 1.75 6 6.25l4.5-4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button></span></label>
+          <div class="crisk-tip">
+            <b>What is uncertainty?</b>
+            <span>A discount that accounts for error in input data, models, and carbon estimates. Higher-tier data (Tier 2/3) justifies a lower deduction.</span>
+          </div>
+          <label class="crisk-input"><input type="text" inputmode="decimal" value="10.00" placeholder="10.00" data-dec="2"><span>%</span><span class="crisk-step"><button type="button" data-step="1" aria-label="Increase"><svg width="12" height="8" viewBox="0 0 12 8" fill="none"><path d="M1.5 6.25 6 1.75l4.5 4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button type="button" data-step="-1" aria-label="Decrease"><svg width="12" height="8" viewBox="0 0 12 8" fill="none"><path d="M1.5 1.75 6 6.25l4.5-4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button></span></label>
           <div class="crisk-hint">1-100%, default 10%</div>
         </div>
         <div class="crisk-field">
           <span class="crisk-label">Buffer pool deduction</span>
+          <div class="crisk-tip">
+            <b>What is buffer pool deduction?</b>
+            <span>Credits set aside as insurance against reversal of fire, flood, or clearing that releases stored carbon back to the atmosphere. Typically 10&ndash;20%.</span>
+          </div>
           <label class="crisk-input"><input type="text" inputmode="numeric" value="12" placeholder="12" data-dec="0"><span>%</span><span class="crisk-step"><button type="button" data-step="1" aria-label="Increase"><svg width="12" height="8" viewBox="0 0 12 8" fill="none"><path d="M1.5 6.25 6 1.75l4.5 4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button type="button" data-step="-1" aria-label="Decrease"><svg width="12" height="8" viewBox="0 0 12 8" fill="none"><path d="M1.5 1.75 6 6.25l4.5-4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button></span></label>
           <div class="crisk-hint">1-100%, default 12%</div>
         </div>
@@ -994,7 +751,14 @@
       <!-- ============ STEP 5 — POTENTIAL BENEFIT (F02-P5) ============ -->
       <div class="da-step-body" data-step="5">
         <div class="p5">
-          <div class="p5-title"><h2>Potential Benefit</h2><span class="p5-rule"></span></div>
+          <div class="t3-head">
+            <button class="t3-nav" data-go="4"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M14 7l-5 5 5 5"/></svg> Back</button>
+            <div class="t3-titles">
+              <h2>Potential Benefit</h2>
+              <p>Estimated Nature, People, and Climate benefits from your selected interventions.</p>
+            </div>
+            <button class="t3-nav" data-dm-finish>Finish <svg viewBox="0 0 24 24" stroke-width="2"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button>
+          </div>
 
   <div data-nbs="benefit"></div>
         </div>
@@ -1004,16 +768,18 @@
 
     <!-- ===== Per-step footers (step 1 uses in-body sub-flow buttons) ===== -->
     <footer class="da-foot" data-step="2">
-      <button class="btn btn-outline" data-go="1">Reselect Area
+      <button class="btn btn-outline" data-go="1">
         <svg viewBox="0 0 24 24" fill="none"><path d="M21 12a9 9 0 1 1-3.5-7.1M21 4v5h-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Reselect Area
       </button>
-      <button class="btn btn-primary" data-go="3">Analyse The Threat Profile
+      <button class="btn btn-primary grow" data-go="3">Analyse The Threat Profile
         <svg viewBox="0 0 24 24" fill="none"><path d="M6 7l5 5-5 5M13 7l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
     </footer>
     <footer class="da-foot" data-step="3">
-      <button class="btn btn-outline" data-go="1">Reselect Area
+      <button class="btn btn-outline" data-go="1">
         <svg viewBox="0 0 24 24" fill="none"><path d="M21 12a9 9 0 1 1-3.5-7.1M21 4v5h-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Reselect Area
       </button>
       <button class="btn btn-primary grow" data-go="4">Select intervention type
         <svg viewBox="0 0 24 24" fill="none"><path d="M6 7l5 5-5 5M13 7l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -1247,8 +1013,8 @@
     const tooBig = document.getElementById('s1TooBig');
     const cont = document.getElementById('s1Continue');
     const num = 150000;                 // Figma demo size for drawn / uploaded areas
-    const isBig = num > 200000;         // limit is 200.000 ha
-    sizeEl.textContent = num.toLocaleString('de-DE') + ' ha';   // 150.000 ha
+    const isBig = num > 200000;         // limit is 200,000 ha
+    sizeEl.textContent = num.toLocaleString('en-US') + ' ha';   // 150,000 ha
     tooBig.hidden = !isBig;             // red "too big" alert
     if (cont) cont.hidden = isBig;      // hide Continue when over the limit
   }
@@ -1378,7 +1144,8 @@
       html += '<div class="act-group"><div class="act-group__ttl ' + PW_CLASS[p] + '">' + p + '</div>';
       map[p].forEach(function(a){
         total++; var on = checkedActs.has(actKey(eco,p,a)); if (on) checked++;
-        html += '<div class="activity-item' + (on ? ' checked' : '') + '" data-activity data-pw="' + p + '" data-act="' + esc(a) + '">'
+        html += '<div class="activity-item' + (on ? ' checked' : '') + '" data-activity data-pw="' + p + '" data-act="' + esc(a) + '"'
+              + ' role="checkbox" tabindex="0" aria-checked="' + (on ? 'true' : 'false') + '">'
               + CHK + '<span class="activity-label">' + esc(a) + '</span></div>';
       });
       html += '</div>';
@@ -1399,44 +1166,83 @@
     if (slot) slot.innerHTML = PW_TIP_ICONS[pwOf(opt)] || '';
   });
 
+  // pathway cards behave as switches — keyboard operable (E-04)
   document.querySelectorAll('.eco-card [data-pathway]').forEach(function(opt){
-    opt.addEventListener('click', function(){
-      if (opt.dataset.locked === 'true') return; // disabled non-eligible card
+    var locked = opt.dataset.locked === 'true';
+    opt.setAttribute('role', 'switch');
+    opt.setAttribute('aria-checked', 'false');
+    if (locked) { opt.setAttribute('aria-disabled', 'true'); }
+    else { opt.setAttribute('tabindex', '0'); }
+    function toggle(){
+      if (locked) return; // disabled non-eligible card
       var card = opt.closest('.eco-card'), eco = ecoOf(card), pw = pwOf(opt);
       var nowOn = !opt.classList.contains('selected');
       opt.classList.toggle('selected', nowOn);
-      ((NBS_ACTIVITIES[eco] || {})[pw] || []).forEach(function(a){
-        var k = actKey(eco,pw,a); if (nowOn) checkedActs.add(k); else checkedActs.delete(k);
+      opt.setAttribute('aria-checked', nowOn ? 'true' : 'false');
+      // activities start unchecked — the user opts in per activity;
+      // deselecting the pathway still clears any it had checked
+      if (!nowOn) ((NBS_ACTIVITIES[eco] || {})[pw] || []).forEach(function(a){
+        checkedActs.delete(actKey(eco,pw,a));
       });
       renderActivities(card);
+    }
+    opt.addEventListener('click', toggle);
+    opt.addEventListener('keydown', function(e){
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
     });
   });
 
-  // checkbox toggle, event-delegated so it survives re-render
+  // checkbox toggle, event-delegated so it survives re-render (keyboard too, E-04)
   document.querySelectorAll('.eco-card [data-activity-list]').forEach(function(list){
-    list.addEventListener('click', function(e){
-      var item = e.target.closest('[data-activity]'); if (!item) return;
+    function toggleItem(item){
       var card = list.closest('.eco-card'), k = actKey(ecoOf(card), item.dataset.pw, item.dataset.act);
       if (checkedActs.has(k)) checkedActs.delete(k); else checkedActs.add(k);
       renderActivities(card);
+    }
+    list.addEventListener('click', function(e){
+      var item = e.target.closest('[data-activity]'); if (!item) return;
+      toggleItem(item);
+    });
+    list.addEventListener('keydown', function(e){
+      if (e.key !== 'Enter' && e.key !== ' ') return;
+      var item = e.target.closest('[data-activity]'); if (!item) return;
+      e.preventDefault(); toggleItem(item);
     });
   });
 
-  // collapse/expand activity section via its head
+  // collapse/expand activity section via its head (button semantics, E-04)
   document.querySelectorAll('.eco-card .activity-head').forEach(function(head){
-    head.addEventListener('click', function(){
-      head.closest('.activity').classList.toggle('collapsed');
+    head.setAttribute('role', 'button');
+    head.setAttribute('tabindex', '0');
+    head.setAttribute('aria-expanded', 'true');
+    function toggleHead(){
+      var collapsed = head.closest('.activity').classList.toggle('collapsed');
+      head.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+    }
+    head.addEventListener('click', toggleHead);
+    head.addEventListener('keydown', function(e){
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleHead(); }
     });
   });
 
-  /* ---- Potential NbS carbon project toggle ---- */
-  document.getElementById('carbonToggle').addEventListener('click', function(){
-    document.getElementById('carbonSection').classList.toggle('on');
+  /* ---- Potential NbS carbon project toggle (switch semantics, E-04) ---- */
+  var carbonToggle = document.getElementById('carbonToggle');
+  carbonToggle.setAttribute('role', 'switch');
+  carbonToggle.setAttribute('tabindex', '0');
+  carbonToggle.setAttribute('aria-checked', 'false');
+  carbonToggle.setAttribute('aria-label', 'Treat as potential NbS carbon project');
+  function carbonFlip(){
+    var on = document.getElementById('carbonSection').classList.toggle('on');
+    carbonToggle.setAttribute('aria-checked', on ? 'true' : 'false');
+  }
+  carbonToggle.addEventListener('click', carbonFlip);
+  carbonToggle.addEventListener('keydown', function(e){
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); carbonFlip(); }
   });
   function criskParse(inp){ return parseFloat(String(inp.value).replace(',', '.')); }
   function criskSet(inp, v){
     v = Math.min(100, Math.max(1, v)); // 1-100%
-    inp.value = v.toFixed(+inp.dataset.dec).replace('.', ',');
+    inp.value = v.toFixed(+inp.dataset.dec);   // en-US decimals (G-02)
   }
   document.querySelectorAll('.crisk-step button').forEach(function(b){
     b.addEventListener('click', function(e){
@@ -1502,8 +1308,8 @@
   const dmSaveGo = document.getElementById('dmSaveGo');
   if (dmSaveGo) dmSaveGo.addEventListener('click', () => { window.location.href = 'project-detail.html'; });
 
-  const finishBtn = document.getElementById('finishAnalysis');
-  if (finishBtn) finishBtn.addEventListener('click', () => dmOpen(dmFinish));
+  document.querySelectorAll('#finishAnalysis, [data-dm-finish]').forEach(b =>
+    b.addEventListener('click', () => dmOpen(dmFinish)));
 
   // Leave-guard: intercept nav-away links while on step 5 (unsaved analysis)
   let pendingHref = null;

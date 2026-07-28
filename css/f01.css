@@ -48,7 +48,7 @@
 .aoi-vertex { fill: #fff; stroke: #399986; stroke-width: 2.5; }
 .aoi-label  {
   font-family: var(--font-text); font-size: 12px; font-weight: 600;
-  fill: #04473a; letter-spacing: 0.02em;
+  fill: var(--primary-750,#04473a); letter-spacing: 0.02em;
 }
 
 /* ============================================================
@@ -98,7 +98,7 @@
 }
 /* active layer */
 .rail-cell[aria-pressed="true"] {
-  background: #04473a;
+  background: var(--primary-750,#04473a);
 }
 .rail-cell[aria-pressed="true"]::before {
   content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
@@ -121,7 +121,7 @@
 }
 .rail-pm__circle {
   width: 60px; height: 60px; border-radius: 50%;
-  background: #04473a; border: 2px solid #077f68;
+  background: var(--primary-750,#04473a); border: 2px solid #077f68;
   display: grid; place-items: center; color: #eafff0;
   transition: transform var(--motion-fast), background var(--motion-fast);
 }
@@ -145,8 +145,8 @@
   z-index: 25;
   transition: transform var(--motion-default), width var(--motion-default), opacity var(--motion-default);
 }
-/* Steps 2–5 use the wider panel (richer content) */
-.da-panel:not([data-step="1"]) { width: 760px; }
+/* Steps 2–5 use the wider panel (richer content) — single width rule (C-03) */
+.da-panel:not([data-step="1"]) { width: 810px; max-width: calc(100% - 96px); }
 
 /* Step 1 hugs its content instead of filling the map top-to-bottom */
 .da-panel[data-step="1"] { bottom: auto; }
@@ -158,7 +158,7 @@
 }
 
 .da-head {
-  background: #04473a;
+  background: var(--primary-750,#04473a);
   color: #fff;
   padding: 20px 20px;
   flex: none;
@@ -213,6 +213,9 @@
 
 /* Context tabs (step 2) live in css/f01-step2.css */
 
+/* Shared 100×3 gradient title rule (C-04) — same values as .t3-rule / .p5-rule */
+.da-rule { width: 100px; height: 3px; border-radius: 2px; background: linear-gradient(90deg,#077f68 0%,#efa22f 50%,#3b82f6 100%); }
+
 /* Body (scroll region holding all step contents) */
 .da-body {
   flex: 1 1 auto;
@@ -222,7 +225,7 @@
   flex-direction: column;
   gap: 18px;
 }
-.da-panel:not([data-step="1"]) .da-body { background: var(--neutral-200); padding: 18px; gap: 14px; }
+.da-panel:not([data-step="1"]) .da-body { --da-body-pad: 18px; background: var(--neutral-200); padding: var(--da-body-pad); gap: 14px; }
 .da-step-body { display: none; flex-direction: column; gap: 16px; }
 .da-step-body.active { display: flex; }
 
@@ -307,7 +310,7 @@
   display: none;
   align-items: center; gap: 9px;
   height: 46px; padding: 0 16px 0 14px;
-  background: #04473a; color: #fff;
+  background: var(--primary-750,#04473a); color: #fff;
   border: none; border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
   font-family: var(--font-text); font-size: 14px; font-weight: 700;
   cursor: pointer; z-index: 24;
@@ -595,7 +598,7 @@
 }
 .mc-search {
   width: 60px; height: 60px; border-radius: 50%;
-  background: #04473a; color: #fff;
+  background: var(--primary-750,#04473a); color: #fff;
   border: 6px solid rgba(7,127,104,0.45);
   display: grid; place-items: center; cursor: pointer;
   transition: background var(--motion-fast);
@@ -642,7 +645,7 @@
 }
 .mc-btn {
   width: 42px; height: 42px; border-radius: var(--radius-md);
-  background: #04473a; color: #fff; border: none; cursor: pointer;
+  background: var(--primary-750,#04473a); color: #fff; border: none; cursor: pointer;
   display: grid; place-items: center;
   transition: background var(--motion-fast), transform var(--motion-fast);
 }
@@ -682,7 +685,7 @@
   box-shadow: var(--elevation-4);
 }
 .legend__bar {
-  background: #04473a; color: #fff;
+  background: var(--primary-750,#04473a); color: #fff;
   padding: 0 14px 0 18px; height: 70px;
   display: flex; align-items: center; justify-content: space-between; gap: 12px;
 }

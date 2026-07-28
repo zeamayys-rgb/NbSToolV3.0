@@ -31,15 +31,34 @@ const gcAlert = `
           </div>`;
 const gcSource = (data, source, year) => `
           <p class="gc-src">Data source:&nbsp; <b>${data}</b>: ${source}, ${year} <a href="#">See more</a>.</p>`;
-const gcHead = (t) => `
-          <div class="gc-card__head"><h4>${t}</h4><img class="gc-info" src="${GC_ASSETS}/ic-info.svg" alt="More information" /></div>`;
+/* Card-head chip icons — Google Material Design Icons (Apache 2.0), 24px filled */
+const GC_ICONS = {
+  globe: '<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>',
+  gov: '<path d="M4 10h3v7H4zM10.5 10h3v7h-3zM2 19h20v3H2zM17 10h3v7h-3zM12 1L2 6v2h20V6z"/>',
+  landscape: '<path d="M14 6l-3.75 5 2.85 3.8-1.6 1.2C9.81 13.75 7 10 7 10l-6 8h22L14 6z"/>',
+  tree: '<path d="M13 16.12c3.47-.41 6.17-3.36 6.17-6.95 0-3.87-3.13-7-7-7s-7 3.13-7 7c0 3.47 2.52 6.34 5.83 6.89V20H5v2h14v-2h-6v-3.88z"/>',
+  layers: '<path d="M11.99 18.54l-7.37-5.73L3 14.07l9 7 9-7-1.63-1.27-7.38 5.74zM12 16l7.36-5.73L21 9l-9-7-9 7 1.63 1.27L12 16z"/>',
+  warning: '<path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>',
+  paw: '<circle cx="4.5" cy="9.5" r="2.5"/><circle cx="9" cy="5.5" r="2.5"/><circle cx="15" cy="5.5" r="2.5"/><circle cx="19.5" cy="9.5" r="2.5"/><path d="M17.34 14.86c-.87-1.02-1.6-1.89-2.48-2.91-.46-.54-1.05-1.08-1.75-1.32-.11-.04-.22-.07-.33-.09-.25-.04-.52-.04-.78-.04s-.53 0-.79.05c-.11.02-.22.05-.33.09-.7.24-1.28.78-1.75 1.32-.87 1.02-1.6 1.89-2.48 2.91-1.31 1.31-2.92 2.76-2.62 4.79.29 1.02 1.02 2.03 2.33 2.32.73.15 3.06-.44 5.54-.44h.18c2.48 0 4.81.58 5.54.44 1.31-.29 2.04-1.31 2.33-2.32.31-2.04-1.3-3.49-2.61-4.8z"/>',
+  eye: '<path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>',
+  shield: '<path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>',
+  chart: '<path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>',
+  pin: '<path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>',
+  park: '<path d="M17 12h2L12 2 5.05 12H7l-3.9 6h6.92v4h3.96v-4H21l-4-6z"/>',
+  cloud: '<path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/>',
+  terrain: '<path d="M14 6l-4.22 5.63 1.25 1.67L14 9.33 19 16h-8.46l-4.01-5.37L1 18h22L14 6z"/>',
+  thermo: '<path d="M15 13V5c0-1.66-1.34-3-3-3S9 3.34 9 5v8c-1.21.91-2 2.37-2 4 0 2.76 2.24 5 5 5s5-2.24 5-5c0-1.63-.79-3.09-2-4zm-4-8c0-.55.45-1 1-1s1 .45 1 1h-1v1h1v1h-1v1h1v1h-2V5z"/>',
+  fire: '<path d="M13.5.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5.67zM11.71 19c-1.78 0-3.22-1.4-3.22-3.14 0-1.62 1.05-2.76 2.81-3.12 1.77-.36 3.6-1.21 4.62-2.58.39 1.29.59 2.65.59 4.04 0 2.65-2.15 4.8-4.8 4.8z"/>',
+};
+const gcHead = (t, ic) => `
+          <div class="gc-card__head"><span class="gc-hchip"><svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">${GC_ICONS[ic] || ''}</svg></span><h4>${t}</h4><svg class="gc-info" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="More information"><path d="M9.99935 18.3332C14.6017 18.3332 18.3327 14.6022 18.3327 9.99984C18.3327 5.39746 14.6017 1.6665 9.99935 1.6665C5.39698 1.6665 1.66602 5.39746 1.66602 9.99984C1.66602 14.6022 5.39698 18.3332 9.99935 18.3332Z" fill="currentColor"></path><path d="M10 13.3332V9.99984M10 6.6665H10.0083" stroke="white" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>`;
 
 const siteGeneral = `
         <div class="ctx-pane" data-ctx="general">
           <div class="gc">
 
             <!-- 1 · Ecosystem type identification -->
-            <section class="gc-card">${gcHead('Ecosystem type identification')}
+            <section class="gc-card">${gcHead('Ecosystem type identification', 'globe')}
               <div class="gc-eco">
                 <figure class="gc-eco__map"><img src="${GC_ASSETS}/map-eco.png" alt="Ecosystem map of the selected area" /></figure>
                 <div class="gc-eco__side">
@@ -47,7 +66,7 @@ const siteGeneral = `
                   <div class="gc-eco__chartrow">
                     <div class="gc-donut">
                       <img src="${GC_ASSETS}/eco-donut.svg" alt="Ecosystem share donut chart" />
-                      <div class="gc-donut__c"><span>Total</span><b>48.421.9 ha</b></div>
+                      <div class="gc-donut__c"><span>Total</span><b>48,421.9 ha</b></div>
                     </div>
                     <ul class="gc-legend">
                       <li><i style="background:#f1fc3e;box-shadow:inset 0 0 0 1px #a9a9a9"></i>Mangrove</li>
@@ -61,7 +80,7 @@ const siteGeneral = `
             </section>
 
             <!-- 2 · Administration and zoning status -->
-            <section class="gc-card">${gcHead('Administration and Zoning Status Information')}
+            <section class="gc-card">${gcHead('Administration and Zoning Status Information', 'gov')}
               <div class="gc-block">
                 <h5 class="gc-sub">Administration</h5>
                 <p class="gc-p">This project area is located in <b>Banjar, Buleleng, Bali, 48,421.9 ha</b><br />The project area intersects <b>3</b> sub-districts. The table below shows each sub-district and its overlapping area.</p>
@@ -82,7 +101,7 @@ const siteGeneral = `
             </section>
 
             <!-- 3 · Terrain -->
-            <section class="gc-card">${gcHead('Terrain')}
+            <section class="gc-card">${gcHead('Terrain', 'landscape')}
               <figure class="gc-terrain"><img src="${GC_ASSETS}/terrain.jpg" alt="3D terrain render of the selected area" /></figure>
               <div class="gc-block">
                 <p class="gc-p gc-p--lg">Elevation ranges from 45 to 1,860 m above sea level (asl), predominantly upland (500&ndash;1,000 m), and the slope of the area consists of:</p>
@@ -97,7 +116,7 @@ const siteGeneral = `
             </section>
 
             <!-- 4 · Deforestation analysis -->
-            <section class="gc-card">${gcHead('Deforestation analysis')}
+            <section class="gc-card">${gcHead('Deforestation analysis', 'tree')}
               <div class="gc-block">
                 <h5 class="gc-sub">Historical Deforestation</h5>
                 <div class="gc-def">
@@ -124,7 +143,7 @@ const siteGeneral = `
             </section>
 
             <!-- 5 · Landcover -->
-            <section class="gc-card">${gcHead('Landcover')}
+            <section class="gc-card">${gcHead('Landcover', 'layers')}
               <div class="gc-block">
                 <p class="gc-p">The major land cover categories in the selected area are:</p>
                 <div class="gc-lcgrid">
@@ -140,7 +159,7 @@ const siteGeneral = `
             </section>
 
             <!-- 6 · Natural disaster risk -->
-            <section class="gc-card">${gcHead('Natural Disaster Risk')}
+            <section class="gc-card">${gcHead('Natural Disaster Risk', 'warning')}
               <div class="gc-block">
                 <p class="gc-p">The selected area is susceptible to several natural disaster risks, including:</p>
                 <div class="gc-ndgrid">
@@ -170,7 +189,7 @@ const siteNature = `
           <div class="gc">
 
             <!-- 1 · Habitat area -->
-            <section class="gc-card">${gcHead('Habitat Area')}
+            <section class="gc-card">${gcHead('Habitat Area', 'paw')}
               <div class="gc-block">
                 <p class="gc-p">The project area is a suitable habitat for a wide range of wildlife, including</p>
                 <div class="nc-habitat">
@@ -186,7 +205,7 @@ const siteNature = `
             </section>
 
             <!-- 2 · Indicative key species presence -->
-            <section class="gc-card">${gcHead('Indicative Key Species Presence')}
+            <section class="gc-card">${gcHead('Indicative Key Species Presence', 'eye')}
               <div class="gc-block">
                 <p class="gc-p">There are keystone species throughout the project area. The species featured are:</p>
                 <div class="nc-splists">
@@ -198,7 +217,7 @@ ${ncSpecies('sp-reptile', 'Reptilia', 41, '#1d9e75', [['Reticulated Python','Mal
             </section>
 
             <!-- 3 · Conservation significance -->
-            <section class="gc-card">${gcHead('Conservation Significance')}
+            <section class="gc-card">${gcHead('Conservation Significance', 'shield')}
               <div class="nc-cons">
                 <figure class="nc-radar"><img src="${NC_ASSETS}/radar.png" alt="Conservation significance radar chart: biodiversity, water and carbon" /></figure>
                 <div class="nc-cons__side">
@@ -209,7 +228,7 @@ ${ncSpecies('sp-reptile', 'Reptilia', 41, '#1d9e75', [['Reticulated Python','Mal
             </section>
 
             <!-- 4 · Forest Landscape Integrity Index -->
-            <section class="gc-card">${gcHead('Forest Landscape Integrity Index')}
+            <section class="gc-card">${gcHead('Forest Landscape Integrity Index', 'chart')}
               <div class="nc-flii">
                 <p class="gc-p">Within the forest in this area, <b>68%</b> has high landscape integrity, <b>24%</b> medium, and <b>8%</b> low. The forest is predominantly high integrity, indicating largely intact and well-connected forest under low human pressure.</p>
                 <div class="nc-score">
@@ -231,7 +250,7 @@ ${ncSpecies('sp-reptile', 'Reptilia', 41, '#1d9e75', [['Reticulated Python','Mal
             </section>
 
             <!-- 5 · Key Biodiversity Area -->
-            <section class="gc-card">${gcHead('Key Biodiversity Area')}
+            <section class="gc-card">${gcHead('Key Biodiversity Area', 'pin')}
               <div class="gc-block">
                 <p class="gc-p">This project area overlaps with <b>6,289.0 ha (13.0% of total AOI area)</b> of Key Biodiversity Areas, across <b>2</b> sites. The largest is <b>West Bali National Park (4,512.3 ha)</b>, followed by <b>Batukaru Ridge Forest (1,776.7 ha)</b>. Key Biodiversity Areas are sites that contribute significantly to the global persistence of biodiversity.</p>
                 <div class="nc-kba">
@@ -243,7 +262,7 @@ ${ncSpecies('sp-reptile', 'Reptilia', 41, '#1d9e75', [['Reticulated Python','Mal
             </section>
 
             <!-- 6 · Endangered tree species -->
-            <section class="gc-card">${gcHead('Endangered Tree Species')}
+            <section class="gc-card">${gcHead('Endangered Tree Species', 'park')}
               <div class="nc-tree">
                 <img src="${NC_ASSETS}/tree.jpg" alt="Endangered tree species" />
                 <div><span>The project area is home to Endangered Tree as</span><b>31 Species</b></div>
@@ -274,7 +293,7 @@ const siteClimate = `
           <div class="gc">
 
             <!-- 1 · Carbon information -->
-            <section class="gc-card">${gcHead('Carbon information')}
+            <section class="gc-card">${gcHead('Carbon information', 'cloud')}
               <div class="gc-block">
                 <h5 class="gc-sub">Current Carbon Storage Total</h5>
                 <div class="cl-carbon">
@@ -289,7 +308,7 @@ const siteClimate = `
             </section>
 
             <!-- 2 · Soil classification -->
-            <section class="gc-card">${gcHead('Soil classification')}
+            <section class="gc-card">${gcHead('Soil classification', 'terrain')}
               <div class="gc-block">
                 <p class="gc-p">Based on the World Reference Base for Soil Resources (WRB) 2006, the soils in this area are predominantly <b>Andosols</b>. The distribution of all identified soil types is presented below.</p>
                 <div class="cl-soil">
@@ -311,7 +330,7 @@ const siteClimate = `
             </section>
 
             <!-- 3 · The annual climate ledger -->
-            <section class="gc-card">${gcHead('The Annual Climate Ledger')}
+            <section class="gc-card">${gcHead('The Annual Climate Ledger', 'thermo')}
               <div class="cl-ledger">
                 <div class="cl-metric">
                   <span class="cl-metric__ic" style="background:#125e92"><img src="${CL_ASSETS}/ic-rain.svg" alt="" /></span>
@@ -329,7 +348,7 @@ ${clChart([104.9,105.7,106.9,108.5,108.9,107.3,105.3,104.9,106.9,108.9,108.5,106
             </section>
 
             <!-- 4 · Fire susceptibility -->
-            <section class="gc-card">${gcHead('Fire Susceptibility')}
+            <section class="gc-card">${gcHead('Fire Susceptibility', 'fire')}
               <div class="cl-fire">
                 <div class="cl-fire__graph">
                   <p class="gc-p">This shows how likely the land is to burn under baseline conditions, based on factors such as land cover, dryness, and climate. It is not a forecast of current fire danger.</p>
@@ -363,9 +382,9 @@ const site = siteGeneral + `
 const threatTabs = `
           <div class="t3-tabs" id="t3Tabs" role="tablist" aria-label="Threat profile views">
             <button class="is-active" data-t3tab="overview"><svg viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/></svg> Overview</button>
-            <button data-t3tab="forest"><svg viewBox="0 0 24 24"><path d="M12 21V9"/><path d="M12 12c-3.6 0-6.3-2.7-6.3-6.3 3.6 0 6.3 2.7 6.3 6.3Z"/><path d="M12 10c0-3.4 2.5-6 6-6 0 3.4-2.6 6-6 6Z"/></svg> Forest</button>
-            <button data-t3tab="mangrove"><svg viewBox="0 0 24 24"><path d="M12 20v-8"/><path d="M12 14c-2.8 0-4.8-2-4.8-4.8 2.8 0 4.8 2 4.8 4.8Z"/><path d="M12 12c0-2.8 2-4.8 4.8-4.8 0 2.8-2 4.8-4.8 4.8Z"/><path d="M8 20c1-2 2.5-2 4-2s3 0 4 2"/></svg> Mangrove</button>
-            <button data-t3tab="peatland"><svg viewBox="0 0 24 24"><path d="M4 16h16M4 19.5h16"/><path d="M8 16v-5M12 16V6M16 16v-5"/><path d="M8 11c-1.2-.6-2-1.8-2-3.2M12 6c-1.4-.4-2.3-1.4-2.6-2.8M16 11c1.2-.6 2-1.8 2-3.2"/></svg> Peatland</button>
+            <button data-t3tab="forest"><img class="ic" src="assets/asset/ECOSYSTEM%20ICON_Ecosystem%20Type=Forest,%20Filled=No.svg" alt="" /> Forest</button>
+            <button data-t3tab="mangrove"><img class="ic" src="assets/asset/ECOSYSTEM%20ICON_Ecosystem%20Type=Mangrove,%20Filled=No.svg" alt="" /> Mangrove</button>
+            <button data-t3tab="peatland"><img class="ic" src="assets/asset/ECOSYSTEM%20ICON_Ecosystem%20Type=Peatland,%20Filled=No.svg" alt="" /> Peatland</button>
           </div>
 `;
 
@@ -374,6 +393,11 @@ const threatSections = `
 
             <!-- ---------- OVERVIEW ---------- -->
             <div class="t3-sec" data-t3sec="overview">
+              <div class="t3-screen">
+                <h4>Screening summary for forest, mangrove, and peatland ecosystems conditions.</h4>
+                <p>Explore disturbance charts and maps summarizing the disturbances to [forest / peatland / mangrove] ecosystems within the project area. The interactive maps show remaining forest, disturbed forest, forest loss, and tree cover gain.</p>
+              </div>
+
               <div class="t3-metrics">
                 <div class="t3-metric">
                   <span class="ic" style="background:#e8f5f1;color:#077f68"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 2.5 15.4 0 18M12 3c-2.5 2.6-2.5 15.4 0 18"/></svg></span>
@@ -389,31 +413,29 @@ const threatSections = `
 
               <div class="t3-ecos">
                 <div class="t3-eco">
-                  <div class="top"><span class="ic" style="background:#e6f0e0;color:#2c6639"><svg viewBox="0 0 24 24"><path d="M12 21V9"/><path d="M12 12c-3.6 0-6.3-2.7-6.3-6.3 3.6 0 6.3 2.7 6.3 6.3Z"/><path d="M12 10c0-3.4 2.5-6 6-6 0 3.4-2.6 6-6 6Z"/></svg></span><div><div class="nm">Dryland forest</div><div class="ha">36,220 <small>ha</small></div></div></div>
+                  <div class="top"><img class="ic" src="assets/asset/ECOSYSTEM%20ICON_Ecosystem%20Type=Forest,%20Filled=Yes.svg" alt="" /><div><div class="nm">Dryland forest</div><div class="ha">36,220 <small>ha</small></div></div></div>
                   <div class="t3-bar"><span style="width:46%;background:#1b7a3b"></span></div>
-                  <div class="cap">46% of total area</div>
+                  <div class="cap"><b>46%</b> of total area</div>
                   <div class="kv"><span>Disturbed</span><b class="red">9,120 ha (25%)</b></div>
-                  <div class="kv"><span>Main pressure</span><b>Agriculture expansion</b></div>
                 </div>
                 <div class="t3-eco">
-                  <div class="top"><span class="ic" style="background:#ddf1ef;color:#1a9e96"><svg viewBox="0 0 24 24"><path d="M12 20v-8"/><path d="M12 14c-2.8 0-4.8-2-4.8-4.8 2.8 0 4.8 2 4.8 4.8Z"/><path d="M12 12c0-2.8 2-4.8 4.8-4.8 0 2.8-2 4.8-4.8 4.8Z"/><path d="M8 20c1-2 2.5-2 4-2s3 0 4 2"/></svg></span><div><div class="nm">Mangrove</div><div class="ha">22,580 <small>ha</small></div></div></div>
+                  <div class="top"><img class="ic" src="assets/asset/ECOSYSTEM%20ICON_Ecosystem%20Type=Mangrove,%20Filled=Yes.svg" alt="" /><div><div class="nm">Mangrove</div><div class="ha">22,580 <small>ha</small></div></div></div>
                   <div class="t3-bar"><span style="width:29%;background:#1a9e96"></span></div>
-                  <div class="cap">29% of total area</div>
+                  <div class="cap"><b>29%</b> of total area</div>
                   <div class="kv"><span>Disturbed</span><b class="red">5,430 ha (24%)</b></div>
-                  <div class="kv"><span>Main pressure</span><b>Coastal conversion</b></div>
                 </div>
                 <div class="t3-eco">
-                  <div class="top"><span class="ic" style="background:#f5efd2;color:#bea001"><svg viewBox="0 0 24 24"><path d="M4 16h16M4 19.5h16"/><path d="M8 16v-5M12 16V6M16 16v-5"/><path d="M8 11c-1.2-.6-2-1.8-2-3.2M12 6c-1.4-.4-2.3-1.4-2.6-2.8M16 11c1.2-.6 2-1.8 2-3.2"/></svg></span><div><div class="nm">Peatland</div><div class="ha">19,650 <small>ha</small></div></div></div>
+                  <div class="top"><img class="ic" src="assets/asset/ECOSYSTEM%20ICON_Ecosystem%20Type=Peatland,%20Filled=Yes.svg" alt="" /><div><div class="nm">Peatland</div><div class="ha">19,650 <small>ha</small></div></div></div>
                   <div class="t3-bar"><span style="width:13%;background:#594b00"></span><span style="width:12%;background:#bea001"></span></div>
-                  <div class="cap">25% of total area</div>
+                  <div class="cap"><b>25%</b> of total area</div>
                   <div class="t3-legend"><span><i style="background:#594b00"></i>Peat forest</span><span><i style="background:#bea001"></i>Peat non-forest</span></div>
                   <div class="kv"><span>Disturbed</span><b class="red">4,210 ha (21%)</b></div>
-                  <div class="kv"><span>Main pressure</span><b>Drainage / fire risk</b></div>
                 </div>
               </div>
 
               <div class="t3-card">
-                <h4>Ecosystem disturbance map</h4>
+                <h4 class="t3-map-h">Ecosystem Disturbance Map</h4>
+                <p class="t3-mapdesc">Explore the distribution of disturbed forest within the project area. Disturbance drivers are summarized in statistics to show the main pressures affecting the ecosystem</p>
                 <div class="t3-map">
                   <img src="assets/f01-step3/disturbance-map.png" alt="Ecosystem disturbance map" />
                 </div>
@@ -423,9 +445,9 @@ const threatSections = `
             <!-- ---------- DRYLAND FOREST ---------- -->
             <div class="t3-sec" data-t3sec="forest">
               <div class="t3-card">
-                <div class="t3-echead" style="--ecobg:#e6f0e0;--ecoclr:#2c6639">
-                  <span class="ic"><svg viewBox="0 0 24 24"><path d="M12 21V9"/><path d="M12 12c-3.6 0-6.3-2.7-6.3-6.3 3.6 0 6.3 2.7 6.3 6.3Z"/><path d="M12 10c0-3.4 2.5-6 6-6 0 3.4-2.6 6-6 6Z"/></svg></span>
-                  <div><h4>Dryland Forest</h4><p>From 2015 to 2024, the selected dryland forest area lost 1,842.6 ha of forest cover.</p></div>
+                <div class="t3-echead" style="--ecoclr:#2c6639">
+                  <img class="ic" src="assets/asset/ECOSYSTEM%20ICON_Ecosystem%20Type=Forest,%20Filled=Yes.svg" alt="" />
+                  <div><h4>Dryland Forest</h4><p>From 2015 to 2024, the selected dryland forest area experienced [X] ha of disturbance, driven mainly by [driver 1] and [driver 2].</p></div>
                 </div>
                 <div class="t3-stats cols5">
                   <div><span>Total area</span><b>36,220 ha</b></div>
@@ -435,8 +457,9 @@ const threatSections = `
                   <div><span>Forest gain</span><b class="grn">1,150 ha (3%)</b></div>
                 </div>
                 <div class="t3-alerts open">
-                  <button class="t3-alerts__head">Disturbance alerts <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
+                  <button class="t3-alerts__head">Dryland forest disturbance drivers <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
                   <div class="t3-alerts__body">
+                    <p class="t3-drivers-intro">Dryland forest disturbance drivers are grouped into three categories: anthropogenic (human-caused), natural, and other drivers that cannot be identified yet. A &ldquo;disturbance&rdquo; refers to a significant change in tree canopy cover and canopy height which indicates degradation without a significant loss of standing trees.</p>
                     <div class="t3-drivers">
                       <div>
                         <h5 class="c-non">Non-natural drivers (human caused)</h5>
@@ -458,7 +481,6 @@ const threatSections = `
                           <li>Drought</li>
                           <li>Typhoon</li>
                           <li>Landslide</li>
-                          <li>Erosion</li>
                           <li>Extreme climate event</li>
                         </ul>
                       </div>
@@ -475,16 +497,16 @@ const threatSections = `
               </div>
           <div class="t3-disc">
             <svg viewBox="0 0 26 26"><path d="M13 3.5 2.5 22h21L13 3.5Z"/><path d="M13 10v5" fill="none"/><circle cx="13" cy="18.2" r="1.1" fill="#efa22f" stroke="none"/></svg>
-            <p><span style="font-weight:500">Disclaimer: </span><b>Field verification required</b><br>All the information in NbS Tool are purposed to support your feasibility study. Always verify before use it!</p>
+            <p><span style="font-weight:500">Disclaimer: </span><b>Field verification required</b><br>All the information in NbS Tool are purposed to support your pre-feasibility study. Always verify before use it!</p>
           </div>
             </div>
 
             <!-- ---------- MANGROVE ---------- -->
             <div class="t3-sec" data-t3sec="mangrove">
               <div class="t3-card">
-                <div class="t3-echead" style="--ecobg:#ddf1ef;--ecoclr:#1a9e96">
-                  <span class="ic"><svg viewBox="0 0 24 24"><path d="M12 20v-8"/><path d="M12 14c-2.8 0-4.8-2-4.8-4.8 2.8 0 4.8 2 4.8 4.8Z"/><path d="M12 12c0-2.8 2-4.8 4.8-4.8 0 2.8-2 4.8-4.8 4.8Z"/><path d="M8 20c1-2 2.5-2 4-2s3 0 4 2"/></svg></span>
-                  <div><h4>Mangrove Disturbance</h4><p>From 2015 to 2024, the selected mangrove area experienced 215.8 ha of disturbance or cover change.</p></div>
+                <div class="t3-echead" style="--ecoclr:#1a9e96">
+                  <img class="ic" src="assets/asset/ECOSYSTEM%20ICON_Ecosystem%20Type=Mangrove,%20Filled=Yes.svg" alt="" />
+                  <div><h4>Mangrove Disturbance</h4><p>From 2015 to 2024, the selected mangrove area experienced [X] ha of disturbance, driven mainly by [driver 1] and [driver 2].</p></div>
                 </div>
                 <div class="t3-stats cols4">
                   <div><span>Total area</span><b>36,220 ha</b></div>
@@ -493,8 +515,9 @@ const threatSections = `
                   <div><span>Main Pressure</span><b class="red">Commodities</b></div>
                 </div>
                 <div class="t3-alerts open">
-                  <button class="t3-alerts__head">Disturbance alerts <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
+                  <button class="t3-alerts__head">Mangrove disturbance drivers <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
                   <div class="t3-alerts__body">
+                    <p class="t3-drivers-intro">Mangrove disturbance drivers are grouped into three categories: anthropogenic (human-caused), natural, and other drivers that cannot be identified yet. A &ldquo;disturbance&rdquo; refers to a significant change in tree canopy cover and canopy height which indicates degradation without a significant loss of standing trees.</p>
                     <div class="t3-drivers">
                       <div>
                         <h5 class="c-non">Non-natural drivers (human caused)</h5>
@@ -506,7 +529,6 @@ const threatSections = `
                       <div>
                         <h5 class="c-nat">Natural drivers</h5>
                         <ul style="--dot:#1a9e96">
-                          <li>Erosion</li>
                           <li>Extreme climate event</li>
                         </ul>
                       </div>
@@ -522,16 +544,16 @@ const threatSections = `
               </div>
           <div class="t3-disc">
             <svg viewBox="0 0 26 26"><path d="M13 3.5 2.5 22h21L13 3.5Z"/><path d="M13 10v5" fill="none"/><circle cx="13" cy="18.2" r="1.1" fill="#efa22f" stroke="none"/></svg>
-            <p><span style="font-weight:500">Disclaimer: </span><b>Field verification required</b><br>All the information in NbS Tool are purposed to support your feasibility study. Always verify before use it!</p>
+            <p><span style="font-weight:500">Disclaimer: </span><b>Field verification required</b><br>All the information in NbS Tool are purposed to support your pre-feasibility study. Always verify before use it!</p>
           </div>
             </div>
 
             <!-- ---------- PEATLAND ---------- -->
             <div class="t3-sec" data-t3sec="peatland">
               <div class="t3-card">
-                <div class="t3-echead" style="--ecobg:#f5efd2;--ecoclr:#bea001">
-                  <span class="ic"><svg viewBox="0 0 24 24"><path d="M4 16h16M4 19.5h16"/><path d="M8 16v-5M12 16V6M16 16v-5"/><path d="M8 11c-1.2-.6-2-1.8-2-3.2M12 6c-1.4-.4-2.3-1.4-2.6-2.8M16 11c1.2-.6 2-1.8 2-3.2"/></svg></span>
-                  <div><h4>Peatland disturbance</h4><p>This peatland area shows possible drainage pressure that may be caused by canal networks</p></div>
+                <div class="t3-echead" style="--ecoclr:#bea001">
+                  <img class="ic" src="assets/asset/ECOSYSTEM%20ICON_Ecosystem%20Type=Peatland,%20Filled=Yes.svg" alt="" />
+                  <div><h4>Peatland disturbance</h4><p>This peatland area shows potential drainage-related disturbance, as the occurrence of drainage is the primary driver of peatland degradation.</p></div>
                 </div>
                 <div class="t3-stats cols4">
                   <div><span>Total area</span><b>36,220 ha</b></div>
@@ -540,20 +562,21 @@ const threatSections = `
                   <div><span>Converted/Loss</span><b class="red">2,840 ha (8%)</b></div>
                 </div>
                 <div class="t3-alerts open">
-                  <button class="t3-alerts__head">Disturbance alerts <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
+                  <button class="t3-alerts__head">Peatland disturbance drivers <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
                   <div class="t3-alerts__body">
+                    <p class="t3-drivers-intro">Peatland disturbance may be associated with drainage pressure, fire risk, hydrological alteration. Disturbance refers to possible changes in peatland condition caused by canals, reduced soil moisture, fire occurrence, or altered water table conditions, even when vegetation cover remains present.</p>
                     <div class="t3-minis">
                       <div class="t3-mini">
-                        <span class="ic" style="background:#f5efd2;color:#bea001"><svg viewBox="0 0 24 24"><path d="M3 17c1.5 0 2.2-1 3.5-1s2 1 3.5 1 2.2-1 3.5-1 2 1 3.5 1 2.2-1 3.5-1"/><path d="M6 13l6-7 6 7M12 6v7"/></svg></span>
-                        <div class="tx"><span>Canal proximity</span><b>High</b><small>Within 1–2 km</small></div>
+                        <span class="ic"><svg viewBox="0 0 24 24"><path d="M3 17c1.5 0 2.2-1 3.5-1s2 1 3.5 1 2.2-1 3.5-1 2 1 3.5 1 2.2-1 3.5-1"/><path d="M6 13l6-7 6 7M12 6v7"/></svg></span>
+                        <div class="tx"><span>Canal proximity</span><b>High</b></div>
                       </div>
                       <div class="t3-mini">
-                        <span class="ic" style="background:#ffe8d9;color:#f3912a"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg></span>
-                        <div class="tx"><span>Drainage pressure</span><b>High</b><small>High risk</small></div>
+                        <span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg></span>
+                        <div class="tx"><span>Drainage pressure</span><b>High</b></div>
                       </div>
                       <div class="t3-mini">
-                        <span class="ic" style="background:#fdecec;color:#d94a3d"><svg viewBox="0 0 24 24"><path d="M12 22c4 0 7-2.6 7-6.5 0-3-2-5.4-3-7-.4 1.6-1.4 2.5-2.4 2.8C14 8 13 4.5 10.5 2 11 5 8 6.5 6.5 9.5 5.6 11.2 5 13 5 15.5 5 19.4 8 22 12 22Z"/></svg></span>
-                        <div class="tx"><span>Fire risk</span><b>High</b><small>Peat fire prone</small></div>
+                        <span class="ic"><svg viewBox="0 0 24 24"><path d="M12 22c4 0 7-2.6 7-6.5 0-3-2-5.4-3-7-.4 1.6-1.4 2.5-2.4 2.8C14 8 13 4.5 10.5 2 11 5 8 6.5 6.5 9.5 5.6 11.2 5 13 5 15.5 5 19.4 8 22 12 22Z"/></svg></span>
+                        <div class="tx"><span>Fire risk</span><b>High</b></div>
                       </div>
                     </div>
                   </div>
@@ -561,7 +584,7 @@ const threatSections = `
               </div>
           <div class="t3-disc">
             <svg viewBox="0 0 26 26"><path d="M13 3.5 2.5 22h21L13 3.5Z"/><path d="M13 10v5" fill="none"/><circle cx="13" cy="18.2" r="1.1" fill="#efa22f" stroke="none"/></svg>
-            <p><span style="font-weight:500">Disclaimer: </span><b>Field verification required</b><br>All the information in NbS Tool are purposed to support your feasibility study. Always verify before use it!</p>
+            <p><span style="font-weight:500">Disclaimer: </span><b>Field verification required</b><br>All the information in NbS Tool are purposed to support your pre-feasibility study. Always verify before use it!</p>
           </div>
             </div>
 
@@ -707,7 +730,7 @@ const benefitPanels = `
             <button class="reset-btn" type="button" aria-label="Reset specification"><svg class="ic" width="11" height="11" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z"/><path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466"/></svg>Reset</button>
           </div>
           <p class="prompt">Which of the following best describes most households&rsquo; primary source of livelihood?</p>
-          <div class="opts"><label class="optm"><input type="checkbox" value="NTFP"><span class="optm-box"><svg class="ic" width="12" height="12" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0"/></svg></span><span class="optm-body"><span class="optm-lab">NTFP</span><span class="optm-desc">Harvesting and selling Non-Timber Forest Products (e.g., fruits, nuts, medicinal plants, resin) integrated into the forest mix.</span></span></label><label class="optm"><input type="checkbox" value="Nursery work"><span class="optm-box"><svg class="ic" width="12" height="12" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0"/></svg></span><span class="optm-body"><span class="optm-lab">Nursery work</span><span class="optm-desc">Seedling production &mdash; soil preparation, bagging, watering, and weeding.</span></span></label><label class="optm"><input type="checkbox" value="Planting work"><span class="optm-box"><svg class="ic" width="12" height="12" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0"/></svg></span><span class="optm-body"><span class="optm-lab">Planting work</span><span class="optm-desc">Site preparation, transporting seedlings, digging, and planting.</span></span></label><label class="optm optm-none"><input type="checkbox" value="__none__"><span class="optm-box"><svg class="ic" width="12" height="12" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0"/></svg></span><span class="optm-body"><span class="optm-lab">None of the above</span></span></label></div>
+          <div class="opts"><label class="optm"><input type="checkbox" value="NTFP"><span class="optm-box"><svg class="ic" width="12" height="12" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0"/></svg></span><span class="optm-body"><span class="optm-lab">NTFP</span><span class="optm-desc">Harvesting and selling Non-Timber Forest Products (e.g., fruits, nuts, medicinal plants, resin) integrated into the forest mix.</span></span></label><label class="optm"><input type="checkbox" value="Nursery work"><span class="optm-box"><svg class="ic" width="12" height="12" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0"/></svg></span><span class="optm-body"><span class="optm-lab">Nursery work</span><span class="optm-desc">Seedling production &mdash; soil preparation, bagging, watering, and weeding.</span></span></label><label class="optm"><input type="checkbox" value="Planting work"><span class="optm-box"><svg class="ic" width="12" height="12" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0"/></svg></span><span class="optm-body"><span class="optm-lab">Planting work</span><span class="optm-desc">Site preparation, transporting seedlings, digging, and planting.</span></span></label><label class="optm optm-none"><input type="checkbox" value="__none__"><span class="optm-box"><svg class="ic" width="12" height="12" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0"/></svg></span><span class="optm-body"><span class="optm-lab">None of them</span></span></label></div>
           <button class="apply" type="button">Apply specification</button>
         </div>
       </div>
@@ -932,6 +955,13 @@ document.querySelectorAll('[data-nbs]').forEach(function(el){
   if (html) el.outerHTML = html;
 });
 
+/* Placeholder links (href="#") in the injected content would otherwise
+   navigate to an empty fragment and scroll the panel back to the top. */
+document.addEventListener('click', function(e){
+  var a = e.target.closest ? e.target.closest('a[href="#"]') : null;
+  if (a) e.preventDefault();
+});
+
 /* ---- Site Characterisation: show one context pane (general|nature|people|climate) ---- */
 function nbsShowSitePane(root, key){
   root.querySelectorAll('.ctx-pane').forEach(function(p){ p.hidden = p.dataset.ctx !== key; });
@@ -965,7 +995,7 @@ function nbsInitBenefit(root){
     s.position='relative'; s.visibility='hidden'; s.height='auto';
     var h=face.offsetHeight; s.position=pp; s.visibility=pv; s.height=''; return h; }
   function sizeCard(c){ var i=c.querySelector('.fcard-inner');
-    i.style.height = Math.max(faceHeight(c.querySelector('.front')), faceHeight(c.querySelector('.back'))) + 'px'; }
+    i.style.height = faceHeight(c.querySelector(c.classList.contains('flipped') ? '.back' : '.front')) + 'px'; }
   function sizeAll(){ cards.forEach(sizeCard); }
 
   /* Per-tab scroll memory: switching tabs keeps each tab's own scroll
@@ -1039,7 +1069,7 @@ function nbsInitBenefit(root){
         var all = ['NTFP','Nursery work','Planting work'];
         var missing = all.filter(function(a){ return sel.indexOf(a) < 0; });
         var text, echo;
-        if (sel.length === 0) { text='Cultivate livelihood opportunities through NTFP, Nursery and Planting work'; echo='None of the above'; }
+        if (sel.length === 0) { text='Cultivate livelihood opportunities through NTFP, Nursery and Planting work'; echo='None of them'; }
         else if (missing.length === 0) { text='Maintain livelihood opportunities through NTFP, Nursery and Planting work'; echo=sel.join(', '); }
         else { text='Expand livelihood opportunities through ' + joinNice(missing); echo=sel.join(', '); }
         apply(text, echo);

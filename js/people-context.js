@@ -142,8 +142,15 @@ function card(key,c,wide){
  }
  return `<div class="dcard${wide?' dc-wide':''}"><div class="dc-t"><span class="ti">${icv(ic)}</span>${c.t}</div>${c.unit?`<div class="dc-u">${c.unit}</div>`:''}<div class="dc-body">${body}</div></div>`;
 }
+/* data-source line — same pattern as the General Context section (gcSource /
+   .gc-src): "Data source: <b>Indicator</b> — source, years; ... See more." */
+function srcHtml(line){if(!line)return '';
+ const body=String(line).replace(/\.\s*$/,'').split(/;\s+/).map(seg=>{
+  const i=seg.indexOf(' — ');
+  return i>0?`<b>${seg.slice(0,i)}</b> — ${seg.slice(i+3)}`:seg;
+ }).join('; ');
+ return `<div class="src">Data source:&nbsp; ${body} <a href="#">See more</a>.</div>`;}
 function section(key,narr,cards,cols,srcLine){const s=SECT[key];
- const srcs=[...new Set(cards.map(c=>c.src).filter(Boolean))];
  let stats=cards.filter(c=>c.viz==='pct'||c.viz==='kpi');
  let charts=cards.filter(c=>c.viz!=='pct'&&c.viz!=='kpi');
  let aside='';
@@ -164,7 +171,7 @@ function section(key,narr,cards,cols,srcLine){const s=SECT[key];
  return `<div class="sect ${s.cls}">
   <div class="sect-header"><span class="chip">${icv(s.icon)}</span><span class="eyebrow">${s.title}</span><span class="info-dot"><svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9.99935 18.3332C14.6017 18.3332 18.3327 14.6022 18.3327 9.99984C18.3327 5.39746 14.6017 1.6665 9.99935 1.6665C5.39698 1.6665 1.66602 5.39746 1.66602 9.99984C1.66602 14.6022 5.39698 18.3332 9.99935 18.3332Z" fill="currentColor"/><path d="M10 13.3332V9.99984M10 6.6665H10.0083" stroke="white" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
   ${aside?`<div class="narr-row"><p class="narrative">${narr}</p><div class="narr-aside">${aside}</div></div>`:`<p class="narrative">${narr}</p>`}
-  <div class="well">${body}${srcs.length?`<div class="src"><span class="src-l">Data sources</span>${srcs.map(x=>`<span class="src-i">${x}</span>`).join('')}</div>`:''}</div></div>`;}
+  <div class="well">${body}${srcHtml(srcLine)}</div></div>`;}
 
 /* ============ regional (Southeast Asia) demography block — same layers for every country ============ */
 const VULN_LEAD='Composite indices (0–1) summarising how susceptible the selected area is to climate hazards, across four dimensions:';
@@ -202,7 +209,7 @@ function demoSection(d){
    ${vulnCard('Economic Vulnerability','ec',v.ec)}
    ${vulnCard('Social Vulnerability','s',v.s)}
   </div></div>
-  <div class="src"><span class="src-l">Data sources</span><span class="src-i">WorldPop constrained 2015–2030 · R2025A v1 · DOI:10.5258/SOTON/WP00839</span><span class="src-i">WorldPop age–sex breakdown · R2025A v1 · DOI:10.5258/SOTON/WP00841</span>${d.hh?`<span class="src-i">${d.hh.src}</span>`:''}<span class="src-i">ADPC harmonised vulnerability indices</span></div></div></div>`;}
+  ${srcHtml(`Estimated Population — WorldPop constrained 2015–2030 (R2025A v1); Estimated Age Group — WorldPop age–sex breakdown (R2025A v1)${d.hh?`; Number of Households — ${d.hh.src.split('·').slice(1).map(s=>s.trim()).join(', ')}`:''}; Vulnerability Assessment — ADPC harmonised vulnerability indices`)}</div></div>`;}
 
 /* ============ per-country content — indicators & narratives per GUI Design Document NBS Tool v3 ============ */
 /* ponytail: values are illustrative samples for the mock; live values come from the data pipeline */
