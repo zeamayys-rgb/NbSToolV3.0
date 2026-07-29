@@ -50,7 +50,7 @@
 .panel.active { display: block; animation: fade var(--motion-default); }
 @keyframes fade { from { opacity: 0; transform: translateY(6px);} to { opacity: 1; transform: none; } }
 
-.grid2 { display: grid; grid-template-columns: 1.5fr 1fr; gap: var(--space-24); align-items: start; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-24); align-items: start; }
 .block { background: var(--bg-base-main); border: 1px solid var(--stroke-base); border-radius: var(--radius-xl); padding: var(--space-24); box-shadow: var(--elevation-2); margin-bottom: var(--space-24); }
 .block:last-child { margin-bottom: 0; }
 .block-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-16); gap: var(--space-12); }
@@ -60,8 +60,8 @@
 .block-head .link svg { width: 15px; height: 15px; }
 
 /* map snippet */
-.map-snip { height: 280px; border-radius: var(--radius-lg); overflow: hidden; position: relative; background: url(../assets/asset/IMAGE_PROJECT MAP.png) center / cover no-repeat; border: 1px solid var(--stroke-base); }
-.map-snip .inset { position: absolute; right: 14px; bottom: 14px; width: 96px; height: 70px; border-radius: var(--radius-sm); border: 2px solid #fff; background: url(../assets/asset/IMAGE_PROJECT MAP SNIPPET.png) center / cover; box-shadow: var(--elevation-3); }
+.map-snip { height: 280px; border-radius: var(--radius-lg); overflow: hidden; position: relative; background: url(../assets/asset/map-overview.jpg) center / cover no-repeat; border: 1px solid var(--stroke-base); }
+.map-snip .inset { position: absolute; right: 14px; bottom: 14px; width: 96px; height: 70px; border-radius: var(--radius-sm); border: 2px solid #fff; background: url(../assets/asset/map-snip.webp) center / cover; box-shadow: var(--elevation-3); }
 .map-snip .pin { position: absolute; left: 38%; top: 42%; width: 18px; height: 18px; border-radius: 50% 50% 50% 0; background: var(--bg-primary-main); transform: rotate(-45deg); box-shadow: 0 0 0 6px rgba(7,127,104,.2); }
 .map-snip .scalebar { position: absolute; left: 14px; bottom: 16px; font-size: 11px; color: #fff; background: rgba(4,38,32,.6); padding: 4px 8px; border-radius: var(--radius-sm); }
 

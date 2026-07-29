@@ -33,7 +33,7 @@
   .p5 .sum-title{display:none;}
   .p5 .sum-sub{display:none;}
   .p5 .stat-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) minmax(0,1.7fr);gap:7px;margin-top:11px;}
-  .p5 .stat{background:#fafbfc;border:1px solid #eaecf0;border-radius:6px;padding:8px 11px;display:flex;flex-direction:column;justify-content:center;}
+  .p5 .stat{background:#fff;border:1px solid #eaecf0;border-radius:6px;padding:8px 11px;display:flex;flex-direction:column;justify-content:center;}
   .p5 .stat-val{font:700 17px/1 var(--font-display,'Barlow Semi Condensed',sans-serif);color:#252525;}
   .p5 .stat-lab{font-size:10px;color:#68727d;text-transform:uppercase;letter-spacing:.04em;font-weight:600;margin-top:3px;}
   .p5 .stat.pathways .stat-lab{margin:0 0 6px;}

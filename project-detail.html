@@ -38,14 +38,17 @@
 .pw-manage  { background:rgb(254,243,199); color:rgb(146,64,14); }
 .pw-restore { background:rgb(224,247,250); color:rgb(14,116,144); }
 
-.nds-group { overflow:hidden; }
+/* expanded activity list — contained panel so it reads as nested inside the eco card */
+.nds-group { overflow:hidden; background:var(--bg-base-second); border:1px solid var(--stroke-base); border-radius:12px; padding:14px 16px; margin-bottom:12px; }
 .nds-group.collapsed { display:none; }
-.nds-group-hd { display:flex; align-items:center; gap:9px; padding:14px 0 10px; border-top:1px solid var(--stroke-base); }
+.nds-group-hd { display:flex; align-items:center; gap:9px; padding:0 0 12px; margin-bottom:12px; border-bottom:1px dashed var(--stroke-base); }
 .nds-group-hd img { width:22px; height:22px; flex:none; }
 .nds-group-name { font-family:var(--font-text); font-size:13px; font-weight:700; color:var(--text-base-main); }
 .nds-group-meta { font-family:var(--font-text); font-size:11px; color:var(--text-base-second); margin-left:auto; white-space:nowrap; }
 
 .nds-act { display:flex; align-items:center; gap:14px; padding:11px 15px; border:1px solid var(--stroke-base); border-radius:10px; margin-bottom:8px; background:var(--bg-base-main); }
+.nds-act:last-child { margin-bottom:0; }
+.nds-mini-lab { font-family:var(--font-text); font-size:9px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--text-base-third); align-self:center; margin-right:2px; }
 .nds-act-main { flex:1; min-width:0; }
 .nds-act-name-row { display:flex; align-items:center; gap:8px; margin-bottom:7px; flex-wrap:wrap; }
 .nds-act-name { font-family:var(--font-text); font-size:13px; font-weight:600; color:var(--text-base-main); }
@@ -89,7 +92,7 @@
 .nds-toast-f { font-size:11px; color:var(--text-base-second); margin-top:1px; }
 
 /* ── Analysis tab — side nav + panes (pane content comes from the shared analyser component) ── */
-.an2 { display:grid; grid-template-columns:250px 1fr; gap:28px; align-items:start; }
+.an2 { display:grid; grid-template-columns:275px 1fr; gap:28px; align-items:start; }
 .an2-nav { position:sticky; top:84px; align-self:start; border:1px solid var(--stroke-base); border-radius:14px; background:var(--bg-base-main); padding:10px; box-shadow:var(--elevation-2); }
 .an2-step__hd { display:flex; align-items:center; gap:11px; width:100%; background:none; border:none; cursor:pointer; padding:11px 10px; border-radius:10px; text-align:left; font-family:var(--font-text); transition:background .15s; }
 .an2-step__hd:hover { background:var(--bg-base-second); }
@@ -100,17 +103,20 @@
 .an2-step__hd.active .an2-step__lbl { color:var(--text-primary); }
 .an2-chev { width:16px; height:16px; flex:none; color:var(--text-base-third); transition:transform .2s; }
 .an2-step.open .an2-chev { transform:rotate(180deg); }
-.an2-subs { display:none; flex-direction:column; gap:2px; padding:2px 0 8px 44px; }
+.an2-subs { display:none; flex-direction:column; gap:2px; padding:2px 0 8px 44px; margin-top:6px; }
 .an2-step.open .an2-subs { display:flex; }
 .an2-sub { text-align:left; background:none; border:1px solid transparent; cursor:pointer; padding:8px 12px; border-radius:8px; font-family:var(--font-text); font-size:13px; color:var(--text-base-second); transition:background .15s,color .15s; }
 .an2-sub:hover { background:var(--bg-base-second); color:var(--text-base-main); }
 .an2-sub.active { background:var(--bg-success-second); color:var(--text-primary); font-weight:600; border-color:var(--primary-100); }
 
 .an2-main { min-width:0; }
-.an2-pane { display:none; }
+.an2-pane { display:none; max-width:810px; margin:0 auto; }
 .an2-pane.active { display:block; animation:fade var(--motion-default); }
-.an2-title { text-align:center; font-family:var(--font-text); font-size:22px; font-weight:700; color:var(--text-base-main); letter-spacing:-0.02em; margin:2px 0 10px; }
-.an2-rule { width:118px; height:3px; margin:0 auto 26px; border-radius:2px; background:linear-gradient(90deg,#e9ee2f,#a7cf4e,#1a6b2e); }
+/* pane title — analyser shared title spec (A-01): Poppins 600 16px #2d3648 */
+.an2-title { text-align:center; font-family:var(--font-text); font-size:16px; font-weight:600; color:#2d3648; letter-spacing:-0.2px; margin:2px 0 14px; }
+/* analyser panel chrome — mirrors the 810px .da-body (f01.css / f01-step2.css) */
+#p-analysis .ctx-pane:not([hidden]) { display:block; background:#f5f6f8; border:1px solid var(--stroke-base); border-radius:14px; overflow:hidden; }
+#p-analysis .t3, #p-analysis .p5 { background:var(--neutral-200); border:1px solid var(--stroke-base); border-radius:14px; padding:18px; }
 
 @media (max-width:880px){ .an2 { grid-template-columns:1fr; } .an2-nav { position:static; } }
 </style>
@@ -216,25 +222,25 @@
       <div>
         <div class="block" style="margin-bottom:0">
           <div class="block-head"><h3>Project metadata</h3><span class="link" id="metaEditBtn" onclick="toggleMetaEdit()" style="cursor:pointer">Inline edit<svg viewBox="0 0 24 24" fill="none"><path d="M4 20h4L18 10l-4-4L4 16v4z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></span></div>
-          <div class="dl" style="font-weight: 200">
-            <div class="it" style="grid-column:1/-1">
-              <div class="k">Project Name</div>
-              <div class="v meta-view" id="nameView" style="font-weight:700;font-size:13px">Kubu Raya Mangrove</div>
-              <div class="meta-edit" id="nameEdit" style="display:none">
-                <input id="nameInput" type="text" value="Kubu Raya Mangrove" style="width:100%;height:36px;padding:0 12px;border:1.5px solid #066653;border-radius:6px;font-family:var(--font-text);font-size:13px;font-weight:700;color:#252525;outline:none;background:#fff" />
+          <div style="display:flex;flex-direction:column">
+            <div class="spec-row top">
+              <span class="spec-key wide">Name</span>
+              <span class="spec-val right meta-view" id="nameView" style="font-weight:700">Kubu Raya Mangrove</span>
+              <div class="meta-edit" id="nameEdit" style="display:none;flex:1">
+                <input id="nameInput" type="text" value="Kubu Raya Mangrove" style="width:100%;height:34px;padding:0 12px;border:1.5px solid #066653;border-radius:6px;font-family:var(--font-text);font-size:12px;font-weight:700;color:#252525;outline:none;background:#fff" />
               </div>
             </div>
-            <div class="it" style="grid-column:1/-1">
-              <div class="k">Description</div>
-              <div class="v meta-view" id="descView" style="font-size:13px">Community-led restoration of a degraded coastal mangrove belt — rebuilding blue-carbon stocks and storm protection while strengthening local fisheries livelihoods across three villages.</div>
-              <div class="meta-edit" id="descEdit" style="display:none">
-                <textarea id="descInput" rows="4" style="width:100%;padding:10px 12px;border:1.5px solid #066653;border-radius:6px;font-family:var(--font-text);font-size:13px;color:#252525;outline:none;background:#fff;resize:vertical;line-height:1.55">Community-led restoration of a degraded coastal mangrove belt — rebuilding blue-carbon stocks and storm protection while strengthening local fisheries livelihoods across three villages.</textarea>
+            <div class="spec-row top">
+              <span class="spec-key wide">Description</span>
+              <span class="spec-val meta-view" id="descView" style="font-weight:400;line-height:1.55;margin-left:24px">Community-led restoration of a degraded coastal mangrove belt — rebuilding blue-carbon stocks and storm protection while strengthening local fisheries livelihoods across three villages.</span>
+              <div class="meta-edit" id="descEdit" style="display:none;flex:1">
+                <textarea id="descInput" rows="4" style="width:100%;padding:10px 12px;border:1.5px solid #066653;border-radius:6px;font-family:var(--font-text);font-size:12px;color:#252525;outline:none;background:#fff;resize:vertical;line-height:1.55">Community-led restoration of a degraded coastal mangrove belt — rebuilding blue-carbon stocks and storm protection while strengthening local fisheries livelihoods across three villages.</textarea>
               </div>
             </div>
-            <div class="it"><div class="k">Province</div><div class="v" style="font-weight:600;font-size:13px">West Kalimantan</div></div>
-            <div class="it"><div class="k">District</div><div class="v" style="font-size:13px">Kubu Raya</div></div>
-            <div class="it"><div class="k">Project size</div><div class="v" style="font-size:13px">1,240 ha</div></div>
-            <div class="it"><div class="k">Created</div><div class="v" style="font-size:13px">12 Mar 2024</div></div>
+            <div class="spec-row"><span class="spec-key">Province</span><span class="spec-val">West Kalimantan</span></div>
+            <div class="spec-row"><span class="spec-key">District</span><span class="spec-val">Kubu Raya</span></div>
+            <div class="spec-row"><span class="spec-key">Project size</span><span class="spec-val">1,240 ha</span></div>
+            <div class="spec-row last"><span class="spec-key">Created</span><span class="spec-val">12 Mar 2024</span></div>
           </div>
           <!-- Save/cancel bar (hidden by default) -->
           <div id="metaSaveBar" style="display:none;margin-top:14px;gap:10px;align-items:center">
@@ -343,28 +349,20 @@
         <div class="block-head"><h3><svg viewBox="0 0 24 24" fill="none"><path d="M12 21V11M12 11c0-3-2-5.5-5-6m5 6c0-3.5 2.5-6 6-6.5" stroke="currentColor" stroke-width="1.7"/></svg>NbS Intervention</h3></div>
         <div style="display:flex;flex-direction:column;gap:0">
           <div class="spec-row top">
-            <span class="spec-key wide">Intervention</span>
-            <span class="spec-val right">Mangrove replanting &amp; hydrological restoration</span>
+            <span class="spec-key">Ecosystem</span>
+            <span class="spec-val">Forest · Mangrove · Peatland</span>
           </div>
           <div class="spec-row">
             <span class="spec-key">Pathway</span>
-            <span class="spec-val brand">Restore</span>
+            <span class="spec-val brand">Protect + Manage</span>
           </div>
           <div class="spec-row">
-            <span class="spec-key">Ecosystem</span>
-            <span class="spec-val">Coastal mangrove</span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-key">Duration</span>
-            <span class="spec-val">2024 — 2034 (10 yr)</span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-key">NbS Incubator</span>
-            <span class="badge i-review" style="font-size:10px">Under review</span>
+            <span class="spec-key">Activities</span>
+            <span class="spec-val">9 selected activities</span>
           </div>
           <div class="spec-row last">
-            <span class="spec-key">Data tier</span>
-            <span class="spec-val">Tier 2 · partial</span>
+            <span class="spec-key">Duration</span>
+            <span class="spec-val">2024 — 2054 (30 yr)</span>
           </div>
         </div>
       </div>
@@ -442,7 +440,7 @@
         <div class="nds-act">
           <div class="nds-act-main">
             <div class="nds-act-name-row"><span class="nds-tag ${a.pw.toLowerCase()}">${a.pw}</span><span class="nds-act-name">${a.name}</span></div>
-            <div class="nds-tags">${a.benefits.map(b => `<span class="nds-tag ${b.toLowerCase()}">${b}</span>`).join('')}</div>
+            <div class="nds-tags"><span class="nds-mini-lab">Benefits</span>${a.benefits.map(b => `<span class="nds-tag ${b.toLowerCase()}">${b}</span>`).join('')}</div>
           </div>
           <div class="nds-ind"><span class="nds-ind-num">${a.ind}</span><span class="nds-ind-lbl">indicators</span></div>
         </div>`).join('');
@@ -672,19 +670,16 @@
       <div class="an2-main">
         <div class="an2-pane active" data-pane="site">
           <div class="an2-title">Site Characterisation: General Information</div>
-          <div class="an2-rule"></div>
           <div data-nbs="site"></div>
         </div>
         <div class="an2-pane" data-pane="threat">
           <div class="an2-title">Threats Profile: Overview</div>
-          <div class="an2-rule"></div>
           <div class="t3" id="an2T3">
             <div data-nbs="threat-sections"></div>
           </div>
         </div>
         <div class="an2-pane" data-pane="benefit">
           <div class="an2-title">Potential Benefit: Nature</div>
-          <div class="an2-rule"></div>
           <div class="p5" id="an2P5">
             <div data-nbs="benefit-content"></div>
           </div>
@@ -876,32 +871,21 @@
 
       <!-- ── STATE B: No monitoring plan → MRV locked ── -->
       <div id="mrv-state-no" style="display:none">
-        <!-- Locked MRV card -->
-        <div style="margin:0 0 0;padding:32px 24px;display:flex;align-items:center;gap:24px;background:var(--bg-base-second);border-radius:var(--radius-lg);border:1px dashed var(--stroke-base);opacity:.55;pointer-events:none;user-select:none">
-          <span class="ic" style="flex:none"><svg viewBox="0 0 24 24" fill="none"><path d="M4 20V4M4 20h16M8 16l3-4 3 2 4-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          <div class="tx"><h4>Impact monitoring &amp; verification</h4><p>Track measured outcomes over the project lifecycle and prepare data for independent verification.</p></div>
-          <button class="btn btn-primary" disabled style="pointer-events:none;opacity:.5">Open MRV Dashboard<svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-        </div>
-
-        <!-- Lock notice -->
-        <div style="margin:16px 0 0;padding:20px 24px;border:1px solid var(--stroke-base);border-radius:var(--radius-lg);background:var(--bg-base-main);display:flex;align-items:flex-start;gap:16px">
-          <div style="width:40px;height:40px;border-radius:10px;background:var(--bg-base-third);display:grid;place-items:center;flex:none">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="5" y="11" width="14" height="9" rx="2" stroke="var(--text-base-second)" stroke-width="1.8"/><path d="M8 11V8a4 4 0 018 0v3" stroke="var(--text-base-second)" stroke-width="1.8"/></svg>
+        <!-- Empty state — no monitoring plan yet -->
+        <div style="padding:56px 32px 48px;border:1px dashed var(--stroke-base);border-radius:var(--radius-lg);background:var(--bg-base-second);display:flex;flex-direction:column;align-items:center;text-align:center">
+          <div style="width:56px;height:56px;border-radius:50%;background:var(--bg-success-second);display:grid;place-items:center;margin-bottom:18px">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="5" y="11" width="14" height="9" rx="2" stroke="var(--text-primary)" stroke-width="1.8"/><path d="M8 11V8a4 4 0 018 0v3" stroke="var(--text-primary)" stroke-width="1.8"/></svg>
           </div>
-          <div style="flex:1;min-width:0">
-            <div style="font-family:var(--font-text);font-size:13px;font-weight:700;color:var(--text-base-main);margin-bottom:4px">Monitoring plan required</div>
-            <div style="font-family:var(--font-text);font-size:12px;color:var(--text-base-second);line-height:1.65;margin-bottom:16px">The MRV Dashboard is only available once a monitoring plan has been created. Set up your indicators and reporting schedule first.</div>
-            <a href="create-monitoring-plan.html" class="btn btn-primary btn-sm" style="text-decoration:none">
-              <svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="white" stroke-width="2.2" stroke-linecap="round"/></svg>
-              Create Monitoring Plan
-            </a>
+          <h3 style="font-family:var(--font-text);font-size:17px;font-weight:700;color:var(--text-base-main);letter-spacing:-0.01em;margin:0 0 8px">No MRV data yet</h3>
+          <p style="font-family:var(--font-text);font-size:13px;color:var(--text-base-second);line-height:1.65;max-width:420px;margin:0 0 22px">The MRV Dashboard opens once this project has a monitoring plan. Set up your indicators and reporting schedule to start tracking measured impact.</p>
+          <a href="create-monitoring-plan.html" class="btn btn-primary" style="text-decoration:none">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="white" stroke-width="2.2" stroke-linecap="round"/></svg>
+            Create Monitoring Plan
+          </a>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:22px">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="flex:none;color:var(--text-primary)"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 8v4M12 16h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            <span style="font-family:var(--font-text);font-size:12px;color:var(--text-base-second);line-height:1.5">MRV reporting requires at least one completed monitoring cycle with verified indicator data.</span>
           </div>
-        </div>
-
-        <!-- Bottom hint -->
-        <div style="margin:0 -1px -1px;padding:14px 20px;background:var(--bg-base-second);border-top:1px solid var(--stroke-base);border-radius:0 0 10px 10px;display:flex;align-items:center;gap:10px">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="flex:none;color:var(--text-primary)"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 8v4M12 16h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-          <span style="font-family:var(--font-text);font-size:12px;color:var(--text-base-second);line-height:1.5">MRV reporting requires at least one completed monitoring cycle with verified indicator data.</span>
         </div>
       </div>
 
