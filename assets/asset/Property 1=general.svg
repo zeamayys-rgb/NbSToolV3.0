@@ -1,8 +1,8 @@
 <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M12.5004 21.7C17.8023 21.7 22.1004 17.4019 22.1004 12.1C22.1004 6.79807 17.8023 2.5 12.5004 2.5C7.19846 2.5 2.90039 6.79807 2.90039 12.1C2.90039 17.4019 7.19846 21.7 12.5004 21.7Z" fill="#993C1D" fill-opacity="0.08" stroke="#993C1D" stroke-width="0.6" stroke-linecap="round" stroke-linejoin="round"/>
-<path opacity="0.6" d="M3.50098 12.1C9.50098 10.7 15.501 10.7 21.501 12.1" stroke="#993C1D" stroke-width="0.45" stroke-linecap="round" stroke-linejoin="round"/>
-<path opacity="0.6" d="M3.50098 12.0999C9.50098 13.4999 15.501 13.4999 21.501 12.0999" stroke="#993C1D" stroke-width="0.45" stroke-linecap="round" stroke-linejoin="round"/>
-<path opacity="0.6" d="M12.5004 2.5C9.70039 8.9 9.70039 15.3 12.5004 21.7" stroke="#993C1D" stroke-width="0.45" stroke-linecap="round" stroke-linejoin="round"/>
-<path opacity="0.6" d="M12.501 2.5C15.301 8.9 15.301 15.3 12.501 21.7" stroke="#993C1D" stroke-width="0.45" stroke-linecap="round" stroke-linejoin="round"/>
-<path opacity="0.3" d="M12.501 2.5V21.7" stroke="#993C1D" stroke-width="0.3" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M12.5004 21.7C17.8023 21.7 22.1004 17.4019 22.1004 12.1C22.1004 6.79807 17.8023 2.5 12.5004 2.5C7.19846 2.5 2.90039 6.79807 2.90039 12.1C2.90039 17.4019 7.19846 21.7 12.5004 21.7Z" fill="#993C1D" fill-opacity="0.08" stroke="#993C1D" stroke-width="0.6" stroke-linecap="round" stroke-linejoin="round"></path>
+<path opacity="0.6" d="M3.50098 12.1C9.50098 10.7 15.501 10.7 21.501 12.1" stroke="#993C1D" stroke-width="0.45" stroke-linecap="round" stroke-linejoin="round"></path>
+<path opacity="0.6" d="M3.50098 12.0999C9.50098 13.4999 15.501 13.4999 21.501 12.0999" stroke="#993C1D" stroke-width="0.45" stroke-linecap="round" stroke-linejoin="round"></path>
+<path opacity="0.6" d="M12.5004 2.5C9.70039 8.9 9.70039 15.3 12.5004 21.7" stroke="#993C1D" stroke-width="0.45" stroke-linecap="round" stroke-linejoin="round"></path>
+<path opacity="0.6" d="M12.501 2.5C15.301 8.9 15.301 15.3 12.501 21.7" stroke="#993C1D" stroke-width="0.45" stroke-linecap="round" stroke-linejoin="round"></path>
+<path opacity="0.3" d="M12.501 2.5V21.7" stroke="#993C1D" stroke-width="0.3" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>

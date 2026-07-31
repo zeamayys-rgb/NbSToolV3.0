@@ -1,11 +1,11 @@
 <svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g id="Group">
-<path id="Vector" d="M70.6667 0H9.33333C4.17868 0 0 4.17868 0 9.33333V70.6667C0 75.8213 4.17868 80 9.33333 80H70.6667C75.8213 80 80 75.8213 80 70.6667V9.33333C80 4.17868 75.8213 0 70.6667 0Z" fill="#E6F2E6"/>
-<path id="Vector_2" d="M40 12L58.6667 37.3333H21.3333L40 12Z" fill="#1A4A1E"/>
-<path id="Vector_3" opacity="0.8" d="M40 24L61.3333 50.6667H18.6667L40 24Z" fill="#1A4A1E"/>
-<path id="Vector_4" opacity="0.65" d="M40 36L64 64H16L40 36Z" fill="#1A4A1E"/>
-<path id="Vector_5" opacity="0.5" d="M29.3333 28H50.6667" stroke="#2D6B32" stroke-width="0.8"/>
-<path id="Vector_6" opacity="0.4" d="M25.3333 41.3333H54.6667" stroke="#2D6B32" stroke-width="0.8"/>
-<path id="Vector_7" opacity="0.5" d="M42 64H38C37.2636 64 36.6667 64.597 36.6667 65.3333V69.3333C36.6667 70.0697 37.2636 70.6667 38 70.6667H42C42.7364 70.6667 43.3333 70.0697 43.3333 69.3333V65.3333C43.3333 64.597 42.7364 64 42 64Z" fill="#1A4A1E"/>
+<path id="Vector" d="M70.6667 0H9.33333C4.17868 0 0 4.17868 0 9.33333V70.6667C0 75.8213 4.17868 80 9.33333 80H70.6667C75.8213 80 80 75.8213 80 70.6667V9.33333C80 4.17868 75.8213 0 70.6667 0Z" fill="#E6F2E6"></path>
+<path id="Vector_2" d="M40 12L58.6667 37.3333H21.3333L40 12Z" fill="#1A4A1E"></path>
+<path id="Vector_3" opacity="0.8" d="M40 24L61.3333 50.6667H18.6667L40 24Z" fill="#1A4A1E"></path>
+<path id="Vector_4" opacity="0.65" d="M40 36L64 64H16L40 36Z" fill="#1A4A1E"></path>
+<path id="Vector_5" opacity="0.5" d="M29.3333 28H50.6667" stroke="#2D6B32" stroke-width="0.8"></path>
+<path id="Vector_6" opacity="0.4" d="M25.3333 41.3333H54.6667" stroke="#2D6B32" stroke-width="0.8"></path>
+<path id="Vector_7" opacity="0.5" d="M42 64H38C37.2636 64 36.6667 64.597 36.6667 65.3333V69.3333C36.6667 70.0697 37.2636 70.6667 38 70.6667H42C42.7364 70.6667 43.3333 70.0697 43.3333 69.3333V65.3333C43.3333 64.597 42.7364 64 42 64Z" fill="#1A4A1E"></path>
 </g>
 </svg>

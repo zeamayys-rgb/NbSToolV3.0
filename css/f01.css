@@ -178,10 +178,15 @@
 /* Stepper — matches F02 Figma "Property 1=01" stepper */
 .da-steps { display: flex; align-items: center; margin-top: 14px; }
 .da-step {
-  display: flex; align-items: center; gap: 8px; flex: none;
-  background: none; border: none; padding: 0; cursor: pointer;
+  display: flex; align-items: center; gap: 6px; flex: none;
+  background: none; border: none; padding: 4px 6px; margin: -4px -6px; border-radius: 999px; cursor: pointer;
   font-family: var(--font-text);
+  transition: background var(--motion-fast);
 }
+/* hover — translucent pill wash + label reveal (outer selector background) */
+.da-step:hover { background: rgba(255,255,255,.16); }
+.da-step:hover .da-step__label { max-width: 160px; opacity: 1; color: #fff; }
+.da-step:hover .da-step__num { color: #066653; border-color: #fff; }
 .da-step__num {
   width: 24px; height: 24px; border-radius: 50%;
   display: grid; place-items: center;
@@ -193,7 +198,7 @@
 .da-step__num svg { width: 13px; height: 13px; stroke: #066653; fill: none; }
 .da-step.is-done .da-step__num svg { stroke: #fff; }  /* white check on the filled green circle (Figma) */
 .da-step__label {
-  font-size: 12px; font-weight: 700; color: #beead5; white-space: nowrap;
+  font-size: 12px; font-weight: 500; color: #beead5; white-space: nowrap;
   max-width: 0; overflow: hidden; opacity: 0;
   transition: max-width var(--motion-default), opacity var(--motion-default);
 }
@@ -206,8 +211,8 @@
 .da-step.is-done   .da-step__label { color: #beead5; }
 /* dashed connector between steps (Figma .Divider stepper) */
 .da-conn {
-  flex: 1 1 auto; min-width: 10px; height: 0;
-  margin: 0 6px;
+  flex: 1 1 auto; min-width: 8px; height: 0;
+  margin: 0 4px;
   border-top: 2px dashed rgb(190,202,196);
 }
 

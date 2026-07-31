@@ -11,7 +11,7 @@
 /* ---- shared bits ---- */
 /* shared step-title spec (A-01): Poppins 600 16px, #2d3648 */
 .s1-h { font-family: var(--font-text); font-weight: 600; font-size: 16px; line-height: 1.2; letter-spacing: -0.2px; color: #2d3648; margin: 0; }
-.s1-sub { font-size: 14px; line-height: 22px; color: #2f2f2f; margin: 0; }
+.s1-sub { font-size: 13px; line-height: 22px; color: #68727d; margin: 0; }
 .s1-head { display: flex; flex-direction: column; gap: 4px; }
 
 /* primary / secondary buttons inside the panel (Figma: radius 4, green #077f68) */
@@ -50,7 +50,7 @@
 /* ============ 1.0 — Choose your analysis area ============ */
 .s1-tip {
   display: flex; gap: 8px; align-items: flex-start;
-  background: #e9f8f1; border-left: 2px solid #27b973;
+  background: #e9f8f1; border-left: 4px solid #27b973;
   border-radius: 0 8px 8px 0; padding: 8px 10px 8px 12px;
 }
 .s1-tip svg { width: 20px; height: 20px; flex: none; color: #066653; margin-top: 1px; }
@@ -108,7 +108,7 @@
 
 /* ============ 1.2 — Upload SHP ============ */
 .s1-drop {
-  border: 1px dashed #077f68; border-radius: 8px; background: #f0fff3;
+  border: 2px dashed #077f68; border-radius: 8px; background: #e9f8f1;
   padding: 20px; display: flex; flex-direction: column; gap: 27px;
   transition: background var(--motion-fast), border-color var(--motion-fast);
 }
@@ -156,17 +156,17 @@
   font-size: 13px; line-height: 20px; color: #68727d; min-height: 120px; align-content: start;
 }
 .s1-areainfo .k { font-weight: 600; color: #505760; }
-.s1-areainfo .v { font-weight: 600; color: #1d463b; text-align: right; }
+.s1-areainfo .v { font-weight: 600; color: var(--primary-700, #044c3e); text-align: right; }
 .s1-areainfo--empty { grid-template-columns: 1fr; place-content: center; text-align: center; color: #98a2b3; }
 
 /* ============ 1.X.1 — Confirmation ============ */
 .s1-confirm { display: flex; flex-direction: column; gap: 30px; }
 .s1-confirm__grp { display: flex; flex-direction: column; gap: 16px; }
 .s1-confirmcard {
-  background: #1d463b; border-radius: 8px; padding: 12px;
+  background: var(--primary-700, #044c3e); border-radius: 8px; padding: 12px;
 }
 .s1-confirmcard__inner {
-  background: #387d69; border-radius: 4px; padding: 10px;
+  background: var(--primary-500, #077f68); border-radius: 4px; padding: 10px;
   display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center;
 }
 .s1-confirmcard__inner .lbl { font-family: var(--font-text); font-weight: 400; font-size: 18px; line-height: 26px; color: #fff; }

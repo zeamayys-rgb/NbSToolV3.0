@@ -34,7 +34,7 @@
 .da-ctx__nav {
   display: inline-flex; align-items: center; justify-content: center; gap: 6px;
   flex: none; height: 28px; min-width: 80px; padding: 4px 6px;
-  border-radius: 20px; border: 1px solid #475467;      /* Neutral/600 */
+  border-radius: 20px; border: 1px solid #475467;      /* slate (not a token — see DA-14) */
   background: #ffffff; color: #475467; cursor: pointer;
   font-family: var(--font-text); font-size: 14px; font-weight: 600; letter-spacing: -0.01em;
   transition: background var(--motion-fast), border-color var(--motion-fast);
@@ -59,8 +59,10 @@
   transition: color var(--motion-fast), border-color var(--motion-fast);
   white-space: nowrap;
 }
-.da-ctx__tabs button .ic { width: 18px; height: 18px; flex: none; opacity: .75; }
-.da-ctx__tabs button:hover { color: #252525; }
+.da-ctx__tabs button .ic { width: 18px; height: 18px; flex: none; opacity: .75; transition: opacity .15s ease-out, transform .15s ease-out; }
+.da-ctx__tabs button { transition: color .15s ease-out, background .15s ease-out, border-bottom-color .15s ease-out; }
+.da-ctx__tabs button:hover { color: #044c3e; background: #f1faf5; border-bottom-color: #9ed3c3; }
+.da-ctx__tabs button:hover .ic { opacity: 1; transform: translateY(-1px); }
 .da-ctx__tabs button[aria-selected="true"] { color: #044c3e; border-bottom-color: #044c3e; }
 .da-ctx__tabs button[aria-selected="true"] .ic { opacity: 1; }
 
@@ -70,7 +72,7 @@
 .da-panel[data-step="2"] .da-body {
   padding: 0;
   gap: 0;
-  background: #f5f6f8;                           /* Background/Base-Fourth */
+  background: var(--bg-base-third, #f7f7f8);     /* Base-Third — "Base-Fourth" does not exist (DA-14) */
 }
 .da-panel[data-step="2"] .da-step-body { gap: 0; }
 .ctx-pane[hidden] { display: none; }

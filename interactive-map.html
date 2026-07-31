@@ -6,7 +6,7 @@
 <title>NbS Tool — Interactive Map</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Barlow+Semi+Condensed:wght@600;700&family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Barlow+Semi+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="css/tokens.css" />
 <link rel="stylesheet" href="css/dashboard.css" />
 <link rel="stylesheet" href="css/nav.css" />
@@ -33,13 +33,14 @@
   /* ===== Data Analyser modals (Finish / Leave) ===== */
   .dm-overlay{position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;padding:24px;background:rgba(15,23,25,.55);}
   .dm-overlay.show{display:flex;}
-  .dm{background:#fff;border-radius:16px;box-shadow:0 24px 60px -12px rgba(16,24,40,.35);width:100%;max-width:620px;padding:24px;font-family:'Poppins',sans-serif;animation:dmIn .18s ease;}
+  .dm{background:var(--bg-base-main,#fff);border-radius:var(--radius-xl);box-shadow:var(--elevation-6);width:100%;max-width:620px;padding:var(--space-32);font-family:var(--font-text);animation:dmIn .18s ease;}
   .dm--sm{max-width:462px;}
   @keyframes dmIn{from{opacity:0;transform:translateY(8px) scale(.99)}to{opacity:1;transform:none}}
-  .dm-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;padding-bottom:18px;border-bottom:1px solid #eaecf0;margin-bottom:18px;}
-  .dm-eyebrow{font:700 11px/1 'Poppins',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#077f68;}
-  .dm h3{font-size:23px;font-weight:700;color:#1a202c;margin:9px 0 6px;letter-spacing:-.3px;line-height:1.15;}
-  .dm-sub{font-size:14px;color:#68727d;line-height:1.5;}
+  .dm-head{display:flex;justify-content:space-between;align-items:flex-start;gap:0;padding-bottom:var(--space-16);border-bottom:1px solid var(--stroke-base);margin-bottom:var(--space-16);}
+  .dm-head>div:first-child{display:flex;flex-direction:column;}
+  .dm-eyebrow{font:600 11px/1 'IBM Plex Mono',monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--text-primary);}
+  .dm h3{font-family:var(--font-display);font-size:26px;font-weight:700;color:var(--text-base-main);margin:var(--space-8) 0 6px;letter-spacing:-.5px;line-height:1.15;}
+  .dm-sub{font-size:14px;color:var(--text-base-second);line-height:1.5;}
   .dm-x{width:38px;height:38px;flex:none;display:grid;place-items:center;border:1px solid #e5e7eb;border-radius:8px;background:#fff;color:#68727d;cursor:pointer;transition:.15s;}
   .dm-x:hover{background:#f5f6f8;color:#252525;}
   .dm-x svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;}
@@ -50,10 +51,10 @@
   .dm-opt__ic svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
   .dm-opt__tx{display:flex;flex-direction:column;gap:4px;}
   .dm-opt__tx b{font-size:17px;font-weight:700;color:#1a202c;}
-  .dm-opt__tx span{font-size:14px;color:#68727d;line-height:1.45;}
+  .dm-opt__tx span{font-size:12px;color:#68727d;line-height:1.45;}
   .dm-note{display:flex;gap:12px;align-items:flex-start;background:var(--bg-warning-second,#fdf6ea);border-radius:10px;padding:14px 16px;margin-top:4px;}
   .dm-note svg{width:22px;height:22px;flex:none;stroke:var(--text-warning,#efa22f);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
-  .dm-note p{margin:0;font-size:14px;color:var(--warning-700,#8f611c);line-height:22px;}
+  .dm-note p{margin:0;font-size:13px;color:var(--warning-700,#8f611c);line-height:22px;}
   /* leave modal */
   .dm-head--icon{border-bottom:none;padding-bottom:0;margin-bottom:0;}
   .dm-warn{width:56px;height:56px;flex:none;display:grid;place-items:center;border-radius:12px;background:#fdf6ea;color:#efa22f;}
@@ -79,6 +80,37 @@
 
   /* Step 3 — Threats Profile & NbS Screening Overview (Figma 302-78413) */
   /* .t3 styles live in css/analysis-shared.css (shared with project-detail.html) */
+
+  /* ===== Legend: per-layer info ( "i" ) button ===== */
+  .legend__item{ justify-content:space-between; }
+  .legend__item-l{ display:flex; align-items:center; gap:10px; min-width:0; }
+  .legend__info{
+    flex:none; width:22px; height:22px; display:grid; place-items:center;
+    border-radius:var(--radius-full); border:1px solid var(--stroke-base);
+    background:#fff; color:var(--text-base-second); cursor:pointer; transition:.15s ease-out; padding:0;
+  }
+  .legend__info:hover{ background:var(--bg-base-second); color:var(--text-primary); border-color:var(--text-primary); }
+  .legend__info svg{ width:12px; height:12px; stroke:currentColor; fill:none; stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round; }
+
+  /* ===== Reusable layer info modal (data-driven — see LAYER_META in the page script) ===== */
+  .im-overlay{ position:fixed; inset:0; z-index:1000; display:none; align-items:center; justify-content:center; padding:24px; background:rgba(24,24,24,.5); backdrop-filter:blur(2px); }
+  .im-overlay.show{ display:flex; }
+  .im-modal{ background:var(--bg-base-main,#fff); border-radius:var(--radius-xl); box-shadow:var(--elevation-6); width:100%; max-width:560px; max-height:min(680px,86vh); display:flex; flex-direction:column; font-family:var(--font-text); animation:imIn .2s cubic-bezier(.34,1.3,.64,1); }
+  @keyframes imIn{ from{ opacity:0; transform:translateY(10px) scale(.98); } to{ opacity:1; transform:none; } }
+  .im-head{ display:flex; align-items:flex-start; justify-content:space-between; gap:16px; padding:22px 24px 18px; border-bottom:1px solid var(--stroke-base); flex:none; }
+  .im-eyebrow{ font:600 11px/1 'IBM Plex Mono', monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--text-primary); }
+  .im-title{ margin:8px 0 0; font-family:var(--font-display); font-weight:700; font-size:26px; letter-spacing:-.5px; line-height:1.15; color:var(--text-base-main); }
+  .im-x{ width:36px; height:36px; flex:none; display:grid; place-items:center; border:1px solid var(--stroke-base); border-radius:var(--radius-lg); background:#fff; color:var(--text-base-second); cursor:pointer; transition:.15s ease-out; }
+  .im-x:hover{ background:var(--bg-base-second); color:var(--text-base-main); }
+  .im-x svg{ width:16px; height:16px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; }
+  .im-body{ overflow-y:auto; padding:20px 24px 26px; display:flex; flex-direction:column; }
+  .im-section{ padding:14px 0; }
+  .im-section:first-child{ padding-top:0; }
+  .im-divider{ height:1px; background:var(--stroke-base); flex:none; }
+  .im-label{ margin:0 0 8px; font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--text-base-second); }
+  .im-value{ margin:0; font-size:14px; line-height:1.6; color:var(--text-base-main); }
+  .im-value a{ color:var(--text-primary); text-decoration:underline; }
+  .im-value a:hover{ color:var(--primary-700); }
 </style>
 </head>
 <template id="__bundler_thumbnail">
@@ -129,7 +161,7 @@
   <div class="map-loading" id="mapLoading" hidden>
     <div class="map-loading__box">
       <span class="map-loading__spin" aria-hidden="true"></span>
-      <p>Analyzing the area</p>
+      <p>Analysing the area</p>
     </div>
   </div>
 
@@ -200,15 +232,15 @@
         </button>
       </div>
       <div class="da-steps" id="daSteps">
-        <button class="da-step is-active" data-goto="1"><span class="da-step__num">1</span><span class="da-step__label">Select Location</span></button>
+        <button class="da-step is-active" data-goto="1"><span class="da-step__num">1</span><span class="da-step__label">Select location</span></button>
         <span class="da-conn"></span>
-        <button class="da-step" data-goto="2"><span class="da-step__num">2</span><span class="da-step__label">Site Characterisation</span></button>
+        <button class="da-step" data-goto="2"><span class="da-step__num">2</span><span class="da-step__label">Site characterisation</span></button>
         <span class="da-conn"></span>
-        <button class="da-step" data-goto="3"><span class="da-step__num">3</span><span class="da-step__label">Threat Profile</span></button>
+        <button class="da-step" data-goto="3"><span class="da-step__num">3</span><span class="da-step__label">Threat profile</span></button>
         <span class="da-conn"></span>
-        <button class="da-step" data-goto="4"><span class="da-step__num">4</span><span class="da-step__label">Select Intervention</span></button>
+        <button class="da-step" data-goto="4"><span class="da-step__num">4</span><span class="da-step__label">Select intervention</span></button>
         <span class="da-conn"></span>
-        <button class="da-step" data-goto="5"><span class="da-step__num">5</span><span class="da-step__label">Potential Benefit</span></button>
+        <button class="da-step" data-goto="5"><span class="da-step__num">5</span><span class="da-step__label">Potential benefit</span></button>
       </div>
     </header>
 
@@ -236,7 +268,7 @@
           <div class="s1-methods">
             <button class="s1-method" data-s1go="draw">
               <span class="s1-method__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 7.5 10.5 4 19 8v8.5L13 20l-8-3.5Z"/><circle cx="5" cy="7.5" r="1.6" fill="currentColor" stroke="none"/><circle cx="10.5" cy="4" r="1.6" fill="currentColor" stroke="none"/><circle cx="19" cy="8" r="1.6" fill="currentColor" stroke="none"/><circle cx="13" cy="20" r="1.6" fill="currentColor" stroke="none"/></svg></span>
-              <h4>Draw Polygon</h4>
+              <h4>Draw polygon</h4>
               <p>Click points on the map to form a custom boundary</p>
             </button>
             <button class="s1-method" data-s1go="upload">
@@ -254,8 +286,8 @@
             <div class="s1-draw__row">
               <img class="s1-draw__ic" src="assets/f01-step1/draw-polygon.svg" alt="" />
               <div class="s1-draw__tx">
-                <h4>Draw the polygon</h4>
-                <p>Select any location to start draw polygon. Double click to finish it</p>
+                <h4>Draw polygon</h4>
+                <p>Click any location to start drawing the polygon. Double-click to finish it.</p>
               </div>
             </div>
             <div class="s1-btns row">
@@ -272,8 +304,8 @@
             <div class="s1-drop__row">
               <img class="s1-drop__ic" src="assets/f01-step1/upload-shp.svg" alt="" />
               <div class="s1-drop__tx">
-                <h4>Upload SHP File</h4>
-                <p>Drop your SHP file here to generate the Site Characterisation data. <b>Format file: .zip (.shp, .shx, .dbf, .prj), .kml, .kmz</b></p>
+                <h4>Upload SHP</h4>
+                <p>Drop your SHP file here to generate the site characterisation data. <b>Format file: .zip (.shp, .shx, .dbf, .prj), .kml, .kmz</b></p>
               </div>
             </div>
             <button class="s1-btn s1-btn--primary" data-s1go="confirm" data-area="draw">or Click to browse from your computer</button>
@@ -284,10 +316,10 @@
         <div class="s1" data-s1="confirm">
           <div class="s1-confirm">
             <div class="s1-confirm__grp">
-              <h2 class="s1-h">Analyze the selected polygon?</h2>
+              <h2 class="s1-h">Analyse the selected polygon?</h2>
               <div class="s1-confirmcard">
                 <div class="s1-confirmcard__inner">
-                  <span class="lbl">The estimation size of selected area is</span>
+                  <span class="lbl" style="font-size: 16px">The estimated size of the selected area is</span>
                   <span class="big" id="s1ConfirmSize">150,000 ha</span>
                 </div>
               </div>
@@ -298,13 +330,13 @@
               <img class="s1-alert__ic" src="assets/f01-step1/alert-toobig.svg" alt="" />
               <div>
                 <h5>The area is too big.</h5>
-                <p>You can only analyse &lt;<b>200,000 ha</b>. <a href="login.html">Sign in→</a> for having up to <b>500,000 ha</b> analysis.</p>
+                <p>You can only analyse areas under <b>200,000 ha</b>. <a href="login.html">Sign in→</a> to analyse up to <b>500,000 ha</b>.</p>
               </div>
             </div>
 
             <div class="s1-btns">
               <button class="s1-btn s1-btn--primary" id="s1Continue">Continue, identify the ecosystem</button>
-              <button class="s1-btn s1-btn--ghost" data-s1go="choose">Re-select area</button>
+              <button class="s1-btn s1-btn--ghost" data-s1go="choose">Reselect area</button>
             </div>
           </div>
         </div>
@@ -322,7 +354,7 @@
               Back
             </button>
             <div class="da-ctx__tt">
-              <h2 id="daCtxTitle">Site Characterisation: General Context</h2>
+              <h2 id="daCtxTitle">Site characterisation: General context</h2>
               <p>Baseline conditions of your selected area.</p>
             </div>
             <button class="da-ctx__nav da-ctx__next" data-ctx-next aria-label="Next context">
@@ -348,8 +380,8 @@
           <div class="t3-head">
             <button class="t3-nav" data-go="2"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M14 7l-5 5 5 5"/></svg> Back</button>
             <div class="t3-titles">
-              <h2>Threats Profile and NbS Screening Overview</h2>
-              <p>Integrated screening summary condition for the ecosystem.</p>
+              <h2>Threat profile and NbS screening overview</h2>
+              <p>Integrated screening summary for the ecosystems in your selected area.</p>
             </div>
             <button class="t3-nav" data-go="4">Next <svg viewBox="0 0 24 24" stroke-width="2"><path d="M10 7l5 5-5 5"/></svg></button>
           </div>
@@ -366,7 +398,7 @@
   <div class="t3-head">
     <button class="t3-nav" data-go="3"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M14 7l-5 5 5 5"/></svg> Back</button>
     <div class="t3-titles">
-      <h2>Design your Nature-based Solution (NbS) Pathway</h2>
+      <h2>Design your Nature-based Solution (NbS) pathway</h2>
       <p>Choose a pathway for each ecosystem, then select its activities.</p>
     </div>
     <button class="t3-nav" data-go="5">Next <svg viewBox="0 0 24 24" stroke-width="2"><path d="M10 7l5 5-5 5"/></svg></button>
@@ -379,26 +411,26 @@
         <div class="eco-icon"><img src="assets/asset/ECOSYSTEM%20ICON_Ecosystem%20Type=Forest,%20Filled=No.svg" alt="" width="48" height="48"></div>
         <div class="eco-titles">
           <div class="eco-name">Forest</div>
-          <span class="eco-status eco-status--ok">Non-Disturbed</span>
+          <span class="eco-status eco-status--ok">Non-disturbed</span>
         </div>
       </div>
       <div class="vdiv"></div>
       <div class="eco-stats">
         <div class="eco-stat">
-          <div class="eco-stat__ttl">Total Forest Area</div>
+          <div class="eco-stat__ttl">Total forest area</div>
           <div class="bar"><span style="width:40%;background:var(--eco);"></span></div>
-          <div class="eco-stat__row"><span>20,942.2 ha</span><span>40% of total area</span></div>
+          <div class="eco-stat__row"><span>56,000.0 ha</span><span>40% of total area</span></div>
         </div>
         <div class="eco-stat">
           <div class="eco-stat__ttl">Disturbed Area of Forest Ecosystem</div>
-          <div class="bar"><span style="width:12%;background:var(--eco);"></span></div>
-          <div class="eco-stat__row"><span>4,638.4 ha</span><span>12% of forest is disturbed</span></div>
+          <div class="bar"><span style="width:25%;background:var(--eco);"></span></div>
+          <div class="eco-stat__row"><span>14,000.0 ha</span><span>25% of forest is disturbed</span></div>
         </div>
       </div>
     </div>
 
     <div class="interv">
-      <div class="interv-title">Select Intervention for Forest Ecosystem:</div>
+      <div class="interv-title">Select intervention for the forest ecosystem:</div>
       <div class="pathway-row">
         <!-- Protect -->
         <div class="pathway-opt" data-pathway data-eco="forest">
@@ -407,7 +439,7 @@
             <div class="opt-meta">
               <div class="opt-name">Protect</div>
               <div class="pw-tip pw-tip--desc"><span class="pw-tip__ic"></span><span class="pw-tip__txt"><b>What is <strong>protect</strong> pathway?</b><span>The Protect pathway establishes a defensive shield over lands identified by 2014–2024 data as persisting forests. By securing these uninterrupted, decade-long canopies, this strategy locks in critical carbon stocks and safeguards baseline biodiversity from future fragmentation.</span></span></div>
-              <div class="opt-ha mono">13,942.2 ha</div>
+              <div class="opt-ha mono">56,000.0 ha</div>
             </div>
           </div>
           <div class="switch"><span class="knob"></span></div>
@@ -420,7 +452,7 @@
             <div class="opt-meta">
               <div class="opt-name">Manage</div>
               <div class="pw-tip pw-tip--desc"><span class="pw-tip__ic"></span><span class="pw-tip__txt"><b>What is <strong>manage</strong> pathway?</b><span>The Manage pathway balances human livelihood with ecological health on lands that transitioned into active use over the last decade. Rather than forcing rewilding, it implements sustainable agroecological and smart farming practices to maintain economic productivity while reducing environmental footprints.</span></span></div>
-              <div class="opt-ha mono">13,942.2 ha</div>
+              <div class="opt-ha mono">56,000.0 ha</div>
             </div>
           </div>
           <div class="switch"><span class="knob"></span></div>
@@ -433,7 +465,7 @@
             <div class="opt-meta">
               <div class="opt-name">Restore</div>
               <div class="pw-tip pw-tip--desc"><span class="pw-tip__ic"></span><span class="pw-tip__txt"><b>What is <strong>restore</strong> pathway?</b><span>The Restore pathway actively heals heavily impacted or vulnerable landscapes, targeting <i>degraded vegetation, barren lands, and long-term non-forested areas</i>. Crucially, it also reclaims active use lands that pose an ecological liability due to medium-to-high flood risks or proximity to water bodies, transforming them back into natural buffers.</span></span></div>
-              <div class="opt-ha mono">13,942.2 ha</div>
+              <div class="opt-ha mono">56,000.0 ha</div>
             </div>
           </div>
           <div class="switch"><span class="knob"></span></div>
@@ -446,17 +478,11 @@
       <div class="activity-head">
         <div class="activity-head-left">
           <div class="activity-titlewrap">
-            <div class="activity-ic">
-              <svg width="11" height="13" viewBox="0 0 11 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M5.5 1C3 1 1 3 1 5.2c0 1.7 1.1 3.2 2.7 3.8V12h3.6V9C8.9 8.4 10 6.9 10 5.2 10 3 8 1 5.5 1Z" fill="#1f6b47"/>
-                <rect x="0.5" y="11.6" width="10" height="1.2" rx="0.6" fill="#1f6b47"/>
-              </svg>
-            </div>
-            <div class="activity-title">Choose Intervention Activity</div>
+            <div class="activity-title">Choose intervention activities</div>
           </div>
           <div class="tags" data-tags></div>
         </div>
-        <div class="count"><span data-count>0</span> of <b data-total>0</b> Activities Selected</div>
+        <div class="count"><span data-count>0</span> of <b data-total>0</b> activities selected</div>
         <span class="activity-chev"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 5.25 7 9.25l4-4" stroke="#0f1419" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
       </div>
       <div class="activity-list" data-activity-list></div>
@@ -470,26 +496,26 @@
         <div class="eco-icon"><img src="assets/asset/ECOSYSTEM%20ICON_Ecosystem%20Type=Mangrove,%20Filled=No.svg" alt="" width="48" height="48"></div>
         <div class="eco-titles">
           <div class="eco-name">Mangrove</div>
-          <span class="eco-status eco-status--ok">Non-Disturbed</span>
+          <span class="eco-status eco-status--ok">Non-disturbed</span>
         </div>
       </div>
       <div class="vdiv"></div>
       <div class="eco-stats">
         <div class="eco-stat">
-          <div class="eco-stat__ttl">Total Mangrove Area</div>
+          <div class="eco-stat__ttl">Total mangrove area</div>
           <div class="bar"><span style="width:35%;background:var(--eco);"></span></div>
-          <div class="eco-stat__row"><span>30,000.0 ha</span><span>35% of total area</span></div>
+          <div class="eco-stat__row"><span>49,000.0 ha</span><span>35% of total area</span></div>
         </div>
         <div class="eco-stat">
           <div class="eco-stat__ttl">Disturbed Area of Mangrove Ecosystem</div>
-          <div class="bar"><span style="width:28%;background:var(--eco);"></span></div>
-          <div class="eco-stat__row"><span>2,731.3 ha</span><span>28% of mangrove is disturbed</span></div>
+          <div class="bar"><span style="width:24%;background:var(--eco);"></span></div>
+          <div class="eco-stat__row"><span>11,760.0 ha</span><span>24% of mangrove is disturbed</span></div>
         </div>
       </div>
     </div>
 
     <div class="interv">
-      <div class="interv-title">Select Intervention for Mangrove Ecosystem:</div>
+      <div class="interv-title">Select intervention for the mangrove ecosystem:</div>
       <div class="pathway-row">
         <!-- Protect -->
         <div class="pathway-opt" data-pathway data-eco="mangrove">
@@ -498,7 +524,7 @@
             <div class="opt-meta">
               <div class="opt-name">Protect</div>
               <div class="pw-tip pw-tip--desc"><span class="pw-tip__ic"></span><span class="pw-tip__txt"><b>What is <strong>protect</strong> pathway?</b><span>The Protect pathway establishes a defensive shield over lands identified by 2014–2024 data as persisting forests. By securing these uninterrupted, decade-long canopies, this strategy locks in critical carbon stocks and safeguards baseline biodiversity from future fragmentation.</span></span></div>
-              <div class="opt-ha mono">15,000.0 ha</div>
+              <div class="opt-ha mono">49,000.0 ha</div>
             </div>
           </div>
           <div class="switch"><span class="knob"></span></div>
@@ -511,7 +537,7 @@
             <div class="opt-meta">
               <div class="opt-name">Manage</div>
               <div class="pw-tip pw-tip--desc"><span class="pw-tip__ic"></span><span class="pw-tip__txt"><b>What is <strong>manage</strong> pathway?</b><span>The Manage pathway balances human livelihood with ecological health on lands that transitioned into active use over the last decade. Rather than forcing rewilding, it implements sustainable agroecological and smart farming practices to maintain economic productivity while reducing environmental footprints.</span></span></div>
-              <div class="opt-ha mono">10,000.0 ha</div>
+              <div class="opt-ha mono">49,000.0 ha</div>
             </div>
           </div>
           <div class="switch"><span class="knob"></span></div>
@@ -524,11 +550,11 @@
             <div class="opt-meta">
               <div class="opt-name">Restore</div>
               <div class="pw-tip pw-tip--desc"><span class="pw-tip__ic"></span><span class="pw-tip__txt"><b>What is <strong>restore</strong> pathway?</b><span>The Restore pathway actively heals heavily impacted or vulnerable landscapes, targeting <i>degraded vegetation, barren lands, and long-term non-forested areas</i>. Crucially, it also reclaims active use lands that pose an ecological liability due to medium-to-high flood risks or proximity to water bodies, transforming them back into natural buffers.</span></span></div>
-              <div class="opt-ha mono">120.0 ha</div>
+              <div class="opt-ha mono">0.0 ha</div>
             </div>
           </div>
           <div class="switch locked"><span class="knob"></span></div>
-          <div class="opt-elig opt-disabled-elig">Non Eligible</div>
+          <div class="opt-elig opt-disabled-elig">Non-eligible</div>
           <div class="pw-tip pw-tip--why"><b>Why I can’t select this intervention?</b><span>These areas are ineligible because the mangrove remains intact and does not show sufficient signs of degradation.</span></div>
         </div>
       </div>
@@ -538,19 +564,11 @@
       <div class="activity-head">
         <div class="activity-head-left">
           <div class="activity-titlewrap">
-            <div class="activity-ic">
-              <svg width="14" height="13" viewBox="0 0 14 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M7 1c-1 1.4-1.6 2.7-1.6 4 0 1.3.6 2.3 1.6 3 1-.7 1.6-1.7 1.6-3 0-1.3-.6-2.6-1.6-4Z" stroke="#0f8a8f" stroke-width="1.3" stroke-linejoin="round"/>
-                <path d="M7 8c-.9-1.3-2.1-2-3.4-2-.6 1.5.2 3.3 1.8 4.4.5.3 1 .5 1.6.6" stroke="#0f8a8f" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M7 8c.9-1.3 2.1-2 3.4-2 .6 1.5-.2 3.3-1.8 4.4-.5.3-1 .5-1.6.6" stroke="#0f8a8f" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M7 11v1.2" stroke="#0f8a8f" stroke-width="1.3" stroke-linecap="round"/>
-              </svg>
-            </div>
-            <div class="activity-title">Choose Intervention Activity</div>
+            <div class="activity-title">Choose intervention activities</div>
           </div>
           <div class="tags" data-tags></div>
         </div>
-        <div class="count"><span data-count>0</span> of <b data-total>0</b> Activities Selected</div>
+        <div class="count"><span data-count>0</span> of <b data-total>0</b> activities selected</div>
         <span class="activity-chev"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 5.25 7 9.25l4-4" stroke="#0f1419" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
       </div>
       <div class="activity-list" data-activity-list></div>
@@ -570,20 +588,20 @@
       <div class="vdiv"></div>
       <div class="eco-stats">
         <div class="eco-stat">
-          <div class="eco-stat__ttl">Total Peatland Area</div>
+          <div class="eco-stat__ttl">Total peatland area</div>
           <div class="bar"><span style="width:25%;background:var(--eco);"></span></div>
-          <div class="eco-stat__row"><span>15,000.5 ha</span><span>25% of total area</span></div>
+          <div class="eco-stat__row"><span>35,000.0 ha</span><span>25% of total area</span></div>
         </div>
         <div class="eco-stat">
           <div class="eco-stat__ttl">Disturbed Area of Peatland Ecosystem</div>
-          <div class="bar"><span style="width:80%;background:var(--eco);"></span></div>
-          <div class="eco-stat__row"><span>7,484.3 ha</span><span>80% of peatland is disturbed</span></div>
+          <div class="bar"><span style="width:40%;background:var(--eco);"></span></div>
+          <div class="eco-stat__row"><span>14,000.0 ha</span><span>40% of peatland is disturbed</span></div>
         </div>
       </div>
     </div>
 
     <div class="interv">
-      <div class="interv-title">Select Intervention for Peatland Ecosystem:</div>
+      <div class="interv-title">Select intervention for the peatland ecosystem:</div>
       <div class="pathway-row">
         <!-- Protect -->
         <div class="pathway-opt" data-pathway data-eco="peat">
@@ -592,7 +610,7 @@
             <div class="opt-meta">
               <div class="opt-name">Protect</div>
               <div class="pw-tip pw-tip--desc"><span class="pw-tip__ic"></span><span class="pw-tip__txt"><b>What is <strong>protect</strong> pathway?</b><span>The Protect pathway establishes a defensive shield over lands identified by 2014–2024 data as persisting forests. By securing these uninterrupted, decade-long canopies, this strategy locks in critical carbon stocks and safeguards baseline biodiversity from future fragmentation.</span></span></div>
-              <div class="opt-ha mono">8,000.5 ha</div>
+              <div class="opt-ha mono">35,000.0 ha</div>
             </div>
           </div>
           <div class="switch"><span class="knob"></span></div>
@@ -605,7 +623,7 @@
             <div class="opt-meta">
               <div class="opt-name">Manage</div>
               <div class="pw-tip pw-tip--desc"><span class="pw-tip__ic"></span><span class="pw-tip__txt"><b>What is <strong>manage</strong> pathway?</b><span>The Manage pathway balances human livelihood with ecological health on lands that transitioned into active use over the last decade. Rather than forcing rewilding, it implements sustainable agroecological and smart farming practices to maintain economic productivity while reducing environmental footprints.</span></span></div>
-              <div class="opt-ha mono">5,000.0 ha</div>
+              <div class="opt-ha mono">35,000.0 ha</div>
             </div>
           </div>
           <div class="switch"><span class="knob"></span></div>
@@ -618,7 +636,7 @@
             <div class="opt-meta">
               <div class="opt-name">Restore</div>
               <div class="pw-tip pw-tip--desc"><span class="pw-tip__ic"></span><span class="pw-tip__txt"><b>What is <strong>restore</strong> pathway?</b><span>The Restore pathway actively heals heavily impacted or vulnerable landscapes, targeting <i>degraded vegetation, barren lands, and long-term non-forested areas</i>. Crucially, it also reclaims active use lands that pose an ecological liability due to medium-to-high flood risks or proximity to water bodies, transforming them back into natural buffers.</span></span></div>
-              <div class="opt-ha mono">2,000.0 ha</div>
+              <div class="opt-ha mono">35,000.0 ha</div>
             </div>
           </div>
           <div class="switch"><span class="knob"></span></div>
@@ -631,18 +649,11 @@
       <div class="activity-head">
         <div class="activity-head-left">
           <div class="activity-titlewrap">
-            <div class="activity-ic">
-              <svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M6.5 8V2.5" stroke="#8a7a1f" stroke-width="1.4" stroke-linecap="round"/>
-                <path d="M6.5 8C6.5 5.5 5.2 3.5 3 2.5M6.5 8C6.5 5.5 7.8 3.5 10 2.5" stroke="#8a7a1f" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M1.5 10h2M5.5 10h2M9.5 10h2M3.5 12h2M7.5 12h2" stroke="#8a7a1f" stroke-width="1.4" stroke-linecap="round"/>
-              </svg>
-            </div>
-            <div class="activity-title">Choose Intervention Activity</div>
+            <div class="activity-title">Choose intervention activities</div>
           </div>
           <div class="tags" data-tags></div>
         </div>
-        <div class="count"><span data-count>0</span> of <b data-total>0</b> Activities Selected</div>
+        <div class="count"><span data-count>0</span> of <b data-total>0</b> activities selected</div>
         <span class="activity-chev"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 5.25 7 9.25l4-4" stroke="#0f1419" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
       </div>
       <div class="activity-list" data-activity-list></div>
@@ -696,7 +707,7 @@
       <div class="carbon-divider"></div>
       <div class="crisk">
         <div class="crisk-text">
-          <div class="crisk-title">Carbon Risk Assumption</div>
+          <div class="crisk-title">Carbon risk assumption</div>
           <div class="crisk-desc">Apply adjustments to estimated GHG reductions or removals to reflect uncertainty, leakage, and buffer pool deduction.</div>
         </div>
         <div class="crisk-field">
@@ -741,7 +752,7 @@
     </div>
     <div class="alert-body">
       <span class="lead">Disclaimer: </span><b>Field verification required</b><br>
-      All the information in NbS Tool are purposed to support your feasibility study. Always verify before use it!
+      The information in NbS Tool is intended to support your feasibility study. Always verify in the field before use.
     </div>
   </div>
 
@@ -770,16 +781,16 @@
     <footer class="da-foot" data-step="2">
       <button class="btn btn-outline" data-go="1">
         <svg viewBox="0 0 24 24" fill="none"><path d="M21 12a9 9 0 1 1-3.5-7.1M21 4v5h-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        Reselect Area
+        Reselect area
       </button>
-      <button class="btn btn-primary grow" data-go="3">Analyse The Threat Profile
+      <button class="btn btn-primary grow" data-go="3">Analyse the threat profile
         <svg viewBox="0 0 24 24" fill="none"><path d="M6 7l5 5-5 5M13 7l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
     </footer>
     <footer class="da-foot" data-step="3">
       <button class="btn btn-outline" data-go="1">
         <svg viewBox="0 0 24 24" fill="none"><path d="M21 12a9 9 0 1 1-3.5-7.1M21 4v5h-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        Reselect Area
+        Reselect area
       </button>
       <button class="btn btn-primary grow" data-go="4">Select intervention type
         <svg viewBox="0 0 24 24" fill="none"><path d="M6 7l5 5-5 5M13 7l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -788,7 +799,7 @@
     <footer class="da-foot" data-step="4">
       <button class="btn btn-outline" data-go="1">
         <svg viewBox="0 0 24 24" fill="none"><path d="M21 12a9 9 0 1 1-3.5-7.1M21 4v5h-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        Reselect Area
+        Reselect area
       </button>
       <button class="btn btn-primary grow" data-go="5">Calculate potential benefit
         <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -799,7 +810,7 @@
         <svg viewBox="0 0 24 24" fill="none"><path d="M19 12H5M11 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         Back to Intervention selection
       </button>
-      <button class="btn btn-primary grow" id="finishAnalysis">Finish The Analysis
+      <button class="btn btn-primary grow" id="finishAnalysis">Finish the analysis
         <svg viewBox="0 0 24 24" fill="none"><path d="M6 7l5 5-5 5M13 7l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
     </footer>
@@ -850,18 +861,66 @@
       <div class="legend__items">
         <div class="legend__group">
           <div class="legend__group-title">Area of Interest</div>
-          <div class="legend__item"><span class="legend__swatch line" style="border-top-color:#399986"></span><span class="legend__name">Project boundary (AOI)</span></div>
-          <div class="legend__item"><span class="legend__swatch" style="background:rgba(57,153,134,0.18)"></span><span class="legend__name">Analysed extent</span></div>
+          <div class="legend__item"><span class="legend__item-l"><span class="legend__swatch line" style="border-top-color:#399986"></span><span class="legend__name">Project boundary (AOI)</span></span></div>
+          <div class="legend__item"><span class="legend__item-l"><span class="legend__swatch" style="background:rgba(57,153,134,0.18)"></span><span class="legend__name">Analysed extent</span></span></div>
         </div>
         <div class="legend__group">
           <div class="legend__group-title">Site Information</div>
-          <div class="legend__item"><span class="legend__swatch" style="background:#beead5"></span><span class="legend__name">Mangrove cover</span></div>
-          <div class="legend__item"><span class="legend__swatch" style="background:#9fd4c9"></span><span class="legend__name">Tidal wetland</span></div>
-          <div class="legend__item"><span class="legend__swatch" style="background:#f5c782"></span><span class="legend__name">Degraded / cleared</span></div>
+          <div class="legend__item"><span class="legend__item-l"><span class="legend__swatch" style="background:#beead5"></span><span class="legend__name">Mangrove cover</span></span></div>
+          <div class="legend__item"><span class="legend__item-l"><span class="legend__swatch" style="background:#9fd4c9"></span><span class="legend__name">Tidal wetland</span></span></div>
+          <div class="legend__item"><span class="legend__item-l"><span class="legend__swatch" style="background:#f5c782"></span><span class="legend__name">Degraded / cleared</span></span></div>
+        </div>
+        <div class="legend__group">
+          <div class="legend__group-title">Nature</div>
+          <div class="legend__item">
+            <span class="legend__item-l"><span class="legend__swatch" style="background:#399986"></span><span class="legend__name">Key Biodiversity Area</span></span>
+            <button class="legend__info" type="button" data-layer-info="kba" aria-label="About the Key Biodiversity Area layer">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 7.5h.01"/></svg>
+            </button>
+          </div>
         </div>
       </div>
     </div>
   </div>
+
+<!-- ===== Reusable layer info modal (data-driven — wire any "i" button with data-layer-info="<key>") ===== -->
+<div class="im-overlay" id="imOverlay" aria-hidden="true">
+  <div class="im-modal" role="dialog" aria-modal="true" aria-labelledby="imTitle">
+    <header class="im-head">
+      <div>
+        <span class="im-eyebrow" id="imCategory"></span>
+        <h3 class="im-title" id="imTitle"></h3>
+      </div>
+      <button class="im-x" type="button" id="imClose" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </header>
+    <div class="im-body" id="imBody">
+      <section class="im-section">
+        <h4 class="im-label">Date of content</h4>
+        <p class="im-value" id="imDate"></p>
+      </section>
+      <div class="im-divider"></div>
+      <section class="im-section">
+        <h4 class="im-label">Description</h4>
+        <p class="im-value" id="imDescription"></p>
+      </section>
+      <div class="im-divider"></div>
+      <section class="im-section">
+        <h4 class="im-label">Disclaimer</h4>
+        <p class="im-value" id="imDisclaimer"></p>
+      </section>
+      <div class="im-divider"></div>
+      <section class="im-section">
+        <h4 class="im-label">Resolution</h4>
+        <p class="im-value" id="imResolution"></p>
+      </section>
+      <div class="im-divider"></div>
+      <section class="im-section">
+        <h4 class="im-label">Source</h4>
+        <p class="im-value" id="imSource"></p>
+      </section>
+    </div>
+  </div>
+</div>
 
 </div>
 
@@ -1093,27 +1152,21 @@
   /* Step 2 — context tabs (sticky bar above the scroll body) */
   const ctx = document.getElementById('daCtx');
   if (ctx) {
-    const tabs = [...ctx.querySelectorAll('[data-ctx]')];
+    const tabs = [...ctx.querySelectorAll('[role="tab"][data-ctx]')];
     const KEYS = tabs.map(t => t.dataset.ctx);
-    const CTX_TITLES = { general: 'General Context', nature: 'Nature Context', people: 'People Context', climate: 'Climate Context' };
+    const CTX_TITLES = { general: 'General context', nature: 'Nature context', people: 'People context', climate: 'Climate context' };
     const ctxTitle = document.getElementById('daCtxTitle');
     function showCtx(key){
       tabs.forEach(t => t.setAttribute('aria-selected', t.dataset.ctx === key ? 'true' : 'false'));
       panel.querySelectorAll('.da-step-body[data-step="2"] .ctx-pane').forEach(p => { p.hidden = (p.dataset.ctx !== key); });
-      if (ctxTitle) ctxTitle.textContent = 'Site Characterisation: ' + CTX_TITLES[key];
+      if (ctxTitle) ctxTitle.textContent = 'Site characterisation: ' + CTX_TITLES[key];
       body.scrollTop = 0;
     }
     tabs.forEach(tab => tab.addEventListener('click', () => showCtx(tab.dataset.ctx)));
     const cur = () => KEYS.indexOf(tabs.find(t => t.getAttribute('aria-selected') === 'true').dataset.ctx);
-    // Back before the first context returns to step 1; Next past the last continues the wizard
-    ctx.querySelector('[data-ctx-back]').addEventListener('click', () => {
-      const i = cur();
-      i === 0 ? goStep(1) : showCtx(KEYS[i - 1]);
-    });
-    ctx.querySelector('[data-ctx-next]').addEventListener('click', () => {
-      const i = cur();
-      i === KEYS.length - 1 ? goStep(3) : showCtx(KEYS[i + 1]);
-    });
+    // Back always returns to step 1; Next always continues to step 3
+    ctx.querySelector('[data-ctx-back]').addEventListener('click', () => goStep(1));
+    ctx.querySelector('[data-ctx-next]').addEventListener('click', () => goStep(3));
   }
 
   /* Step 3 — Threat Profile — markup + behavior shared with project-detail.html
@@ -1130,6 +1183,35 @@
   function ecoOf(card){ var o = card.querySelector('[data-eco]'); return o ? o.dataset.eco : ''; }
   function pwOf(opt){ return opt.querySelector('.opt-name').textContent.trim(); }
   var CHK = '<span class="checkbox"><svg viewBox="0 0 14 14" fill="none"><path d="M3 7l2.6 2.6L11 4.5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>';
+
+  /* Live Step-5 summary — recomputed from Step-4 pathway/activity/duration selections. */
+  function recomputeBenefit(){
+    var root = panel.querySelector('.p5'); if (!root || !window.NBS_DATA) return;
+    var D = window.NBS_DATA, ecoSel = {}, pwSel = {};
+    panel.querySelectorAll('.eco-card').forEach(function(card){
+      var eco = ecoOf(card);
+      card.querySelectorAll('[data-pathway].selected').forEach(function(opt){
+        ecoSel[eco] = true; pwSel[pwOf(opt)] = true;
+      });
+    });
+    var ecoKeys = Object.keys(ecoSel), area = 0;
+    ecoKeys.forEach(function(k){ if (D.eco[k]) area += D.eco[k].area; });
+    var durEl = document.getElementById('durationSlider');
+    var dur = durEl ? +durEl.value : D.duration;
+    var any = ecoKeys.length > 0;
+    function set(k,v){ var el = root.querySelector('[data-sum="'+k+'"]'); if (el) el.textContent = v; }
+    set('acts', any ? checkedActs.size : 0);
+    set('dur', dur + ' yr');
+    set('area', (any ? D.grp(area) : '0') + ' ha');
+    var pwBox = root.querySelector('[data-sum="pw"]');
+    if (pwBox){
+      var order = ['Protect','Manage','Restore'], cls = { Protect:'p', Manage:'m', Restore:'r' };
+      var chosen = order.filter(function(p){ return pwSel[p]; });
+      pwBox.innerHTML = chosen.length
+        ? chosen.map(function(p){ return '<span class="pchip ' + cls[p] + '"><b>' + p + '</b></span>'; }).join('')
+        : '<span class="pchip" style="opacity:.55;background:transparent;box-shadow:none;color:#68727d"><b>None selected yet</b></span>';
+    }
+  }
 
   function renderActivities(card){
     var eco = ecoOf(card), map = NBS_ACTIVITIES[eco] || {};
@@ -1153,6 +1235,7 @@
     card.querySelector('[data-activity-list]').innerHTML = html;
     card.querySelector('[data-count]').textContent = checked;
     var tot = card.querySelector('[data-total]'); if (tot) tot.textContent = total;
+    recomputeBenefit();
   }
 
   // pathway description tooltip icons
@@ -1269,7 +1352,7 @@
     fill.style.width = pct + '%';
     num.textContent = val;
   }
-  slider.addEventListener('input', syncSlider);
+  slider.addEventListener('input', function(){ syncSlider(); recomputeBenefit(); });
   syncSlider();
 
   /* Step 5 — Potential Benefit — markup + behavior shared with project-detail.html
@@ -1280,6 +1363,72 @@
   /* Legend expand / collapse */
   const legend = document.getElementById('legend');
   document.getElementById('legendToggle').addEventListener('click', () => legend.classList.toggle('open'));
+
+  /* ===== Reusable layer info modal =====
+     Data-driven: each entry is one row from the dataset catalogue
+     (Date of content / Description / Disclaimer / Resolution / Source).
+     To wire a new "i" button: add a <button class="legend__info" data-layer-info="key">
+     next to its layer, then add "key" here. */
+  var LAYER_META = {
+    kba: {
+      name: 'Key Biodiversity Area',
+      category: 'Nature',
+      dateOfContent: '2022',
+      description: 'Key Biodiversity Areas, which are among the most incredible and diverse places on Earth for nature, from deserts to the middle of the ocean, are sites of global importance to the planet\u2019s overall health and the persistence of biodiversity. The Key Biodiversity Area Partnership \u2014 an ambitious partnership of 13 global conservation organizations \u2014 is helping prevent the rapid loss of biodiversity by supporting nationally led efforts to identify these places on the planet that are critical for the survival of unique plants and animals, and the ecological communities they comprise.',
+      disclaimer: 'Protected Area data are taken from the World Database on Protected Areas. While it represents the most comprehensive global database on terrestrial and marine protected areas, in some cases there may be inaccuracies and differences from national datasets.',
+      resolution: 'N/A',
+      source: 'BirdLife International (2023) World Database of Key Biodiversity Areas. Developed by the KBA Partnership: BirdLife International, International Union for the Conservation of Nature, American Bird Conservancy, Amphibian Survival Alliance, Conservation International, Critical Ecosystem Partnership Fund, Global Environment Facility, Re:wild, NatureServe, Rainforest Trust, Royal Society for the Protection of Birds, Wildlife Conservation Society and World Wildlife Fund. March 2023 version. Available at http://keybiodiversityareas.org/kba-data/request'
+    }
+  };
+
+  function imEsc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function imLinkify(s){
+    return imEsc(s).replace(/(https?:\/\/[^\s)]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>');
+  }
+
+  const imOverlay = document.getElementById('imOverlay');
+  const imFields = {
+    category: document.getElementById('imCategory'),
+    title: document.getElementById('imTitle'),
+    date: document.getElementById('imDate'),
+    description: document.getElementById('imDescription'),
+    disclaimer: document.getElementById('imDisclaimer'),
+    resolution: document.getElementById('imResolution'),
+    source: document.getElementById('imSource')
+  };
+  function openLayerInfo(key){
+    var d = LAYER_META[key];
+    if (!d) return;
+    imFields.category.textContent = d.category || '';
+    imFields.title.textContent = d.name || '';
+    imFields.date.textContent = d.dateOfContent || '\u2014';
+    imFields.description.textContent = d.description || '\u2014';
+    imFields.disclaimer.textContent = d.disclaimer || '\u2014';
+    imFields.resolution.textContent = d.resolution || '\u2014';
+    imFields.source.innerHTML = d.source ? imLinkify(d.source) : '\u2014';
+    imOverlay.classList.add('show');
+    imOverlay.setAttribute('aria-hidden', 'false');
+  }
+  function closeLayerInfo(){
+    imOverlay.classList.remove('show');
+    imOverlay.setAttribute('aria-hidden', 'true');
+  }
+  document.querySelectorAll('[data-layer-info]').forEach(function(btn){
+    btn.addEventListener('click', function(){ openLayerInfo(btn.dataset.layerInfo); });
+  });
+  document.getElementById('imClose').addEventListener('click', closeLayerInfo);
+  imOverlay.addEventListener('click', function(e){ if (e.target === imOverlay) closeLayerInfo(); });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') closeLayerInfo(); });
+
+  /* Data Analyser cards: the "i" info icon in each card head, and the
+     "See more" link on each card's data-source line, open the same modal.
+     All wired to the KBA example for now \u2014 swap 'kba' for each card's own
+     key in LAYER_META once the rest of the catalogue rows are added. */
+  document.addEventListener('click', function(e){
+    if (e.target.closest('.gc-info, .info-dot')) { e.preventDefault(); openLayerInfo('kba'); return; }
+    var seeMore = e.target.closest('.gc-src a, .src a, .data-source a');
+    if (seeMore) { e.preventDefault(); openLayerInfo('kba'); }
+  });
 
   /* Layer toggles (active state) */
   document.querySelectorAll('#railLayers .rail-cell').forEach(cell => {
