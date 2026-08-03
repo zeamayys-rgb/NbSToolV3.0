@@ -99,7 +99,7 @@ const siteGeneral = `
                       <li><i style="background:#f1fc3e;box-shadow:inset 0 0 0 1px #a9a9a9"></i>Mangrove</li>
                       <li><i style="background:#abc963"></i>Peatland</li>
                       <li><i style="background:#2c6639"></i>Dryland Forest</li>
-                      <li><i style="background:#dadada"></i>Non-eligible area</li>
+                      <li><i style="background:#dadada"></i>Other</li>
                     </ul>
                   </div>
                 </div>
@@ -162,10 +162,10 @@ const siteGeneral = `
                   <figure class="gc-def__map gc-def__map--plain"><img src="${GC_ASSETS}/map-risk.png" alt="National deforestation risk map" /></figure>
                   <div class="gc-def__side">
                     <div>
-                      <h5 class="gc-sub">Deforestation Risk</h5>
-                      <p class="gc-p">Forest in this area has a higher deforestation risk than the national average, ranking in the top <b>15%</b> of the country&rsquo;s forest with deforestation risk</p>
+                      <h5 class="gc-sub">Deforestation Risk Index</h5>
+                      <p class="gc-p">Deforestation risk is mapped as a continuous index from <b>0</b> (lowest) to <b>1</b> (highest). Forest in this area averages <b>0.85</b>, higher than the national average &mdash; the top <b>15%</b> of the country&rsquo;s forest by deforestation risk.</p>
                     </div>
-                    <div class="gc-chip"><span><i style="background:#e03131"></i>High Risk</span><span><i style="background:#f2c531"></i>Moderate Risk</span><span><i style="background:#f3f77e"></i>Low Risk</span></div>
+                    <div class="gc-chip gc-chip--ramp"><span>Deforestation risk index</span><span>0<i></i>1</span></div>
                   </div>
                 </div>
               </div>${gcAlert}${gcSource('Forest loss', 'Global Forest Watch (Hansen/UMD)', '2024')}
@@ -206,11 +206,13 @@ const siteGeneral = `
 /* Nature Context — live HTML rebuilt from Figma (F02 P2, node 3892-33553).
    Shares the .gc* card/alert/source styles; Nature-only pieces are .nc*. */
 const NC_ASSETS = 'assets/f01-step2/natctx';
-const ncSpecies = (icon, name, count, dot, list) => `
+/* Every occurrence count is per species; the class row totals the species below
+   it, so the two always agree. list = [common, latin, occurrence] */
+const ncSpecies = (icon, name, dot, list) => `
                 <div class="nc-splist">
                   <img class="nc-splist__ic" src="${NC_ASSETS}/${icon}.svg" alt="" />
-                  <div class="nc-splist__id"><span>${name}</span><b>${count} Occurence</b></div>
-                  <ul style="--dot:${dot}">${list.map(s => `<li><i>${s[0]}</i> <em>(${s[1]})</em></li>`).join('')}</ul>
+                  <div class="nc-splist__id"><span>${name}</span><b>${list.reduce((n, s) => n + s[2], 0)} Occurrence</b></div>
+                  <ul style="--dot:${dot}">${list.map(s => `<li><i>${s[0]}</i> <em>(${s[1]})</em><b>${s[2]} occurrence</b></li>`).join('')}</ul>
                 </div>`;
 
 const siteNature = `
@@ -238,9 +240,9 @@ const siteNature = `
               <div class="gc-block">
                 <p class="gc-p">There are keystone species throughout the project area. The species featured are:</p>
                 <div class="nc-splists">
-${ncSpecies('sp-bird', 'Aves', 321, '#1da3dc', [['Bali Myna','Leucopsar rothschildi'],['Java Sparrow','Padda oryzivora'],['Black-winged Starling','Acridotheres melanopterus'],['Javan Kingfisher','Halcyon cyanoventris']])}
-${ncSpecies('sp-mammal', 'Mammalia', 21, '#f08a4b', [['Javan Rusa','Rusa timorensis'],['Long-tailed Macaque','Macaca fascicularis']])}
-${ncSpecies('sp-reptile', 'Reptilia', 41, '#1d9e75', [['Reticulated Python','Malayopython reticulatus'],['Asian Water Monitor','Varanus salvator']])}
+${ncSpecies('sp-bird', 'Aves', '#1da3dc', [['Bali Myna','Leucopsar rothschildi',96],['Java Sparrow','Padda oryzivora',74],['Black-winged Starling','Acridotheres melanopterus',61],['Javan Kingfisher','Halcyon cyanoventris',48]])}
+${ncSpecies('sp-mammal', 'Mammalia', '#f08a4b', [['Javan Rusa','Rusa timorensis',37],['Long-tailed Macaque','Macaca fascicularis',52]])}
+${ncSpecies('sp-reptile', 'Reptilia', '#1d9e75', [['Reticulated Python','Malayopython reticulatus',23],['Asian Water Monitor','Varanus salvator',44]])}
                 </div>
               </div>${gcAlert}${gcSource('Threatened species', 'IUCN Red List', '2024')}
             </section>
@@ -343,31 +345,31 @@ const siteClimate = `
                       </ul>
                     </div>
                     <img src="${CL_ASSETS}/carbon-scene.png" alt="Cross-section of trees above ground and roots in soil" />
-                    <div class="cl-pool__tag cl-pool__tag--agb"><span>Above Ground Biomass</span><div><b>22,600.2 <em>ha</em></b><i>20%</i></div></div>
-                    <div class="cl-pool__tag cl-pool__tag--soc"><span>Soil Organic Carbon</span><div><b>22,600.2 <em>ha</em></b><i>50%</i></div></div>
-                    <div class="cl-pool__tag cl-pool__tag--bgb"><span>Below Ground Biomass</span><div><b>22,600.2 <em>ha</em></b><i>30%</i></div></div>
+                    <div class="cl-pool__tag cl-pool__tag--agb"><span>Above Ground Biomass</span><div><b>5,438,742.44 <em>tCO<sub>2</sub>e</em></b><i>20%</i></div></div>
+                    <div class="cl-pool__tag cl-pool__tag--soc"><span>Soil Organic Carbon</span><div><b>13,596,856.10 <em>tCO<sub>2</sub>e</em></b><i>50%</i></div></div>
+                    <div class="cl-pool__tag cl-pool__tag--bgb"><span>Below Ground Biomass</span><div><b>8,158,113.66 <em>tCO<sub>2</sub>e</em></b><i>30%</i></div></div>
                   </figure>
                 </div>
               </div>${gcAlert}${gcSource('Carbon density', 'Spawn &amp; Gibbs global biomass; ISRIC SoilGrids', '2023')}
             </section>
 
             <!-- 2 · Soil classification -->
-            <section class="gc-card">${gcHead('Soil classification', 'terrain')}
+            <section class="gc-card gc-card--blue">${gcHead('Soil classification', 'terrain')}
               <div class="gc-block">
                 <p class="gc-p">Based on the World Reference Base for Soil Resources (WRB) 2006, the soils in this area are predominantly <b>Andosols</b>. The distribution of all identified soil types is presented below.</p>
                 <div class="cl-soil">
                   <div class="cl-soil__list">
-                    <div class="cl-soilrow is-top" style="--c:#6c8f4f"><span class="n">01</span><div><b>Andosols</b><i><s style="width:73%"></s></i></div><em>27%</em></div>
-                    <div class="cl-soilrow" style="--c:#c59a3c"><span class="n">02</span><div><b>Cambisols</b><i><s style="width:62%"></s></i></div><em>25%</em></div>
-                    <div class="cl-soilrow" style="--c:#d4724a"><span class="n">03</span><div><b>Ferralsols</b><i><s style="width:48%"></s></i></div><em>17%</em></div>
-                    <div class="cl-soilrow" style="--c:#a0522d"><span class="n">04</span><div><b>Aricsols</b><i><s style="width:23%"></s></i></div><em>9%</em></div>
-                    <div class="cl-soilrow" style="--c:#7b6a5c"><span class="n">05</span><div><b>Nitsols</b><i><s style="width:10%"></s></i></div><em>7%</em></div>
+                    <div class="cl-soilrow is-top" style="--c:#ed3a33"><span class="n">01</span><div><b>Andosols</b><i><s style="width:73%"></s></i></div><em>27%</em></div>
+                    <div class="cl-soilrow" style="--c:#fecd67"><span class="n">02</span><div><b>Cambisols</b><i><s style="width:62%"></s></i></div><em>25%</em></div>
+                    <div class="cl-soilrow" style="--c:#f6872d"><span class="n">03</span><div><b>Ferralsols</b><i><s style="width:48%"></s></i></div><em>17%</em></div>
+                    <div class="cl-soilrow" style="--c:#f7991d"><span class="n">04</span><div><b>Acrisols</b><i><s style="width:23%"></s></i></div><em>9%</em></div>
+                    <div class="cl-soilrow" style="--c:#f7a082"><span class="n">05</span><div><b>Nitisols</b><i><s style="width:10%"></s></i></div><em>7%</em></div>
                   </div>
                   <div class="cl-dominant">
                     <span class="cl-dominant__t">Dominant Soil Type:</span>
-                    <div><b>Andosols</b><em>27% Probability</em></div>
+                    <div><b>Andosols</b></div>
                     <hr />
-                    <p>Andosols are young, fertile soils derived from volcanic ash. They have excellent water retention, high organic matter content, and support diverse vegetation. Ideal for forest restoration and agroforestry NbS projects.</p>
+                    <p>Soils developed from volcanic ash, pumice, and other volcanic materials. They are usually dark-coloured, rich in organic matter, highly porous, and have excellent water-holding capacity. These soils are generally highly fertile, although phosphorus fertilization is often required because of their strong phosphorus fixation capacity.</p>
                   </div>
                 </div>
               </div>${gcAlert}${gcSource('Soil classification (WRB 2006)', 'ISRIC SoilGrids 250 m', '2023')}

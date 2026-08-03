@@ -394,17 +394,17 @@
      chosen in F05.0 Step 3 for this project. */
   const NBS_DESIGN = [
     { id:'forest', name:'Forest', area:'13,942 ha · 40%', activities:[
-      { name:'Boundary demarcation & legal recognition', pw:'PROTECT', benefits:['Nature','People','Climate'], ind:3 },
+      { name:'Boundary delimitation & legal recognition', pw:'PROTECT', benefits:['Nature','People','Climate'], ind:3 },
       { name:'Community-based patrol & monitoring',       pw:'PROTECT', benefits:['Nature','People','Climate'], ind:7 },
       { name:'Soil rehabilitation & erosion control',     pw:'MANAGE',  benefits:['Nature','People','Climate'], ind:6 },
     ] },
     { id:'mangrove', name:'Mangrove', area:'9,755 ha · 28%', activities:[
-      { name:'Boundary demarcation & legal recognition', pw:'PROTECT', benefits:['Nature','People','Climate'], ind:6 },
+      { name:'Boundary delimitation & legal recognition', pw:'PROTECT', benefits:['Nature','People','Climate'], ind:6 },
       { name:'Community-based patrol & monitoring',       pw:'PROTECT', benefits:['Nature','People','Climate'], ind:5 },
       { name:'Assisted Natural Regeneration (ANR)',       pw:'MANAGE',  benefits:['Nature','People','Climate'], ind:7 },
     ] },
     { id:'peatland', name:'Peatland', area:'11,211 ha · 32%', activities:[
-      { name:'Boundary demarcation & legal recognition',            pw:'PROTECT', benefits:['Nature','People','Climate'], ind:3 },
+      { name:'Boundary delimitation & legal recognition',            pw:'PROTECT', benefits:['Nature','People','Climate'], ind:3 },
       { name:'Community-based patrol & monitoring',                 pw:'PROTECT', benefits:['Nature','People','Climate'], ind:5 },
       { name:'Community-based fire management (degraded areas)',    pw:'MANAGE',  benefits:['Nature','People','Climate'], ind:8 },
     ] },
@@ -1138,7 +1138,7 @@ renderCollabList();
 /* Monitoring matrix — mirrors F05 structure (Activity → Benefit category → Indicators).
    Uses the default recommended mangrove activities from the plan. */
 const MON_PLAN = [
-  { name: 'Boundary demarcation & legal recognition', pw: 'PROTECT', source: 'Remote Sensing / Field Measurement', freq: 'Annually', benefits: [
+  { name: 'Boundary delimitation & legal recognition', pw: 'PROTECT', source: 'Remote Sensing / Field Measurement', freq: 'Annually', benefits: [
     { cat: 'Nature',  benefit: 'Maintenance of ecological connectivity', inds: ['MAN-01 Mangrove Extent', 'MAN-02 Mangrove Carbon Stock', 'MAN-04 Mangrove Species Diversity'] },
     { cat: 'People',  benefit: 'Secure land and resource tenure', inds: ['GOV-03 Indigenous Land Tenure', 'GOV-07 Safeguard Information System'] },
     { cat: 'Climate', benefit: 'Reduced emissions from deforestation and degradation', inds: ['MAN-02 Mangrove Carbon Stock (tCO₂e)'] },

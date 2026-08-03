@@ -443,7 +443,7 @@
             </div>
           </div>
           <div class="switch"><span class="knob"></span></div>
-          <div class="opt-elig">70% of area is eligible to protect</div>
+          <div class="opt-elig">70% of forest is eligible to protect</div>
         </div>
         <!-- Manage -->
         <div class="pathway-opt" data-pathway data-eco="forest">
@@ -456,7 +456,7 @@
             </div>
           </div>
           <div class="switch"><span class="knob"></span></div>
-          <div class="opt-elig">40% of area is eligible to manage</div>
+          <div class="opt-elig">40% of forest is eligible to manage</div>
         </div>
         <!-- Restore -->
         <div class="pathway-opt" data-pathway data-eco="forest">
@@ -469,7 +469,7 @@
             </div>
           </div>
           <div class="switch"><span class="knob"></span></div>
-          <div class="opt-elig">40% of area is eligible to restore</div>
+          <div class="opt-elig">40% of forest is eligible to restore</div>
         </div>
       </div>
     </div>
@@ -528,7 +528,7 @@
             </div>
           </div>
           <div class="switch"><span class="knob"></span></div>
-          <div class="opt-elig">50% of area is eligible to protect</div>
+          <div class="opt-elig">50% of mangrove is eligible to protect</div>
         </div>
         <!-- Manage -->
         <div class="pathway-opt" data-pathway data-eco="mangrove">
@@ -541,7 +541,7 @@
             </div>
           </div>
           <div class="switch"><span class="knob"></span></div>
-          <div class="opt-elig">33% of area is eligible to manage</div>
+          <div class="opt-elig">33% of mangrove is eligible to manage</div>
         </div>
         <!-- Restore — NON-ELIGIBLE / DISABLED EXAMPLE -->
         <div class="pathway-opt disabled" data-pathway data-eco="mangrove" data-locked="true">
@@ -614,7 +614,7 @@
             </div>
           </div>
           <div class="switch"><span class="knob"></span></div>
-          <div class="opt-elig">53% of area is eligible to protect</div>
+          <div class="opt-elig">53% of peatland is eligible to protect</div>
         </div>
         <!-- Manage -->
         <div class="pathway-opt" data-pathway data-eco="peat">
@@ -627,7 +627,7 @@
             </div>
           </div>
           <div class="switch"><span class="knob"></span></div>
-          <div class="opt-elig">33% of area is eligible to manage</div>
+          <div class="opt-elig">33% of peatland is eligible to manage</div>
         </div>
         <!-- Restore -->
         <div class="pathway-opt" data-pathway data-eco="peat">
@@ -640,7 +640,7 @@
             </div>
           </div>
           <div class="switch"><span class="knob"></span></div>
-          <div class="opt-elig">13% of area is eligible to restore</div>
+          <div class="opt-elig">13% of peatland is eligible to restore</div>
         </div>
       </div>
     </div>
@@ -1003,6 +1003,7 @@
 
 <script src="js/analysis-shared.js"></script>
 <script src="js/people-context.js"></script>
+<script src="js/f05-shared.js"></script>
 <script>
 (function(){
   /* Profile dropdown handled by nav-mobile.js (Q-03) */
@@ -1174,11 +1175,23 @@
   nbsInitThreat(panel.querySelector('.t3'), function(){ body.scrollTop = 0; });
 
   /* Step 4 — pathway selection; activities sourced from NbS Activities Matrix */
-  var NBS_ACTIVITIES = {"forest": {"Protect": ["Boundary demarcation & legal recognition", "Community-based patrol & monitoring", "Customary/indigenous rights recognition & FPIC process", "Fire prevention infrastructure & early warning", "Buffer zone establishment & compatible land use", "Biodiversity baseline & adaptive monitoring system"], "Manage": ["Soil rehabilitation & erosion control", "Community-based fire management (degraded areas)", "Assisted Natural Regeneration (ANR)", "Invasive species control & native restoration", "Agricultural burning regulation & no-burn alternatives", "Agroforestry / silvopasture / paludiculture transition", "Riparian buffer & watershed protection within productive landscape", "Climate-smart agriculture (CSA) practices", "Sustainable intensification with soil carbon enhancement", "Payment for Ecosystem Services (PES)", "Pre-restoration ecological assessment for stable non-forest/barren sites"], "Restore": ["Enrichment planting with native species (low-medium density)", "Full reforestation (high-density native species planting)", "Full reforestation of reclaimable/abandoned converted sites", "Riparian zone restoration planting (active)", "Pioneer species establishment (first-stage canopy)", "Native species succession planting (mid-late stage)", "Hydrology / water management for barren restoration", "Forest landscape restoration on stable non-forest sites (full reforestation)"]}, "mangrove": {"Protect": ["Boundary demarcation & legal recognition", "Community-based patrol & monitoring", "Customary/indigenous rights recognition & FPIC process", "Buffer zone establishment & compatible land use", "Biodiversity baseline & adaptive monitoring system"], "Manage": ["Assisted Natural Regeneration (ANR)", "Riparian buffer & watershed protection within productive landscape", "Sustainable intensification with soil carbon enhancement", "Payment for Ecosystem Services (PES)", "Pre-restoration ecological assessment for stable non-forest/barren sites"], "Restore": ["Enrichment planting with native species (low-medium density)", "Full reforestation (high-density native species planting)", "Full reforestation of reclaimable/abandoned converted sites", "Riparian zone restoration planting (active)", "Pioneer species establishment (first-stage canopy)", "Native species succession planting (mid-late stage)", "Forest landscape restoration on stable non-forest sites (full reforestation)", "Wetland forest restoration (peat swamp / mangrove / riparian)"]}, "peat": {"Protect": ["Boundary demarcation & legal recognition", "Community-based patrol & monitoring", "Customary/indigenous rights recognition & FPIC process", "Fire prevention infrastructure & early warning", "Buffer zone establishment & compatible land use", "Biodiversity baseline & adaptive monitoring system"], "Manage": ["Community-based fire management (degraded areas)", "Assisted Natural Regeneration (ANR)", "Agricultural burning regulation & no-burn alternatives", "Riparian buffer & watershed protection within productive landscape", "Sustainable intensification with soil carbon enhancement", "Payment for Ecosystem Services (PES)", "Pre-restoration ecological assessment for stable non-forest/barren sites"], "Restore": ["Enrichment planting with native species (low-medium density)", "Full reforestation (high-density native species planting)", "Full reforestation of reclaimable/abandoned converted sites", "Riparian zone restoration planting (active)", "Pioneer species establishment (first-stage canopy)", "Native species succession planting (mid-late stage)", "Hydrology / water management for barren restoration", "Forest landscape restoration on stable non-forest sites (full reforestation)", "Wetland forest restoration (peat swamp / mangrove / riparian)"]}};
+  /* Activity list = the F05 activity data (js/f05-shared.js, generated from
+     Activities Deep Dive Fix Latest V 3.0.xlsx) reshaped to eco → pathway →
+     [{id,name}] so Step 4 and the Monitoring Plan can never drift apart. */
+  var F05_ECO = { forest:'forest', mangrove:'mangrove', peat:'peatland' };
+  var NBS_ACTIVITIES = {};
+  Object.keys(F05_ECO).forEach(function(eco){
+    var src = ecosystems.find(function(e){ return e.id === F05_ECO[eco]; });
+    var byPw = NBS_ACTIVITIES[eco] = {};
+    (src ? src.activities : []).forEach(function(a){
+      if (!a.pw) return;
+      var label = a.pw.charAt(0) + a.pw.slice(1).toLowerCase();  // PROTECT → Protect
+      (byPw[label] = byPw[label] || []).push({ id:a.id, name:a.name });
+    });
+  });
   var PW_ORDER = ['Protect','Manage','Restore'];
   var PW_CLASS = { Protect:'pw-protect', Manage:'pw-manage', Restore:'pw-restore' };
-  var checkedActs = new Set();                 // "eco|pathway|activity" ticked
-  function actKey(e,p,a){ return e+'|'+p+'|'+a; }
+  var checkedActs = new Set();                 // ticked activity ids (F05 ids)
   function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
   function ecoOf(card){ var o = card.querySelector('[data-eco]'); return o ? o.dataset.eco : ''; }
   function pwOf(opt){ return opt.querySelector('.opt-name').textContent.trim(); }
@@ -1225,10 +1238,10 @@
     sel.forEach(function(p){
       html += '<div class="act-group"><div class="act-group__ttl ' + PW_CLASS[p] + '">' + p + '</div>';
       map[p].forEach(function(a){
-        total++; var on = checkedActs.has(actKey(eco,p,a)); if (on) checked++;
-        html += '<div class="activity-item' + (on ? ' checked' : '') + '" data-activity data-pw="' + p + '" data-act="' + esc(a) + '"'
+        total++; var on = checkedActs.has(a.id); if (on) checked++;
+        html += '<div class="activity-item' + (on ? ' checked' : '') + '" data-activity data-act="' + a.id + '"'
               + ' role="checkbox" tabindex="0" aria-checked="' + (on ? 'true' : 'false') + '">'
-              + CHK + '<span class="activity-label">' + esc(a) + '</span></div>';
+              + CHK + '<span class="activity-label">' + esc(a.name) + '</span></div>';
       });
       html += '</div>';
     });
@@ -1236,6 +1249,12 @@
     card.querySelector('[data-count]').textContent = checked;
     var tot = card.querySelector('[data-total]'); if (tot) tot.textContent = total;
     recomputeBenefit();
+    savePickedActs();
+  }
+
+  // Persist F02-P4 picks so F05 Monitoring Plan Step 1 lists only these.
+  function savePickedActs(){
+    try { localStorage.setItem('nbs_selected_activities', JSON.stringify(Array.from(checkedActs))); } catch(e){}
   }
 
   // pathway description tooltip icons
@@ -1265,7 +1284,7 @@
       // activities start unchecked — the user opts in per activity;
       // deselecting the pathway still clears any it had checked
       if (!nowOn) ((NBS_ACTIVITIES[eco] || {})[pw] || []).forEach(function(a){
-        checkedActs.delete(actKey(eco,pw,a));
+        checkedActs.delete(a.id);
       });
       renderActivities(card);
     }
@@ -1278,9 +1297,9 @@
   // checkbox toggle, event-delegated so it survives re-render (keyboard too, E-04)
   document.querySelectorAll('.eco-card [data-activity-list]').forEach(function(list){
     function toggleItem(item){
-      var card = list.closest('.eco-card'), k = actKey(ecoOf(card), item.dataset.pw, item.dataset.act);
+      var k = item.dataset.act;
       if (checkedActs.has(k)) checkedActs.delete(k); else checkedActs.add(k);
-      renderActivities(card);
+      renderActivities(list.closest('.eco-card'));
     }
     list.addEventListener('click', function(e){
       var item = e.target.closest('[data-activity]'); if (!item) return;

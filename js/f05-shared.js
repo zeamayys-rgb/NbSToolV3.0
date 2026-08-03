@@ -17,403 +17,473 @@ const ecoIcons = {
   peatland: `<img class="eco-logo" src="assets/pathway/eco-peatland.svg" alt="Peatland" />`
 };
 
-/* Activities, benefits and indicators are mapped directly from the
-   NbS indicators-longform matrix (Pathway → Ecosystem → Activity →
-   Benefit Category → Benefit → Indicator). Forest = DRYLAND in source.
-   Max 7 activities per ecosystem, spread across Protect / Manage / Restore. */
+/* Activities, benefits and indicators mirror NbS_Activities_Flow_v3.html —
+   the matrix flow diagram is the canonical mapping of
+   Ecosystem → Pathway → Activity → Benefit Category → Benefit → Indicator.
+   Forest = DRYLAND there; ineligible trajectories are excluded.
+   `traj` records the land-cover trajectory an activity belongs to (C1–C6
+   ecological states). It is provenance for whoever edits this data — the
+   product UI does not show it. */
+
+/* Indicator metadata — methodology and sampling frequency, one row per
+   indicator (each indicator has exactly one of each across the whole matrix).
+   Activities reference indicators by name; indMeta is derived below. */
+const indicatorMeta = {
+  'Species Richness-Flora': { source:'Standardized point-centered quarter method or fixed quadrat field surveys counting distinct species stems within coastal zones.', freq:'Semester (6 month)' },
+  'Number of Individual/Occurence per Species-Flora': { source:'Quadrat or transect surveys', freq:'Semester (6 month)' },
+  'Species Richness-Fauna': { source:'Standardized fauna surveys (e.g., camera traps, line transects, point counts, or visual encounter surveys) to identify and count the total number of animal species within the monitoring area', freq:'Semester (6 month)' },
+  'Number of Individual/Occurence per Species-Fauna': { source:'Camera trap / Transect / Point count', freq:'Semester (6 month)' },
+  'Forest Connectivity Index': { source:'Spatial network analysis software (e.g., Conefor, GuidosToolbox) mapping patch sizes, edge effects, and corridor resistance.', freq:'Annually' },
+  'Soil Erosion Control Rate': { source:'Field measurement using erosion pins or sediment traps compared against open, un-vegetated control catchments.', freq:'Annually' },
+  'Tree Canopy Cover': { source:'Remote sensing analysis using high-resolution satellite imagery (Sentinel-2, Landsat, PlanetScope) combined with ground-truthing via spherical densiometers, hemispherical photography, or drone/LiDAR canopy modeling.', freq:'Annually' },
+  'Water discharge flow': { source:'Direct measurement using velocity-area methods (flow/current meters, ADCP), hydraulic structures (weirs or flumes with pressure transducers/ultrasonic level sensors), or indirect estimation using slope-area methods (Manning\'s equation)', freq:'Daily' },
+  'Indigenous Land Tenure': { source:'Reviewing official land registry titles, land-tenure maps, and legal gazettes against traditional territory claims.', freq:'Annually' },
+  'Safeguard Information System': { source:'Documentation of social and encironmental safeguard policy or legal documents, system updates, public accessibility, and compliance metrics logs.', freq:'Annually' },
+  'Crop/Non-Timber Forest Product Value': { source:'Household survey databases, community forest cooperative registries, agricultural extension records, and regional remote sensing yield analysis reports', freq:'Annually' },
+  'Social Forestry Beneficiaries': { source:'Administrative registries from community forestry groups and formal land-allocation project tracking systems.', freq:'Annually' },
+  'Forestry Legal Framework': { source:'Legal audit and policy review tracking milestones (e.g., 1: No Policy, 2: Drafted, 3: Enacted, 4: Enforced).', freq:'Annually' },
+  'MRV Institutional Capacity': { source:'Standardized institutional capacity assessments evaluation across staffing, GIS hardware availability, and data audit trails.', freq:'Annually' },
+  'Grievance Redress Mechanism': { source:'Project grievance logbooks tracking total inputs, days to resolution, and formal stakeholder satisfaction sign-offs.', freq:'Annually' },
+  'Adaptive Management Response Time': { source:'Auditing project management logs tracking the time delta between an adverse monitoring report and implemented field adjustments.', freq:'Annually' },
+  'Benefit Sharing Mechanism': { source:'Financial compliance audits of trust funds, project bank statements, and community-approved allocation registries.', freq:'Annually' },
+  'Gender-Disaggregated Resource Access': { source:'Reviewing formal resource collection permits, attendance at decision assemblies, and micro-grant disbursement lists.', freq:'Annually' },
+  'Deforestation Rate': { source:'Multi-temporal automated classification of satellite imagery (Sentinel-2, Landsat) cross-verified with global forest loss alerts.', freq:'Annually' },
+  'Forest Degradation Rate': { source:'Canopy density tracking via continuous fractional vegetation cover (FVC) analysis or delta-NDVI baseline comparisons.', freq:'Annually' },
+  'Forest Extent': { source:'GIS mapping utilizing land-cover baseline maps, high-resolution satellite arrays, and targeted ground-truthing plots.', freq:'Annually' },
+  'Forest Carbon Stock': { source:'Physical forest inventories using allometric equations (DBH) combined with remote-sensing LiDAR/Radar models.', freq:'Annually' },
+  'Soil Organic Carbon Accumulation': { source:'Standardized laboratory testing (Walkley-Black or dry combustion) of soil cores collected from permanent field monitoring grids.', freq:'Annually' },
+  'Protected Ecosystem Area': { source:'National environmental ministry gazette documents and digital boundaries overlayed with total baseline mangrove maps.', freq:'Annually' },
+  'Sediment Accretion Rate': { source:'Field installation and monitoring of Surface Elevation Tables (SET) paired with horizontal feldspar marker horizons.', freq:'Annually' },
+  'Relative Sea-Level': { source:'Measured using tide gauges, satellite altimetry, GPS/SET data, or other long-term sea-level monitoring datasets.', freq:'Daily' },
+  'Tidal Inundation Regime': { source:'Deployment of automated pressure-transducer water level loggers within the forest interior calibrated to local tide datums.', freq:'Daily' },
+  'Mangrove Carbon Stock': { source:'Allometric measurement of tree dimensions paired with deep-core sediment soil carbon sampling in coastal transects.', freq:'Annually' },
+  'Aquaculture Conversion Pressure': { source:'GIS buffer analysis calculating the distance and conversion rates of aquaculture boundaries relative to intact forest margins.', freq:'Annually' },
+  'Forest Fire Incidents': { source:'MODIS and VIIRS satellite active fire thermal anomaly data combined with localized post-fire perimeter mapping.', freq:'Annually' },
+  'Invasive Species Spread Rate': { source:'Systematic grid sampling across permanent forest line-transects combined with high-resolution drone multi-spectral mapping.', freq:'Semester (6 month)' },
+  'Peat Burn Depth': { source:'Measured through post-fire field surveys by comparing pre- and post-fire peat surface elevations, burn scar assessments, and direct peat depth measurements at representative locations.', freq:'Annually' },
+  'Peat Soil Moisture': { source:'Measured using in-situ soil moisture sensors installed at representative depths, supplemented by gravimetric analysis of peat samples collected in the field.', freq:'Daily' },
+  'Peat Fire Hotspots': { source:'Daily processing of MODIS/VIIRS thermal data combined with localized ground patrol fire verification grids.', freq:'Daily' },
+  'Burned Area': { source:'Measured using satellite imagery, burned scar mapping, fire hotspot detection, and field verification where applicable.', freq:'Annually' },
+  'Water Table Depth': { source:'Automated telemetry-enabled dipwells and piezometers logging water table fluctuations at hourly intervals across a grid.', freq:'Daily' },
+  'Peat Water Quality': { source:'Regular collection of subsurface pore-water using suction lysimeters followed by standardized laboratory chemical tracking.', freq:'Monthly' },
+  'Peatland Extent': { source:'Systematic soil auger field profiling, electrical resistivity imaging (ERI), and specialized digital soil mapping models.', freq:'Annually' },
+  'Rainwater Use Efficiency': { source:'Combining satellite-derived net primary productivity (NPP) models with localized gridded rain-gauge data arrays.', freq:'Annually' },
+  'Fire Prevention Brigades': { source:'Civil defense or project administrative records verifying active rosters, training certificates, and equipment maintenance logs.', freq:'Annually' },
+  'Burning Ban Compliance': { source:'Compliance assessment using field inspections, fire hotspot data, and administrative records.', freq:'Annually' },
+  'Peatland Carbon Emissions': { source:'Closed flux chamber field measurements calibrated with water table depth proxy emission factors (IPCC Tier 2/3 models).', freq:'Annually' },
+  'Nitrous Oxide (N₂O) Flux': { source:'Field deployment of automated or manual static greenhouse gas flux chambers and gas chromatography analysis.', freq:'Annually' },
+  'Methane (CH4) Flux': { source:'Field deployment of automated or manual static greenhouse gas flux chambers and gas chromatography analysis.', freq:'Annually' },
+  'Peatland Carbon Emissions due to fires': { source:'Closed flux chamber field measurements calibrated with water table depth proxy emission factors (IPCC Tier 2/3 models).', freq:'Annually' },
+  'Drained Peatland Area': { source:'Manual and automated remote-sensing digitizing of canal networks and associated dry-land vegetative signatures.', freq:'Annually' },
+  'Peat Subsidence Rate': { source:'Physical field measurements using deep-anchored subsidence poles anchored to bedrock, supplemented by InSAR satellite radar.', freq:'Annually' },
+  'Trees Planted': { source:'Nursery inventory and seedling dispatch logs combined with field planting registries, geotagged mobile app data, and verified through random plot-based survival audits and drone-based high-resolution aerial counts.', freq:'Quarterly (3 month)' },
+  'Ecosystem Restoration Area': { source:'Geotagged project boundaries verified via high-resolution satellite arrays and localized seedling survival count grids.', freq:'Annually' },
+  'Number of Seedlings per Species': { source:'Standardized vegetation surveys using quadrats or transects to identify and count the total number of plant species within the monitoring area', freq:'Quarterly (3 month)' },
+  'Groundwater Recharge Flux': { source:'Water-table fluctuation methods in local monitoring wells paired with localized water balance modeling software.', freq:'Annually' },
+  'Number of Seedling Species': { source:'Field inventory of restoration plots using standardized species identification protocols and restoration monitoring records.', freq:'Quarterly (3 month)' },
+  'Sustainable Grazing Capacity': { source:'Seasonal forage biomass clipping and weighing trials combined with community livestock tracking audits.', freq:'Annually' },
+  'Carbon sequestration / removal rate from Afforestation, Reforestation, and Revegetation (ARR) activities': { source:'Quantification of net carbon stock changes in above- and below-ground biomass using permanent field sample plots (allometric equations based on DBH and height), calibrated with remote sensing models, subtracting baseline changes, project emissions, and leakage as per certified standards.', freq:'Annually' },
+  'Peat Soil Wetness Index': { source:'Derived from water table monitoring, soil moisture measurements, and/or satellite-based hydrological assessments using a standardized calculation approach.', freq:'Weekly' },
+  'Rewetted Peatland Area': { source:'As-built engineering mapping verified by satellite hydrological tracking and localized water table depth stabilization data.', freq:'Annually' },
+  'Paludiculture Area': { source:'Project agricultural distribution records and land-use mapping cross-verified with seasonal satellite vegetative indices.', freq:'Annually' },
+  'Peat Restoration Progress': { source:'Project management milestone auditing against the formal landscape-scale master restoration plan.', freq:'Annually' },
+  'Pioneer Vegetation Cover': { source:'Quadrat surveys combined with drone or satellite imagery to estimate vegetation cover.', freq:'Semester (6 month)' },
+  'Drought-Resilient Canopy Cover': { source:'Line-intercept field transects combined with ultra-high-resolution airborne or drone orthomosaic imagery classification.', freq:'Annually' },
+};
 
 const ecosystems = [
   { id:'forest', name:'Forest', pwLabel:'Protect / Manage / Restore', pwClass:'', colorCls:'forest', activities:[
-    { id:'fo-pro-1', name:'Boundary demarcation & legal recognition', pw:'PROTECT', type:'Recommended', checked:true, method:'Remote Sensing', freq:'Annually', indMeta:{ 'Fragmentation index (1-10)':{source:'Remote Sensing'}, 'Forest Carbon Stock (tCO₂e)':{source:'Remote Sensing/Field Measurement'} }, benefits:[
-        { cat:'Nature', benefit:'Maintenance of ecological connectivity', inds:['Fragmentation index (1-10)'] },
-        { cat:'People', benefit:'Secure land and resource tenure', inds:['Area under recognised indigenous or customary tenure (ha)'] },
-        { cat:'Climate', benefit:'Reduced emissions from deforestation and degradation', inds:['Forest Carbon Stock (tCO₂e)'] }
-    ]},
-    { id:'fo-pro-2', name:'Community-based patrol & monitoring', pw:'PROTECT', type:'Recommended', checked:true, method:'Remote sensing', freq:'Annually', indMeta:{ 'Forest Fire Incidents (number)':{source:'Remote sensing'}, 'Primary Forest Loss (ha)':{source:'Remote sensing'} }, benefits:[
-        { cat:'Nature', benefit:'Reduced vulnerability to fire, pests, and diseases', inds:['Forest Fire Incidents (number)', 'Primary Forest Loss (ha)'] },
-        { cat:'People', benefit:'Sustainable livelihood opportunities', inds:['Social Forestry Beneficiaries'] },
-        { cat:'Climate', benefit:'Reduced emissions from deforestation and degradation', inds:['Forest Carbon Stock'] },
-        { cat:'Nature', benefit:'Protection of watershed functions', inds:['Water yield (GIS Analysis)'] },
-        { cat:'People', benefit:'Strengthened social capital and governance capacity', inds:['Grievance Redress Mechanism', 'MRV Institutional Capacity'] }
-    ]},
-    { id:'fo-pro-3', name:'Customary/indigenous rights recognition & FPIC process', pw:'PROTECT', type:'Recommended', checked:false, method:'Field Survey/Secondary Data (Government Data)', freq:'Annually', indMeta:{ 'Sites of community importance and special protection areas (Ha)':{source:'Field Survey/Secondary Data (Government Data)'} }, benefits:[
+    { id:'fo-pro-1', name:'Establish protected areas, corridors, and enforce customary land rights.', traj:'Forest to C1/C2 (Persistent Forest)', pw:'PROTECT', type:'Recommended', checked:true, benefits:[
+        { cat:'Nature', benefit:'Enhanced biodiversity and ecosystem functions', inds:['Species Richness-Flora', 'Number of Individual/Occurence per Species-Flora', 'Species Richness-Fauna', 'Number of Individual/Occurence per Species-Fauna'] },
         { cat:'Nature', benefit:'Maintenance of ecological connectivity', inds:['Forest Connectivity Index'] },
+        { cat:'Nature', benefit:'Protection of watershed functions', inds:['Soil Erosion Control Rate', 'Tree Canopy Cover', 'Water discharge flow'] },
         { cat:'People', benefit:'Secure land and resource tenure', inds:['Indigenous Land Tenure'] },
-        { cat:'Climate', benefit:'Reduced emissions from deforestation and degradation', inds:['Forest Carbon Stock'] },
-        { cat:'People', benefit:'Strengthened social capital and governance capacity', inds:['Sites of community importance and special protection areas (Ha)'] },
-        { cat:'People', benefit:'Equitable benefit-sharing mechanisms', inds:['Benefit Sharing Mechanism'] }
+        { cat:'People', benefit:'Cultural heritage preservation', inds:['Safeguard Information System'] },
+        { cat:'People', benefit:'Enhanced food and water security', inds:['Crop/Non-Timber Forest Product Value'] },
+        { cat:'People', benefit:'Sustainable livelihood opportunities', inds:['Social Forestry Beneficiaries', 'Crop/Non-Timber Forest Product Value'] },
+        { cat:'People', benefit:'Strengthened social capital and governance capacity', inds:['Forestry Legal Framework', 'MRV Institutional Capacity', 'Safeguard Information System', 'Grievance Redress Mechanism', 'Adaptive Management Response Time'] },
+        { cat:'People', benefit:'Equitable benefit-sharing mechanisms', inds:['Benefit Sharing Mechanism', 'Gender-Disaggregated Resource Access'] },
+        { cat:'Climate', benefit:'Reduced emissions from deforestation and degradation', inds:['Deforestation Rate', 'Forest Degradation Rate', 'Forest Extent', 'Forest Carbon Stock'] },
+        { cat:'Climate', benefit:'Increased carbon sequestration and storage', inds:['Forest Carbon Stock', 'Soil Organic Carbon Accumulation'] },
     ]},
-    { id:'fo-pro-4', name:'Fire prevention infrastructure & early warning', pw:'PROTECT', type:'Recommended', checked:false, method:'Remote Sensing', freq:'Annually', indMeta:{}, benefits:[
-        { cat:'Nature', benefit:'Reduced vulnerability to fire, pests, and diseases', inds:['Forest Degradation Rate'] },
-        { cat:'People', benefit:'Enhanced food and water security', inds:['Social Forestry Beneficiaries'] },
-        { cat:'Climate', benefit:'Reduced emissions from deforestation and degradation', inds:['Forest Carbon Stock'] },
-        { cat:'People', benefit:'Strengthened social capital and governance capacity', inds:['MRV Institutional Capacity'] }
-    ]},
-    { id:'fo-pro-5', name:'Buffer zone establishment & compatible land use', pw:'PROTECT', type:'Recommended', checked:false, method:'Household survey', freq:'Annually', indMeta:{ 'Household income (USD/year)':{source:'Household survey'}, 'Land surface temerature (°C)':{source:'remote sensing/field sensor'} }, benefits:[
+    { id:'fo-res-1', name:'Execute Assisted Natural Regeneration (ANR) and enrichment planting.', traj:'Forest to C4 (Degraded; Other Ref.)', pw:'RESTORE', type:'Recommended', checked:false, benefits:[
+        { cat:'Nature', benefit:'Improved forest productivity and regeneration', inds:['Forest Extent', 'Tree Canopy Cover', 'Trees Planted', 'Ecosystem Restoration Area', 'Number of Seedlings per Species'] },
         { cat:'Nature', benefit:'Maintenance of ecological connectivity', inds:['Forest Connectivity Index'] },
-        { cat:'People', benefit:'Sustainable livelihood opportunities', inds:['Household income (USD/year)'] },
-        { cat:'Climate', benefit:'Reduced emissions from deforestation and degradation', inds:['Forest Carbon Stock'] },
-        { cat:'Nature', benefit:'Reduced vulnerability to fire, pests, and diseases', inds:['Forest Degradation Rate'] },
-        { cat:'People', benefit:'Equitable benefit-sharing mechanisms', inds:['Benefit Sharing Mechanism'] },
-        { cat:'Climate', benefit:'Microclimate regulation', inds:['Land surface temerature (°C)'] }
+        { cat:'Nature', benefit:'Protection of watershed functions', inds:['Soil Erosion Control Rate', 'Groundwater Recharge Flux', 'Water discharge flow'] },
+        { cat:'Nature', benefit:'Enhanced biodiversity and ecosystem functions', inds:['Number of Seedling Species', 'Species Richness-Flora', 'Number of Individual/Occurence per Species-Flora', 'Species Richness-Fauna', 'Number of Individual/Occurence per Species-Fauna'] },
+        { cat:'People', benefit:'Sustainable livelihood opportunities', inds:['Social Forestry Beneficiaries', 'Crop/Non-Timber Forest Product Value'] },
+        { cat:'People', benefit:'Equitable benefit-sharing mechanisms', inds:['Benefit Sharing Mechanism', 'Gender-Disaggregated Resource Access'] },
+        { cat:'People', benefit:'Enhanced food and water security', inds:['Rainwater Use Efficiency', 'Sustainable Grazing Capacity'] },
+        { cat:'People', benefit:'Strengthened social capital and governance capacity', inds:['Forestry Legal Framework', 'MRV Institutional Capacity', 'Safeguard Information System', 'Grievance Redress Mechanism', 'Adaptive Management Response Time'] },
+        { cat:'Climate', benefit:'Increased carbon sequestration and storage', inds:['Forest Carbon Stock', 'Soil Organic Carbon Accumulation', 'Carbon sequestration / removal rate from Afforestation, Reforestation, and Revegetation (ARR) activities'] },
+        { cat:'Climate', benefit:'Microclimate regulation', inds:['Tree Canopy Cover'] },
+        { cat:'Climate', benefit:'Reduced emissions from deforestation and degradation', inds:['Deforestation Rate', 'Forest Degradation Rate'] },
     ]},
-    { id:'fo-pro-6', name:'Biodiversity baseline & adaptive monitoring system', pw:'PROTECT', type:'Recommended', checked:false, method:'Field Measurement', freq:'Annually', indMeta:{ 'Species richness index (index)':{source:'Field Measurement'} }, benefits:[
-        { cat:'Nature', benefit:'Enhanced biodiversity and ecosystem functions', inds:['Species richness index (index)'] },
-        { cat:'People', benefit:'Strengthened social capital and governance capacity', inds:['community institutions (count)'] }
-    ]},
-    { id:'fo-man-1', name:'Soil rehabilitation & erosion control', pw:'MANAGE', type:'Recommended', checked:true, method:'Remote sensing', freq:'Annually', indMeta:{ 'Tree canopy cover (%)':{source:'Remote sensing'}, 'Crop/NTFP Yield (kg/year)':{source:'Field Measurement'}, 'Total carbon removed or stored in vegetation and soil per unit area per unit time (metric tonnes/ha/year)':{source:'Remote Sensing/Field Measurement'}, 'Number of active community institutions (KUPS/LPHD) (count)':{source:'Field Survey/Secondary Data (Government Data)'}, 'Disaster vulnability index (index)':{source:'GIS/Remote Sensing'} }, benefits:[
-        { cat:'Nature', benefit:'Improved forest productivity and regeneration', inds:['Tree canopy cover (%)'] },
-        { cat:'People', benefit:'Enhanced food and water security', inds:['Crop/NTFP Yield (kg/year)'] },
-        { cat:'Climate', benefit:'Increased carbon sequestration and storage', inds:['Total carbon removed or stored in vegetation and soil per unit area per unit time (metric tonnes/ha/year)'] },
-        { cat:'Nature', benefit:'Protection of watershed functions', inds:['Sediment Accretion Rate'] },
-        { cat:'People', benefit:'Strengthened social capital and governance capacity', inds:['Number of active community institutions (KUPS/LPHD) (count)'] },
-        { cat:'Climate', benefit:'Enhanced resilience to climate hazards', inds:['Disaster vulnability index (index)'] }
-    ]},
-    { id:'fo-man-2', name:'Community-based fire management (degraded areas)', pw:'MANAGE', type:'Recommended', checked:false, method:'GIS/Remote Sensing', freq:'Annually', indMeta:{ 'Forest Fire Incidents (count)':{source:'GIS/Remote Sensing'}, 'Crop/NTFP Yield (kg/year)':{source:'household survey'}, 'Disaster vulnability index (index)':{source:'GIS/Remote Sensing'} }, benefits:[
-        { cat:'Nature', benefit:'Reduced vulnerability to fire, pests, and diseases', inds:['Forest Fire Incidents (count)'] },
-        { cat:'People', benefit:'Enhanced food and water security', inds:['Fire Prevention Brigades'] },
-        { cat:'Climate', benefit:'Reduced emissions from deforestation and degradation', inds:['Forest Carbon Stock'] },
-        { cat:'Nature', benefit:'Improved forest productivity and regeneration', inds:['Crop/NTFP Yield (kg/year)'] },
-        { cat:'People', benefit:'Strengthened social capital and governance capacity', inds:['Fire Prevention Brigades (count)'] },
-        { cat:'Climate', benefit:'Enhanced resilience to climate hazards', inds:['Disaster vulnability index (index)'] }
-    ]},
-    { id:'fo-man-3', name:'Assisted Natural Regeneration (ANR)', pw:'MANAGE', type:'Recommended', checked:false, method:'Remote sensing', freq:'Annually', indMeta:{ 'Tree canopy cover (%)':{source:'Remote sensing'}, 'Forest Carbon Stock (MtCO₂e/yr or tCO₂e/yr)':{source:'Remote sensing/field measurement'}, 'Forest Landscape Integrity Index (FLII) (1-10)':{source:'Remote Sensing'} }, benefits:[
-        { cat:'Nature', benefit:'Enhanced biodiversity and ecosystem functions', inds:['Species Richness Index'] },
-        { cat:'People', benefit:'Sustainable livelihood opportunities', inds:['Social Forestry Beneficiaries'] },
-        { cat:'Climate', benefit:'Increased carbon sequestration and storage', inds:['Forest Carbon Stock'] },
-        { cat:'Nature', benefit:'Improved forest productivity and regeneration', inds:['Tree canopy cover (%)'] },
-        { cat:'Climate', benefit:'Reduced emissions from deforestation and degradation', inds:['Forest Carbon Stock (MtCO₂e/yr or tCO₂e/yr)'] },
-        { cat:'Nature', benefit:'Maintenance of ecological connectivity', inds:['Forest Landscape Integrity Index (FLII) (1-10)'] }
-    ]},
-    { id:'fo-man-4', name:'Invasive species control & native restoration', pw:'MANAGE', type:'Recommended', checked:false, method:'Spatial Modelling', freq:'Annually', indMeta:{ 'Threat Abatement STAR (START) (Score)':{source:'Spatial Modelling'}, 'Forest Carbon Stock (MtCO₂e/yr or tCO₂e/yr)':{source:'Remote sensing/field measurement'}, 'Tree canopy cover (%)':{source:'Remote sensing'} }, benefits:[
-        { cat:'Nature', benefit:'Enhanced biodiversity and ecosystem functions', inds:['Threat Abatement STAR (START) (Score)'] },
-        { cat:'Climate', benefit:'Reduced emissions from deforestation and degradation', inds:['Forest Carbon Stock (MtCO₂e/yr or tCO₂e/yr)'] },
-        { cat:'Nature', benefit:'Improved forest productivity and regeneration', inds:['Tree canopy cover (%)'] }
-    ]},
-    { id:'fo-man-5', name:'Agricultural burning regulation & no-burn alternatives', pw:'MANAGE', type:'Recommended', checked:false, method:'Remote Sensing', freq:'Annually', indMeta:{}, benefits:[
-        { cat:'Nature', benefit:'Reduced vulnerability to fire, pests, and diseases', inds:['Burning Ban Compliance'] },
-        { cat:'People', benefit:'Strengthened social capital and governance capacity', inds:['Fire Prevention Brigades (count)'] },
-        { cat:'Climate', benefit:'Reduced emissions from deforestation and degradation', inds:['Forest Carbon Stock'] },
-        { cat:'Climate', benefit:'Enhanced resilience to climate hazards', inds:['Disaster vulnerability index'] }
-    ]},
-    { id:'fo-man-6', name:'Agroforestry / silvopasture / paludiculture transition', pw:'MANAGE', type:'Recommended', checked:false, method:'Field Survey/Project Report', freq:'Annually', indMeta:{ 'Direct economic activity: Number of new jobs created (Number)':{source:'Field Survey/Project Report'}, 'Land surface temperature (°C)':{source:'Remote Sensing'} }, benefits:[
-        { cat:'Nature', benefit:'Enhanced biodiversity and ecosystem functions', inds:['Species Richness Index', 'Forest Connectivity Index'] },
-        { cat:'People', benefit:'Sustainable livelihood opportunities (planting employment)', inds:['Direct economic activity: Number of new jobs created (Number)'] },
-        { cat:'Climate', benefit:'Increased carbon sequestration and storage', inds:['Forest Carbon Stock'] },
-        { cat:'Nature', benefit:'Improved forest productivity and regeneration', inds:['Crop/NTFP yield', 'Tree canopy cover (%)', 'Tree canopy cover'] },
-        { cat:'People', benefit:'Enhanced food and water security', inds:['Social Forestry Beneficiaries'] },
-        { cat:'Climate', benefit:'Enhanced resilience to climate hazards', inds:['Disaster vulnerability index', 'Area exposed to flood/drought/landslide hazard (Ha)'] },
-        { cat:'Climate', benefit:'Microclimate regulation', inds:['Land surface temperature (°C)', 'Land surface temperature'] }
-    ]},
-    { id:'fo-man-7', name:'Riparian buffer & watershed protection within productive landscape', pw:'MANAGE', type:'Recommended', checked:false, method:'Remote Sensing', freq:'Annually', indMeta:{}, benefits:[
-        { cat:'Nature', benefit:'Protection of watershed functions', inds:['Water yield/Sediment retention'] },
-        { cat:'People', benefit:'Enhanced food and water security', inds:['Crop/NTFP yield'] },
-        { cat:'Climate', benefit:'Increased carbon sequestration and storage (riparian)', inds:['Forest Carbon Stock'] },
+    { id:'fo-res-2', name:'Conduct Forest Landscape Restoration (FLR) to transition back to native forest.', traj:'Forest to C5 (Converted; Other Ref.)', pw:'RESTORE', type:'Recommended', checked:false, benefits:[
         { cat:'Nature', benefit:'Maintenance of ecological connectivity', inds:['Forest Connectivity Index'] },
-        { cat:'Climate', benefit:'Enhanced resilience to climate hazards', inds:['Disaster vulnerability index'] },
-        { cat:'Climate', benefit:'Microclimate regulation', inds:['Land surface temperature'] }
+        { cat:'Nature', benefit:'Enhanced biodiversity and ecosystem functions', inds:['Number of Seedling Species', 'Species Richness-Flora', 'Number of Individual/Occurence per Species-Flora', 'Species Richness-Fauna', 'Number of Individual/Occurence per Species-Fauna'] },
+        { cat:'Nature', benefit:'Protection of watershed functions', inds:['Soil Erosion Control Rate', 'Groundwater Recharge Flux', 'Water discharge flow'] },
+        { cat:'People', benefit:'Sustainable livelihood opportunities', inds:['Social Forestry Beneficiaries', 'Crop/Non-Timber Forest Product Value'] },
+        { cat:'People', benefit:'Secure land and resource tenure', inds:['Indigenous Land Tenure'] },
+        { cat:'People', benefit:'Enhanced food and water security', inds:['Rainwater Use Efficiency', 'Crop/Non-Timber Forest Product Value'] },
+        { cat:'People', benefit:'Strengthened social capital and governance capacity', inds:['Forestry Legal Framework', 'MRV Institutional Capacity', 'Safeguard Information System', 'Grievance Redress Mechanism', 'Adaptive Management Response Time'] },
+        { cat:'People', benefit:'Equitable benefit-sharing mechanisms', inds:['Benefit Sharing Mechanism', 'Gender-Disaggregated Resource Access'] },
+        { cat:'Climate', benefit:'Increased carbon sequestration and storage', inds:['Forest Carbon Stock', 'Soil Organic Carbon Accumulation', 'Carbon sequestration / removal rate from Afforestation, Reforestation, and Revegetation (ARR) activities'] },
+        { cat:'Climate', benefit:'Reduced emissions from deforestation and degradation', inds:['Deforestation Rate', 'Forest Degradation Rate'] },
     ]},
-    { id:'fo-man-8', name:'Climate-smart agriculture (CSA) practices', pw:'MANAGE', type:'Recommended', checked:false, method:'Field Survey/Project Report', freq:'Annually', indMeta:{ 'Direct economic activity: Number of new jobs created (Number)':{source:'Field Survey/Project Report'}, 'Soil organic carbon (tC/ha)':{source:'Field Measurement'} }, benefits:[
-        { cat:'People', benefit:'Sustainable livelihood opportunities', inds:['Direct economic activity: Number of new jobs created (Number)'] },
-        { cat:'Climate', benefit:'Increased carbon sequestration and storage (soil); Enhanced resilience to climate hazards', inds:['Soil organic carbon (tC/ha)'] },
-        { cat:'People', benefit:'Enhanced food and water security', inds:['Crop/NTFP Yield'] }
+    { id:'fo-res-3', name:'Soil terracing/gully plugs for erosion control and active reforestation.', traj:'Forest to C6 (Converted to Barren)', pw:'RESTORE', type:'Recommended', checked:false, benefits:[
+        { cat:'Nature', benefit:'Improved forest productivity and regeneration', inds:['Forest Extent', 'Tree Canopy Cover', 'Trees Planted', 'Ecosystem Restoration Area', 'Number of Seedlings per Species'] },
+        { cat:'Nature', benefit:'Protection of watershed functions', inds:['Soil Erosion Control Rate', 'Groundwater Recharge Flux', 'Water discharge flow'] },
+        { cat:'Nature', benefit:'Maintenance of ecological connectivity', inds:['Forest Connectivity Index'] },
+        { cat:'Nature', benefit:'Enhanced biodiversity and ecosystem functions', inds:['Number of Seedling Species', 'Species Richness-Flora', 'Number of Individual/Occurence per Species-Flora', 'Species Richness-Fauna', 'Number of Individual/Occurence per Species-Fauna'] },
+        { cat:'People', benefit:'Sustainable livelihood opportunities', inds:['Social Forestry Beneficiaries', 'Crop/Non-Timber Forest Product Value'] },
+        { cat:'People', benefit:'Enhanced food and water security', inds:['Rainwater Use Efficiency', 'Crop/Non-Timber Forest Product Value'] },
+        { cat:'People', benefit:'Strengthened social capital and governance capacity', inds:['Forestry Legal Framework', 'MRV Institutional Capacity', 'Safeguard Information System', 'Grievance Redress Mechanism', 'Adaptive Management Response Time'] },
+        { cat:'People', benefit:'Equitable benefit-sharing mechanisms', inds:['Benefit Sharing Mechanism', 'Gender-Disaggregated Resource Access'] },
+        { cat:'Climate', benefit:'Increased carbon sequestration and storage', inds:['Forest Carbon Stock', 'Soil Organic Carbon Accumulation', 'Carbon sequestration / removal rate from Afforestation, Reforestation, and Revegetation (ARR) activities'] },
+        { cat:'Climate', benefit:'Microclimate regulation', inds:['Tree Canopy Cover'] },
+        { cat:'Climate', benefit:'Reduced emissions from deforestation and degradation', inds:['Deforestation Rate', 'Forest Degradation Rate'] },
     ]},
-    { id:'fo-man-9', name:'Sustainable intensification with soil carbon enhancement', pw:'MANAGE', type:'Recommended', checked:false, method:'Field Measurement', freq:'Annually', indMeta:{ 'Soil carbon content (ton/ha)':{source:'Field Measurement'} }, benefits:[
-        { cat:'Nature', benefit:'Improved forest productivity and regeneration (soil health)', inds:['Soil carbon content (ton/ha)'] },
-        { cat:'People', benefit:'Sustainable livelihood opportunities', inds:['Household income'] },
-        { cat:'Climate', benefit:'Increased carbon sequestration and storage (soil carbon)', inds:['Soil carbon content'] },
-        { cat:'Nature', benefit:'Enhanced biodiversity and ecosystem functions', inds:['Forest Connectivity Index'] },
-        { cat:'People', benefit:'Enhanced food and water security', inds:['Crop yield'] },
-        { cat:'Climate', benefit:'Enhanced resilience to climate hazards', inds:['Disaster vulnerability index'] }
+    { id:'fo-man-1', name:'Protect regenerating stands from fire/grazing and apply CBFM.', traj:'Non-Forest to C1/C2 (Regenerated Naturally)', pw:'MANAGE', type:'Recommended', checked:false, benefits:[
+        { cat:'Nature', benefit:'Improved forest productivity and regeneration', inds:['Forest Extent', 'Tree Canopy Cover', 'Fire Prevention Brigades'] },
+        { cat:'Nature', benefit:'Maintenance of ecological connectivity', inds:['Forest Connectivity Index'] },
+        { cat:'Nature', benefit:'Protection of watershed functions', inds:['Soil Erosion Control Rate', 'Groundwater Recharge Flux', 'Water discharge flow'] },
+        { cat:'Nature', benefit:'Enhanced biodiversity and ecosystem functions', inds:['Number of Seedling Species', 'Species Richness-Flora', 'Number of Individual/Occurence per Species-Flora', 'Species Richness-Fauna', 'Number of Individual/Occurence per Species-Fauna'] },
+        { cat:'People', benefit:'Secure land and resource tenure', inds:['Indigenous Land Tenure'] },
+        { cat:'People', benefit:'Strengthened social capital and governance capacity', inds:['Forestry Legal Framework', 'MRV Institutional Capacity', 'Safeguard Information System', 'Grievance Redress Mechanism', 'Adaptive Management Response Time'] },
+        { cat:'People', benefit:'Enhanced food and water security', inds:['Rainwater Use Efficiency', 'Crop/Non-Timber Forest Product Value'] },
+        { cat:'People', benefit:'Sustainable livelihood opportunities', inds:['Social Forestry Beneficiaries', 'Crop/Non-Timber Forest Product Value'] },
+        { cat:'People', benefit:'Equitable benefit-sharing mechanisms', inds:['Benefit Sharing Mechanism', 'Gender-Disaggregated Resource Access'] },
+        { cat:'Climate', benefit:'Increased carbon sequestration and storage', inds:['Forest Carbon Stock', 'Soil Organic Carbon Accumulation', 'Carbon sequestration / removal rate from Afforestation, Reforestation, and Revegetation (ARR) activities'] },
+        { cat:'Climate', benefit:'Microclimate regulation', inds:['Tree Canopy Cover'] },
+        { cat:'Climate', benefit:'Reduced emissions from deforestation and degradation', inds:['Deforestation Rate', 'Forest Degradation Rate'] },
     ]},
-    { id:'fo-man-10', name:'Payment for Ecosystem Services (PES)', pw:'MANAGE', type:'Recommended', checked:false, method:'Remote Sensing/Field Measurement', freq:'Annually', indMeta:{ 'Net surface water availability; Quantitative status of groundwater; Water Exploitation Index (m3/year; Good or Poor; %)':{source:'Remote Sensing/Field Measurement'}, 'Avoided greenhouse gas emissions from deforestation and degradation; Forest habitat fragmentation - effective mesh density (t CO₂e/y; 1/ha)':{source:'Remote Sensing/Field Measurement'} }, benefits:[
-        { cat:'Nature', benefit:'Protection of watershed functions', inds:['Net surface water availability; Quantitative status of groundwater; Water Exploitation Index (m3/year; Good or Poor; %)'] },
-        { cat:'Climate', benefit:'Reduced emissions from deforestation and degradation (incentive prevents conversion)', inds:['Avoided greenhouse gas emissions from deforestation and degradation; Forest habitat fragmentation - effective mesh density (t CO₂e/y; 1/ha)'] },
-        { cat:'People', benefit:'Equitable benefit-sharing mechanisms', inds:['Benefit Sharing Mechanism'] },
-        { cat:'People', benefit:'Strengthened social capital and governance capacity', inds:['MRV Institutional Capacity'] }
+    { id:'fo-man-2', name:'Optimize forage management, rotational grazing, and controlled patch burning.', traj:'Non-Forest to C4 (Stable C4; Cultivated)', pw:'MANAGE', type:'Recommended', checked:false, benefits:[
+        { cat:'Nature', benefit:'Enhanced biodiversity and ecosystem functions', inds:['Number of Seedling Species', 'Species Richness-Flora', 'Number of Individual/Occurence per Species-Flora', 'Species Richness-Fauna', 'Number of Individual/Occurence per Species-Fauna'] },
+        { cat:'Nature', benefit:'Protection of watershed functions', inds:['Soil Erosion Control Rate', 'Groundwater Recharge Flux', 'Water discharge flow'] },
+        { cat:'Nature', benefit:'Maintenance of ecological connectivity', inds:['Forest Connectivity Index', 'Forest Extent'] },
+        { cat:'People', benefit:'Sustainable livelihood opportunities', inds:['Social Forestry Beneficiaries', 'Crop/Non-Timber Forest Product Value'] },
+        { cat:'People', benefit:'Enhanced food and water security', inds:['Rainwater Use Efficiency', 'Sustainable Grazing Capacity'] },
+        { cat:'People', benefit:'Strengthened social capital and governance capacity', inds:['Forestry Legal Framework', 'MRV Institutional Capacity', 'Safeguard Information System', 'Grievance Redress Mechanism', 'Adaptive Management Response Time'] },
+        { cat:'People', benefit:'Equitable benefit-sharing mechanisms', inds:['Benefit Sharing Mechanism', 'Gender-Disaggregated Resource Access'] },
+        { cat:'Climate', benefit:'Increased carbon sequestration and storage', inds:['Forest Carbon Stock', 'Soil Organic Carbon Accumulation', 'Carbon sequestration / removal rate from Afforestation, Reforestation, and Revegetation (ARR) activities'] },
+        { cat:'Climate', benefit:'Reduced emissions from deforestation and degradation', inds:['Deforestation Rate', 'Forest Degradation Rate'] },
     ]},
-    { id:'fo-man-11', name:'Pre-restoration ecological assessment for stable non-forest/barren sites', pw:'MANAGE', type:'Recommended', checked:false, method:'Project Report', freq:'Annually', indMeta:{ 'Ecosystem services provision e.g., Soil water holding capacity; Plant-available water; Soil Available Water (SAW) for plant uptake (Descriptive)':{source:'Project Report'} }, benefits:[
-        { cat:'Nature', benefit:'Enhanced biodiversity and ecosystem functions (informed planning)', inds:['Ecosystem services provision e.g., Soil water holding capacity; Plant-available water; Soil Available Water (SAW) for plant uptake (Descriptive)'] }
+    { id:'fo-res-4', name:'Remove invasive flora, plant native non-forest trees, and restore riparian buffers.', traj:'Non-Forest to C4 (Stable C4; Other Ref.)', pw:'RESTORE', type:'Recommended', checked:false, benefits:[
+        { cat:'Nature', benefit:'Enhanced biodiversity and ecosystem functions', inds:['Number of Seedling Species', 'Species Richness-Flora', 'Number of Individual/Occurence per Species-Flora', 'Species Richness-Fauna', 'Number of Individual/Occurence per Species-Fauna'] },
+        { cat:'Nature', benefit:'Protection of watershed functions', inds:['Soil Erosion Control Rate', 'Groundwater Recharge Flux', 'Water discharge flow'] },
+        { cat:'Nature', benefit:'Maintenance of ecological connectivity', inds:['Forest Connectivity Index'] },
+        { cat:'People', benefit:'Enhanced food and water security', inds:['Rainwater Use Efficiency', 'Sustainable Grazing Capacity'] },
+        { cat:'People', benefit:'Sustainable livelihood opportunities', inds:['Social Forestry Beneficiaries', 'Crop/Non-Timber Forest Product Value'] },
+        { cat:'People', benefit:'Strengthened social capital and governance capacity', inds:['Forestry Legal Framework', 'MRV Institutional Capacity', 'Safeguard Information System', 'Grievance Redress Mechanism', 'Adaptive Management Response Time'] },
+        { cat:'People', benefit:'Equitable benefit-sharing mechanisms', inds:['Benefit Sharing Mechanism', 'Gender-Disaggregated Resource Access'] },
+        { cat:'Climate', benefit:'Microclimate regulation', inds:['Tree Canopy Cover'] },
+        { cat:'Climate', benefit:'Increased carbon sequestration and storage', inds:['Forest Carbon Stock', 'Soil Organic Carbon Accumulation', 'Carbon sequestration / removal rate from Afforestation, Reforestation, and Revegetation (ARR) activities'] },
+        { cat:'Climate', benefit:'Reduced emissions from deforestation and degradation', inds:['Deforestation Rate', 'Forest Degradation Rate'] },
     ]},
-    { id:'fo-res-1', name:'Enrichment planting with native species (low-medium density)', pw:'RESTORE', type:'Recommended', checked:false, method:'Field Survey/Project Report', freq:'Annually', indMeta:{ 'Direct economic activity: Number of new jobs created (Number)':{source:'Field Survey/Project Report'}, 'Forest Carbon Stock (MtCO₂e/yr or tCO₂e/yr)':{source:'Remote sensing/field measurement'}, 'Tree canopy cover (%)':{source:'Remote sensing'} }, benefits:[
-        { cat:'Nature', benefit:'Enhanced biodiversity and ecosystem functions', inds:['Species Richness Index (index)'] },
-        { cat:'People', benefit:'Sustainable livelihood opportunities (nursery employment)', inds:['Direct economic activity: Number of new jobs created (Number)'] },
-        { cat:'Climate', benefit:'Increased carbon sequestration and storage', inds:['Forest Carbon Stock (MtCO₂e/yr or tCO₂e/yr)'] },
-        { cat:'Nature', benefit:'Improved forest productivity and regeneration', inds:['Tree canopy cover (%)'] },
-        { cat:'Nature', benefit:'Maintenance of ecological connectivity', inds:['Landscape Integrity Index (Index)'] }
+    { id:'fo-man-3', name:'Agroforestry (alley cropping, windbreaks) with zero-tillage, cover crops, and biochar.', traj:'Non-Forest to C5 (Stable Cropland/Rice)', pw:'MANAGE', type:'Recommended', checked:false, benefits:[
+        { cat:'Nature', benefit:'Protection of watershed functions', inds:['Soil Erosion Control Rate', 'Groundwater Recharge Flux', 'Water discharge flow'] },
+        { cat:'Nature', benefit:'Enhanced biodiversity and ecosystem functions', inds:['Number of Seedling Species', 'Species Richness-Flora', 'Number of Individual/Occurence per Species-Flora', 'Species Richness-Fauna', 'Number of Individual/Occurence per Species-Fauna'] },
+        { cat:'Nature', benefit:'Maintenance of ecological connectivity', inds:['Forest Connectivity Index'] },
+        { cat:'People', benefit:'Enhanced food and water security', inds:['Rainwater Use Efficiency', 'Sustainable Grazing Capacity'] },
+        { cat:'People', benefit:'Sustainable livelihood opportunities', inds:['Social Forestry Beneficiaries', 'Crop/Non-Timber Forest Product Value'] },
+        { cat:'People', benefit:'Strengthened social capital and governance capacity', inds:['Forestry Legal Framework', 'MRV Institutional Capacity', 'Safeguard Information System', 'Grievance Redress Mechanism', 'Adaptive Management Response Time'] },
+        { cat:'People', benefit:'Equitable benefit-sharing mechanisms', inds:['Benefit Sharing Mechanism', 'Gender-Disaggregated Resource Access'] },
+        { cat:'Climate', benefit:'Increased carbon sequestration and storage', inds:['Forest Carbon Stock', 'Soil Organic Carbon Accumulation', 'Carbon sequestration / removal rate from Afforestation, Reforestation, and Revegetation (ARR) activities'] },
+        { cat:'Climate', benefit:'Reduced emissions from deforestation and degradation', inds:['Deforestation Rate', 'Forest Degradation Rate'] },
     ]},
-    { id:'fo-res-2', name:'Full reforestation (high-density native species planting)', pw:'RESTORE', type:'Recommended', checked:false, method:'Field Survey/Project Report', freq:'Annually', indMeta:{ 'Direct economic activity: Number of new jobs created (Number)':{source:'Field Survey/Project Report'}, 'Carbon removed/stored in vegetation and soil (tCO₂e/ha/year)':{source:'Field Survey/Project Report'}, 'Crop/NTFP Yield (kg/year)':{source:'Household survey'} }, benefits:[
-        { cat:'Nature', benefit:'Enhanced biodiversity and ecosystem functions', inds:['Species Richness Index (index)'] },
-        { cat:'People', benefit:'Sustainable livelihood opportunities (planting employment)', inds:['Direct economic activity: Number of new jobs created (Number)'] },
-        { cat:'Climate', benefit:'Increased carbon sequestration and storage', inds:['Carbon removed/stored in vegetation and soil (tCO₂e/ha/year)'] },
-        { cat:'Nature', benefit:'Improved forest productivity and regeneration', inds:['Tree canopy cover (%)'] },
-        { cat:'People', benefit:'Enhanced food and water security', inds:['Crop/NTFP Yield (kg/year)'] },
-        { cat:'Nature', benefit:'Maintenance of ecological connectivity', inds:['Landscape integrity index (index)'] }
+    { id:'fo-man-4', name:'Establish vegetated riparian buffers around inland fish ponds.', traj:'Non-Forest to C5 (Aqua Elsewhere)', pw:'MANAGE', type:'Recommended', checked:false, benefits:[
+        { cat:'Nature', benefit:'Protection of watershed functions', inds:['Soil Erosion Control Rate', 'Groundwater Recharge Flux', 'Water discharge flow'] },
+        { cat:'Nature', benefit:'Maintenance of ecological connectivity', inds:['Forest Connectivity Index'] },
+        { cat:'Nature', benefit:'Enhanced biodiversity and ecosystem functions', inds:['Number of Seedling Species', 'Species Richness-Flora', 'Number of Individual/Occurence per Species-Flora', 'Species Richness-Fauna', 'Number of Individual/Occurence per Species-Fauna'] },
+        { cat:'People', benefit:'Enhanced food and water security', inds:['Rainwater Use Efficiency', 'Crop/Non-Timber Forest Product Value'] },
+        { cat:'People', benefit:'Sustainable livelihood opportunities', inds:['Social Forestry Beneficiaries', 'Crop/Non-Timber Forest Product Value'] },
+        { cat:'People', benefit:'Strengthened social capital and governance capacity', inds:['Forestry Legal Framework', 'MRV Institutional Capacity', 'Safeguard Information System', 'Grievance Redress Mechanism', 'Adaptive Management Response Time'] },
+        { cat:'People', benefit:'Equitable benefit-sharing mechanisms', inds:['Benefit Sharing Mechanism', 'Gender-Disaggregated Resource Access'] },
+        { cat:'Climate', benefit:'Increased carbon sequestration and storage', inds:['Forest Carbon Stock', 'Soil Organic Carbon Accumulation', 'Carbon sequestration / removal rate from Afforestation, Reforestation, and Revegetation (ARR) activities'] },
+        { cat:'Climate', benefit:'Enhanced resilience to climate hazards', inds:['Drought-Resilient Canopy Cover'] },
+        { cat:'Climate', benefit:'Reduced emissions from deforestation and degradation', inds:['Forest Extent', 'Tree Canopy Cover'] },
     ]},
-    { id:'fo-res-3', name:'Full reforestation of reclaimable/abandoned converted sites', pw:'RESTORE', type:'Recommended', checked:false, method:'Field Survey/Project Report', freq:'Annually', indMeta:{ 'Direct economic activity: Number of new jobs created (Number)':{source:'Field Survey/Project Report'} }, benefits:[
-        { cat:'Nature', benefit:'Enhanced biodiversity and ecosystem functions', inds:['Species Richness Index'] },
-        { cat:'People', benefit:'Sustainable livelihood opportunities (planting employment)', inds:['Direct economic activity: Number of new jobs created (Number)'] },
-        { cat:'Climate', benefit:'Increased carbon sequestration and storage', inds:['Forest Carbon Stock'] },
-        { cat:'Nature', benefit:'Improved forest productivity and regeneration', inds:['Tree canopy cover'] },
-        { cat:'People', benefit:'Enhanced food and water security', inds:['Water yield'] },
-        { cat:'Climate', benefit:'Microclimate regulation', inds:['Land surface temperature'] },
-        { cat:'Nature', benefit:'Maintenance of ecological connectivity', inds:['Forest Connectivity Index'] }
-    ]},
-    { id:'fo-res-5', name:'Pioneer species establishment (first-stage canopy)', pw:'RESTORE', type:'Recommended', checked:false, method:'Field measurement', freq:'Annually', indMeta:{ 'Seedling survival rate (%)':{source:'Field measurement'} }, benefits:[
-        { cat:'Nature', benefit:'Improved forest productivity and regeneration', inds:['Tree planted/survivability rate (count/%)'] },
-        { cat:'People', benefit:'Sustainable livelihood opportunities (nursery + planting employment)', inds:['Benefit Sharing Mechanism'] },
-        { cat:'Climate', benefit:'Increased carbon sequestration and storage', inds:['Forest Carbon Stock'] },
-        { cat:'Nature', benefit:'Enhanced biodiversity and ecosystem functions', inds:['Seedling survival rate (%)'] },
-        { cat:'Climate', benefit:'Microclimate regulation', inds:['Land surface temperature'] }
-    ]},
-    { id:'fo-res-6', name:'Native species succession planting (mid-late stage)', pw:'RESTORE', type:'Recommended', checked:false, method:'Field measurement', freq:'Annually', indMeta:{ 'Species richness & diversity indices; Abundance of indicator species (Count)':{source:'Field measurement'} }, benefits:[
-        { cat:'Nature', benefit:'Enhanced biodiversity and ecosystem functions', inds:['Species richness & diversity indices; Abundance of indicator species (Count)'] },
-        { cat:'People', benefit:'Sustainable livelihood opportunities (NTFP species inclusion)', inds:['Crop/NTFP Yield'] },
-        { cat:'Climate', benefit:'Increased carbon sequestration and storage', inds:['Forest Carbon Stock'] },
-        { cat:'Nature', benefit:'Improved forest productivity and regeneration', inds:['Tree canopy cover'] },
-        { cat:'Nature', benefit:'Maintenance of ecological connectivity', inds:['Forest Connectivity Index'] }
-    ]},
-    { id:'fo-res-7', name:'Hydrology / water management for barren restoration', pw:'RESTORE', type:'Recommended', checked:false, method:'Remote Sensing', freq:'Annually', indMeta:{}, benefits:[
-        { cat:'Nature', benefit:'Protection of watershed functions', inds:['Sediment Accretion Rate'] },
-        { cat:'People', benefit:'Enhanced food and water security', inds:['Water yield'] },
-        { cat:'Climate', benefit:'Increased carbon sequestration and storage (peat carbon especially)', inds:['Forest Carbon Stock'] },
-        { cat:'Nature', benefit:'Improved forest productivity and regeneration', inds:['Tree canopy cover'] },
-        { cat:'Climate', benefit:'Enhanced resilience to climate hazards', inds:['Disaster vulnerability index'] }
+    { id:'fo-res-5', name:'Bio-engineering, soil reclamation, and drought-tolerant native afforestation.', traj:'Non-Forest to C6 (Stable Barren)', pw:'RESTORE', type:'Recommended', checked:false, benefits:[
+        { cat:'Nature', benefit:'Improved forest productivity and regeneration', inds:['Forest Extent', 'Tree Canopy Cover', 'Trees Planted', 'Ecosystem Restoration Area', 'Number of Seedlings per Species'] },
+        { cat:'Nature', benefit:'Protection of watershed functions', inds:['Soil Erosion Control Rate', 'Groundwater Recharge Flux', 'Water discharge flow'] },
+        { cat:'Nature', benefit:'Maintenance of ecological connectivity', inds:['Forest Connectivity Index'] },
+        { cat:'Nature', benefit:'Enhanced biodiversity and ecosystem functions', inds:['Number of Seedling Species', 'Species Richness-Flora', 'Number of Individual/Occurence per Species-Flora', 'Species Richness-Fauna', 'Number of Individual/Occurence per Species-Fauna'] },
+        { cat:'People', benefit:'Sustainable livelihood opportunities', inds:['Social Forestry Beneficiaries', 'Crop/Non-Timber Forest Product Value'] },
+        { cat:'People', benefit:'Enhanced food and water security', inds:['Rainwater Use Efficiency', 'Sustainable Grazing Capacity'] },
+        { cat:'People', benefit:'Strengthened social capital and governance capacity', inds:['Forestry Legal Framework', 'MRV Institutional Capacity', 'Safeguard Information System', 'Grievance Redress Mechanism', 'Adaptive Management Response Time'] },
+        { cat:'People', benefit:'Equitable benefit-sharing mechanisms', inds:['Benefit Sharing Mechanism', 'Gender-Disaggregated Resource Access'] },
+        { cat:'Climate', benefit:'Increased carbon sequestration and storage', inds:['Forest Carbon Stock', 'Soil Organic Carbon Accumulation', 'Carbon sequestration / removal rate from Afforestation, Reforestation, and Revegetation (ARR) activities'] },
+        { cat:'Climate', benefit:'Microclimate regulation', inds:['Tree Canopy Cover'] },
     ]},
   ]},
   { id:'mangrove', name:'Mangrove', pwLabel:'Protect / Manage / Restore', pwClass:'teal', colorCls:'mangrove', activities:[
-    { id:'ma-pro-1', name:'Boundary demarcation & legal recognition', pw:'PROTECT', type:'Recommended', checked:true, method:'Remote Sensing/Field Measurement', freq:'Annually', indMeta:{ 'MAN-02 Mangrove Carbon Stock (tCO₂e)':{source:'Remote Sensing/Field Measurement'} }, benefits:[
-        { cat:'Nature', benefit:'Maintenance of ecological connectivity', inds:['MAN-01 Mangrove Extent', 'MAN-02 Mangrove Carbon Stock', 'MAN-04 Mangrove Species Diversity'] },
-        { cat:'People', benefit:'Secure land and resource tenure', inds:['GOV-03 Indigenous Land Tenure', 'GOV-07 Safeguard Information System'] },
-        { cat:'Climate', benefit:'Reduced emissions from deforestation and degradation', inds:['MAN-02 Mangrove Carbon Stock (tCO₂e)'] }
+    { id:'ma-pro-1', name:'Establish MPAs and enforce strict prohibitions on coastal development.', traj:'Forest to C1/C2 (Persistent Forest)', pw:'PROTECT', type:'Recommended', checked:true, benefits:[
+        { cat:'Nature', benefit:'Protection of watershed functions', inds:['Water discharge flow', 'Tree Canopy Cover'] },
+        { cat:'Nature', benefit:'Enhanced biodiversity and ecosystem functions', inds:['Species Richness-Flora', 'Number of Individual/Occurence per Species-Flora', 'Species Richness-Fauna', 'Number of Individual/Occurence per Species-Fauna', 'Protected Ecosystem Area'] },
+        { cat:'Nature', benefit:'Maintenance of ecological connectivity', inds:['Forest Connectivity Index'] },
+        { cat:'People', benefit:'Sustainable livelihood opportunities', inds:['Social Forestry Beneficiaries', 'Crop/Non-Timber Forest Product Value'] },
+        { cat:'People', benefit:'Strengthened social capital and governance capacity', inds:['Forestry Legal Framework', 'MRV Institutional Capacity', 'Safeguard Information System', 'Grievance Redress Mechanism', 'Adaptive Management Response Time'] },
+        { cat:'People', benefit:'Enhanced food and water security', inds:['Crop/Non-Timber Forest Product Value'] },
+        { cat:'People', benefit:'Equitable benefit-sharing mechanisms', inds:['Benefit Sharing Mechanism', 'Gender-Disaggregated Resource Access'] },
+        { cat:'Climate', benefit:'Enhanced resilience to climate hazards', inds:['Sediment Accretion Rate', 'Relative Sea-Level', 'Tidal Inundation Regime'] },
+        { cat:'Climate', benefit:'Increased carbon sequestration and storage', inds:['Forest Carbon Stock', 'Mangrove Carbon Stock'] },
+        { cat:'Climate', benefit:'Reduced emissions from deforestation and degradation', inds:['Deforestation Rate', 'Forest Degradation Rate', 'Aquaculture Conversion Pressure'] },
     ]},
-    { id:'ma-pro-2', name:'Community-based patrol & monitoring', pw:'PROTECT', type:'Recommended', checked:true, method:'Remote Sensing', freq:'Annually', indMeta:{}, benefits:[
-        { cat:'Nature', benefit:'Reduced vulnerability to fire, pests, and diseases', inds:['MAN-01 Mangrove Extent', 'MAN-10 Protected Mangrove Area'] },
-        { cat:'People', benefit:'Sustainable livelihood opportunities', inds:['MAN-06 Mangrove Community Beneficiaries'] },
-        { cat:'Climate', benefit:'Reduced emissions from deforestation and degradation', inds:['MAN-02 Mangrove Carbon Stock'] },
-        { cat:'People', benefit:'Strengthened social capital and governance capacity', inds:['GOV-04 MRV Institutional Capacity'] }
+    { id:'ma-res-1', name:'Breach coastal barriers for tidal flushing and actively plant native mangroves.', traj:'Forest to C4 (Degraded; Other Ref.)', pw:'RESTORE', type:'Recommended', checked:false, benefits:[
+        { cat:'Nature', benefit:'Enhanced biodiversity and ecosystem functions', inds:['Number of Seedling Species', 'Species Richness-Flora', 'Number of Individual/Occurence per Species-Flora', 'Species Richness-Fauna', 'Number of Individual/Occurence per Species-Fauna', 'Protected Ecosystem Area'] },
+        { cat:'Nature', benefit:'Protection of watershed functions', inds:['Water discharge flow', 'Tidal Inundation Regime'] },
+        { cat:'Nature', benefit:'Maintenance of ecological connectivity', inds:['Forest Connectivity Index'] },
+        { cat:'People', benefit:'Sustainable livelihood opportunities', inds:['Social Forestry Beneficiaries', 'Crop/Non-Timber Forest Product Value'] },
+        { cat:'People', benefit:'Strengthened social capital and governance capacity', inds:['Forestry Legal Framework', 'MRV Institutional Capacity', 'Safeguard Information System', 'Grievance Redress Mechanism', 'Adaptive Management Response Time'] },
+        { cat:'People', benefit:'Enhanced food and water security', inds:['Water discharge flow'] },
+        { cat:'People', benefit:'Equitable benefit-sharing mechanisms', inds:['Benefit Sharing Mechanism', 'Gender-Disaggregated Resource Access'] },
+        { cat:'Climate', benefit:'Enhanced resilience to climate hazards', inds:['Sediment Accretion Rate', 'Relative Sea-Level'] },
+        { cat:'Climate', benefit:'Increased carbon sequestration and storage', inds:['Forest Carbon Stock', 'Carbon sequestration / removal rate from Afforestation, Reforestation, and Revegetation (ARR) activities', 'Mangrove Carbon Stock'] },
+        { cat:'Climate', benefit:'Reduced emissions from deforestation and degradation', inds:['Deforestation Rate', 'Forest Degradation Rate', 'Aquaculture Conversion Pressure'] },
     ]},
-    { id:'ma-pro-3', name:'Customary/indigenous rights recognition & FPIC process', pw:'PROTECT', type:'Recommended', checked:false, method:'Field Survey/Secondary Data (Government Data)', freq:'Annually', indMeta:{ 'Sites of community importance and special protection areas (Ha)':{source:'Field Survey/Secondary Data (Government Data)'} }, benefits:[
-        { cat:'Nature', benefit:'Maintenance of ecological connectivity', inds:['Mangrove Extent', 'Mangrove Carbon Stock', 'Mangrove Restoration Area', 'Mangrove Species Diversity'] },
-        { cat:'People', benefit:'Secure land and resource tenure', inds:['Indigenous Land Tenure', 'Safeguard Information System'] },
-        { cat:'People', benefit:'Cultural heritage preservation', inds:['Sites of community importance and special protection areas (Ha)'] },
-        { cat:'People', benefit:'Strengthened social capital and governance capacity', inds:['MRV Institutional Capacity'] },
-        { cat:'People', benefit:'Equitable benefit-sharing mechanisms', inds:['Benefit Sharing Mechanism'] }
+    { id:'ma-res-2', name:'Reclaim active aquaculture ponds, hydrological restoration, and re-establish intertidal elevation.', traj:'Forest to C5 (Converted; Other Ref.)', pw:'RESTORE', type:'Recommended', checked:false, benefits:[
+        { cat:'Nature', benefit:'Protection of watershed functions', inds:['Water discharge flow', 'Tidal Inundation Regime'] },
+        { cat:'Nature', benefit:'Enhanced biodiversity and ecosystem functions', inds:['Number of Seedling Species', 'Species Richness-Flora', 'Number of Individual/Occurence per Species-Flora', 'Species Richness-Fauna', 'Number of Individual/Occurence per Species-Fauna', 'Protected Ecosystem Area'] },
+        { cat:'Nature', benefit:'Maintenance of ecological connectivity', inds:['Forest Connectivity Index'] },
+        { cat:'People', benefit:'Sustainable livelihood opportunities', inds:['Social Forestry Beneficiaries', 'Crop/Non-Timber Forest Product Value'] },
+        { cat:'People', benefit:'Cultural heritage preservation', inds:['Indigenous Land Tenure'] },
+        { cat:'People', benefit:'Enhanced food and water security', inds:['Crop/Non-Timber Forest Product Value'] },
+        { cat:'People', benefit:'Strengthened social capital and governance capacity', inds:['Forestry Legal Framework', 'MRV Institutional Capacity', 'Safeguard Information System', 'Grievance Redress Mechanism', 'Adaptive Management Response Time'] },
+        { cat:'People', benefit:'Equitable benefit-sharing mechanisms', inds:['Benefit Sharing Mechanism', 'Gender-Disaggregated Resource Access'] },
+        { cat:'Climate', benefit:'Enhanced resilience to climate hazards', inds:['Sediment Accretion Rate', 'Relative Sea-Level'] },
+        { cat:'Climate', benefit:'Increased carbon sequestration and storage', inds:['Forest Carbon Stock', 'Carbon sequestration / removal rate from Afforestation, Reforestation, and Revegetation (ARR) activities', 'Mangrove Carbon Stock'] },
+        { cat:'Climate', benefit:'Reduced emissions from deforestation and degradation', inds:['Deforestation Rate', 'Forest Degradation Rate', 'Aquaculture Conversion Pressure'] },
     ]},
-    { id:'ma-pro-4', name:'Buffer zone establishment & compatible land use', pw:'PROTECT', type:'Recommended', checked:false, method:'Remote Sensing', freq:'Annually', indMeta:{}, benefits:[
-        { cat:'Nature', benefit:'Maintenance of ecological connectivity', inds:['MAN-01 Mangrove Extent', 'MAN-02 Mangrove Carbon Stock', 'MAN-04 Mangrove Species Diversity'] },
-        { cat:'People', benefit:'Sustainable livelihood opportunities', inds:['MAN-06 Mangrove Community Beneficiaries', 'MAN-07 Fisheries Dependency Value'] },
-        { cat:'Nature', benefit:'Reduced vulnerability to fire, pests, and diseases', inds:['MAN-03 Mangrove Loss Rate'] },
-        { cat:'People', benefit:'Equitable benefit-sharing mechanisms', inds:['GOV-02 Benefit Sharing Mechanism', 'GOV-07 Safeguard Information System', 'GOV-11 Grievance Redress Mechanism'] },
-        { cat:'Climate', benefit:'Microclimate regulation', inds:['Mangrove Extent'] }
+    { id:'ma-res-3', name:'Build permeable breakwaters to trap sediment and re-vegetate mudflats.', traj:'Forest to C6 (Converted to Barren)', pw:'RESTORE', type:'Recommended', checked:false, benefits:[
+        { cat:'Nature', benefit:'Enhanced biodiversity and ecosystem functions', inds:['Number of Seedling Species', 'Species Richness-Flora', 'Number of Individual/Occurence per Species-Flora', 'Species Richness-Fauna', 'Number of Individual/Occurence per Species-Fauna', 'Protected Ecosystem Area'] },
+        { cat:'Nature', benefit:'Protection of watershed functions', inds:['Water discharge flow', 'Tidal Inundation Regime'] },
+        { cat:'Nature', benefit:'Maintenance of ecological connectivity', inds:['Forest Connectivity Index'] },
+        { cat:'People', benefit:'Sustainable livelihood opportunities', inds:['Social Forestry Beneficiaries', 'Crop/Non-Timber Forest Product Value'] },
+        { cat:'People', benefit:'Strengthened social capital and governance capacity', inds:['Forestry Legal Framework', 'MRV Institutional Capacity', 'Safeguard Information System', 'Grievance Redress Mechanism', 'Adaptive Management Response Time'] },
+        { cat:'People', benefit:'Equitable benefit-sharing mechanisms', inds:['Benefit Sharing Mechanism', 'Gender-Disaggregated Resource Access'] },
+        { cat:'Climate', benefit:'Enhanced resilience to climate hazards', inds:['Sediment Accretion Rate', 'Relative Sea-Level'] },
+        { cat:'Climate', benefit:'Increased carbon sequestration and storage', inds:['Forest Carbon Stock', 'Carbon sequestration / removal rate from Afforestation, Reforestation, and Revegetation (ARR) activities', 'Mangrove Carbon Stock'] },
+        { cat:'Climate', benefit:'Reduced emissions from deforestation and degradation', inds:['Deforestation Rate', 'Forest Degradation Rate', 'Aquaculture Conversion Pressure'] },
     ]},
-    { id:'ma-pro-5', name:'Biodiversity baseline & adaptive monitoring system', pw:'PROTECT', type:'Recommended', checked:false, method:'Field Measurement', freq:'Annually', indMeta:{ 'Mangrove Species Diversity (count)':{source:'Field Measurement'} }, benefits:[
-        { cat:'Nature', benefit:'Enhanced biodiversity and ecosystem functions', inds:['Mangrove Species Diversity (count)'] },
-        { cat:'People', benefit:'Strengthened social capital and governance capacity', inds:['MRV Institutional Capacity'] }
+    { id:'ma-man-1', name:'Protect colonizing seedlings on mudflats and regulate non-timber harvesting.', traj:'Non-Forest to C1/C2 (Regenerated Naturally)', pw:'MANAGE', type:'Recommended', checked:false, benefits:[
+        { cat:'Nature', benefit:'Enhanced biodiversity and ecosystem functions', inds:['Number of Seedling Species', 'Species Richness-Flora', 'Number of Individual/Occurence per Species-Flora', 'Species Richness-Fauna', 'Number of Individual/Occurence per Species-Fauna', 'Protected Ecosystem Area'] },
+        { cat:'Nature', benefit:'Maintenance of ecological connectivity', inds:['Forest Connectivity Index'] },
+        { cat:'Nature', benefit:'Protection of watershed functions', inds:['Water discharge flow', 'Tidal Inundation Regime'] },
+        { cat:'People', benefit:'Sustainable livelihood opportunities', inds:['Social Forestry Beneficiaries', 'Crop/Non-Timber Forest Product Value'] },
+        { cat:'People', benefit:'Secure land and resource tenure', inds:['Indigenous Land Tenure'] },
+        { cat:'People', benefit:'Enhanced food and water security', inds:['Crop/Non-Timber Forest Product Value'] },
+        { cat:'People', benefit:'Strengthened social capital and governance capacity', inds:['Forestry Legal Framework', 'MRV Institutional Capacity', 'Safeguard Information System', 'Grievance Redress Mechanism', 'Adaptive Management Response Time'] },
+        { cat:'People', benefit:'Equitable benefit-sharing mechanisms', inds:['Benefit Sharing Mechanism', 'Gender-Disaggregated Resource Access'] },
+        { cat:'Climate', benefit:'Enhanced resilience to climate hazards', inds:['Sediment Accretion Rate', 'Relative Sea-Level'] },
+        { cat:'Climate', benefit:'Increased carbon sequestration and storage', inds:['Forest Carbon Stock', 'Carbon sequestration / removal rate from Afforestation, Reforestation, and Revegetation (ARR) activities', 'Mangrove Carbon Stock'] },
+        { cat:'Climate', benefit:'Reduced emissions from deforestation and degradation', inds:['Deforestation Rate', 'Forest Degradation Rate', 'Aquaculture Conversion Pressure'] },
     ]},
-    { id:'ma-man-1', name:'Assisted Natural Regeneration (ANR)', pw:'MANAGE', type:'Recommended', checked:true, method:'Remote Sensing', freq:'Annually', indMeta:{}, benefits:[
-        { cat:'Nature', benefit:'Enhanced biodiversity and ecosystem functions', inds:['Mangrove Species Diversity'] },
-        { cat:'People', benefit:'Sustainable livelihood opportunities', inds:['Mangrove Community Beneficiaries', 'Fisheries Dependency Value'] },
-        { cat:'Climate', benefit:'Increased carbon sequestration and storage', inds:['Mangrove Carbon Stock'] },
-        { cat:'Nature', benefit:'Improved forest productivity and regeneration', inds:['Mangrove Restoration Area'] },
-        { cat:'Nature', benefit:'Maintenance of ecological connectivity', inds:['Mangrove Extent', 'Protected Mangrove Area'] }
+    { id:'ma-man-2', name:'Implement sustainable coastal wetland utilization and community-based NTFP.', traj:'Non-Forest to C4 (Stable C4; Cultivated)', pw:'MANAGE', type:'Recommended', checked:false, benefits:[
+        { cat:'Nature', benefit:'Enhanced biodiversity and ecosystem functions', inds:['Number of Seedling Species', 'Species Richness-Flora', 'Number of Individual/Occurence per Species-Flora', 'Species Richness-Fauna', 'Number of Individual/Occurence per Species-Fauna', 'Protected Ecosystem Area'] },
+        { cat:'Nature', benefit:'Protection of watershed functions', inds:['Water discharge flow', 'Tidal Inundation Regime'] },
+        { cat:'Nature', benefit:'Maintenance of ecological connectivity', inds:['Forest Connectivity Index'] },
+        { cat:'People', benefit:'Sustainable livelihood opportunities', inds:['Social Forestry Beneficiaries', 'Crop/Non-Timber Forest Product Value'] },
+        { cat:'People', benefit:'Equitable benefit-sharing mechanisms', inds:['Benefit Sharing Mechanism', 'Gender-Disaggregated Resource Access'] },
+        { cat:'People', benefit:'Enhanced food and water security', inds:['Crop/Non-Timber Forest Product Value'] },
+        { cat:'People', benefit:'Strengthened social capital and governance capacity', inds:['Forestry Legal Framework', 'MRV Institutional Capacity', 'Safeguard Information System', 'Grievance Redress Mechanism', 'Adaptive Management Response Time'] },
+        { cat:'Climate', benefit:'Enhanced resilience to climate hazards', inds:['Sediment Accretion Rate', 'Relative Sea-Level'] },
+        { cat:'Climate', benefit:'Reduced emissions from deforestation and degradation', inds:['Deforestation Rate', 'Forest Degradation Rate', 'Aquaculture Conversion Pressure'] },
     ]},
-    { id:'ma-man-2', name:'Riparian buffer & watershed protection within productive landscape', pw:'MANAGE', type:'Recommended', checked:false, method:'Remote Sensing', freq:'Annually', indMeta:{}, benefits:[
-        { cat:'People', benefit:'Enhanced food and water security', inds:['Mangrove Community Beneficiaries'] },
-        { cat:'Climate', benefit:'Increased carbon sequestration and storage (riparian)', inds:['Mangrove Carbon Stock'] },
-        { cat:'Nature', benefit:'Maintenance of ecological connectivity', inds:['Mangrove Extent'] },
-        { cat:'Climate', benefit:'Enhanced resilience to climate hazards', inds:['Sediment Accretion Rate'] }
+    { id:'ma-res-4', name:'Restore degraded tidal marshlands and rehabilitate abandoned salt pans.', traj:'Non-Forest to C4 (Stable C4; Other Ref.)', pw:'RESTORE', type:'Recommended', checked:false, benefits:[
+        { cat:'Nature', benefit:'Enhanced biodiversity and ecosystem functions', inds:['Number of Seedling Species', 'Species Richness-Flora', 'Number of Individual/Occurence per Species-Flora', 'Species Richness-Fauna', 'Number of Individual/Occurence per Species-Fauna', 'Protected Ecosystem Area'] },
+        { cat:'Nature', benefit:'Protection of watershed functions', inds:['Water discharge flow', 'Tidal Inundation Regime'] },
+        { cat:'Nature', benefit:'Maintenance of ecological connectivity', inds:['Forest Connectivity Index'] },
+        { cat:'People', benefit:'Sustainable livelihood opportunities', inds:['Social Forestry Beneficiaries', 'Crop/Non-Timber Forest Product Value'] },
+        { cat:'People', benefit:'Strengthened social capital and governance capacity', inds:['Forestry Legal Framework', 'MRV Institutional Capacity', 'Safeguard Information System', 'Grievance Redress Mechanism', 'Adaptive Management Response Time'] },
+        { cat:'People', benefit:'Enhanced food and water security', inds:['Crop/Non-Timber Forest Product Value'] },
+        { cat:'People', benefit:'Equitable benefit-sharing mechanisms', inds:['Benefit Sharing Mechanism', 'Gender-Disaggregated Resource Access'] },
+        { cat:'Climate', benefit:'Enhanced resilience to climate hazards', inds:['Sediment Accretion Rate', 'Relative Sea-Level'] },
+        { cat:'Climate', benefit:'Increased carbon sequestration and storage', inds:['Forest Carbon Stock', 'Carbon sequestration / removal rate from Afforestation, Reforestation, and Revegetation (ARR) activities', 'Mangrove Carbon Stock'] },
+        { cat:'Climate', benefit:'Reduced emissions from deforestation and degradation', inds:['Deforestation Rate', 'Forest Degradation Rate', 'Aquaculture Conversion Pressure'] },
     ]},
-    { id:'ma-man-3', name:'Sustainable intensification with soil carbon enhancement', pw:'MANAGE', type:'Recommended', checked:false, method:'Field Measurement', freq:'Annually', indMeta:{ 'Soil carbon content (ton/ha)':{source:'Field Measurement'}, 'Mangrove Species Diversity (ton/ha)':{source:'Field Measurement'}, 'Total carbon removed or stored in vegetation and soil per unit area per unit time (metric tonnes/ha/year)':{source:'Remote Sensing/Field Measurement'} }, benefits:[
-        { cat:'Nature', benefit:'Improved forest productivity and regeneration (soil health)', inds:['Soil carbon content (ton/ha)', 'Mangrove Species Diversity (ton/ha)'] },
-        { cat:'People', benefit:'Sustainable livelihood opportunities', inds:['Fisheries Dependency Value', 'Mangrove Community Beneficiaries'] },
-        { cat:'Climate', benefit:'Increased carbon sequestration and storage (soil carbon)', inds:['Total carbon removed or stored in vegetation and soil per unit area per unit time (metric tonnes/ha/year)'] },
-        { cat:'Nature', benefit:'Enhanced biodiversity and ecosystem functions', inds:['Mangrove Species Diversity'] }
+    { id:'ma-man-3', name:'Manage saline-tolerant crop and establish protective mangrove greenbelts.', traj:'Non-Forest to C5 (Stable Cropland/Rice)', pw:'MANAGE', type:'Recommended', checked:false, benefits:[
+        { cat:'Nature', benefit:'Protection of watershed functions', inds:['Water discharge flow', 'Tidal Inundation Regime'] },
+        { cat:'Nature', benefit:'Maintenance of ecological connectivity', inds:['Forest Connectivity Index'] },
+        { cat:'Nature', benefit:'Enhanced biodiversity and ecosystem functions', inds:['Number of Seedling Species', 'Species Richness-Flora', 'Number of Individual/Occurence per Species-Flora', 'Species Richness-Fauna', 'Number of Individual/Occurence per Species-Fauna', 'Protected Ecosystem Area'] },
+        { cat:'People', benefit:'Enhanced food and water security', inds:['Crop/Non-Timber Forest Product Value'] },
+        { cat:'People', benefit:'Sustainable livelihood opportunities', inds:['Social Forestry Beneficiaries', 'Crop/Non-Timber Forest Product Value'] },
+        { cat:'People', benefit:'Strengthened social capital and governance capacity', inds:['Forestry Legal Framework', 'MRV Institutional Capacity', 'Safeguard Information System', 'Grievance Redress Mechanism', 'Adaptive Management Response Time'] },
+        { cat:'People', benefit:'Equitable benefit-sharing mechanisms', inds:['Benefit Sharing Mechanism', 'Gender-Disaggregated Resource Access'] },
+        { cat:'Climate', benefit:'Enhanced resilience to climate hazards', inds:['Sediment Accretion Rate', 'Relative Sea-Level'] },
+        { cat:'Climate', benefit:'Microclimate regulation', inds:['Tree Canopy Cover'] },
+        { cat:'Climate', benefit:'Reduced emissions from deforestation and degradation', inds:['Deforestation Rate', 'Forest Degradation Rate', 'Aquaculture Conversion Pressure'] },
     ]},
-    { id:'ma-man-4', name:'Payment for Ecosystem Services (PES)', pw:'MANAGE', type:'Recommended', checked:false, method:'Remote Sensing/Field Measurement', freq:'Annually', indMeta:{ 'Net surface water availability; Quantitative status of groundwater; Water Exploitation Index (m3/year; Good or Poor; %)':{source:'Remote Sensing/Field Measurement'}, 'Avoided greenhouse gas emissions from deforestation and degradation; Forest habitat fragmentation - effective mesh density (t CO₂e/y; 1/ha)':{source:'Remote Sensing/Field Measurement'} }, benefits:[
-        { cat:'Nature', benefit:'Protection of watershed functions', inds:['Net surface water availability; Quantitative status of groundwater; Water Exploitation Index (m3/year; Good or Poor; %)'] },
-        { cat:'People', benefit:'Sustainable livelihood opportunities', inds:['Mangrove Community Beneficiaries', 'Fisheries Dependency Value'] },
-        { cat:'Climate', benefit:'Reduced emissions from deforestation and degradation (incentive prevents conversion)', inds:['Avoided greenhouse gas emissions from deforestation and degradation; Forest habitat fragmentation - effective mesh density (t CO₂e/y; 1/ha)', 'MAN-02 Mangrove Carbon Stock'] },
-        { cat:'People', benefit:'Equitable benefit-sharing mechanisms', inds:['GOV-02 Benefit Sharing Mechanism', 'GOV-07 Safeguard Information System'] },
-        { cat:'People', benefit:'Strengthened social capital and governance capacity', inds:['GOV-11 Grievance Redress Mechanism'] }
+    { id:'ma-res-5', name:'Breach aquaculture pond dykes for full tidal flushing and replant endemic mangroves.', traj:'Non-Forest to C5 (Aqua on Mangrove/Peat)', pw:'RESTORE', type:'Recommended', checked:false, benefits:[
+        { cat:'Nature', benefit:'Enhanced biodiversity and ecosystem functions', inds:['Number of Seedling Species', 'Species Richness-Flora', 'Number of Individual/Occurence per Species-Flora', 'Species Richness-Fauna', 'Number of Individual/Occurence per Species-Fauna', 'Protected Ecosystem Area'] },
+        { cat:'Nature', benefit:'Protection of watershed functions', inds:['Water discharge flow', 'Tidal Inundation Regime'] },
+        { cat:'Nature', benefit:'Maintenance of ecological connectivity', inds:['Forest Connectivity Index'] },
+        { cat:'People', benefit:'Sustainable livelihood opportunities', inds:['Social Forestry Beneficiaries', 'Crop/Non-Timber Forest Product Value'] },
+        { cat:'People', benefit:'Strengthened social capital and governance capacity', inds:['Forestry Legal Framework', 'MRV Institutional Capacity', 'Safeguard Information System', 'Grievance Redress Mechanism', 'Adaptive Management Response Time'] },
+        { cat:'People', benefit:'Enhanced food and water security', inds:['Crop/Non-Timber Forest Product Value'] },
+        { cat:'People', benefit:'Equitable benefit-sharing mechanisms', inds:['Benefit Sharing Mechanism', 'Gender-Disaggregated Resource Access'] },
+        { cat:'Climate', benefit:'Enhanced resilience to climate hazards', inds:['Sediment Accretion Rate', 'Relative Sea-Level'] },
+        { cat:'Climate', benefit:'Increased carbon sequestration and storage', inds:['Forest Carbon Stock', 'Carbon sequestration / removal rate from Afforestation, Reforestation, and Revegetation (ARR) activities', 'Mangrove Carbon Stock'] },
+        { cat:'Climate', benefit:'Reduced emissions from deforestation and degradation', inds:['Deforestation Rate', 'Forest Degradation Rate', 'Aquaculture Conversion Pressure'] },
     ]},
-    { id:'ma-man-5', name:'Pre-restoration ecological assessment for stable non-forest/barren sites', pw:'MANAGE', type:'Recommended', checked:false, method:'Project Report', freq:'Annually', indMeta:{ 'Ecosystem services provision e.g., Soil water holding capacity; Plant-available water; Soil Available Water (SAW) for plant uptake (Descriptive)':{source:'Project Report'} }, benefits:[
-        { cat:'Nature', benefit:'Enhanced biodiversity and ecosystem functions (informed planning)', inds:['Ecosystem services provision e.g., Soil water holding capacity; Plant-available water; Soil Available Water (SAW) for plant uptake (Descriptive)'] },
-        { cat:'People', benefit:'Strengthened social capital and governance capacity (stakeholder consultation as part of assessment)', inds:['MRV Institutional Capacity', 'Multi-Stakeholder Platform'] }
+    { id:'ma-man-4', name:'Transition to silvofisheries (mangroves on pond dikes/buffers) & bio-filtration.', traj:'Non-Forest to C5 (Aqua Elsewhere)', pw:'MANAGE', type:'Recommended', checked:false, benefits:[
+        { cat:'Nature', benefit:'Protection of watershed functions', inds:['Water discharge flow', 'Tidal Inundation Regime'] },
+        { cat:'Nature', benefit:'Enhanced biodiversity and ecosystem functions', inds:['Number of Seedling Species', 'Species Richness-Flora', 'Number of Individual/Occurence per Species-Flora', 'Species Richness-Fauna', 'Number of Individual/Occurence per Species-Fauna', 'Protected Ecosystem Area'] },
+        { cat:'Nature', benefit:'Maintenance of ecological connectivity', inds:['Forest Connectivity Index'] },
+        { cat:'People', benefit:'Sustainable livelihood opportunities', inds:['Social Forestry Beneficiaries', 'Crop/Non-Timber Forest Product Value'] },
+        { cat:'People', benefit:'Enhanced food and water security', inds:['Crop/Non-Timber Forest Product Value'] },
+        { cat:'People', benefit:'Strengthened social capital and governance capacity', inds:['Forestry Legal Framework', 'MRV Institutional Capacity', 'Safeguard Information System', 'Grievance Redress Mechanism', 'Adaptive Management Response Time'] },
+        { cat:'People', benefit:'Equitable benefit-sharing mechanisms', inds:['Benefit Sharing Mechanism', 'Gender-Disaggregated Resource Access'] },
+        { cat:'Climate', benefit:'Enhanced resilience to climate hazards', inds:['Sediment Accretion Rate', 'Relative Sea-Level'] },
+        { cat:'Climate', benefit:'Microclimate regulation', inds:['Tree Canopy Cover'] },
+        { cat:'Climate', benefit:'Reduced emissions from deforestation and degradation', inds:['Deforestation Rate', 'Forest Degradation Rate', 'Aquaculture Conversion Pressure'] },
     ]},
-    { id:'ma-res-1', name:'Enrichment planting with native species (low-medium density)', pw:'RESTORE', type:'Recommended', checked:false, method:'Field Survey/Project Report', freq:'Annually', indMeta:{ 'Direct economic activity: Number of new jobs created (Number)':{source:'Field Survey/Project Report'} }, benefits:[
-        { cat:'People', benefit:'Sustainable livelihood opportunities (nursery employment)', inds:['Direct economic activity: Number of new jobs created (Number)'] },
-        { cat:'Climate', benefit:'Increased carbon sequestration and storage', inds:['Mangrove Carbon Stock'] },
-        { cat:'Nature', benefit:'Improved forest productivity and regeneration', inds:['Mangrove Species Diversity'] },
-        { cat:'Nature', benefit:'Maintenance of ecological connectivity', inds:['Mangrove Extent'] }
-    ]},
-    { id:'ma-res-2', name:'Full reforestation (high-density native species planting)', pw:'RESTORE', type:'Recommended', checked:false, method:'Field Survey/Project Report', freq:'Annually', indMeta:{ 'Direct economic activity: Number of new jobs created (Number)':{source:'Field Survey/Project Report'} }, benefits:[
-        { cat:'Nature', benefit:'Enhanced biodiversity and ecosystem functions', inds:['Mangrove Species Diversity', 'Mangrove Restoration Area'] },
-        { cat:'People', benefit:'Sustainable livelihood opportunities (planting employment)', inds:['Direct economic activity: Number of new jobs created (Number)'] },
-        { cat:'Climate', benefit:'Increased carbon sequestration and storage', inds:['Mangrove Carbon Stock'] },
-        { cat:'Nature', benefit:'Improved forest productivity and regeneration', inds:['Mangrove Extent'] },
-        { cat:'People', benefit:'Enhanced food and water security', inds:['Mangrove Community Beneficiaries'] }
-    ]},
-    { id:'ma-res-3', name:'Full reforestation of reclaimable/abandoned converted sites', pw:'RESTORE', type:'Recommended', checked:false, method:'Field Survey/Project Report', freq:'Annually', indMeta:{ 'Direct economic activity: Number of new jobs created (Number)':{source:'Field Survey/Project Report'} }, benefits:[
-        { cat:'People', benefit:'Sustainable livelihood opportunities (planting employment)', inds:['Direct economic activity: Number of new jobs created (Number)'] },
-        { cat:'Climate', benefit:'Increased carbon sequestration and storage', inds:['Forest Carbon Stock'] },
-        { cat:'Nature', benefit:'Improved forest productivity and regeneration', inds:['Mangrove Extent', 'Mangrove Species Diversity'] },
-        { cat:'People', benefit:'Enhanced food and water security', inds:['Mangrove Community Beneficiaries'] },
-        { cat:'Nature', benefit:'Maintenance of ecological connectivity', inds:['Mangrove Restoration Area', 'Aquaculture Conversion pressure'] }
-    ]},
-    { id:'ma-res-4', name:'Riparian zone restoration planting (active)', pw:'RESTORE', type:'Recommended', checked:false, method:'Remote Sensing', freq:'Annually', indMeta:{}, benefits:[
-        { cat:'Nature', benefit:'Protection of watershed functions', inds:['Mangrove Restoration Area'] },
-        { cat:'People', benefit:'Enhanced food and water security', inds:['Mangrove Community Beneficiaries'] },
-        { cat:'Climate', benefit:'Increased carbon sequestration and storage', inds:['Mangrove Carbon Stock'] },
-        { cat:'Nature', benefit:'Maintenance of ecological connectivity', inds:['Peatland Extent'] },
-        { cat:'Nature', benefit:'Enhanced biodiversity and ecosystem functions', inds:['Mangrove Species Diversity'] }
-    ]},
-    { id:'ma-res-5', name:'Pioneer species establishment (first-stage canopy)', pw:'RESTORE', type:'Recommended', checked:false, method:'Field measurement', freq:'Annually', indMeta:{ 'Seedling survival rate (%)':{source:'Field measurement'} }, benefits:[
-        { cat:'Nature', benefit:'Improved forest productivity and regeneration', inds:['Mangrove Species Diversity', 'Mangrove Restoration Area'] },
-        { cat:'People', benefit:'Sustainable livelihood opportunities (nursery + planting employment)', inds:['Mangrove Community Beneficiaries'] },
-        { cat:'Climate', benefit:'Increased carbon sequestration and storage', inds:['Mangrove Carbon Stock'] },
-        { cat:'Nature', benefit:'Enhanced biodiversity and ecosystem functions', inds:['Seedling survival rate (%)'] }
-    ]},
-    { id:'ma-res-6', name:'Native species succession planting (mid-late stage)', pw:'RESTORE', type:'Recommended', checked:false, method:'Field measurement', freq:'Annually', indMeta:{ 'Species richness & diversity indices; Abundance of indicator species (Count)':{source:'Field measurement'} }, benefits:[
-        { cat:'Nature', benefit:'Enhanced biodiversity and ecosystem functions', inds:['Species richness & diversity indices; Abundance of indicator species (Count)'] },
-        { cat:'People', benefit:'Sustainable livelihood opportunities (NTFP species inclusion)', inds:['Mangrove Community Beneficiaries', 'Fisheries Dependency Value'] },
-        { cat:'Climate', benefit:'Increased carbon sequestration and storage', inds:['Mangrove Carbon Stock'] },
-        { cat:'Nature', benefit:'Improved forest productivity and regeneration', inds:['Mangrove Species Diversity', 'Mangrove Restoration Area'] },
-        { cat:'Nature', benefit:'Maintenance of ecological connectivity', inds:['Mangrove Extent'] }
-    ]},
-    { id:'ma-res-7', name:'Forest landscape restoration on stable non-forest sites (full reforestation)', pw:'RESTORE', type:'Recommended', checked:false, method:'Remote Sensing', freq:'Annually', indMeta:{}, benefits:[
-        { cat:'Nature', benefit:'Enhanced biodiversity and ecosystem functions', inds:['Mangrove Species Diversity', 'Mangrove Restoration Area'] },
-        { cat:'People', benefit:'Sustainable livelihood opportunities (planting employment)', inds:['Mangrove Community Beneficiaries'] },
-        { cat:'Climate', benefit:'Increased carbon sequestration and storage', inds:['Mangrove Carbon Stock'] },
-        { cat:'Nature', benefit:'Improved forest productivity and regeneration', inds:['Mangrove Extent'] }
+    { id:'ma-res-6', name:'Build artificial breakwaters to restore mud substrate and reintroduce pioneer flora.', traj:'Non-Forest to C6 (Stable Barren)', pw:'RESTORE', type:'Recommended', checked:false, benefits:[
+        { cat:'Nature', benefit:'Enhanced biodiversity and ecosystem functions', inds:['Number of Seedling Species', 'Species Richness-Flora', 'Number of Individual/Occurence per Species-Flora', 'Species Richness-Fauna', 'Number of Individual/Occurence per Species-Fauna', 'Protected Ecosystem Area'] },
+        { cat:'Nature', benefit:'Protection of watershed functions', inds:['Water discharge flow', 'Tidal Inundation Regime'] },
+        { cat:'Nature', benefit:'Maintenance of ecological connectivity', inds:['Forest Connectivity Index'] },
+        { cat:'People', benefit:'Sustainable livelihood opportunities', inds:['Social Forestry Beneficiaries', 'Crop/Non-Timber Forest Product Value'] },
+        { cat:'People', benefit:'Strengthened social capital and governance capacity', inds:['Forestry Legal Framework', 'MRV Institutional Capacity', 'Safeguard Information System', 'Grievance Redress Mechanism', 'Adaptive Management Response Time'] },
+        { cat:'People', benefit:'Enhanced food and water security', inds:['Crop/Non-Timber Forest Product Value'] },
+        { cat:'People', benefit:'Equitable benefit-sharing mechanisms', inds:['Benefit Sharing Mechanism', 'Gender-Disaggregated Resource Access'] },
+        { cat:'Climate', benefit:'Enhanced resilience to climate hazards', inds:['Sediment Accretion Rate', 'Relative Sea-Level'] },
+        { cat:'Climate', benefit:'Increased carbon sequestration and storage', inds:['Forest Carbon Stock', 'Carbon sequestration / removal rate from Afforestation, Reforestation, and Revegetation (ARR) activities', 'Mangrove Carbon Stock'] },
+        { cat:'Climate', benefit:'Reduced emissions from deforestation and degradation', inds:['Aquaculture Conversion Pressure'] },
     ]},
   ]},
   { id:'peatland', name:'Peatland', pwLabel:'Protect / Manage / Restore', pwClass:'olive', colorCls:'peatland', activities:[
-    { id:'pe-pro-1', name:'Boundary demarcation & legal recognition', pw:'PROTECT', type:'Recommended', checked:true, method:'Field Measurement', freq:'Annually', indMeta:{ 'Water Table Depth (cm)':{source:'Field Measurement'}, 'Peatland Carbon Emission (MtCO₂e/yr or tCO₂e/yr)':{source:'Remote Sensing/Field Measurement'} }, benefits:[
-        { cat:'Nature', benefit:'Maintenance of ecological connectivity', inds:['Water Table Depth (cm)'] },
-        { cat:'People', benefit:'Secure land and resource tenure', inds:['Area with recognized tenure / social-forestry permit (ha)'] },
-        { cat:'Climate', benefit:'Reduced emissions from deforestation and degradation', inds:['Peatland Carbon Emission (MtCO₂e/yr or tCO₂e/yr)'] }
-    ]},
-    { id:'pe-pro-2', name:'Community-based patrol & monitoring', pw:'PROTECT', type:'Recommended', checked:true, method:'Remote Sensing/Field Measurement', freq:'Annually', indMeta:{ 'Peat fire hotspots (count/year)':{source:'Remote Sensing/Field Measurement'}, 'Water Table Depth (cm)':{source:'Field Measurement'}, 'Peatland Carbon Emission (MtCO₂e/yr or tCO₂e/yr)':{source:'Field Measurement'}, 'Peat subsidence (cm/year)':{source:'Field Measurement'}, 'Fire Prevention Brigades (MPA or brigades)':{source:'Field Survey/Secondary Data (Government Data)'} }, benefits:[
-        { cat:'Nature', benefit:'Reduced vulnerability to fire, pests, and diseases', inds:['Peat fire hotspots (count/year)', 'Water Table Depth (cm)'] },
-        { cat:'Climate', benefit:'Reduced emissions from deforestation and degradation', inds:['Peatland Carbon Emission (MtCO₂e/yr or tCO₂e/yr)'] },
-        { cat:'Nature', benefit:'Protection of watershed functions', inds:['Peat subsidence (cm/year)'] },
-        { cat:'People', benefit:'Strengthened social capital and governance capacity', inds:['Fire Prevention Brigades (MPA or brigades)'] }
-    ]},
-    { id:'pe-pro-3', name:'Customary/indigenous rights recognition & FPIC process', pw:'PROTECT', type:'Recommended', checked:false, method:'Field Measurement', freq:'Annually', indMeta:{ 'Peatland Carbon Emission (MtCO₂e/yr or tCO₂e/yr)':{source:'Field Measurement'}, 'GHG Flux Measurement Sites (Sites)':{source:'Field Measurement/Secondary/Government Data'}, 'Sites of community importance and special protection areas (Ha)':{source:'Field Survey/Secondary Data (Government Data)'} }, benefits:[
-        { cat:'Nature', benefit:'Maintenance of ecological connectivity', inds:['Water Table Depth (cm)'] },
+    { id:'pe-pro-1', name:'Protect peat domes within Peat Hydrological Units (PHUs), enforce moratoria, & ban canal construction.', traj:'Forest to C1/C2 (Persistent Forest)', pw:'PROTECT', type:'Recommended', checked:true, benefits:[
+        { cat:'Nature', benefit:'Reduced vulnerability to fire, pests, and diseases', inds:['Forest Fire Incidents', 'Invasive Species Spread Rate', 'Peat Burn Depth', 'Peat Soil Moisture', 'Peat Fire Hotspots', 'Burned Area'] },
+        { cat:'Nature', benefit:'Protection of watershed functions', inds:['Water discharge flow', 'Water Table Depth', 'Tree Canopy Cover', 'Peat Water Quality'] },
+        { cat:'Nature', benefit:'Maintenance of ecological connectivity', inds:['Forest Connectivity Index'] },
+        { cat:'Nature', benefit:'Enhanced biodiversity and ecosystem functions', inds:['Peatland Extent', 'Species Richness-Flora', 'Number of Individual/Occurence per Species-Flora', 'Species Richness-Fauna', 'Number of Individual/Occurence per Species-Fauna'] },
+        { cat:'People', benefit:'Enhanced food and water security', inds:['Rainwater Use Efficiency'] },
         { cat:'People', benefit:'Secure land and resource tenure', inds:['Indigenous Land Tenure'] },
-        { cat:'Climate', benefit:'Reduced emissions from deforestation and degradation', inds:['Peatland Carbon Emission (MtCO₂e/yr or tCO₂e/yr)', 'GHG Flux Measurement Sites (Sites)'] },
-        { cat:'People', benefit:'Cultural heritage preservation', inds:['Sites of community importance and special protection areas (Ha)'] },
-        { cat:'People', benefit:'Strengthened social capital and governance capacity', inds:['MRV Institutional Capacity'] },
-        { cat:'People', benefit:'Equitable benefit-sharing mechanisms', inds:['Benefit Sharing Mechanism'] }
+        { cat:'People', benefit:'Sustainable livelihood opportunities', inds:['Social Forestry Beneficiaries', 'Crop/Non-Timber Forest Product Value'] },
+        { cat:'People', benefit:'Strengthened social capital and governance capacity', inds:['Fire Prevention Brigades', 'Burning Ban Compliance', 'Forestry Legal Framework', 'MRV Institutional Capacity', 'Safeguard Information System', 'Grievance Redress Mechanism', 'Adaptive Management Response Time'] },
+        { cat:'People', benefit:'Equitable benefit-sharing mechanisms', inds:['Benefit Sharing Mechanism', 'Gender-Disaggregated Resource Access'] },
+        { cat:'Climate', benefit:'Reduced emissions from deforestation and degradation', inds:['Deforestation Rate', 'Forest Degradation Rate', 'Peatland Carbon Emissions', 'Nitrous Oxide (N₂O) Flux', 'Methane (CH4) Flux', 'Peatland Carbon Emissions due to fires', 'Drained Peatland Area', 'Peat Subsidence Rate'] },
     ]},
-    { id:'pe-pro-4', name:'Fire prevention infrastructure & early warning', pw:'PROTECT', type:'Recommended', checked:false, method:'Remote Sensing/Field Measurement', freq:'Annually', indMeta:{ 'Peat fire hotspots (count/year or count)':{source:'Remote Sensing/Field Measurement'}, 'Peatland Carbon Emission (MtCO₂e/yr or tCO₂e/yr)':{source:'Field Measurement'}, 'GHG Flux Measurement Sites (Sites)':{source:'Field Measurement/Secondary/Government Data'} }, benefits:[
-        { cat:'Nature', benefit:'Reduced vulnerability to fire, pests, and diseases', inds:['Peat fire hotspots (count/year or count)'] },
-        { cat:'Climate', benefit:'Reduced emissions from deforestation and degradation', inds:['Peatland Carbon Emission (MtCO₂e/yr or tCO₂e/yr)', 'GHG Flux Measurement Sites (Sites)'] }
+    { id:'pe-res-1', name:'Construct rewetting infrastructures to raise water tables and re-vegetate with native species.', traj:'Forest to C4 (Degraded; Other Ref.)', pw:'RESTORE', type:'Recommended', checked:false, benefits:[
+        { cat:'Nature', benefit:'Reduced vulnerability to fire, pests, and diseases', inds:['Forest Fire Incidents', 'Invasive Species Spread Rate', 'Peat Burn Depth', 'Peat Soil Moisture', 'Peat Fire Hotspots', 'Burned Area'] },
+        { cat:'Nature', benefit:'Protection of watershed functions', inds:['Water discharge flow', 'Water Table Depth', 'Peat Soil Wetness Index', 'Rewetted Peatland Area', 'Peat Water Quality'] },
+        { cat:'Nature', benefit:'Maintenance of ecological connectivity', inds:['Forest Connectivity Index'] },
+        { cat:'Nature', benefit:'Enhanced biodiversity and ecosystem functions', inds:['Peatland Extent', 'Number of Seedling Species', 'Species Richness-Flora', 'Number of Individual/Occurence per Species-Flora', 'Species Richness-Fauna', 'Number of Individual/Occurence per Species-Fauna'] },
+        { cat:'People', benefit:'Enhanced food and water security', inds:['Rainwater Use Efficiency'] },
+        { cat:'People', benefit:'Equitable benefit-sharing mechanisms', inds:['Benefit Sharing Mechanism', 'Gender-Disaggregated Resource Access'] },
+        { cat:'People', benefit:'Sustainable livelihood opportunities', inds:['Social Forestry Beneficiaries', 'Crop/Non-Timber Forest Product Value', 'Paludiculture Area'] },
+        { cat:'People', benefit:'Strengthened social capital and governance capacity', inds:['Fire Prevention Brigades', 'Burning Ban Compliance', 'Forestry Legal Framework', 'MRV Institutional Capacity', 'Safeguard Information System', 'Grievance Redress Mechanism', 'Adaptive Management Response Time'] },
+        { cat:'Climate', benefit:'Reduced emissions from deforestation and degradation', inds:['Deforestation Rate', 'Forest Degradation Rate', 'Peatland Carbon Emissions', 'Nitrous Oxide (N₂O) Flux', 'Methane (CH4) Flux', 'Peatland Carbon Emissions due to fires', 'Drained Peatland Area', 'Peat Subsidence Rate'] },
     ]},
-    { id:'pe-pro-5', name:'Buffer zone establishment & compatible land use', pw:'PROTECT', type:'Recommended', checked:false, method:'Field measurement', freq:'Annually', indMeta:{ 'Water table depth (cm)':{source:'Field measurement'}, 'Peatland Carbon Emission (MtCO₂e/yr or tCO₂e/yr)':{source:'Field Measurement'}, 'GHG Flux Measurement Sites (Sites)':{source:'Field Measurement/Secondary/Government Data'}, 'Peat fire hotspots (count/year or count)':{source:'Remote Sensing/Field Measurement'} }, benefits:[
-        { cat:'Nature', benefit:'Maintenance of ecological connectivity', inds:['Water table depth (cm)'] },
-        { cat:'People', benefit:'Sustainable livelihood opportunities', inds:['Social Forestry Beneficiaries'] },
-        { cat:'Climate', benefit:'Reduced emissions from deforestation and degradation', inds:['Peatland Carbon Emission (MtCO₂e/yr or tCO₂e/yr)', 'GHG Flux Measurement Sites (Sites)'] },
-        { cat:'Nature', benefit:'Reduced vulnerability to fire, pests, and diseases', inds:['Peat fire hotspots (count/year or count)'] }
+    { id:'pe-res-2', name:'Rewet drained croplands & implement paludiculture (the sustainable cultivation using peatland-adapted crops).', traj:'Forest to C5 (Converted; Other Ref.)', pw:'RESTORE', type:'Recommended', checked:false, benefits:[
+        { cat:'Nature', benefit:'Reduced vulnerability to fire, pests, and diseases', inds:['Forest Fire Incidents', 'Invasive Species Spread Rate', 'Peat Burn Depth', 'Peat Soil Moisture', 'Peat Fire Hotspots', 'Burned Area'] },
+        { cat:'Nature', benefit:'Protection of watershed functions', inds:['Water discharge flow', 'Water Table Depth', 'Peat Soil Wetness Index', 'Rewetted Peatland Area', 'Peat Water Quality'] },
+        { cat:'Nature', benefit:'Maintenance of ecological connectivity', inds:['Forest Connectivity Index'] },
+        { cat:'Nature', benefit:'Enhanced biodiversity and ecosystem functions', inds:['Peatland Extent', 'Number of Seedling Species', 'Species Richness-Flora', 'Number of Individual/Occurence per Species-Flora', 'Species Richness-Fauna', 'Number of Individual/Occurence per Species-Fauna'] },
+        { cat:'People', benefit:'Enhanced food and water security', inds:['Rainwater Use Efficiency'] },
+        { cat:'People', benefit:'Secure land and resource tenure', inds:['Indigenous Land Tenure'] },
+        { cat:'People', benefit:'Sustainable livelihood opportunities', inds:['Social Forestry Beneficiaries', 'Crop/Non-Timber Forest Product Value', 'Paludiculture Area'] },
+        { cat:'People', benefit:'Strengthened social capital and governance capacity', inds:['Fire Prevention Brigades', 'Burning Ban Compliance', 'Forestry Legal Framework', 'MRV Institutional Capacity', 'Safeguard Information System', 'Grievance Redress Mechanism', 'Adaptive Management Response Time'] },
+        { cat:'People', benefit:'Equitable benefit-sharing mechanisms', inds:['Benefit Sharing Mechanism', 'Gender-Disaggregated Resource Access'] },
+        { cat:'Climate', benefit:'Reduced emissions from deforestation and degradation', inds:['Deforestation Rate', 'Forest Degradation Rate', 'Peatland Carbon Emissions', 'Nitrous Oxide (N₂O) Flux', 'Methane (CH4) Flux', 'Peatland Carbon Emissions due to fires', 'Drained Peatland Area', 'Peat Subsidence Rate'] },
     ]},
-    { id:'pe-pro-6', name:'Biodiversity baseline & adaptive monitoring system', pw:'PROTECT', type:'Recommended', checked:false, method:'Field Measurement', freq:'Annually', indMeta:{ 'Species richness index (count)':{source:'Field Measurement'} }, benefits:[
-        { cat:'Nature', benefit:'Enhanced biodiversity and ecosystem functions', inds:['Species richness index (count)'] }
+    { id:'pe-res-3', name:'Rewet degraded bare peat, control compaction, & reintroduce peatland native species.', traj:'Forest to C6 (Converted to Barren)', pw:'RESTORE', type:'Recommended', checked:false, benefits:[
+        { cat:'Nature', benefit:'Reduced vulnerability to fire, pests, and diseases', inds:['Forest Fire Incidents', 'Invasive Species Spread Rate', 'Peat Burn Depth', 'Peat Soil Moisture', 'Peat Fire Hotspots', 'Burned Area'] },
+        { cat:'Nature', benefit:'Protection of watershed functions', inds:['Water discharge flow', 'Water Table Depth', 'Peat Soil Wetness Index', 'Rewetted Peatland Area', 'Peat Water Quality'] },
+        { cat:'Nature', benefit:'Maintenance of ecological connectivity', inds:['Forest Connectivity Index'] },
+        { cat:'Nature', benefit:'Enhanced biodiversity and ecosystem functions', inds:['Peatland Extent', 'Number of Seedling Species', 'Species Richness-Flora', 'Number of Individual/Occurence per Species-Flora', 'Species Richness-Fauna', 'Number of Individual/Occurence per Species-Fauna'] },
+        { cat:'People', benefit:'Enhanced food and water security', inds:['Rainwater Use Efficiency'] },
+        { cat:'People', benefit:'Equitable benefit-sharing mechanisms', inds:['Benefit Sharing Mechanism', 'Gender-Disaggregated Resource Access'] },
+        { cat:'People', benefit:'Sustainable livelihood opportunities', inds:['Social Forestry Beneficiaries', 'Crop/Non-Timber Forest Product Value', 'Paludiculture Area'] },
+        { cat:'People', benefit:'Strengthened social capital and governance capacity', inds:['Fire Prevention Brigades', 'Burning Ban Compliance', 'Forestry Legal Framework', 'MRV Institutional Capacity', 'Safeguard Information System', 'Grievance Redress Mechanism', 'Adaptive Management Response Time'] },
+        { cat:'Climate', benefit:'Reduced emissions from deforestation and degradation', inds:['Deforestation Rate', 'Forest Degradation Rate', 'Peatland Carbon Emissions', 'Nitrous Oxide (N₂O) Flux', 'Methane (CH4) Flux', 'Peatland Carbon Emissions due to fires', 'Drained Peatland Area', 'Peat Subsidence Rate'] },
     ]},
-    { id:'pe-man-1', name:'Community-based fire management (degraded areas)', pw:'MANAGE', type:'Recommended', checked:true, method:'Remote Sensing/Field Measurement', freq:'Annually', indMeta:{ 'Peat Fire Hotspots (count/year)':{source:'Remote Sensing/Field Measurement'}, 'Fire Prevention Brigades (MPA units; brigades; units)':{source:'Field Survey/Secondary Data (Government Data)'}, 'Burning Ban Compliance (Violations/year; State level; haze policy; compliance (%))':{source:'Field Survey/Secondary Data (Government Data)'}, 'Water Table Depth Monitoring (cm)':{source:'Field measurement'}, 'Peatland Carbon Emissions (MtCO₂e/yr or tCO₂e/yr)':{source:'Field Measurement'}, 'Peat Subsidence Rate (cm/year)':{source:'Field measurement'} }, benefits:[
-        { cat:'Nature', benefit:'Reduced vulnerability to fire, pests, and diseases', inds:['Peat Fire Hotspots (count/year)', 'Fire Prevention Brigades (MPA units; brigades; units)', 'Burning Ban Compliance (Violations/year; State level; haze policy; compliance (%))'] },
-        { cat:'People', benefit:'Enhanced food and water security', inds:['Water Table Depth Monitoring (cm)'] },
-        { cat:'Climate', benefit:'Reduced emissions from deforestation and degradation', inds:['Peatland Carbon Emissions (MtCO₂e/yr or tCO₂e/yr)'] },
-        { cat:'People', benefit:'Strengthened social capital and governance capacity', inds:['Multi-Stakeholder Platform', 'Grievance Redress Mechanism'] },
-        { cat:'Climate', benefit:'Enhanced resilience to climate hazards', inds:['Peat Subsidence Rate (cm/year)'] }
+    { id:'pe-man-1', name:'Maintain high peat water tables and establish community fire-monitoring teams.', traj:'Non-Forest to C1/C2 (Regenerated Naturally)', pw:'MANAGE', type:'Recommended', checked:false, benefits:[
+        { cat:'Nature', benefit:'Reduced vulnerability to fire, pests, and diseases', inds:['Forest Fire Incidents', 'Invasive Species Spread Rate', 'Peat Burn Depth', 'Peat Soil Moisture', 'Peat Fire Hotspots', 'Burned Area'] },
+        { cat:'Nature', benefit:'Improved forest productivity and regeneration', inds:['Forest Extent', 'Tree Canopy Cover', 'Peatland Extent', 'Peat Restoration Progress', 'Pioneer Vegetation Cover', 'Ecosystem Restoration Area', 'Peat Soil Wetness Index'] },
+        { cat:'Nature', benefit:'Maintenance of ecological connectivity', inds:['Forest Connectivity Index'] },
+        { cat:'Nature', benefit:'Protection of watershed functions', inds:['Water discharge flow', 'Water Table Depth', 'Peat Soil Wetness Index', 'Rewetted Peatland Area', 'Peat Water Quality'] },
+        { cat:'Nature', benefit:'Enhanced biodiversity and ecosystem functions', inds:['Peatland Extent', 'Number of Seedling Species', 'Species Richness-Flora', 'Number of Individual/Occurence per Species-Flora', 'Species Richness-Fauna', 'Number of Individual/Occurence per Species-Fauna'] },
+        { cat:'People', benefit:'Strengthened social capital and governance capacity', inds:['Fire Prevention Brigades', 'Burning Ban Compliance', 'Forestry Legal Framework', 'MRV Institutional Capacity', 'Safeguard Information System', 'Grievance Redress Mechanism', 'Adaptive Management Response Time'] },
+        { cat:'People', benefit:'Secure land and resource tenure', inds:['Indigenous Land Tenure'] },
+        { cat:'People', benefit:'Enhanced food and water security', inds:['Crop/Non-Timber Forest Product Value'] },
+        { cat:'People', benefit:'Sustainable livelihood opportunities', inds:['Social Forestry Beneficiaries', 'Crop/Non-Timber Forest Product Value'] },
+        { cat:'People', benefit:'Equitable benefit-sharing mechanisms', inds:['Benefit Sharing Mechanism', 'Gender-Disaggregated Resource Access'] },
+        { cat:'Climate', benefit:'Reduced emissions from deforestation and degradation', inds:['Deforestation Rate', 'Forest Degradation Rate', 'Peatland Carbon Emissions', 'Nitrous Oxide (N₂O) Flux', 'Methane (CH4) Flux', 'Peatland Carbon Emissions due to fires', 'Drained Peatland Area', 'Peat Subsidence Rate'] },
     ]},
-    { id:'pe-man-2', name:'Assisted Natural Regeneration (ANR)', pw:'MANAGE', type:'Recommended', checked:false, method:'Field measurement', freq:'Annually', indMeta:{ 'Species Richness Index (count)':{source:'Field measurement'}, 'Peatland Carbon Emissions (MtCO₂e/yr or tCO₂e/yr)':{source:'Field Measurement'}, 'Water Table Depth Monitoring (cm)':{source:'Field measurement'} }, benefits:[
-        { cat:'Nature', benefit:'Enhanced biodiversity and ecosystem functions', inds:['Species Richness Index (count)'] },
-        { cat:'People', benefit:'Sustainable livelihood opportunities', inds:['Social Forestry Beneficiaries'] },
-        { cat:'Climate', benefit:'Increased carbon sequestration and storage', inds:['Forest Carbon Stock'] },
-        { cat:'Climate', benefit:'Reduced emissions from deforestation and degradation', inds:['Peatland Carbon Emissions (MtCO₂e/yr or tCO₂e/yr)'] },
-        { cat:'Nature', benefit:'Maintenance of ecological connectivity', inds:['Water Table Depth Monitoring (cm)'] }
+    { id:'pe-man-2', name:'Implement paludiculture (the sustainable cultivation using peatland-adapted crops).', traj:'Non-Forest to C4 (Stable C4; Cultivated)', pw:'MANAGE', type:'Recommended', checked:false, benefits:[
+        { cat:'Nature', benefit:'Reduced vulnerability to fire, pests, and diseases', inds:['Forest Fire Incidents', 'Invasive Species Spread Rate', 'Peat Burn Depth', 'Peat Soil Moisture', 'Peat Fire Hotspots', 'Burned Area'] },
+        { cat:'Nature', benefit:'Protection of watershed functions', inds:['Water discharge flow', 'Water Table Depth', 'Peat Soil Wetness Index', 'Rewetted Peatland Area', 'Peat Water Quality'] },
+        { cat:'Nature', benefit:'Maintenance of ecological connectivity', inds:['Forest Connectivity Index'] },
+        { cat:'Nature', benefit:'Enhanced biodiversity and ecosystem functions', inds:['Peatland Extent', 'Number of Seedling Species', 'Species Richness-Flora', 'Number of Individual/Occurence per Species-Flora', 'Species Richness-Fauna', 'Number of Individual/Occurence per Species-Fauna'] },
+        { cat:'People', benefit:'Sustainable livelihood opportunities', inds:['Social Forestry Beneficiaries', 'Crop/Non-Timber Forest Product Value', 'Paludiculture Area'] },
+        { cat:'People', benefit:'Enhanced food and water security', inds:['Rainwater Use Efficiency'] },
+        { cat:'People', benefit:'Strengthened social capital and governance capacity', inds:['Fire Prevention Brigades', 'Burning Ban Compliance', 'Forestry Legal Framework', 'MRV Institutional Capacity', 'Safeguard Information System', 'Grievance Redress Mechanism', 'Adaptive Management Response Time'] },
+        { cat:'People', benefit:'Equitable benefit-sharing mechanisms', inds:['Benefit Sharing Mechanism', 'Gender-Disaggregated Resource Access'] },
+        { cat:'Climate', benefit:'Reduced emissions from deforestation and degradation', inds:['Deforestation Rate', 'Forest Degradation Rate', 'Peatland Carbon Emissions', 'Nitrous Oxide (N₂O) Flux', 'Methane (CH4) Flux', 'Peatland Carbon Emissions due to fires', 'Drained Peatland Area', 'Peat Subsidence Rate'] },
+        { cat:'Climate', benefit:'Microclimate regulation', inds:['Tree Canopy Cover'] },
     ]},
-    { id:'pe-man-3', name:'Agricultural burning regulation & no-burn alternatives', pw:'MANAGE', type:'Recommended', checked:false, method:'Remote Sensing/Field Measurement', freq:'Annually', indMeta:{ 'Peat Fire Hotspots (count/year or count)':{source:'Remote Sensing/Field Measurement'}, 'Peatland Carbon Emissions (MtCO₂e/yr or tCO₂e/yr)':{source:'Field Measurement'}, 'Peat Subsidence Rate (cm/year)':{source:'Field measurement'} }, benefits:[
-        { cat:'Nature', benefit:'Reduced vulnerability to fire, pests, and diseases', inds:['Peat Fire Hotspots (count/year or count)'] },
-        { cat:'People', benefit:'Strengthened social capital and governance capacity', inds:['Burning Ban Compliance'] },
-        { cat:'Climate', benefit:'Reduced emissions from deforestation and degradation', inds:['Peatland Carbon Emissions (MtCO₂e/yr or tCO₂e/yr)'] },
-        { cat:'Climate', benefit:'Enhanced resilience to climate hazards', inds:['Peat Subsidence Rate (cm/year)'] }
+    { id:'pe-res-4', name:'Construct peat rewetting infrastructures to maintain water tables and revegetate with native species.', traj:'Non-Forest to C4 (Stable C4; Other Ref.)', pw:'RESTORE', type:'Recommended', checked:false, benefits:[
+        { cat:'Nature', benefit:'Reduced vulnerability to fire, pests, and diseases', inds:['Forest Fire Incidents', 'Invasive Species Spread Rate', 'Peat Burn Depth', 'Peat Soil Moisture', 'Peat Fire Hotspots', 'Burned Area'] },
+        { cat:'Nature', benefit:'Protection of watershed functions', inds:['Water discharge flow', 'Water Table Depth', 'Peat Soil Wetness Index', 'Rewetted Peatland Area', 'Peat Water Quality'] },
+        { cat:'Nature', benefit:'Maintenance of ecological connectivity', inds:['Forest Connectivity Index'] },
+        { cat:'Nature', benefit:'Enhanced biodiversity and ecosystem functions', inds:['Peatland Extent', 'Number of Seedling Species', 'Species Richness-Flora', 'Number of Individual/Occurence per Species-Flora', 'Species Richness-Fauna', 'Number of Individual/Occurence per Species-Fauna'] },
+        { cat:'People', benefit:'Enhanced food and water security', inds:['Rainwater Use Efficiency'] },
+        { cat:'People', benefit:'Secure land and resource tenure', inds:['Indigenous Land Tenure'] },
+        { cat:'People', benefit:'Sustainable livelihood opportunities', inds:['Social Forestry Beneficiaries', 'Crop/Non-Timber Forest Product Value', 'Paludiculture Area'] },
+        { cat:'People', benefit:'Strengthened social capital and governance capacity', inds:['Fire Prevention Brigades', 'Burning Ban Compliance', 'Forestry Legal Framework', 'MRV Institutional Capacity', 'Safeguard Information System', 'Grievance Redress Mechanism', 'Adaptive Management Response Time'] },
+        { cat:'People', benefit:'Equitable benefit-sharing mechanisms', inds:['Benefit Sharing Mechanism', 'Gender-Disaggregated Resource Access'] },
+        { cat:'Climate', benefit:'Reduced emissions from deforestation and degradation', inds:['Deforestation Rate', 'Forest Degradation Rate', 'Peatland Carbon Emissions', 'Nitrous Oxide (N₂O) Flux', 'Methane (CH4) Flux', 'Peatland Carbon Emissions due to fires', 'Drained Peatland Area', 'Peat Subsidence Rate'] },
     ]},
-    { id:'pe-man-4', name:'Riparian buffer & watershed protection within productive landscape', pw:'MANAGE', type:'Recommended', checked:false, method:'Field survey/Government data', freq:'Annually', indMeta:{ 'Peatland Extent (Mha)':{source:'Field survey/Government data'}, 'Drained peatland Area (Mha)':{source:'Field survey/Government data'} }, benefits:[
-        { cat:'Nature', benefit:'Protection of watershed functions', inds:['Peatland Extent (Mha)', 'Drained peatland Area (Mha)'] }
+    { id:'pe-man-3', name:'Transition drained croplands to paludiculture and maintain water table management.', traj:'Non-Forest to C5 (Stable Cropland/Rice)', pw:'MANAGE', type:'Recommended', checked:false, benefits:[
+        { cat:'Nature', benefit:'Reduced vulnerability to fire, pests, and diseases', inds:['Forest Fire Incidents', 'Invasive Species Spread Rate', 'Peat Burn Depth', 'Peat Soil Moisture', 'Peat Fire Hotspots', 'Burned Area'] },
+        { cat:'Nature', benefit:'Protection of watershed functions', inds:['Water discharge flow', 'Water Table Depth', 'Peat Soil Wetness Index', 'Rewetted Peatland Area', 'Peat Water Quality'] },
+        { cat:'Nature', benefit:'Maintenance of ecological connectivity', inds:['Forest Connectivity Index'] },
+        { cat:'Nature', benefit:'Enhanced biodiversity and ecosystem functions', inds:['Peatland Extent', 'Number of Seedling Species', 'Species Richness-Flora', 'Number of Individual/Occurence per Species-Flora', 'Species Richness-Fauna', 'Number of Individual/Occurence per Species-Fauna'] },
+        { cat:'People', benefit:'Enhanced food and water security', inds:['Rainwater Use Efficiency'] },
+        { cat:'People', benefit:'Sustainable livelihood opportunities', inds:['Social Forestry Beneficiaries', 'Crop/Non-Timber Forest Product Value', 'Paludiculture Area'] },
+        { cat:'People', benefit:'Strengthened social capital and governance capacity', inds:['Fire Prevention Brigades', 'Burning Ban Compliance', 'Forestry Legal Framework', 'MRV Institutional Capacity', 'Safeguard Information System', 'Grievance Redress Mechanism', 'Adaptive Management Response Time'] },
+        { cat:'People', benefit:'Equitable benefit-sharing mechanisms', inds:['Benefit Sharing Mechanism', 'Gender-Disaggregated Resource Access'] },
+        { cat:'Climate', benefit:'Reduced emissions from deforestation and degradation', inds:['Deforestation Rate', 'Forest Degradation Rate', 'Peatland Carbon Emissions', 'Nitrous Oxide (N₂O) Flux', 'Methane (CH4) Flux', 'Peatland Carbon Emissions due to fires', 'Drained Peatland Area', 'Peat Subsidence Rate'] },
     ]},
-    { id:'pe-man-5', name:'Sustainable intensification with soil carbon enhancement', pw:'MANAGE', type:'Recommended', checked:false, method:'Field Measurement', freq:'Annually', indMeta:{ 'Soil carbon content (ton/ha)':{source:'Field Measurement'} }, benefits:[
-        { cat:'Nature', benefit:'Improved forest productivity and regeneration (soil health)', inds:['Soil carbon content (ton/ha)'] },
-        { cat:'People', benefit:'Sustainable livelihood opportunities', inds:['Paludiculture Area'] },
-        { cat:'Climate', benefit:'Increased carbon sequestration and storage (soil carbon)', inds:['Peatland Carbon Emissions'] }
+    { id:'pe-res-5', name:'Decommission drained peat farming/ponds and build peat rewetting infrastructures to rewet peat.', traj:'Non-Forest to C5 (Aqua on Mangrove/Peat)', pw:'RESTORE', type:'Recommended', checked:false, benefits:[
+        { cat:'Nature', benefit:'Reduced vulnerability to fire, pests, and diseases', inds:['Forest Fire Incidents', 'Invasive Species Spread Rate', 'Peat Burn Depth', 'Peat Soil Moisture', 'Peat Fire Hotspots', 'Burned Area'] },
+        { cat:'Nature', benefit:'Protection of watershed functions', inds:['Water discharge flow', 'Water Table Depth', 'Peat Soil Wetness Index', 'Rewetted Peatland Area', 'Peat Water Quality'] },
+        { cat:'Nature', benefit:'Maintenance of ecological connectivity', inds:['Forest Connectivity Index'] },
+        { cat:'Nature', benefit:'Enhanced biodiversity and ecosystem functions', inds:['Peatland Extent', 'Number of Seedling Species', 'Species Richness-Flora', 'Number of Individual/Occurence per Species-Flora', 'Species Richness-Fauna', 'Number of Individual/Occurence per Species-Fauna'] },
+        { cat:'People', benefit:'Enhanced food and water security', inds:['Rainwater Use Efficiency'] },
+        { cat:'People', benefit:'Secure land and resource tenure', inds:['Indigenous Land Tenure'] },
+        { cat:'People', benefit:'Sustainable livelihood opportunities', inds:['Social Forestry Beneficiaries', 'Crop/Non-Timber Forest Product Value', 'Paludiculture Area'] },
+        { cat:'People', benefit:'Strengthened social capital and governance capacity', inds:['Fire Prevention Brigades', 'Burning Ban Compliance', 'Forestry Legal Framework', 'MRV Institutional Capacity', 'Safeguard Information System', 'Grievance Redress Mechanism', 'Adaptive Management Response Time'] },
+        { cat:'People', benefit:'Equitable benefit-sharing mechanisms', inds:['Benefit Sharing Mechanism', 'Gender-Disaggregated Resource Access'] },
+        { cat:'Climate', benefit:'Reduced emissions from deforestation and degradation', inds:['Peat Restoration Progress', 'Rewetted Peatland Area', 'Peatland Carbon Emissions', 'Nitrous Oxide (N₂O) Flux', 'Methane (CH4) Flux', 'Peatland Carbon Emissions due to fires', 'Drained Peatland Area', 'Peat Subsidence Rate'] },
     ]},
-    { id:'pe-man-6', name:'Payment for Ecosystem Services (PES)', pw:'MANAGE', type:'Recommended', checked:false, method:'Remote Sensing/Field Measurement', freq:'Annually', indMeta:{ 'Net surface water availability; Quantitative status of groundwater; Water Exploitation Index (m3/year; Good or Poor; %)':{source:'Remote Sensing/Field Measurement'}, 'Avoided greenhouse gas emissions from deforestation and degradation; Forest habitat fragmentation - effective mesh density (t CO₂e/y; 1/ha)':{source:'Remote Sensing/Field Measurement'} }, benefits:[
-        { cat:'Nature', benefit:'Protection of watershed functions', inds:['Net surface water availability; Quantitative status of groundwater; Water Exploitation Index (m3/year; Good or Poor; %)'] },
-        { cat:'People', benefit:'Sustainable livelihood opportunities', inds:['Paludiculture Area'] },
-        { cat:'Climate', benefit:'Reduced emissions from deforestation and degradation (incentive prevents conversion)', inds:['Avoided greenhouse gas emissions from deforestation and degradation; Forest habitat fragmentation - effective mesh density (t CO₂e/y; 1/ha)'] },
-        { cat:'People', benefit:'Equitable benefit-sharing mechanisms', inds:['Benefit Sharing Mechanism'] },
-        { cat:'People', benefit:'Strengthened social capital and governance capacity', inds:['MRV Institutional Capacity'] }
-    ]},
-    { id:'pe-man-7', name:'Pre-restoration ecological assessment for stable non-forest/barren sites', pw:'MANAGE', type:'Recommended', checked:false, method:'Project Report', freq:'Annually', indMeta:{ 'Ecosystem services provision e.g., Soil water holding capacity; Plant-available water; Soil Available Water (SAW) for plant uptake (Descriptive)':{source:'Project Report'} }, benefits:[
-        { cat:'Nature', benefit:'Enhanced biodiversity and ecosystem functions (informed planning)', inds:['Ecosystem services provision e.g., Soil water holding capacity; Plant-available water; Soil Available Water (SAW) for plant uptake (Descriptive)'] },
-        { cat:'People', benefit:'Strengthened social capital and governance capacity (stakeholder consultation as part of assessment)', inds:['MRV Institutional Capacity'] }
-    ]},
-    { id:'pe-res-1', name:'Enrichment planting with native species (low-medium density)', pw:'RESTORE', type:'Recommended', checked:false, method:'Field Survey/Project Report', freq:'Annually', indMeta:{ 'Direct economic activity: Number of new jobs created (Number)':{source:'Field Survey/Project Report'}, 'Peatland Extent (Mha)':{source:'Field Survey/Government Data'}, 'Water Table Depth Monitoring (cm)':{source:'Field measurement'} }, benefits:[
-        { cat:'Nature', benefit:'Enhanced biodiversity and ecosystem functions', inds:['Species Richness Index (Index)'] },
-        { cat:'People', benefit:'Sustainable livelihood opportunities (nursery employment)', inds:['Direct economic activity: Number of new jobs created (Number)'] },
-        { cat:'Climate', benefit:'Increased carbon sequestration and storage', inds:['Forest Carbon Stock'] },
-        { cat:'Nature', benefit:'Maintenance of ecological connectivity', inds:['Peatland Extent (Mha)', 'Water Table Depth Monitoring (cm)'] }
-    ]},
-    { id:'pe-res-2', name:'Full reforestation (high-density native species planting)', pw:'RESTORE', type:'Recommended', checked:false, method:'Field Survey/Project Report', freq:'Annually', indMeta:{ 'Direct economic activity: Number of new jobs created (Number)':{source:'Field Survey/Project Report'}, 'Water Table Depth Monitoring (cm)':{source:'Field measurement'}, 'Peatland Extent (Mha)':{source:'Field survey/Government data'} }, benefits:[
-        { cat:'People', benefit:'Sustainable livelihood opportunities (planting employment)', inds:['Direct economic activity: Number of new jobs created (Number)'] },
-        { cat:'Climate', benefit:'Increased carbon sequestration and storage', inds:['Forest Carbon Stock'] },
-        { cat:'People', benefit:'Enhanced food and water security', inds:['Water Table Depth Monitoring (cm)'] },
-        { cat:'Nature', benefit:'Maintenance of ecological connectivity', inds:['Peatland Extent (Mha)'] }
-    ]},
-    { id:'pe-res-3', name:'Full reforestation of reclaimable/abandoned converted sites', pw:'RESTORE', type:'Recommended', checked:false, method:'Field Survey/Project Report', freq:'Annually', indMeta:{ 'Direct economic activity: Number of new jobs created (Number)':{source:'Field Survey/Project Report'} }, benefits:[
-        { cat:'Nature', benefit:'Enhanced biodiversity and ecosystem functions', inds:['Species Richness Index'] },
-        { cat:'People', benefit:'Sustainable livelihood opportunities (planting employment)', inds:['Direct economic activity: Number of new jobs created (Number)'] },
-        { cat:'Climate', benefit:'Increased carbon sequestration and storage', inds:['Forest Carbon Stock'] }
-    ]},
-    { id:'pe-res-5', name:'Pioneer species establishment (first-stage canopy)', pw:'RESTORE', type:'Recommended', checked:false, method:'Field measurement', freq:'Annually', indMeta:{ 'Seedling survival rate (%)':{source:'Field measurement'} }, benefits:[
-        { cat:'Climate', benefit:'Increased carbon sequestration and storage', inds:['Peatland Carbon Emissions'] },
-        { cat:'Nature', benefit:'Enhanced biodiversity and ecosystem functions', inds:['Seedling survival rate (%)'] }
-    ]},
-    { id:'pe-res-6', name:'Native species succession planting (mid-late stage)', pw:'RESTORE', type:'Recommended', checked:false, method:'Field measurement', freq:'Annually', indMeta:{ 'Species richness & diversity indices; Abundance of indicator species (Count)':{source:'Field measurement'} }, benefits:[
-        { cat:'Nature', benefit:'Enhanced biodiversity and ecosystem functions', inds:['Species richness & diversity indices; Abundance of indicator species (Count)'] },
-        { cat:'People', benefit:'Sustainable livelihood opportunities (NTFP species inclusion)', inds:['Paludiculture Area'] },
-        { cat:'Climate', benefit:'Increased carbon sequestration and storage', inds:['Peatland Carbon Emissions'] }
-    ]},
-    { id:'pe-res-7', name:'Hydrology / water management for barren restoration', pw:'RESTORE', type:'Recommended', checked:false, method:'Remote Sensing', freq:'Annually', indMeta:{}, benefits:[
-        { cat:'Nature', benefit:'Protection of watershed functions', inds:['Water Table Depth Monitoring'] },
-        { cat:'People', benefit:'Enhanced food and water security', inds:['Paludiculture Area'] },
-        { cat:'Climate', benefit:'Increased carbon sequestration and storage (peat carbon especially)', inds:['Peatland Carbon Emissions'] },
-        { cat:'Nature', benefit:'Improved forest productivity and regeneration', inds:['Rewetting Infrastructure'] },
-        { cat:'Climate', benefit:'Enhanced resilience to climate hazards', inds:['Peat Subsidence Rate'] }
-    ]},
-    { id:'pe-res-8', name:'Forest landscape restoration on stable non-forest sites (full reforestation)', pw:'RESTORE', type:'Recommended', checked:false, method:'Remote Sensing', freq:'Annually', indMeta:{}, benefits:[
-        { cat:'Nature', benefit:'Enhanced biodiversity and ecosystem functions', inds:['Species Richness Index'] },
-        { cat:'People', benefit:'Sustainable livelihood opportunities (planting employment)', inds:['Paludiculture Area'] },
-        { cat:'Climate', benefit:'Increased carbon sequestration and storage', inds:['Peatland Carbon Emissions'] },
-        { cat:'Nature', benefit:'Improved forest productivity and regeneration', inds:['Peat Restoration Progress'] },
-        { cat:'Nature', benefit:'Maintenance of ecological connectivity', inds:['Water Table Depth Monitoring', 'Peat Subsidence Rate'] },
-        { cat:'Climate', benefit:'Microclimate regulation', inds:['Rewetted Peatland Area'] }
-    ]},
-    { id:'pe-res-9', name:'Wetland forest restoration (peat swamp / mangrove / riparian)', pw:'RESTORE', type:'Recommended', checked:false, method:'Remote Sensing', freq:'Annually', indMeta:{}, benefits:[
-        { cat:'Nature', benefit:'Protection of watershed functions', inds:['Water Table Depth Monitoring', 'Peat Restoration Progress'] },
-        { cat:'People', benefit:'Enhanced food and water security', inds:['Paludiculture Area'] },
-        { cat:'Climate', benefit:'Increased carbon sequestration and storage', inds:['Forest Carbon Stock'] },
-        { cat:'Nature', benefit:'Enhanced biodiversity and ecosystem functions', inds:['Species Richness Index'] },
-        { cat:'Climate', benefit:'Enhanced resilience to climate hazards', inds:['Peatland Carbon Emissions', 'Peat Subsidence Rate'] }
+    { id:'pe-res-6', name:'Rewet bare degraded peat and reintroduce native peatland species.', traj:'Non-Forest to C6 (Stable Barren)', pw:'RESTORE', type:'Recommended', checked:false, benefits:[
+        { cat:'Nature', benefit:'Reduced vulnerability to fire, pests, and diseases', inds:['Forest Fire Incidents', 'Invasive Species Spread Rate', 'Peat Burn Depth', 'Peat Soil Moisture', 'Peat Fire Hotspots', 'Burned Area'] },
+        { cat:'Nature', benefit:'Protection of watershed functions', inds:['Water discharge flow', 'Water Table Depth', 'Peat Soil Wetness Index', 'Rewetted Peatland Area', 'Peat Water Quality'] },
+        { cat:'Nature', benefit:'Maintenance of ecological connectivity', inds:['Forest Connectivity Index'] },
+        { cat:'Nature', benefit:'Enhanced biodiversity and ecosystem functions', inds:['Peatland Extent', 'Number of Seedling Species', 'Species Richness-Flora', 'Number of Individual/Occurence per Species-Flora', 'Species Richness-Fauna', 'Number of Individual/Occurence per Species-Fauna'] },
+        { cat:'People', benefit:'Enhanced food and water security', inds:['Rainwater Use Efficiency'] },
+        { cat:'People', benefit:'Secure land and resource tenure', inds:['Indigenous Land Tenure'] },
+        { cat:'People', benefit:'Sustainable livelihood opportunities', inds:['Social Forestry Beneficiaries', 'Crop/Non-Timber Forest Product Value', 'Paludiculture Area'] },
+        { cat:'People', benefit:'Strengthened social capital and governance capacity', inds:['Fire Prevention Brigades', 'Burning Ban Compliance', 'Forestry Legal Framework', 'MRV Institutional Capacity', 'Safeguard Information System', 'Grievance Redress Mechanism', 'Adaptive Management Response Time'] },
+        { cat:'People', benefit:'Equitable benefit-sharing mechanisms', inds:['Benefit Sharing Mechanism', 'Gender-Disaggregated Resource Access'] },
+        { cat:'Climate', benefit:'Reduced emissions from deforestation and degradation', inds:['Peatland Carbon Emissions', 'Nitrous Oxide (N₂O) Flux', 'Methane (CH4) Flux', 'Peatland Carbon Emissions due to fires', 'Drained Peatland Area', 'Peat Subsidence Rate'] },
     ]},
   ]},
 ];
-// Derive flat indicator lists used by Step 3 accordions & the indicator editor.
+
+// Derive flat indicator lists (Step 3 accordions & the indicator editor) plus
+// each activity's per-indicator source/frequency, taken from indicatorMeta.
+// a.method / a.freq are the activity-level fallbacks shown in the Method editor.
 ecosystems.forEach(e => e.activities.forEach(a => {
   a.indicators = a.benefits.flatMap(b => b.inds);
   a.optional = a.optional || [];
+  a.indMeta = {};
+  a.indicators.forEach(i => { if (indicatorMeta[i]) a.indMeta[i] = { ...indicatorMeta[i] }; });
+  const first = indicatorMeta[a.indicators[0]] || {};
+  a.method = first.source || '';
+  a.freq = first.freq || 'Annually';
 }));
 
 const INTV_LABEL = { PROTECT:'Protect', MANAGE:'Manage', RESTORE:'Restore' };
@@ -448,11 +518,15 @@ function buildActivitySectionsHTML(activeEco, activeIntv) {
     // Visible activities = matching the active intervention (custom activities have no pathway → always shown).
     const visAct = e.activities.filter(a => !a.pw || activeIntv.has(a.pw));
     if (visAct.length === 0) {
+      // `noPicks` is set by the page when this ecosystem was filtered down to
+      // nothing by the Data Analyser (F02-P4) selection — not by the filters here.
       return `<div class="eco-card">${head}
         <div class="eco-empty">
           <div class="eco-empty-ic">${EMPTY_IC}</div>
-          <div class="eco-empty-title">No matching activities</div>
-          <div class="eco-empty-msg"><strong>${e.name}</strong> has no ${listIntv()} activities. Adjust the Intervention filter above.</div>
+          <div class="eco-empty-title">${e.noPicks ? 'No activities selected' : 'No matching activities'}</div>
+          <div class="eco-empty-msg">${e.noPicks
+            ? `You didn't select any <strong>${e.name}</strong> activities in the Data Analyser (Step 4 — Pathway selection).`
+            : `<strong>${e.name}</strong> has no ${listIntv()} activities. Adjust the Intervention filter above.`}</div>
         </div>
         <button class="btn-add-act" onclick="openAddModal('${e.id}')">+ Add custom activity</button></div>`;
     }

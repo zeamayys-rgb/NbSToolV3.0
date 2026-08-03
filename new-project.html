@@ -1394,8 +1394,11 @@ function saveIndicators() {
 }
 
 /* ══ MODAL 2 — Methods editor ══ */
-const METHOD_OPTS = ['Remote sensing + field verification','GPS mapping + satellite imagery','Field plots + geotagged photos','Drone/satellite imagery + transect','Field observation + hydrology assessment','Shoreline change analysis','GPS inspection + photo documentation','Dipwell/water logger + remote sensing','MODIS/VIIRS + patrol report','NDVI/canopy monitoring + field survey','Stakeholder interview + survey','Community patrol + field report','Other / custom method'];
-const FREQ_OPTS = ['Monthly','Quarterly','Every 6 months','Annual','Annual / seasonal','3, 6, 12 months','Monthly in dry season','Per event'];
+/* Method & frequency options = the workbook's own methodology and sampling
+   values, derived from indicatorMeta (js/f05-shared.js) so the dropdowns
+   can never drift from the activity data. */
+const METHOD_OPTS = [...new Set(Object.values(indicatorMeta).map(m => m.source))].sort();
+const FREQ_OPTS = ['Hourly','Daily','Weekly','Bi-weekly','Monthly','Quarterly (3 month)','Semester (6 month)','Annually'];
 
 function buildMethEditor() {
   const sel = getSelected();

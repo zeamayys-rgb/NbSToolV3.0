@@ -442,7 +442,7 @@
     align-self:flex-start;border-bottom:1px dashed #68727d;cursor:help;
   }
   .opt-ha,.opt-ha.mono{font-family:'Poppins',sans-serif;font-size:11px;font-weight:500;line-height:20px;color:var(--text-base-second,#68727d);} /* was var(--gray-400,#98a2b3) — wrong token (DA-19) */
-  .opt-elig{font-size:12px;font-weight:400;line-height:20px;color:var(--text-second);}
+  .opt-elig{font-size:10.5px;font-weight:400;line-height:20px;color:var(--text-second);}
   .opt-disabled-elig{color:var(--danger-800,#901f1b);}
 
   /* hover tooltips: pathway description + ineligibility reason */
@@ -525,7 +525,7 @@
   .checkbox svg{position:absolute;inset:0;opacity:0;transition:opacity .12s ease;}
   .activity-item.checked .checkbox{background:var(--primary);border-color:var(--primary);}
   .activity-item.checked .checkbox svg{opacity:1;}
-  .activity-label{font-size:12px;font-weight:400;line-height:normal;color:var(--slate);}
+  .activity-label{font-size:12px;font-weight:400;line-height:1.35;color:var(--slate);}
   .act-group{display:flex;flex-direction:column;gap:6px;}
   .act-group + .act-group{margin-top:10px;padding-top:12px;border-top:1px dashed var(--stroke-base,#eaebf0);}
   .act-group__ttl{align-self:flex-start;border-radius:20px;padding:3.5px 10px;font-size:10px;font-weight:600;line-height:normal;white-space:nowrap;}

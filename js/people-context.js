@@ -119,10 +119,10 @@ function svgPyramid(rows,mTot,fTot){rows=rows.slice().reverse();const W=300,H=19
  const max=Math.max(...rows.flatMap(r=>[r.m,r.f]))||1;
  rows.forEach((r,i)=>{const y=i*(bh+2),lw=r.m/max*(cx-gap-4),rw=r.f/max*(cx-gap-4);
   const tip=mTot?`Age ${r.a} — Male ${cnt(mTot*r.m/sm)} · Female ${cnt(fTot*r.f/sf)}`:`Age ${r.a} — Male ${r.m}% · Female ${r.f}%`;
-  s+=`<rect data-tip="${tip}" x="${cx-gap-lw}" y="${y}" width="${lw}" height="${bh}" rx="1.5" fill="${band(r.a)}"/><rect data-tip="${tip}" x="${cx+gap}" y="${y}" width="${rw}" height="${bh}" rx="1.5" fill="${band(r.a)}" opacity=".62"/><text x="${cx}" y="${y+bh-1.5}" text-anchor="middle" font-size="7" fill="#68727d">${r.a}</text>`;});
+  s+=`<rect data-tip="${tip}" x="${cx-gap-lw}" y="${y}" width="${lw}" height="${bh}" rx="1.5" fill="${band(r.a)}"/><rect data-tip="${tip}" x="${cx+gap}" y="${y}" width="${rw}" height="${bh}" rx="1.5" fill="${band(r.a)}"/><text x="${cx}" y="${y+bh-1.5}" text-anchor="middle" font-size="7" fill="#68727d">${r.a}</text>`;});
  return `<svg viewBox="0 0 ${W} ${H}" width="100%">${s}</svg>`;}
-function gauge(level,tipTxt){const L=['Very Low','Low','Moderate','High','Very High'],C=['#077f68','#8fd14f','#f4d03f','#eb984e','#e0556b'],idx=L.indexOf(level);
- return `<div class="gsteps" data-tip="${esc(tipTxt||level)}">${L.map((l,i)=>`<span class="gs${i<=idx?' on':''}" style="${i<=idx?`background:${C[idx]};`:''}"></span>`).join('')}</div><div class="gscale"><span>Very Low</span><span>Very High</span></div>`;}
+function gauge(level,tipTxt){const L=['Very Low','Low','Moderate','High','Very High'],idx=L.indexOf(level);
+ return `<div class="gsteps" data-tip="${esc(tipTxt||level)}">${L.map((l,i)=>`<span class="gs${i<=idx?' on':''}" style="${i<=idx?'background:#077f68;':''}"></span>`).join('')}</div><div class="gscale"><span>1 · Very Low</span><span>5 · Very High</span></div>`;}
 function dots(pct){const on=Math.round(pct/10);let s='';for(let i=0;i<10;i++)s+=`<span class="dot${i<on?' on':''}"></span>`;return s;}
 
 /* ============ card factory ============ */
@@ -175,7 +175,7 @@ function section(key,narr,cards,cols,srcLine){const s=SECT[key];
   <div class="well">${body}${srcHtml(srcLine)}</div></div>`;}
 
 /* ============ regional (Southeast Asia) demography block — same layers for every country ============ */
-const VULN_LEAD='Composite indices (0–1) summarising how susceptible the selected area is to climate hazards, across four dimensions:';
+const VULN_LEAD='Composite indices (1–5) summarising how susceptible the selected area is to climate hazards, across four dimensions:';
 const VULN_TXT={
  p:'Condition of infrastructure, buildings, and critical facilities exposed to hazards.',
  e:'Ecosystem degradation, loss of natural buffers, and ecological resilience.',
@@ -190,7 +190,7 @@ const VULN_FULL={
 function vulnCard(title,k,level){return `<div class="vcard"><div class="vt"><span class="vic">${icv(VULN_IC[k])}</span>${title}<span class="vq" data-tip="${esc(VULN_FULL[k](level))}">?</span><span class="vlv">${level}</span></div><div class="vd">${VULN_TXT[k]}</div>${gauge(level,title+': '+level)}</div>`;}
 function demoSection(d){
  const s=SECT.demography;
- const narr=`Gridded world population data puts the selected area at roughly <b>${d.pop}</b> people, about <b>${d.male}</b> men and <b>${d.female}</b> women.${d.hhNarr?' '+d.hhNarr:''} Vulnerability is scored 0 to 1 across the physical, environmental, economic, and social dimensions. Together, these indicate the size of the community and its exposure to climate hazards.`;
+ const narr=`Gridded world population data puts the selected area at roughly <b>${d.pop}</b> people, about <b>${d.male}</b> men and <b>${d.female}</b> women.${d.hhNarr?' '+d.hhNarr:''} Vulnerability is scored 1 to 5 across the physical, environmental, economic, and social dimensions. Together, these indicate the size of the community and its exposure to climate hazards.`;
  const mv=num(d.male)||1,fv=num(d.female)||1;
  const mp=Math.round(mv/(mv+fv)*100),fp=100-mp;
  const paired=`<div class="genders"><div class="gfigs"><span class="gfig m" style="width:${mp}%">${icv('man')}</span><span class="gfig f" style="width:${fp}%">${icv('woman')}</span></div><div class="gbar"><div class="gm" data-tip="Male: ${d.male} (${mp}%)" style="width:${mp}%"><span class="gpc">${mp}%</span><span class="glb">Male</span><span class="gsub">${d.male}</span></div><div class="gf" data-tip="Female: ${d.female} (${fp}%)" style="width:${fp}%"><span class="gpc">${fp}%</span><span class="glb">Female</span><span class="gsub">${d.female}</span></div></div></div>`;
