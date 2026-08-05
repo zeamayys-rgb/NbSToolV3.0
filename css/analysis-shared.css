@@ -88,6 +88,24 @@
   .p5 .card-info:hover,.p5 .card-info:focus-visible{opacity:1;}
   .p5 .tagrow{display:flex;gap:6px;flex-wrap:wrap;margin-top:0;align-items:center;}
   .p5 .def{font-size:13px;color:#505760;line-height:1.55;}
+  /* Definitions marked data-def="modal" live only behind the card's "i" button —
+     kept in the DOM so the modal reads them straight off the card. */
+  .p5 .def[data-def="modal"]{display:none;}
+
+  /* .split — copy left, metric right (240px). On every card that has a metric:
+     the head spans both columns, everything else stacks in the left column. */
+  .p5 .scard.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,240px);column-gap:14px;align-items:start;}
+  .p5 .scard.split > *{grid-column:1;}
+  .p5 .scard.split > .card-head{grid-column:1/-1;}
+  /* row 2/6 spans the left stack (def + narr + formula/srcline = 3 rows max);
+     surplus rows collapse to zero height. Number above label, bottom-left. */
+  .p5 .scard.split > .metric{grid-column:2;grid-row:2/6;margin:0;align-self:stretch;
+    flex-direction:column;justify-content:flex-end;align-items:flex-start;}
+  .p5 .scard.split > .metric .metric-lab{margin-left:0;text-align:left;max-width:100%;}
+  @media (max-width:560px){
+    .p5 .scard.split{display:block;}
+    .p5 .scard.split > .metric{margin:0 0 11px;}
+  }
 
   /* metric — clean stat box */
   .p5 .metric{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 10px;margin:0 0 11px;padding:11px 13px;border-radius:8px;background:var(--accent-soft);border:1px solid var(--accent-line);}
@@ -97,10 +115,11 @@
   .p5 .metric-lab{font-size:12px;color:#68727d;margin-left:auto;text-align:right;max-width:56%;}
 
   /* narrative / estimated statement */
-  .p5 .narr{margin-top:10px;padding:11px 13px;background:#fafbfc;border-radius:6px;border:1px solid var(--stroke-base,#eaebf0);}
+  /* plain copy — same treatment as a card's .def paragraph, no bounding box */
+  .p5 .narr{margin-top:0;}
   .p5 .narr-lab{display:inline-flex;align-items:center;gap:4px;font:700 10px/1 'Poppins';letter-spacing:.1em;text-transform:uppercase;color:var(--accent-deep);margin-bottom:6px;}
   .p5 .narr-lab .nchev{color:var(--accent);}
-  .p5 .narr p{font-size:13px;color:#505760;line-height:1.6;}
+  .p5 .narr p{font-size:13px;color:#505760;line-height:1.55;}
   .p5 .narr b{color:var(--accent-deep);font-weight:600;background:var(--accent-soft);padding:1px 5px;border-radius:4px;white-space:nowrap;}
   .p5 .formula{margin-top:9px;}
   .p5 .formula code{font:500 11px/1.4 'IBM Plex Mono',ui-monospace,Menlo,monospace;color:#68727d;background:#f7f7f8;border:1px dashed #e5e5e7;border-radius:4px;padding:7px 10px;display:block;overflow-x:auto;}
@@ -611,3 +630,25 @@
   .alert-body{flex:1 1 0;min-width:0;font-size:12px;line-height:20px;color:var(--text-main);}
   .alert-body .lead{font-weight:500;}
   .alert-body b{font-weight:700;}
+
+/* ---- Step 5 — benefit card "i" modal (definition + calculation method).
+   Mirrors the site-characterisation layer-info modal, but lives on <body> and
+   is styled here so interactive-map.html AND project-detail.html both get it. */
+.bi-overlay{position:fixed;inset:0;z-index:1200;display:none;align-items:center;justify-content:center;padding:24px;background:rgba(24,24,24,.5);backdrop-filter:blur(2px);}
+.bi-overlay.show{display:flex;}
+.bi-modal{background:#fff;border-radius:var(--radius-xl,16px);box-shadow:var(--elevation-6,0 24px 48px rgba(16,24,40,.18));width:100%;max-width:520px;max-height:min(640px,86vh);display:flex;flex-direction:column;font-family:'Poppins',sans-serif;animation:biIn .2s cubic-bezier(.34,1.3,.64,1);}
+@keyframes biIn{from{opacity:0;transform:translateY(10px) scale(.98);}to{opacity:1;transform:none;}}
+.bi-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:22px 24px 18px;border-bottom:1px solid var(--stroke-base,#eaebf0);flex:none;}
+.bi-eyebrow{font:600 11px/1 'IBM Plex Mono',ui-monospace,Menlo,monospace;letter-spacing:.14em;text-transform:uppercase;color:#077f68;}
+.bi-title{margin:8px 0 0;font-family:var(--font-display,'Barlow Semi Condensed',sans-serif);font-weight:700;font-size:24px;letter-spacing:-.3px;line-height:1.2;color:#252525;}
+.bi-x{width:36px;height:36px;flex:none;display:grid;place-items:center;border:1px solid var(--stroke-base,#eaebf0);border-radius:var(--radius-lg,10px);background:#fff;color:#68727d;cursor:pointer;transition:.15s ease-out;}
+.bi-x:hover{background:#f7f7f8;color:#252525;}
+.bi-x svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;}
+.bi-body{overflow-y:auto;padding:20px 24px 26px;display:flex;flex-direction:column;}
+.bi-section{padding:14px 0;}
+.bi-section:first-child{padding-top:0;}
+.bi-section + .bi-section{border-top:1px solid var(--stroke-base,#eaebf0);}
+.bi-section[hidden]{display:none;}
+.bi-label{margin:0 0 8px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#68727d;}
+.bi-value{margin:0;font-size:14px;line-height:1.6;color:#252525;}
+.bi-value.bi-mono{font:500 12px/1.5 'IBM Plex Mono',ui-monospace,Menlo,monospace;color:#68727d;background:#f7f7f8;border:1px dashed #e5e5e7;border-radius:6px;padding:10px 12px;overflow-x:auto;}

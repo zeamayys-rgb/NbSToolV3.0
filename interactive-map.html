@@ -108,7 +108,8 @@
   .im-section:first-child{ padding-top:0; }
   .im-divider{ height:1px; background:var(--stroke-base); flex:none; }
   .im-label{ margin:0 0 8px; font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--text-base-second); }
-  .im-value{ margin:0; font-size:14px; line-height:1.6; color:var(--text-base-main); }
+  /* pre-line: catalogue rows that cover several datasets keep their paragraph breaks */
+  .im-value{ margin:0; font-size:14px; line-height:1.6; color:var(--text-base-main); white-space:pre-line; }
   .im-value a{ color:var(--text-primary); text-decoration:underline; }
   .im-value a:hover{ color:var(--primary-700); }
 </style>
@@ -1385,20 +1386,12 @@
 
   /* ===== Reusable layer info modal =====
      Data-driven: each entry is one row from the dataset catalogue
-     (Date of content / Description / Disclaimer / Resolution / Source).
+     (Date of content / Description / Disclaimer / Resolution / Source), which
+     lives in js/analysis-shared.js as NBS_LAYER_INFO so the Site
+     Characterisation cards and this map legend read the same rows.
      To wire a new "i" button: add a <button class="legend__info" data-layer-info="key">
-     next to its layer, then add "key" here. */
-  var LAYER_META = {
-    kba: {
-      name: 'Key Biodiversity Area',
-      category: 'Nature',
-      dateOfContent: '2022',
-      description: 'Key Biodiversity Areas, which are among the most incredible and diverse places on Earth for nature, from deserts to the middle of the ocean, are sites of global importance to the planet\u2019s overall health and the persistence of biodiversity. The Key Biodiversity Area Partnership \u2014 an ambitious partnership of 13 global conservation organizations \u2014 is helping prevent the rapid loss of biodiversity by supporting nationally led efforts to identify these places on the planet that are critical for the survival of unique plants and animals, and the ecological communities they comprise.',
-      disclaimer: 'Protected Area data are taken from the World Database on Protected Areas. While it represents the most comprehensive global database on terrestrial and marine protected areas, in some cases there may be inaccuracies and differences from national datasets.',
-      resolution: 'N/A',
-      source: 'BirdLife International (2023) World Database of Key Biodiversity Areas. Developed by the KBA Partnership: BirdLife International, International Union for the Conservation of Nature, American Bird Conservancy, Amphibian Survival Alliance, Conservation International, Critical Ecosystem Partnership Fund, Global Environment Facility, Re:wild, NatureServe, Rainforest Trust, Royal Society for the Protection of Birds, Wildlife Conservation Society and World Wildlife Fund. March 2023 version. Available at http://keybiodiversityareas.org/kba-data/request'
-    }
-  };
+     next to its layer, then add "key" to NBS_LAYER_INFO. */
+  var LAYER_META = window.NBS_LAYER_INFO || {};
 
   function imEsc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
   function imLinkify(s){
@@ -1432,21 +1425,26 @@
     imOverlay.classList.remove('show');
     imOverlay.setAttribute('aria-hidden', 'true');
   }
-  document.querySelectorAll('[data-layer-info]').forEach(function(btn){
+  document.querySelectorAll('button[data-layer-info]').forEach(function(btn){
     btn.addEventListener('click', function(){ openLayerInfo(btn.dataset.layerInfo); });
   });
   document.getElementById('imClose').addEventListener('click', closeLayerInfo);
   imOverlay.addEventListener('click', function(e){ if (e.target === imOverlay) closeLayerInfo(); });
   document.addEventListener('keydown', function(e){ if (e.key === 'Escape') closeLayerInfo(); });
 
-  /* Data Analyser cards: the "i" info icon in each card head, and the
-     "See more" link on each card's data-source line, open the same modal.
-     All wired to the KBA example for now \u2014 swap 'kba' for each card's own
-     key in LAYER_META once the rest of the catalogue rows are added. */
+  /* Data Analyser cards: the "i" info icon in each card head or sub-title, and
+     the "See more" link on each card's data-source line, open the same modal.
+     Each icon carries its own data-layer-info key; "See more" borrows the key
+     of the nearest icon in its card. Icons with no catalogue row stay inert. */
   document.addEventListener('click', function(e){
-    if (e.target.closest('.gc-info, .info-dot')) { e.preventDefault(); openLayerInfo('kba'); return; }
+    var icon = e.target.closest('.gc-info, .info-dot');
+    if (icon) { e.preventDefault(); openLayerInfo(icon.dataset.layerInfo); return; }
     var seeMore = e.target.closest('.gc-src a, .src a, .data-source a');
-    if (seeMore) { e.preventDefault(); openLayerInfo('kba'); }
+    if (seeMore) {
+      var card = seeMore.closest('.gc-card');
+      var own = card && card.querySelector('[data-layer-info]');
+      if (own) { e.preventDefault(); openLayerInfo(own.dataset.layerInfo); }
+    }
   });
 
   /* Layer toggles (active state) */

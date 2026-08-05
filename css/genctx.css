@@ -43,6 +43,9 @@
   margin: 0; font-family: var(--font-text); font-size: 16px; font-weight: 500;
   line-height: 24px; color: #252525;
 }
+/* sub-title that owns the card's "i" (cards covering more than one subject) —
+   flex so the icon's margin-left:auto parks it on the right */
+.gc-sub--info { display: flex; align-items: center; gap: 8px; }
 .gc-p { margin: 0; font-size: 14px; line-height: 22px; color: #252525; }
 .gc-p b { font-weight: 700; }
 .gc-p--lg { font-size: 14px; line-height: 1.42; color: #2d3648; letter-spacing: -0.01em; }

@@ -45,6 +45,158 @@ const NBS_DATA = (function(){
 })();
 if (typeof window !== 'undefined') window.NBS_DATA = NBS_DATA;
 
+/* Dataset catalogue behind every "i" button in Site Characterisation — the
+   rows come from the shared NbS dataset sheet (F02 Site Characterisation).
+   Mark an icon with a key here via gcHead(title, icon, key) / gcSub(title, key);
+   interactive-map.html renders the matching row in its layer-info modal. */
+const NBS_LAYER_INFO = {
+  "ecosystem-type": {
+    name: "Ecosystem type identification",
+    category: "Site information",
+    dateOfContent: "Historical",
+    description: "A composite classification layer for Southeast Asia that merges the mangrove, peatland, and dryland layers into a single ecosystem-type map, including the areas where two or all three overlap.",
+    disclaimer: "Ecosystem types and area figures shown here are derived from regional remote-sensing and land-cover datasets across Southeast Asia. They are indicative estimates, not ground-verified measurements, and may differ from actual conditions. Boundaries between mangrove, peatland, and dryland forest can be misclassified depending on imagery date and resolution. Verify with field data before using these figures for planning or reporting",
+    resolution: "30 meters",
+    source: ""
+  },
+  "protected-area": {
+    name: "Protection / zoning status (Protected Areas)",
+    category: "Site information",
+    dateOfContent: "Dynamic",
+    description: "Protected Areas are areas designated and managed, through law or other effective means, to conserve nature over the long term. This layer is drawn from the World Database on Protected Areas (WDPA), the most comprehensive global dataset on terrestrial and marine protected areas, jointly produced by the UN Environment Programme World Conservation Monitoring Centre (UNEP-WCMC) and the International Union for Conservation of Nature (IUCN). It compiles the boundaries and attributes of protected areas submitted by governments, NGOs, landowners, and communities, is updated monthly, and is distributed openly through the Protected Planet website (protectedplanet.net). The WDPA underpins reporting on global biodiversity targets and the Sustainable Development Goals and is widely used across research, government, and industry to identify conservation priorities and assess biodiversity risk.",
+    disclaimer: "Protected area data are compiled from the WDPA and provided \"as is.\" They may differ from official national records and should not be treated as a legal reference; the boundaries and designations shown imply no opinion on the legal status of any territory or its frontiers. For authoritative information, refer to the relevant national authority",
+    resolution: "30 meters",
+    source: "World Database on Protected Areas (WDPA) \u2014 UNEP-WCMC & IUCN, Protected Planet (WDPA)"
+  },
+  "terrain": {
+    name: "Terrain (elevation & slope)",
+    category: "Site information",
+    dateOfContent: "Historical",
+    description: "Elevation shows the height of the land above sea level across Southeast Asia, derived from SRTM 30 m data and grouped into four classes: lowland (0 to 500 m), submontane or hill (500 to 1000 m), montane (1000 to 2000 m), and upper montane (above 2000 m). In the tool it reports the elevation range of an area, from its lowest to highest point in metres above sea level, and the class that covers most of it.\n\nSlope shows the steepness of the terrain across Southeast Asia, expressed as percent rise, the vertical gain over horizontal distance. Values are grouped into five classes: flat (0 to 8%), gently sloping (8 to 15%), moderately steep (15 to 25%), steep (25 to 40%), and very steep (above 40%). The layer is derived from SRTM 30 m elevation data, with slope calculated as percent rise and reclassified into these classes. The classification follows and modifies the SOTER (Soil and Terrain) slope scheme adapted into five terrain-steepness classes.",
+    disclaimer: "This layer is derived from SRTM 30 m elevation data and has not been field-verified at every location. Provided as is for landscape-scale analysis, the elevation and slope values and their classes are approximate and should not be used as a legal or authoritative determination of ground height, steepness, or boundaries.",
+    resolution: "30 meters",
+    source: "SRTM"
+  },
+  "deforestation-2014-2024": {
+    name: "Historical deforestation (2014\u20132024)",
+    category: "Site information",
+    dateOfContent: "2014 - 2024",
+    description: "Deforestation 2014 to 2024 shows where natural forest standing in 2014 had been lost by 2024 across Southeast Asia, marking the areas that changed from forest to non-forest over the decade. The layer is derived directly from Forest Cover 2014 and Forest Cover 2024 using simple Boolean logic, flagging pixels that were natural forest in 2014 but no longer natural forest in 2024. These inputs draw on the SERVIR RLCMS land cover maps, with the 2014 baseline also using University of Maryland tree canopy cover and height data. It records the location and extent of loss but does not attribute its cause, which may range from clearing and conversion to other forms of disturbance.",
+    disclaimer: "This layer is derived from modeled forest classifications and has not been field-verified at every location. Provided as is for landscape-scale analysis, it identifies forest loss without attributing its cause and should not be used as a legal or authoritative determination of deforestation, forest status, or boundaries.",
+    resolution: "30 meters",
+    source: "SIGnal"
+  },
+  "deforestation-risk": {
+    name: "Deforestation Risk Index",
+    category: "Site information",
+    dateOfContent: "Deforestation was observed over 2014-2024",
+    description: "This layer shows the modelled probability of future unplanned deforestation across Southeast Asia, serving as a baseline to project where and how much forest is likely to be lost without intervention \u2014 high-risk locations can be used to define an NbS project footprint or, under jurisdictional carbon frameworks (e.g. Verra JNR), to allocate baseline deforestation. The 30 m probability surface (0\u2013100%) follows the \"forestatrisk\" approach (Vieilledent et al. 2021, 2023; https://forestatrisk.cirad.fr) for selecting explanatory variables, but the probability itself is estimated with a Random Forest classifier trained on observed forest-cover change over 2014\u20132024",
+    disclaimer: "1) The output is relative deforestation risk, not a calibrated rate. It should be read as a ranking of risk, not an absolute figure.\n2) Accuracy is reported in-sample (AUC). Independent or out-of-time validation has not yet been done.\n3) Only two dates (2014 and 2024) are available, so distance to past deforestation cannot be used as a leak-free predictor.",
+    resolution: "30 meters",
+    source: "SCeNe Coalition"
+  },
+  "land-cover-2024": {
+    name: "Land cover (2024)",
+    category: "Site information",
+    dateOfContent: "2024",
+    description: "Land Cover 2024 shows the physical cover of the land surface across Southeast Asia in 2024, including natural and planted vegetation, bare ground, built surfaces, and water. It classifies the landscape into 19 cover classes spanning forest, cropland and plantation, grassland and shrub, settlement, water, and wetland, and serves as the base layer from which the forest, mangrove, and other thematic products are derived. The map was produced with the SERVIR Regional Land Cover Monitoring System (RLCMS) in Google Earth Engine, using AlphaEarth Foundations satellite embeddings, specifically the 2024 annual, 64-band embedding layer. Each class was first modeled as a probability layer, then combined through a hierarchical decision tree applying tree canopy cover, tree canopy height, and a minimum mapping unit to assign a single class to every pixel.",
+    disclaimer: "This layer is a modeled classification from satellite data and has not been field-verified at every location. Provided as is for landscape-scale analysis, it should not be used as a legal or authoritative determination of land cover, tenure, or boundaries.",
+    resolution: "30 meters",
+    source: "SIGnal land cover \u2014 Saah, D., Tenneson, K., Poortinga, A., Nguyen, Q., Chishtie, F., Aung, K. S., Markert, K. N., Clinton, N., Anderson, E. R., Cutter, P., Goldstein, J., Housman, I. W., Bhandari, B., Potapov, P. V., Matin, M., Uddin, K., Pham, H. N., Khanal, N., Maharjan, S., ... Ganz, D. (2020). Primitives as building blocks for constructing land cover maps. International Journal of Applied Earth Observation and Geoinformation, 85, 101979. https://doi.org/10.1016/j.jag.2019.101979"
+  },
+  "disaster-risk": {
+    name: "Natural disaster risk",
+    category: "Site information",
+    dateOfContent: "Dynamic",
+    description: "Flood: The GAR Atlas global flood hazard assessment uses a probabilistic approach for modelling riverine flood major river basins around the globe. This has been possible after compiling a global database of stream-flow data, merging different sources and gathering more than 8000 stations over the globe in order to calculate the range of possible discharges from very low to the maximum possible scales at different locations along the rivers. The calculated discharges were introduced in the river sections to model water levels downstream. This procedure allowed for the determination of stochastic event-sets of riverine floods from which hazard maps for 100 return periods were obtained. The hazard maps are developed at 1kmx1km resolution and have been validated against satellite flood footprints from different sources (DFO archive, UNOSAT flood portal) performing well especially for big events For smaller events (lower return periods), the GAR Atlas flood hazard maps tend to overestimate with respect to similar maps produced locally (hazard maps where available for some countries and were used as benchmark). The main issue being that, due to the resolution, the GAR Atlas flood hazard maps do not take into account flood defenses that are normally present to preserve the value exposed to floods. More information about the flood hazard assessment can be found in the background paper (Rudari et al., 2015).\n\nLandslide: The Global Landslide Hazard Distribution is a 2.5 minute grid of global landslide and snow avalanche hazards based upon work of the Norwegian Geotechnical Institute (NGI). The hazards mapping of NGI incorporates a range of data including slope, soil, soil moisture conditions, precipitation, seismicity, and temperature. Shuttle Radar Topography Mission (SRTM) elevation data at 30 seconds resolution are also incorporated. Hazards values less than or equal to 4 are considered negligible and only values 5 through 9 are utilized in further analyses. To ensure compatibility with other data sets, value 1 is added to each of the values to provide a hazard ranking ranging 6 through 10 in increasing hazard. This data set is the result of collaboration among the Columbia University Center for Hazards and Risk Research (CHRR), Norwegian Geotechnical Institute (NGI), and Columbia University Center for International Earth Science and Information Network (CIESIN).\n\nDrought: The Global Drought Hazard Frequency and Distribution is a 2.5 minute grid based upon the International Research Institute for Climate Prediction's (IRI) Weighted Anomaly of Standardized Precipitation (WASP). Utilizing average monthly precipitation data from 1980 through 2000 at a resolution of 2.5 degrees, WASP assesses the precipitation deficit or surplus over a three month temporal window that is weighted by the magnitude of the seasonal cyclic variation in precipitation. The three months' averages are derived from the precipitation data and the median rainfall for the 21 year period is calculated for each grid cell. Grid cells where the three month running average of precipitation is less than 1 mm per day ae excluded. Drought events are identified when the magnitude of a monthly precipitation deficit is less than or equal to 50 percent of its longterm median value for three or more consecutive months. Grid cells are then divided into 10 classes having an approximately equal number of grid cells. Higher grid cell values denote higher frequencies of drought occurrences. This data set is the result of collaboration among the Columbia University Center for Hazards and Risk Research (CHRR), Columbia University International Research Institute for Climate Prediction (IRI), and Columbia University Center for International Earth Science Information Network (CIESIN).\n\nTropical typhoon: The Global Cyclone Hazard Frequency and Distribution is a 2.5 minute grid based on more than 1,600 storm tracks for the period 1 January 1980 through 31 December 2000 for the Atlantic, Pacific, and Indian Oceans that were assembled and modeled at UNEP/GRID-Geneva PreView. Windspeeds around storm tracks were modeled using Holland's model (1997) to assess the grid cells likely to have been exposed to high wind levels. Post-modeling, the cells were divided into deciles, 10 classes consisting of approximately equal number of grid cells. The higher the value of the grid cell, the higher the decile ranking and the greater the frequency of the hazard relative to other cells. This data set is the result of collaboration among the Columbia University Center for Hazards and Risk Research (CHRR), International Bank for Reconstruction and Development/The World Bank, United Nations Environment Programme Global Resource Information Database Geneva (UNEP/GRID-Geneva), and Columbia University Center for International Earth Science Information Network (CIESIN).",
+    disclaimer: "Data classification needs refinement (per GUI doc).",
+    resolution: "N/A",
+    source: "ADPC"
+  },
+  "biodiversity-aoh": {
+    name: "Habitat area (Area of Habitat)",
+    category: "Nature",
+    dateOfContent: "",
+    description: "The Area of Habitat (AOH) refers to the accessible habitat within a species' range. Unlike mere range maps, AOH maps showcase where a species might likely dwell within its range, which minimizes inaccuracies. These maps are crafted by removing unsuitable habitats from a species' range, based on its known habitat preferences and elevation tolerances. Comprehensive AOH maps have been previously developed for mammals, amphibians, and certain birds. The portion of a species\u2019 range depicted in the AOH can differ due to various factors, including the techniques used to link species with their habitats, the detail of the range map, the species' geographical distribution, and specifics about its habitat preference and elevation boundaries.",
+    disclaimer: "",
+    resolution: "",
+    source: "Brooks, T. M., Pimm, S. L., Ak\u00e7akaya, H. R., Buchanan, G. M., Butchart, S. H. M., Foden, W., Hilton-Taylor, C., Hoffmann, M., Jenkins, C. N., Joppa, L., Li, B. V., Menon, V., Ocampo-Pe\u00f1uela, N., & Rondinini, C. (2019). Measuring terrestrial area of habitat (AOH) and its utility for the IUCN Red List. Trends in Ecology & Evolution, 34(11), 977\u2013986. https://doi.org/10.1016/j.tree.2019.06.009"
+  },
+  "species-occurrence": {
+    name: "Species occurrences",
+    category: "Nature",
+    dateOfContent: "",
+    description: "",
+    disclaimer: "",
+    resolution: "",
+    source: "GBIF"
+  },
+  "flii": {
+    name: "Forest Landscape Integrity Index",
+    category: "Nature",
+    dateOfContent: "2020",
+    description: "The Forest Landscape Integrity Index integrates data on observed and inferred forest pressures and lost forest connectivity to generate the first globally-consistent, continuous index of forest integrity as determined by degree of anthropogenic modification.",
+    disclaimer: "The FLII estimates forest integrity based on a number of factors known to influence forest condition, but does not represent directly observed measurements of forest integrity and thus mayu contain innaccuracies. In particular, it treats all observed fires as \"natural\" and thus does not consider them evidence of observed human pressure, despite many fires being deliberately caused by humans. Similarly, activities that occured pre-2000 - such as historical logging - are not considered in the FLII.",
+    resolution: "30 m",
+    source: "Forest Landscape Integrity Index \u2014 Grantham, H. S., A. Duncan, T. D. Evans, K. R. Jones, H. L. Beyer, R. Schuster, J. Walston, et al. \u2018Anthropogenic Modification of Forests Means Only 40% of Remaining Forests Have High Ecosystem Integrity\u2019. Nature Communications 11, no. 1 (8 December 2020): 5978. https://doi.org/10.1038/s41467-020-19493-3."
+  },
+  "carbon-pools": {
+    name: "Carbon pools (biomass & soil organic carbon)",
+    category: "Climate",
+    dateOfContent: "2024 (biomass); dynamic (soil organic carbon)",
+    description: "Above ground biomass: Above Ground Biomass (AGB) represents the mass of living vegetation above the soil surface. This spatially complete layer, suitable for baseline carbon assessments, is created by combining sparse spaceborne LiDAR measurements from GEDI with high-resolution Google satellite embeddings. These embeddings guide the spatial interpolation of GEDI's footprint data, allowing biomass to be consistently predicted across the entire landscape, even in unsampled areas. Because this process relies on modeling and interpolation, pixel values should be treated as estimates with calibrated uncertainty rather than direct measurements.\n\nSoil organic carbon: Soil organic carbon content in \u00d7 5 g / kg (to convert to % divide by 2) at 6 standard depths (0, 10, 30, 60, 100 and 200 cm) at 250 m resolution",
+    disclaimer: "This layer provides modeled biomass estimates from satellite data and has not been field-verified at every location.",
+    resolution: "100 meters (biomass); 250 meters (soil organic carbon)",
+    source: "GEDI L4A biomass with Google satellite embeddings; SoilGrids / Maxwell et al. (2023) mangrove SOC 30 m \u2014 Maxwell, T.L. et al. (2023) Global mangrove soil organic carbon 30 m."
+  },
+  "soil-groups": {
+    name: "Soil classification (WRB 2006)",
+    category: "Climate",
+    dateOfContent: "Dynamic",
+    description: "The soil classification is based on the World Reference Base for Soil Resources (WRB) 2006, an international soil classification system developed by the International Union of Soil Sciences (IUSS). WRB provides a standardized framework for describing and classifying soils worldwide, enabling consistent soil mapping and comparison across countries and regions. The data layer is sourced from SoilGrids and is publicly accessible at https://soilgrids.org/.",
+    disclaimer: "The classification provides a standardized international soil nomenclature and should not be interpreted as a substitute for site-specific soil surveys or field verification",
+    resolution: "250 meters",
+    source: "ISRIC \u2014 World Reference Base (2006) Soil Groups \u2014 IUSS Working Group WRB. 2007. World Reference Base for Soil Resources 2006, first update 2007. World Soil Resources Reports No. 103. FAO, Rome."
+  },
+  "annual-precipitation": {
+    name: "Annual precipitation",
+    category: "Climate",
+    dateOfContent: "Dynamic",
+    description: "Annual precipitation data is important in the context of Natural-based Solution project prepration. It can shows variability in water availability, plant selection, soil conservation, habitat suitability and economic viability as well. This data shows annual preciptation, taken from WorldClim data. WorldClim is a set of global climate layers (gridded climate data) with a spatial resolution of about 1 square kilometer.",
+    disclaimer: "",
+    resolution: "N/A",
+    source: "WorldClim"
+  },
+  "annual-temperature": {
+    name: "Annual mean temperature",
+    category: "Climate",
+    dateOfContent: "Dynamic",
+    description: "Temperature information is pivotal in nature-based solution projects, particularly for avoided deforestation and ecosystem restoration, as it guides species selection, aiding in the resilience of local ecosystems to climate change. It facilitates the monitoring of project success, carbon sequestration estimation, and risk assessment related to climate change impacts, ensuring project effectiveness. This data shows average annual temperature, taken from WorldClim data. WorldClim is a set of global climate layers (gridded climate data) with a spatial resolution of about 1 square kilometer.",
+    disclaimer: "",
+    resolution: "N/A",
+    source: "WorldClim"
+  },
+  "burned-area": {
+    name: "Historical burned area",
+    category: "Climate",
+    dateOfContent: "Dynamic",
+    description: "Burned area becomes important to visualise due to when peatlands burn, huge amount of stored carbon is released and it is difficult to control and extinguish. This type of information can provide early detection and rapid response systems to rehabilitate degraded peatland ecosystems",
+    disclaimer: "",
+    resolution: "N/A",
+    source: "MODIS MCD64A1"
+  },
+  "kba": {
+    name: "Key Biodiversity Area",
+    category: "Nature",
+    dateOfContent: "2022",
+    description: "Key Biodiversity Areas, which are among the most incredible and diverse places on Earth for nature, from deserts to the middle of the ocean, are sites of global importance to the planet\u2019s overall health and the persistence of biodiversity. The Key Biodiversity Area Partnership \u2014 an ambitious partnership of 13 global conservation organizations \u2014 is helping prevent the rapid loss of biodiversity by supporting nationally led efforts to identify these places on the planet that are critical for the survival of unique plants and animals, and the ecological communities they comprise.",
+    disclaimer: "Key Biodiversity Area data are taken from the World Database of Key Biodiversity Areas. While it represents the most comprehensive global database of these sites, in some cases there may be inaccuracies and differences from national datasets.",
+    resolution: "N/A",
+    source: "BirdLife International (2023) World Database of Key Biodiversity Areas. Developed by the KBA Partnership: BirdLife International, International Union for the Conservation of Nature, American Bird Conservancy, Amphibian Survival Alliance, Conservation International, Critical Ecosystem Partnership Fund, Global Environment Facility, Re:wild, NatureServe, Rainforest Trust, Royal Society for the Protection of Birds, Wildlife Conservation Society and World Wildlife Fund. March 2023 version. Available at http://keybiodiversityareas.org/kba-data/request"
+  }
+};
+if (typeof window !== 'undefined') window.NBS_LAYER_INFO = NBS_LAYER_INFO;
+
 const NBS_ANALYSIS = (() => {
 
 /* ---- Step 2 — Site Characterisation context panes ---- */
@@ -67,7 +219,7 @@ const GC_ICONS = {
   layers: '<path d="M11.99 18.54l-7.37-5.73L3 14.07l9 7 9-7-1.63-1.27-7.38 5.74zM12 16l7.36-5.73L21 9l-9-7-9 7 1.63 1.27L12 16z"/>',
   warning: '<path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>',
   paw: '<circle cx="4.5" cy="9.5" r="2.5"/><circle cx="9" cy="5.5" r="2.5"/><circle cx="15" cy="5.5" r="2.5"/><circle cx="19.5" cy="9.5" r="2.5"/><path d="M17.34 14.86c-.87-1.02-1.6-1.89-2.48-2.91-.46-.54-1.05-1.08-1.75-1.32-.11-.04-.22-.07-.33-.09-.25-.04-.52-.04-.78-.04s-.53 0-.79.05c-.11.02-.22.05-.33.09-.7.24-1.28.78-1.75 1.32-.87 1.02-1.6 1.89-2.48 2.91-1.31 1.31-2.92 2.76-2.62 4.79.29 1.02 1.02 2.03 2.33 2.32.73.15 3.06-.44 5.54-.44h.18c2.48 0 4.81.58 5.54.44 1.31-.29 2.04-1.31 2.33-2.32.31-2.04-1.3-3.49-2.61-4.8z"/>',
-  eye: '<path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>',
+  eye: '<path d="M11,6H13V13H11V6M9,20A1,1 0 0,1 8,21H5A1,1 0 0,1 4,20V15L6,6H10V13A1,1 0 0,1 9,14V20M10,5H7V3H10V5M15,20V14A1,1 0 0,1 14,13V6H18L20,15V20A1,1 0 0,1 19,21H16A1,1 0 0,1 15,20M14,5V3H17V5H14Z"/>',
   shield: '<path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>',
   chart: '<path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>',
   pin: '<path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>',
@@ -77,15 +229,22 @@ const GC_ICONS = {
   thermo: '<path d="M15 13V5c0-1.66-1.34-3-3-3S9 3.34 9 5v8c-1.21.91-2 2.37-2 4 0 2.76 2.24 5 5 5s5-2.24 5-5c0-1.63-.79-3.09-2-4zm-4-8c0-.55.45-1 1-1s1 .45 1 1h-1v1h1v1h-1v1h1v1h-2V5z"/>',
   fire: '<path d="M13.5.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5.67zM11.71 19c-1.78 0-3.22-1.4-3.22-3.14 0-1.62 1.05-2.76 2.81-3.12 1.77-.36 3.6-1.21 4.62-2.58.39 1.29.59 2.65.59 4.04 0 2.65-2.15 4.8-4.8 4.8z"/>',
 };
-const gcHead = (t, ic) => `
-          <div class="gc-card__head"><span class="gc-hchip"><svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">${GC_ICONS[ic] || ''}</svg></span><h4>${t}</h4><svg class="gc-info" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="More information"><path d="M9.99935 18.3332C14.6017 18.3332 18.3327 14.6022 18.3327 9.99984C18.3327 5.39746 14.6017 1.6665 9.99935 1.6665C5.39698 1.6665 1.66602 5.39746 1.66602 9.99984C1.66602 14.6022 5.39698 18.3332 9.99935 18.3332Z" fill="currentColor"></path><path d="M10 13.3332V9.99984M10 6.6665H10.0083" stroke="white" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>`;
+const gcInfo = (key) => `<svg class="gc-info"${key ? ` data-layer-info="${key}"` : ''} viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" role="button" tabindex="0" aria-label="More information"><path d="M9.99935 18.3332C14.6017 18.3332 18.3327 14.6022 18.3327 9.99984C18.3327 5.39746 14.6017 1.6665 9.99935 1.6665C5.39698 1.6665 1.66602 5.39746 1.66602 9.99984C1.66602 14.6022 5.39698 18.3332 9.99935 18.3332Z" fill="currentColor"></path><path d="M10 13.3332V9.99984M10 6.6665H10.0083" stroke="white" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path></svg>`;
+/* The "i" belongs to whatever a reader would look it up by. A card with a single
+   subject carries it in the head; a card holding several (Administration +
+   Protection/zoning status, …) carries one per sub-title instead — pass
+   key=false to gcHead and build those sub-titles with gcSub(title, key).
+   The key names a row in NBS_LAYER_INFO below (the dataset catalogue). */
+const gcHead = (t, ic, key) => `
+          <div class="gc-card__head"><span class="gc-hchip"><svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">${GC_ICONS[ic] || ''}</svg></span><h4>${t}</h4>${key === false ? '' : gcInfo(key)}</div>`;
+const gcSub = (t, key) => `<h5 class="gc-sub gc-sub--info">${t}${gcInfo(key)}</h5>`;
 
 const siteGeneral = `
         <div class="ctx-pane" data-ctx="general">
           <div class="gc">
 
             <!-- 1 · Ecosystem type identification -->
-            <section class="gc-card">${gcHead('Ecosystem type identification', 'globe')}
+            <section class="gc-card">${gcHead('Ecosystem type identification', 'globe', 'ecosystem-type')}
               <div class="gc-eco">
                 <figure class="gc-eco__map"><img src="${GC_ASSETS}/map-eco.png" alt="Ecosystem map of the selected area" /></figure>
                 <div class="gc-eco__side">
@@ -107,9 +266,9 @@ const siteGeneral = `
             </section>
 
             <!-- 2 · Administration and zoning status -->
-            <section class="gc-card">${gcHead('Administration and Zoning Status Information', 'gov')}
+            <section class="gc-card">${gcHead('Administration and Zoning Status Information', 'gov', false)}
               <div class="gc-block">
-                <h5 class="gc-sub">Administration</h5>
+                ${gcSub('Administration')}
                 <p class="gc-p">This project area is located in <b>Banjar, Buleleng, Bali, 150,000 ha</b><br />The project area intersects <b>3</b> sub-districts. The table below shows each sub-district and its overlapping area.</p>
                 <table class="gc-table">
                   <thead><tr><th>Sub-district</th><th>District</th><th>Province</th><th>Area ha</th></tr></thead>
@@ -122,13 +281,13 @@ const siteGeneral = `
                 <p class="gc-note-it">See all completed administrative boundaries of your project in the <a href="#">Feasibility study document</a></p>
               </div>
               <div class="gc-block">
-                <h5 class="gc-sub">Protection/zoning status</h5>
+                ${gcSub('Protection/zoning status', 'protected-area')}
                 <p class="gc-p">This project area overlaps with 30,000 hectares of protected areas (20% of the AOI). The protected area within the polygon is designated for <b>Taman Wisata Alam (nature recreation park)</b></p>
               </div>${gcAlert}${gcSource('Administrative boundaries', 'Badan Informasi Geospasial (BIG)', '2024')}
             </section>
 
             <!-- 3 · Terrain -->
-            <section class="gc-card">${gcHead('Terrain', 'landscape')}
+            <section class="gc-card">${gcHead('Terrain', 'landscape', 'terrain')}
               <figure class="gc-terrain"><img src="${GC_ASSETS}/terrain.jpg" alt="3D terrain render of the selected area" /></figure>
               <div class="gc-block">
                 <p class="gc-p gc-p--lg">Elevation ranges from 45 to 1,860 m above sea level (asl), predominantly upland (500&ndash;1,000 m), and the slope of the area consists of:</p>
@@ -143,13 +302,13 @@ const siteGeneral = `
             </section>
 
             <!-- 4 · Deforestation analysis -->
-            <section class="gc-card">${gcHead('Deforestation analysis', 'tree')}
+            <section class="gc-card">${gcHead('Deforestation analysis', 'tree', false)}
               <div class="gc-block">
                 <div class="gc-def">
                   <figure class="gc-def__map"><img src="${GC_ASSETS}/map-defor.png" alt="Historical deforestation map" /></figure>
                   <div class="gc-def__side">
                     <div>
-                      <h5 class="gc-sub">Historical Deforestation</h5>
+                      ${gcSub('Historical Deforestation', 'deforestation-2014-2024')}
                       <p class="gc-p">Between 2014 and 2024, the project area lost <b>6,720 ha</b> of forest, an average of</p>
                       <p class="gc-big">1.2<small>% / year</small></p>
                     </div>
@@ -162,7 +321,7 @@ const siteGeneral = `
                   <figure class="gc-def__map gc-def__map--plain"><img src="${GC_ASSETS}/map-risk.png" alt="National deforestation risk map" /></figure>
                   <div class="gc-def__side">
                     <div>
-                      <h5 class="gc-sub">Deforestation Risk Index</h5>
+                      ${gcSub('Deforestation Risk Index', 'deforestation-risk')}
                       <p class="gc-p">Deforestation risk is mapped as a continuous index from <b>0</b> (lowest) to <b>1</b> (highest). Forest in this area averages <b>0.85</b>, higher than the national average &mdash; the top <b>15%</b> of the country&rsquo;s forest by deforestation risk.</p>
                     </div>
                     <div class="gc-chip gc-chip--ramp"><span>Deforestation risk index</span><span>0<i></i>1</span></div>
@@ -172,7 +331,7 @@ const siteGeneral = `
             </section>
 
             <!-- 5 · Landcover -->
-            <section class="gc-card">${gcHead('Landcover', 'layers')}
+            <section class="gc-card">${gcHead('Landcover', 'layers', 'land-cover-2024')}
               <div class="gc-block">
                 <p class="gc-p">The major land cover categories in the selected area are:</p>
                 <div class="gc-lcgrid">
@@ -188,7 +347,7 @@ const siteGeneral = `
             </section>
 
             <!-- 6 · Natural disaster risk -->
-            <section class="gc-card">${gcHead('Natural Disaster Risk', 'warning')}
+            <section class="gc-card">${gcHead('Natural Disaster Risk', 'warning', 'disaster-risk')}
               <div class="gc-block">
                 <p class="gc-p">The selected area is susceptible to several natural disaster risks, including:</p>
                 <div class="gc-ndgrid">
@@ -221,7 +380,7 @@ const siteNature = `
           <div class="gc">
 
             <!-- 1 · Habitat area -->
-            <section class="gc-card">${gcHead('Habitat Area', 'paw')}
+            <section class="gc-card">${gcHead('Habitat Area', 'paw', 'biodiversity-aoh')}
               <div class="gc-block">
                 <p class="gc-p">The project area is a suitable habitat for a wide range of wildlife, including</p>
                 <div class="nc-habitat">
@@ -237,7 +396,7 @@ const siteNature = `
             </section>
 
             <!-- 2 · Indicative key species presence -->
-            <section class="gc-card">${gcHead('Indicative Key Species Presence', 'eye')}
+            <section class="gc-card">${gcHead('Indicative Key Species Presence', 'eye', 'species-occurrence')}
               <div class="gc-block">
                 <p class="gc-p">There are keystone species throughout the project area. The species featured are:</p>
                 <div class="nc-splists">
@@ -260,7 +419,7 @@ ${ncSpecies('sp-reptile', 'Reptilia', '#1d9e75', [['Reticulated Python','Malayop
             </section>
 
             <!-- 4 · Forest Landscape Integrity Index -->
-            <section class="gc-card">${gcHead('Forest Landscape Integrity Index', 'chart')}
+            <section class="gc-card">${gcHead('Forest Landscape Integrity Index', 'chart', 'flii')}
               <div class="nc-flii">
                 <p class="gc-p">Within the forest in this area, <b>68%</b> has high landscape integrity, <b>24%</b> medium, and <b>8%</b> low. The forest is predominantly high integrity, indicating largely intact and well-connected forest under low human pressure.</p>
                 <div class="nc-score">
@@ -282,7 +441,7 @@ ${ncSpecies('sp-reptile', 'Reptilia', '#1d9e75', [['Reticulated Python','Malayop
             </section>
 
             <!-- 5 · Key Biodiversity Area -->
-            <section class="gc-card">${gcHead('Key Biodiversity Area', 'pin')}
+            <section class="gc-card">${gcHead('Key Biodiversity Area', 'pin', 'kba')}
               <div class="gc-block">
                 <p class="gc-p">This project area overlaps with <b>19,500 ha (13.0% of total AOI area)</b> of Key Biodiversity Areas, across <b>2</b> sites. The largest is <b>West Bali National Park (4,512.3 ha)</b>, followed by <b>Batukaru Ridge Forest (1,776.7 ha)</b>. Key Biodiversity Areas are sites that contribute significantly to the global persistence of biodiversity.</p>
                 <div class="nc-kba">
@@ -325,16 +484,16 @@ const siteClimate = `
           <div class="gc">
 
             <!-- 1 · Carbon information -->
-            <section class="gc-card gc-card--blue">${gcHead('Carbon information', 'cloud')}
+            <section class="gc-card gc-card--blue">${gcHead('Carbon information', 'cloud', false)}
               <div class="gc-block">
-                <h5 class="gc-sub">Current Carbon Storage Total</h5>
+                ${gcSub('Current Carbon Storage Total', 'carbon-pools')}
                 <div class="cl-carbon">
                   <p class="gc-p">The area hosts extensive carbon sinks that currently store <b>27,193,712.20</b> tCO<sub>2</sub>e, adding to the vital fight against global warming.</p>
                   <div class="cl-total"><span>Total Carbon Storage:</span><b>27,193,712.20 <em>tCO<sub>2</sub>e</em></b></div>
                 </div>
               </div>
               <div class="gc-block">
-                <h5 class="gc-sub">Type of Carbon (Carbon Pool) within the area:</h5>
+                ${gcSub('Type of Carbon (Carbon Pool) within the area:', 'carbon-pools')}
                 <div class="cl-pool">
                   <figure class="cl-pool__scene">
                     <div class="cl-pool__top">
@@ -355,7 +514,7 @@ const siteClimate = `
             </section>
 
             <!-- 2 · Soil classification -->
-            <section class="gc-card gc-card--blue">${gcHead('Soil classification', 'terrain')}
+            <section class="gc-card gc-card--blue">${gcHead('Soil classification', 'terrain', 'soil-groups')}
               <div class="gc-block">
                 <p class="gc-p">Based on the World Reference Base for Soil Resources (WRB) 2006, the soils in this area are predominantly <b>Andosols</b>. The distribution of all identified soil types is presented below.</p>
                 <div class="cl-soil">
@@ -377,17 +536,17 @@ const siteClimate = `
             </section>
 
             <!-- 3 · The annual climate ledger -->
-            <section class="gc-card gc-card--blue">${gcHead('The Annual Climate Ledger', 'thermo')}
+            <section class="gc-card gc-card--blue">${gcHead('The Annual Climate Ledger', 'thermo', false)}
               <div class="cl-ledger">
                 <div class="cl-metric">
                   <span class="cl-metric__ic" style="background:#125e92"><img src="${CL_ASSETS}/ic-rain.svg" alt="" /></span>
-                  <h5 class="gc-sub">Annual precipitation</h5>
+                  ${gcSub('Annual precipitation', 'annual-precipitation')}
                   <p class="gc-p">Annual precipitation in the selected area ranges from 45 to 320 mm per month, with an annual total of 2,000 mm and 4 dry months.</p>
 ${clChart([127.2,115.3,99.4,59.6,39.8,27.8,21.9,17.9,27.8,51.7,87.5,119.3], 159, MONTHS, [400,300,200,100,0], 'Precipitation (mm)', 'cl-chart--prec')}
                 </div>
                 <div class="cl-metric">
                   <span class="cl-metric__ic" style="background:#4591c5"><img src="${CL_ASSETS}/ic-temp.svg" alt="" /></span>
-                  <h5 class="gc-sub">Annual mean temperature</h5>
+                  ${gcSub('Annual mean temperature', 'annual-temperature')}
                   <p class="gc-p">Annual mean temperature in the selected area ranges from 26.4&deg;C to 27.4&deg;C with an average of 26.9&deg;C</p>
 ${clChart([104.9,105.7,106.9,108.5,108.9,107.3,105.3,104.9,106.9,108.9,108.5,106.5], 159, MONTHS, [40,30,20,10,0], 'Temperatures (c)', 'cl-chart--temp')}
                 </div>
@@ -395,7 +554,7 @@ ${clChart([104.9,105.7,106.9,108.5,108.9,107.3,105.3,104.9,106.9,108.9,108.5,106
             </section>
 
             <!-- 4 · Historical burned area -->
-            <section class="gc-card gc-card--red">${gcHead('Historical Burned Area', 'fire')}
+            <section class="gc-card gc-card--red">${gcHead('Historical Burned Area', 'fire', 'burned-area')}
               <div class="cl-fire">
                 <div class="cl-fire__graph">
                   <p class="gc-p">This shows how likely the land is to burn under baseline conditions, based on factors such as land cover, dryness, and climate. It is not a forecast of current fire danger.</p>
@@ -674,41 +833,41 @@ const benefitTabs = `
 
 const benefitPanels = `
   <section class="tabpanel active" id="nature" role="tabpanel">
-    <article class="scard">
+    <article class="scard split" data-method="Assessed structurally with Morphological Spatial Pattern Analysis (MSPA) in GuidosToolbox, run on a binary habitat mask derived from the 2024 land cover map plus a surrounding landscape buffer. MSPA classifies each habitat pixel into structural types (core, edge, perforation, bridge, loop, branch and islet).">
       <span class="corner"></span>
       <div class="card-head">
         <span class="card-ic"><svg class="ic" width="21" height="21" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" d="M1 2.5A1.5 1.5 0 0 1 2.5 1h1A1.5 1.5 0 0 1 5 2.5h4.134a1 1 0 1 1 0 1h-2.01q.269.27.484.605C8.246 5.097 8.5 6.459 8.5 8c0 1.993.257 3.092.713 3.7.356.476.895.721 1.787.784A1.5 1.5 0 0 1 12.5 11h1a1.5 1.5 0 0 1 1.5 1.5v1a1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5H6.866a1 1 0 1 1 0-1h1.711a3 3 0 0 1-.165-.2C7.743 11.407 7.5 10.007 7.5 8c0-1.46-.246-2.597-.733-3.355-.39-.605-.952-1-1.767-1.112A1.5 1.5 0 0 1 3.5 5h-1A1.5 1.5 0 0 1 1 3.5zM2.5 2a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm10 10a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5z"/></svg></span>
-        <div class="card-tt"><h3>Maintenance of ecological connectivity</h3><div class="tagrow"><span class="pw pw-protect">Protect</span><span class="pw pw-manage">Manage</span><span class="pw pw-restore">Restore</span></div></div><svg class="card-info" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="More information" tabindex="0"><path d="M9.99935 18.3332C14.6017 18.3332 18.3327 14.6022 18.3327 9.99984C18.3327 5.39746 14.6017 1.6665 9.99935 1.6665C5.39698 1.6665 1.66602 5.39746 1.66602 9.99984C1.66602 14.6022 5.39698 18.3332 9.99935 18.3332Z" fill="currentColor"></path><path d="M10 13.3332V9.99984M10 6.6665H10.0083" stroke="white" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        <div class="card-tt"><h3>Maintenance of ecological connectivity</h3><div class="tagrow"><span class="pw pw-protect">Protect</span><span class="pw pw-manage">Manage</span><span class="pw pw-restore">Restore</span></div></div><svg class="card-info" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" role="button" aria-label="More information" tabindex="0"><path d="M9.99935 18.3332C14.6017 18.3332 18.3327 14.6022 18.3327 9.99984C18.3327 5.39746 14.6017 1.6665 9.99935 1.6665C5.39698 1.6665 1.66602 5.39746 1.66602 9.99984C1.66602 14.6022 5.39698 18.3332 9.99935 18.3332Z" fill="currentColor"></path><path d="M10 13.3332V9.99984M10 6.6665H10.0083" stroke="white" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path></svg>
       </div>
       <div class="metric"><div class="metric-main"><span class="mnum">880</span><span class="munit">ha</span></div><div class="metric-lab">contiguous habitat kept connected</div></div><div class="narr"><p>Conserving this <b>forest</b> ecosystem keeps an estimated <b>880 ha</b> block of natural habitat intact and safeguards its role as a connector in the surrounding landscape. Based on the site structure, <b>210 ha (&asymp; 24%)</b> of the area functions as a corridor linking separate habitat cores. Protecting it prevents the fragmentation that would likely occur under current deforestation pressure over the <b>30-year</b> project period.</p></div>
     </article><article class="scard">
       <span class="corner"></span>
       <div class="card-head">
         <span class="card-ic"><svg class="ic" width="21" height="21" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M.036 3.314a.5.5 0 0 1 .65-.278l1.757.703a1.5 1.5 0 0 0 1.114 0l1.014-.406a2.5 2.5 0 0 1 1.857 0l1.015.406a1.5 1.5 0 0 0 1.114 0l1.014-.406a2.5 2.5 0 0 1 1.857 0l1.015.406a1.5 1.5 0 0 0 1.114 0l1.757-.703a.5.5 0 1 1 .372.928l-1.758.703a2.5 2.5 0 0 1-1.857 0l-1.014-.406a1.5 1.5 0 0 0-1.114 0l-1.015.406a2.5 2.5 0 0 1-1.857 0l-1.014-.406a1.5 1.5 0 0 0-1.114 0l-1.015.406a2.5 2.5 0 0 1-1.857 0L.314 3.964a.5.5 0 0 1-.278-.65m0 3a.5.5 0 0 1 .65-.278l1.757.703a1.5 1.5 0 0 0 1.114 0l1.014-.406a2.5 2.5 0 0 1 1.857 0l1.015.406a1.5 1.5 0 0 0 1.114 0l1.014-.406a2.5 2.5 0 0 1 1.857 0l1.015.406a1.5 1.5 0 0 0 1.114 0l1.757-.703a.5.5 0 1 1 .372.928l-1.758.703a2.5 2.5 0 0 1-1.857 0l-1.014-.406a1.5 1.5 0 0 0-1.114 0l-1.015.406a2.5 2.5 0 0 1-1.857 0l-1.014-.406a1.5 1.5 0 0 0-1.114 0l-1.015.406a2.5 2.5 0 0 1-1.857 0L.314 6.964a.5.5 0 0 1-.278-.65m0 3a.5.5 0 0 1 .65-.278l1.757.703a1.5 1.5 0 0 0 1.114 0l1.014-.406a2.5 2.5 0 0 1 1.857 0l1.015.406a1.5 1.5 0 0 0 1.114 0l1.014-.406a2.5 2.5 0 0 1 1.857 0l1.015.406a1.5 1.5 0 0 0 1.114 0l1.757-.703a.5.5 0 1 1 .372.928l-1.758.703a2.5 2.5 0 0 1-1.857 0l-1.014-.406a1.5 1.5 0 0 0-1.114 0l-1.015.406a2.5 2.5 0 0 1-1.857 0l-1.014-.406a1.5 1.5 0 0 0-1.114 0l-1.015.406a2.5 2.5 0 0 1-1.857 0L.314 9.964a.5.5 0 0 1-.278-.65m0 3a.5.5 0 0 1 .65-.278l1.757.703a1.5 1.5 0 0 0 1.114 0l1.014-.406a2.5 2.5 0 0 1 1.857 0l1.015.406a1.5 1.5 0 0 0 1.114 0l1.014-.406a2.5 2.5 0 0 1 1.857 0l1.015.406a1.5 1.5 0 0 0 1.114 0l1.757-.703a.5.5 0 1 1 .372.928l-1.758.703a2.5 2.5 0 0 1-1.857 0l-1.014-.406a1.5 1.5 0 0 0-1.114 0l-1.015.406a2.5 2.5 0 0 1-1.857 0l-1.014-.406a1.5 1.5 0 0 0-1.114 0l-1.015.406a2.5 2.5 0 0 1-1.857 0l-1.757-.703a.5.5 0 0 1-.278-.65"/></svg></span>
-        <div class="card-tt"><h3>Protection of watershed function</h3><div class="tagrow"><span class="pw pw-protect">Protect</span><span class="pw pw-manage">Manage</span><span class="pw pw-restore">Restore</span></div></div><svg class="card-info" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="More information" tabindex="0"><path d="M9.99935 18.3332C14.6017 18.3332 18.3327 14.6022 18.3327 9.99984C18.3327 5.39746 14.6017 1.6665 9.99935 1.6665C5.39698 1.6665 1.66602 5.39746 1.66602 9.99984C1.66602 14.6022 5.39698 18.3332 9.99935 18.3332Z" fill="currentColor"></path><path d="M10 13.3332V9.99984M10 6.6665H10.0083" stroke="white" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        <div class="card-tt"><h3>Protection of watershed function</h3><div class="tagrow"><span class="pw pw-protect">Protect</span><span class="pw pw-manage">Manage</span><span class="pw pw-restore">Restore</span></div></div><svg class="card-info" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" role="button" aria-label="More information" tabindex="0"><path d="M9.99935 18.3332C14.6017 18.3332 18.3327 14.6022 18.3327 9.99984C18.3327 5.39746 14.6017 1.6665 9.99935 1.6665C5.39698 1.6665 1.66602 5.39746 1.66602 9.99984C1.66602 14.6022 5.39698 18.3332 9.99935 18.3332Z" fill="currentColor"></path><path d="M10 13.3332V9.99984M10 6.6665H10.0083" stroke="white" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path></svg>
       </div>
-      <p class="def">Safeguarding this <b>forest</b> ecosystem helps protect the natural capacity of the landscape to capture, store, filter, and slowly release water. Keeping the site under healthy natural cover supports more stable river flow, lower erosion and sediment loads, and better water quality downstream.</p>
-    </article><article class="scard">
+      <p class="def" data-def>Safeguarding this <b>forest</b> ecosystem helps protect the natural capacity of the landscape to capture, store, filter, and slowly release water. Keeping the site under healthy natural cover supports more stable river flow, lower erosion and sediment loads, and better water quality downstream.</p>
+    </article><article class="scard split">
       <span class="corner"></span>
       <div class="card-head">
         <span class="card-ic"><svg class="ic" width="21" height="21" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M6.174 1.184a2 2 0 0 1 3.652 0A2 2 0 0 1 12.99 3.01a2 2 0 0 1 1.826 3.164 2 2 0 0 1 0 3.652 2 2 0 0 1-1.826 3.164 2 2 0 0 1-3.164 1.826 2 2 0 0 1-3.652 0A2 2 0 0 1 3.01 12.99a2 2 0 0 1-1.826-3.164 2 2 0 0 1 0-3.652A2 2 0 0 1 3.01 3.01a2 2 0 0 1 3.164-1.826M8 1a1 1 0 0 0-.998 1.03l.01.091q.017.116.054.296c.049.241.122.542.213.887.182.688.428 1.513.676 2.314L8 5.762l.045-.144c.248-.8.494-1.626.676-2.314.091-.345.164-.646.213-.887a5 5 0 0 0 .064-.386L9 2a1 1 0 0 0-1-1M2 9l.03-.002.091-.01a5 5 0 0 0 .296-.054c.241-.049.542-.122.887-.213a61 61 0 0 0 2.314-.676L5.762 8l-.144-.045a61 61 0 0 0-2.314-.676 17 17 0 0 0-.887-.213 5 5 0 0 0-.386-.064L2 7a1 1 0 1 0 0 2m7 5-.002-.03a5 5 0 0 0-.064-.386 16 16 0 0 0-.213-.888 61 61 0 0 0-.676-2.314L8 10.238l-.045.144c-.248.8-.494 1.626-.676 2.314-.091.345-.164.646-.213.887a5 5 0 0 0-.064.386L7 14a1 1 0 1 0 2 0m-5.696-2.134.025-.017a5 5 0 0 0 .303-.248c.184-.164.408-.377.661-.629A61 61 0 0 0 5.96 9.23l.103-.111-.147.033a61 61 0 0 0-2.343.572c-.344.093-.64.18-.874.258a5 5 0 0 0-.367.138l-.027.014a1 1 0 1 0 1 1.732zM4.5 14.062a1 1 0 0 0 1.366-.366l.014-.027q.014-.03.036-.084a5 5 0 0 0 .102-.283c.078-.233.165-.53.258-.874a61 61 0 0 0 .572-2.343l.033-.147-.11.102a61 61 0 0 0-1.743 1.667 17 17 0 0 0-.629.66 5 5 0 0 0-.248.304l-.017.025a1 1 0 0 0 .366 1.366m9.196-8.196a1 1 0 0 0-1-1.732l-.025.017a5 5 0 0 0-.303.248 17 17 0 0 0-.661.629A61 61 0 0 0 10.04 6.77l-.102.111.147-.033a61 61 0 0 0 2.342-.572c.345-.093.642-.18.875-.258a5 5 0 0 0 .367-.138zM11.5 1.938a1 1 0 0 0-1.366.366l-.014.027q-.014.03-.036.084a5 5 0 0 0-.102.283c-.078.233-.165.53-.258.875a61 61 0 0 0-.572 2.342l-.033.147.11-.102a61 61 0 0 0 1.743-1.667c.252-.253.465-.477.629-.66a5 5 0 0 0 .248-.304l.017-.025a1 1 0 0 0-.366-1.366M14 9a1 1 0 0 0 0-2l-.03.002a5 5 0 0 0-.386.064c-.242.049-.543.122-.888.213-.688.182-1.513.428-2.314.676L10.238 8l.144.045c.8.248 1.626.494 2.314.676.345.091.646.164.887.213a5 5 0 0 0 .386.064zM1.938 4.5a1 1 0 0 0 .393 1.38l.084.035q.108.045.283.103c.233.078.53.165.874.258a61 61 0 0 0 2.343.572l.147.033-.103-.111a61 61 0 0 0-1.666-1.742 17 17 0 0 0-.66-.629 5 5 0 0 0-.304-.248l-.025-.017a1 1 0 0 0-1.366.366m2.196-1.196.017.025a5 5 0 0 0 .248.303c.164.184.377.408.629.661A61 61 0 0 0 6.77 5.96l.111.102-.033-.147a61 61 0 0 0-.572-2.342c-.093-.345-.18-.642-.258-.875a5 5 0 0 0-.138-.367l-.014-.027a1 1 0 1 0-1.732 1m9.928 8.196a1 1 0 0 0-.366-1.366l-.027-.014a5 5 0 0 0-.367-.138c-.233-.078-.53-.165-.875-.258a61 61 0 0 0-2.342-.572l-.147-.033.102.111a61 61 0 0 0 1.667 1.742c.253.252.477.465.66.629a5 5 0 0 0 .304.248l.025.017a1 1 0 0 0 1.366-.366m-3.928 2.196a1 1 0 0 0 1.732-1l-.017-.025a5 5 0 0 0-.248-.303 17 17 0 0 0-.629-.661A61 61 0 0 0 9.23 10.04l-.111-.102.033.147a61 61 0 0 0 .572 2.342c.093.345.18.642.258.875a5 5 0 0 0 .138.367zM8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/></svg></span>
-        <div class="card-tt"><h3>Enhanced biodiversity and ecosystem function</h3><div class="tagrow"><span class="pw pw-protect">Protect</span><span class="pw pw-manage">Manage</span><span class="pw pw-restore">Restore</span></div></div><svg class="card-info" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="More information" tabindex="0"><path d="M9.99935 18.3332C14.6017 18.3332 18.3327 14.6022 18.3327 9.99984C18.3327 5.39746 14.6017 1.6665 9.99935 1.6665C5.39698 1.6665 1.66602 5.39746 1.66602 9.99984C1.66602 14.6022 5.39698 18.3332 9.99935 18.3332Z" fill="currentColor"></path><path d="M10 13.3332V9.99984M10 6.6665H10.0083" stroke="white" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        <div class="card-tt"><h3>Enhanced biodiversity and ecosystem function</h3><div class="tagrow"><span class="pw pw-protect">Protect</span><span class="pw pw-manage">Manage</span><span class="pw pw-restore">Restore</span></div></div><svg class="card-info" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" role="button" aria-label="More information" tabindex="0"><path d="M9.99935 18.3332C14.6017 18.3332 18.3327 14.6022 18.3327 9.99984C18.3327 5.39746 14.6017 1.6665 9.99935 1.6665C5.39698 1.6665 1.66602 5.39746 1.66602 9.99984C1.66602 14.6022 5.39698 18.3332 9.99935 18.3332Z" fill="currentColor"></path><path d="M10 13.3332V9.99984M10 6.6665H10.0083" stroke="white" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path></svg>
       </div>
-      <div class="metric"><div class="metric-main"><span class="mnum">620</span><span class="munit">ha</span></div><div class="metric-lab">suitable habitat safeguarded vs. BAU</div></div><p class="def">The systemic recovery of species richness, abundance, and complex ecological interactions, resulting in a highly resilient ecosystem capable of self-regulation and intense carbon sequestration.</p><div class="narr"><p>Conserving this <b>forest</b> ecosystem maintains an estimated <b>620 hectares</b> of suitable habitat, safeguarding habitat extent for species over the <b>30 year</b> of project&rsquo;s duration.</p></div><div class="formula"><code>avoided_loss_ha = &Sigma; (habitat pixel area &times; deforestation risk) across the project area</code></div>
-    </article><article class="scard">
+      <div class="metric"><div class="metric-main"><span class="mnum">620</span><span class="munit">ha</span></div><div class="metric-lab">suitable habitat safeguarded vs. BAU</div></div><p class="def" data-def="modal">The systemic recovery of species richness, abundance, and complex ecological interactions, resulting in a highly resilient ecosystem capable of self-regulation and intense carbon sequestration.</p><div class="narr"><p>Conserving this <b>forest</b> ecosystem maintains an estimated <b>620 hectares</b> of suitable habitat, safeguarding habitat extent for species over the <b>30 year</b> of project&rsquo;s duration.</p></div><div class="formula"><code>avoided_loss_ha = &Sigma; (habitat pixel area &times; deforestation risk) across the project area</code></div>
+    </article><article class="scard split">
       <span class="corner"></span>
       <div class="card-head">
         <span class="card-ic"><svg class="ic" width="21" height="21" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M8 16c3.314 0 6-2 6-5.5 0-1.5-.5-4-2.5-6 .25 1.5-1.25 2-1.25 2C11 4 9 .5 6 0c.357 2 .5 4-2 6-1.25 1-2 2.729-2 4.5C2 14 4.686 16 8 16m0-1c-1.657 0-3-1-3-2.75 0-.75.25-2 1.25-3C6.125 10 7 10.5 7 10.5c-.375-1.25.5-3.25 2-3.5-.179 1-.25 2 1 3 .625.5 1 1.364 1 2.25C11 14 9.657 15 8 15"/></svg></span>
-        <div class="card-tt"><h3>Reduced vulnerability to fire, pests, and disease</h3><div class="tagrow"><span class="pw pw-protect">Protect</span></div></div><svg class="card-info" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="More information" tabindex="0"><path d="M9.99935 18.3332C14.6017 18.3332 18.3327 14.6022 18.3327 9.99984C18.3327 5.39746 14.6017 1.6665 9.99935 1.6665C5.39698 1.6665 1.66602 5.39746 1.66602 9.99984C1.66602 14.6022 5.39698 18.3332 9.99935 18.3332Z" fill="currentColor"></path><path d="M10 13.3332V9.99984M10 6.6665H10.0083" stroke="white" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        <div class="card-tt"><h3>Reduced vulnerability to fire, pests, and disease</h3><div class="tagrow"><span class="pw pw-protect">Protect</span></div></div><svg class="card-info" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" role="button" aria-label="More information" tabindex="0"><path d="M9.99935 18.3332C14.6017 18.3332 18.3327 14.6022 18.3327 9.99984C18.3327 5.39746 14.6017 1.6665 9.99935 1.6665C5.39698 1.6665 1.66602 5.39746 1.66602 9.99984C1.66602 14.6022 5.39698 18.3332 9.99935 18.3332Z" fill="currentColor"></path><path d="M10 13.3332V9.99984M10 6.6665H10.0083" stroke="white" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path></svg>
       </div>
-      <div class="metric"><div class="metric-main"><span class="mnum">23</span><span class="munit">species</span></div><div class="metric-lab">reduced extinction risk (IUCN STAR)</div></div><p class="def">The systemic enhancement of ecosystem and community resilience against catastrophic environmental disturbances, biological infestations, and climate-driven pathogens.</p><div class="narr"><p>By protecting at-risk habitat, this project supports habitat for <b>23</b> species, including <b>35%</b> threatened species: <b>1</b> CR, <b>3</b> EN, and <b>4</b> VU. Over the project&rsquo;s <b>30</b> year duration, the intervention may reduce threat levels by protecting at least <b>80%</b> of habitat for <b>23</b> species through: boundary demarcation &amp; legal recognition, community-based patrol &amp; monitoring, and fire prevention &amp; early warning.</p></div>
-    </article><article class="scard">
+      <div class="metric"><div class="metric-main"><span class="mnum">23</span><span class="munit">species</span></div><div class="metric-lab">reduced extinction risk (IUCN STAR)</div></div><p class="def" data-def="modal">The systemic enhancement of ecosystem and community resilience against catastrophic environmental disturbances, biological infestations, and climate-driven pathogens.</p><div class="narr"><p>By protecting at-risk habitat, this project supports habitat for <b>23</b> species, including <b>35%</b> threatened species: <b>1</b> CR, <b>3</b> EN, and <b>4</b> VU. Over the project&rsquo;s <b>30</b> year duration, the intervention may reduce threat levels by protecting at least <b>80%</b> of habitat for <b>23</b> species through: boundary demarcation &amp; legal recognition, community-based patrol &amp; monitoring, and fire prevention &amp; early warning.</p></div>
+    </article><article class="scard split">
       <span class="corner"></span>
       <div class="card-head">
         <span class="card-ic"><svg class="ic" width="21" height="21" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" d="M0 0h1v15h15v1H0zm10 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V4.9l-3.613 4.417a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61L13.445 4H10.5a.5.5 0 0 1-.5-.5"/></svg></span>
-        <div class="card-tt"><h3>Improved forest productivity and regeneration</h3><div class="tagrow"><span class="pw pw-restore">Restore</span><span class="pw pw-manage">Manage</span></div></div><svg class="card-info" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="More information" tabindex="0"><path d="M9.99935 18.3332C14.6017 18.3332 18.3327 14.6022 18.3327 9.99984C18.3327 5.39746 14.6017 1.6665 9.99935 1.6665C5.39698 1.6665 1.66602 5.39746 1.66602 9.99984C1.66602 14.6022 5.39698 18.3332 9.99935 18.3332Z" fill="currentColor"></path><path d="M10 13.3332V9.99984M10 6.6665H10.0083" stroke="white" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        <div class="card-tt"><h3>Improved forest productivity and regeneration</h3><div class="tagrow"><span class="pw pw-restore">Restore</span><span class="pw pw-manage">Manage</span></div></div><svg class="card-info" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" role="button" aria-label="More information" tabindex="0"><path d="M9.99935 18.3332C14.6017 18.3332 18.3327 14.6022 18.3327 9.99984C18.3327 5.39746 14.6017 1.6665 9.99935 1.6665C5.39698 1.6665 1.66602 5.39746 1.66602 9.99984C1.66602 14.6022 5.39698 18.3332 9.99935 18.3332Z" fill="currentColor"></path><path d="M10 13.3332V9.99984M10 6.6665H10.0083" stroke="white" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path></svg>
       </div>
-      <div class="metric"><div class="metric-main"><span class="mnum">17</span><span class="munit">species</span></div><div class="metric-lab">expanded suitable habitat (IUCN STAR)</div></div><p class="def">The measurable acceleration of natural or assisted ecological growth, biomass accumulation, and structural recovery within a forest ecosystem over time.</p><div class="narr"><p>By restoring degraded areas, this project may expand habitat for <b>17</b> species, including <b>29%</b> threatened species: <b>1</b> CR, <b>2</b> EN, and <b>2</b> VU. Over the project&rsquo;s <b>30</b> year duration, the intervention may increase suitable habitat by <b>15%</b> for <b>17</b> species through: assisted natural regeneration, enrichment planting, and agroforestry transition.</p></div>
+      <div class="metric"><div class="metric-main"><span class="mnum">17</span><span class="munit">species</span></div><div class="metric-lab">expanded suitable habitat (IUCN STAR)</div></div><p class="def" data-def="modal">The measurable acceleration of natural or assisted ecological growth, biomass accumulation, and structural recovery within a forest ecosystem over time.</p><div class="narr"><p>By restoring degraded areas, this project may expand habitat for <b>17</b> species, including <b>29%</b> threatened species: <b>1</b> CR, <b>2</b> EN, and <b>2</b> VU. Over the project&rsquo;s <b>30</b> year duration, the intervention may increase suitable habitat by <b>15%</b> for <b>17</b> species through: assisted natural regeneration, enrichment planting, and agroforestry transition.</p></div>
     </article>
   </section>
 
@@ -720,10 +879,10 @@ const benefitPanels = `
           <div class="card-head">
             <span class="card-ic"><svg class="ic" width="21" height="21" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" d="M7.21.8C7.69.295 8 0 8 0q.164.544.371 1.038c.812 1.946 2.073 3.35 3.197 4.6C12.878 7.096 14 8.345 14 10a6 6 0 0 1-12 0C2 6.668 5.58 2.517 7.21.8m.413 1.021A31 31 0 0 0 5.794 3.99c-.726.95-1.436 2.008-1.96 3.07C3.304 8.133 3 9.138 3 10c0 0 2.5 1.5 5 .5s5-.5 5-.5c0-1.201-.796-2.157-2.181-3.7l-.03-.032C9.75 5.11 8.5 3.72 7.623 1.82z"/>
   <path fill-rule="evenodd" d="M4.553 7.776c.82-1.641 1.717-2.753 2.093-3.13l.708.708c-.29.29-1.128 1.311-1.907 2.87z"/></svg></span>
-            <div class="card-tt"><h3>Enhanced food and water security</h3><div class="tagrow"><span class="pw pw-protect">Protect</span><span class="pw pw-manage">Manage</span><span class="pw pw-restore">Restore</span></div></div><svg class="card-info" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="More information" tabindex="0"><path d="M9.99935 18.3332C14.6017 18.3332 18.3327 14.6022 18.3327 9.99984C18.3327 5.39746 14.6017 1.6665 9.99935 1.6665C5.39698 1.6665 1.66602 5.39746 1.66602 9.99984C1.66602 14.6022 5.39698 18.3332 9.99935 18.3332Z" fill="currentColor"></path><path d="M10 13.3332V9.99984M10 6.6665H10.0083" stroke="white" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            <div class="card-tt"><h3>Enhanced food and water security</h3><div class="tagrow"><span class="pw pw-protect">Protect</span><span class="pw pw-manage">Manage</span><span class="pw pw-restore">Restore</span></div></div><svg class="card-info" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" role="button" aria-label="More information" tabindex="0"><path d="M9.99935 18.3332C14.6017 18.3332 18.3327 14.6022 18.3327 9.99984C18.3327 5.39746 14.6017 1.6665 9.99935 1.6665C5.39698 1.6665 1.66602 5.39746 1.66602 9.99984C1.66602 14.6022 5.39698 18.3332 9.99935 18.3332Z" fill="currentColor"></path><path d="M10 13.3332V9.99984M10 6.6665H10.0083" stroke="white" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path></svg>
           </div>
           <div class="front-default">
-            <p class="def">The guaranteed year-round, climate-resilient community access to critical nutritional and hydrological resources by stabilizing and restoring vital ecosystem functions.</p>
+            <p class="def" data-def>The guaranteed year-round, climate-resilient community access to critical nutritional and hydrological resources by stabilizing and restoring vital ecosystem functions.</p>
           </div>
           <div class="front-answered" hidden>
             <span class="face-lab answered"><svg class="ic" width="13" height="13" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0"/>
@@ -753,10 +912,10 @@ const benefitPanels = `
           <span class="corner"></span>
           <div class="card-head">
             <span class="card-ic"><svg class="ic" width="21" height="21" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M5.757 1.071a.5.5 0 0 1 .172.686L3.383 6h9.234L10.07 1.757a.5.5 0 1 1 .858-.514L13.783 6H15.5a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H.5a.5.5 0 0 1-.5-.5v-1A.5.5 0 0 1 .5 6h1.717L5.07 1.243a.5.5 0 0 1 .686-.172zM3.394 15l-1.48-6h-.97l1.525 6.426a.75.75 0 0 0 .729.574h9.606a.75.75 0 0 0 .73-.574L15.056 9h-.972l-1.479 6z"/></svg></span>
-            <div class="card-tt"><h3>Sustainable livelihood opportunities</h3><div class="tagrow"><span class="pw pw-manage">Manage</span><span class="pw pw-restore">Restore</span></div></div><svg class="card-info" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="More information" tabindex="0"><path d="M9.99935 18.3332C14.6017 18.3332 18.3327 14.6022 18.3327 9.99984C18.3327 5.39746 14.6017 1.6665 9.99935 1.6665C5.39698 1.6665 1.66602 5.39746 1.66602 9.99984C1.66602 14.6022 5.39698 18.3332 9.99935 18.3332Z" fill="currentColor"></path><path d="M10 13.3332V9.99984M10 6.6665H10.0083" stroke="white" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            <div class="card-tt"><h3>Sustainable livelihood opportunities</h3><div class="tagrow"><span class="pw pw-manage">Manage</span><span class="pw pw-restore">Restore</span></div></div><svg class="card-info" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" role="button" aria-label="More information" tabindex="0"><path d="M9.99935 18.3332C14.6017 18.3332 18.3327 14.6022 18.3327 9.99984C18.3327 5.39746 14.6017 1.6665 9.99935 1.6665C5.39698 1.6665 1.66602 5.39746 1.66602 9.99984C1.66602 14.6022 5.39698 18.3332 9.99935 18.3332Z" fill="currentColor"></path><path d="M10 13.3332V9.99984M10 6.6665H10.0083" stroke="white" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path></svg>
           </div>
           <div class="front-default">
-            <p class="def">The generation of climate-adaptive, nature-positive revenue streams that allow households to withstand economic shocks without degrading or depleting the local natural resource base.</p>
+            <p class="def" data-def>The generation of climate-adaptive, nature-positive revenue streams that allow households to withstand economic shocks without degrading or depleting the local natural resource base.</p>
           </div>
           <div class="front-answered" hidden>
             <span class="face-lab answered"><svg class="ic" width="13" height="13" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0"/>
@@ -786,10 +945,10 @@ const benefitPanels = `
           <span class="corner"></span>
           <div class="card-head">
             <span class="card-ic"><svg class="ic" width="21" height="21" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" d="M6 3.5A1.5 1.5 0 0 1 7.5 2h1A1.5 1.5 0 0 1 10 3.5v1A1.5 1.5 0 0 1 8.5 6v1H14a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0V8h-5v.5a.5.5 0 0 1-1 0V8h-5v.5a.5.5 0 0 1-1 0v-1A.5.5 0 0 1 2 7h5.5V6A1.5 1.5 0 0 1 6 4.5zM8.5 5a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5zM0 11.5A1.5 1.5 0 0 1 1.5 10h1A1.5 1.5 0 0 1 4 11.5v1A1.5 1.5 0 0 1 2.5 14h-1A1.5 1.5 0 0 1 0 12.5zm1.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm4.5.5A1.5 1.5 0 0 1 7.5 10h1a1.5 1.5 0 0 1 1.5 1.5v1A1.5 1.5 0 0 1 8.5 14h-1A1.5 1.5 0 0 1 6 12.5zm1.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm4.5.5a1.5 1.5 0 0 1 1.5-1.5h1a1.5 1.5 0 0 1 1.5 1.5v1a1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5zm1.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5z"/></svg></span>
-            <div class="card-tt"><h3>Strengthened social capital and governance capacity</h3><div class="tagrow"><span class="pw pw-protect">Protect</span><span class="pw pw-manage">Manage</span><span class="pw pw-restore">Restore</span></div></div><svg class="card-info" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="More information" tabindex="0"><path d="M9.99935 18.3332C14.6017 18.3332 18.3327 14.6022 18.3327 9.99984C18.3327 5.39746 14.6017 1.6665 9.99935 1.6665C5.39698 1.6665 1.66602 5.39746 1.66602 9.99984C1.66602 14.6022 5.39698 18.3332 9.99935 18.3332Z" fill="currentColor"></path><path d="M10 13.3332V9.99984M10 6.6665H10.0083" stroke="white" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            <div class="card-tt"><h3>Strengthened social capital and governance capacity</h3><div class="tagrow"><span class="pw pw-protect">Protect</span><span class="pw pw-manage">Manage</span><span class="pw pw-restore">Restore</span></div></div><svg class="card-info" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" role="button" aria-label="More information" tabindex="0"><path d="M9.99935 18.3332C14.6017 18.3332 18.3327 14.6022 18.3327 9.99984C18.3327 5.39746 14.6017 1.6665 9.99935 1.6665C5.39698 1.6665 1.66602 5.39746 1.66602 9.99984C1.66602 14.6022 5.39698 18.3332 9.99935 18.3332Z" fill="currentColor"></path><path d="M10 13.3332V9.99984M10 6.6665H10.0083" stroke="white" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path></svg>
           </div>
           <div class="front-default">
-            <p class="def">The advancement of community cohesion, institutional trust, and localized legislative and operational capacity to independently manage resources, enforce laws, and resolve conflicts.</p>
+            <p class="def" data-def>The advancement of community cohesion, institutional trust, and localized legislative and operational capacity to independently manage resources, enforce laws, and resolve conflicts.</p>
           </div>
           <div class="front-answered" hidden>
             <span class="face-lab answered"><svg class="ic" width="13" height="13" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0"/>
@@ -819,10 +978,10 @@ const benefitPanels = `
           <span class="corner"></span>
           <div class="card-head">
             <span class="card-ic"><svg class="ic" width="21" height="21" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M7.5 1.018a7 7 0 0 0-4.79 11.566L7.5 7.793zm1 0V7.5h6.482A7 7 0 0 0 8.5 1.018M14.982 8.5H8.207l-4.79 4.79A7 7 0 0 0 14.982 8.5M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8"/></svg></span>
-            <div class="card-tt"><h3>Equitable benefit-sharing mechanisms</h3><div class="tagrow"><span class="pw pw-protect">Protect</span><span class="pw pw-manage">Manage</span><span class="pw pw-restore">Restore</span></div></div><svg class="card-info" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="More information" tabindex="0"><path d="M9.99935 18.3332C14.6017 18.3332 18.3327 14.6022 18.3327 9.99984C18.3327 5.39746 14.6017 1.6665 9.99935 1.6665C5.39698 1.6665 1.66602 5.39746 1.66602 9.99984C1.66602 14.6022 5.39698 18.3332 9.99935 18.3332Z" fill="currentColor"></path><path d="M10 13.3332V9.99984M10 6.6665H10.0083" stroke="white" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            <div class="card-tt"><h3>Equitable benefit-sharing mechanisms</h3><div class="tagrow"><span class="pw pw-protect">Protect</span><span class="pw pw-manage">Manage</span><span class="pw pw-restore">Restore</span></div></div><svg class="card-info" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" role="button" aria-label="More information" tabindex="0"><path d="M9.99935 18.3332C14.6017 18.3332 18.3327 14.6022 18.3327 9.99984C18.3327 5.39746 14.6017 1.6665 9.99935 1.6665C5.39698 1.6665 1.66602 5.39746 1.66602 9.99984C1.66602 14.6022 5.39698 18.3332 9.99935 18.3332Z" fill="currentColor"></path><path d="M10 13.3332V9.99984M10 6.6665H10.0083" stroke="white" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path></svg>
           </div>
           <div class="front-default">
-            <p class="def">The establishment of transparent, inclusive, and legally binding institutional frameworks that distribute project-generated rewards and resource rights fairly while actively preventing elite capture.</p>
+            <p class="def" data-def>The establishment of transparent, inclusive, and legally binding institutional frameworks that distribute project-generated rewards and resource rights fairly while actively preventing elite capture.</p>
           </div>
           <div class="front-answered" hidden>
             <span class="face-lab answered"><svg class="ic" width="13" height="13" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0"/>
@@ -853,10 +1012,10 @@ const benefitPanels = `
           <div class="card-head">
             <span class="card-ic"><svg class="ic" width="21" height="21" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10"/>
   <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/></svg></span>
-            <div class="card-tt"><h3>Secure land and resource tenure</h3><div class="tagrow"><span class="pw pw-protect">Protect</span></div></div><svg class="card-info" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="More information" tabindex="0"><path d="M9.99935 18.3332C14.6017 18.3332 18.3327 14.6022 18.3327 9.99984C18.3327 5.39746 14.6017 1.6665 9.99935 1.6665C5.39698 1.6665 1.66602 5.39746 1.66602 9.99984C1.66602 14.6022 5.39698 18.3332 9.99935 18.3332Z" fill="currentColor"></path><path d="M10 13.3332V9.99984M10 6.6665H10.0083" stroke="white" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            <div class="card-tt"><h3>Secure land and resource tenure</h3><div class="tagrow"><span class="pw pw-protect">Protect</span></div></div><svg class="card-info" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" role="button" aria-label="More information" tabindex="0"><path d="M9.99935 18.3332C14.6017 18.3332 18.3327 14.6022 18.3327 9.99984C18.3327 5.39746 14.6017 1.6665 9.99935 1.6665C5.39698 1.6665 1.66602 5.39746 1.66602 9.99984C1.66602 14.6022 5.39698 18.3332 9.99935 18.3332Z" fill="currentColor"></path><path d="M10 13.3332V9.99984M10 6.6665H10.0083" stroke="white" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path></svg>
           </div>
           <div class="front-default">
-            <p class="def">The formalization, legal protection, and institutional enforcement of a community&rsquo;s bundle of rights to possess, use, manage, and inherit land and natural resources, safeguarding them against displacement and unauthorized exploitation.</p>
+            <p class="def" data-def>The formalization, legal protection, and institutional enforcement of a community&rsquo;s bundle of rights to possess, use, manage, and inherit land and natural resources, safeguarding them against displacement and unauthorized exploitation.</p>
           </div>
           <div class="front-answered" hidden>
             <span class="face-lab answered"><svg class="ic" width="13" height="13" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0"/>
@@ -887,10 +1046,10 @@ const benefitPanels = `
           <div class="card-head">
             <span class="card-ic"><svg class="ic" width="21" height="21" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10"/>
   <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/></svg></span>
-            <div class="card-tt"><h3>Cultural heritage preservation</h3><div class="tagrow"><span class="pw pw-protect">Protect</span></div></div><svg class="card-info" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="More information" tabindex="0"><path d="M9.99935 18.3332C14.6017 18.3332 18.3327 14.6022 18.3327 9.99984C18.3327 5.39746 14.6017 1.6665 9.99935 1.6665C5.39698 1.6665 1.66602 5.39746 1.66602 9.99984C1.66602 14.6022 5.39698 18.3332 9.99935 18.3332Z" fill="currentColor"></path><path d="M10 13.3332V9.99984M10 6.6665H10.0083" stroke="white" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            <div class="card-tt"><h3>Cultural heritage preservation</h3><div class="tagrow"><span class="pw pw-protect">Protect</span></div></div><svg class="card-info" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" role="button" aria-label="More information" tabindex="0"><path d="M9.99935 18.3332C14.6017 18.3332 18.3327 14.6022 18.3327 9.99984C18.3327 5.39746 14.6017 1.6665 9.99935 1.6665C5.39698 1.6665 1.66602 5.39746 1.66602 9.99984C1.66602 14.6022 5.39698 18.3332 9.99935 18.3332Z" fill="currentColor"></path><path d="M10 13.3332V9.99984M10 6.6665H10.0083" stroke="white" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path></svg>
           </div>
           <div class="front-default">
-            <p class="def">The safeguarding, transmission, and active protection of a community&rsquo;s intangible traditions, localized ecological knowledge, sacred sites, and customary ways of life that are deeply intertwined with the surrounding landscape.</p>
+            <p class="def" data-def>The safeguarding, transmission, and active protection of a community&rsquo;s intangible traditions, localized ecological knowledge, sacred sites, and customary ways of life that are deeply intertwined with the surrounding landscape.</p>
           </div>
           <div class="front-answered" hidden>
             <span class="face-lab answered"><svg class="ic" width="13" height="13" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0"/>
@@ -918,42 +1077,42 @@ const benefitPanels = `
   </section>
 
   <section class="tabpanel" id="climate" role="tabpanel">
-    <article class="scard">
+    <article class="scard split">
       <span class="corner"></span>
       <div class="card-head">
         <span class="card-ic"><svg class="ic" width="21" height="21" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" d="M3.112 5.112a3 3 0 0 0-.17.613C1.266 6.095 0 7.555 0 9.318 0 11.366 1.708 13 3.781 13H11l-1-1H3.781C2.231 12 1 10.785 1 9.318c0-1.365 1.064-2.513 2.46-2.666l.446-.05v-.447q0-.113.018-.231zm2.55-1.45-.725-.725A5.5 5.5 0 0 1 8 2c2.69 0 4.923 2 5.166 4.579C14.758 6.804 16 8.137 16 9.773a3.2 3.2 0 0 1-1.516 2.711l-.733-.733C14.498 11.378 15 10.626 15 9.773c0-1.216-1.02-2.228-2.313-2.228h-.5v-.5C12.188 4.825 10.328 3 8 3c-.875 0-1.678.26-2.339.661z"/>
   <path d="m13.646 14.354-12-12 .708-.708 12 12z"/></svg></span>
-        <div class="card-tt"><h3>Reduced emissions from deforestation and degradation</h3><div class="tagrow"><span class="pw pw-protect">Protect</span></div></div><svg class="card-info" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="More information" tabindex="0"><path d="M9.99935 18.3332C14.6017 18.3332 18.3327 14.6022 18.3327 9.99984C18.3327 5.39746 14.6017 1.6665 9.99935 1.6665C5.39698 1.6665 1.66602 5.39746 1.66602 9.99984C1.66602 14.6022 5.39698 18.3332 9.99935 18.3332Z" fill="currentColor"></path><path d="M10 13.3332V9.99984M10 6.6665H10.0083" stroke="white" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        <div class="card-tt"><h3>Reduced emissions from deforestation and degradation</h3><div class="tagrow"><span class="pw pw-protect">Protect</span></div></div><svg class="card-info" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" role="button" aria-label="More information" tabindex="0"><path d="M9.99935 18.3332C14.6017 18.3332 18.3327 14.6022 18.3327 9.99984C18.3327 5.39746 14.6017 1.6665 9.99935 1.6665C5.39698 1.6665 1.66602 5.39746 1.66602 9.99984C1.66602 14.6022 5.39698 18.3332 9.99935 18.3332Z" fill="currentColor"></path><path d="M10 13.3332V9.99984M10 6.6665H10.0083" stroke="white" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path></svg>
       </div>
-      <div class="metric"><div class="metric-main"><span class="mnum">${NBS_DATA.grp(NBS_DATA.totalEligible*35)}</span><span class="munit">tCO&#8322;e</span></div><div class="metric-lab">avoided over the project duration</div></div><p class="def">The greenhouse gas emissions are avoided by protecting this ecosystem from deforestation or degradation, keeping stored carbon locked in vegetation and soil rather than released to the atmosphere.</p><div class="narr"><p>Protecting this <b>forest</b> ecosystem can avoid an estimated <b>${NBS_DATA.grp(NBS_DATA.totalEligible*35)} tonnes</b> of CO&#8322;eq emissions over the project&rsquo;s <b>30 year</b> duration.</p></div><div class="srcline"><svg class="ic" width="12" height="12" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+      <div class="metric"><div class="metric-main"><span class="mnum">${NBS_DATA.grp(NBS_DATA.totalEligible*35)}</span><span class="munit">tCO&#8322;e</span></div><div class="metric-lab">avoided over the project duration</div></div><p class="def" data-def="modal">The greenhouse gas emissions are avoided by protecting this ecosystem from deforestation or degradation, keeping stored carbon locked in vegetation and soil rather than released to the atmosphere.</p><div class="narr"><p>Protecting this <b>forest</b> ecosystem can avoid an estimated <b>${NBS_DATA.grp(NBS_DATA.totalEligible*35)} tonnes</b> of CO&#8322;eq emissions over the project&rsquo;s <b>30 year</b> duration.</p></div><div class="srcline"><svg class="ic" width="12" height="12" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
   <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/></svg><span>Through: boundary demarcation &amp; legal recognition; community-based patrol; fire prevention &amp; early warning</span></div>
-    </article><article class="scard">
+    </article><article class="scard split">
       <span class="corner"></span>
       <div class="card-head">
         <span class="card-ic"><svg class="ic" width="21" height="21" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M8.186 1.113a.5.5 0 0 0-.372 0L1.846 3.5l2.404.961L10.404 2zm3.564 1.426L5.596 5 8 5.961 14.154 3.5zm3.25 1.7-6.5 2.6v7.922l6.5-2.6V4.24zM7.5 14.762V6.838L1 4.239v7.923zM7.443.184a1.5 1.5 0 0 1 1.114 0l7.129 2.852A.5.5 0 0 1 16 3.5v8.662a1 1 0 0 1-.629.928l-7.185 2.874a.5.5 0 0 1-.372 0L.63 13.09a1 1 0 0 1-.63-.928V3.5a.5.5 0 0 1 .314-.464z"/></svg></span>
-        <div class="card-tt"><h3>Increased carbon sequestration and storage</h3><div class="tagrow"><span class="pw pw-restore">Restore</span><span class="pw pw-manage">Manage</span></div></div><svg class="card-info" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="More information" tabindex="0"><path d="M9.99935 18.3332C14.6017 18.3332 18.3327 14.6022 18.3327 9.99984C18.3327 5.39746 14.6017 1.6665 9.99935 1.6665C5.39698 1.6665 1.66602 5.39746 1.66602 9.99984C1.66602 14.6022 5.39698 18.3332 9.99935 18.3332Z" fill="currentColor"></path><path d="M10 13.3332V9.99984M10 6.6665H10.0083" stroke="white" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        <div class="card-tt"><h3>Increased carbon sequestration and storage</h3><div class="tagrow"><span class="pw pw-restore">Restore</span><span class="pw pw-manage">Manage</span></div></div><svg class="card-info" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" role="button" aria-label="More information" tabindex="0"><path d="M9.99935 18.3332C14.6017 18.3332 18.3327 14.6022 18.3327 9.99984C18.3327 5.39746 14.6017 1.6665 9.99935 1.6665C5.39698 1.6665 1.66602 5.39746 1.66602 9.99984C1.66602 14.6022 5.39698 18.3332 9.99935 18.3332Z" fill="currentColor"></path><path d="M10 13.3332V9.99984M10 6.6665H10.0083" stroke="white" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path></svg>
       </div>
-      <div class="metric"><div class="metric-main"><span class="mnum">${NBS_DATA.grp(NBS_DATA.totalEligible*86)}</span><span class="munit">tCO&#8322;e</span></div><div class="metric-lab">sequestered over the project duration</div></div><p class="def">The additional greenhouse gases are removed from the atmosphere as this ecosystem is restored or sustainably managed, drawing carbon into growing vegetation and soil where it is stored over time.</p><div class="narr"><p>Restoring and sustainably managing this <b>forest</b> ecosystem can sequester an estimated <b>${NBS_DATA.grp(NBS_DATA.totalEligible*86)} tonnes</b> of CO&#8322;eq over the project&rsquo;s <b>30 years</b> duration.</p></div><div class="srcline"><svg class="ic" width="12" height="12" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+      <div class="metric"><div class="metric-main"><span class="mnum">${NBS_DATA.grp(NBS_DATA.totalEligible*86)}</span><span class="munit">tCO&#8322;e</span></div><div class="metric-lab">sequestered over the project duration</div></div><p class="def" data-def="modal">The additional greenhouse gases are removed from the atmosphere as this ecosystem is restored or sustainably managed, drawing carbon into growing vegetation and soil where it is stored over time.</p><div class="narr"><p>Restoring and sustainably managing this <b>forest</b> ecosystem can sequester an estimated <b>${NBS_DATA.grp(NBS_DATA.totalEligible*86)} tonnes</b> of CO&#8322;eq over the project&rsquo;s <b>30 years</b> duration.</p></div><div class="srcline"><svg class="ic" width="12" height="12" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
   <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/></svg><span>Cook-Patton et&nbsp;al. (2020) natural-regrowth rates &middot; assisted regeneration, enrichment planting, agroforestry</span></div>
-    </article><article class="scard"><span class="corner"></span><div class="card-head"><span class="card-ic"><svg class="ic" width="21" height="21" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" d="M3.112 5.112a3 3 0 0 0-.17.613C1.266 6.095 0 7.555 0 9.318 0 11.366 1.708 13 3.781 13H11l-1-1H3.781C2.231 12 1 10.785 1 9.318c0-1.365 1.064-2.513 2.46-2.666l.446-.05v-.447q0-.113.018-.231zm2.55-1.45-.725-.725A5.5 5.5 0 0 1 8 2c2.69 0 4.923 2 5.166 4.579C14.758 6.804 16 8.137 16 9.773a3.2 3.2 0 0 1-1.516 2.711l-.733-.733C14.498 11.378 15 10.626 15 9.773c0-1.216-1.02-2.228-2.313-2.228h-.5v-.5C12.188 4.825 10.328 3 8 3c-.875 0-1.678.26-2.339.661z"/>
-  <path d="m13.646 14.354-12-12 .708-.708 12 12z"/></svg></span><div class="card-tt"><h3>Net carbon emissions reduction</h3><div class="tagrow"><span class="pw pw-protect">Protect</span><span class="pw pw-manage">Manage</span><span class="pw pw-restore">Restore</span></div></div><svg class="card-info" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="More information" tabindex="0"><path d="M9.99935 18.3332C14.6017 18.3332 18.3327 14.6022 18.3327 9.99984C18.3327 5.39746 14.6017 1.6665 9.99935 1.6665C5.39698 1.6665 1.66602 5.39746 1.66602 9.99984C1.66602 14.6022 5.39698 18.3332 9.99935 18.3332Z" fill="currentColor"></path><path d="M10 13.3332V9.99984M10 6.6665H10.0083" stroke="white" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path></svg></div><div class="metric"><div class="metric-main"><span class="mnum">${NBS_DATA.grp(NBS_DATA.totalEligible*35*0.65)}</span><span class="munit">tCO&#8322;e</span></div><div class="metric-lab">net emissions reduction after deductions</div></div><p class="def">If this project is developed for an NbS Carbon Project, the net carbon emissions reduction is estimated at <b>${NBS_DATA.grp(NBS_DATA.totalEligible*35*0.65)} tCO&#8322;e</b> after applying deductions to the total estimated carbon reduction of <b>${NBS_DATA.grp(NBS_DATA.totalEligible*35)} tCO&#8322;e</b>.</p><div class="formula"><code>Net = Gross ${NBS_DATA.grp(NBS_DATA.totalEligible*35)} &minus; Leakage ${NBS_DATA.grp(NBS_DATA.totalEligible*3.5)} &minus; Uncertainty ${NBS_DATA.grp(NBS_DATA.totalEligible*3.5)} &minus; Buffer ${NBS_DATA.grp(NBS_DATA.totalEligible*5.25)} = ${NBS_DATA.grp(NBS_DATA.totalEligible*35*0.65)} tCO&#8322;e</code></div></article><article class="scard"><span class="corner"></span><div class="card-head"><span class="card-ic"><svg class="ic" width="21" height="21" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" d="M3.112 5.112a3 3 0 0 0-.17.613C1.266 6.095 0 7.555 0 9.318 0 11.366 1.708 13 3.781 13H11l-1-1H3.781C2.231 12 1 10.785 1 9.318c0-1.365 1.064-2.513 2.46-2.666l.446-.05v-.447q0-.113.018-.231zm2.55-1.45-.725-.725A5.5 5.5 0 0 1 8 2c2.69 0 4.923 2 5.166 4.579C14.758 6.804 16 8.137 16 9.773a3.2 3.2 0 0 1-1.516 2.711l-.733-.733C14.498 11.378 15 10.626 15 9.773c0-1.216-1.02-2.228-2.313-2.228h-.5v-.5C12.188 4.825 10.328 3 8 3c-.875 0-1.678.26-2.339.661z"/>
-  <path d="m13.646 14.354-12-12 .708-.708 12 12z"/></svg></span><div class="card-tt"><h3>Net carbon sequestration</h3><div class="tagrow"><span class="pw pw-restore">Restore</span><span class="pw pw-manage">Manage</span></div></div><svg class="card-info" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="More information" tabindex="0"><path d="M9.99935 18.3332C14.6017 18.3332 18.3327 14.6022 18.3327 9.99984C18.3327 5.39746 14.6017 1.6665 9.99935 1.6665C5.39698 1.6665 1.66602 5.39746 1.66602 9.99984C1.66602 14.6022 5.39698 18.3332 9.99935 18.3332Z" fill="currentColor"></path><path d="M10 13.3332V9.99984M10 6.6665H10.0083" stroke="white" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path></svg></div><div class="metric"><div class="metric-main"><span class="mnum">${NBS_DATA.grp(NBS_DATA.totalEligible*86*0.65)}</span><span class="munit">tCO&#8322;e</span></div><div class="metric-lab">net sequestration after deductions</div></div><p class="def">The net carbon sequestration is estimated at <b>${NBS_DATA.grp(NBS_DATA.totalEligible*86*0.65)} tCO&#8322;e</b> after applying deductions to the total estimated carbon sequestration of <b>${NBS_DATA.grp(NBS_DATA.totalEligible*86)} tCO&#8322;e</b>.</p><div class="formula"><code>Net = Gross ${NBS_DATA.grp(NBS_DATA.totalEligible*86)} &minus; Leakage ${NBS_DATA.grp(NBS_DATA.totalEligible*8.6)} &minus; Uncertainty ${NBS_DATA.grp(NBS_DATA.totalEligible*8.6)} &minus; Buffer ${NBS_DATA.grp(NBS_DATA.totalEligible*12.9)} = ${NBS_DATA.grp(NBS_DATA.totalEligible*86*0.65)} tCO&#8322;e</code></div></article><article class="scard"><span class="corner"></span><div class="card-head"><span class="card-ic"><svg class="ic" width="21" height="21" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" d="M3.112 5.112a3 3 0 0 0-.17.613C1.266 6.095 0 7.555 0 9.318 0 11.366 1.708 13 3.781 13H11l-1-1H3.781C2.231 12 1 10.785 1 9.318c0-1.365 1.064-2.513 2.46-2.666l.446-.05v-.447q0-.113.018-.231zm2.55-1.45-.725-.725A5.5 5.5 0 0 1 8 2c2.69 0 4.923 2 5.166 4.579C14.758 6.804 16 8.137 16 9.773a3.2 3.2 0 0 1-1.516 2.711l-.733-.733C14.498 11.378 15 10.626 15 9.773c0-1.216-1.02-2.228-2.313-2.228h-.5v-.5C12.188 4.825 10.328 3 8 3c-.875 0-1.678.26-2.339.661z"/>
-  <path d="m13.646 14.354-12-12 .708-.708 12 12z"/></svg></span><div class="card-tt"><h3>Estimated net emission reduction and removals (Net ERRs)</h3><div class="tagrow"><span class="pw pw-protect">Protect</span><span class="pw pw-manage">Manage</span><span class="pw pw-restore">Restore</span></div></div><svg class="card-info" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="More information" tabindex="0"><path d="M9.99935 18.3332C14.6017 18.3332 18.3327 14.6022 18.3327 9.99984C18.3327 5.39746 14.6017 1.6665 9.99935 1.6665C5.39698 1.6665 1.66602 5.39746 1.66602 9.99984C1.66602 14.6022 5.39698 18.3332 9.99935 18.3332Z" fill="currentColor"></path><path d="M10 13.3332V9.99984M10 6.6665H10.0083" stroke="white" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path></svg></div><div class="metric"><div class="metric-main"><span class="mnum">${NBS_DATA.grp(NBS_DATA.totalEligible*121*0.8)}</span><span class="munit">tCO&#8322;e</span></div><div class="metric-lab">net ERRs over the 30-yr crediting period</div></div><p class="def">Over a <b>30-year</b> crediting period, the project area could generate an estimated <b>${NBS_DATA.grp(NBS_DATA.totalEligible*121*0.8)} tCO&#8322;e</b> of net emission reductions and removals, an average of <b>${NBS_DATA.grp(NBS_DATA.totalEligible*121*0.8/30)} tCO&#8322;e</b> per year. This figure already subtracts leakage and uncertainty deductions from the gross potential of <b>${NBS_DATA.grp(NBS_DATA.totalEligible*121)} tCO&#8322;e</b>. It does not yet subtract the buffer contribution, which is held to cover permanence risk.</p></article><article class="scard">
+    </article><article class="scard split"><span class="corner"></span><div class="card-head"><span class="card-ic"><svg class="ic" width="21" height="21" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" d="M3.112 5.112a3 3 0 0 0-.17.613C1.266 6.095 0 7.555 0 9.318 0 11.366 1.708 13 3.781 13H11l-1-1H3.781C2.231 12 1 10.785 1 9.318c0-1.365 1.064-2.513 2.46-2.666l.446-.05v-.447q0-.113.018-.231zm2.55-1.45-.725-.725A5.5 5.5 0 0 1 8 2c2.69 0 4.923 2 5.166 4.579C14.758 6.804 16 8.137 16 9.773a3.2 3.2 0 0 1-1.516 2.711l-.733-.733C14.498 11.378 15 10.626 15 9.773c0-1.216-1.02-2.228-2.313-2.228h-.5v-.5C12.188 4.825 10.328 3 8 3c-.875 0-1.678.26-2.339.661z"/>
+  <path d="m13.646 14.354-12-12 .708-.708 12 12z"/></svg></span><div class="card-tt"><h3>Net carbon emissions reduction</h3><div class="tagrow"><span class="pw pw-protect">Protect</span><span class="pw pw-manage">Manage</span><span class="pw pw-restore">Restore</span></div></div><svg class="card-info" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" role="button" aria-label="More information" tabindex="0"><path d="M9.99935 18.3332C14.6017 18.3332 18.3327 14.6022 18.3327 9.99984C18.3327 5.39746 14.6017 1.6665 9.99935 1.6665C5.39698 1.6665 1.66602 5.39746 1.66602 9.99984C1.66602 14.6022 5.39698 18.3332 9.99935 18.3332Z" fill="currentColor"></path><path d="M10 13.3332V9.99984M10 6.6665H10.0083" stroke="white" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path></svg></div><div class="metric"><div class="metric-main"><span class="mnum">${NBS_DATA.grp(NBS_DATA.totalEligible*35*0.65)}</span><span class="munit">tCO&#8322;e</span></div><div class="metric-lab">net emissions reduction after deductions</div></div><p class="def">If this project is developed for an NbS Carbon Project, the net carbon emissions reduction is estimated at <b>${NBS_DATA.grp(NBS_DATA.totalEligible*35*0.65)} tCO&#8322;e</b> after applying deductions to the total estimated carbon reduction of <b>${NBS_DATA.grp(NBS_DATA.totalEligible*35)} tCO&#8322;e</b>.</p><div class="formula"><code>Net = Gross ${NBS_DATA.grp(NBS_DATA.totalEligible*35)} &minus; Leakage ${NBS_DATA.grp(NBS_DATA.totalEligible*3.5)} &minus; Uncertainty ${NBS_DATA.grp(NBS_DATA.totalEligible*3.5)} &minus; Buffer ${NBS_DATA.grp(NBS_DATA.totalEligible*5.25)} = ${NBS_DATA.grp(NBS_DATA.totalEligible*35*0.65)} tCO&#8322;e</code></div></article><article class="scard split"><span class="corner"></span><div class="card-head"><span class="card-ic"><svg class="ic" width="21" height="21" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" d="M3.112 5.112a3 3 0 0 0-.17.613C1.266 6.095 0 7.555 0 9.318 0 11.366 1.708 13 3.781 13H11l-1-1H3.781C2.231 12 1 10.785 1 9.318c0-1.365 1.064-2.513 2.46-2.666l.446-.05v-.447q0-.113.018-.231zm2.55-1.45-.725-.725A5.5 5.5 0 0 1 8 2c2.69 0 4.923 2 5.166 4.579C14.758 6.804 16 8.137 16 9.773a3.2 3.2 0 0 1-1.516 2.711l-.733-.733C14.498 11.378 15 10.626 15 9.773c0-1.216-1.02-2.228-2.313-2.228h-.5v-.5C12.188 4.825 10.328 3 8 3c-.875 0-1.678.26-2.339.661z"/>
+  <path d="m13.646 14.354-12-12 .708-.708 12 12z"/></svg></span><div class="card-tt"><h3>Net carbon sequestration</h3><div class="tagrow"><span class="pw pw-restore">Restore</span><span class="pw pw-manage">Manage</span></div></div><svg class="card-info" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" role="button" aria-label="More information" tabindex="0"><path d="M9.99935 18.3332C14.6017 18.3332 18.3327 14.6022 18.3327 9.99984C18.3327 5.39746 14.6017 1.6665 9.99935 1.6665C5.39698 1.6665 1.66602 5.39746 1.66602 9.99984C1.66602 14.6022 5.39698 18.3332 9.99935 18.3332Z" fill="currentColor"></path><path d="M10 13.3332V9.99984M10 6.6665H10.0083" stroke="white" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path></svg></div><div class="metric"><div class="metric-main"><span class="mnum">${NBS_DATA.grp(NBS_DATA.totalEligible*86*0.65)}</span><span class="munit">tCO&#8322;e</span></div><div class="metric-lab">net sequestration after deductions</div></div><p class="def">The net carbon sequestration is estimated at <b>${NBS_DATA.grp(NBS_DATA.totalEligible*86*0.65)} tCO&#8322;e</b> after applying deductions to the total estimated carbon sequestration of <b>${NBS_DATA.grp(NBS_DATA.totalEligible*86)} tCO&#8322;e</b>.</p><div class="formula"><code>Net = Gross ${NBS_DATA.grp(NBS_DATA.totalEligible*86)} &minus; Leakage ${NBS_DATA.grp(NBS_DATA.totalEligible*8.6)} &minus; Uncertainty ${NBS_DATA.grp(NBS_DATA.totalEligible*8.6)} &minus; Buffer ${NBS_DATA.grp(NBS_DATA.totalEligible*12.9)} = ${NBS_DATA.grp(NBS_DATA.totalEligible*86*0.65)} tCO&#8322;e</code></div></article><article class="scard split" data-method="Net ERRs = Gross ERR &minus; leakage &minus; uncertainty deduction, using a default leakage of 10% and an uncertainty deduction factor of 10%. The buffer contribution is not subtracted."><span class="corner"></span><div class="card-head"><span class="card-ic"><svg class="ic" width="21" height="21" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" d="M3.112 5.112a3 3 0 0 0-.17.613C1.266 6.095 0 7.555 0 9.318 0 11.366 1.708 13 3.781 13H11l-1-1H3.781C2.231 12 1 10.785 1 9.318c0-1.365 1.064-2.513 2.46-2.666l.446-.05v-.447q0-.113.018-.231zm2.55-1.45-.725-.725A5.5 5.5 0 0 1 8 2c2.69 0 4.923 2 5.166 4.579C14.758 6.804 16 8.137 16 9.773a3.2 3.2 0 0 1-1.516 2.711l-.733-.733C14.498 11.378 15 10.626 15 9.773c0-1.216-1.02-2.228-2.313-2.228h-.5v-.5C12.188 4.825 10.328 3 8 3c-.875 0-1.678.26-2.339.661z"/>
+  <path d="m13.646 14.354-12-12 .708-.708 12 12z"/></svg></span><div class="card-tt"><h3>Estimated net emission reduction and removals (Net ERRs)</h3><div class="tagrow"><span class="pw pw-protect">Protect</span><span class="pw pw-manage">Manage</span><span class="pw pw-restore">Restore</span></div></div><svg class="card-info" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" role="button" aria-label="More information" tabindex="0"><path d="M9.99935 18.3332C14.6017 18.3332 18.3327 14.6022 18.3327 9.99984C18.3327 5.39746 14.6017 1.6665 9.99935 1.6665C5.39698 1.6665 1.66602 5.39746 1.66602 9.99984C1.66602 14.6022 5.39698 18.3332 9.99935 18.3332Z" fill="currentColor"></path><path d="M10 13.3332V9.99984M10 6.6665H10.0083" stroke="white" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path></svg></div><div class="metric"><div class="metric-main"><span class="mnum">${NBS_DATA.grp(NBS_DATA.totalEligible*121*0.8)}</span><span class="munit">tCO&#8322;e</span></div><div class="metric-lab">net ERRs over the 30-yr crediting period</div></div><p class="def">Over a <b>30-year</b> crediting period, the project area could generate an estimated <b>${NBS_DATA.grp(NBS_DATA.totalEligible*121*0.8)} tCO&#8322;e</b> of net emission reductions and removals, an average of <b>${NBS_DATA.grp(NBS_DATA.totalEligible*121*0.8/30)} tCO&#8322;e</b> per year. This figure already subtracts leakage and uncertainty deductions from the gross potential of <b>${NBS_DATA.grp(NBS_DATA.totalEligible*121)} tCO&#8322;e</b>. It does not yet subtract the buffer contribution, which is held to cover permanence risk.</p></article><article class="scard split">
       <span class="corner"></span>
       <div class="card-head">
         <span class="card-ic"><svg class="ic" width="21" height="21" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" d="M8 14.933a1 1 0 0 0 .1-.025q.114-.034.294-.118c.24-.113.547-.29.893-.533a10.7 10.7 0 0 0 2.287-2.233c1.527-1.997 2.807-5.031 2.253-9.188a.48.48 0 0 0-.328-.39c-.651-.213-1.75-.56-2.837-.855C9.552 1.29 8.531 1.067 8 1.067zM5.072.56C6.157.265 7.31 0 8 0s1.843.265 2.928.56c1.11.3 2.229.655 2.887.87a1.54 1.54 0 0 1 1.044 1.262c.596 4.477-.787 7.795-2.465 9.99a11.8 11.8 0 0 1-2.517 2.453 7 7 0 0 1-1.048.625c-.28.132-.581.24-.829.24s-.548-.108-.829-.24a7 7 0 0 1-1.048-.625 11.8 11.8 0 0 1-2.517-2.453C1.928 10.487.545 7.169 1.141 2.692A1.54 1.54 0 0 1 2.185 1.43 63 63 0 0 1 5.072.56"/></svg></span>
-        <div class="card-tt"><h3>Enhance resilience to climate hazards</h3><div class="tagrow"><span class="pw pw-protect">Protect</span><span class="pw pw-manage">Manage</span><span class="pw pw-restore">Restore</span></div></div><svg class="card-info" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="More information" tabindex="0"><path d="M9.99935 18.3332C14.6017 18.3332 18.3327 14.6022 18.3327 9.99984C18.3327 5.39746 14.6017 1.6665 9.99935 1.6665C5.39698 1.6665 1.66602 5.39746 1.66602 9.99984C1.66602 14.6022 5.39698 18.3332 9.99935 18.3332Z" fill="currentColor"></path><path d="M10 13.3332V9.99984M10 6.6665H10.0083" stroke="white" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        <div class="card-tt"><h3>Enhance resilience to climate hazards</h3><div class="tagrow"><span class="pw pw-protect">Protect</span><span class="pw pw-manage">Manage</span><span class="pw pw-restore">Restore</span></div></div><svg class="card-info" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" role="button" aria-label="More information" tabindex="0"><path d="M9.99935 18.3332C14.6017 18.3332 18.3327 14.6022 18.3327 9.99984C18.3327 5.39746 14.6017 1.6665 9.99935 1.6665C5.39698 1.6665 1.66602 5.39746 1.66602 9.99984C1.66602 14.6022 5.39698 18.3332 9.99935 18.3332Z" fill="currentColor"></path><path d="M10 13.3332V9.99984M10 6.6665H10.0083" stroke="white" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path></svg>
       </div>
-      <div class="metric"><div class="metric-main"><span class="mnum">3,400</span><span class="munit">people</span></div><div class="metric-lab">at reduced disaster exposure</div></div><p class="def">The reduction in people&rsquo;s and assets&rsquo; exposure to climate hazards achieved by using healthy ecosystems as natural buffers.</p><div class="narr"><p>Implementing NbS in this ecosystem can reduce disaster exposure across an estimated <b>${NBS_DATA.grp(NBS_DATA.totalEligible)} hectares</b>, helping to lower risk for an estimated <b>3,400 people</b> / <b>850 households</b> / <b>6 communities</b> over the project&rsquo;s <b>30-year</b> duration.</p></div><div class="srcline"><svg class="ic" width="12" height="12" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+      <div class="metric"><div class="metric-main"><span class="mnum">3,400</span><span class="munit">people</span></div><div class="metric-lab">at reduced disaster exposure</div></div><p class="def" data-def="modal">The reduction in people&rsquo;s and assets&rsquo; exposure to climate hazards achieved by using healthy ecosystems as natural buffers.</p><div class="narr"><p>Implementing NbS in this ecosystem can reduce disaster exposure across an estimated <b>${NBS_DATA.grp(NBS_DATA.totalEligible)} hectares</b>, helping to lower risk for an estimated <b>3,400 people</b> / <b>850 households</b> / <b>6 communities</b> over the project&rsquo;s <b>30-year</b> duration.</p></div><div class="srcline"><svg class="ic" width="12" height="12" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
   <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/></svg><span>ADPC Climate Disaster Risk &middot; SIGnal Forest Cover &middot; Gridded World Pop</span></div>
-    </article><article class="scard">
+    </article><article class="scard split">
       <span class="corner"></span>
       <div class="card-head">
         <span class="card-ic"><svg class="ic" width="21" height="21" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9.5 12.5a1.5 1.5 0 1 1-2-1.415V6.5a.5.5 0 0 1 1 0v4.585a1.5 1.5 0 0 1 1 1.415"/>
   <path d="M5.5 2.5a2.5 2.5 0 0 1 5 0v7.55a3.5 3.5 0 1 1-5 0zM8 1a1.5 1.5 0 0 0-1.5 1.5v7.987l-.167.15a2.5 2.5 0 1 0 3.333 0l-.166-.15V2.5A1.5 1.5 0 0 0 8 1"/></svg></span>
-        <div class="card-tt"><h3>Microclimate regulation</h3><div class="tagrow"><span class="pw pw-protect">Protect</span><span class="pw pw-manage">Manage</span><span class="pw pw-restore">Restore</span></div></div><svg class="card-info" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="More information" tabindex="0"><path d="M9.99935 18.3332C14.6017 18.3332 18.3327 14.6022 18.3327 9.99984C18.3327 5.39746 14.6017 1.6665 9.99935 1.6665C5.39698 1.6665 1.66602 5.39746 1.66602 9.99984C1.66602 14.6022 5.39698 18.3332 9.99935 18.3332Z" fill="currentColor"></path><path d="M10 13.3332V9.99984M10 6.6665H10.0083" stroke="white" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        <div class="card-tt"><h3>Microclimate regulation</h3><div class="tagrow"><span class="pw pw-protect">Protect</span><span class="pw pw-manage">Manage</span><span class="pw pw-restore">Restore</span></div></div><svg class="card-info" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" role="button" aria-label="More information" tabindex="0"><path d="M9.99935 18.3332C14.6017 18.3332 18.3327 14.6022 18.3327 9.99984C18.3327 5.39746 14.6017 1.6665 9.99935 1.6665C5.39698 1.6665 1.66602 5.39746 1.66602 9.99984C1.66602 14.6022 5.39698 18.3332 9.99935 18.3332Z" fill="currentColor"></path><path d="M10 13.3332V9.99984M10 6.6665H10.0083" stroke="white" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path></svg>
       </div>
-      <div class="metric"><div class="metric-main"><span class="mnum">${NBS_DATA.grp(NBS_DATA.totalEligible*0.48)}</span><span class="munit">ha</span></div><div class="metric-lab">tree-cover increase (&asymp; 48% of AOI)</div></div><p class="def">The moderation of local temperatures by vegetation, through canopy shading and evapotranspiration, which buffers the area within and around it against heat extremes. Estimates the area of tree cover delivering this cooling function.</p><div class="narr"><p>Conserving this <b>forest</b> ecosystem, with an estimated <b>${NBS_DATA.grp(NBS_DATA.totalEligible*0.48)} hectares (&asymp; 48%)</b> of tree cover increase, helps regulate the local microclimate, moderating temperatures through shading and evapotranspiration, and buffering the surrounding area against heat extremes over the project&rsquo;s <b>30 year</b> duration.</p></div><div class="srcline"><svg class="ic" width="12" height="12" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+      <div class="metric"><div class="metric-main"><span class="mnum">${NBS_DATA.grp(NBS_DATA.totalEligible*0.48)}</span><span class="munit">ha</span></div><div class="metric-lab">tree-cover increase (&asymp; 48% of AOI)</div></div><p class="def" data-def="modal">The moderation of local temperatures by vegetation, through canopy shading and evapotranspiration, which buffers the area within and around it against heat extremes. Estimates the area of tree cover delivering this cooling function.</p><div class="narr"><p>Conserving this <b>forest</b> ecosystem, with an estimated <b>${NBS_DATA.grp(NBS_DATA.totalEligible*0.48)} hectares (&asymp; 48%)</b> of tree cover increase, helps regulate the local microclimate, moderating temperatures through shading and evapotranspiration, and buffering the surrounding area against heat extremes over the project&rsquo;s <b>30 year</b> duration.</p></div><div class="srcline"><svg class="ic" width="12" height="12" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
   <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/></svg><span>SIGnal forest-cover benchmark &middot; De&nbsp;Frenne et&nbsp;al. (2019), <i>Nature Ecology &amp; Evolution</i></span></div>
     </article>
   </section>
@@ -1014,6 +1173,67 @@ function nbsInitThreat(root, onShow){
   root.querySelectorAll('.t3-tabs [data-t3tab]').forEach(function(tb){ tb.addEventListener('click', function(){ show(tb.dataset.t3tab); }); });
   root.querySelectorAll('.t3-alerts__head').forEach(function(h){ h.addEventListener('click', function(){ h.closest('.t3-alerts').classList.toggle('open'); }); });
   return { show: show };
+}
+
+/* ---- Benefit card "i" modal: the two things the GUI doc stores per benefit —
+   the definition of the data and how it is calculated. Both are read off the
+   card itself, so the card markup stays the single source of truth:
+     definition → the [data-def] paragraph (data-def="modal" ones are hidden
+                  on the card and only ever read here)
+     method     → the .formula block, or data-method on cards without one.
+   Lives on <body> so it is never clipped by the analyser's scroll panes. ---- */
+var nbsBenefitInfoOpen = null;
+function nbsBenefitInfo(){
+  if (nbsBenefitInfoOpen) return nbsBenefitInfoOpen;
+  document.body.insertAdjacentHTML('beforeend',
+    '<div class="bi-overlay" id="biOverlay" aria-hidden="true">' +
+      '<div class="bi-modal" role="dialog" aria-modal="true" aria-labelledby="biTitle">' +
+        '<header class="bi-head"><div>' +
+          '<span class="bi-eyebrow" id="biCategory"></span>' +
+          '<h3 class="bi-title" id="biTitle"></h3></div>' +
+          '<button class="bi-x" type="button" id="biClose" aria-label="Close">' +
+          '<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>' +
+        '</header>' +
+        '<div class="bi-body">' +
+          '<section class="bi-section" id="biDefSec"><h4 class="bi-label">Definition</h4>' +
+            '<p class="bi-value" id="biDef"></p></section>' +
+          '<section class="bi-section" id="biMethodSec"><h4 class="bi-label">Calculation method</h4>' +
+            '<p class="bi-value bi-mono" id="biMethod"></p></section>' +
+        '</div>' +
+      '</div>' +
+    '</div>');
+
+  var ov = document.getElementById('biOverlay'), opener = null;
+  function close(){
+    ov.classList.remove('show'); ov.setAttribute('aria-hidden','true');
+    if (opener && opener.focus) opener.focus();
+    opener = null;
+  }
+  document.getElementById('biClose').addEventListener('click', close);
+  ov.addEventListener('click', function(e){ if (e.target === ov) close(); });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') close(); });
+
+  nbsBenefitInfoOpen = function open(card, from){
+    if (!card) return;
+    opener = from || null;
+    var title = card.querySelector('h3');
+    var pane = card.closest('.tabpanel');
+    var def = card.querySelector('[data-def]');
+    var formula = card.querySelector('.formula code');
+    var method = formula ? formula.innerHTML : (card.getAttribute('data-method') || '');
+
+    document.getElementById('biCategory').textContent = pane ? pane.id : '';
+    document.getElementById('biTitle').textContent = title ? title.textContent : '';
+    document.getElementById('biDef').innerHTML = def ? def.innerHTML : '';
+    document.getElementById('biMethod').innerHTML = method;
+    document.getElementById('biDefSec').hidden = !def;
+    document.getElementById('biMethodSec').hidden = !method;
+    document.getElementById('biMethod').classList.toggle('bi-mono', !!formula);
+    ov.classList.add('show');
+    ov.setAttribute('aria-hidden','false');
+    document.getElementById('biClose').focus();
+  };
+  return nbsBenefitInfoOpen;
 }
 
 /* ---- Potential Benefit behavior: category switching, flip-card assessments,
@@ -1113,6 +1333,19 @@ function nbsInitBenefit(root){
   function joinNice(a){ if (a.length===1) return a[0];
     if (a.length===2) return a[0].replace(' work','') + ' and ' + a[1];
     return a.slice(0,-1).map(function(x){ return x.replace(' work',''); }).join(', ') + ' and ' + a[a.length-1]; }
+
+  /* "i" in each card head → definition + calculation modal. Capture phase so the
+     People flip-cards (which flip on any front click) don't also flip. */
+  var openInfo = nbsBenefitInfo();
+  function infoHit(e){
+    var btn = e.target.closest && e.target.closest('.card-info');
+    if (!btn) return;
+    if (e.type === 'keydown' && e.key !== 'Enter' && e.key !== ' ') return;
+    e.preventDefault(); e.stopPropagation();
+    openInfo(btn.closest('article'), btn);
+  }
+  root.addEventListener('click', infoHit, true);
+  root.addEventListener('keydown', infoHit, true);
 
   var disc = root.querySelector('#disc');
   if (disc) disc.querySelector('.disc-btn').addEventListener('click', function(){ disc.classList.toggle('open'); });
