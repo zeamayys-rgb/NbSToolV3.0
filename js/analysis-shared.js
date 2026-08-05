@@ -192,10 +192,11 @@ const siteGeneral = `
               <div class="gc-block">
                 <p class="gc-p">The selected area is susceptible to several natural disaster risks, including:</p>
                 <div class="gc-ndgrid">
-                  <div class="gc-nditem"><figure><img src="${GC_ASSETS}/nd-flood.jpg" alt="Flood" /></figure><span>Flood</span><b>High risk</b></div>
-                  <div class="gc-nditem"><figure><img src="${GC_ASSETS}/nd-landslide.jpg" alt="Landslide" /></figure><span>Landslide</span><b>Moderate risk</b></div>
-                  <div class="gc-nditem"><figure><img src="${GC_ASSETS}/nd-typhoon.jpg" alt="Tropical typhoon" /></figure><span>Tropical Typhoon</span><b>Low risk</b></div>
-                  <div class="gc-nditem"><figure><img src="${GC_ASSETS}/nd-drought.jpg" alt="Drought" /></figure><span>Drought</span><b>Moderate risk</b></div>
+                  <div class="gc-nditem"><figure><img src="assets/asset/Disaster Risk/drought.png" alt="Drought" /></figure><span>Drought</span><b>Moderate risk</b></div>
+                  <div class="gc-nditem"><figure><img src="assets/asset/Disaster Risk/flood.png" alt="Flood" /></figure><span>Flood</span><b>High risk</b></div>
+                  <div class="gc-nditem"><figure><img src="assets/asset/Disaster Risk/fire risk.png" alt="Fire risk" /></figure><span>Fire Risk</span><b>High risk</b></div>
+                  <div class="gc-nditem"><figure><img src="assets/asset/Disaster Risk/Landslide.png" alt="Landslide" /></figure><span>Landslide</span><b>Moderate risk</b></div>
+                  <div class="gc-nditem"><figure><img src="assets/asset/Disaster Risk/tropicaltyphon.png" alt="Tropical typhoon" /></figure><span>Tropical Typhoon</span><b>Low risk</b></div>
                 </div>
               </div>${gcAlert}${gcSource('Multi-hazard risk index', 'BNPB InaRISK', '2024')}
             </section>
@@ -393,8 +394,8 @@ ${clChart([104.9,105.7,106.9,108.5,108.9,107.3,105.3,104.9,106.9,108.9,108.5,106
               </div>${gcAlert}${gcSource('Climate normals', 'WorldClim v2.1', '2023')}
             </section>
 
-            <!-- 4 · Fire susceptibility -->
-            <section class="gc-card gc-card--red">${gcHead('Fire Susceptibility', 'fire')}
+            <!-- 4 · Historical burned area -->
+            <section class="gc-card gc-card--red">${gcHead('Historical Burned Area', 'fire')}
               <div class="cl-fire">
                 <div class="cl-fire__graph">
                   <p class="gc-p">This shows how likely the land is to burn under baseline conditions, based on factors such as land cover, dryness, and climate. It is not a forecast of current fire danger.</p>

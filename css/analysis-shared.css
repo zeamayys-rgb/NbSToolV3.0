@@ -560,13 +560,13 @@
   .duration-unit{font-family:'Poppins',sans-serif;font-weight:500;font-size:12px;line-height:12px;color:var(--slate);}
 
   /* ---- potential nbs carbon project ---- */
-  .carbon{background:#fff;border:1px solid var(--stroke-base,#eaebf0);border-radius:8px;padding:20px;display:flex;flex-direction:column;gap:16px;}
+  .carbon{background:#fcfcfd;border:1px solid #c1c3c7;border-radius:6px;padding:20px;display:flex;flex-direction:column;gap:16px;}
   .carbon-head{display:flex;gap:10px;align-items:flex-start;}
-  .carbon-ic{width:44px;height:44px;flex:none;}
-  .carbon-ic svg{display:block;width:44px;height:44px;}
+  .carbon-ic{width:36px;height:36px;flex:none;}
+  .carbon-ic svg{display:block;width:36px;height:36px;}
   .carbon-txt{flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:4px;}
-  .carbon-title{font-size:16px;font-weight:500;line-height:24px;color:#252525;}
-  .carbon-q{font-size:14px;font-weight:500;line-height:normal;color:#68727d;}
+  .carbon-title{font-size:14px;font-weight:600;line-height:22px;color:#252525;}
+  .carbon-q{font-size:14px;font-weight:400;line-height:22px;color:#68727d;}
   .carbon-right{flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:10px;}
   .carbon-toggle{position:static;cursor:pointer;flex:none;}
   .carbon.on .carbon-toggle{background:#077f68;}
@@ -590,7 +590,7 @@
   .crisk-title{font-size:14px;font-weight:600;line-height:22px;color:#252525;}
   .crisk-desc{font-size:12px;font-weight:400;line-height:20px;color:#505760;}
   .crisk-field{flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:8px;position:relative;}
-  .crisk-label{align-self:flex-start;font-size:13px;font-weight:400;line-height:19px;color:#252525;border-bottom:1px dashed #252525;padding-bottom:3px;}
+  .crisk-label{align-self:flex-start;font-size:12px;font-weight:400;line-height:19px;color:#252525;border-bottom:1px dashed #252525;padding-bottom:3px;}
   .crisk-input{display:flex;align-items:stretch;gap:8px;background:#fff;border:1px solid #eaebf0;border-radius:6px;padding:0 0 0 16px;cursor:text;overflow:hidden;}
   .crisk-input input{flex:1 1 0;min-width:0;border:none;outline:none;background:transparent;font-family:inherit;font-size:12px;line-height:17.4px;color:#252525;padding:9px 0;-moz-appearance:textfield;appearance:textfield;}
   .crisk-input input::-webkit-outer-spin-button,.crisk-input input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0;}

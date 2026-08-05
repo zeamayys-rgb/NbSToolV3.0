@@ -13,12 +13,12 @@
 .profile { position: relative; display: grid; grid-template-columns: auto 1fr auto; gap: var(--space-32); align-items: center; padding: var(--space-24) var(--space-32); margin-bottom: var(--space-24); }
 .profile .who .name-row { display: flex; align-items: center; gap: 14px; margin: 0 0 4px; }
 .profile .who .name-row h2 { margin: 0; }
-.profile-edit { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: var(--radius-md); border: 1px solid var(--stroke-base); background: var(--bg-base-second); color: var(--text-primary); font-family: var(--font-text); font-size: 13px; font-weight: 600; text-decoration: none; transition: background .15s, border-color .15s; }
+.profile-edit { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; margin: -6px 0; border-radius: var(--radius-md); border: none; background: none; color: var(--text-primary); transition: background .15s; }
 .profile-edit svg { width: 15px; height: 15px; flex: none; }
-.profile-edit:hover { background: var(--bg-success-second); border-color: var(--text-primary); }
+.profile-edit:hover { background: var(--bg-success-second); }
 .profile .pic { width: 92px; height: 92px; border-radius: var(--radius-xl); object-fit: cover; flex: none; background: var(--primary-100); display: grid; place-items: center; font-family: var(--font-display); font-weight: 700; font-size: 36px; color: var(--text-primary); }
 .profile .who h2 { font-family: var(--font-display); font-weight: 700; font-size: 28px; letter-spacing: -1px; margin: 0 0 4px; }
-.profile .who .role { display: inline-flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 600; color: var(--text-primary); background: var(--bg-success-second); border: 1px solid var(--primary-100); border-radius: var(--radius-pill); padding: 2px 12px; margin-bottom: 12px; }
+.profile .who .role { display: inline-flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 600; color: var(--text-primary); background: var(--bg-success-second); border: 1px solid var(--primary-100); border-radius: var(--radius-pill); padding: 2px 12px; margin-bottom: 0; }
 .profile .meta { display: flex; flex-wrap: wrap; gap: 8px 28px; }
 .profile .meta .m { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-base-second); }
 .profile .meta .m svg { width: 16px; height: 16px; color: var(--text-base-third); flex: none; }

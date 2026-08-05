@@ -238,7 +238,7 @@
         <span class="da-conn"></span>
         <button class="da-step" data-goto="3"><span class="da-step__num">3</span><span class="da-step__label">Threat profile</span></button>
         <span class="da-conn"></span>
-        <button class="da-step" data-goto="4"><span class="da-step__num">4</span><span class="da-step__label">Select intervention</span></button>
+        <button class="da-step" data-goto="4"><span class="da-step__num">4</span><span class="da-step__label">Pathway Selection</span></button>
         <span class="da-conn"></span>
         <button class="da-step" data-goto="5"><span class="da-step__num">5</span><span class="da-step__label">Potential benefit</span></button>
       </div>
@@ -390,7 +390,7 @@
         </div>
       </div>
 
-      <!-- ============ STEP 4 — SELECT INTERVENTION (F02-P4 Pathway Selection) ============ -->
+      <!-- ============ STEP 4 — PATHWAY SELECTION (F02-P4) ============ -->
       <div class="da-step-body" data-step="4">
 <div class="pathway" id="pathway">
 
@@ -695,8 +695,8 @@
         </svg>
       </div>
       <div class="carbon-txt">
-        <div class="carbon-title">Potential NbS Carbon Project</div>
-        <div class="carbon-q">Do you want to treat this as a potential NbS carbon project?</div>
+        <div class="carbon-title">Are you interested in exploring this as a Nature-based Solutions (NbS) carbon project?</div>
+        <div class="carbon-q">If so, Net Emission Reductions and Removals (Net ERRs) will be calculated by incorporating uncertainty, leakage and buffer,</div>
       </div>
       <div class="carbon-right">
         <div class="switch carbon-toggle" id="carbonToggle"><span class="knob"></span></div>
@@ -707,8 +707,8 @@
       <div class="carbon-divider"></div>
       <div class="crisk">
         <div class="crisk-text">
-          <div class="crisk-title">Carbon risk assumption</div>
-          <div class="crisk-desc">Apply adjustments to estimated GHG reductions or removals to reflect uncertainty, leakage, and buffer pool deduction.</div>
+          <div class="crisk-title">Carbon Risk Assumption</div>
+          <div class="crisk-desc">Adjust % of uncertainty (discount for error in data and models), leakage (emission displacement), and buffer (emission release from reversal and non permanence risks)</div>
         </div>
         <div class="crisk-field">
           <span class="crisk-label">Leakage deduction</span>
@@ -792,7 +792,7 @@
         <svg viewBox="0 0 24 24" fill="none"><path d="M21 12a9 9 0 1 1-3.5-7.1M21 4v5h-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         Reselect area
       </button>
-      <button class="btn btn-primary grow" data-go="4">Select intervention type
+      <button class="btn btn-primary grow" data-go="4">Pathway Selection
         <svg viewBox="0 0 24 24" fill="none"><path d="M6 7l5 5-5 5M13 7l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
     </footer>

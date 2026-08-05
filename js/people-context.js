@@ -267,11 +267,10 @@ C.Malaysia={flag:'\u{1F1F2}\u{1F1FE}',
    [{t:'Average Household Income',unit:'RM (MYR) / month',viz:'kpi',value:'RM 8,479',src:'economy_household_income_gross_mean.csv · DOSM · 1970–2022 · adm1'}],1,
    'Average Household Income — DOSM, 1970–2022.'),
   section('housing',
-   `In <b>Selangor</b> State, <b>96.4%</b> of households have access to improved drinking water and <b>92%</b> of households have hygienic toilets. The reserved forest in the area covers <b>250,300 hectares</b>. This covers the basic services and living conditions that shape how communities cope.`,
+   `In <b>Selangor</b> State, <b>96.4%</b> of households have access to improved drinking water and <b>92%</b> of households have hygienic toilets. This covers the basic services and living conditions that shape how communities cope.`,
    [{t:'Households with Access to Water',unit:'% of households (treated piped)',viz:'pct',value:'96.4%',src:'hhs_water_treated_pipe.csv · DOSM · 2000–2016 · adm1'},
-    {t:'Toilet Facility Access',unit:'% of households (hygienic)',viz:'pct',value:'92%',src:'hhs_sanitary_latrines.csv · DOSM · 2000–2016 · adm1'},
-    {t:'Permanent Reserved Forests',unit:'hectares',viz:'kpi',value:'250,300 ha',src:'other_forest_reserve.csv · DOSM · 2003–2021 · adm1'}],3,
-   'Households with Access to Water — DOSM, 2000–2016; Toilet Facility Categories — DOSM, 2000–2016; Permanent Reserved Forests — DOSM, 2003–2021.')]};
+    {t:'Toilet Facility Access',unit:'% of households (hygienic)',viz:'pct',value:'92%',src:'hhs_sanitary_latrines.csv · DOSM · 2000–2016 · adm1'}],2,
+   'Households with Access to Water — DOSM, 2000–2016; Toilet Facility Categories — DOSM, 2000–2016.')]};
 
 C.Singapore={flag:'\u{1F1F8}\u{1F1EC}',
  demo:{pop:'5.92 M',male:'2.90 M',female:'3.02 M',
@@ -298,11 +297,7 @@ C.Singapore={flag:'\u{1F1F8}\u{1F1EC}',
   section('health',
    `The most common illnesses are <b>hypertension</b> and <b>hyperlipidaemia</b>. These point to the health conditions NbS co-benefits could ease.`,
    [{t:'Top 4 Common Diseases',unit:'ranked by recorded cases',viz:'ranked',items:[{n:'Hypertension',tag:'non'},{n:'Hyperlipidaemia',tag:'non'},{n:'Diabetes Mellitus',tag:'non'},{n:'Asthma / COPD',tag:'non'}],src:'health_common_diseases.csv · SingStat · 2010–2022 · national'}],1,
-   'Top 4 Common Diseases — SingStat, 2010–2022.'),
-  section('housing',
-   `Reserved forest covers <b>3,347 hectares</b> (<b>4.6%</b> of the land area), part of the area's natural buffer.`,
-   [{t:'Permanent Reserved Forests',unit:'% of land area · 3,347 ha',viz:'pct',value:'4.6%',src:'land_forest_reserves.csv · SingStat · 2015–2020 · national'}],1,
-   'Permanent Reserved Forests — SingStat, 2015–2020.')]};
+   'Top 4 Common Diseases — SingStat, 2010–2022.')]};
 
 C.Thailand={flag:'\u{1F1F9}\u{1F1ED}',
  demo:{pop:'1,290,000',male:'638,000',female:'652,000',rows:AGE,vuln:{p:'High',e:'Moderate',ec:'Moderate',s:'Moderate'},
@@ -377,11 +372,10 @@ C.Vietnam={flag:'\u{1F1FB}\u{1F1F3}',
    [{t:'Average Household Income',unit:'VND / month per person',viz:'kpi',value:'&#8363; 4.67 M',src:'economy_income_monthly_per_capita.csv · GSO · adm1'}],1,
    'Average Household Income — GSO.'),
   section('housing',
-   `In <b>Qu&#7843;ng Ninh</b> Province, <b>96.2%</b> of households have access to improved drinking water and <b>88%</b> of households have access to improved sanitation. The permanent reserved forest covers <b>122,000 hectares</b> in this province, part of the area's natural buffer.`,
+   `In <b>Qu&#7843;ng Ninh</b> Province, <b>96.2%</b> of households have access to improved drinking water and <b>88%</b> of households have access to improved sanitation.`,
    [{t:'Households with Access to Water',unit:'% of households (improved source)',viz:'pct',value:'96.2%',src:'hhs_water_drinking_improved.csv · GSO · 2018–2023 · adm1'},
-    {t:'Toilet Facility Categories',unit:'% of households (improved sanitation)',viz:'pct',value:'88%',src:'hhs_toilet_usage.csv · GSO · 2018–2023 · adm1'},
-    {t:'Permanent Reserved Forests',unit:'hectares',viz:'kpi',value:'122,000 ha',src:'land_forest_reserves.csv · GSO · 2020–2024 · adm1'}],3,
-   'Households with Access to Water — GSO, 2018–2023; Toilet Facility Categories — GSO, 2018–2023; Permanent Reserved Forests — GSO, 2020–2024.')]};
+    {t:'Toilet Facility Categories',unit:'% of households (improved sanitation)',viz:'pct',value:'88%',src:'hhs_toilet_usage.csv · GSO · 2018–2023 · adm1'}],2,
+   'Households with Access to Water — GSO, 2018–2023; Toilet Facility Categories — GSO, 2018–2023.')]};
 
 C.Laos={flag:'\u{1F1F1}\u{1F1E6}',
  demo:{pop:'7,500,000',male:'3,730,000',female:'3,770,000',rows:AGE,vuln:{p:'High',e:'High',ec:'High',s:'High'},
@@ -397,11 +391,10 @@ C.Laos={flag:'\u{1F1F1}\u{1F1E6}',
    [{t:'Literacy Rate',unit:'% of community aged 15+',viz:'pct',value:'87.1%',src:'education_literacy_rate.csv · Lao Statistics Bureau · 2023 · national'}],1,
    'Literacy Rate — Lao Statistics Bureau, 2023.'),
   section('housing',
-   `<b>82.4%</b> of households have access to improved drinking water and <b>68%</b> of households have access to improved sanitation (national data). In <b>Savannakhet</b> Province, reserved forest covers <b>1.2 M hectares</b>. This covers the basic services and living conditions that shape how communities cope.`,
+   `<b>82.4%</b> of households have access to improved drinking water and <b>68%</b> of households have access to improved sanitation (national data). This covers the basic services and living conditions that shape how communities cope.`,
    [{t:'Households with Access to Water',unit:'% of households (improved source)',viz:'pct',value:'82.4%',src:'water_drinking_improved.csv · Lao Statistics Bureau · 2018–2024 · national'},
-    {t:'Toilet Facility Categories',unit:'% of households (improved sanitation)',viz:'pct',value:'68%',src:'sanitation_toilet_access.csv · Lao Statistics Bureau · 2018–2024 · national'},
-    {t:'Permanent Reserved Forests',unit:'hectares',viz:'kpi',value:'1.2 M ha',src:'land_forest_reserves.csv · Lao Statistics Bureau · 2021–2024 · adm1'}],3,
-   'Households with Access to Water — Lao Statistics Bureau, 2018–2024; Toilet Facility Categories — Lao Statistics Bureau, 2018–2024; Permanent Reserved Forests — Lao Statistics Bureau, 2021–2024.')]};
+    {t:'Toilet Facility Categories',unit:'% of households (improved sanitation)',viz:'pct',value:'68%',src:'sanitation_toilet_access.csv · Lao Statistics Bureau · 2018–2024 · national'}],2,
+   'Households with Access to Water — Lao Statistics Bureau, 2018–2024; Toilet Facility Categories — Lao Statistics Bureau, 2018–2024.')]};
 
 C.Cambodia={flag:'\u{1F1F0}\u{1F1ED}',
  demo:{pop:'1,010,000',male:'498,000',female:'512,000',rows:AGE,vuln:{p:'High',e:'High',ec:'High',s:'High'},
@@ -456,11 +449,10 @@ C['Brunei Darussalam']={flag:'\u{1F1E7}\u{1F1F3}',
    [{t:'Average Household Income',unit:'BND / month',viz:'kpi',value:'B$ 4,650',src:'income_by_household.csv · DEPS Brunei · 2005–2015 · national'}],1,
    'Average Household Income — DEPS Brunei, 2005–2015.'),
   section('housing',
-   `In the selected area, <b>99.4%</b> of households have access to improved drinking water and <b>98%</b> of households have access to improved sanitation (national data). Permanent reserved forest covers <b>235,500 hectares</b> (national data), part of the area's natural buffer.`,
+   `In the selected area, <b>99.4%</b> of households have access to improved drinking water and <b>98%</b> of households have access to improved sanitation (national data).`,
    [{t:'Households with Access to Water',unit:'% of households (improved source)',viz:'pct',value:'99.4%',src:'water_drinking_improved.csv · DEPS Brunei · 2016–2025 · national'},
-    {t:'Toilet Facility Categories',unit:'% of households (improved sanitation)',viz:'pct',value:'98%',src:'sanitation_toilet_access.csv · DEPS Brunei · 2010–2023 · national'},
-    {t:'Permanent Reserved Forests',unit:'% of reserved forest by class · 235,500 ha',viz:'stacked',segs:[{n:'Protection',v:44},{n:'Production',v:31},{n:'Conservation',v:19},{n:'Recreation',v:6}],src:'land_forest_reserves_edata.csv · DEPS Brunei · 2010–2025 · national'}],2,
-   'Households with Access to Water — DEPS Brunei, 2016–2025; Toilet Facility Categories — DEPS Brunei, 2010–2023; Permanent Reserved Forests — DEPS Brunei, 2010–2025.')]};
+    {t:'Toilet Facility Categories',unit:'% of households (improved sanitation)',viz:'pct',value:'98%',src:'sanitation_toilet_access.csv · DEPS Brunei · 2010–2023 · national'}],2,
+   'Households with Access to Water — DEPS Brunei, 2016–2025; Toilet Facility Categories — DEPS Brunei, 2010–2023.')]};
 
 C['Timor-Leste']={flag:'\u{1F1F9}\u{1F1F1}',
  demo:{pop:'320,000',male:'163,000',female:'157,000',rows:AGE,vuln:{p:'High',e:'High',ec:'Very High',s:'High'},
