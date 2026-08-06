@@ -366,12 +366,11 @@ const siteGeneral = `
 /* Nature Context — live HTML rebuilt from Figma (F02 P2, node 3892-33553).
    Shares the .gc* card/alert/source styles; Nature-only pieces are .nc*. */
 const NC_ASSETS = 'assets/f01-step2/natctx';
-/* Every occurrence count is per species; the class row totals the species below
-   it, so the two always agree. list = [common, latin, occurrence] */
+/* Occurrence counts are per species only. list = [common, latin, occurrence] */
 const ncSpecies = (icon, name, dot, list) => `
                 <div class="nc-splist">
                   <img class="nc-splist__ic" src="${NC_ASSETS}/${icon}.svg" alt="" />
-                  <div class="nc-splist__id"><span>${name}</span><b>${list.reduce((n, s) => n + s[2], 0)} Occurrence</b></div>
+                  <div class="nc-splist__id"><span>${name}</span></div>
                   <ul style="--dot:${dot}">${list.map(s => `<li><i>${s[0]}</i> <em>(${s[1]})</em><b>${s[2]} occurrence</b></li>`).join('')}</ul>
                 </div>`;
 
@@ -400,9 +399,9 @@ const siteNature = `
               <div class="gc-block">
                 <p class="gc-p">There are keystone species throughout the project area. The species featured are:</p>
                 <div class="nc-splists">
-${ncSpecies('sp-bird', 'Aves', '#1da3dc', [['Bali Myna','Leucopsar rothschildi',96],['Java Sparrow','Padda oryzivora',74],['Black-winged Starling','Acridotheres melanopterus',61],['Javan Kingfisher','Halcyon cyanoventris',48]])}
-${ncSpecies('sp-mammal', 'Mammalia', '#f08a4b', [['Javan Rusa','Rusa timorensis',37],['Long-tailed Macaque','Macaca fascicularis',52]])}
-${ncSpecies('sp-reptile', 'Reptilia', '#1d9e75', [['Reticulated Python','Malayopython reticulatus',23],['Asian Water Monitor','Varanus salvator',44]])}
+${ncSpecies('sp-bird', 'Aves', 'var(--primary-500)', [['Bali Myna','Leucopsar rothschildi',96],['Java Sparrow','Padda oryzivora',74],['Black-winged Starling','Acridotheres melanopterus',61],['Javan Kingfisher','Halcyon cyanoventris',48]])}
+${ncSpecies('sp-mammal', 'Mammalia', 'var(--primary-500)', [['Javan Rusa','Rusa timorensis',37],['Long-tailed Macaque','Macaca fascicularis',52]])}
+${ncSpecies('sp-reptile', 'Reptilia', 'var(--primary-500)', [['Reticulated Python','Malayopython reticulatus',23],['Asian Water Monitor','Varanus salvator',44]])}
                 </div>
               </div>${gcAlert}${gcSource('Threatened species', 'IUCN Red List', '2024')}
             </section>
