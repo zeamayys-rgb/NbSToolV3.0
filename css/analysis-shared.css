@@ -240,10 +240,6 @@
   .t3-sec[hidden]{display:none;}
   .t3-sec{display:flex;flex-direction:column;gap:16px;}
   .t3-sections{display:flex;flex-direction:column;gap:16px;}
-  /* screening summary intro (Figma 302-44638) */
-  .t3-screen{display:flex;flex-direction:column;gap:6px;}
-  .t3-screen h4{margin:0;font-size:14px;font-weight:600;line-height:1.45;color:#2c6639;}
-  .t3-screen p{margin:0;font-size:12px;line-height:18px;color:#505760;}
   /* top metric cards */
   .t3-metrics{display:flex;gap:8px;}
   .t3-metric{flex:1 1 0;min-width:0;display:flex;gap:12px;align-items:flex-start;background:#fff;border:1px solid var(--stroke-base,#eaebf0);border-radius:8px;padding:17px;}

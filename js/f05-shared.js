@@ -17,7 +17,7 @@ const ecoIcons = {
   peatland: `<img class="eco-logo" src="assets/pathway/eco-peatland.svg" alt="Peatland" />`
 };
 
-/* Activities, benefits and indicators mirror NbS_Activities_Flow_v3.html —
+/* Activities, benefits and indicators mirror NbS_Activities_Flow_v2.html —
    the matrix flow diagram is the canonical mapping of
    Ecosystem → Pathway → Activity → Benefit Category → Benefit → Indicator.
    Forest = DRYLAND there; ineligible trajectories are excluded.

@@ -42,6 +42,24 @@
     justify-content: center; gap: 6px;
   }
 
+  /* ===== Data migration notice banner ===== */
+  .mig-banner {
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 18px; margin-bottom: 16px;
+    background: var(--primary-25); border: 1px solid var(--primary-200);
+    border-radius: var(--radius-md);
+  }
+  .mig-ic { flex: none; width: 22px; height: 22px; color: var(--primary-600); }
+  .mig-ic svg { width: 100%; height: 100%; }
+  .mig-txt { flex: 1 1 0; min-width: 0; }
+  .mig-txt b { display: block; font-size: 14px; line-height: 22px; color: var(--text-base-main); }
+  .mig-txt p { margin: 2px 0 0; font-size: 13px; line-height: 20px; color: var(--text-base-second); }
+  .mig-cta { flex: none; white-space: nowrap; }
+  @media (max-width: 720px) {
+    .mig-banner { flex-wrap: wrap; }
+    .mig-cta { margin-left: 36px; }
+  }
+
   /* ===== Create New Project chooser modal ===== */
   .np-ov {
     position: fixed; inset: 0; z-index: 9000;
@@ -187,6 +205,19 @@
       <div class="stat"><div class="v">37</div><div class="k">Monitoring Entries</div></div>
     </div>
   </section>
+
+  <!-- ===== Data migration notice ===== -->
+  <div class="mig-banner" role="status" data-screen-label="Migration notice">
+    <span class="mig-ic"><svg viewBox="0 0 24 24" fill="none"><ellipse cx="12" cy="5.5" rx="7" ry="2.5" stroke="currentColor" stroke-width="1.8"/><path d="M5 5.5v6c0 1.38 3.13 2.5 7 2.5s7-1.12 7-2.5v-6" stroke="currentColor" stroke-width="1.8"/><path d="M5 11.5v6C5 18.88 8.13 20 12 20s7-1.12 7-2.5v-6" stroke="currentColor" stroke-width="1.8"/></svg></span>
+    <div class="mig-txt">
+      <b>Your data from the previous NbS Tool version is being migrated.</b>
+      <p>Projects and monitoring records from the earlier version will appear here automatically once the migration is complete. Need quick access to your old data in the meantime?</p>
+    </div>
+    <a class="btn btn-primary mig-cta" href="mailto:support@nbstool.org?subject=Request%20access%20to%20my%20previous%20NbS%20Tool%20data">
+      <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M4 7l8 6 8-6" stroke="currentColor" stroke-width="1.8"/></svg>
+      Contact Developer
+    </a>
+  </div>
 
   <!-- ===== Toolbar ===== -->
   <div class="toolbar">

@@ -36,38 +36,47 @@
   .dm{background:var(--bg-base-main,#fff);border-radius:var(--radius-xl);box-shadow:var(--elevation-6);width:100%;max-width:620px;padding:var(--space-32);font-family:var(--font-text);animation:dmIn .18s ease;}
   .dm--sm{max-width:462px;}
   @keyframes dmIn{from{opacity:0;transform:translateY(8px) scale(.99)}to{opacity:1;transform:none}}
-  .dm-head{display:flex;justify-content:space-between;align-items:flex-start;gap:0;padding-bottom:var(--space-16);border-bottom:1px solid var(--stroke-base);margin-bottom:var(--space-16);}
+  .dm-head{display:flex;justify-content:space-between;align-items:flex-start;gap:0;padding-bottom:12px;border-bottom:1px solid var(--stroke-base);margin-bottom:var(--space-16);}
   .dm-head>div:first-child{display:flex;flex-direction:column;}
   .dm-eyebrow{font:600 11px/1 'IBM Plex Mono',monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--text-primary);}
-  .dm h3{font-family:var(--font-display);font-size:26px;font-weight:700;color:var(--text-base-main);margin:var(--space-8) 0 6px;letter-spacing:-.5px;line-height:1.15;}
+  .dm h3{font-family:var(--font-display);font-size:26px;font-weight:600;color:var(--text-base-main);margin:var(--space-8) 0 0;letter-spacing:-.5px;line-height:1.15;}
+  #dmFinish h3{font-family:'Poppins',sans-serif;font-size:17px;font-weight:700;letter-spacing:-.34px;margin:4px 0 2px;line-height:1.3;}
   .dm-sub{font-size:14px;color:var(--text-base-second);line-height:1.5;}
+  #dmFinish > div > .dm-head > div > .dm-sub{margin:0;padding-top:0;padding-bottom:2px;font-size:12px;}
   .dm-x{width:38px;height:38px;flex:none;display:grid;place-items:center;border:1px solid #e5e7eb;border-radius:8px;background:#fff;color:#68727d;cursor:pointer;transition:.15s;}
   .dm-x:hover{background:#f5f6f8;color:#252525;}
   .dm-x svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;}
   .dm-body{display:flex;flex-direction:column;gap:12px;}
-  .dm-opt{display:flex;gap:16px;align-items:flex-start;text-align:left;width:100%;background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:16px 18px;cursor:pointer;transition:.15s;font-family:inherit;}
+  .dm-opt{display:flex;align-items:center;justify-content:space-between;gap:16px;text-align:left;width:100%;background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:16px 18px;cursor:pointer;transition:.15s;font-family:inherit;}
   .dm-opt:hover{border-color:#066653;background:#f3faf7;box-shadow:0 4px 14px -6px rgba(16,24,40,.12);}
-  .dm-opt__ic{width:52px;height:52px;flex:none;display:grid;place-items:center;border-radius:12px;background:#e8f5f1;color:#066653;}
-  .dm-opt__ic svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
-  .dm-opt__tx{display:flex;flex-direction:column;gap:4px;}
-  .dm-opt__tx b{font-size:17px;font-weight:700;color:#1a202c;}
+  .dm-opt__main{display:flex;gap:16px;align-items:flex-start;}
+  .dm-opt__ic{width:52px;height:52px;flex:none;display:grid;place-items:center;border-radius:12px;background:#e8f5f1;}
+  .dm-opt__ic img{width:24px;height:24px;}
+  .dm-opt__tx{display:flex;flex-direction:column;gap:3.25px;}
+  .dm-opt__tx b{font-size:14px;font-weight:700;color:#252525;}
   .dm-opt__tx span{font-size:12px;color:#68727d;line-height:1.45;}
-  .dm-note{display:flex;gap:12px;align-items:flex-start;background:var(--bg-warning-second,#fdf6ea);border-radius:10px;padding:14px 16px;margin-top:4px;}
-  .dm-note svg{width:22px;height:22px;flex:none;stroke:var(--text-warning,#efa22f);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
-  .dm-note p{margin:0;font-size:13px;color:var(--warning-700,#8f611c);line-height:22px;}
-  /* leave modal */
-  .dm-head--icon{border-bottom:none;padding-bottom:0;margin-bottom:0;}
-  .dm-warn{width:56px;height:56px;flex:none;display:grid;place-items:center;border-radius:12px;background:#fdf6ea;color:#efa22f;}
-  .dm-warn svg{width:28px;height:28px;stroke:#efa22f;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
-  .dm-info{display:flex;gap:12px;align-items:flex-start;background:#f7f8fa;border:1px solid #eaecf0;border-radius:10px;padding:14px 16px;margin:18px 0;}
-  .dm-info svg{width:20px;height:20px;flex:none;stroke:#066653;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;}
-  .dm-info p{margin:0;font-size:14px;color:var(--text-base-second,#4a5560);line-height:22px;}
+  .dm-opt__chev{width:20px;height:20px;flex:none;stroke:#9aa8a1;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+  .dm-note{display:flex;gap:12px;align-items:flex-start;background:#e9f8f1;border-radius:10px;padding:14px 16px;margin-top:4px;}
+  .dm-note img{width:30px;height:30px;flex:none;}
+  .dm-note p{margin:0;font-size:13px;color:#05332a;line-height:22px;}
+  /* leave modal — Figma 4475-39568 */
+  .dm--sm{max-width:479px;}
+  .dm-leave__row{display:flex;gap:20px;align-items:flex-start;}
+  .dm-warn{width:56px;height:56px;flex:none;display:grid;place-items:center;border-radius:12px;background:#fdf6ea;}
+  .dm-warn img{width:28px;height:28px;}
+  .dm-leave__tx{display:flex;flex-direction:column;gap:4px;}
+  .dm-leave__tx h3{font-family:'Poppins',sans-serif;font-size:17px;font-weight:700;letter-spacing:-.34px;color:var(--text-base-main);margin:0;line-height:1.3;}
+  .dm-leave__tx .dm-sub{margin:0;}
+  .dm-leave__btns{display:flex;flex-direction:column;gap:13px;margin-top:30px;}
   .dm-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:9px;font:600 15px/1 'Poppins',sans-serif;border-radius:10px;padding:15px;cursor:pointer;border:1px solid transparent;transition:.15s;}
   .dm-btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
   .dm-btn--primary{background:#066653;color:#fff;}
   .dm-btn--primary:hover{background:#044c3e;}
   .dm-btn--ghost{background:#fff;border-color:#e5e7eb;color:#68727d;margin-top:10px;}
   .dm-btn--ghost:hover{background:#f5f6f8;color:#252525;}
+  .dm-leave__btns .dm-btn{margin-top:0;}
+  .dm-leave__btns .dm-btn--primary{border-radius:6px;padding:12px;box-shadow:0 1px 2px rgba(16,24,40,.04);}
+  .dm-leave__btns .dm-btn--ghost{padding:12px 15px;}
   /* save-project (Add new Project) modal — Figma 2136-61751 */
   .dm-field{display:flex;flex-direction:column;gap:8px;}
   .dm-field label{font-size:15px;font-weight:600;color:#1a202c;}
@@ -938,20 +947,29 @@
     </div>
     <div class="dm-body">
       <button class="dm-opt" type="button" id="dmOptSave">
-        <span class="dm-opt__ic"><svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg></span>
-        <span class="dm-opt__tx"><b>Save to my Project</b><span>Create a feasibility study draft from your site characterisation data.</span></span>
+        <span class="dm-opt__main">
+          <span class="dm-opt__ic"><img src="assets/asset/Icon/save.svg" alt="" width="24" height="24" /></span>
+          <span class="dm-opt__tx"><b>Finish and Save the Analysis</b><span>Save your project area and analysis to your account.</span></span>
+        </span>
+        <svg class="dm-opt__chev" viewBox="0 0 20 20"><path d="M7.5 5l5 5-5 5"/></svg>
       </button>
       <button class="dm-opt" type="button" onclick="window.location.href='document-generator.html'">
-        <span class="dm-opt__ic"><svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg></span>
-        <span class="dm-opt__tx"><b>Generate Document (Feasibility)</b><span>Select suitable activities and metric indicators to track over time.</span></span>
+        <span class="dm-opt__main">
+          <span class="dm-opt__ic"><img src="assets/asset/Icon/document.svg" alt="" width="24" height="24" /></span>
+          <span class="dm-opt__tx"><b>Generate Document (Feasibility)</b><span>Select suitable activities and metric indicators to track over time.</span></span>
+        </span>
+        <svg class="dm-opt__chev" viewBox="0 0 20 20"><path d="M7.5 5l5 5-5 5"/></svg>
       </button>
       <button class="dm-opt" type="button" onclick="window.location.href='create-monitoring-plan.html'">
-        <span class="dm-opt__ic"><svg viewBox="0 0 24 24"><path d="M4 19V5M4 19h16M8 15l3-4 3 3 4-6"/></svg></span>
-        <span class="dm-opt__tx"><b>Create Monitoring Plan</b><span>Select suitable activities and metric indicators to track over time.</span></span>
+        <span class="dm-opt__main">
+          <span class="dm-opt__ic"><img src="assets/asset/Icon/monitoring%20plan.svg" alt="" width="24" height="24" /></span>
+          <span class="dm-opt__tx"><b>Create Monitoring Plan</b><span>Select suitable activities and metric indicators to track over time.</span></span>
+        </span>
+        <svg class="dm-opt__chev" viewBox="0 0 20 20"><path d="M7.5 5l5 5-5 5"/></svg>
       </button>
       <div class="dm-note">
-        <svg viewBox="0 0 24 24"><path d="M12 3 2 20h20z"/><path d="M12 9v5M12 17.5h.01"/></svg>
-        <p>You can return to this step anytime from the Data Analyser panel. Generated outputs are saved to your project portfolio.</p>
+        <img src="assets/asset/Icon/i%20button.svg" alt="" width="30" height="30" />
+        <p>You can return to this step anytime from the Data Analyser panel.<br>Generated outputs are saved to my project dashboard.</p>
       </div>
     </div>
   </div>
@@ -987,18 +1005,17 @@
 <!-- ===== Leave without saving — exit guard modal ===== -->
 <div class="dm-overlay" id="dmLeave" aria-hidden="true">
   <div class="dm dm--sm" role="dialog" aria-modal="true" aria-labelledby="dmLeaveTitle">
-    <div class="dm-head dm-head--icon">
-      <span class="dm-warn"><svg viewBox="0 0 24 24"><path d="M12 3 2 20h20z"/><path d="M12 9v5M12 17.5h.01"/></svg></span>
-      <button class="dm-x" type="button" data-dm-close aria-label="Close"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    <div class="dm-leave__row">
+      <span class="dm-warn"><img src="assets/asset/Icon/Warning.svg" alt="" width="28" height="28" /></span>
+      <div class="dm-leave__tx">
+        <h3 id="dmLeaveTitle">Leave without saving?</h3>
+        <p class="dm-sub">Your analysis hasn&rsquo;t been saved yet. If you leave now, your analysis on NbS Tool will be lost.</p>
+      </div>
     </div>
-    <h3 id="dmLeaveTitle">Leave without saving?</h3>
-    <p class="dm-sub">Your analysis hasn&rsquo;t been saved yet. If you leave now, your site characterisation progress will be lost.</p>
-    <div class="dm-info">
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 7.5h.01"/></svg>
-      <p>Saving creates a project in your portfolio you can return to anytime.</p>
+    <div class="dm-leave__btns">
+      <button class="dm-btn dm-btn--primary" type="button" id="dmLeaveSave">Save my analysis</button>
+      <button class="dm-btn dm-btn--ghost" type="button" id="dmLeaveGo">Leave without saving</button>
     </div>
-    <button class="dm-btn dm-btn--primary" type="button" id="dmLeaveSave"><svg viewBox="0 0 24 24"><path d="M5 3h11l3 3v15H5z"/><path d="M8 3v5h7M8 21v-7h8v7"/></svg>Save my analysis</button>
-    <button class="dm-btn dm-btn--ghost" type="button" id="dmLeaveGo">Leave without saving</button>
   </div>
 </div>
 

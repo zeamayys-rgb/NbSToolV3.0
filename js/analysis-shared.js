@@ -220,6 +220,7 @@ const GC_ICONS = {
   warning: '<path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>',
   paw: '<circle cx="4.5" cy="9.5" r="2.5"/><circle cx="9" cy="5.5" r="2.5"/><circle cx="15" cy="5.5" r="2.5"/><circle cx="19.5" cy="9.5" r="2.5"/><path d="M17.34 14.86c-.87-1.02-1.6-1.89-2.48-2.91-.46-.54-1.05-1.08-1.75-1.32-.11-.04-.22-.07-.33-.09-.25-.04-.52-.04-.78-.04s-.53 0-.79.05c-.11.02-.22.05-.33.09-.7.24-1.28.78-1.75 1.32-.87 1.02-1.6 1.89-2.48 2.91-1.31 1.31-2.92 2.76-2.62 4.79.29 1.02 1.02 2.03 2.33 2.32.73.15 3.06-.44 5.54-.44h.18c2.48 0 4.81.58 5.54.44 1.31-.29 2.04-1.31 2.33-2.32.31-2.04-1.3-3.49-2.61-4.8z"/>',
   eye: '<path d="M11,6H13V13H11V6M9,20A1,1 0 0,1 8,21H5A1,1 0 0,1 4,20V15L6,6H10V13A1,1 0 0,1 9,14V20M10,5H7V3H10V5M15,20V14A1,1 0 0,1 14,13V6H18L20,15V20A1,1 0 0,1 19,21H16A1,1 0 0,1 15,20M14,5V3H17V5H14Z"/>',
+  key: '<path d="M21 10h-8.35C11.83 7.67 9.61 6 7 6c-3.31 0-6 2.69-6 6s2.69 6 6 6c2.61 0 4.83-1.67 5.65-4H15v4h4v-4h2v-4zM7 15c-1.65 0-3-1.35-3-3s1.35-3 3-3 3 1.35 3 3-1.35 3-3 3z"/>',
   shield: '<path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>',
   chart: '<path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>',
   pin: '<path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>',
@@ -255,10 +256,10 @@ const siteGeneral = `
                       <div class="gc-donut__c"><span>Total</span><b>150,000 ha</b></div>
                     </div>
                     <ul class="gc-legend">
-                      <li><i style="background:#f1fc3e;box-shadow:inset 0 0 0 1px #a9a9a9"></i>Mangrove</li>
-                      <li><i style="background:#abc963"></i>Peatland</li>
-                      <li><i style="background:#2c6639"></i>Dryland Forest</li>
-                      <li><i style="background:#dadada"></i>Other</li>
+                      <li><i style="background:#1a9e96"></i>Mangrove</li>
+                      <li><i style="background:#bea001"></i>Peatland</li>
+                      <li><i style="background:#1f6b47"></i>Dryland Forest</li>
+                      <li><i style="background:#e1e1e1"></i>Other</li>
                     </ul>
                   </div>
                 </div>
@@ -368,7 +369,7 @@ const siteGeneral = `
 const NC_ASSETS = 'assets/f01-step2/natctx';
 /* Occurrence counts are per species only. list = [common, latin, occurrence] */
 const ncSpecies = (icon, name, dot, list) => `
-                <div class="nc-splist">
+                <div class="nc-splist${list.length > 5 ? ' nc-splist--scroll' : ''}">
                   <img class="nc-splist__ic" src="${NC_ASSETS}/${icon}.svg" alt="" />
                   <div class="nc-splist__id"><span>${name}</span></div>
                   <ul style="--dot:${dot}">${list.map(s => `<li><i>${s[0]}</i> <em>(${s[1]})</em><b>${s[2]} occurrence</b></li>`).join('')}</ul>
@@ -395,7 +396,7 @@ const siteNature = `
             </section>
 
             <!-- 2 · Indicative key species presence -->
-            <section class="gc-card">${gcHead('Indicative Key Species Presence', 'eye', 'species-occurrence')}
+            <section class="gc-card">${gcHead('Indicative Key Species Presence', 'key', 'species-occurrence')}
               <div class="gc-block">
                 <p class="gc-p">There are keystone species throughout the project area. The species featured are:</p>
                 <div class="nc-splists">
@@ -459,6 +460,27 @@ ${ncSpecies('sp-reptile', 'Reptilia', 'var(--primary-500)', [['Reticulated Pytho
               </div>${gcAlert}${gcSource('Threatened tree species', 'BGCI GlobalTreeSearch &amp; IUCN Red List', '2024')}
             </section>
 
+            <!-- 6b · Endangered tree species — error / edge-case states -->
+            <section class="gc-card">${gcHead('Endangered Tree Species (Error)', 'park')}
+              <div class="gc-block">
+                <div class="nc-err nc-err--empty">
+                  <span class="nc-err__ic"><svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">${GC_ICONS.warning}</svg></span>
+                  <div>
+                    <b>Data not available</b>
+                    <p>Endangered tree species data is not available &mdash; or only partially available &mdash; for this project area. Dataset coverage varies across South-east Asia; results shown may be incomplete.</p>
+                  </div>
+                </div>
+                <div class="nc-err nc-err--fail">
+                  <span class="nc-err__ic"><svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">${GC_ICONS.warning}</svg></span>
+                  <div>
+                    <b>Failed to load</b>
+                    <p>We couldn&rsquo;t load endangered tree species data for this area. Check your connection and try again.</p>
+                  </div>
+                  <button type="button" class="nc-err__retry">Retry</button>
+                </div>
+              </div>${gcAlert}${gcSource('Threatened tree species', 'BGCI GlobalTreeSearch &amp; IUCN Red List', '2024')}
+            </section>
+
           </div>
         </div>`;
 
@@ -483,16 +505,14 @@ const siteClimate = `
           <div class="gc">
 
             <!-- 1 · Carbon information -->
-            <section class="gc-card gc-card--blue">${gcHead('Carbon information', 'cloud', false)}
+            <section class="gc-card gc-card--blue">${gcHead('Carbon information', 'cloud', 'carbon-pools')}
               <div class="gc-block">
-                ${gcSub('Current Carbon Storage Total', 'carbon-pools')}
                 <div class="cl-carbon">
                   <p class="gc-p">The area hosts extensive carbon sinks that currently store <b>27,193,712.20</b> tCO<sub>2</sub>e, adding to the vital fight against global warming.</p>
                   <div class="cl-total"><span>Total Carbon Storage:</span><b>27,193,712.20 <em>tCO<sub>2</sub>e</em></b></div>
                 </div>
               </div>
               <div class="gc-block">
-                ${gcSub('Type of Carbon (Carbon Pool) within the area:', 'carbon-pools')}
                 <div class="cl-pool">
                   <figure class="cl-pool__scene">
                     <div class="cl-pool__top">
@@ -597,11 +617,6 @@ const threatSections = `
 
             <!-- ---------- OVERVIEW ---------- -->
             <div class="t3-sec" data-t3sec="overview">
-              <div class="t3-screen">
-                <h4>Screening summary of forest, mangrove and peatland ecosystem conditions.</h4>
-                <p>Explore disturbance charts and maps summarising the disturbances to the forest, peatland and mangrove ecosystems within the project area. The interactive maps show remaining forest, disturbed forest, forest loss, and tree cover gain.</p>
-              </div>
-
               <div class="t3-metrics">
                 <div class="t3-metric">
                   <span class="ic" style="background:#e8f5f1;color:#077f68"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 2.5 15.4 0 18M12 3c-2.5 2.6-2.5 15.4 0 18"/></svg></span>
