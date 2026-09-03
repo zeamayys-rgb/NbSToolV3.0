@@ -89,6 +89,45 @@
   .vu-ghost{background:#fff;color:#2d3648;border-color:#e5e5e7}
   .vu-ghost:hover{background:#f5f5f5;transform:translateY(-1px)}
 
+
+  .vu-hd-row{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:18px}
+  .vu-date{margin-top:0}
+  .vu-link{display:inline-flex;align-items:center;gap:7px;padding:6px 2px;border:0;background:none;
+    font-family:inherit;font-size:13px;font-weight:600;color:#5fe6a0;cursor:pointer;
+    border-bottom:1px solid rgba(95,230,160,.35);transition:color .18s,border-color .18s}
+  .vu-link:hover{color:#9bf2c4;border-color:#9bf2c4}
+  .vu-link svg{width:15px;height:15px;transition:transform .2s}
+  .vu-link:hover svg{transform:translateX(3px)}
+
+  /* subscribe form */
+  .vu-fld{display:flex;flex-direction:column;gap:6px;margin-top:4px}
+  .vu-fld>span{font-size:12.5px;font-weight:600;color:#2d3648}
+  .vu-fld>span em{font-style:normal;font-weight:400;color:#848b94}
+  .vu-fld input{width:100%;padding:11px 13px;border:1px solid #e5e5e7;border-radius:10px;
+    font-family:inherit;font-size:13.5px;color:#2d3648;background:#fff;outline:none;
+    transition:border-color .16s,box-shadow .16s}
+  .vu-fld input::placeholder{color:#a0a4ac}
+  .vu-fld input:focus{border-color:#077f68;box-shadow:0 0 0 3px rgba(7,127,104,.13)}
+  .vu-cap{display:flex;align-items:center;gap:12px;margin-top:18px;padding:14px 16px;
+    background:#f8f9fb;border:1px solid #e5e5e7;border-radius:12px;cursor:pointer}
+  .vu-cap input{position:absolute;opacity:0;width:0;height:0}
+  .vu-cap-box{flex:none;width:24px;height:24px;border:2px solid #c0c2c6;border-radius:6px;background:#fff;
+    display:grid;place-items:center;color:#fff;transition:background .16s,border-color .16s}
+  .vu-cap-box svg{width:15px;height:15px;opacity:0;transition:opacity .16s}
+  .vu-cap input:checked+.vu-cap-box{background:#077f68;border-color:#077f68}
+  .vu-cap input:checked+.vu-cap-box svg{opacity:1}
+  .vu-cap-txt{flex:1;font-size:13.5px;font-weight:500;color:#2d3648}
+  .vu-cap-brand{display:inline-flex;align-items:center;gap:6px;font-size:10.5px;color:#848b94;text-align:right}
+  .vu-cap-brand svg{width:20px;height:20px;color:#9fd4c9}
+
+  /* confirmation */
+  .vu-done{text-align:center;padding:26px 0 10px}
+  .vu-done-ic{width:52px;height:52px;margin:0 auto 14px;border-radius:50%;display:grid;place-items:center;
+    background:#e9f8f1;color:#077f68}
+  .vu-done-ic svg{width:26px;height:26px}
+  .vu-done h4{margin:0 0 6px;font-size:18px;font-weight:600;color:#2d3648}
+  .vu-done p{margin:0 auto;max-width:46ch;font-size:13.5px;line-height:1.65;color:#5c656e}
+
   @media (max-width:600px){
     .vu-ovl{padding:0;align-items:flex-end}
     .vu{max-height:94vh;border-radius:20px 20px 0 0}
@@ -115,18 +154,21 @@
       (tag ? '<span class="vu-tag">' + tag + '</span>' : '') + '</h4>' + body + '</div></div>';
   }
 
-  var html =
-  '<div class="vu" role="dialog" aria-modal="true" aria-labelledby="vu-title">' +
+  var HEADER =
     '<div class="vu-hd">' +
       '<button class="vu-x" type="button" aria-label="Close announcement">' + svg('<path d="M18 6 6 18M6 6l12 12"/>') + '</button>' +
       '<span class="vu-badge"><i></i>Version update</span>' +
       '<h2 id="vu-title">NbS Tool <em>v3.0</em> is coming</h2>' +
       '<p>A deeper analysis engine, a full Feasibility Study document, and an interface rebuilt around how you actually work — shaped by your feedback and our user study.</p>' +
-      '<span class="vu-date">' + svg('<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>') +
-        'Launching <b>2 December</b></span>' +
-    '</div>' +
+      '<div class="vu-hd-row">' +
+        '<span class="vu-date">' + svg('<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>') +
+          'Launching <b>2 December 2026</b></span>' +
+        '<button class="vu-link" type="button" data-vu-view="form">Be the first to know NbS Tool update' +
+          svg('<path d="M5 12h14M13 6l6 6-6 6"/>') + '</button>' +
+      '</div>' +
+    '</div>';
 
-    '<div class="vu-bd">' +
+  var newsHtml =
       '<section class="vu-sec">' +
         '<h3>What\'s new — Features</h3>' +
         item(ic.chart, 'Data Analyser', 'Expanded',
@@ -157,16 +199,65 @@
         item(ic.folder, 'A more complete My Project', '',
           '<p>The My Project screen carries more information, organised into clearer categories.</p>') +
       '</section>' +
-    '</div>' +
+    '';
 
-    '<div class="vu-ft">' +
-      '<div class="vu-ft-txt"><b>Questions about the update?</b>' +
-        '<span>The NbS Tool team is happy to walk you through what changes for your projects.</span></div>' +
-      '<a class="vu-btn vu-solid" href="' + CONTACT + '">' +
-        svg('<path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"/><path d="m22 7-10 6L2 7"/>') +
-        'Contact the NbS Tool team</a>' +
-      '<button class="vu-btn vu-ghost" type="button" data-vu-close>Got it</button>' +
-    '</div>' +
+  var newsFt =
+    '<div class="vu-ft-txt"><b>Questions about the update?</b>' +
+      '<span>The NbS Tool team is happy to walk you through what changes for your projects.</span></div>' +
+    '<a class="vu-btn vu-solid" href="' + CONTACT + '">' +
+      svg('<path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"/><path d="m22 7-10 6L2 7"/>') +
+      'Contact the NbS Tool team</a>' +
+    '<button class="vu-btn vu-ghost" type="button" data-vu-close>Got it</button>';
+
+  // ponytail: interface only — no submit endpoint, no real captcha.
+  var formHtml =
+    '<section class="vu-sec vu-form">' +
+      '<h3>Launch notification</h3>' +
+      '<p class="vu-lead">Leave your email address and we will let you know the moment NbS Tool v3.0 goes live on 2 December 2026, together with a short guide to what changed.</p>' +
+      '<label class="vu-fld"><span>Email address</span>' +
+        '<input type="email" name="email" placeholder="you@organisation.org" autocomplete="email" required /></label>' +
+      '<label class="vu-cap">' +
+        '<input type="checkbox" name="captcha" />' +
+        '<span class="vu-cap-box">' + svg('<path d="M20 6 9 17l-5-5"/>') + '</span>' +
+        '<span class="vu-cap-txt">I am not a robot</span>' +
+        '<span class="vu-cap-brand">' + svg('<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/>') + 'Privacy · Terms</span>' +
+      '</label>' +
+    '</section>';
+
+  var formFt =
+    '<div class="vu-ft-txt"><b>One email, at launch.</b>' +
+      '<span>We only use this address for NbS Tool release news — no newsletters, no sharing.</span></div>' +
+    '<button class="vu-btn vu-solid" type="button" data-vu-view="done">' +
+      svg('<path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"/><path d="m22 7-10 6L2 7"/>') +
+      'Notify me at launch</button>' +
+    '<button class="vu-btn vu-ghost" type="button" data-vu-view="news">Back to what\'s new</button>';
+
+  var doneHtml =
+    '<section class="vu-sec vu-done">' +
+      '<div class="vu-done-ic">' + svg('<path d="M20 6 9 17l-5-5"/>') + '</div>' +
+      '<h4>You are on the list</h4>' +
+      '<p>We will email you on 2 December 2026 when NbS Tool v3.0 is live. In the meantime you can keep using v2 as usual.</p>' +
+    '</section>';
+
+  var doneFt =
+    '<div class="vu-ft-txt"><b>Need something sooner?</b>' +
+      '<span>The NbS Tool team can walk you through the update for your projects.</span></div>' +
+    '<a class="vu-btn vu-solid" href="' + CONTACT + '">' +
+      svg('<path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"/><path d="m22 7-10 6L2 7"/>') +
+      'Contact the NbS Tool team</a>' +
+    '<button class="vu-btn vu-ghost" type="button" data-vu-close>Got it</button>';
+
+  var views = {
+    news: [newsHtml, newsFt],
+    form: [formHtml, formFt],
+    done: [doneHtml, doneFt]
+  };
+
+  var shell =
+  '<div class="vu" role="dialog" aria-modal="true" aria-labelledby="vu-title">' +
+    HEADER +
+    '<div class="vu-bd"></div>' +
+    '<div class="vu-ft"></div>' +
   '</div>';
 
   function open() {
@@ -176,13 +267,22 @@
 
     var ovl = document.createElement('div');
     ovl.className = 'vu-ovl';
-    ovl.innerHTML = html;
+    ovl.innerHTML = shell;
     document.body.appendChild(ovl);
 
     var prevOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
     requestAnimationFrame(function () { ovl.classList.add('in'); });
-    ovl.querySelector('.vu-bd').scrollTop = 0;
+    var bd = ovl.querySelector('.vu-bd');
+    var ft = ovl.querySelector('.vu-ft');
+    function show(name) {
+      bd.innerHTML = views[name][0];
+      ft.innerHTML = views[name][1];
+      bd.scrollTop = 0;
+      var first = bd.querySelector('input[type="email"]');
+      if (first) first.focus({ preventScroll: true });
+    }
+    show('news');
     ovl.querySelector('.vu-x').focus({ preventScroll: true });
 
     function close() {
@@ -195,7 +295,9 @@
     function onKey(e) { if (e.key === 'Escape') close(); }
 
     ovl.addEventListener('click', function (e) {
-      if (e.target === ovl || e.target.closest('.vu-x, [data-vu-close]')) close();
+      if (e.target === ovl || e.target.closest('.vu-x, [data-vu-close]')) return close();
+      var v = e.target.closest('[data-vu-view]');
+      if (v) show(v.getAttribute('data-vu-view'));
     });
     document.addEventListener('keydown', onKey);
   }
