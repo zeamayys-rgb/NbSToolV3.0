@@ -1,6 +1,9 @@
 # Local / internal — not part of the deployed site
 uploads/
 scraps/
-docs/
+# docs/* (not docs/) so the negation below can re-include a subdirectory —
+# git cannot re-include anything under an excluded *directory* (DEC-20)
+docs/*
+!docs/design/
 .claude/
 .DS_Store

@@ -71,10 +71,37 @@
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') wrap.classList.remove('open'); });
   }
 
+  /* Brand product switcher — the chevron beside the SCeNe mark.
+     Same open / outside-click / Escape contract as the profile dropdown,
+     but keeps aria-expanded in sync and returns focus to the button. */
+  function initBrandSwitch() {
+    var wrap = document.getElementById('brandSwitch');
+    if (!wrap) return;
+    var btn = wrap.querySelector('.sitenav-switch');
+    var menu = wrap.querySelector('.sitenav-switch-menu');
+    if (!btn || !menu) return;
+
+    function setOpen(open) {
+      menu.hidden = !open;
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      setOpen(menu.hidden);
+    });
+    document.addEventListener('click', function (e) {
+      if (!menu.hidden && !wrap.contains(e.target)) setOpen(false);
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !menu.hidden) { setOpen(false); btn.focus(); }
+    });
+  }
+
   function boot() {
     document.querySelectorAll('nav.sitenav').forEach(initNav);
     initNotices();
     initProfileDropdown();
+    initBrandSwitch();
     hardenSvgs();
     // catch dynamically-rendered icons — only on JS-rendered screens (F03 / F05.1.1)
     if (document.getElementById('root')) {

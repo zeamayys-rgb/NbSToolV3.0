@@ -141,9 +141,32 @@
 
 <!-- ===== Site nav (shared) ===== -->
 <nav class="sitenav">
-  <a class="sitenav-logo" href="index.html">
-    <img src="assets/scene-logo.png" alt="SCeNe Coalition" width="360" height="133" style="height:44px;width:auto" />
-  </a>
+  <div class="sitenav-brand" id="brandSwitch">
+    <a class="sitenav-logo" href="index.html">
+      <img class="sitenav-logo-nbs" src="assets/nbs-logo-dark.png" alt="NbS Tool" width="188" height="80" />
+      <span class="sitenav-logo-rule" aria-hidden="true"></span>
+      <img class="sitenav-logo-scene" src="assets/scene-logo.png" alt="SCeNe Coalition" width="360" height="133" />
+    </a>
+    <button class="sitenav-switch" type="button" aria-label="Other SCeNe Coalition tools" aria-expanded="false" aria-controls="brandSwitchMenu">
+      <svg class="chev" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div class="sitenav-switch-menu" id="brandSwitchMenu" hidden>
+      <p class="ssm-head">SCeNe Coalition tools</p>
+      <a class="ssm-item is-current" href="index.html" aria-current="page">
+        <b>NbS Tool</b><span>Understand your area with credible spatial data.</span>
+      </a>
+      <!-- TODO(design): these three need real destinations; rendered as non-links until then. -->
+      <div class="ssm-item is-unavailable">
+        <b>NbS Criteria</b><span>Build climate, biodiversity and social integrity into the project.</span>
+      </div>
+      <div class="ssm-item is-unavailable">
+        <b>NbS Incubator</b><span>Turn an early idea into a fundable project.</span>
+      </div>
+      <div class="ssm-item is-unavailable">
+        <b>NbS Portfolio</b><span>Find high-integrity nature-based projects in the region.</span>
+      </div>
+    </div>
+  </div>
   <div class="sitenav-links">
     <a href="index.html" class="sitenav-link">Home</a>
     <a href="#" class="sitenav-link active">Interactive Map</a>
