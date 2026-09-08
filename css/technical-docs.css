@@ -13,21 +13,6 @@ body.docs-active .analysis-toolbar,
 body.docs-active .topbar { display: none !important; }
 body.docs-active .footer { display: none; }
 
-/* ---------- nav entry point ---------- */
-.nav-doc-button {
-  position: relative; flex: none;
-  width: var(--space-40); height: var(--space-40);
-  display: grid; place-items: center;
-  border: 1px solid var(--stroke-base); border-radius: var(--radius-full);
-  background: var(--bg-base-main); color: var(--text-base-second);
-  cursor: pointer;
-  transition: color var(--motion-fast), border-color var(--motion-fast),
-              background var(--motion-fast);
-}
-.nav-doc-button svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linejoin: round; stroke-linecap: round; }
-.nav-doc-button:hover { color: var(--text-primary); border-color: var(--stroke-primary); background: var(--primary-25); }
-.nav-doc-button.active { color: var(--text-on-color); background: var(--bg-primary-main); border-color: var(--stroke-primary); }
-
 /* ---------- three-column layout ---------- */
 .docs-page { background: var(--bg-base-main); }
 .docs-layout {
@@ -201,5 +186,5 @@ body.docs-active .footer { display: none; }
    motion preference. Opt this page out; the JS honours it too (docScrollBehavior). */
 @media (prefers-reduced-motion: reduce) {
   html:has(.docs-page) { scroll-behavior: auto; }
-  .docs-nav-button, .nav-doc-button, .docs-article-footer button { transition: none; }
+  .docs-nav-button, .docs-article-footer button { transition: none; }
 }

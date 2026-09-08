@@ -16,52 +16,8 @@
 <body data-screen-label="F06 — NbS MRV Dashboard">
 <a class="skip-link" href="#main">Skip to main content</a>
 
-<nav class="sitenav">
-  <div class="sitenav-brand" id="brandSwitch">
-    <a class="sitenav-logo" href="index.html">
-      <img class="sitenav-logo-nbs" src="assets/nbs-logo-dark.png" alt="NbS Tool" width="188" height="80" />
-      <span class="sitenav-logo-rule" aria-hidden="true"></span>
-      <img class="sitenav-logo-scene" src="assets/scene-logo.png" alt="SCeNe Coalition" width="360" height="133" />
-    </a>
-    <button class="sitenav-switch" type="button" aria-label="Other SCeNe Coalition tools" aria-expanded="false" aria-controls="brandSwitchMenu">
-      <svg class="chev" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </button>
-    <div class="sitenav-switch-menu" id="brandSwitchMenu" hidden>
-      <p class="ssm-head">SCeNe Coalition tools</p>
-      <a class="ssm-item is-current" href="index.html" aria-current="page">
-        <b>NbS Tool</b><span>Understand your area with credible spatial data.</span>
-      </a>
-      <!-- TODO(design): these three need real destinations; rendered as non-links until then. -->
-      <div class="ssm-item is-unavailable">
-        <b>NbS Criteria</b><span>Build climate, biodiversity and social integrity into the project.</span>
-      </div>
-      <div class="ssm-item is-unavailable">
-        <b>NbS Incubator</b><span>Turn an early idea into a fundable project.</span>
-      </div>
-      <div class="ssm-item is-unavailable">
-        <b>NbS Portfolio</b><span>Find high-integrity nature-based projects in the region.</span>
-      </div>
-    </div>
-  </div>
-  <div class="sitenav-links">
-    <a href="index.html" class="sitenav-link">Home</a>
-    <a href="interactive-map.html" class="sitenav-link">Interactive Map</a>
-    <a href="dashboard.html" class="sitenav-link active">My Project</a>
-  </div>
-  <div class="sitenav-actions">
-    <div class="sitenav-profile-wrap" id="profileWrap">
-      <button class="sitenav-profile" id="profileBtn"><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="white" stroke-width="2"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="white" stroke-width="2" stroke-linecap="round"/></svg> Profile <svg class="chev" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-      <div class="sitenav-dropdown">
-        <div class="sitenav-user-info"><div class="sitenav-user-name">Adi Mantri</div><div class="sitenav-user-email">adi@lestari.org</div></div>
-        <a href="dashboard.html">My Projects</a>
-        <a href="document-generator.html">Document Generator</a>
-        <a href="account-settings.html">Account settings</a>
-        <button class="logout" onclick="window.location.href='login.html'">Log out</button>
-      </div>
-    </div>
-    <button class="sitenav-lang">🇺🇸 <svg class="chev" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-  </div>
-</nav>
+<nav class="sitenav" data-nav-page="projects" data-nav-auth="user"></nav>
+<script src="js/navbar.js"></script>
 <!-- profile dropdown handled by nav-mobile.js (Q-03) -->
 
 <nav class="crumbbar">

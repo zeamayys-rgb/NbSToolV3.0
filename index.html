@@ -22,44 +22,8 @@
 <a class="skip-link" href="#main">Skip to main content</a>
 <div class="scrollbar" id="scrollbar"></div>
 
-<nav class="sitenav">
-  <div class="sitenav-brand" id="brandSwitch">
-    <a class="sitenav-logo" href="index.html">
-      <img class="sitenav-logo-nbs" src="assets/nbs-logo-dark.png" alt="NbS Tool" width="188" height="80" />
-      <span class="sitenav-logo-rule" aria-hidden="true"></span>
-      <img class="sitenav-logo-scene" src="assets/scene-logo.png" alt="SCeNe Coalition" width="360" height="133" />
-    </a>
-    <button class="sitenav-switch" type="button" aria-label="Other SCeNe Coalition tools" aria-expanded="false" aria-controls="brandSwitchMenu">
-      <svg class="chev" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </button>
-    <div class="sitenav-switch-menu" id="brandSwitchMenu" hidden>
-      <p class="ssm-head">SCeNe Coalition tools</p>
-      <a class="ssm-item is-current" href="index.html" aria-current="page">
-        <b>NbS Tool</b><span>Understand your area with credible spatial data.</span>
-      </a>
-      <!-- TODO(design): these three need real destinations; rendered as non-links until then. -->
-      <div class="ssm-item is-unavailable">
-        <b>NbS Criteria</b><span>Build climate, biodiversity and social integrity into the project.</span>
-      </div>
-      <div class="ssm-item is-unavailable">
-        <b>NbS Incubator</b><span>Turn an early idea into a fundable project.</span>
-      </div>
-      <div class="ssm-item is-unavailable">
-        <b>NbS Portfolio</b><span>Find high-integrity nature-based projects in the region.</span>
-      </div>
-    </div>
-  </div>
-  <div class="sitenav-links">
-    <a href="index.html" class="sitenav-link active">Home</a>
-    <a href="interactive-map.html" class="sitenav-link">Interactive Map</a>
-    <a href="dashboard.html" class="sitenav-link">My Project</a>
-  </div>
-  <div class="sitenav-actions">
-    <button class="sitenav-login" data-auth="login">Login</button>
-    <button class="sitenav-signup" data-auth="signup">Sign up</button>
-    <button class="sitenav-lang">🇺🇸 <svg class="chev" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-  </div>
-</nav>
+<nav class="sitenav" data-nav-page="home" data-nav-auth="guest"></nav>
+<script src="js/navbar.js"></script>
 
 
 <!-- ============================================================
@@ -71,7 +35,6 @@
   <div class="hero-contour" aria-hidden="true" style="background:repeating-radial-gradient(circle at 84% 14%, transparent 0 25px, rgba(95,230,160,.14) 25px 26px); -webkit-mask-image:radial-gradient(60% 50% at 84% 14%, #000, transparent 72%); mask-image:radial-gradient(60% 50% at 84% 14%, #000, transparent 72%);"></div>
   <div class="hero-veil" aria-hidden="true"></div>
 
-  <div class="hud hud-br">RLCMS · Tier-2 regional baseline</div>
 
   <div class="hero-inner">
     <h1 class="reveal">Turn a place into a climate project <span class="lit">the world can verify.</span></h1>
@@ -583,7 +546,6 @@
 <section class="finale" data-screen-label="Get started">
   <div class="finale-bg" aria-hidden="true"></div>
   <div class="wrap">
-    <div class="coord reveal">1.4078°S · 109.8290°E — your site is already on the map</div>
     <h2 class="reveal">Let's make it count.</h2>
     <p class="reveal">Start where every great Nature-based Solution starts: a boundary on a map. Scope it, analyse it, and build the proof that unlocks the finance to protect it.</p>
     <div class="cbtn-row reveal">

@@ -404,6 +404,37 @@ out of the benefitFoot template into a named export, then drop the regex in read
 
 ---
 
+## DEC-22 · The site navigation is rendered from one file, not copied into every screen
+
+**Date.** 2026-09-09 · **Status.** `documented`
+
+**Decision.** `nav.sitenav` is no longer authored per screen. Each of the 12 screens that carry
+the bar ships an empty placeholder — `<nav class="sitenav" data-nav-page="…" data-nav-auth="…">`
+— followed by `<script src="js/navbar.js"></script>`, which renders the markup synchronously
+during parse. `js/navbar.js` owns the markup; `js/nav-mobile.js` still owns the behaviour.
+
+**Context.** The same 47 lines of nav markup were duplicated across 12 files, and drifting:
+`interactive-map.html` pointed its own active link at `href="#"`, `technical-docs.html` carried
+an extra doc-icon button nobody else had, `account-settings.html` highlighted a dropdown row
+with inline hexes, and `sitemap.html` styled its Login/Sign-up anchors inline. Adding one link
+("Technical Doc") meant 12 identical edits — the change that prompted this.
+
+**Alternatives visible in the code.** A build step or template include (rejected — DEC-01 keeps
+this a no-build static site); `fetch()` + inject on `DOMContentLoaded` (rejected — the bar would
+paint late and shift the page); a custom element (same late-paint problem, plus a second
+abstraction next to the four shared files the codebase already treats as its component layer).
+
+**Consequences.** A nav change is now one edit in `js/navbar.js` — the `LINKS` array for
+items, `actions()`/`profile()` for the right-hand side. The dropdown's sample identity lives in
+one place, ready to become a real session user. The cost: the bar is JS-dependent — with
+scripting off the placeholder renders as an empty bar, where before there was static markup.
+Acceptable for a prototype whose screens are already JS-driven; the guard in `navbar.js` skips
+any `nav.sitenav` that still has children, so a screen can opt back into its own markup.
+
+Two fixes rode along: `interactive-map.html` and `sitemap.html` never loaded
+`js/nav-mobile.js`, so they had no hamburger and (on the map) a dead profile button. Both now
+load it.
+
 ---
 
 ## How to add an entry

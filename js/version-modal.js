@@ -159,10 +159,10 @@
       '<button class="vu-x" type="button" aria-label="Close announcement">' + svg('<path d="M18 6 6 18M6 6l12 12"/>') + '</button>' +
       '<span class="vu-badge"><i></i>Version update</span>' +
       '<h2 id="vu-title">NbS Tool <em>v3.0</em> is coming</h2>' +
-      '<p>A deeper analysis engine, a full Feasibility Study document, and an interface rebuilt around how you actually work — shaped by your feedback and our user study.</p>' +
+      '<p>An interface rebuilt around how you actually work—shaped by your feedback and user research, featuring richer contextual data layers and deeper analytical tools to take you from general pre-feasibility overviews into detailed feasibility documentation.</p>' +
       '<div class="vu-hd-row">' +
         '<span class="vu-date">' + svg('<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>') +
-          'Launching <b>2 December 2026</b></span>' +
+          'Launching <b>December 2026</b></span>' +
         '<button class="vu-link" type="button" data-vu-view="form">Be the first to know NbS Tool update' +
           svg('<path d="M5 12h14M13 6l6 6-6 6"/>') + '</button>' +
       '</div>' +
@@ -175,7 +175,7 @@
           '<p>Four additions that make the baseline analysis sharper and more location-specific.</p><ul>' +
           '<li><b>Ecosystem identification</b> — a new aspect that maps which ecosystems are present in your area.</li>' +
           '<li><b>Threat Profile</b> — an analysis of the pressures affecting each ecosystem.</li>' +
-          '<li><b>Country-specific social data</b> — stronger figures across demography, employment, education, economy, health, and housing &amp; human settlements.</li>' +
+          '<li><b>Country-specific social data</b> — stronger figures across demography, employment, education, economy, health, as well as housing and human settlements.</li>' +
           '<li><b>Deeper NbS Pathway design</b> — choose an ecosystem (forest, mangrove, peatland), a pathway (protect, manage, restore), and activities for each ecosystem–pathway combination, then see a projected estimate for your NbS carbon project.</li></ul>') +
         item(ic.layers, 'Monitoring Plan', 'New',
           '<p>Select your planned NbS activities and monitoring indicators. NbS Tool generates recommended and additional indicators for you to review before the report is produced.</p>') +
@@ -203,7 +203,7 @@
 
   var newsFt =
     '<div class="vu-ft-txt"><b>Questions about the update?</b>' +
-      '<span>The NbS Tool team is happy to walk you through what changes for your projects.</span></div>' +
+      '<span>The NbS Tool team would love to walk you through what changes for your projects.</span></div>' +
     '<a class="vu-btn vu-solid" href="' + CONTACT + '">' +
       svg('<path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"/><path d="m22 7-10 6L2 7"/>') +
       'Contact the NbS Tool team</a>' +
@@ -212,8 +212,8 @@
   // ponytail: interface only — no submit endpoint, no real captcha.
   var formHtml =
     '<section class="vu-sec vu-form">' +
-      '<h3>Launch notification</h3>' +
-      '<p class="vu-lead">Leave your email address and we will let you know the moment NbS Tool v3.0 goes live on 2 December 2026, together with a short guide to what changed.</p>' +
+      '<h3>Early access</h3>' +
+      '<p class="vu-lead">Want to be among the first to try the new version? Share your email below for early access!</p>' +
       '<label class="vu-fld"><span>Email address</span>' +
         '<input type="email" name="email" placeholder="you@organisation.org" autocomplete="email" required /></label>' +
       '<label class="vu-cap">' +

@@ -22,9 +22,24 @@ State matrices are in [UI-STATES.md](UI-STATES.md). Screens are in [SCREENS.md](
 
 ## CMP-01 · Site navigation (`.sitenav`)
 
-**Files.** [css/nav.css](../../css/nav.css) · [js/nav-mobile.js](../../js/nav-mobile.js)
+**Files.** [css/nav.css](../../css/nav.css) · [js/navbar.js](../../js/navbar.js) (markup) ·
+[js/nav-mobile.js](../../js/nav-mobile.js) (behaviour)
 **Purpose.** The persistent top bar on every screen except SCR-01's variant. Brand, primary
 navigation, identity, language.
+
+**One source of markup (DEC-22).** A screen ships only a placeholder; `js/navbar.js` renders
+the bar into it. Add the script with a plain `<script>` directly after the placeholder so the
+bar exists before paint.
+
+```html
+<nav class="sitenav" data-nav-page="map" data-nav-auth="user"></nav>
+<script src="js/navbar.js"></script>
+```
+
+Changing a nav item — a new link, a renamed label, a different action — is a one-line edit to
+the `LINKS` array or a template function in `js/navbar.js`, never a pass over 12 HTML files.
+The bar spans the full viewport width with `var(--space-48)` side padding; the links stay
+centred via `.sitenav-links { margin: 0 auto }`.
 
 **Brand lockup.** `.sitenav-logo` is a two-mark lockup: the NbS Tool mark
 (`assets/nbs-logo-dark.png`, `.sitenav-logo-nbs`), a 1px `.sitenav-logo-rule` divider, then
@@ -44,9 +59,11 @@ to turn them into `<a>`.`
 
 | "Prop" | Type | Required | Default | Controls |
 |---|---|---|---|---|
-| `.sitenav-link.active` | class | no | — | Marks the current section |
+| `data-nav-page` | attribute | no | — | `home` \| `map` \| `projects` \| `docs` \| `account` — marks the current link `.active` + `aria-current` |
+| `data-nav-auth` | attribute | no | `user` | `user` = profile dropdown · `guest` = Login / Sign up |
+| `.sitenav-link.active` | class (set by JS) | no | — | Marks the current section |
 | `#profileWrap` / `#profileBtn` | id | for signed-in screens | — | Presence enables the profile dropdown |
-| `.sitenav-login` / `.sitenav-signup` | class | no | — | Logged-out variant (SCR-01, SCR-02) |
+| `.sitenav-login` / `.sitenav-signup` | class | no | — | Logged-out variant (SCR-01, SCR-02); rendered as `<a href="login.html" data-auth>` so SCR-01's auth modal can intercept it and every other screen just follows the link |
 | `.open` | class (set by JS) | — | off | Mobile drawer open |
 
 **Variants.** Signed-in (profile dropdown + language) · Logged-out (Log in + Sign up) · Mobile
@@ -65,7 +82,8 @@ to turn them into `<a>`.`
 - Injected once per `nav.sitenav`; re-entrant via a `:scope > .sitenav-burger` guard.
 
 **Known limitations.**
-- User name and email are hardcoded markup ("Adi Mantri", "adi@lestari.org") on every screen.
+- User name and email are still sample data ("Adi Mantri", "adi@lestari.org"), now in one
+  place — `profile()` in `js/navbar.js` — rather than on every screen.
 - The dropdown is not a `menu`/`menuitem` structure and has no roving focus.
 - Long names have no truncation rule.
 - `TODO(design): add aria-expanded to the profile button and define its open/closed announcement.`
