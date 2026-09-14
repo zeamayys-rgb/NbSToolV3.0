@@ -384,6 +384,7 @@ The best-covered screen in the product for real-world states.
 | Long content | Full matrix on a small screen | Diagram scales down; small nodes become unreadable | Partial — no minimum legible size or mobile alternative |
 | Offline / stale | No connection | CDN scripts fail → the error guard fires correctly | Yes |
 | Reduced motion | `prefers-reduced-motion: reduce` | `const reduce = matchMedia(...).matches` is read and honoured | Yes |
+| Embedded | `?embed` in the URL | Title, lede, filter toolbar, stat strip and footer are hidden; only the legend and the diagram render. Used by the SCR-17 figure in §7.5 | Yes |
 
 ## SCR-17 · Technical Documentation (F09)
 
@@ -397,7 +398,11 @@ The best-covered screen in the product for real-world states.
 | Non-eligible | N/A | — | N/A |
 | Long content | A long article on a narrow viewport | Tables and equation blocks scroll horizontally inside their own wrapper; the page body never scrolls sideways. TOC drops below 1100px; sidebar becomes a chip rail below 820px | Yes |
 | Offline / stale | No connection after first load | Fully functional — no network calls after the page and its scripts are cached | Yes |
-| Invalid deep link | `#docs/nonsense` | Falls back to the `overview` article rather than an empty page | Yes |
+| Embedded figure blank | The §7.5 `<iframe>` of SCR-13 fails to load, or its CDN scripts do | An empty framed area. The caption and the *See the detailed activities matrix* CTA below it still render and still reach the page | Partial — the frame carries no fallback of its own; the CTA is the recovery path |
+| Embedded figure on a phone | Viewport below 820px | The frame is hidden; caption and CTA remain. Eight label columns across 1680px do not survive a phone, so the full page — which has pan and zoom — is the route | Yes |
+| Invalid deep link | `#docs/nonsense` | Falls back to the `introduction` article rather than an empty page | Yes |
+| Stale reference | The methodology documentation is reissued after the method articles were transcribed | Nothing — the *Introduction* article names the source and its date (`METHOD_DOC_DATE`, currently 26 August 2026), but the page cannot tell that a newer revision exists | Partial — by design, see DEC-24 |
+| Source contradicts itself | The methodology document gives two values for the same thing (reference CRS, hazard class count, the 44/12 constant) | Both are printed, with a `.doc-callout warn` naming the contradiction and saying which to use meanwhile. Collected in *Limitations* &rarr; "Known inconsistencies in the current method" | Yes — by design, see DEC-24 |
 | Reduced motion | `prefers-reduced-motion: reduce` | Honoured — `docScrollBehavior()` returns `auto`, and a media query opts the page out of the global `html { scroll-behavior: smooth }` in `tokens.css` | Yes |
 
 `TODO(design): SCR-17 has no degraded-page banner. If a shared script fails, the reader sees a page of TODO markers with no explanation of why.` **Blocking.**

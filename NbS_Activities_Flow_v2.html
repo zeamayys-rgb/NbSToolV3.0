@@ -179,7 +179,17 @@
   .tt .t-row .t-k{color:var(--faint);min-width:64px;font-weight:600}
   .tt .t-row .t-v{color:var(--ink)}
   .tt .t-pill{display:inline-block;padding:1px 8px;border-radius:999px;font-size:11px;font-weight:600;margin-top:2px}
+
+  /* ---------- embed mode ---------- */
+  /* ?embed drops the page chrome so this page can be iframed as a figure —
+     technical-docs.html §7.5 does that. Filters and stats go too: the embed is
+     the overview, and its CTA sends anyone who wants to interrogate the matrix
+     here, to the full page. Only the legend and the diagram remain. */
+  .embed body{padding:10px 12px 12px}
+  .embed .eyebrow,.embed h1,.embed .lede,.embed .toolbar,.embed .stats,.embed footer{display:none}
+  .embed .howto{margin-top:0}
 </style>
+<script>if(location.search.includes('embed'))document.documentElement.classList.add('embed');</script>
 </head>
 <body>
 <div class="wrap">

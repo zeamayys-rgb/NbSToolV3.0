@@ -36,7 +36,7 @@ State matrices (`SCR-nn`) are in [UI-STATES.md](UI-STATES.md).
 | SCR-14 | `/design-system` | Design System reference | Living catalogue of tokens and primitives | Look up a component before building | CMP-02, and every primitive | `css/tokens.css`, `css/styleguide.css` |
 | SCR-15 | `/F02-P4_Pathway_Selection` | Pathway Selection (superseded) | Original Figma rebuild of Step 4 | — | — | Superseded by SCR-03 Step 4 |
 | SCR-16 | `/F02-P5_Potential_Benefit_1` | Potential Benefit (superseded) | Original Figma rebuild of Step 5 | — | — | Superseded by SCR-03 Step 5 |
-| SCR-17 | `/technical-docs` | Technical Documentation (F09) | In-app methodology reference: inputs, derivation, core method, limits, forward planning | Understand and audit how a number was produced | CMP-01, CMP-28 | Reads live parameters from `NBS_DATA`, `NBS_ANALYSIS`, `NBS_LAYER_INFO`, `ecosystems`, `indicatorMeta`, `NBS_PEOPLE` — no static copies |
+| SCR-17 | `/technical-docs` | Technical Documentation (F09) | In-app rendering of the Data & methodology documentation: scope, the five phases, benefit detail, Annex A spatial layers, limits | Understand and audit how a number was produced | CMP-01, CMP-28 | Reads live parameters from `NBS_DATA`, `NBS_ANALYSIS`, `NBS_LAYER_INFO`, `ecosystems`, `indicatorMeta`, `NBS_PEOPLE` — no static copies |
 
 **Orphans.** SCR-14, SCR-15, SCR-16 and SCR-17 are reachable by URL but linked from no nav, footer or
 sitemap. SCR-15 and SCR-16 are the Figma-rebuild sources whose content now lives inside
@@ -312,6 +312,11 @@ a CDN and guards for their absence** (`if (typeof d3 === 'undefined' || !d3.sank
 into `#err`) — the only explicit dependency-failure state in the product. Also the only file
 besides `js/version-modal.js` that reads `prefers-reduced-motion` and acts on it.
 
+**Embed mode.** `?embed` hides the title block, the filter toolbar, the stat strip and the
+footer, leaving the legend and the diagram. SCR-17 §7.5 iframes the page that way as a figure
+above the seventeen-row table; the filters are dropped there because the embed is an overview
+and its CTA sends anyone who wants to interrogate the matrix to this page. See DEC-26.
+
 ---
 
 ## SCR-14 · Design System
@@ -337,17 +342,41 @@ horizontal chip rail above the article. `body.docs-active` hides the analyser to
 and footer so the layout owns the viewport.
 
 **Content model.** One `TECH_DOCS.articles` array drives three things at once: the grouped
-sidebar, the search index (`label + keywords + group`), and the previous/next order. Twelve
-articles in six groups — Start here, Inputs, Core method, Checks & limits, Forward planning,
-Reference. Each article is a function returning `docHero(...)` plus a sequence of
-`docSection(...)`, and each `<h2>` inside a `.doc-section` becomes a TOC anchor, tracked by an
-IntersectionObserver at `rootMargin: '-22% 0px -68% 0px'`.
+sidebar, the search index (`label + keywords + group`), and the previous/next order.
+**Twenty-four articles in seven groups**, mirroring the section order of the Coalition's
+*Data & methodology documentation* so the two can be read side by side — Start here, Scope,
+The five phases, Benefit detail, Annex A · Layers, Checks & limits, Reference. Each article is
+a function returning `docHero(...)` plus a sequence of `docSection(...)`, and each `<h2>`
+inside a `.doc-section` becomes a TOC anchor, tracked by an IntersectionObserver at
+`rootMargin: '-22% 0px -68% 0px'`.
+
+The six Annex A articles — one per annex section, A.1 to A.6 — carry thirty-four layer records
+built by `docLayer(name, indicator, fields)`, which renders one `.doc-details` per layer with
+the source document's own field order (why it matters, citation, attributes, sources,
+pre-processing, method, QA/QC, where it appears, disclaimer). A field the source leaves blank is
+not printed rather than filled in. Each annex article is split into two to four thematic
+`docSection`s so the TOC rail stays useful on a page of collapsed records.
+
+Method tables carry a `docSource('Table n')` citation line (`.doc-source`) naming the table
+they were transcribed from.
+
+One article embeds another screen. *Phase 4a · Decision matrix* opens §7.5 with a
+`.doc-embed` figure that iframes **SCR-13** at `?embed`, followed by a `.doc-cta` link to the
+full page. The figure shows where the seventeen rows lead once a pathway is assigned; its
+caption states the limit, which is that the six rows resolving to *Carbon ineligible* carry no
+activities and so do not appear in it. See DEC-26.
 
 **Data dependencies — the point of the screen.** No figure on SCR-17 is typed into prose.
 `readLiveParameters()` reads the same objects the product renders from, including parsing the
 Data Analyser's own rendered benefit HTML for its methods, metrics, formulas and carbon
 deduction chain. A value that cannot be read prints a visible `TODO` rather than a plausible
 constant. See DEC-21.
+
+One kind of content is transcribed rather than read, and it says so on the page.
+Every **method** statement — constants, rates, class tables, decision rows, formulas,
+citations and publisher disclaimers — is transcribed from the methodology documentation and
+cites its section number (DEC-24). Site figures stay live. The two are kept visibly apart:
+a method constant cites a `§`, a site figure cites a source object.
 
 **States.** See [UI-STATES.md](UI-STATES.md) — SCR-17 has no loading or failure state (all data
 is synchronous and in-page), but it does have a *missing parameter* state, rendered inline as

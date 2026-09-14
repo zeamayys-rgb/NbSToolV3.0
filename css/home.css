@@ -221,7 +221,7 @@ section { position: relative; }
   .hstat:nth-child(3)::before, .hstat:nth-child(2n+1)::before { display: none; } }
 
 /* scroll cue */
-.scrollcue { position: absolute; left: 50%; bottom: 16px; transform: translateX(-50%); z-index: 3;
+.scrollcue { position: absolute; left: 50%; bottom: 150px; transform: translateX(-50%); z-index: 3;
   font-family: var(--mono); font-size: 10px; letter-spacing: .2em; text-transform: uppercase;
   color: rgba(155,242,196,.6); display: flex; flex-direction: column; align-items: center; gap: 8px; }
 .scrollcue .rail { width: 1px; height: 38px; background: linear-gradient(var(--spring), transparent); position: relative; overflow: hidden; }

@@ -189,7 +189,7 @@
 
       '<section class="vu-sec">' +
         '<h3>What\'s new — Interface</h3>' +
-        '<p class="vu-lead">NbS Tool v2 gave us a lot of feedback on the experience. The WRI Indonesia team also ran a user study to understand the flow that works best and how different users behave. Version 3.0 brings those findings into the interface.</p>' +
+        '<p class="vu-lead">NbS Tool v2 gave us a lot of feedback on the experience. Our team also ran a user study to understand the flow that works best and how different users behave. Version 3.0 brings those findings into the interface.</p>' +
         item(ic.map, 'Clearer area search', '',
           '<p>Searching for an area now returns polygon information based on jurisdiction shapefiles.</p>') +
         item(ic.panel, 'A leaner Data Analyser panel', '',

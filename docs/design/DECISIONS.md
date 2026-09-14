@@ -395,6 +395,11 @@ sequestration rates) exist only as literals inside the analyser's assumptions pa
 recovered by regex over its text. If that paragraph is reworded the docs show `TODO`, not a
 stale number — a loud failure rather than a silent one, which was the deliberate trade.
 
+**Scope.** This entry governs **site figures** — what this project area measures. It does not
+govern **method statements** — what the published method says, which is transcribed and cited
+(DEC-24) — or **approved copy**, which is transcribed and validated against (DEC-23). Both are
+named exceptions, and both say so on the page.
+
 **The fix this defers.** Those three constants should be lifted out of the template string into
 a small exported object in `js/analysis-shared.js` that both the analyser and the docs read.
 That edit was left out of this change on purpose: `analysis-shared.js` is mounted by both
@@ -437,9 +442,134 @@ load it.
 
 ---
 
+## DEC-23 · One article on SCR-17 is transcribed copy, not a live parameter
+
+**Date.** 2026-09-10 · **Status.** `superseded` by DEC-25 on 2026-09-14 — the article was removed
+
+**Decision.** The *Approved interface copy* article (`#docs/gui-copy`) in
+`js/technical-docs.js` reproduces the product team's **GUI Design Document NbS Tool V 3.1
+(Launch Ver)** verbatim, as fixed strings, and closes with a table of where the build currently
+disagrees with it. It is a deliberate, named exception to DEC-21.
+
+**Context.** User-facing wording is approved outside this repository, in a PDF copy sheet. The
+build had drifted from it — a changed attribution, a different contact address, and several
+blocks of copy written after sign-off — with nowhere in the product to notice. Copy validation
+needs the approved text held still next to the implementation, not re-derived from it.
+
+**Alternatives visible in the code.** Reading the strings live, as every other article does,
+would require `version-modal.js` to export its copy and `technical-docs.html` to load it — and
+would defeat the purpose: a reference that follows the build can never show the build is wrong.
+
+**Consequences.** The article must be re-transcribed when the copy sheet is reissued (the
+version is held in `GUI_DOC_VERSION`, the path in `GUI_DOC_FILE`, both at the top of
+`docsGuiCopy()`'s block). Never edit a string there to match the build — that is the one edit
+that silently destroys the page's value. In exchange, the deltas table is a standing, readable
+answer to "does the product say what we approved".
+
+---
+
+## DEC-25 · The approved-interface-copy article is removed from SCR-17
+
+**Date.** 2026-09-14 · **Status.** `documented` — this change
+
+**Decision.** The *Approved interface copy* article (`#docs/gui-copy`), its renderer
+`docsGuiCopy()` and the `guiRow` / `guiTable` helpers are deleted from
+`js/technical-docs.js`. SCR-17 now carries method content only. This supersedes DEC-23.
+
+**Consequences.** The copy sheet (`GUI Design Document NbS Tool V 3.1 (Launch Ver)`) and the
+build are no longer readable side by side inside the product, and the "where the build differs"
+table — which flagged an unverified launch date and a contact-address mismatch — no longer
+appears anywhere. Those checks now live only in the source PDF. DEC-21 has no named exception
+left: every figure on SCR-17 is read live or cites the methodology documentation.
+
+---
+
 ## How to add an entry
 
 ```markdown
+## DEC-24 · SCR-17 renders the methodology documentation, and prints its contradictions
+
+**Date.** 2026-09-14 · **Status.** `documented`
+
+**Decision.** The method articles on SCR-17 are a transcription of the SCeNe Coalition's
+**Data & methodology documentation — Nature-based Solutions triple benefits assessment**
+(last updated 26 August 2026). Article order, section numbers and table numbers follow that
+document; every constant, rate, class table, decision row, formula, citation and publisher
+disclaimer is quoted from it and cites its `§`. Site figures — hectares, ecosystem shares,
+carbon totals — stay live under DEC-21. Where the source document contradicts itself, **both
+readings are printed with a warn callout naming the contradiction**, rather than one being
+silently chosen.
+
+**Context.** The method existed only as a PDF held outside the product. A reader looking at a
+carbon figure in the Data Analyser had no way to reach the growth rates, the baseline
+assumptions or the publisher's disclaimer that produced it. The previous SCR-17 described the
+method in its own words, which is a second source that can drift from the first — and it was
+already thinner than the document in places that matter (the seventeen decision rows, the ARR
+rate table, Annex A's thirty-four layer records, the direction of each known bias).
+
+A method statement must not follow the build, for the same reason approved copy must not
+(DEC-23): a reference that tracks the implementation can never show the implementation is
+wrong. So the split on this screen is by *kind of claim*, not by convenience — **what the
+method says** is transcribed and cited; **what this site measures** is read live.
+
+**Contradictions currently printed rather than resolved.** Four, each with the handling the
+page tells the reader to use:
+
+| Where | The contradiction | What the page says to do |
+|---|---|---|
+| §8.4.4.3 | The printed narrative says the buffer is not yet subtracted; the code subtracts it | Treat `net_ERR` as buffer-deducted, disregard the sentence, do not quote the narrative to a third party |
+| §2.3 vs Table 4 / Annex A | Reference CRS given as `ESRI:54043` in one place, `ESRI:54034` in others | Confirm with the Substance Team; the method (one reprojection to an equal-area CRS) is unambiguous either way |
+| §6 / A.1 | The interface specifies five hazard risk levels; the wired rasters carry four | Flagged for reclassification; do not equate a four-class "High" with a five-class "High" |
+| §8.4.2 | The formula line reads `× 44/7`; its own bullet and the constants table give `44/12` | `44/12` is used; the source line should be corrected in the next revision |
+
+**Alternatives considered.** Paraphrasing the method in the product's own voice (rejected — it
+created the drift this entry removes, and it quietly dropped the limitations that make the
+figures safe to use). Linking out to the PDF instead of transcribing (rejected — a reader
+checking one carbon constant should not have to open a 84-page document, and the deploy
+excludes `docs/`). Resolving the contradictions silently (rejected — the tool's own third
+analysis convention is that where a method is uncertain it reports the uncertainty).
+
+**Consequences.** The articles must be re-transcribed when the methodology document is
+reissued; the source date lives in `METHOD_DOC_DATE` at the top of `js/technical-docs.js`, and
+the contradiction table above must be re-checked against the new revision. Never edit a
+transcribed constant to match the build — that is the one edit that destroys the page's value;
+if the build disagrees, that disagreement is the finding. New method content belongs in the
+source document first, and in the article second.
+
+---
+
+## DEC-26 · The activity matrix is embedded in SCR-17, not rebuilt there
+
+**Date.** 2026-09-14 · **Status.** `documented`
+
+**Decision.** §7.5 of the *Phase 4a · Decision matrix* article shows the activity flow matrix by
+iframing SCR-13 at `NbS_Activities_Flow_v2.html?embed`, with a CTA link to the full page below
+it. SCR-13 gained an embed mode — a query flag that hides its title block, filter toolbar, stat
+strip and footer — rather than SCR-17 gaining a copy of the diagram.
+
+**Why.** The seventeen decision rows end at a pathway, and readers kept asking what happens
+next. The answer already exists as a screen. Rebuilding it inside the docs article would mean a
+second copy of ~650KB of source rows, a second D3 and d3-sankey dependency on a page that has
+none, and two diagrams to keep in step with
+`scripts/build_activities_flow_data.py`. The iframe keeps one source and one renderer.
+
+**Alternatives considered.** A static image (rejected — it goes stale silently, and the matrix
+is read by tracing a path, which a picture cannot do). Porting the Sankey into
+`js/technical-docs.js` (rejected — the duplication above). A link with no figure (rejected — the
+question §7.5 raises deserves an answer on the page that raises it).
+
+**Consequences.** SCR-17 now has a network- and CDN-dependent element, which is the first on a
+page whose whole premise is that it renders from in-page data (DEC-21). The frame is therefore
+not load-bearing: the caption and the CTA carry the meaning, and both render whether or not the
+frame does. Below 820px the frame is hidden and the CTA is the route, because eight label
+columns across 1680px cannot be read on a phone. The frame is sized by `aspect-ratio` rather
+than a fixed height so it tracks the article column; if the diagram's own proportions change,
+the ratio in `css/technical-docs.css` must change with it. The caption also states what the
+matrix leaves out — the six rows that resolve to *Carbon ineligible* carry no activities, so
+they are absent from the diagram, which would otherwise read as an omission.
+
+---
+
 ## DEC-nn · <one-line decision>
 
 **Date.** YYYY-MM-DD or "unknown" · **Status.** `documented` | `inferred`
