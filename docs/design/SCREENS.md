@@ -76,13 +76,24 @@ sections: benefits ("Actions that pay back"), the `#journey` step strip, lifecyc
 proof ("Real places. Real hectares."), a mint data band, testimony, and the `#about` coalition
 band, closing on a `.finale` CTA.
 
+Held in parity with the implemented page at `staging-fe.scenecoalition.org` (DEC-28). Hero and
+proof counters are `.odo` odometer reels; the benefit cards carry a 233px photo header; the
+feature index is a three-tab set (`.ftabs`) of two `.fcard` photo cards each; and the proof
+band's portfolio is a paused-on-hover `.pmarquee` of `.pflip` flip cards behind a
+"coming very soon" pill. The journey chapters carry a step number only — no F-code, tag row or
+per-step CTA.
+
 **Components.** CMP-01, CMP-02, CMP-03 (auth modal — the same login form as SCR-02, overlaid),
 CMP-21 (scroll-reveal), CMP-22 (version / "what's new" modal, fired once per visitor and
 remembered under `localStorage` key `nbs-vu-seen`).
 
 **Data.** None. Every figure is copy. This is the one screen where that's appropriate — but the
-hectare and project counts read as live statistics.
-`TODO(design): the proof band presents specific numbers as fact. Mark them as illustrative, or wire them to a real source before any public launch.`
+hectare, user, project and province counts read as live statistics, and since 2026-09-15 they
+are a hard-coded snapshot of staging's real counters (260 users, 524,054.82 ha, 167 projects),
+which makes them look more live than they are. The marquee cards carry field notes written from
+the 2026 site visits (Kibongcog, Lematang, Teluk Pambang, Kampong Thom).
+`TODO(design): the hero and proof bands present specific numbers as fact. Wire them to the same source staging reads, or mark them as a dated snapshot in the UI — a code comment is not enough.`
+`TODO(design): the flip-card notes state field figures — 979 ha under decree, 451 ha to restore, a 2024 ordinance, "30% of what the climate needs by 2030". Confirm each against its source before the page is public; they read as verified, and DEC-11 does not cover them.`
 
 ---
 
@@ -139,6 +150,7 @@ results for all five steps. Today every value comes from the `NBS_DATA` / `NBS_A
 constants regardless of what polygon is drawn — the analysis output does not vary with the
 input.
 `TODO(design): Step 2–5 results are identical for every polygon. Testers will read this as a bug. Decide whether the prototype should label results as sample data.`
+`TODO(design): the legend's **Export as Image** button (`.legend__export`, interactive-map.html:845) has no handler in any file — it is styled, it has a hover state, and clicking it does nothing. Either wire it up or remove it; an inert control on the primary screen is worse than an absent one. Found while documenting SCR-18.`
 
 ---
 
@@ -385,3 +397,67 @@ is synchronous and in-page), but it does have a *missing parameter* state, rende
 **Accessibility.** The article region is `tabindex="-1"` and focused on article change so
 keyboard and screen-reader users land on the new content; nav buttons carry `aria-current`;
 TOC links move focus to their target section; the skip link targets `#docs-article`.
+
+---
+
+## SCR-18 · Walkthrough
+
+**What the user is trying to accomplish.** Learn what the tool can do, and what each control on
+each screen is for, without having an account, a boundary file, or anyone to demo it to them.
+
+**Entry** — the footer's "NbS Tool Tutorial" link, present on every screen carrying the footer
+(thirteen files), and the Start-here group of SCR-12. **Exit** — any route chip in the body, or
+the closing CTA to SCR-03. There is no forward step; this is a reference surface.
+
+**Layout.** Two-column reading grid, `250px / minmax(0,1fr)`, inside `.docs-layout` from
+SCR-17's stylesheet. The right-hand TOC that SCR-17 carries is dropped: SCR-18 is one
+continuous document, so its sidebar already *is* the full table of contents and a second one
+would list the same anchors twice. The reading column takes the width the third column gives
+up, because a screenshot of a 1440px screen reads better wide. Below 1100px the sidebar
+narrows; below 820px it becomes the horizontal chip rail SCR-17 already defines. The footer is
+**not** hidden — `body.docs-active` is never set, because the footer is this screen's own entry
+point.
+
+**Content model.** Static HTML. Eight `<section class="wt-chapter">` blocks, each with a
+chapter number, an `<h2>`, and a lead paragraph, following the product's own workflow order
+rather than the F-code order:
+
+| # | Chapter | Covers |
+|---|---|---|
+| 1 | Start here | SCR-01, the shared shell (CMP-01, CMP-02), SCR-02, SCR-11 |
+| 2 | Step 1 · Scope | SCR-03 step 1 — layer rail, legend, search, draw, upload, confirm |
+| 3 | Step 2 · Analyse | SCR-03 steps 2–5, including CMP-20 provenance modals |
+| 4 | Step 3 · Manage | SCR-06, SCR-07 (all seven tabs) |
+| 5 | Step 4 · Plan | SCR-04, SCR-08 |
+| 6 | Step 5 · Document | SCR-05, both templates |
+| 7 | Step 6 · Monitor | SCR-09, SCR-10 |
+| 8 | Reference | SCR-17, SCR-13, SCR-12, CMP-22 |
+
+**Forty-eight screenshots** (CMP-29), committed under `assets/walkthrough/`, captured at
+1440×884 CSS px on a 2× display and stored as WebP. Every one carries `width`/`height`
+attributes so its box is reserved before it loads — without them, forty-eight lazy images
+produce cumulative layout shift that breaks the scroll-spy. See DEC-27.
+
+**Data dependencies.** None. The page is static, which is the point: it must still describe the
+tool when the tool is down, and it must not imply live figures. The sample-data warning is the
+first thing under the hero, because the screenshots are full of numbers that are not
+measurements (DEC-11).
+
+**Behaviour.** One script: a sidebar scroll-spy. It is position-based rather than an
+IntersectionObserver — the question is "which heading did I last pass", and an observer only
+reports *changes* in intersection, so at the top of the page and anywhere between two headings
+no element is intersecting and an observer leaves a stale highlight behind. Reading positions
+on a `requestAnimationFrame`-throttled scroll always gives the right answer. Below 820px the
+same function scrolls the current chip into view in the horizontal rail.
+
+**States.** See [UI-STATES.md](UI-STATES.md). SCR-18 has no data-driven state: it cannot be
+empty, partial, stale or failed. Its only degraded state is a screenshot that fails to load.
+
+**Accessibility.** The sidebar is real anchors to real ids, so navigation works with JavaScript
+off; the spy only moves a highlight. Heading levels nest properly — `h1` hero, `h2` chapter,
+`h3` numbered sub-feature, `h4` a tab or lettered route within one — with no skipped level.
+Every screenshot has descriptive alt text naming the controls visible in it, not a restatement
+of the caption. Decorative chevrons are `aria-hidden`. The skip link targets `#wt-article`.
+
+`TODO(design): the screenshots will drift as the UI changes. Decide whether they are
+regenerated per release or per PR that changes a captured screen, and record it here.`

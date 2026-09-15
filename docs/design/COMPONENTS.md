@@ -679,9 +679,140 @@ CMP-01 yet, so there is no way to reach the docs from any other screen except by
 
 ---
 
+## CMP-29 · Screenshot figure
+
+**Files.** [css/walkthrough.css](../../css/walkthrough.css) ·
+used by [walkthrough.html](../../walkthrough.html) (SCR-18)
+
+**Purpose.** Show one screen of the product inside a document, with a caption that says what to
+look at. The only component in the codebase whose content is an image of the codebase.
+
+**Parts.**
+
+| Part | Element | Notes |
+|---|---|---|
+| Figure | `figure.wt-shot` | Block-level, own vertical rhythm. |
+| Image | `.wt-shot img` | `loading="lazy"`, `width` + `height` **required**. Bordered, `--radius-lg`, `--elevation-2`. Never given a CSS height — the intrinsic ratio is what keeps a UI screenshot legible. |
+| Caption | `.wt-shot figcaption` | Left rule in `--stroke-primary`. Opens with a `<b>` naming the screen, then one sentence on what it shows. |
+| Pair | `.wt-shot-pair` | Two figures side by side above 900px, stacked below. For two variants of one screen. |
+
+**Props, by convention rather than code** (there is no component system — see DEC-03):
+
+| Prop | Where | Required | Notes |
+|---|---|---|---|
+| `src` | `img` | Yes | `assets/walkthrough/NN-name.webp`. Numbered in reading order. |
+| `alt` | `img` | Yes | Describes the **controls visible in the screenshot**, not the caption. This is the whole accessible content of the figure. |
+| `width` / `height` | `img` | Yes | The intrinsic pixel size. Without them, a page of lazy images produces cumulative layout shift. |
+| caption `<b>` | `figcaption` | Yes | The screen or state being shown. |
+
+**Capture convention.** 1440×884 CSS px on a 2× display, so files are 2880px wide; WebP at
+quality 80, roughly 100–260 KB each. Transient overlays that are not the subject (the version
+modal, the desktop notice) are dismissed before capture.
+
+**States.** None — it is static content. A failed image shows the browser's own broken-image
+box in the reserved area, with the alt text and caption still readable. See UI-STATES SCR-18.
+
+**Accessibility contract.** `alt` is mandatory and must be a description, never a filename, a
+caption restatement, or empty. A screenshot is never decorative here: it *is* the explanation,
+so a reader who cannot see it must get the same information from the alt text and the
+surrounding prose. The figure needs no `role` — `<figure>` with `<figcaption>` already
+associates the two.
+
+**Known limitations.** Nothing detects that a screenshot has gone stale.
+`TODO(design): a screenshot cannot be diffed against the screen it depicts. Define when they are regenerated, and record it in SCREENS.md SCR-18.`
+`TODO(design): the screenshots are captured at one viewport only. There is no mobile capture of any screen, so the walkthrough documents the desktop layout exclusively.`
+
+---
+
+---
+
 ## Component-wide gaps
 
 - `TODO(design): no component defines a loading state except CMP-26. Once a backend exists, every data-driven component needs one.` **Blocking.**
 - `TODO(design): no component defines a focus trap, and five modals need one.` **Blocking.**
 - `TODO(design): interactive states are inconsistently specified. Only focus-visible is systematic (from the a11y baseline in css/tokens.css); hover, active and disabled are defined per component with no shared rule.`
 - `TODO(design): the "i" affordance (gcInfo) is focusable but not operable by keyboard. It is the primary way users reach methodology and source information.` **Blocking.**
+
+---
+
+## CMP-30 · Odometer counter (`.odo`)
+
+**Files.** [css/home.css](../../css/home.css) · built by the inline script in
+[index.html](../../index.html) (SCR-01 only)
+
+**Purpose.** Roll a figure up into place as it scrolls into view. Ported from the staging
+front-end (DEC-28) in place of the older `data-count` tween, which SCR-01 no longer uses.
+
+**Parts.** A `.odo` span holds one `.odo-win` per digit — a 1.1em-tall clipping window over an
+`.odo-col` strip of twenty `<b>` digits (two 0–9 cycles). Punctuation (`,` `.`) renders as a
+plain `aria-hidden` span between windows. JS sets each column's final `translateY` on reveal;
+`--odo-delay` staggers the columns 0.08s apart, left to right.
+
+| Prop | Where | Required | Notes |
+|---|---|---|---|
+| `data-odo` | `.odo` | Yes | The figure **as it should read**, punctuation included: `"524,054.82"`. Also becomes the `aria-label`. |
+
+**States.** *Pre-roll* — every column shows `0`, so the number reads as zeros until observed.
+*Rolled* — the final value. There is no error or empty state; a missing `data-odo` renders
+nothing.
+
+**Accessibility contract.** The digit strips are `aria-hidden`; the whole value reaches a
+screen reader once, from the `aria-label` set at build time — so it is announced correctly
+before the animation runs, not digit by digit. Under `prefers-reduced-motion: reduce` the
+transition is removed and the final offset is applied immediately.
+
+---
+
+## CMP-31 · Feature tab set (`.ftabs` / `.fpanel`)
+
+**Files.** [css/home.css](../../css/home.css) · inline script in
+[index.html](../../index.html) (SCR-01 only)
+
+**Purpose.** Group the six lifecycle feature cards under three headings. Ported from staging
+(DEC-28).
+
+**Parts.** `.ftabs[role="tablist"]` of three `button[role="tab"]`, each `aria-controls` its
+`.fpanel[role="tabpanel"]` of two `.fcard`s. A card is a 280px photo (`.fc-shot`, gradient
+scrim, corner "See tutorial" link) beside a `.fc-body` of icon chip, title and description.
+
+**States.** Selected tab carries `.is-on` + `aria-selected="true"` + `tabIndex 0`; the rest are
+`aria-selected="false"` + `tabIndex -1`. Unselected panels are `hidden`.
+
+**Accessibility contract.** Roving tabindex: only the selected tab is in the tab order, and
+<kbd>←</kbd>/<kbd>→</kbd> move between tabs, wrapping, moving focus with selection. Panels are
+hidden with the `hidden` attribute, not `display:none` in a class, so they leave the
+accessibility tree. The tablist carries `aria-label="NbS Tool features"`.
+
+---
+
+## CMP-32 · Project flip card + marquee (`.pflip` / `.pmarquee`)
+
+**Files.** [css/home.css](../../css/home.css) · inline script in
+[index.html](../../index.html) (SCR-01 only)
+
+**Purpose.** Tease the unbuilt project portfolio (SCR-08) with a looping strip of field-project
+cards that turn over to show a summary. Ported from staging (DEC-28), replacing the static
+three-card grid that had been `hidden` in the markup.
+
+**Parts.** `.pmarquee` scrolls `.pmarquee-track`, which holds the card set twice — the second
+copy is a visual clone only. `.pflip` is a 420×340 `perspective` box over `.pflip-in`, which
+rotates 180° between `.pf-front` (photo, name, location) and `.pf-back` (name, location, the
+field note, external-link corner).
+
+**Sizing.** The card is sized to its longest back, not to a design grid: 420×340 holds the
+Lematang note at 336px with 12.5px/1.5 copy. Staging's 352×233 was cut around lorem ipsum and
+clips every real note. `.pf-copy` keeps `overflow-y: auto` as a safety net for narrow
+viewports, but nothing scrolls at the sizes shipped. **If a note is rewritten longer, re-measure
+and raise the height — do not let it scroll.**
+
+**States.** *Resting* — front face, marquee sliding. *Flipped* — `.is-flipped` +
+`aria-pressed="true"`. *Paused* — `:hover` or `:focus-within` on `.pmarquee` stops the
+animation.
+
+**Accessibility contract.** Each real card is `role="button"`, `tabindex="0"`, labelled
+"<name>, <location>. Show details." and toggles on click, <kbd>Enter</kbd> and
+<kbd>Space</kbd>, with `aria-pressed` tracking the face. **The cloned set is `aria-hidden` and
+`tabindex="-1"`, with empty `alt` on its images** — without that, every project is announced
+and tabbed through twice. Focus inside the strip pauses the animation, so a keyboard user is
+not reading a moving target. The transition is removed under `prefers-reduced-motion: reduce`,
+along with the marquee itself.

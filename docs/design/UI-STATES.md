@@ -46,6 +46,10 @@ That is the useful output. The rows marked **No** are the backlog.
 |---|---|---|---|
 | Default | Page load | Hero, scroll-driven `.stage` sequence, seven content bands, finale CTA | Yes |
 | Loading | Hero and band imagery in flight | Nothing — images pop in as they decode; the hero has no placeholder or aspect-ratio box | Partial — no reserved space, so the hero shifts on slow connections |
+| Counters pre-roll | Before an `.odo` scrolls into view | Every digit reads `0`; the real figure is already in `aria-label`, so a screen reader is correct before the animation runs | Yes — CMP-30 |
+| Tab switched | Click or ←/→ on `.ftabs` | The selected panel's two cards replace the previous pair; unselected panels carry `hidden` | Yes — CMP-31 |
+| Card flipped | Click, Enter or Space on a `.pflip` | The card turns to its back: name, location, the field note and an external link. The card is sized to the longest note, so nothing clips | Yes — CMP-32 |
+| Marquee paused | Hover or keyboard focus inside `.pmarquee` | The strip stops moving so it can be read or tabbed through | Yes — CMP-32 |
 | Empty | N/A — all copy is static | — | N/A |
 | Partial | An image 404s | Browser default broken-image behaviour | No — `TODO(design)` |
 | Error | N/A | — | N/A |
@@ -58,7 +62,9 @@ That is the useful output. The rows marked **No** are the backlog.
   `localStorage` key `nbs-vu-seen`. If storage is unavailable (private mode, storage blocked),
   it fires on **every** visit.
 - `TODO(design): reserve aspect-ratio boxes for the hero and proof-band imagery so the home page doesn't reflow while loading.`
-- `TODO(design): the proof band states specific hectare and project counts as fact. Decide whether these are labelled illustrative before public launch.`
+- `TODO(design): the hero and proof bands state specific user, hectare, project and province counts as fact. Since 2026-09-15 these are a hard-coded snapshot of the staging front-end's live counters (DEC-28) — decide whether they are labelled illustrative, dated, or wired to the same source before public launch.`
+- Under `prefers-reduced-motion: reduce` the marquee does not move, the cards do not animate
+  between faces, and the counters snap to their final value. All three remain fully usable.
 
 ---
 
@@ -409,6 +415,32 @@ The best-covered screen in the product for real-world states.
 `TODO(design): SCR-17 opts itself out of the global smooth scroll under reduced motion. Every other screen still ignores the preference — fix it in css/tokens.css instead.`
 
 ---
+
+---
+
+## SCR-18 · Walkthrough
+
+The only screen in the product with no data-driven state. It renders no figure it did not ship
+with, so it cannot be empty, partial, stale or out of scope. That is deliberate: a page whose
+job is to explain the tool has to work when the tool does not.
+
+| State | Trigger | What the user sees | Implemented? |
+|---|---|---|---|
+| Default | Page load, or an `#anchor` deep link | Sidebar of eight chapter groups, the article, and the shared footer | Yes |
+| Loading | N/A — the page is static HTML | — | N/A |
+| Empty | N/A — content is authored, not fetched | — | N/A |
+| Partial | N/A | — | N/A |
+| Error | A screenshot fails to load | The browser's broken-image box in a reserved area of the right size, with the alt text and the caption below it still readable. Every screenshot's alt text names the controls in it, so the explanation survives the image | Partial — by design; no per-image fallback styling |
+| Script fails | `navbar.js` does not load | No top bar. The article, sidebar, footer and all anchors still work; the skip link still reaches the content | Partial — shared with every screen, see CMP-01 |
+| JavaScript off | Scripting disabled | Fully functional. The sidebar is real anchors to real ids; only the scroll-spy highlight is lost | Yes |
+| Non-eligible | N/A | — | N/A |
+| Long content | Any viewport | The page is deliberately long. Screenshots scale to the column and never force a horizontal scroll; the flow strip and any table scroll inside their own wrapper | Yes |
+| Offline / stale | No connection after first load | The page renders from cache. Lazy screenshots below the fold that were never fetched show the error state above | Partial |
+| Stale screenshots | A screen changes after its picture was taken | Nothing — the page cannot tell that a screenshot no longer matches the product | No — `TODO(design)` |
+| Narrow viewport | Below 1100px, then below 820px | Sidebar narrows, then becomes a horizontal chip rail above the article; the current chip is scrolled into view | Yes |
+| Reduced motion | `prefers-reduced-motion: reduce` | Honoured — the `html:has(.docs-page)` opt-out in `technical-docs.css` covers this page, and the spy's chip-rail scroll uses `behavior: 'auto'` | Yes |
+
+`TODO(design): nothing detects a stale screenshot. A control can be renamed, moved or removed and this page will keep showing the old one with confident prose beside it. Decide on a regeneration trigger — per release, or per PR touching a captured screen — and record it in SCREENS.md SCR-18.`
 
 ---
 

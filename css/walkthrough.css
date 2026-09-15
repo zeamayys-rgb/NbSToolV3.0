@@ -1,0 +1,182 @@
+/* ============================================================================
+   walkthrough.css — SCR-18 Walkthrough (guided tour of the tool)
+
+   Loaded only by walkthrough.html, ON TOP OF css/technical-docs.css. That file
+   already carries the three-column reading shell (.docs-layout, .docs-sidebar,
+   .docs-article, .doc-section, .doc-callout, .doc-flow, .doc-table) and every
+   one of those rules is token-bound. This file adds only what a walkthrough
+   needs and technical documentation does not: a screenshot figure, a chapter
+   marker, and a route chip. See DEC-27.
+
+   Colour, spacing, radius, elevation and motion come from css/tokens.css.
+   Font sizes and line heights are literal here for the same reason they are
+   literal in technical-docs.css: the token layer has no type-size scale
+   (TODO-14 / TODO-15 in docs/design/tokens.json). No colour, space or radius
+   literal appears below.
+   ============================================================================ */
+
+/* ---------- layout: two columns, not three ----------
+   SCR-17 keeps a right-hand TOC because it renders one article at a time.
+   SCR-18 is a single continuous document, so its left sidebar already IS the
+   full table of contents; a second one would list the same anchors twice.
+   The reading column takes the width the third column gives up, because a
+   screenshot of a 1440px screen reads better wide. */
+.wt-page .docs-layout {
+  grid-template-columns: 250px minmax(0, 1fr);
+  width: min(1320px, calc(100% - var(--space-40)));
+}
+.wt-page .docs-toc { display: none; }
+
+/* ---------- hero ---------- */
+.wt-hero { padding-bottom: var(--space-32); border-bottom: 1px solid var(--stroke-base); }
+.wt-hero h1 {
+  max-width: 880px; margin: 0;
+  font-family: var(--font-display); font-weight: 700;
+  font-size: clamp(34px, 4.6vw, 56px); line-height: 1.02; letter-spacing: -.02em;
+  color: var(--text-title);
+}
+.wt-hero .wt-lead {
+  max-width: 760px; margin: var(--space-20) 0 0;
+  color: var(--text-base-second); font-size: 16px; line-height: 1.72;
+}
+
+/* ---------- chapter heads ----------
+   A chapter opens with its number and the F-code(s) it covers, so a reader can
+   match the tour to the GUI design document without a lookup table. */
+.wt-chapter { padding-top: var(--space-48); scroll-margin-top: var(--space-80); }
+.wt-chapter + .wt-chapter { margin-top: var(--space-32); }
+.wt-chapter > header { display: grid; gap: var(--space-8); padding-bottom: var(--space-20); border-bottom: 1px solid var(--stroke-base); }
+.wt-chapter > header .wt-no {
+  display: inline-flex; align-items: center; gap: var(--space-8);
+  color: var(--text-primary); font-size: 11px; font-weight: 700;
+  letter-spacing: .16em; text-transform: uppercase;
+}
+.wt-chapter > header h2 {
+  margin: 0; font-family: var(--font-display); font-weight: 700;
+  font-size: clamp(26px, 3vw, 36px); line-height: 1.1; letter-spacing: -.015em;
+  color: var(--text-title);
+}
+.wt-chapter > header p { margin: 0; max-width: 720px; color: var(--text-base-second); font-size: 14.5px; line-height: 1.7; }
+
+/* A numbered sub-feature inside a chapter. Uses .doc-section for its type
+   rules; this only adds the anchor offset and drops the divider, because a
+   chapter already draws one above itself. */
+.wt-step { scroll-margin-top: var(--space-80); }
+.wt-step + .wt-step { border-top: 1px solid var(--stroke-base); margin-top: var(--space-24); }
+.wt-chapter h3 {
+  display: flex; align-items: baseline; gap: var(--space-12);
+  scroll-margin-top: var(--space-80);
+  margin: var(--space-32) 0 var(--space-8);
+  font-family: var(--font-display); font-size: 19px; line-height: 1.25; font-weight: 600;
+  color: var(--text-title);
+}
+.wt-chapter h3 span {
+  flex: none; color: var(--text-base-third);
+  font-family: var(--font-text); font-size: 12px; font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* One level deeper: the tabs of a screen, or the lettered routes through a
+   step. Same shape as h3, quieter, and the label in the <span> is the subject
+   rather than a number — so it takes the accent colour and carries the weight. */
+.wt-chapter h4 {
+  display: flex; align-items: baseline; gap: var(--space-12);
+  margin: var(--space-24) 0 var(--space-8); scroll-margin-top: var(--space-80);
+  font-size: 15px; line-height: 1.3; font-weight: 600;
+  color: var(--text-base-main);
+}
+.wt-chapter h4 span {
+  flex: none; min-width: var(--space-64);
+  color: var(--text-primary); font-size: 11px; font-weight: 700;
+  letter-spacing: .1em; text-transform: uppercase;
+}
+.wt-chapter h4 span:last-child { min-width: 0; }
+
+/* ---------- route chips ----------
+   "Where to find it" — the real href, so the tour is also a launcher. */
+.wt-where { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-8); margin: var(--space-12) 0 var(--space-16); }
+.wt-where > b {
+  color: var(--text-base-third); font-size: 9px; font-weight: 700;
+  letter-spacing: .12em; text-transform: uppercase;
+}
+.doc-section a.wt-route, a.wt-route {
+  display: inline-flex; align-items: center; gap: var(--space-4);
+  padding: var(--space-4) var(--space-12);
+  border: 1px solid var(--stroke-base); border-radius: var(--radius-pill);
+  background: var(--bg-base-second); color: var(--text-base-second);
+  font-size: 11.5px; font-weight: 600; text-decoration: none;
+}
+.doc-section a.wt-route:hover, a.wt-route:hover {
+  border-color: var(--stroke-primary); background: var(--primary-25); color: var(--text-primary);
+}
+.wt-route svg { width: 12px; height: 12px; flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ---------- screenshot figure (CMP-29) ----------
+   The screenshots are captured at 1440x884 CSS px on a 2x display, so they are
+   2880px wide files rendered into a ~1000px column. Never set a height: the
+   intrinsic ratio is what keeps a UI screenshot readable. */
+.wt-shot { margin: var(--space-16) 0 var(--space-24); }
+.wt-shot img {
+  display: block; width: 100%; height: auto;
+  border: 1px solid var(--stroke-base); border-radius: var(--radius-lg);
+  background: var(--bg-base-second);
+  box-shadow: var(--elevation-2);
+}
+.wt-shot figcaption {
+  margin-top: var(--space-12); padding-left: var(--space-12);
+  border-left: 2px solid var(--stroke-primary);
+  color: var(--text-base-second); font-size: 12.5px; line-height: 1.6;
+}
+.wt-shot figcaption b { color: var(--text-base-main); font-weight: 600; }
+
+/* Two screenshots that are variants of one screen sit side by side above
+   900px and stack below it. */
+.wt-shot-pair { display: grid; gap: var(--space-16); margin: var(--space-16) 0 var(--space-24); }
+@media (min-width: 900px) { .wt-shot-pair { grid-template-columns: 1fr 1fr; } }
+.wt-shot-pair .wt-shot { margin: 0; }
+
+/* ---------- key-points list ----------
+   What to look at in the screenshot above. Deliberately not a plain <ul>: each
+   item names one control, so the label is emphasised and the rest explains. */
+.wt-points { list-style: none; margin: var(--space-12) 0 var(--space-16); padding: 0; }
+.wt-points li {
+  position: relative; padding-left: var(--space-24); margin: 0 0 var(--space-8);
+  color: var(--text-base-second); font-size: 13.5px; line-height: 1.65;
+}
+.wt-points li::before {
+  content: ""; position: absolute; left: var(--space-8); top: .6em;
+  width: var(--space-8); height: var(--space-8); border-radius: var(--radius-full);
+  background: var(--bg-primary-main);
+}
+.wt-points li b { color: var(--text-base-main); font-weight: 600; }
+
+/* ---------- sidebar: anchors, not buttons ----------
+   technical-docs.css styles .docs-nav-button; SCR-18's sidebar is a list of
+   real links to real anchors, so it works with JavaScript switched off. */
+.docs-nav-link {
+  display: block; padding: var(--space-8);
+  border-radius: var(--radius-sm); background: transparent;
+  color: var(--text-base-second); text-decoration: none;
+  font-size: 12px; line-height: 1.35;
+}
+.docs-nav-link:hover { background: var(--bg-base-second); color: var(--text-base-main); }
+.docs-nav-link.is-current { background: var(--primary-25); color: var(--text-primary); font-weight: 600; }
+
+/* ---------- responsive ---------- */
+@media (max-width: 1100px) {
+  .wt-page .docs-layout { grid-template-columns: 210px minmax(0, 1fr); width: min(1080px, calc(100% - var(--space-40))); }
+}
+@media (max-width: 820px) {
+  .wt-page .docs-layout { grid-template-columns: none; }
+  /* The sidebar becomes the horizontal chip rail technical-docs.css already
+     defines; its rules target .docs-nav-button, so repeat them for the links. */
+  .docs-article-nav { display: flex; overflow-x: auto; gap: var(--space-4); padding-bottom: var(--space-2); }
+  .docs-nav-link {
+    flex: 0 0 auto; padding: var(--space-8) var(--space-12);
+    border: 1px solid var(--stroke-base); border-radius: var(--radius-pill);
+    background: var(--bg-base-main); white-space: nowrap;
+  }
+  .docs-nav-link.is-current { background: var(--bg-primary-main); color: var(--text-on-color); border-color: var(--stroke-primary); }
+  .wt-hero h1 { font-size: 32px; }
+  .wt-chapter > header h2 { font-size: 24px; }
+}

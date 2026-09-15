@@ -484,6 +484,51 @@ left: every figure on SCR-17 is read live or cites the methodology documentation
 
 ---
 
+## DEC-27 · The walkthrough is a static page of committed screenshots, not a live tour
+
+**Date.** 2026-09-15 · **Status.** `documented`
+
+**Decision.** SCR-18 is hand-written static HTML with forty-eight WebP screenshots committed
+under `assets/walkthrough/`. It reuses `css/technical-docs.css` for its reading shell and adds
+`css/walkthrough.css` for what a tour needs and documentation does not. It carries no data, no
+template engine and no product code, and it is reached from the footer link present on all
+thirteen screens that carry the footer.
+
+**Context.** The tool had no entry point that explained itself. The footer's "NbS Tool
+Tutorial" link pointed at SCR-17, which answers *how was this number produced* — a different
+question from *what does this button do*, and the wrong first thing to hand a policymaker or a
+field team.
+
+**Alternatives visible in the code.**
+
+- *Render it the way SCR-17 renders* — an article array driving one view at a time
+  (`js/technical-docs.js`, 2,261 lines). Rejected: a walkthrough is read start to finish, so
+  one continuous scroll matches how it is used, and an eight-chapter static document needs no
+  engine. A second content DSL would also have to be maintained alongside the first.
+- *An interactive product tour* — overlays driven on the real screens. Rejected: it would have
+  to run inside every screen it explains, making twelve screens depend on tour code, and it
+  cannot be read by someone without an account or a boundary file.
+- *A second reading stylesheet* — rejected. The three-column shell, the callouts, the flow
+  strip and the table styles in `css/technical-docs.css` are already token-bound and already
+  responsive; SCR-18 overrides four rules and adds one component.
+- *Right-hand TOC, as SCR-17 has* — rejected. SCR-17 needs one because it shows one article at
+  a time; SCR-18's sidebar already lists every anchor on the page.
+
+**Consequences.** The page renders when the product is broken, which is what a manual should
+do, and it is honest about carrying no live data — the sample-data warning sits above the first
+screenshot. The cost is that **it cannot know when it is wrong.** A control can be renamed,
+moved or removed and the walkthrough will keep showing last month's picture with confident
+prose beside it, with nothing in the codebase to catch the drift. That risk is concentrated,
+not spread: the screenshots are the only part that can go stale, they are all in one directory,
+and each is referenced exactly once. Regenerating one is re-capturing one file at
+1440×884 on a 2× display. The open question — what triggers a re-capture — is recorded as a
+`TODO(design)` on SCR-18 in both SCREENS.md and UI-STATES.md.
+
+A second consequence: the screenshots are desktop-only. Nothing in the walkthrough shows any
+screen at phone width, so the mobile layouts of twelve screens remain undocumented.
+
+---
+
 ## How to add an entry
 
 ```markdown
@@ -567,6 +612,43 @@ than a fixed height so it tracks the article column; if the diagram's own propor
 the ratio in `css/technical-docs.css` must change with it. The caption also states what the
 matrix leaves out — the six rows that resolve to *Carbon ineligible* carry no activities, so
 they are absent from the diagram, which would otherwise read as an omission.
+
+---
+
+## DEC-28 · SCR-01 tracks the staging front-end, not the other way round
+
+**Date.** 2026-09-15 · **Status.** `documented`
+
+**Decision.** SCR-01 is now kept in parity with the implemented home page at
+`staging-fe.scenecoalition.org`. Where the two disagree, staging wins and this prototype is
+brought to it. Six pieces were ported on this date: rolling-odometer hero counters carrying
+staging's figures; photo-headed benefit cards with the two-mark lockup note; a tabbed feature
+index of six photo cards; a marquee of flip cards behind a "coming very soon" pill in place of
+the hidden static portfolio grid; a workshop photograph and a methodology link in the
+credibility band; and staging's step chapters, which carry no F-code, tag row or per-step CTA.
+
+**Context.** SCR-01 was the source the front-end team ported from — staging still carries this
+prototype's class names (`hero`, `terrain`, `cbtn`, `hstat`). Once shipped, the implemented
+page became the thing stakeholders actually see, so a prototype that drifts ahead of it
+describes a product that does not exist.
+
+**Alternatives visible in the code.** *Keep the prototype richer* — the step CTAs, the F-code
+chips and the benefit-card metric lists were real content, and the diff deletes them. Rejected
+deliberately: a reference that shows more than the product shows is a reference that misleads.
+They remain in git history if the front-end adopts them later.
+
+**Deviation on the flip cards.** The marquee carries real field notes from the 2026 site
+visits, not staging's lorem ipsum, and the cards were resized from 352×233 to 420×340 to hold
+them without clipping or scrolling (CMP-32). The fourth card is "Kampong Thom, Cambodia" rather
+than staging's "Cambodia, Cambodia".
+
+**Consequences.** SCR-01 now answers "what does the home page look like" truthfully, and the
+journey steps lost their only in-page route into the tool — the nav, hero CTA and footer flow
+are now the sole paths out of the page. The figures in the hero and proof bands are a snapshot
+of staging's live counters read on 2026-09-15; they are marked as such in comments in
+`index.html`, and they will go stale. The footer is the one place parity was **not** applied:
+its link columns are duplicated across fourteen pages, so stripping them from SCR-01 alone
+would have made the home page the odd one out. See DEC-11 on illustrative figures.
 
 ---
 
