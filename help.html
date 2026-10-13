@@ -1,0 +1,1336 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NbS Tool — Help Centre</title>
+<meta name="description" content="Help centre for the NbS Tool v3.0: what the tool is, who is behind it, a guide with screenshots for every phase of an analysis, how to read the results, and where to get support." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Barlow+Semi+Condensed:wght@600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/tokens.css" />
+<link rel="stylesheet" href="css/nav.css" />
+<link rel="stylesheet" href="css/footer.css" />
+<link rel="stylesheet" href="css/technical-docs.css" />
+<link rel="stylesheet" href="css/help.css" />
+</head>
+<body data-screen-label="Help Centre">
+<a class="skip-link" href="#docs-article">Skip to the help centre</a>
+
+<nav class="sitenav" data-nav-auth="user"></nav>
+<script src="js/navbar.js"></script>
+
+<main>
+  <section class="page docs-page" id="page-help" data-title="Help Centre">
+    <div class="docs-layout">
+
+      <!-- Same shell as technical-docs.html; js/docs-shell.js fills the nav,
+           the "On this page" list and the pager (DEC-31). -->
+      <aside class="docs-sidebar" aria-label="Help centre contents">
+        <div class="docs-sidebar-head"><span>NBS TOOL V3.0</span><strong>Help Centre</strong></div>
+        <nav class="docs-switch" aria-label="Documentation">
+          <a href="help.html" aria-current="page">Help</a>
+          <a href="technical-docs.html">Methodology</a>
+        </nav>
+        <label class="docs-search">
+          <span class="sr-only">Search Help and Methodology</span>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 4 4"></path></svg>
+          <input id="docs-search" type="search" placeholder="Search Help and Methodology…" autocomplete="off" />
+        </label>
+        <nav id="docs-article-nav" class="docs-article-nav" aria-label="Help centre articles"></nav>
+      </aside>
+
+      <article id="docs-article" class="docs-article" tabindex="-1" aria-live="polite">
+
+<!-- =============================== START HERE =============================== -->
+
+        <div data-doc="what-is" id="what-is">
+          <header class="doc-hero">
+            <span class="doc-kicker">Start here</span>
+            <h1>What the NbS Tool is</h1>
+            <p>The NbS Tool is a free, web-based platform for planning Nature-based Solutions projects in Southeast Asia. You give it a boundary on a map. It tells you what is already there, what is happening to it, what kind of Nature-based Solution the land can take, and what that could deliver for nature, people and climate.</p>
+          </header>
+
+          <section class="doc-section" id="what-is-does">
+            <h2>What it does</h2>
+            <p>For any area you draw or upload, the tool returns what is already there across nature, climate and people, the threats each ecosystem faces, the intervention pathway that fits, an estimate of the benefit that pathway could deliver, a monitoring plan, and documents you can put in front of a funder.</p>
+            <figure class="hc-shot">
+              <img src="assets/walkthrough/01-home.webp" loading="lazy" width="2880" height="1768"
+                   alt="The NbS Tool home page. A full-width dark hero reads Turn a place into a climate project the world can verify, above a paragraph explaining what the tool does. Two buttons read Start with the map and See how it works." />
+              <figcaption><b>The home page.</b> <em>Start with the map</em> takes you straight to <a href="#phase-0">Phase 0</a>.</figcaption>
+            </figure>
+          </section>
+
+          <section class="doc-section" id="what-is-who-for">
+            <h2>Who it is for</h2>
+            <p>The tool serves two audiences, and answers a different question for each.</p>
+            <div class="doc-table-wrap">
+              <table class="doc-table">
+                <thead><tr><th>Audience</th><th>What the tool gives them</th></tr></thead>
+                <tbody>
+                  <tr><td><strong>Project developers</strong>, especially frontline organisations</td><td>A pre-feasibility assessment: an overview of existing conditions at the project location, plus a first look at the potential benefits for nature, people and climate of a proposed pathway. Frontline organisations often have limited capacity to carry out spatial assessments of their own.</td></tr>
+                  <tr><td><strong>Investors</strong></td><td>Insight into the potential costs and revenue of a planned project, so that projects likely to deliver the best combined benefits can be compared and selected with confidence.</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>No GIS software or spatial-analysis background is needed. Everything runs in a browser.</p>
+            <aside class="doc-callout warn">
+              <span>An initial assessment, not a pre-feasibility study</span>
+              <p>What the tool produces is an initial assessment only. It does not replace a full pre-feasibility study. It is a foundation for more detailed work, such as field observation and more detailed local data, that refines the understanding of a project's potential.</p>
+            </aside>
+          </section>
+
+          <section class="doc-section" id="what-is-supports">
+            <h2>What it supports</h2>
+            <ul>
+              <li>Site identification and prioritisation</li>
+              <li>Feasibility assessments</li>
+              <li>Project design and planning</li>
+              <li>Baseline development</li>
+              <li>Financing and investment-readiness assessments</li>
+              <li>Monitoring framework development</li>
+              <li>Evidence-based decisions throughout the project lifecycle</li>
+            </ul>
+          </section>
+
+          <section class="doc-section" id="what-is-apart">
+            <h2>What sets it apart</h2>
+            <ul class="hc-points">
+              <li><b>Built for the region.</b> It uses country-specific map and socio-economic layers aligned with national data standards across ASEAN Member States, rather than global datasets alone.</li>
+              <li><b>Nature, climate and people in one place.</b> Baseline-versus-benefit analysis, biodiversity values, carbon stocks and community context sit on one platform, so you assess the three benefits together rather than in isolation.</li>
+              <li><b>Open access, low barrier.</b> It is free. A registered account analyses up to 500,000 hectares, generates documents, and can bring in local and traditional knowledge.</li>
+              <li><b>A pathway to action, not just a report.</b> It generates project documentation, including templates aligned with recognised carbon standards, and connects to the Coalition's NbS Incubator and Portfolio.</li>
+            </ul>
+            <aside class="doc-callout note">
+              <span>The one rule</span>
+              <p>The tool structures and supports decisions. It never replaces field data, community knowledge, Free, Prior and Informed Consent processes, or professional feasibility work. Treat every output as evidence to check, not a conclusion to quote. See <a href="#results-limits">what the tool does not do</a>.</p>
+            </aside>
+          </section>
+        </div>
+
+        <div data-doc="who" id="who">
+          <header class="doc-hero">
+            <span class="doc-kicker">Start here</span>
+            <h1>Who is behind the NbS Tool</h1>
+            <p>The NbS Tool is built by the SCeNe Coalition, with technical experts from across the region and funding from the ASEAN–UK Green Transition Fund.</p>
+          </header>
+
+          <section class="doc-section" id="who-coalition">
+            <h2>The SCeNe Coalition</h2>
+            <p>The <strong>Southeast Asia Climate and Nature-based Solutions (SCeNe) Coalition</strong> is a collaboration between leading non-governmental organisations with an established presence in Southeast Asia. Its purpose is to speed up and increase the implementation of, and investment in, high-quality, high-integrity Nature-based Solutions that deliver for climate, nature and people across the region.</p>
+            <p>Southeast Asia faces unprecedented demand for carbon credits, and with it an opportunity to direct climate finance towards projects that deliver not only climate outcomes but outcomes for biodiversity and for people as well.</p>
+            <h3>The Coalition's four aims</h3>
+            <ol>
+              <li>Show what quality Nature-based Solutions for climate look like in Southeast Asia.</li>
+              <li>Direct carbon finance and other climate finance towards just and equitable climate mitigation and adaptation, and the conservation of biodiversity and critical habitat in Southeast Asia.</li>
+              <li>Speed up and scale up high-integrity demand for, and supply of, Nature-based Solutions for climate in Southeast Asia.</li>
+              <li>Make sure that growth genuinely delivers positive impacts for climate, nature and equitable benefits for local people: the <strong>triple benefits</strong>.</li>
+            </ol>
+          </section>
+
+          <section class="doc-section" id="who-members">
+            <h2>Members and partners</h2>
+            <div class="doc-table-wrap">
+              <table class="doc-table">
+                <thead><tr><th>Group</th><th>Organisations</th></tr></thead>
+                <tbody>
+                  <tr><td><strong>Coalition members</strong></td><td>BirdLife International · Conservation International · Mandai Nature · RECOFTC · The Nature Conservancy · Wildlife Conservation Society · Worldwide Fund for Nature Singapore (WWF Singapore) · Yayasan Institut Sumber Daya Dunia (World Resources Institute) Indonesia · Zoological Society of London (ZSL)</td></tr>
+                  <tr><td><strong>Technical experts</strong></td><td>Asian Disaster Preparedness Center (ADPC) · Nanyang Technological University (NTU) · Spatial Informatics Group–Natural Assets Laboratory (SIG-NAL), together with Nature-based Solutions, mapping, biodiversity and financing experts from across Southeast Asia</td></tr>
+                  <tr><td><strong>Funder</strong></td><td>ASEAN–UK Green Transition Fund</td></tr>
+                  <tr><td><strong>Consultation</strong></td><td>The ASEAN Secretariat and ASEAN Member States</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <!-- TODO(design): the home page partner strip shows IDH; this table (from the methodology document) lists ZSL and not IDH. Confirm the member list with the Coalition before launch. -->
+          </section>
+
+          <section class="doc-section" id="who-resources">
+            <h2>Three Coalition resources</h2>
+            <p>The tool is one of three complementary resources:</p>
+            <ul class="hc-points">
+              <li><b>High-Integrity NbS Criteria.</b> A framework for what a high-integrity project looks like: robust science, meaningful community participation, equitable governance, sustainable financing and long-term stewardship.</li>
+              <li><b>NbS Tool.</b> This platform: the evidence and decision support.</li>
+              <li><b>NbS Incubator.</b> Technical assistance, capacity building and project-development support for selected initiatives, and the route from a promising site towards investment readiness.</li>
+            </ul>
+          </section>
+
+          <section class="doc-section" id="who-standards">
+            <h2>Standards it aligns with</h2>
+            <p>The Coalition's capacity-building curriculum, developed under the ASEAN–UK Green Transition Fund, uses the tool throughout its feasibility and monitoring modules. Both the curriculum and the tool are designed to align with the IUCN Global Standard for Nature-based Solutions and with the ASEAN Guidelines and Toolkit on Nature-based Solutions and Ecosystem-based Approaches in the forestry sector.</p>
+          </section>
+        </div>
+
+        <div data-doc="workflow" id="workflow">
+          <header class="doc-hero">
+            <span class="doc-kicker">Start here</span>
+            <h1>How the NbS Tool works</h1>
+            <p>Every analysis follows the same eight phases. Phase 0 is optional. Phases 1 to 5 run in the Data Analyser, the panel over the map, and are where the calculation happens. Phases 6 and 7 turn the analysis into a monitoring plan and a document. After that, the project lives in My Project.</p>
+          </header>
+
+          <section class="doc-section" id="workflow-phases">
+            <h2>The eight phases</h2>
+            <ol class="hc-steps hc-steps-zero">
+              <li><b><a href="#phase-0">Explore the map</a>.</b> Optional. Switch layers on and off, read the legend, find a place, export a map.</li>
+              <li><b><a href="#phase-1">Select location</a>.</b> Draw a polygon or upload a boundary file, then confirm the area.</li>
+              <li><b><a href="#phase-2">Site characterisation</a>.</b> What is here: general context, nature, people and climate.</li>
+              <li><b><a href="#phase-3">Threat profile</a>.</b> What is happening to it: the pressures on each ecosystem.</li>
+              <li><b><a href="#phase-4">Pathway selection</a>.</b> What the land can take: an ecosystem, a pathway to protect, manage or restore it, and the activities for that combination.</li>
+              <li><b><a href="#phase-5">Potential benefit</a>.</b> What the project could deliver for nature, climate and people.</li>
+              <li><b><a href="#phase-6">Monitoring planning</a>.</b> Activities become indicators, methods and a schedule.</li>
+              <li><b><a href="#phase-7">Generate documents</a>.</b> General project documentation, or a carbon project document aligned with a chosen standard.</li>
+            </ol>
+            <p><strong>After the analysis:</strong> <a href="#projects">manage your projects</a>, then <a href="#record">record and verify</a> what happens in the field.</p>
+          </section>
+
+          <section class="doc-section" id="workflow-chain">
+            <h2>How phases 1 to 5 feed each other</h2>
+            <p>Each phase feeds the next, so nothing can be produced without the phases before it.</p>
+            <div class="doc-flow">
+              <div class="step"><span>PHASES 2–3</span><strong>Inform</strong><small>Site and threats</small></div>
+              <div class="arrow" aria-hidden="true">→</div>
+              <div class="step"><span>PHASE 4</span><strong>Select</strong><small>Pathway, then activities</small></div>
+              <div class="arrow" aria-hidden="true">→</div>
+              <div class="step"><span>PHASE 5</span><strong>Determine</strong><small>Benefit</small></div>
+              <div class="arrow" aria-hidden="true">→</div>
+              <div class="step"><span>LOOP BACK</span><strong>Threat profile</strong><small>Decides which hazard and species benefits can be counted</small></div>
+            </div>
+            <ul class="hc-points">
+              <li><b>Phase 4 produces two things.</b> The pathway (what the land can take) and the activity list (what you will do). The logic behind them is different, so they are chosen separately.</li>
+              <li><b>One loop back.</b> The threat profile is read again at the benefit stage, to decide which climate-hazard and species benefits can be put into numbers.</li>
+              <li><b>Each phase keeps its own result.</b> A phase can be run again without running the ones before it, and a saved result keeps the choices it was produced with, including the project duration.</li>
+            </ul>
+          </section>
+
+          <section class="doc-section" id="workflow-kinds">
+            <h2>Calculated, reported or described</h2>
+            <p>Three kinds of output appear on the analysis screens, and it matters which is which.</p>
+            <div class="doc-table-wrap">
+              <table class="doc-table">
+                <thead><tr><th>Kind of output</th><th>How it is produced</th><th>Example</th></tr></thead>
+                <tbody>
+                  <tr><td><strong>Calculated</strong></td><td>Worked out inside the tool from the site area and published rates</td><td>Projected forest loss, avoided emissions, carbon removals, habitat loss avoided</td></tr>
+                  <tr><td><strong>Reported</strong></td><td>Read from a named map layer and summarised for your area</td><td>Land cover shares, population, vulnerability class, soil group</td></tr>
+                  <tr><td><strong>Described</strong></td><td>Attached to a chosen activity, with no number, because no reliable spatial method exists yet</td><td>Watershed function, cultural heritage, benefit sharing</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <aside class="doc-callout note">
+              <span>A benefit without a number is not a weaker benefit</span>
+              <p>It is one for which the tool has no reliable spatial method yet. The screens mark which is which, and the people benefits are described throughout.</p>
+            </aside>
+          </section>
+
+          <section class="doc-section" id="workflow-fits">
+            <h2>Where the tool fits in a project</h2>
+            <p>The tool helps at specific points along a project. It does not cover community engagement, consent, governance or financing strategy itself. It gives those steps the evidence they need.</p>
+            <div class="doc-table-wrap">
+              <table class="doc-table">
+                <thead><tr><th>Project stage</th><th>What you need</th><th>Where the tool helps</th></tr></thead>
+                <tbody>
+                  <tr><td><strong>Understanding the place</strong></td><td>A first read of the landscape: land cover, ecosystems, pressures, who lives there</td><td><a href="#phase-0">Phase 0</a> · <a href="#phase-2">Phase 2</a></td></tr>
+                  <tr><td><strong>Technical feasibility</strong></td><td>Ecological, social, climate and carbon baselines, and the data gaps to fill in the field</td><td><a href="#phase-2">Phase 2</a> · <a href="#phase-3">Phase 3</a></td></tr>
+                  <tr><td><strong>Defining activities</strong></td><td>Interventions that suit each ecosystem, with monitoring built in from the start</td><td><a href="#phase-4">Phase 4</a> · <a href="#phase-6">Phase 6</a></td></tr>
+                  <tr><td><strong>Financing and investment readiness</strong></td><td>Structured evidence in the form funders and standards ask for</td><td><a href="#phase-5">Phase 5</a> · <a href="#phase-7">Phase 7</a></td></tr>
+                  <tr><td><strong>Implementation and monitoring</strong></td><td>A baseline to monitor against, field records, and a verification trail</td><td><a href="#projects">Manage your projects</a> · <a href="#record">Record and verify</a></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <aside class="doc-callout hc-xref">
+              <span>How it's calculated</span>
+              <p><a href="technical-docs.html#docs/phase1">Phase 1</a> · <a href="technical-docs.html#docs/phase2">Phase 2</a> · <a href="technical-docs.html#docs/phase3">Phase 3</a> · <a href="technical-docs.html#docs/phase4-state">Phase 4</a> · <a href="technical-docs.html#docs/phase5">Phase 5</a>, step by step in the Methodology.</p>
+            </aside>
+          </section>
+        </div>
+
+        <div data-doc="getting-around" id="getting-around">
+          <header class="doc-hero">
+            <span class="doc-kicker">Start here</span>
+            <h1>Finding your way around</h1>
+            <p>Every screen carries the same bar at the top and the same footer at the bottom. Learn these two and you can always find your way back.</p>
+          </header>
+
+          <section class="doc-section" id="getting-around-top">
+            <h2>The top bar</h2>
+            <ul class="hc-points">
+              <li><b>The logos, far left.</b> Back to the home page. The small arrow beside them lists the Coalition's other tools.</li>
+              <li><b>The main links, centre.</b> Home, Interactive Map, My Project and Methodology. The one you are on is underlined.</li>
+              <li><b>Your profile, right.</b> Shortcuts to My Projects, the Document Generator, Account settings, this Help Centre, and Log out.</li>
+            </ul>
+            <figure class="hc-shot">
+              <img src="assets/walkthrough/49-nav-profile.webp" loading="lazy" width="2880" height="1768"
+                   alt="My Project with the profile menu open under the top bar. The menu shows the signed-in user's name and email, then My Projects, Document Generator, Account settings, Help centre and Log out. The top bar links read Home, Interactive Map, My Project and Methodology." />
+              <figcaption><b>The top bar, with the profile menu open.</b> Help centre sits between Account settings and Log out.</figcaption>
+            </figure>
+          </section>
+
+          <section class="doc-section" id="getting-around-footer">
+            <h2>The footer</h2>
+            <p>The footer repeats the workflow as a strip of links, so you can jump to any phase from the bottom of any page. Above it are the supporting materials: the activity matrix, the Methodology and this Help Centre.</p>
+            <figure class="hc-shot">
+              <img src="assets/walkthrough/48-footer.webp" loading="lazy" width="2880" height="1768"
+                   alt="The bottom of the My Project page and the dark footer. Supporting Materials lists Activity Matrix, Methodology and Help Centre. A strip of five links reads Phases 0 to 1 Explore and select, Phases 2 to 5 Analyse, Phase 6 Plan monitoring, Phase 7 Generate documents, and After the analysis Manage and monitor." />
+              <figcaption><b>The footer.</b> The workflow strip uses the same phases as this Help Centre.</figcaption>
+            </figure>
+          </section>
+
+          <section class="doc-section" id="getting-around-phone">
+            <h2>On a phone or tablet</h2>
+            <p>The links fold into a menu button. The map and the analysis need a larger screen, and a note says so. Reading pages, such as this Help Centre and the Methodology, work on any device.</p>
+          </section>
+        </div>
+
+        <div data-doc="accounts" id="accounts">
+          <header class="doc-hero">
+            <span class="doc-kicker">Start here</span>
+            <h1>Accounts, area limits and privacy</h1>
+            <p>You can explore and analyse without an account. An account lets you analyse larger areas, keep your work, and share it on your terms.</p>
+            <div class="hc-where">
+              <b>Where</b>
+              <a class="hc-route" href="login.html">Log in / Sign up<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
+              <a class="hc-route" href="account-settings.html">Account settings<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
+            </div>
+          </header>
+
+          <section class="doc-section" id="accounts-limits">
+            <h2>Area limits</h2>
+            <ul>
+              <li>Without an account you can analyse areas up to <strong>200,000 hectares</strong>.</li>
+              <li>With a free account you can analyse up to <strong>500,000 hectares</strong>.</li>
+              <li>Need more? Request broader analysis capability by emailing <a href="mailto:support@nbstool.org?subject=Request%20broader%20analysis%20capability">support@nbstool.org</a> with your organisation and the area you want to analyse.</li>
+            </ul>
+          </section>
+
+          <section class="doc-section" id="accounts-unlocks">
+            <h2>What an account unlocks</h2>
+            <p>Saving and managing projects, inviting collaborators, uploading your own data, generating and downloading documents, and the larger area allowance.</p>
+            <figure class="hc-shot">
+              <img src="assets/walkthrough/43-login.webp" loading="lazy" width="2880" height="1768"
+                   alt="The split log-in screen: a dark brand panel on the left listing four platform benefits, and on the right a form with Log in and Sign up tabs, email and password fields, a remember-me checkbox and a forgot-password link." />
+              <figcaption><b>Log in and sign up share one screen.</b> The tabs above the form switch between them.</figcaption>
+            </figure>
+          </section>
+
+          <section class="doc-section" id="accounts-settings">
+            <h2>Account settings</h2>
+            <p>Three parts, each saved on its own: your personal details (photo, name, job title, phone, a short bio), your password, and your organisation's details. Changing your name does not require re-entering your password.</p>
+            <figure class="hc-shot">
+              <img src="assets/walkthrough/40-account-settings.webp" loading="lazy" width="2880" height="1768"
+                   alt="The Account settings screen with a left rail listing Personal identity, Password, Organization info and Log out, beside a form containing an avatar with upload and remove buttons, first and last name, job title, phone number and a short bio field." />
+              <figcaption><b>Account settings.</b> Personal identity, Password and Organization info.</figcaption>
+            </figure>
+          </section>
+
+          <section class="doc-section" id="accounts-privacy">
+            <h2>Project privacy</h2>
+            <p>Every saved project has a privacy level you can change in its Privacy tab:</p>
+            <ul class="hc-points">
+              <li><b>Level 1 · Private.</b> Only you and invited collaborators can view the project. It is left out of the public NbS Portfolio.</li>
+              <li><b>Level 2 · Coalition.</b> Visible to verified SCeNe Coalition members and the NbS Incubator, for review and funding matchmaking.</li>
+              <li><b>Level 3 · Public.</b> Listed in the public NbS Portfolio as a high-quality example. Baseline summaries are visible to anyone.</li>
+              <li><b>Never shared, at any level.</b> Personal contact details, financial data, and GPS coordinates finer than one hectare.</li>
+            </ul>
+            <p>Data you upload stays confidential unless you authorise sharing, and carries the same protections as a Level 1 project.</p>
+            <figure class="hc-shot">
+              <img src="assets/walkthrough/22-project-privacy.webp" loading="lazy" width="2880" height="1768"
+                   alt="The Privacy tab of a project. On the left, data sharing terms and conditions. On the right, three privacy levels as options: Level 1 Private, Level 2 Coalition, and Level 3 Public, followed by a warning that raising the level cannot be silently reversed and a Change privacy level button." />
+              <figcaption><b>The Privacy tab.</b> Raising the level cannot be quietly undone, and the screen says so before you confirm.</figcaption>
+            </figure>
+            <aside class="doc-callout hc-xref">
+              <span>How it's calculated</span>
+              <p><a href="technical-docs.html#docs/phase1">Phase 1 · Select location</a>: how the area of your boundary is measured.</p>
+            </aside>
+          </section>
+        </div>
+
+        <div data-doc="first-analysis" id="first-analysis">
+          <header class="doc-hero">
+            <span class="doc-kicker">Start here</span>
+            <h1>Your first analysis</h1>
+            <p>From a place on the map to a first result, in seven steps. No account is needed for an area under 200,000 hectares.</p>
+            <div class="hc-where">
+              <b>Where</b>
+              <a class="hc-route" href="interactive-map.html">Interactive Map<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
+            </div>
+          </header>
+
+          <section class="doc-section" id="first-analysis-steps">
+            <h2>Seven steps</h2>
+            <ol class="hc-steps">
+              <li><b>Open the Interactive Map.</b> Use the search box to find your district or province, or zoom to the area by hand.</li>
+              <li><b>Mark your area.</b> Draw a polygon on the map, or upload a boundary file. See <a href="#phase-1">Phase 1</a>.</li>
+              <li><b>Confirm the area.</b> Check the hectares shown. If the area is over your limit, the confirmation step stops and tells you why. Shrink the boundary or sign in.</li>
+              <li><b>Read the baseline.</b> Work through site characterisation and the threat profile. Each figure has an information button that names its data source.</li>
+              <li><b>Choose a pathway.</b> Pick the ecosystem, the pathway and the activities. Set the project duration, and switch on the carbon-project option if that is your intent.</li>
+              <li><b>Read the potential benefit.</b> Nature, climate and people. Put into numbers where the method allows, described where it does not.</li>
+              <li><b>Save it.</b> Sign in and save the analysis as a project so your team can return to it, plan monitoring and generate documents.</li>
+            </ol>
+          </section>
+
+          <section class="doc-section" id="first-analysis-screens">
+            <h2>Where you start, and where you confirm</h2>
+            <figure class="hc-shot">
+              <img src="assets/walkthrough/02-map-step1.webp" loading="lazy" width="2880" height="1768"
+                   alt="The Interactive Map. A vertical icon rail on the far left lists Site Information, Nature, People, Climate and Project Management. The Data Analyser panel sits over the map, opened on Select location, with two method cards, Draw polygon and Upload SHP. Map controls sit at the top right and a Legend bar at the bottom right." />
+              <figcaption><b>The map on first load.</b> The Data Analyser opens on Select location.</figcaption>
+            </figure>
+            <figure class="hc-shot">
+              <img src="assets/walkthrough/05-map-confirm.webp" loading="lazy" width="2880" height="1768"
+                   alt="The confirmation step asking Analyse the selected polygon, with the estimated size of the selected area in a large card, a primary button to continue and a secondary Reselect area button. The polygon is drawn on the map behind it." />
+              <figcaption><b>Confirming the area.</b> Check the hectares before you continue.</figcaption>
+            </figure>
+          </section>
+        </div>
+
+        <div data-doc="boundary-file" id="boundary-file">
+          <header class="doc-hero">
+            <span class="doc-kicker">Start here</span>
+            <h1>Preparing a boundary file</h1>
+            <p>If you already have a boundary from a GIS, a survey or a community map, upload it instead of drawing.</p>
+          </header>
+
+          <section class="doc-section" id="boundary-file-rules">
+            <h2>What the file needs</h2>
+            <ul class="hc-points">
+              <li><b>Accepted formats.</b> A <strong>.zip</strong> holding the shapefile set (<strong>.shp, .shx, .dbf, .prj</strong>), or a <strong>.kml</strong> or <strong>.kmz</strong> file.</li>
+              <li><b>Zip the whole set.</b> A shapefile is several files. Put all of them in one .zip; a lone .shp cannot be read.</li>
+              <li><b>Include the .prj.</b> It tells the tool which coordinate system your boundary uses, so it can be placed correctly and its area measured.</li>
+              <li><b>One site per file.</b> Keep a single project boundary per upload. Analyse separate sites as separate projects.</li>
+              <li><b>Stay inside the region and the limit.</b> The boundary must fall within Southeast Asia and under your hectare allowance. The uploader tells you if either check fails.</li>
+            </ul>
+            <figure class="hc-shot">
+              <img src="assets/walkthrough/04-map-upload.webp" loading="lazy" width="2880" height="1768"
+                   alt="The Data Analyser showing the Upload SHP option with a drop zone, the accepted formats listed as a zip containing shp, shx, dbf and prj files, or kml or kmz, and a button to browse from your computer." />
+              <figcaption><b>The upload drop zone.</b> The accepted formats are listed under it.</figcaption>
+            </figure>
+          </section>
+        </div>
+
+<!-- ============================= RUN AN ANALYSIS ============================= -->
+
+        <div data-doc="phase-0" id="phase-0">
+          <header class="doc-hero">
+            <span class="doc-kicker">Phase 0 · Optional</span>
+            <h1>Explore the map</h1>
+            <p>Look around before you analyse anything. Skip this phase if you already know your area.</p>
+            <div class="hc-where">
+              <b>Where</b>
+              <a class="hc-route" href="interactive-map.html">Interactive Map<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
+            </div>
+          </header>
+
+          <aside class="doc-callout warn">
+            <span>About the screenshots</span>
+            <p>Every figure in the screenshots in these guides is illustrative sample data, there to show how a screen behaves. None of it is a measurement of a real site.</p>
+          </aside>
+
+          <section class="doc-section" id="phase-0-layers">
+            <h2>Layers and legend</h2>
+            <ol class="hc-steps">
+              <li><b>Open a layer group.</b> The map layers sit in the rail on the left, grouped by theme: site information, nature, people and climate. A small dot marks a group that has a layer switched on.</li>
+              <li><b>Switch layers on and off.</b> Several layers can be on at once, which is how you compare carbon stocks with settlements, or deforestation risk with Key Biodiversity Areas.</li>
+              <li><b>Read the legend.</b> Bottom right. Expand it to see the key for every layer that is on. Your boundary and the area actually analysed are always listed. The information button beside an entry opens its source and caveats.</li>
+            </ol>
+            <figure class="hc-shot">
+              <img src="assets/walkthrough/02-map-step1.webp" loading="lazy" width="2880" height="1768"
+                   alt="The Interactive Map screen. A vertical icon rail on the far left lists Site Information, Nature, People, Climate and Project Management. The Data Analyser panel sits over the map. Map zoom and locate controls sit at the top right and a Legend bar at the bottom right." />
+              <figcaption><b>The map on first load.</b> Layer groups on the left, the Data Analyser over the map, controls top right, legend bottom right. <em>Hide</em> in the analyser's header folds it away.</figcaption>
+            </figure>
+            <figure class="hc-shot">
+              <img src="assets/walkthrough/06-map-layers-legend.webp" loading="lazy" width="2880" height="1768"
+                   alt="The map with the Data Analyser folded away. The Nature layer group in the left rail is active, and the expanded Legend panel at the bottom right lists the project boundary and analysed extent, then site information entries for mangrove cover, tidal wetland and degraded or cleared land, then a nature entry for Key Biodiversity Area." />
+              <figcaption><b>The legend expanded.</b> Entries are grouped the same way as the layer rail.</figcaption>
+            </figure>
+          </section>
+
+          <section class="doc-section" id="phase-0-find">
+            <h2>Find a place</h2>
+            <p>Use the search box at the top right to go to a district or province by name. Zoom in and out with the map controls or your mouse, or jump to your current location.</p>
+            <figure class="hc-shot">
+              <img src="assets/walkthrough/45-map-search.webp" loading="lazy" width="2880" height="1768"
+                   alt="The map search box open at the top right with Kubu Raya typed in, and a single suggestion below reading Kubu Raya, West Kalimantan, Indonesia." />
+              <figcaption><b>Searching by place name.</b> Pick a suggestion and the map moves to it.</figcaption>
+            </figure>
+          </section>
+
+          <section class="doc-section" id="phase-0-export">
+            <h2>Export a map or data</h2>
+            <p>Take what you see into a meeting, a report or your own GIS, in three forms:</p>
+            <ul class="hc-points">
+              <li><b>GeoPDF.</b> A map of the layers you have switched on and your project boundary that keeps its location information. It works offline and in presentations, and opens in GIS software.</li>
+              <li><b>Tabular data.</b> The figures behind the layers, as a spreadsheet, for statistics, planning tools, or comparing several sites.</li>
+              <li><b>GIS files.</b> The spatial data itself, including the shapefile, for QGIS, ArcGIS and other mapping software.</li>
+            </ul>
+            <aside class="doc-callout hc-xref">
+              <span>How it's calculated</span>
+              <p><a href="technical-docs.html#docs/scope">Region, ecosystems and pathways</a> · <a href="technical-docs.html#docs/landcover">Land cover classes</a></p>
+            </aside>
+          </section>
+        </div>
+
+        <div data-doc="phase-1" id="phase-1">
+          <header class="doc-hero">
+            <span class="doc-kicker">Phase 1</span>
+            <h1>Select location</h1>
+            <p>Tell the tool which piece of ground you are asking about. There are two ways in. Pick the one that matches what you already have.</p>
+            <div class="hc-where">
+              <b>Where</b>
+              <a class="hc-route" href="interactive-map.html">Interactive Map<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
+            </div>
+          </header>
+
+          <section class="doc-section" id="phase-1-draw">
+            <h2>Draw a polygon</h2>
+            <p>For an area that does not match a boundary you already hold: a concession, a community forest, a restoration site.</p>
+            <ol class="hc-steps">
+              <li><b>Choose Draw polygon.</b> Then click anywhere on the map to place your first corner.</li>
+              <li><b>Add corners.</b> Each click adds one. Follow the boundary of your site.</li>
+              <li><b>Close the shape.</b> Double-click to finish, or click your first corner again.</li>
+              <li><b>Adjust it.</b> Drag any corner to move it. Click on a line between two corners to add a new one there.</li>
+              <li><b>Click Finish drawing</b> to go on to the confirmation step. <em>Cancel</em> abandons the shape.</li>
+            </ol>
+            <figure class="hc-shot">
+              <img src="assets/walkthrough/03-map-draw.webp" loading="lazy" width="2880" height="1768"
+                   alt="The Data Analyser showing the Draw polygon option, with the instruction to click any location to start drawing and double-click to finish, and Cancel and Finish drawing buttons." />
+              <figcaption><b>Drawing.</b> A Back link returns you to the two methods.</figcaption>
+            </figure>
+          </section>
+
+          <section class="doc-section" id="phase-1-upload">
+            <h2>Upload a boundary file</h2>
+            <p>For a boundary that already exists in your GIS.</p>
+            <ol class="hc-steps">
+              <li><b>Prepare the file.</b> A .zip of the shapefile set, or a .kml or .kmz. See <a href="#boundary-file">preparing a boundary file</a>.</li>
+              <li><b>Choose Upload SHP.</b> Drag the file onto the drop zone, or browse for it.</li>
+              <li><b>Wait for the check.</b> The tool checks the file's format, its size against your allowance, and that it lies within Southeast Asia. A failed check names the problem.</li>
+            </ol>
+            <figure class="hc-shot">
+              <img src="assets/walkthrough/04-map-upload.webp" loading="lazy" width="2880" height="1768"
+                   alt="The Data Analyser showing the Upload SHP option with a drop zone, the accepted formats, and a button to browse from your computer." />
+              <figcaption><b>Uploading.</b> The accepted formats are listed under the drop zone.</figcaption>
+            </figure>
+          </section>
+
+          <section class="doc-section" id="phase-1-confirm">
+            <h2>Confirm the area</h2>
+            <p>However you defined it, the tool shows the size it measured and asks you to confirm before it runs anything. If the number is not what you expected, your boundary is wrong, and this is the cheapest place to fix it. <em>Continue</em> runs the analysis; <em>Reselect area</em> takes you back.</p>
+            <figure class="hc-shot">
+              <img src="assets/walkthrough/05-map-confirm.webp" loading="lazy" width="2880" height="1768"
+                   alt="The confirmation step asking Analyse the selected polygon, with the estimated size of the selected area in a large card, a primary button to continue and a secondary Reselect area button. The polygon is drawn on the map behind it." />
+              <figcaption><b>Confirming the area.</b> Check the hectares before you continue.</figcaption>
+            </figure>
+            <aside class="doc-callout warn">
+              <span>If the area is too big</span>
+              <p>Above 200,000 hectares the confirmation step stops and offers a link to sign in for the 500,000-hectare allowance. Nothing is analysed until you are inside the limit. For areas above 500,000 hectares, <a href="#accounts">request broader analysis capability</a>.</p>
+            </aside>
+            <aside class="doc-callout hc-xref">
+              <span>How it's calculated</span>
+              <p><a href="technical-docs.html#docs/phase1">Phase 1 · Select location</a> · <a href="technical-docs.html#docs/conventions">Analysis conventions</a></p>
+            </aside>
+          </section>
+        </div>
+
+        <div data-doc="phase-2" id="phase-2">
+          <header class="doc-hero">
+            <span class="doc-kicker">Phase 2</span>
+            <h1>Site characterisation</h1>
+            <p>The baseline: what is in your area today, across four tabs. The tabs follow the same four themes as the map's layer rail, so what you read here matches what you can draw on the map.</p>
+            <div class="hc-where">
+              <b>Where</b>
+              <a class="hc-route" href="interactive-map.html">Data Analyser<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
+            </div>
+          </header>
+
+          <section class="doc-section" id="phase-2-general">
+            <h2>General</h2>
+            <p>Which ecosystems are present and how much of each, administrative and zoning status, terrain, historical deforestation, deforestation risk, land cover and natural disaster risk.</p>
+            <figure class="hc-shot">
+              <img src="assets/walkthrough/07-step2-general.webp" loading="lazy" width="2880" height="1768"
+                   alt="The General context tab. An Ecosystem type identification card shows a map thumbnail of the site beside a paragraph explaining the area spans dryland, mangrove and peatland, and a doughnut chart splitting the total area between mangrove, peatland, dryland forest and other. Below is an orange disclaimer and a data source line." />
+              <figcaption><b>Which ecosystems are here.</b> The doughnut splits your area between dryland forest, mangrove, peatland and everything else. A source line and a disclaimer sit under each card.</figcaption>
+            </figure>
+          </section>
+
+          <section class="doc-section" id="phase-2-themes">
+            <h2>Nature, People and Climate</h2>
+            <p>Habitat, connectivity and species; population, livelihoods and vulnerability; carbon, rainfall, temperature and fire. <a href="#results-contexts">What each analysis shows</a> lists every item.</p>
+            <figure class="hc-shot">
+              <img src="assets/walkthrough/08-step2-nature.webp" loading="lazy" width="2880" height="1768"
+                   alt="The Nature context tab, showing baseline nature indicators for the selected area." />
+              <figcaption><b>Nature.</b> Forest integrity, habitat, connectivity and species.</figcaption>
+            </figure>
+            <figure class="hc-shot">
+              <img src="assets/walkthrough/09-step2-people.webp" loading="lazy" width="2880" height="1768"
+                   alt="The People context tab, with a country selector set to Indonesia. A social demography card gives an estimated population split by sex, alongside an age-group population pyramid and a households figure." />
+              <figcaption><b>People, with its country selector.</b> Social statistics follow national definitions, so the tab asks which country's figures to use.</figcaption>
+            </figure>
+            <figure class="hc-shot">
+              <img src="assets/walkthrough/10-step2-climate.webp" loading="lazy" width="2880" height="1768"
+                   alt="The Climate context tab, showing baseline climate and carbon indicators for the selected area." />
+              <figcaption><b>Climate.</b> Biomass and soil carbon, temperature and rainfall, fire and hazard exposure.</figcaption>
+            </figure>
+          </section>
+
+          <section class="doc-section" id="phase-2-source">
+            <h2>Check where a number comes from</h2>
+            <p>Every card has an information button in its top-right corner. It opens the date, a description, the disclaimer, the resolution and the source of the layer behind that figure. Read it before you quote the figure: a 30-metre layer cannot tell you about a two-hectare patch, and a "historical" date describes the past, not today.</p>
+            <figure class="hc-shot">
+              <img src="assets/walkthrough/46-info-modal.webp" loading="lazy" width="2880" height="1768"
+                   alt="A pop-up titled Ecosystem type identification listing Date of content as Historical, a description of the layer, a disclaimer warning that the figures are indicative estimates rather than ground-verified measurements, a resolution of 30 metres, and a source field." />
+              <figcaption><b>The information panel.</b> Date, description, disclaimer, resolution and source.</figcaption>
+            </figure>
+            <p>Anything surprising, coarse or missing is a candidate for ground-truthing, community mapping or a survey.</p>
+            <aside class="doc-callout hc-xref">
+              <span>How it's calculated</span>
+              <p><a href="technical-docs.html#docs/phase2">Phase 2 · Site characterisation</a> · Data layers: <a href="technical-docs.html#docs/annex-general">general context</a>, <a href="technical-docs.html#docs/annex-nature">nature</a>, <a href="technical-docs.html#docs/annex-climate">climate</a>, <a href="technical-docs.html#docs/annex-people">people</a></p>
+            </aside>
+          </section>
+        </div>
+
+        <div data-doc="phase-3" id="phase-3">
+          <header class="doc-hero">
+            <span class="doc-kicker">Phase 3</span>
+            <h1>Threat profile</h1>
+            <p>What is going wrong, and where. The tool separates each ecosystem into what is intact and what is disturbed, then shows the pressures behind the disturbance.</p>
+            <div class="hc-where">
+              <b>Where</b>
+              <a class="hc-route" href="interactive-map.html">Data Analyser<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
+            </div>
+          </header>
+
+          <section class="doc-section" id="phase-3-read">
+            <h2>Reading the threat profile</h2>
+            <ol class="hc-steps">
+              <li><b>Read the summary.</b> The <em>All Ecosystem</em> tab gives the total ecosystem area and how much of it is disturbed, as a number and a share.</li>
+              <li><b>Compare the ecosystems.</b> Dryland forest, mangrove and peatland sit side by side, so you can see which is under most pressure. Each has its own tab for detail.</li>
+              <li><b>Find where it is happening.</b> The disturbance map shows where inside your boundary the pressure is: remaining, disturbed, forest loss or forest gain.</li>
+              <li><b>Read the drivers.</b> Below the map, the main pressures behind the disturbance are named, not just measured.</li>
+            </ol>
+            <figure class="hc-shot">
+              <img src="assets/walkthrough/11-step3-threat.webp" loading="lazy" width="2880" height="1768"
+                   alt="The threat profile. Tabs read All Ecosystem, Forest, Mangrove and Peatland. Summary cards give a total ecosystem area and a total disturbed area with its share. Three cards break this down by dryland forest, mangrove and peatland. Below, an ecosystem disturbance map is keyed by remaining, disturbed, forest loss and forest gain." />
+              <figcaption><b>The threat profile.</b> A summary for all ecosystems, then one card per ecosystem, then the disturbance map.</figcaption>
+            </figure>
+            <aside class="doc-callout hc-xref">
+              <span>How it's calculated</span>
+              <p><a href="technical-docs.html#docs/phase3">Phase 3 · Threat profile</a> · <a href="technical-docs.html#docs/annex-threat">Threat profile layers</a></p>
+            </aside>
+          </section>
+        </div>
+
+        <div data-doc="phase-4" id="phase-4">
+          <header class="doc-hero">
+            <span class="doc-kicker">Phase 4</span>
+            <h1>Pathway selection</h1>
+            <p>The decision phase. The activities you choose here travel furthest: they become the indicators in your monitoring plan.</p>
+            <div class="hc-where">
+              <b>Where</b>
+              <a class="hc-route" href="interactive-map.html">Data Analyser<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
+              <a class="hc-route" href="NbS_Activities_Flow_v2.html">Activity Matrix<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
+            </div>
+          </header>
+
+          <section class="doc-section" id="phase-4-pathway">
+            <h2>Ecosystem and pathway</h2>
+            <ol class="hc-steps">
+              <li><b>Pick the ecosystem.</b> One block per ecosystem the analysis found in your area: forest, mangrove or peatland.</li>
+              <li><b>Pick the pathway.</b> Protect, Manage or Restore. Each card shows the area it applies to and what share of that ecosystem is eligible. A pathway the land cannot take is greyed out and marked, not hidden.</li>
+            </ol>
+            <figure class="hc-shot">
+              <img src="assets/walkthrough/12-step4-pathway.webp" loading="lazy" width="2880" height="1768"
+                   alt="Design your Nature-based Solution pathway. A Forest block shows total forest area and disturbed area, with three intervention cards, Protect, Manage and Restore, each with a toggle and an eligibility percentage. A Mangrove block below repeats the pattern, with its Restore card greyed out and labelled Non-eligible." />
+              <figcaption><b>One block per ecosystem.</b> Pathways that are not eligible are visibly disabled.</figcaption>
+            </figure>
+          </section>
+
+          <section class="doc-section" id="phase-4-activities">
+            <h2>Activities</h2>
+            <p>Switching a pathway on reveals the activities for that ecosystem and pathway. A counter tracks how many you have chosen.</p>
+            <figure class="hc-shot">
+              <img src="assets/walkthrough/13-step4-activities.webp" loading="lazy" width="2880" height="1768"
+                   alt="The pathway screen with the forest Protect toggle switched on. A Choose intervention activities section has appeared below it, showing zero of one activities selected and a checkbox for establishing protected areas, corridors and enforcing customary land rights." />
+              <figcaption><b>Activities appear once a pathway is on.</b> Which ones you see depends on both the ecosystem and the pathway.</figcaption>
+            </figure>
+            <p>The full logic, from land cover through to indicators, is drawn in the activity matrix.</p>
+            <figure class="hc-shot">
+              <img src="assets/walkthrough/42-activity-matrix.webp" loading="lazy" width="2880" height="1768"
+                   alt="The activity matrix flow diagram. A colour key marks protect, manage, restore and cross-pathway links. A flow diagram runs across labelled columns from land cover through trajectory, pathway, ecosystem, activity, benefit category and benefit to indicator." />
+              <figcaption><b>The activity matrix.</b> Land cover to pathway to activity to benefit to indicator, with every link drawn. Click any box to highlight every route through it.</figcaption>
+            </figure>
+          </section>
+
+          <section class="doc-section" id="phase-4-duration">
+            <h2>Duration and carbon</h2>
+            <ul class="hc-points">
+              <li><b>Duration.</b> Between 10 and 70 years, 30 by default. Benefits add up over this period, so a longer project shows a larger total.</li>
+              <li><b>The carbon-project option.</b> If the project will seek carbon finance, switch it on. The benefit phase then shows net figures, after three deductions you can edit: <b>uncertainty</b> (error in the data and models), <b>leakage</b> (emissions simply moved elsewhere) and <b>buffer</b> (a reserve held back in case the gains are reversed). See <a href="#results-carbon">carbon finance</a>.</li>
+            </ul>
+            <figure class="hc-shot">
+              <img src="assets/walkthrough/16-step4-duration-carbon.webp" loading="lazy" width="2880" height="1768"
+                   alt="The lower part of the pathway screen. A Duration of intervention slider runs from 10 to 70 years. Below it a card asks whether you are interested in exploring this as a Nature-based Solutions carbon project, with the toggle switched on, revealing three percentage inputs for leakage, uncertainty and buffer pool deductions. An orange disclaimer beneath warns that field verification is required." />
+              <figcaption><b>Duration and the carbon-project option.</b> The three deductions appear when the option is on.</figcaption>
+            </figure>
+            <aside class="doc-callout hc-xref">
+              <span>How it's calculated</span>
+              <p><a href="technical-docs.html#docs/phase4-state">Ecological state and trajectory</a> · <a href="technical-docs.html#docs/phase4-matrix">Decision matrix</a> · <a href="technical-docs.html#docs/phase4-pathways">Protect, Manage, Restore, Ineligible</a> · <a href="technical-docs.html#docs/annex-pathway">Pathway layers</a></p>
+            </aside>
+          </section>
+        </div>
+
+        <div data-doc="phase-5" id="phase-5">
+          <header class="doc-hero">
+            <span class="doc-kicker">Phase 5</span>
+            <h1>Potential benefit</h1>
+            <p>What your chosen pathway could deliver over the project duration, compared with the baseline. A strip at the top repeats the choices that produced everything below it.</p>
+            <div class="hc-where">
+              <b>Where</b>
+              <a class="hc-route" href="interactive-map.html">Data Analyser<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
+            </div>
+          </header>
+
+          <section class="doc-section" id="phase-5-pillars">
+            <h2>Nature, climate and people</h2>
+            <ul class="hc-points">
+              <li><b>Nature.</b> Ecological connectivity, watershed function, biodiversity and ecosystem function, vulnerability to fire, pests and disease, and forest productivity and regeneration.</li>
+              <li><b>Climate.</b> Reduced emissions from deforestation and degradation, increased carbon sequestration and storage, net emission reductions and removals, resilience to climate hazards, and microclimate regulation. Avoided emissions and new carbon are shown separately before they are combined.</li>
+              <li><b>People.</b> Food and water security, sustainable livelihoods, social capital and governance capacity, equitable benefit sharing, secure land and resource tenure, and cultural heritage. These are described rather than numbered, because they depend on how the project is designed and run, not on the map alone.</li>
+            </ul>
+            <figure class="hc-shot">
+              <img src="assets/walkthrough/14-step5-benefit.webp" loading="lazy" width="2880" height="1768"
+                   alt="Potential Benefit. A summary strip shows the number of activities, the duration, the project area and the selected pathway. Below, tabs for Nature, People and Climate with Nature open, showing benefit cards for maintenance of ecological connectivity, protection of watershed function, and enhanced biodiversity and ecosystem function." />
+              <figcaption><b>The Nature tab.</b> One card per benefit, with its pathway tags.</figcaption>
+            </figure>
+            <figure class="hc-shot">
+              <img src="assets/walkthrough/15-step5-climate.webp" loading="lazy" width="2880" height="1768"
+                   alt="The Climate tab, showing a reduced emissions from deforestation and degradation card, an increased carbon sequestration and storage card, and the beginning of a net carbon emissions reduction card." />
+              <figcaption><b>The Climate tab.</b> Avoided emissions and new carbon, then the net figure.</figcaption>
+            </figure>
+          </section>
+
+          <section class="doc-section" id="phase-5-cards">
+            <h2>Reading a benefit card</h2>
+            <ol class="hc-steps">
+              <li><b>Read the card.</b> It names the benefit, explains the reasoning in a sentence, and puts any figure in a box. A note underneath names the activities or published rates the estimate rests on.</li>
+              <li><b>Check the pathway tags.</b> Protect, Manage and Restore tags show which pathways deliver the benefit. A grey tag means you did not choose that pathway.</li>
+              <li><b>Finish the analysis.</b> The button at the foot carries the result into a new project, or onto an existing one.</li>
+            </ol>
+            <aside class="doc-callout warn">
+              <span>How to read these figures</span>
+              <p>A figure is given only where the method supports one. These are screening estimates, not measurements: treat them as an order of magnitude that tells you whether a site is worth a feasibility study, not as a carbon yield you can sell.</p>
+            </aside>
+            <aside class="doc-callout hc-xref">
+              <span>How it's calculated</span>
+              <p><a href="technical-docs.html#docs/phase5">Phase 5 · Potential benefit</a> · <a href="technical-docs.html#docs/benefit-nature">Nature benefits</a> · <a href="technical-docs.html#docs/benefit-people">People benefits</a> · <a href="technical-docs.html#docs/benefit-climate">Climate benefits and carbon</a></p>
+            </aside>
+          </section>
+        </div>
+
+        <div data-doc="phase-6" id="phase-6">
+          <header class="doc-hero">
+            <span class="doc-kicker">Phase 6</span>
+            <h1>Monitoring planning</h1>
+            <p>A plan turns an intention into something that can be checked. You choose the activities; the tool proposes the indicators, methods and frequencies that go with them.</p>
+            <div class="hc-where">
+              <b>Where</b>
+              <a class="hc-route" href="create-monitoring-plan.html">Create Monitoring Plan<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
+            </div>
+          </header>
+
+          <section class="doc-section" id="phase-6-activities">
+            <h2>Define the activities</h2>
+            <p>Filter by ecosystem and pathway, then tick what the project will actually do.</p>
+            <figure class="hc-shot">
+              <img src="assets/walkthrough/35-monitoringplan-step1.webp" loading="lazy" width="2880" height="1768"
+                   alt="Monitoring Plan Development, Define NbS Activities. Three step cards read define NbS activities, define monitoring indicators, and review and finalize. Filter buttons for ecosystem and intervention sit at the top right. Three columns for Forest, Mangrove and Peatland list protect, manage and restore activities as checkboxes." />
+              <figcaption><b>Define the activities.</b> Filter, then tick.</figcaption>
+            </figure>
+          </section>
+
+          <section class="doc-section" id="phase-6-indicators">
+            <h2>Review the recommended indicators</h2>
+            <p>Each activity implies the indicators that can show whether it is working. Keep, drop or add indicators, and confirm how and how often each will be measured.</p>
+            <figure class="hc-shot">
+              <img src="assets/walkthrough/36-monitoringplan-indicators.webp" loading="lazy" width="2880" height="1768"
+                   alt="Define Monitoring Indicators, showing the recommended indicators for the chosen activities." />
+              <figcaption><b>Recommended indicators.</b> Generated from the activities you ticked.</figcaption>
+            </figure>
+          </section>
+
+          <section class="doc-section" id="phase-6-finalise">
+            <h2>Review and finalise</h2>
+            <p>Set the duration for each ecosystem, check the plan summary, and generate the plan. It is attached to the project and becomes the structure for field records.</p>
+            <figure class="hc-shot">
+              <img src="assets/walkthrough/37-monitoringplan-finalize.webp" loading="lazy" width="2880" height="1768"
+                   alt="Review and Finalize. Three pathway cards show forest, mangrove and peatland with their durations. Three per-ecosystem monitoring plan rows follow. A Plan summary panel counts ecosystems, activities, indicators and monitoring methods, with a Generate Monitoring Plan button and a footnote that plans require field verification." />
+              <figcaption><b>Review and finalise.</b> Durations per ecosystem, a plan summary, and the generate button.</figcaption>
+            </figure>
+            <aside class="doc-callout note">
+              <span>Before you send a plan anywhere</span>
+              <p>A generated plan is guidance, at landscape level. Field surveys, community monitoring, stakeholder consultation, a data-quality review and, where relevant, the requirements of a carbon standard all sit between it and formal reporting.</p>
+            </aside>
+          </section>
+        </div>
+
+        <div data-doc="phase-7" id="phase-7">
+          <header class="doc-hero">
+            <span class="doc-kicker">Phase 7</span>
+            <h1>Generate documents</h1>
+            <p>Funders and standards ask for particular documents in particular shapes. Both document types draw on the analysis you have already run, so the baseline sections are filled in for you and you complete the parts only you know.</p>
+            <div class="hc-where">
+              <b>Where</b>
+              <a class="hc-route" href="document-generator.html">Document Generator<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
+            </div>
+          </header>
+
+          <section class="doc-section" id="phase-7-types">
+            <h2>Two document types</h2>
+            <ul class="hc-points">
+              <li><b>General Project Documentation.</b> Site information with maps, ecological baseline statistics, biodiversity values such as overlap with Key Biodiversity Areas, climate and carbon baselines, a socio-economic profile, and an assessment of the project's potential for nature, climate and people. The right starting point for a feasibility study or a funding concept.</li>
+              <li><b>Carbon Project Documentation.</b> Choose a target standard: <strong>Verra</strong>, <strong>Gold Standard</strong> or <strong>Plan Vivo</strong>. The document follows that standard's structure, with baseline scenarios, monitoring templates, permanence and leakage risk frameworks, spaces for the inputs only your project can supply, and an outline monitoring, reporting and verification plan.</li>
+            </ul>
+          </section>
+
+          <section class="doc-section" id="phase-7-steps">
+            <h2>Filling one in</h2>
+            <ol class="hc-steps">
+              <li><b>Choose the document type</b> and, for a carbon document, the standard.</li>
+              <li><b>Work through the sections.</b> Each section shows how many of its questions are answered, and you can move between them in any order. Fields filled from the analysis are marked. Answer the rest in plain language.</li>
+              <li><b>Review and download.</b> Save the result as PDF or Word. Check the text against what you know of the site before it goes anywhere.</li>
+            </ol>
+            <!-- TODO(design): this capture shows the prototype's CCB template, not the General / Carbon Project Documentation described above (DEC-29). Recapture when SCR-05 offers the specified templates. -->
+            <figure class="hc-shot">
+              <img src="assets/walkthrough/33-docgen-ccb.webp" loading="lazy" width="2880" height="1768"
+                   alt="A document form. A left rail lists five numbered sections, each with a count of questions filled, above a Download document panel with a Generate Document button. The main area shows the basic information questions: project name, document version, creation date, location, and the project proponent's organisation and contact details." />
+              <figcaption><b>Working through a document.</b> The section rail on the left counts what is answered in each section; generate the document from the panel below it.</figcaption>
+            </figure>
+          </section>
+        </div>
+
+<!-- ============================ AFTER THE ANALYSIS ============================ -->
+
+        <div data-doc="projects" id="projects">
+          <header class="doc-hero">
+            <span class="doc-kicker">After the analysis</span>
+            <h1>Manage your projects</h1>
+            <p>An analysis becomes useful when it becomes a project: something with a name, a team, a history and a monitoring record.</p>
+            <div class="hc-where">
+              <b>Where</b>
+              <a class="hc-route" href="dashboard.html">My Project<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
+              <a class="hc-route" href="project-detail.html">Project detail<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
+              <a class="hc-route" href="new-project.html">Create New Project<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
+            </div>
+          </header>
+
+          <section class="doc-section" id="projects-find">
+            <h2>Save and find your projects</h2>
+            <ol class="hc-steps">
+              <li><b>Sign in and save the analysis.</b> Saving needs a free account. The project appears in My Project.</li>
+              <li><b>Find it again.</b> My Project shows your totals at the top, then every project you can reach. Filter by monitoring status, ecosystem or country, search by name, and switch between a table and cards.</li>
+              <li><b>See what each project needs next.</b> The monitoring status reads <em>Monitoring Active</em> or <em>Waiting for Monitoring Plan</em>, and the main button changes to match.</li>
+            </ol>
+            <figure class="hc-shot">
+              <img src="assets/walkthrough/17-dashboard.webp" loading="lazy" width="2880" height="1768"
+                   alt="The My Project dashboard. A profile card shows the user's organisation and contact details beside three counters: total projects, area covered and monitoring entries. Below, filters for monitoring status, ecosystem, country and sort order, a search box and a view switcher, then a table of projects with name, ecosystem and pathway, location, size, monitoring status, collaborators, last updated time and actions." />
+              <figcaption><b>My Project.</b> Your totals, then every project, filterable and searchable.</figcaption>
+            </figure>
+            <figure class="hc-shot">
+              <img src="assets/walkthrough/18-dashboard-grid.webp" loading="lazy" width="2880" height="1768"
+                   alt="The dashboard in card view. Each card shows a map thumbnail of the project boundary with its ecosystem and pathway and a monitoring status label, then the project name, location, area size, last opened time, collaborators and a monitoring button." />
+              <figcaption><b>Card view.</b> The same projects, recognisable by the shape of their boundary.</figcaption>
+            </figure>
+          </section>
+
+          <section class="doc-section" id="projects-inside">
+            <h2>Inside one project</h2>
+            <p>Opening a project gives you seven tabs in two groups.</p>
+            <ul class="hc-points">
+              <li><b>Overview.</b> The boundary on a map, the project details, the documents it has produced, and the intervention it is running.</li>
+              <li><b>Collaborators.</b> Add colleagues by email so they can view and work on the project, and set their role.</li>
+              <li><b>Privacy.</b> Private, Coalition or Public. See <a href="#accounts">accounts, area limits and privacy</a>.</li>
+              <li><b>History.</b> A record of every edit, including privacy changes.</li>
+              <li><b>Analysis.</b> The same site characterisation, threat profile and potential benefit, kept with the project.</li>
+              <li><b>Monitoring Plan and MRV Data.</b> The plan's status and indicators, and two ways forward: read the monitoring dashboard, or log a new entry.</li>
+            </ul>
+            <figure class="hc-shot">
+              <img src="assets/walkthrough/20-project-overview.webp" loading="lazy" width="2880" height="1768"
+                   alt="The Overview tab of a project. A header carries the project name, a privacy badge, a monitoring status, collaborators, and edit and delete buttons. Below, a location card with a map, a project details card, a project documents card with generate and download buttons, and an intervention card listing ecosystem, pathway, number of activities and duration." />
+              <figcaption><b>Overview.</b> Everything that identifies the project, on one screen.</figcaption>
+            </figure>
+            <figure class="hc-shot">
+              <img src="assets/walkthrough/21-project-collaborators.webp" loading="lazy" width="2880" height="1768"
+                   alt="The Collaborators tab of a project, listing the people with access to it and their roles." />
+              <figcaption><b>Collaborators.</b> Who can see and edit this project, and in what role.</figcaption>
+            </figure>
+            <figure class="hc-shot">
+              <img src="assets/walkthrough/23-project-history.webp" loading="lazy" width="2880" height="1768"
+                   alt="The History tab of a project, showing a chronological log of edits made to it." />
+              <figcaption><b>History.</b> A record of every edit.</figcaption>
+            </figure>
+            <figure class="hc-shot">
+              <img src="assets/walkthrough/24-project-analysis.webp" loading="lazy" width="2880" height="1768"
+                   alt="The Analysis tab, with a left list of Site Characterisation, expanded into General Information, Nature, People and Climate, then Threats Profile and Potential Benefit. The main area shows the same ecosystem card seen on the map." />
+              <figcaption><b>Analysis, kept with the project.</b> The baseline you read once stays attached.</figcaption>
+            </figure>
+            <div class="hc-shot-pair">
+              <figure class="hc-shot">
+                <img src="assets/walkthrough/25-project-monitoring.webp" loading="lazy" width="2880" height="1768"
+                     alt="The Monitoring Plan tab, showing plan status, indicators tracked across activities, monitoring frequency, entries logged, and See plan and Edit buttons." />
+                <figcaption><b>Monitoring Plan tab.</b></figcaption>
+              </figure>
+              <figure class="hc-shot">
+                <img src="assets/walkthrough/26-project-mrv.webp" loading="lazy" width="2880" height="1768"
+                     alt="The MRV Data tab, showing a panel with a button to open the MRV dashboard, and a panel with a button to input monitoring data." />
+                <figcaption><b>MRV Data tab.</b></figcaption>
+              </figure>
+            </div>
+          </section>
+
+          <section class="doc-section" id="projects-import">
+            <h2>Import a project that is already running</h2>
+            <p>If a project is already under way, bring it in so the tool can describe the site and build a monitoring plan around activities that are already happening. From My Project, choose <em>Create a new project</em>, then <em>Upload an existing project</em>.</p>
+            <figure class="hc-shot">
+              <img src="assets/walkthrough/19-dashboard-newproject.webp" loading="lazy" width="2880" height="1768"
+                   alt="A pop-up titled Create a new project offering two choices: Create project from scratch, tagged Guided, and Upload an existing project, tagged Import." />
+              <figcaption><b>Two ways to start a project.</b> From scratch, or import one you already run.</figcaption>
+            </figure>
+            <ol class="hc-steps">
+              <li><b>Upload the boundary.</b> The same formats as any boundary. The tool reports what it found (area, ecosystems, disturbance) before you continue. A wrong format, an area over the limit, or a boundary outside Southeast Asia is refused with the reason.</li>
+              <li><b>Select the pathway and the activities</b> the project already carries out.</li>
+              <li><b>Review the generated monitoring table.</b> One row per activity: its benefit, its indicators, the data source and how often it is measured. Untick any indicator, or add your own.</li>
+              <li><b>Customise and finalise.</b> Adjust data sources and frequency, assign who is responsible, add notes, and generate the plan.</li>
+            </ol>
+            <figure class="hc-shot">
+              <img src="assets/walkthrough/27-newproject-upload.webp" loading="lazy" width="2880" height="1768"
+                   alt="The Import Existing Project screen. Five step cards run across the top: upload site boundary, select NbS pathway, select NbS activities, review monitoring matrix, and customize and finalize. Below, a drop zone for the boundary file and a browse button." />
+              <figcaption><b>Importing a project.</b> Five steps, starting from the boundary file.</figcaption>
+            </figure>
+            <figure class="hc-shot">
+              <img src="assets/walkthrough/28-newproject-upload-states.webp" loading="lazy" width="2880" height="1768"
+                   alt="After a successful upload, a site summary card shows a map thumbnail, the file name, the total area, the ecosystems detected, the disturbed area and the share of each ecosystem. A Continue to pathways button is now enabled." />
+              <figcaption><b>A successful upload.</b> The tool reports what it found before you continue.</figcaption>
+            </figure>
+            <figure class="hc-shot">
+              <img src="assets/walkthrough/29-newproject-activities.webp" loading="lazy" width="2880" height="1768"
+                   alt="Select planned NbS activities. Three columns follow: Forest, greyed out and labelled not selected, then Mangrove and Peatland, each listing protect, manage and restore activities as checkboxes. Several are ticked." />
+              <figcaption><b>Activities.</b> An ecosystem you did not choose a pathway for is greyed out with an explanation.</figcaption>
+            </figure>
+            <figure class="hc-shot">
+              <img src="assets/walkthrough/30-newproject-matrix.webp" loading="lazy" width="2880" height="1768"
+                   alt="Review generated monitoring matrix. Pathway cards summarise forest, mangrove and peatland. Below, a table maps each activity to its benefit, its monitoring indicators as a checklist, its data source, and how often it is monitored." />
+              <figcaption><b>The generated monitoring table.</b> One row per activity. Every indicator can be unticked, and you can add your own.</figcaption>
+            </figure>
+            <figure class="hc-shot">
+              <img src="assets/walkthrough/31-newproject-finalize.webp" loading="lazy" width="2880" height="1768"
+                   alt="Customize and finalize your plan. Three task rows: adjust data source and monitoring frequency, assign responsible parties, and add notes and evidence. A Plan summary panel on the right counts everything in the plan and offers a Generate and export plan button." />
+              <figcaption><b>Customise and finalise.</b> The summary on the right tracks what you have done.</figcaption>
+            </figure>
+          </section>
+        </div>
+
+        <div data-doc="record" id="record">
+          <header class="doc-hero">
+            <span class="doc-kicker">After the analysis</span>
+            <h1>Record and verify</h1>
+            <p>A plan predicts; monitoring records. One screen is for entering field observations against the plan's indicators, the other for seeing whether the project is on track.</p>
+            <div class="hc-where">
+              <b>Where</b>
+              <a class="hc-route" href="monitoring-form.html">Field Monitoring Form<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
+              <a class="hc-route" href="mrv.html">MRV Dashboard<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
+            </div>
+          </header>
+
+          <section class="doc-section" id="record-enter">
+            <h2>Enter field data</h2>
+            <ol class="hc-steps">
+              <li><b>Open the field form and pick the reporting period.</b> Everything you enter is filed against it. The indicators come from the monitoring plan, grouped by ecosystem, each with its target, method and frequency.</li>
+              <li><b>Enter measurements and evidence.</b> Record the value, unit, date and data source, and attach photos or files as evidence. Add a note where it helps.</li>
+              <li><b>Submit.</b> You can submit what you have and finish later. The left column shows how much of the period is recorded.</li>
+            </ol>
+            <figure class="hc-shot">
+              <img src="assets/walkthrough/38-monitoring-form.webp" loading="lazy" width="2880" height="1768"
+                   alt="The field monitoring form. A left column shows the share recorded and groups for Mangrove, Dryland Forest and Peatland with per-group counts, above a Submit panel. The main area has a reporting period selector, then indicator cards each showing target, method and frequency, with fields for recorded value, unit, date collected and data source, an Attach evidence button and an optional note." />
+              <figcaption><b>The field form.</b> Each indicator carries its target, method and frequency, so the field team knows what is being asked.</figcaption>
+            </figure>
+          </section>
+
+          <section class="doc-section" id="record-track">
+            <h2>Track progress</h2>
+            <ul class="hc-points">
+              <li><b>Progress to target.</b> For every indicator, the latest value against its target, as a bar and a percentage.</li>
+              <li><b>Status.</b> <em>On track</em>, or <em>Update due</em> when an indicator has gone too long without a reading.</li>
+              <li><b>Reporting progress.</b> How much of this period's data is in, and how much is still missing.</li>
+              <li><b>Activity log.</b> Who recorded what, and when. This is the record a verifier will ask for. Export a report when you need to show progress.</li>
+            </ul>
+            <figure class="hc-shot">
+              <img src="assets/walkthrough/39-mrv-dashboard.webp" loading="lazy" width="2880" height="1768"
+                   alt="The MRV Dashboard. A dark header carries the project name, location, size, pathway and reporting period, with Input Monitoring Data and Change Monitoring Plan buttons. Below, a table of indicators with latest value against target, a progress bar, last update and a status of On track or Update due. A right column shows reporting progress and an activity log." />
+              <figcaption><b>The monitoring dashboard.</b> Which indicators are on track, and which need a reading.</figcaption>
+            </figure>
+          </section>
+
+          <section class="doc-section" id="record-own-data">
+            <h2>Add your own data</h2>
+            <p>Organisations with an account can upload their own spatial data to sit alongside the tool's layers: field surveys, community maps, culturally significant areas or traditional-use zones, and recent monitoring data. This is how local and traditional knowledge enters the analysis. Uploads stay confidential unless you authorise sharing, and they add to the analysis without changing the method behind the standard figures.</p>
+          </section>
+        </div>
+
+<!-- =========================== READING YOUR RESULTS =========================== -->
+
+        <div data-doc="results-contexts" id="results-contexts">
+          <header class="doc-hero">
+            <span class="doc-kicker">Reading your results</span>
+            <h1>What each analysis shows</h1>
+            <p>For a defined area, the tool reports the following, grouped as it appears on screen.</p>
+          </header>
+
+          <section class="doc-section" id="results-contexts-list">
+            <h2>Every item, by analysis</h2>
+            <div class="doc-table-wrap">
+              <table class="doc-table">
+                <thead><tr><th>Analysis</th><th>What it reports</th></tr></thead>
+                <tbody>
+                  <tr><td><strong>General context</strong></td><td>Ecosystem type identification · administration and zoning status · terrain · historical deforestation · deforestation risk · land cover · natural disaster risk</td></tr>
+                  <tr><td><strong>Nature context</strong></td><td>Habitat area · indicative key species presence · conservation significance · Forest Landscape Integrity Index · Key Biodiversity Areas · endangered tree species</td></tr>
+                  <tr><td><strong>Climate context</strong></td><td>Carbon information · soil classification · annual precipitation · annual mean temperature · historical burned area</td></tr>
+                  <tr><td><strong>People context</strong></td><td>Demography: estimated population, age groups, households, vulnerability · employment and underemployment · education: literacy, enrolment, attainment · economy: average household income · health: most common diseases · housing and settlements: water access, sanitation, toilet facilities</td></tr>
+                  <tr><td><strong>Threat profile</strong></td><td>For each of dryland forest, mangrove and peatland: total disturbed area · disturbance map · disturbance drivers</td></tr>
+                  <tr><td><strong>Potential benefit · nature</strong></td><td>Maintenance of ecological connectivity · protection of watershed function · enhanced biodiversity and ecosystem function · reduced vulnerability to fire, pests and disease · improved forest productivity and regeneration</td></tr>
+                  <tr><td><strong>Potential benefit · climate</strong></td><td>Reduced emissions from deforestation and degradation · increased carbon sequestration and storage · net carbon emission reduction · net carbon sequestration · estimated net emission reductions and removals · enhanced resilience to climate hazards · microclimate regulation</td></tr>
+                  <tr><td><strong>Potential benefit · people</strong></td><td>Enhanced food and water security · sustainable livelihood opportunities · strengthened social capital and governance capacity · equitable benefit-sharing mechanisms · secure land and resource tenure · cultural heritage preservation</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <figure class="hc-shot">
+              <img src="assets/walkthrough/24-project-analysis.webp" loading="lazy" width="2880" height="1768"
+                   alt="The Analysis tab of a project, with a left list of Site Characterisation, expanded into General Information, Nature, People and Climate, then Threats Profile and Potential Benefit." />
+              <figcaption><b>The same groups, in a saved project.</b> The list on the left follows the table above.</figcaption>
+            </figure>
+          </section>
+
+          <section class="doc-section" id="results-contexts-people">
+            <h2>A note on the people figures</h2>
+            <p>The people figures come from gridded and national statistics. They describe the population of the area your boundary covers, not the community that holds rights over the land. Tenure, customary claims and community make-up have to come from your own engagement and surveys.</p>
+            <aside class="doc-callout hc-xref">
+              <span>How it's calculated</span>
+              <p>Data layers: <a href="technical-docs.html#docs/annex-general">general context</a> · <a href="technical-docs.html#docs/annex-nature">nature</a> · <a href="technical-docs.html#docs/annex-climate">climate</a> · <a href="technical-docs.html#docs/annex-people">people</a> · <a href="technical-docs.html#docs/annex-threat">threat profile</a></p>
+            </aside>
+          </section>
+        </div>
+
+        <div data-doc="results-sources" id="results-sources">
+          <header class="doc-hero">
+            <span class="doc-kicker">Reading your results</span>
+            <h1>Where the numbers come from</h1>
+            <p>Every figure is produced from a named map layer by a documented method. There are two places to look.</p>
+          </header>
+
+          <section class="doc-section" id="results-sources-screen">
+            <h2>On the screen</h2>
+            <p>The information button next to each figure names the dataset, its publisher, its resolution, its date and the publisher's own disclaimer.</p>
+            <figure class="hc-shot">
+              <img src="assets/walkthrough/46-info-modal.webp" loading="lazy" width="2880" height="1768"
+                   alt="A pop-up titled Ecosystem type identification listing Date of content as Historical, a description of the layer, a disclaimer, a resolution of 30 metres, and a source field." />
+              <figcaption><b>The information panel</b> behind every figure.</figcaption>
+            </figure>
+          </section>
+
+          <section class="doc-section" id="results-sources-method">
+            <h2>In the Methodology</h2>
+            <p>Every data layer, grouped by theme, and every constant and formula the tool uses.</p>
+            <aside class="doc-callout hc-xref">
+              <span>How it's calculated</span>
+              <p><a href="technical-docs.html#docs/phase2">Phase 2 · Site characterisation</a> · <a href="technical-docs.html#docs/annex-general">Data layers</a> · <a href="technical-docs.html#docs/reference">Parameters, formulas and glossary</a></p>
+            </aside>
+          </section>
+        </div>
+
+        <div data-doc="results-limits" id="results-limits">
+          <header class="doc-hero">
+            <span class="doc-kicker">Reading your results</span>
+            <h1>What the tool does not do</h1>
+            <p>The tool is strongest as a baseline and decision-support platform. Used well, it gives a consistent starting point for feasibility, design and long-term monitoring. It is not, and does not claim to be, any of the following.</p>
+          </header>
+
+          <section class="doc-section" id="results-limits-list">
+            <h2>Six limits</h2>
+            <ul class="hc-points">
+              <li><b>Not a substitute for field data.</b> Its outputs come from satellite and statistical products. Field measurements, carbon inventories and ecological surveys check, refine or correct them. Tool-generated maps are a good way to decide where to survey first.</li>
+              <li><b>Not a substitute for community engagement.</b> It does not replace household surveys, participatory assessments, Free, Prior and Informed Consent processes or consultation. It should be used alongside them.</li>
+              <li><b>Not formal carbon accounting.</b> The carbon figures are early-stage screening. A project seeking validation or credits still needs additionality demonstration, leakage analysis, permanence-risk assessment, measured carbon stocks and the method of its chosen standard. See <a href="#results-carbon">carbon finance</a>.</li>
+              <li><b>Not continuous monitoring.</b> It establishes a baseline and structures a plan. Ongoing monitoring still needs periodic field surveys, ground checks and updates to the project record.</li>
+              <li><b>Not a replacement for professional review.</b> Outputs are a structured evidence base for discussion, checking and decisions. They are not final conclusions.</li>
+              <li><b>Limited by resolution.</b> A figure is only as detailed as the layer it came from. A 30-metre layer cannot see a feature narrower than about 30 metres, and a coarse layer may cover a small site with a single cell. Check the resolution of each layer before quoting a figure from it.</li>
+            </ul>
+            <figure class="hc-shot">
+              <img src="assets/walkthrough/07-step2-general.webp" loading="lazy" width="2880" height="1768"
+                   alt="An analysis card with an orange disclaimer and a data source line beneath a doughnut chart." />
+              <figcaption><b>The tool says so on screen too.</b> The orange disclaimer under each card is there by design.</figcaption>
+            </figure>
+            <aside class="doc-callout warn">
+              <span>Before it reaches a funder</span>
+              <p>Everything the tool produces is intended to support a feasibility study. Check it in the field, with the community, and against the requirements of whoever will read it, before you rely on it.</p>
+            </aside>
+            <aside class="doc-callout hc-xref">
+              <span>How it's calculated</span>
+              <p><a href="technical-docs.html#docs/limits">Limitations and how to read a figure</a></p>
+            </aside>
+          </section>
+        </div>
+
+        <div data-doc="results-carbon" id="results-carbon">
+          <header class="doc-hero">
+            <span class="doc-kicker">Reading your results</span>
+            <h1>Carbon finance and standards</h1>
+            <p>Carbon markets are the most developed system for project design, safeguards and monitoring, so the tool uses them as a reference. Nature-based Solutions are not only carbon projects, and many good projects are viable on biodiversity and social benefits alone.</p>
+          </header>
+
+          <section class="doc-section" id="results-carbon-know">
+            <h2>If your project will seek carbon finance</h2>
+            <ul class="hc-points">
+              <li><b>Which standards matter in Southeast Asia.</b> Verra's Verified Carbon Standard, usually paired with the Climate, Community and Biodiversity Standards; Gold Standard; Plan Vivo; and the emerging Equitable Earth standard. They differ in scale, cost, safeguards and buyer recognition. Choosing one is a design decision, not a box to tick at the end.</li>
+              <li><b>Consent is required.</b> Across these standards, Free, Prior and Informed Consent is required where Indigenous Peoples or local communities may be affected. A documented, maintained consent process is a condition of validation.</li>
+              <li><b>What a Project Design Document is.</b> The official document submitted to a standard for validation, and the main reference for auditors, regulators and buyers. It covers the project description, eligibility, baseline and additionality, carbon modelling and monitoring, community and biodiversity impacts, safeguards, legal and tenure documents, and benefit sharing.</li>
+              <li><b>How far the tool gets you.</b> Feasibility work of the kind the tool supports typically covers up to about half of a Project Design Document: baseline, eligibility, early safeguard assessment. Legal documents, field surveys and updated carbon modelling must still be added before validation.</li>
+              <li><b>What the Document Generator gives you.</b> A Carbon Project Documentation template aligned with Verra, Gold Standard or Plan Vivo, with spaces for the inputs only your project can supply. See <a href="#phase-7">Phase 7</a>.</li>
+            </ul>
+          </section>
+
+          <section class="doc-section" id="results-carbon-screen">
+            <h2>Where carbon appears in the tool</h2>
+            <figure class="hc-shot">
+              <img src="assets/walkthrough/16-step4-duration-carbon.webp" loading="lazy" width="2880" height="1768"
+                   alt="The carbon-project toggle switched on, revealing three percentage inputs for leakage, uncertainty and buffer pool deductions, with a warning that field verification is required." />
+              <figcaption><b>Phase 4: the carbon-project option</b> and its three deductions.</figcaption>
+            </figure>
+            <figure class="hc-shot">
+              <img src="assets/walkthrough/15-step5-climate.webp" loading="lazy" width="2880" height="1768"
+                   alt="The Climate tab of the benefit phase, with cards for reduced emissions, carbon sequestration and the start of a net carbon card." />
+              <figcaption><b>Phase 5: the climate benefits.</b> Gross figures first, then the net figure after deductions.</figcaption>
+            </figure>
+            <aside class="doc-callout hc-xref">
+              <span>How it's calculated</span>
+              <p><a href="technical-docs.html#docs/benefit-climate">Climate benefits and carbon</a>: the constants, the deductions for leakage and uncertainty, and the net figures.</p>
+            </aside>
+          </section>
+        </div>
+
+        <div data-doc="results-cite" id="results-cite">
+          <header class="doc-hero">
+            <span class="doc-kicker">Reading your results</span>
+            <h1>How to cite</h1>
+            <p>Cite the tool and the data separately, because they have different authors.</p>
+          </header>
+
+          <section class="doc-section" id="results-cite-how">
+            <h2>Tool, data and method</h2>
+            <ul class="hc-points">
+              <li><b>The tool.</b> Name it, give the version, the date you ran the analysis and the area analysed. For example: <em>SCeNe Coalition. NbS Tool, version 3.0. Analysis of [area name], run on [date].</em></li>
+              <li><b>The data.</b> Each figure's information button names the dataset and its publisher. Cite the publisher's own reference for any dataset you rely on.</li>
+              <li><b>The method.</b> For formulas and constants, cite the Coalition's methodology documentation as shown in the Methodology.</li>
+            </ul>
+            <aside class="doc-callout hc-xref">
+              <span>In the Methodology</span>
+              <p><a href="technical-docs.html#docs/reference">Parameters, formulas and glossary</a></p>
+            </aside>
+          </section>
+        </div>
+
+<!-- ============================== NEWS & SUPPORT ============================== -->
+
+        <div data-doc="whats-new" id="whats-new">
+          <header class="doc-hero">
+            <span class="doc-kicker">News &amp; support</span>
+            <h1>What's new in v3.0</h1>
+            <p>Version 3.0 rebuilds the interface around how practitioners actually work, shaped by user feedback and research. It launches in December 2026.</p>
+          </header>
+
+          <section class="doc-section" id="whats-new-list">
+            <h2>New in this release</h2>
+            <ul class="hc-points">
+              <li><b>Ecosystem identification.</b> The analysis now maps which ecosystems are present in your area.</li>
+              <li><b>Threat profile.</b> A new analysis of the pressures affecting each ecosystem.</li>
+              <li><b>Country-specific social data.</b> Stronger figures across demography, employment, education, economy, health, housing and human settlements.</li>
+              <li><b>Deeper pathway design.</b> Choose an ecosystem, then a pathway, then activities for each combination, with a projected estimate for a carbon project.</li>
+              <li><b>Monitoring plan.</b> A new module that turns activities into recommended indicators, reviewed before the report is produced.</li>
+            </ul>
+            <p>A later release will move the degradation analysis from a ten-year window to an annual or five-year one.</p>
+            <figure class="hc-shot">
+              <img src="assets/walkthrough/00-version-modal.webp" loading="lazy" width="2880" height="1768"
+                   alt="The version update pop-up headed NbS Tool v3.0 is coming, with a launch date of December 2026, a list of what is new, and an offer to contact the NbS Tool team." />
+              <figcaption><b>The version notice</b> on the home page.</figcaption>
+            </figure>
+          </section>
+        </div>
+
+        <div data-doc="faq" id="faq">
+          <header class="doc-hero">
+            <span class="doc-kicker">News &amp; support</span>
+            <h1>Frequently asked questions</h1>
+            <p>Open a question to read the answer.</p>
+          </header>
+
+          <section class="doc-section" id="faq-using">
+            <h2>Using the tool</h2>
+            <details class="doc-details"><summary>Is the NbS Tool free to use?</summary><div>
+              <p>Yes. Without an account you can explore the map and analyse areas up to 200,000 hectares. A free account raises that to 500,000 hectares and unlocks saving projects, collaborators, uploads and document generation. For larger areas, <a href="#accounts">request broader analysis capability</a>.</p>
+            </div></details>
+            <details class="doc-details"><summary>Do I need an account?</summary><div>
+              <p>Not to explore or to run an analysis under 200,000 hectares. You need one to save a project, invite collaborators, upload your own data, generate and download documents, or analyse a larger area.</p>
+            </div></details>
+            <details class="doc-details"><summary>Which countries and ecosystems does it cover?</summary><div>
+              <p>Southeast Asia, with country-specific layers for the ASEAN Member States. The analysis covers three ecosystems: dryland forest, mangrove and peatland. The Methodology's <a href="technical-docs.html#docs/scope">region, ecosystems and pathways</a> lists the countries and the ecosystem definitions.</p>
+            </div></details>
+            <details class="doc-details"><summary>What boundary file can I upload?</summary><div>
+              <p>A .zip containing the shapefile set (.shp, .shx, .dbf, .prj), or a .kml or .kmz file. The boundary must fall within Southeast Asia and within your hectare allowance. See <a href="#boundary-file">preparing a boundary file</a>.</p>
+            </div></details>
+            <details class="doc-details"><summary>Can I add my own field data or community maps?</summary><div>
+              <p>Yes, with an account. You can upload spatial data from field surveys, community mapping and local monitoring to sit alongside the tool's layers. It stays confidential unless you authorise sharing. See <a href="#record">record and verify</a>.</p>
+            </div></details>
+            <details class="doc-details"><summary>Can I export maps and data?</summary><div>
+              <p>Yes. A GeoPDF of the map, the figures behind the layers as a spreadsheet, and the spatial data itself in standard GIS formats including the shapefile. See <a href="#phase-0">Phase 0</a>.</p>
+            </div></details>
+            <details class="doc-details"><summary>Who can see my project?</summary><div>
+              <p>That depends on its privacy level. Level 1 is private to you and your collaborators. Level 2 is visible to verified SCeNe Coalition members and the NbS Incubator. Level 3 lists it in the public NbS Portfolio. See <a href="#accounts">accounts, area limits and privacy</a>.</p>
+            </div></details>
+            <details class="doc-details"><summary>Can I work on a project with colleagues?</summary><div>
+              <p>Yes. Open the project and add collaborators by email from the Collaborators tab. See <a href="#projects">manage your projects</a>.</p>
+            </div></details>
+            <details class="doc-details"><summary>Where is my data from the previous version of the tool?</summary><div>
+              <p>Projects and monitoring records from the earlier version are being moved across and will appear in My Project automatically once that is complete. If you need them sooner, email <a href="mailto:support@nbstool.org?subject=Request%20access%20to%20my%20previous%20NbS%20Tool%20data">support@nbstool.org</a>.</p>
+            </div></details>
+            <details class="doc-details"><summary>Is the tool available in other languages?</summary><div>
+              <p>The interface and this help centre are in English for now.</p>
+            </div></details>
+            <details class="doc-details"><summary>Does it work on a phone or tablet?</summary><div>
+              <p>The map and the analysis are designed for a desktop or laptop screen, and a notice says so on small screens. Reading pages, such as this help centre and the Methodology, work on any device.</p>
+            </div></details>
+          </section>
+
+          <section class="doc-section" id="faq-results">
+            <h2>Results and documents</h2>
+            <details class="doc-details"><summary>Are the results good enough to put in a funding proposal?</summary><div>
+              <p>They are screening-level evidence for a pre-feasibility or feasibility study, not measurements of your site. Check them in the field and with the community before they go to a funder, and check the resolution of each layer you rely on. See <a href="#results-limits">what the tool does not do</a>.</p>
+            </div></details>
+            <details class="doc-details"><summary>Does the tool calculate carbon credits?</summary><div>
+              <p>No. It estimates potential avoided emissions and removals as an early screen. Issuing credits requires additionality, leakage and permanence analysis, measured carbon stocks and the method of a recognised standard. See <a href="#results-carbon">carbon finance and standards</a>.</p>
+            </div></details>
+            <details class="doc-details"><summary>Which document templates are available?</summary><div>
+              <p>General Project Documentation, and Carbon Project Documentation aligned with Verra, Gold Standard or Plan Vivo. Documents download as PDF or Word. See <a href="#phase-7">Phase 7</a>.</p>
+            </div></details>
+            <details class="doc-details"><summary>Does the tool replace community consultation or consent?</summary><div>
+              <p>No. It does not conduct, record or stand in for Free, Prior and Informed Consent, household surveys or participatory assessment. Its maps and summaries can support those processes, for example by helping a community see a proposed boundary, but the process itself is yours to run.</p>
+            </div></details>
+            <details class="doc-details"><summary>How do I cite the tool and its data?</summary><div>
+              <p>Cite the tool by name, version, date of analysis and area, and cite each dataset by its publisher. See <a href="#results-cite">how to cite</a>.</p>
+            </div></details>
+          </section>
+
+          <section class="doc-section" id="faq-docs">
+            <h2>This documentation</h2>
+            <details class="doc-details"><summary>What is the difference between Help and Methodology?</summary><div>
+              <p>Help explains how to use the tool. The Methodology explains how each number is produced: the data layers, the rules and the formulas. Every guide here links to the matching Methodology article, and every Methodology article links back. Use the <em>Help | Methodology</em> switch at the top of the sidebar to move between them. The search box searches both.</p>
+            </div></details>
+            <details class="doc-details"><summary>How do I report a problem or suggest an improvement?</summary><div>
+              <p>Email the team. See <a href="#support">contact and feedback</a> for what to include so we can reproduce it.</p>
+            </div></details>
+          </section>
+        </div>
+
+        <div data-doc="support" id="support">
+          <header class="doc-hero">
+            <span class="doc-kicker">News &amp; support</span>
+            <h1>Contact and feedback</h1>
+            <p>Questions about using the tool, your account, your area allowance or your data go to <a href="mailto:support@nbstool.org">support@nbstool.org</a>.</p>
+          </header>
+
+          <section class="doc-section" id="support-contact">
+            <h2>Get in touch</h2>
+            <div class="hc-contact">
+              <div>
+                <h3>Ask the team</h3>
+                <p>For questions about using the tool, your account, your area allowance or your data.</p>
+                <p><a class="doc-cta" href="mailto:support@nbstool.org?subject=NbS%20Tool%20question">Email support
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                </a></p>
+              </div>
+              <div>
+                <h3>Report a bug or give feedback</h3>
+                <p>Tell us which screen you were on, what you did, what you expected, and what happened instead. Your browser and the size of your area help us reproduce it. Screenshots are welcome.</p>
+                <p><a class="doc-cta" href="mailto:support@nbstool.org?subject=NbS%20Tool%20bug%20report">Report a bug
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                </a></p>
+              </div>
+            </div>
+          </section>
+
+          <section class="doc-section" id="support-elsewhere">
+            <h2>Elsewhere</h2>
+            <p>Looking for how a number was produced? That is the <a href="technical-docs.html">Methodology</a>. Looking for a particular screen? Every page is listed on the <a href="sitemap.html">sitemap</a>.</p>
+            <!-- TODO(design): privacy notice and terms of use need legal text from WRI before launch. Rendered as plain text until then. -->
+            <p>The privacy notice and terms of use are being prepared and will be linked from here before launch.</p>
+          </section>
+        </div>
+
+      </article>
+
+      <aside class="docs-toc" aria-label="On this page">
+        <span>ON THIS PAGE</span>
+        <nav id="docs-toc"></nav>
+      </aside>
+    </div>
+  </section>
+</main>
+
+<!-- ============================================================
+     FOOTER (shared component — footer.css)
+     ============================================================ -->
+<footer class="footer" data-screen-label="Footer">
+  <div class="wrap">
+    <div class="footer-head">
+      <div class="footer-brand">
+        <a class="footer-lockup" href="index.html">
+          <img class="footer-logo-nbs" src="assets/nbs-logo-light.png" alt="NbS Tool" width="294" height="80" loading="lazy" />
+          <span class="footer-lockup-rule" aria-hidden="true"></span>
+          <img class="footer-logo-scene" src="assets/scene-logo-light.png" alt="SCeNe Coalition" width="150" height="56" loading="lazy" />
+        </a>
+        <p>One standardised platform carrying frontline organisations from a boundary on a map to verified climate, nature and people impact.</p>
+      </div>
+      <nav class="footer-cols" aria-label="Footer links">
+        <div class="footer-col">
+          <h2>Supporting Materials</h2>
+          <a href="NbS_Activities_Flow_v2.html">Activity Matrix</a>
+          <a href="technical-docs.html">Methodology</a>
+          <a href="help.html" aria-current="page">Help Centre</a>
+        </div>
+        <div class="footer-col">
+          <h2>Other Page</h2>
+          <a href="sitemap.html">Sitemap</a>
+          <a href="index.html#about">About SCeNe Coalition</a>
+          <a href="index.html#about">Contact Us</a>
+        </div>
+      </nav>
+    </div>
+
+    <nav class="footer-flow" aria-label="The NbS Tool workflow">
+      <a href="interactive-map.html"><span class="fno">Phases 0–1</span><b>Explore &amp; select</b><em>Interactive Map</em></a>
+      <a href="interactive-map.html"><span class="fno">Phases 2–5</span><b>Analyse</b><em>Data Analyser</em></a>
+      <a href="create-monitoring-plan.html"><span class="fno">Phase 6</span><b>Plan monitoring</b><em>Monitoring Plan</em></a>
+      <a href="document-generator.html"><span class="fno">Phase 7</span><b>Generate documents</b><em>Document Generator</em></a>
+      <a href="dashboard.html"><span class="fno">After the analysis</span><b>Manage &amp; monitor</b><em>My Projects</em></a>
+    </nav>
+
+    <div class="footer-bottom">
+      <span>© 2026 SCeNe Coalition · ASEAN-NbS Tool project</span>
+      <div class="soc">
+        <a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.94 5a1.94 1.94 0 11-3.88 0 1.94 1.94 0 013.88 0zM3.4 8.4h3.1V21H3.4V8.4zM9.1 8.4h2.97v1.72h.04c.41-.78 1.42-1.6 2.93-1.6 3.13 0 3.71 2.06 3.71 4.74V21h-3.1v-5.5c0-1.31-.02-3-1.83-3-1.83 0-2.11 1.43-2.11 2.9V21H9.1V8.4z"/></svg></a>
+        <a href="#" aria-label="Website"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.7"/><path d="M3 12h18M12 3c2.5 2.5 2.5 15 0 18M12 3c-2.5 2.5-2.5 15 0 18" stroke="currentColor" stroke-width="1.7"/></svg></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="js/nav-mobile.js"></script>
+<script src="js/docs-index.js"></script>
+<script src="js/docs-shell.js"></script>
+<script>DocsShell.mount({ page: 'help' });</script>
+</body>
+</html>

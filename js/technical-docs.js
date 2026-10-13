@@ -30,37 +30,9 @@
    See DEC-21 (live parameters), DEC-24 (this transcription), DEC-25 (GUI copy removed).
    ============================================================================ */
 
-const TECH_DOCS = {
-  loaded: false,
-  active: 'introduction',
-  params: null,
-  tocObserver: null,
-  articles: [
-    { id:'introduction',   group:'Start here',      label:'Introduction & the SCeNe Coalition', keywords:'introduction scene coalition nbs tool purpose frontline organisation investor pre-feasibility asean gtf members birdlife conservation international mandai recoftc tnc wcs wwf wri zsl overview start' },
-    { id:'how-it-works',   group:'Start here',      label:'How the NbS Tool works',             keywords:'how it works five phases chain phase select location site characterisation threat profile pathway benefit feedback loop result file' },
-    { id:'scope',          group:'Scope',           label:'Region, ecosystems & pathways',      keywords:'scope region countries southeast asia eleven ecosystem dryland forest mangrove peatland savanna guardrail time frame 2014 2024 pathway protect manage restore cook-patton asean mrv framework' },
-    { id:'landcover',      group:'Scope',           label:'Land cover classes',                 keywords:'land cover classes rlcms servir alphaearth twenty classes aquaculture barren cropland plantation deciduous evergreen flooded forest grass mangrove mixed oil palm rice rubber shrub settlement water wetlands snow other land' },
-    { id:'conventions',    group:'Scope',           label:'Analysis conventions',               keywords:'conventions projection equal area esri 54034 54043 reprojection mixed site area weighted distribution screening instrument uncertainty' },
-    { id:'phase1',         group:'The five phases', label:'Phase 1 · Select location',          keywords:'phase 1 select location aoi area of interest boundary polygon upload identifier minimum area cell resolution duration' },
-    { id:'phase2',         group:'The five phases', label:'Phase 2 · Site characterisation',    keywords:'phase 2 site characterisation general context nature climate people groups layers puyravaud deforestation rate reference layer area of habitat root to shoot soil organic carbon' },
-    { id:'phase3',         group:'The five phases', label:'Phase 3 · Threat profile',           keywords:'phase 3 threat profile disturbance drivers canopy height deficit peatland drainage canal astiani wedeux natural hazard risk flood landslide typhoon drought fire' },
-    { id:'phase4-state',   group:'The five phases', label:'Phase 4a · Ecological state & trajectory', keywords:'phase 4 ecological state c1 c2 c3 c4 c5 c6 trajectory ten categories reference ecosystem potential natural vegetation forest savanna peat mangrove transition matrix' },
-    { id:'phase4-matrix',  group:'The five phases', label:'Phase 4a · Decision matrix',         keywords:'decision matrix seventeen rows cat 1 cat 10 3a 3b 4a 4b 8a 8b 8c 9a 9b 9c 9d pathway assignment protect manage restore carbon ineligible' },
-    { id:'phase4-pathways',group:'The five phases', label:'Phase 4a · Protect, Manage, Restore, Ineligible', keywords:'protect manage restore ineligible eligibility avoided deforestation silvofishery paludiculture arr additionality plantation settlement savanna guardrail' },
-    { id:'phase5',         group:'The five phases', label:'Phase 5 · Potential benefit',        keywords:'phase 5 potential benefit summary shared projection puyravaud exponential ranked allocation risk pillar general unique quantified qualitative' },
-    { id:'benefit-nature', group:'Benefit detail',  label:'Nature benefits',                    keywords:'nature connectivity mspa guidostoolbox watershed biodiversity habitat loss avoided iucn star threatened species condition uplift sd vista' },
-    { id:'benefit-people', group:'Benefit detail',  label:'People benefits',                    keywords:'people qualitative tenure food water security livelihood social capital governance benefit sharing cultural heritage watershed erosion' },
-    { id:'benefit-climate',group:'Benefit detail',  label:'Climate benefits & carbon',          keywords:'climate carbon constants carbon fraction 0.47 root shoot 0.28 co2 44 12 avoided emissions redd sequestration arr stocking factor leakage uncertainty buffer net err microclimate hazard resilience' },
-    { id:'annex-general',  group:'Annex A · Layers',label:'A.1 General context layers',         keywords:'annex general context gadm administrative protected area wdpa land cover 2024 forest cover deforestation risk forestatrisk elevation srtm slope ecosystem type natural disaster risk adpc' },
-    { id:'annex-nature',   group:'Annex A · Layers',label:'A.2 Nature layers',                  keywords:'annex nature flii forest landscape integrity area of habitat aoh gbif key species key biodiversity area kba conservation significance naturemap ecological connectivity mspa endangered tree species' },
-    { id:'annex-climate',  group:'Annex A · Layers',label:'A.3 Climate layers',                 keywords:'annex climate above ground biomass gedi below ground biomass soil organic carbon soilgrids worldclim temperature precipitation burned area gabam fire susceptibility soil groups wrb' },
-    { id:'annex-people',   group:'Annex A · Layers',label:'A.4 People layers',                  keywords:'annex people worldpop gridded population age sex structure dependency ratio climate vulnerability adpc national socio-economic indicators bps dosm psa nso gso' },
-    { id:'annex-threat',   group:'Annex A · Layers',label:'A.5 Threat profile layers',          keywords:'annex threat ecosystem disturbance screening canopy height deficit drivers slagter fire viirs peatland drainage canal dadap astiani wedeux water table' },
-    { id:'annex-pathway',  group:'Annex A · Layers',label:'A.6 Pathway layers',                 keywords:'annex pathway forest cover trajectory transition category nbs pathway raster three bands band 1 band 2 band 3 reference ecosystem decision row cook-patton asean mrv' },
-    { id:'limits',         group:'Checks & limits', label:'Limitations & how to read a figure', keywords:'limitations uncertainty caveats disclaimer validation field verification screening not certified sample data error propagation resolution vintage' },
-    { id:'reference',      group:'Reference',       label:'Parameters, formulas & glossary',    keywords:'reference parameters constants formulas worked example arithmetic lookup table glossary aoi mrv tco2e net err' }
-  ]
-};
+/* The article list (ids, groups, labels, search keywords) lives in
+   js/docs-index.js, shared with Help. This file supplies the articles only. */
+const TECH_DOCS = { params: null };
 
 /* Source document, named once so every citation on the page agrees. */
 const METHOD_DOC = 'Data &amp; methodology documentation — Nature-based Solutions triple benefits assessment';
@@ -89,17 +61,13 @@ const docNum = (path, d = 0) => {
   return v == null || !Number.isFinite(+v) ? docTodo(`${path} not readable`) : docFmt(v, d);
 };
 
-/* Accessibility baseline: never animate scrolling for a reader who asked us not to. */
-const docScrollBehavior = () =>
-  window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
 
 /* ------------------------------------------------------------ html builders */
 function docSection(title, body, id = '') {
   return `<section class="doc-section" id="${id || docSlug(title)}"><h2>${title}</h2>${body}</section>`;
 }
 function docHero(kicker, title, intro, meta = []) {
-  return `<div class="doc-breadcrumb"><span>Technical Documentation</span><i></i><span>${title}</span></div>` +
-         `<header class="doc-hero"><span class="doc-kicker">${kicker}</span><h1>${title}</h1><p>${intro}</p>` +
+  return `<header class="doc-hero"><span class="doc-kicker">${kicker}</span><h1>${title}</h1><p>${intro}</p>` +
          `<div class="doc-meta">${meta.map(x => `<span>${x}</span>`).join('')}</div></header>`;
 }
 function docCallout(label, body, tone = '') {
@@ -278,130 +246,6 @@ function readLiveParameters() {
 /* ============================================================================
    ARTICLES — transcribed from the methodology document, section by section.
    ========================================================================== */
-
-/* ------------------------------------------------------------ 1 Introduction */
-function docsIntroduction() {
-  return docHero('START HERE', 'Introduction and the SCeNe Coalition',
-    'The NbS Tool is an online spatial platform built by the SCeNe Coalition so that a project developer or an investor can make an initial assessment of a site in Southeast Asia: what is there, what is happening to it, what kind of Nature-based Solution it can take, and what triple benefits — for nature, people and climate — that intervention might deliver. This documentation describes the method behind those answers.',
-    ['Method documentation', `Source updated ${METHOD_DOC_DATE}`, 'Screening, not feasibility']) +
-
-  docSection('1.1 &mdash; The SCeNe Coalition', `
-    <p>The <strong>Southeast Asia Climate and Nature-based Solutions (SCeNe) Coalition</strong> is a collaboration between leading non-governmental organisations with an established presence in Southeast Asia. Its purpose is to accelerate and increase the implementation of, and investment in, high-quality, high-integrity, triple-benefit Nature-based Solutions across the region.</p>
-    <p>Southeast Asia is facing unprecedented demand for carbon credits, and with it an unparalleled opportunity to direct climate finance towards projects that deliver not only climate outcomes but outcomes for biodiversity and for people as well.</p>
-    <h3>The Coalition's four aims</h3>
-    <ol>
-      <li>Demonstrate what quality NbS for Climate looks like in Southeast Asia.</li>
-      <li>Direct carbon finance and other climate finance towards just and equitable climate mitigation and adaptation, and the conservation of biodiversity and critical habitat in Southeast Asia.</li>
-      <li>Accelerate and scale up high-integrity demand for, and supply of, NbS for Climate in Southeast Asia.</li>
-      <li>Ensure the growth of NbS for Climate genuinely delivers positive impacts for climate, nature and equitable benefits for local people &mdash; the <strong>triple benefits</strong>.</li>
-    </ol>
-    <h3>Members and partners</h3>
-    ${docTable(['Group', 'Organisations'], [
-      ['<strong>Coalition members</strong>', 'BirdLife International · Conservation International · Mandai Nature · RECOFTC · The Nature Conservancy · Wildlife Conservation Society · Worldwide Fund for Nature Singapore (WWF Singapore) · Yayasan Institut Sumber Daya Dunia (World Resources Institute) Indonesia · Zoological Society of London (ZSL)'],
-      ['<strong>Technical experts</strong>', 'Asian Disaster Preparedness Center (ADPC) · Nanyang Technological University (NTU) · Spatial Informatics Group&ndash;Natural Assets Laboratory (SIG-NAL), together with NbS, geospatial, biodiversity and financing experts from across Southeast Asia'],
-      ['<strong>Funder</strong>', 'ASEAN&ndash;UK Green Transition Fund (GTF)'],
-      ['<strong>Consultation</strong>', 'The ASEAN Secretariat and ASEAN Member States (AMS)']
-    ])}
-    ${docCallout('Launch', 'NbS Tool Version 3 is planned for launch in <strong>December 2026</strong>.', 'note')}`,
-    'scene-coalition') +
-
-  docSection('1.2 &mdash; What the NbS Tool is for', `
-    <p>The tool serves two audiences, and it answers a different question for each.</p>
-    ${docTable(['Audience', 'What the tool gives them'], [
-      ['<strong>Project developers</strong>, especially frontline organisations (FOs)',
-       'The generation of a pre-feasibility assessment document: a comprehensive overview of existing conditions at the project location, plus preliminary insight into the potential triple benefits of a proposed pathway or intervention type. This matters because frontline organisations often have limited capacity to carry out initial spatial assessments of their own.'],
-      ['<strong>Investors</strong>',
-       'Insight into the potential costs and revenue associated with a planned NbS project, so that projects with the potential to deliver optimal triple benefits can be evaluated and selected with confidence.']
-    ])}
-    ${docCallout('An initial assessment, not a pre-feasibility study', 'The information the NbS Tool generates serves as an <strong>initial assessment only</strong>. It is not intended to replace a comprehensive pre-feasibility study. It is a foundation for more detailed work &mdash; field observation and more detailed spatial data sources &mdash; that refines the understanding of a project&rsquo;s potential.', 'warn')}`,
-    'what-the-tool-is-for') +
-
-  docSection('About this documentation', `
-    <p>These pages reproduce the Coalition&rsquo;s methodology document so the method can be read inside the product it describes.</p>
-    ${docTable(['Field', 'Value'], [
-      ['<strong>Title</strong>', METHOD_DOC],
-      ['<strong>Owners</strong>', 'SCeNe Coalition'],
-      ['<strong>Contributors</strong>', 'NbS Tool Substance Team'],
-      ['<strong>Reviewers</strong>', 'Coalition members'],
-      ['<strong>Last updated</strong>', METHOD_DOC_DATE],
-      ['<strong>Status</strong>', 'Draft / under review'],
-      ['<strong>Category</strong>', 'Documentation'],
-      ['<strong>Related material</strong>', 'Spatial Data Catalog (<em>NbS Tool V3 Data Management</em>) · Figma: NbS Tool V3 Design · Version 1: NbS Tool V1']
-    ])}
-    ${docCallout('How to read the numbers on these pages', 'Constants, rates, class definitions and formulas are <strong>transcribed from the methodology document</strong> and cite their section number. Figures describing <em>this</em> project area &mdash; hectares, ecosystem shares, carbon totals &mdash; are read live from the same data the analysis screens render from. Where a value cannot be read, the page prints a visible TODO rather than a plausible constant.', 'note')}`,
-    'about-this-documentation');
-}
-
-/* ------------------------------------------------- 3 How the NbS Tool works */
-function docsHowItWorks() {
-  return docHero('START HERE', 'How the NbS Tool works',
-    'The tool runs in five phases. Each phase feeds the next, so nothing can be produced without the phases before it. Phase 4 produces two things — the pathway and the activity list — and the method treats them as two sections, because the logic behind them is different.',
-    ['Five phases', 'One feedback loop', 'Re-runnable per phase']) +
-
-  docSection('The five phases', `
-    ${docFlow([
-      ['PHASE 1', 'Select location',       'A boundary on an equal-area grid'],
-      ['PHASE 2', 'Site characterisation', 'What is here'],
-      ['PHASE 3', 'Threat profile',        'What is happening to it'],
-      ['PHASE 4', 'Pathway selection',     'What intervention the land can take'],
-      ['PHASE 5', 'Potential benefit',     'What the project would deliver']
-    ])}
-    ${docTable(['Phase', 'Name', 'What happens', 'What comes out'], [
-      ['<strong>1</strong>', '<strong>Select location</strong>',
-       'The user draws or uploads a polygon and sets the project duration.',
-       'A project boundary, called the area of interest (AOI), on an equal-area grid.'],
-      ['<strong>2</strong>', '<strong>Site characterisation</strong>',
-       'The tool clips every spatial layer to the AOI and reports what is there, in four groups: general context, nature, climate and people.',
-       'A description of the site as area-weighted distributions, never a single label.'],
-      ['<strong>3</strong>', '<strong>Threat profile</strong>',
-       'The tool reports what is happening to the site: how much is disturbed, what is driving it, drainage pressure on peat, and natural hazard risk.',
-       'Disturbed area by ecosystem, a driver breakdown, and hazard levels.'],
-      ['<strong>4</strong>', '<strong>Pathway selection</strong>',
-       'The tool compares land cover in 2014 with 2024, reads the reference ecosystem, and assigns every pixel to Protect, Manage, Restore or Carbon ineligible.',
-       'Area and share under each pathway, and the pathway raster.'],
-      ['<strong>5</strong>', '<strong>Potential benefit</strong>',
-       'The tool reports the benefits the selected activities are expected to deliver, in three pillars, and quantifies carbon.',
-       'A benefit profile for nature, people and climate, plus gross and net carbon figures.']
-    ])}
-    ${docSource("Table 3")}`,
-    'five-phases') +
-
-  docSection('Two properties of the chain', `
-    <p><strong>It is one-directional, with one feedback loop.</strong> Site characterisation and the threat profile inform the pathway; the pathway and the reference ecosystem select the activity; the activity determines the benefit. The single loop back is the threat profile, which is read again at the benefit stage to decide which climate-hazard and species components can be quantified.</p>
-    ${docFlow([
-      ['INFORM', 'Site & threat', 'Phases 2 and 3'],
-      ['SELECT', 'Pathway + reference', 'Phase 4a'],
-      ['SELECT', 'Activity', 'Phase 4b'],
-      ['DETERMINE', 'Benefit', 'Phase 5'],
-      ['LOOP BACK', 'Threat profile', 'Gates hazard and species components']
-    ])}
-    <p><strong>Every phase writes a result file keyed to the AOI.</strong> A phase can therefore be re-run without re-running the ones before it, and a saved result carries the inputs it was produced with, including the project duration.</p>`,
-    'chain-properties') +
-
-  docSection('What the tool computes, and what it only reports', `
-    <p>Three different kinds of output appear on the analysis screens, and it matters which is which.</p>
-    ${docTable(['Kind of output', 'How it is produced', 'Example'], [
-      ['<strong>Derived</strong>', 'Calculated inside the tool from the site area and published rates', 'Projected forest loss, avoided emissions, carbon removals, habitat loss avoided'],
-      ['<strong>Read and reported</strong>', 'Clipped from a named external layer and tabulated as an area-weighted distribution', 'Land cover shares, population, vulnerability class, soil group'],
-      ['<strong>Qualitative</strong>', 'A benefit tag attached to a selected activity, with no number, because no defensible spatial method exists yet', 'Watershed function, cultural heritage, benefit sharing']
-    ])}
-    ${docCallout('A benefit without a number is not a weaker benefit', 'It is one for which the tool has no defensible spatial method yet. The interface marks which is which, and the People pillar is deliberately qualitative throughout &mdash; see <em>People benefits</em>.', 'note')}`,
-    'derived-vs-reported') +
-
-  docSection('The figures this build is showing', `
-    <p>This page never hard-codes a site figure. It reads the same shared objects the product renders from, at the moment the page loads. The current reading is:</p>
-    ${docTable(['Parameter', 'Value', 'Read from'], [
-      ['Area of interest', `${docNum('aoi.total')} ha`, '<code>NBS_DATA.aoi</code>'],
-      ['Eligible ecosystem area', `${docNum('aoi.eligible')} ha`, '<code>NBS_DATA.totalEligible</code>'],
-      ['Project duration', `${docNum('aoi.duration')} years`, '<code>NBS_DATA.duration</code>'],
-      ['Ecosystems in the activity matrix', docNum('matrix.ecosystemCount'), '<code>ecosystems</code> (f05-shared)'],
-      ['NbS activities', docNum('matrix.activityCount'), '<code>ecosystems[].activities</code>'],
-      ['Distinct monitoring indicators', docNum('indicators.total'), '<code>indicatorMeta</code>'],
-      ['Countries with People Context', docNum('people.countryCount'), '<code>NBS_PEOPLE.DATA</code>']
-    ])}
-    ${docCallout('Illustrative sample data', 'Every site figure in this build describes one worked example area. It demonstrates that the method runs end to end. It is not a measurement of anywhere, and it must not be quoted, screenshotted into a proposal, or presented to a partner as a finding.', 'warn')}`,
-    'live-parameters');
-}
 
 /* ------------------------------------- 2.1 Region, ecosystems, time frame */
 function docsScope() {
@@ -607,7 +451,7 @@ function docsPhase2() {
   ]) : [];
   return docHero('PHASE 2', 'Site characterisation',
     'Site characterisation answers one question: what is here. It reads data and makes no recommendation. Every layer held by the tool is clipped to the boundary and summarised, and the results are grouped exactly as the interface groups them — general context, nature, climate and people.',
-    ['Four groups', '29 layers in Annex A', 'Area-weighted, never a single label']) +
+    ['Four groups', '29 data layers', 'Area-weighted, never a single label']) +
 
   docSection('The rule for every group', `
     <p>Results are area-weighted distributions over the project area, not single labels, because a project area almost always spans several classes at once. The full description of each layer &mdash; its source, resolution, update frequency, method and disclaimer &mdash; is in Annex&nbsp;A. This page states what each group is for and what it contributes downstream.</p>`,
@@ -617,8 +461,8 @@ function docsPhase2() {
     <p><strong>What it reports.</strong> Where the site is and what it is made of: administrative boundaries, protected areas, land cover 2024, forest cover in 2014 and 2024, deforestation between the two dates and its annual rate, deforestation risk, elevation, slope, ecosystem type, and natural disaster risk.</p>
     <p><strong>Method and downstream use.</strong> Ten layers, described in Annex&nbsp;A.1. Three of them carry the whole downstream chain:</p>
     ${docTable(['Layer', 'What it becomes downstream'], [
-      ['<strong>Land Cover 2024</strong>', 'The current ecological state in Phase 4a'],
-      ['<strong>Forest Cover 2014</strong>', 'The past state in Phase 4a'],
+      ['<strong>Land Cover 2024</strong>', 'The current ecological state in Phase 4'],
+      ['<strong>Forest Cover 2014</strong>', 'The past state in Phase 4'],
       ['<strong>Deforestation rate</strong>', 'Computed with the Puyravaud (2003) formula over the ten-year window; becomes the baseline for every avoided-loss projection in Phase 5']
     ])}
     ${docCallout('The single most common misreading of this group', 'Ecosystem type is a <strong>reference layer</strong>: it is the ecosystem that <em>belongs</em> on the site, not the vegetation standing on it today. Reading it as current cover will produce the wrong conclusion about almost every degraded site.', 'warn')}`,
@@ -721,13 +565,13 @@ function docsPhase3() {
 
 /* ------------------ 7.1–7.4 Phase 4a: ecological state and trajectory */
 function docsPhase4State() {
-  return docHero('PHASE 4A', 'Ecological state and trajectory',
+  return docHero('PHASE 4', 'Ecological state and trajectory',
     'Pathway selection is where the tool stops describing and starts deciding. Everything before it reports what is on the ground; this phase turns that description into a statement about what kind of intervention the land can take. Identifying the ecosystem alone is not enough — the ecological state has to be understood as well, and it is built from three components.',
     ['6 state classes', '10 trajectory categories', '5 reference values']) +
 
   docSection('7 &mdash; The three components of ecological state', `
     ${docTable(['Component', 'What it is', 'Where it comes from in the tool'], [
-      ['<strong>The ecological state reference</strong>', 'The ecosystem that originally and naturally existed in the landscape &mdash; forest, savanna, grassland, peatland or mangrove.', 'The Ecosystem Type layer (Annex A.1)'],
+      ['<strong>The ecological state reference</strong>', 'The ecosystem that originally and naturally existed in the landscape &mdash; forest, savanna, grassland, peatland or mangrove.', 'The Ecosystem Type layer (General context layers)'],
       ['<strong>The current ecological state</strong>', 'What exists in that landscape now.', 'Land Cover 2024, grouped into the six ecological state classes below'],
       ['<strong>The trajectory</strong>', 'The comparison between the current state and the earlier state: whether the landscape is disturbed, stable or recovering.', 'Forest Cover 2014 crossed with the 2024 state']
     ])}
@@ -835,7 +679,7 @@ function docsPhase4State() {
 function docsPhase4Matrix() {
   const row = (n, cat, traj, def, cond, pw) =>
     [`<span class="num">${n}</span>`, `<strong>${cat}</strong>`, traj, def, cond, `<strong>${pw}</strong>`];
-  return docHero('PHASE 4A', 'The decision matrix',
+  return docHero('PHASE 4', 'The decision matrix',
     'Ten trajectory categories become seventeen decision rows once the conditional splits are applied. This table is the whole of the pathway logic: every pixel in every project area resolves to exactly one of these rows, and the row number is carried in band 3 of the pathway raster so the assignment can be audited afterwards.',
     ['17 rows', '4 outcomes', 'Auditable per pixel']) +
 
@@ -887,7 +731,7 @@ function docsPhase4Matrix() {
 /* ------------------------------------ 7.6–7.9 the four pathway outcomes */
 function docsPhase4Pathways() {
   const m = docParam('matrix', null);
-  return docHero('PHASE 4A', 'Protect, Manage, Restore and Ineligible',
+  return docHero('PHASE 4', 'Protect, Manage, Restore and Ineligible',
     'What each outcome means on the ground: which decision rows produce it, what the pathway is for, which site characteristics are read against it, and the circumstances in which a project area is reported as ineligible for it.',
     m ? [`${m.ecosystemCount} ecosystems`, `${m.activityCount} activities`, 'Eligibility, not ranking'] : ['Protect · Manage · Restore · Ineligible']) +
 
@@ -1324,11 +1168,11 @@ const ANNEX_INTRO = `<p>Each layer below is described the same way: why it is th
 
 /* ------------------------------------------------ A.1 General context */
 function docsAnnexGeneral() {
-  return docHero('ANNEX A.1', 'General context layers',
+  return docHero('DATA LAYERS', 'General context layers',
     'Ten layers that answer where the site is and what it is made of. Three of them — Land Cover 2024, Forest Cover 2014 and the deforestation rate — carry the whole downstream chain, and an error in any of them propagates into every pathway and every benefit figure.',
     ['10 layers', 'F02 General Context', '3 carry the chain']) +
 
-  docSection('A.1 &mdash; Where the site is', ANNEX_INTRO +
+  docSection('Where the site is', ANNEX_INTRO +
 
     docLayer('Administrative Boundary',
       'Dominant district and province; list of overlapping administrative units with overlap area (ha) and share of the project area.', {
@@ -1357,7 +1201,7 @@ function docsAnnexGeneral() {
     docSource('Table A1'),
     'annex-a1-where') +
 
-  docSection('A.1 &mdash; What is standing on it',
+  docSection('What is standing on it',
 
     docLayer('Land Cover 2024',
       'Area (ha) and share of the project area for each of the 20 land cover classes, plus the six largest classes as a headline.', {
@@ -1388,7 +1232,7 @@ function docsAnnexGeneral() {
     docSource('Table A1'),
     'annex-a1-cover') +
 
-  docSection('A.1 &mdash; What has happened, and what is at risk',
+  docSection('What has happened, and what is at risk',
 
     docLayer('Deforestation 2014 &ndash; 2024',
       'Forest loss over the period (ha) and the average annual rate (% per year).', {
@@ -1417,7 +1261,7 @@ function docsAnnexGeneral() {
     docSource('Table A1'),
     'annex-a1-change') +
 
-  docSection('A.1 &mdash; The physical setting',
+  docSection('The physical setting',
 
     docLayer('Elevation',
       'Minimum and maximum elevation (m above sea level) and the predominant elevation class.', {
@@ -1472,11 +1316,11 @@ function docsAnnexGeneral() {
 
 /* ------------------------------------------------------ A.2 Nature */
 function docsAnnexNature() {
-  return docHero('ANNEX A.2', 'Nature layers',
+  return docHero('DATA LAYERS', 'Nature layers',
     'Seven layers describing the biodiversity and habitat value of the site. Three of them — the Area of Habitat rasters — are the direct input to the nature benefit components, where they are intersected with projected deforestation or with the restoration area.',
     ['7 layers', 'F02 Nature', 'Modelled, not observed']) +
 
-  docSection('A.2 &mdash; Condition of the forest', ANNEX_INTRO +
+  docSection('Condition of the forest', ANNEX_INTRO +
 
     docLayer('Forest Landscape Integrity Index (FLII)',
       'Mean forest landscape integrity score out of 10, with the share of forest in High, Medium and Low integrity classes.', {
@@ -1493,7 +1337,7 @@ function docsAnnexNature() {
     docSource('Table A2'),
     'annex-a2-condition') +
 
-  docSection('A.2 &mdash; Species and habitat',
+  docSection('Species and habitat',
 
     docLayer('Refined Area of Habitat (mammals, birds, reptiles, amphibians)',
       'Number of species with suitable habitat in the project area, by class, and the habitat area and share of the project area per species.', {
@@ -1522,7 +1366,7 @@ function docsAnnexNature() {
     docSource('Table A2'),
     'annex-a2-species') +
 
-  docSection('A.2 &mdash; Designations and global context',
+  docSection('Designations and global context',
 
     docLayer('Key Biodiversity Areas',
       'Overlap with Key Biodiversity Areas: area (ha), share of the project area, and the name of each site.', {
@@ -1578,11 +1422,11 @@ function docsAnnexNature() {
 
 /* ----------------------------------------------------- A.3 Climate */
 function docsAnnexClimate() {
-  return docHero('ANNEX A.3', 'Climate layers',
+  return docHero('DATA LAYERS', 'Climate layers',
     'Eight layers covering carbon stocks and climate conditions. Biomass carbon and soil carbon are reported as two separate headline numbers and are deliberately not summed — adding them would look like a complete carbon account when it is not.',
     ['8 layers', 'F02 Climate', 'Two carbon pools, never summed']) +
 
-  docSection('A.3 &mdash; The three carbon pools', ANNEX_INTRO +
+  docSection('The three carbon pools', ANNEX_INTRO +
 
     docLayer('Above Ground Biomass Density',
       'Above-ground biomass density in Mg per hectare, and the carbon it represents in tCO₂e.', {
@@ -1623,7 +1467,7 @@ function docsAnnexClimate() {
     docSource('Table A3'),
     'annex-a3-carbon') +
 
-  docSection('A.3 &mdash; Climate conditions',
+  docSection('Climate conditions',
 
     docLayer('Annual Temperature',
       'Mean annual temperature across the project area, with a twelve-month profile.', {
@@ -1652,7 +1496,7 @@ function docsAnnexClimate() {
     docSource('Table A3'),
     'annex-a3-climate') +
 
-  docSection('A.3 &mdash; Fire and soil',
+  docSection('Fire and soil',
 
     docLayer('Historical Burned Area',
       'Area (ha) of the project area that burned at least once between 2014 and 2024, and the area burned in each year.', {
@@ -1695,11 +1539,11 @@ function docsAnnexClimate() {
 
 /* ------------------------------------------------------ A.4 People */
 function docsAnnexPeople() {
-  return docHero('ANNEX A.4', 'People layers',
+  return docHero('DATA LAYERS', 'People layers',
     'Unlike the nature and climate layers, which are spatially explicit, most socio-economic data are jurisdiction-based: reported for an administrative unit rather than for the project area itself. The two gridded population layers are the exception — and even they are modelled estimates, not a head count.',
     ['4 layers', 'F02 People', 'Jurisdiction-based, mostly']) +
 
-  docSection('A.4 &mdash; The two gridded population layers', ANNEX_INTRO +
+  docSection('The two gridded population layers', ANNEX_INTRO +
 
     docLayer('Gridded Population',
       'Total estimated population inside the project area, population density, settled area (ha) and the share of the project area that is settled.', {
@@ -1728,7 +1572,7 @@ function docsAnnexPeople() {
     docSource('Table A4'),
     'annex-a4-population') +
 
-  docSection('A.4 &mdash; Vulnerability and national statistics',
+  docSection('Vulnerability and national statistics',
 
     docLayer('Climate Vulnerability',
       'Four independent vulnerability levels, from Very Low to Very High: physical, environmental, economic and social.', {
@@ -1759,11 +1603,11 @@ function docsAnnexPeople() {
 
 /* ------------------------------------ A.5 Threat profile · A.6 Pathway */
 function docsAnnexThreat() {
-  return docHero('ANNEX A.5', 'Threat profile layers',
+  return docHero('DATA LAYERS', 'Threat profile layers',
     'The three layers behind Phase 3 — the ones that report not what is here, but what is happening to it. Two read structural decline in forest that is still standing and what is driving it; the third reads the hydrology that decides whether anything on peat can work at all. All three carry the same instruction: field verification is required.',
     ['3 layers', 'F02 Threat Profile', 'Field verification required']) +
 
-  docSection('A.5 &mdash; Disturbance, and what is driving it', ANNEX_INTRO +
+  docSection('Disturbance, and what is driving it', ANNEX_INTRO +
 
     docLayer('Ecosystem disturbance screening',
       'Total ecosystem area and disturbed area (ha and %) for dryland forest, mangrove and peatland.', {
@@ -1792,7 +1636,7 @@ function docsAnnexThreat() {
     docSource('Table A5'),
     'annex-a5-disturbance') +
 
-  docSection('A.5 &mdash; Peatland hydrology',
+  docSection('Peatland hydrology',
 
     docLayer('Peatland drainage pressure',
       'Canal proximity, drainage pressure and fire risk, each classified High, Moderate or Low, with the distance to the nearest canal.', {
@@ -1811,11 +1655,11 @@ function docsAnnexThreat() {
 
 /* ------------------------------------------------------ A.6 Pathway */
 function docsAnnexPathway() {
-  return docHero('ANNEX A.6', 'Pathway layers',
+  return docHero('DATA LAYERS', 'Pathway layers',
     'The two layers that turn the site reading into a pathway assignment. The first says what happened between 2014 and 2024; the second is where the whole chain lands — one raster with three bands carrying the pathway, the reference ecosystem and the decision row that produced them.',
     ['2 layers', 'F02 Pathway Selection', 'Screening recommendation']) +
 
-  docSection('A.6 &mdash; What happened between the two dates', ANNEX_INTRO +
+  docSection('What happened between the two dates', ANNEX_INTRO +
 
     docLayer('Forest Cover Trajectory',
       'The transition each part of the project area went through between 2014 and 2024, as a trajectory category.', {
@@ -1832,7 +1676,7 @@ function docsAnnexPathway() {
     docSource('Table A6'),
     'annex-a6-trajectory') +
 
-  docSection('A.6 &mdash; The pathway raster',
+  docSection('The pathway raster',
 
     docLayer('NbS Pathway (predefined)',
       'Area (ha) and share of the project area under each pathway: Protect, Manage, Restore, or Ineligible.', {
@@ -1950,6 +1794,25 @@ function docsLimits() {
 }
 
 /* ====================================================== REFERENCE */
+/* Provenance of these pages: the source document, its date and status. Moved
+   here from the retired introduction article when that content went to Help. */
+function docsAboutThisDocumentation() {
+  return docSection('About this documentation', `
+    <p>These pages reproduce the Coalition&rsquo;s methodology document so the method can be read inside the product it describes.</p>
+    ${docTable(['Field', 'Value'], [
+      ['<strong>Title</strong>', METHOD_DOC],
+      ['<strong>Owners</strong>', 'SCeNe Coalition'],
+      ['<strong>Contributors</strong>', 'NbS Tool Substance Team'],
+      ['<strong>Reviewers</strong>', 'Coalition members'],
+      ['<strong>Last updated</strong>', METHOD_DOC_DATE],
+      ['<strong>Status</strong>', 'Draft / under review'],
+      ['<strong>Category</strong>', 'Documentation'],
+      ['<strong>Related material</strong>', 'Spatial Data Catalog (<em>NbS Tool V3 Data Management</em>) · Figma: NbS Tool V3 Design · Version 1: NbS Tool V1']
+    ])}
+    ${docCallout('How to read the numbers on these pages', 'Constants, rates, class definitions and formulas are <strong>transcribed from the methodology document</strong> and cite their section number. Figures describing <em>this</em> project area &mdash; hectares, ecosystem shares, carbon totals &mdash; are read live from the same data the analysis screens render from. Where a value cannot be read, the page prints a visible TODO rather than a plausible constant.', 'note')}`,
+    'about-this-documentation');
+}
+
 function docsReference() {
   const c = docParam('carbon', {}) || {};
   const av = c.avoided, sq = c.sequestration;
@@ -1958,9 +1821,9 @@ function docsReference() {
   /* Every "Source section" cell links to where this page explains that citation. */
   const r841   = docJump('§8.4.1', 'benefit-climate#carbon-constants');
   const r843   = docJump('§8.4.3', 'benefit-climate#carbon-sequestration');
-  const rDist  = `${docJump('§6', 'phase3#phase3-disturbance')}, ${docJump('A.5', 'annex-threat#annex-a5-disturbance')}`;
-  const rCanal = `${docJump('§6', 'phase3#phase3-peat')}, ${docJump('A.5', 'annex-threat#annex-a5-peat')}`;
-  const rFlii  = docJump('A.2', 'annex-nature#annex-a2-condition');
+  const rDist  = `${docJump('§6', 'phase3#phase3-disturbance')}, ${docJump('Threat profile layers', 'annex-threat#annex-a5-disturbance')}`;
+  const rCanal = `${docJump('§6', 'phase3#phase3-peat')}, ${docJump('Threat profile layers', 'annex-threat#annex-a5-peat')}`;
+  const rFlii  = docJump('Nature layers', 'annex-nature#annex-a2-condition');
 
   return docHero('REFERENCE', 'Parameters, formulas and glossary',
     'Everything a reviewer needs to reproduce the main calculations without reading the whole documentation: the method constants in one table, the live site parameters in another, every formula in one list, and a worked example they can follow end to end.',
@@ -1988,16 +1851,16 @@ function docsReference() {
       ['Canal water-table influence',     '500',       'm (Astiani et al. 2017)',rCanal],
       ['Canal biomass influence',         '1,000',     'm (Wedeux et al. 2020)',rCanal],
       ['Hazard representative threshold', '20',        '% of project area',
-       `${docJump('§6', 'phase3#phase3-hazard')}, ${docJump('A.1', 'annex-general#annex-a1-setting')}`],
+       `${docJump('§6', 'phase3#phase3-hazard')}, ${docJump('General context layers', 'annex-general#annex-a1-setting')}`],
       ['Admin sliver threshold',          '1.0',       '% of project area',
-       docJump('A.1', 'annex-general#annex-a1-where')],
+       docJump('General context layers', 'annex-general#annex-a1-where')],
       ['Humid montane threshold',         '1,000',     'm elevation',          r843],
       ['Humid lowland rainfall threshold','2,000',     'mm/year',              r843],
       ['Dry month threshold',             '100',       'mm (Walsh 1996)',      r843],
       ['FLII High class',                 '&ge; 9.6',  'score out of 10',      rFlii],
       ['FLII Low class',                  '&le; 6.0',  'score out of 10',      rFlii],
       ['Soil carbon depth',               '0–30',      'cm',
-       docJump('A.3', 'annex-climate#annex-a3-carbon')]
+       docJump('Climate layers', 'annex-climate#annex-a3-carbon')]
     ])}`,
     'method-constants') +
 
@@ -2071,7 +1934,7 @@ function docsReference() {
          <ul><li>disturbed = ${docFmt(f.area)} &times; ${f.disturbedPct}% = <strong>${docFmt(f.disturbed)} ha</strong></li>
              <li>loss = ${docFmt(f.area)} &times; ${f.lossPct}% = <strong>${docFmt(f.loss)} ha</strong></li>
              <li>remaining = <strong>${docFmt(f.remaining)} ha</strong></li></ul>
-         <p><strong>Phase 4a &mdash; Pathway.</strong> Forest persisting (Cat 1) &rarr; Protect. Forest degraded or converted on a non-savanna reference (Cat 3B, 4B, 5) &rarr; Restore.</p>
+         <p><strong>Phase 4 &mdash; Pathway.</strong> Forest persisting (Cat 1) &rarr; Protect. Forest degraded or converted on a non-savanna reference (Cat 3B, 4B, 5) &rarr; Restore.</p>
          <p><strong>Phase 5 &mdash; Gross carbon over ${dur} years.</strong></p>
          <ul><li>gross avoided = <strong>${docFmt(av.gross)} tCO₂e</strong> (${docFmt(av.perHa, 1)} tCO₂e/ha)</li>
              <li>gross removals = <strong>${docFmt(sq.gross)} tCO₂e</strong> (${docFmt(sq.perHa, 1)} tCO₂e/ha)</li></ul>
@@ -2117,10 +1980,42 @@ function docsReference() {
     'glossary');
 }
 
+/* Every article closes with a link to the Help guide that does the same thing in
+   the tool. The mirror of this table is the "How it's calculated" box at the end
+   of each Help guide; change both together (DEC-30, SCREENS.md SCR-17/SCR-19). */
+const HELP_GUIDES = {
+  scope:             [['Phase 0 · Explore the map', 'phase-0']],
+  landcover:         [['Phase 0 · Explore the map', 'phase-0']],
+  conventions:       [['Phase 1 · Select location', 'phase-1']],
+  phase1:            [['Phase 1 · Select location', 'phase-1'], ['Accounts and area limits', 'accounts']],
+  phase2:            [['Phase 2 · Site characterisation', 'phase-2']],
+  phase3:            [['Phase 3 · Threat profile', 'phase-3']],
+  'phase4-state':    [['Phase 4 · Pathway selection', 'phase-4']],
+  'phase4-matrix':   [['Phase 4 · Pathway selection', 'phase-4']],
+  'phase4-pathways': [['Phase 4 · Pathway selection', 'phase-4']],
+  phase5:            [['Phase 5 · Potential benefit', 'phase-5']],
+  'benefit-nature':  [['Phase 5 · Potential benefit', 'phase-5']],
+  'benefit-people':  [['Phase 5 · Potential benefit', 'phase-5']],
+  'benefit-climate': [['Phase 5 · Potential benefit', 'phase-5'], ['Carbon finance and standards', 'results-carbon']],
+  'annex-general':   [['Phase 2 · Site characterisation', 'phase-2'], ['Where the numbers come from', 'results-sources']],
+  'annex-nature':    [['Phase 2 · Site characterisation', 'phase-2']],
+  'annex-climate':   [['Phase 2 · Site characterisation', 'phase-2']],
+  'annex-people':    [['Phase 2 · Site characterisation', 'phase-2']],
+  'annex-threat':    [['Phase 3 · Threat profile', 'phase-3']],
+  'annex-pathway':   [['Phase 4 · Pathway selection', 'phase-4']],
+  limits:            [['What the tool does not do', 'results-limits']],
+  reference:         [['How to cite', 'results-cite']]
+};
+function docsHelpLink(id) {
+  const guides = HELP_GUIDES[id];
+  if (!guides) return '';
+  return docCallout('Do this in the tool',
+    guides.map(([label, anchor]) => `<a href="help.html#${anchor}">${label}</a>`).join(' &middot; ') +
+    ' &mdash; step-by-step in Help, with screenshots.', 'hc-xref');
+}
+
 function docsArticleHtml(id) {
   const map = {
-    introduction: docsIntroduction,
-    'how-it-works': docsHowItWorks,
     scope: docsScope,
     landcover: docsLandcover,
     conventions: docsConventions,
@@ -2141,120 +2036,28 @@ function docsArticleHtml(id) {
     'annex-threat': docsAnnexThreat,
     'annex-pathway': docsAnnexPathway,
     limits: docsLimits,
-    reference: docsReference
+    reference: () => docsReference() + docsAboutThisDocumentation()
   };
-  return (map[id] || docsIntroduction)();
+  return (map[id] || docsScope)() + docsHelpLink(id);
 }
 /* ============================================================================
-   CHROME
+   LOADER — the sidebar, universal search, "On this page", pager and routing
+   are js/docs-shell.js, shared with Help (CMP-35). This file only supplies the
+   articles and the live parameters they read.
    ========================================================================== */
-
-function renderDocsNav(query = '') {
-  const host = document.querySelector('#docs-article-nav');
-  if (!host) return;
-  const q = String(query || '').trim().toLowerCase();
-  const visible = TECH_DOCS.articles.filter(a =>
-    !q || `${a.label} ${a.keywords} ${a.group}`.toLowerCase().includes(q));
-
-  if (!visible.length) {
-    host.innerHTML = `<div class="docs-nav-empty">No methodology section matches &ldquo;${docEsc(query)}&rdquo;.</div>`;
-    return;
-  }
-  let currentGroup = '';
-  host.innerHTML = visible.map(a => {
-    let group = '';
-    if (a.group !== currentGroup) { currentGroup = a.group; group = `<div class="docs-nav-group">${docEsc(a.group)}</div>`; }
-    const safe = docEsc(a.label);
-    const label = q
-      ? safe.replace(new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'ig'), '<mark>$1</mark>')
-      : safe;
-    const active = a.id === TECH_DOCS.active;
-    return `${group}<button type="button" class="docs-nav-button"${active ? ' aria-current="page"' : ''} data-doc-article="${a.id}">${label}</button>`;
-  }).join('');
-  host.querySelectorAll('[data-doc-article]').forEach(b =>
-    b.addEventListener('click', () => openTechnicalDoc(b.dataset.docArticle)));
-}
-
-/* Move the page, and the keyboard, to a .doc-section by id. */
-function docScrollToSection(id) {
-  const target = document.getElementById(id);
-  if (!target) return;
-  target.scrollIntoView({ behavior: docScrollBehavior(), block: 'start' });
-  target.setAttribute('tabindex', '-1');
-  target.focus({ preventScroll: true });
-}
-
-function renderDocsToc() {
-  const host = document.querySelector('#docs-toc');
-  const article = document.querySelector('#docs-article');
-  if (!host || !article) return;
-  const headings = [...article.querySelectorAll('.doc-section > h2')];
-  host.innerHTML = headings.map(h =>
-    `<a href="#${h.parentElement.id}" data-doc-toc="${h.parentElement.id}">${docEsc(h.textContent)}</a>`).join('');
-  host.querySelectorAll('a').forEach(a => a.addEventListener('click', e => {
-    e.preventDefault();
-    docScrollToSection(a.dataset.docToc);
-  }));
-
-  if (TECH_DOCS.tocObserver) TECH_DOCS.tocObserver.disconnect();
-  TECH_DOCS.tocObserver = new IntersectionObserver(entries => {
-    const active = entries.filter(x => x.isIntersecting)
-      .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
-    if (!active) return;
-    host.querySelectorAll('a').forEach(a => a.classList.toggle('active', a.dataset.docToc === active.target.id));
-  }, { rootMargin: '-22% 0px -68% 0px' });
-  article.querySelectorAll('.doc-section').forEach(s => TECH_DOCS.tocObserver.observe(s));
-}
-
-function renderDocsFooter() {
-  const article = document.querySelector('#docs-article');
-  if (!article) return;
-  const i = TECH_DOCS.articles.findIndex(a => a.id === TECH_DOCS.active);
-  const prev = TECH_DOCS.articles[i - 1], next = TECH_DOCS.articles[i + 1];
-  article.insertAdjacentHTML('beforeend',
-    `<footer class="docs-article-footer">${
-      prev ? `<button type="button" data-doc-footer="${prev.id}"><span>&larr; PREVIOUS</span><strong>${docEsc(prev.label)}</strong></button>` : '<span></span>'}${
-      next ? `<button type="button" data-doc-footer="${next.id}"><span>NEXT &rarr;</span><strong>${docEsc(next.label)}</strong></button>` : '<span></span>'}</footer>`);
-  article.querySelectorAll('[data-doc-footer]').forEach(b =>
-    b.addEventListener('click', () => openTechnicalDoc(b.dataset.docFooter)));
-}
-
-function openTechnicalDoc(id, replaceHash = true) {
-  if (!TECH_DOCS.articles.some(a => a.id === id)) id = 'overview';
-  TECH_DOCS.active = id;
-  const host = document.querySelector('#docs-article');
-  if (!host) return;
-  host.innerHTML = docsArticleHtml(id);
-  renderDocsFooter();
-  renderDocsNav(document.querySelector('#docs-search')?.value || '');
-  renderDocsToc();
-  /* nav-mobile.js hides unlabelled inline SVGs; re-run for freshly injected markup. */
-  if (typeof hardenSvgs === 'function') hardenSvgs();
-  if (replaceHash && history.replaceState) history.replaceState(null, '', `#docs/${id}`);
-  window.scrollTo({ top: 0, behavior: docScrollBehavior() });
-  host.focus({ preventScroll: true });
-}
+function openTechnicalDoc(id, section) { DocsShell.open(id, section); }
 
 function loadTechnicalDocs() {
-  if (!TECH_DOCS.loaded) {
-    TECH_DOCS.params = readLiveParameters();
-    TECH_DOCS.loaded = true;
-    const search = document.querySelector('#docs-search');
-    search?.addEventListener('input', e => renderDocsNav(e.target.value));
-    /* Cross-references inside an article: data-doc-jump="<article-id>#<section-id>". */
-    document.querySelector('#docs-article')?.addEventListener('click', e => {
-      const jump = e.target.closest('[data-doc-jump]');
-      if (!jump) return;
-      const [article, section] = jump.dataset.docJump.split('#');
-      openTechnicalDoc(article);
-      if (section) docScrollToSection(section);
-    });
-  }
-  const match = location.hash.match(/^#docs\/([a-z0-9-]+)$/);
-  if (match && TECH_DOCS.articles.some(a => a.id === match[1])) TECH_DOCS.active = match[1];
+  TECH_DOCS.params = readLiveParameters();
   document.body.classList.add('docs-active');
-  renderDocsNav();
-  openTechnicalDoc(TECH_DOCS.active, false);
+  /* Cross-references inside an article: data-doc-jump="<article-id>#<section-id>". */
+  document.querySelector('#docs-article')?.addEventListener('click', e => {
+    const jump = e.target.closest('[data-doc-jump]');
+    if (!jump) return;
+    const [article, section] = jump.dataset.docJump.split('#');
+    DocsShell.open(article, section);
+  });
+  DocsShell.mount({ page: 'methodology', render: docsArticleHtml });
 }
 
 window.loadTechnicalDocs = loadTechnicalDocs;

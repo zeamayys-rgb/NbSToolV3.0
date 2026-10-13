@@ -36,7 +36,9 @@ State matrices (`SCR-nn`) are in [UI-STATES.md](UI-STATES.md).
 | SCR-14 | `/design-system` | Design System reference | Living catalogue of tokens and primitives | Look up a component before building | CMP-02, and every primitive | `css/tokens.css`, `css/styleguide.css` |
 | SCR-15 | `/F02-P4_Pathway_Selection` | Pathway Selection (superseded) | Original Figma rebuild of Step 4 | — | — | Superseded by SCR-03 Step 4 |
 | SCR-16 | `/F02-P5_Potential_Benefit_1` | Potential Benefit (superseded) | Original Figma rebuild of Step 5 | — | — | Superseded by SCR-03 Step 5 |
-| SCR-17 | `/technical-docs` | Technical Documentation (F09) | In-app rendering of the Data & methodology documentation: scope, the five phases, benefit detail, Annex A spatial layers, limits | Understand and audit how a number was produced | CMP-01, CMP-28 | Reads live parameters from `NBS_DATA`, `NBS_ANALYSIS`, `NBS_LAYER_INFO`, `ecosystems`, `indicatorMeta`, `NBS_PEOPLE` — no static copies |
+| SCR-17 | `/technical-docs` | Methodology (F09) | In-app rendering of the Data & methodology documentation: scope, analysis phases 1 to 5, benefit detail, data layers, limits; every article links back to its SCR-19 guide | Understand and audit how a number was produced | CMP-01, CMP-28 | Reads live parameters from `NBS_DATA`, `NBS_ANALYSIS`, `NBS_LAYER_INFO`, `ecosystems`, `indicatorMeta`, `NBS_PEOPLE` — no static copies |
+| SCR-18 | `/walkthrough` | Walkthrough — **retired** | Redirect only: maps each old chapter anchor to its SCR-19 guide (DEC-30) | Keep old links working | — | None |
+| SCR-19 | `/help` | Help Centre | The single place for "how do I use the tool": what it is, the eight-phase workflow, one guide per phase with screenshots, after-the-analysis guides, reading results, FAQs, support | Learn the tool, or get one question answered | CMP-01, CMP-22, CMP-28, CMP-29, CMP-33, CMP-34 | None — static HTML; every guide with a method behind it links to its SCR-17 `#docs/` article (DEC-29, DEC-30) |
 
 **Orphans.** SCR-14, SCR-15, SCR-16 and SCR-17 are reachable by URL but linked from no nav, footer or
 sitemap. SCR-15 and SCR-16 are the Figma-rebuild sources whose content now lives inside
@@ -348,6 +350,26 @@ produced, and what it is safe to claim from it — before it goes into a proposa
 **Entry** — the `.nav-doc-button` in the nav actions, or a `#docs/<article-id>` deep link.
 **Exit** — back to any nav destination. There is no forward step; this is a reference surface.
 
+**Renamed Methodology (DEC-30).** Nav label, page title, sidebar head and breadcrumb read
+*Methodology*; the URL and the `#docs/<id>` hashes are unchanged. The sidebar opens with the
+Help | Methodology switch (CMP-34). Every article whose phase has a Help guide ends with a
+*Do this in the tool* callout built from `HELP_GUIDES` in `js/technical-docs.js`; that table is
+the mirror of the *How it's calculated* boxes in SCR-19 and the two change together. Sidebar
+labels carry no source-document codes: "Phase 4a" is "Phase 4", the "Annex A · Layers" group is
+"Data layers". Section numbers (§) stay in citations, where they trace a figure to its source.
+A `?q=` parameter pre-fills the search; an empty search offers the same query on SCR-19.
+
+**Shared shell, and two articles moved out (DEC-31).** The sidebar, search, "On this page"
+list, pager and hash routing are now `js/docs-shell.js` (CMP-35), the same engine SCR-19 runs;
+`js/technical-docs.js` only supplies the articles (`docsArticleHtml`) and the live parameters.
+The article list moved from `TECH_DOCS.articles` to `js/docs-index.js`. Search covers both
+pages: matches here first, then *Also in Help*. *Introduction & the SCeNe Coalition* and *How
+the NbS Tool works* moved to SCR-19 (*Who is behind the NbS Tool*, *What the NbS Tool is*, *How
+the NbS Tool works*); old `#docs/introduction` and `#docs/how-it-works` links forward there via
+the index's `moved` map. *About this documentation* (source document, date, status) stays and
+closes *Parameters, formulas & glossary*. The page opens on *Region, ecosystems & pathways*.
+**Twenty-one articles in six groups** now; the paragraph below describes the earlier count.
+
 **Layout.** Three-column reading grid, `230px / minmax(0,900px) / 180px`, gap 44px, sidebar and
 TOC both sticky. Below 1100px the TOC is dropped; below 820px the sidebar collapses to a
 horizontal chip rail above the article. `body.docs-active` hides the analyser toolbar, topbar
@@ -402,6 +424,10 @@ TOC links move focus to their target section; the skip link targets `#docs-artic
 
 ## SCR-18 · Walkthrough
 
+> **Retired 2026-10-13 (DEC-30).** Every screenshot and explanation below moved into SCR-19's
+> phase guides. `walkthrough.html` is now a redirect that maps each old chapter anchor to the
+> matching guide (`#area` → `help.html#phase-1`, and so on). The record below is kept as history.
+
 **What the user is trying to accomplish.** Learn what the tool can do, and what each control on
 each screen is for, without having an account, a boundary file, or anyone to demo it to them.
 
@@ -443,7 +469,7 @@ tool when the tool is down, and it must not imply live figures. The sample-data 
 first thing under the hero, because the screenshots are full of numbers that are not
 measurements (DEC-11).
 
-**Behaviour.** One script: a sidebar scroll-spy. It is position-based rather than an
+**Behaviour.** One script, `js/docs-spy.js`, shared with SCR-19: a sidebar scroll-spy. It is position-based rather than an
 IntersectionObserver — the question is "which heading did I last pass", and an observer only
 reports *changes* in intersection, so at the top of the page and anywhere between two headings
 no element is intersecting and an observer leaves a stale highlight behind. Reading positions
@@ -461,3 +487,67 @@ of the caption. Decorative chevrons are `aria-hidden`. The skip link targets `#w
 
 `TODO(design): the screenshots will drift as the UI changes. Decide whether they are
 regenerated per release or per PR that changes a captured screen, and record it here.`
+
+---
+
+## SCR-19 · Help Centre
+
+**What the user is trying to accomplish.** Learn how to use the tool, or get one question
+answered — *is it free, what file do I upload, can I put this number in a proposal, who can see
+my project* — without opening the methodology.
+
+**Entry** — the footer's "Help Centre" link on every screen carrying the footer, the "Help
+centre" item in the profile dropdown (CMP-01), the home page's *See how* links, the CMP-34
+switch and every *Do this in the tool* box on SCR-17, *Also in Help* search results on SCR-17,
+forwarded links to SCR-17's two retired articles, and old walkthrough links via the SCR-18
+redirect. **Exit** — route chips to the product screens, *How it's calculated* boxes and *Also
+in Methodology* search results into SCR-17, and `mailto:` links to support.
+
+**Layout — the same as SCR-17 (DEC-31).** The three-column reading grid from
+`css/technical-docs.css`: sidebar (head, CMP-34 switch, search, grouped article list), one
+article, "On this page". Below 1100px the TOC drops; below 820px the sidebar becomes the chip
+rail and the current chip is scrolled into view. Unlike SCR-17, the site footer stays.
+`css/help.css` adds only route chips, key-points list, numbered steps, screenshot figures and
+contact cards; the walkthrough stylesheet and the scroll-spy script are deleted.
+
+**Content model.** Static HTML: twenty-five `<div data-doc="id">` articles inside
+`#docs-article`, each a breadcrumb, a `.doc-hero` (kicker, `h1`, lead, route chips) and two to
+four `.doc-section`s whose `h2`s feed the TOC. Their ids, groups, labels and search keywords are
+rows in `js/docs-index.js`. `DocsShell.mount({ page: 'help' })` lifts the articles out of the
+flow and shows one at a time, routed by `#id`.
+
+| Group | Articles |
+|---|---|
+| Start here | What the NbS Tool is (incl. the two audiences, from the retired SCR-17 introduction) · Who is behind the NbS Tool (Coalition, four aims, members and partners, three resources, standards) · How the NbS Tool works (eight phases, how phases 1–5 feed each other, calculated / reported / described, where it fits) · Finding your way around · Accounts, area limits & privacy · Your first analysis · Preparing a boundary file |
+| Run an analysis | Phase 0 to Phase 7, one article each |
+| After the analysis | Manage your projects · Record and verify |
+| Reading your results | What each analysis shows · Where the numbers come from · What the tool does not do · Carbon finance & standards · How to cite |
+| News & support | What's new in v3.0 · FAQ (three sections of `<details>`) · Contact & feedback |
+
+**Screenshots, shown inline (CMP-29).** Every article about a screen carries its screenshots
+inside the section they illustrate, reusing the captures in `assets/walkthrough/`. Two were
+captured fresh on 2026-10-13 because the originals predate the rename and the new footer:
+`48-footer.webp` and `49-nav-profile.webp`. Phase 7 uses `33-docgen-ccb.webp` for the form
+mechanics only, with a TODO: it shows the prototype's CCB template, not the templates the copy
+describes (DEC-29).
+
+**Cross-links to SCR-17.** Unchanged in principle from DEC-30: every guide with a method closes
+with a *How it's calculated* box; SCR-17's `HELP_GUIDES` is the mirror. The workflow article now
+links the five phase articles directly, since SCR-17's *How it works* moved here.
+
+**Behaviour.** All of it is CMP-35. Search matches every word against label, group and
+keywords across both pages; other-page hits link with `?q=` so the reader lands with the same
+results. Nothing is fetched.
+
+**Data dependencies.** None. The only numbers are the two hectare allowances, the duration
+range and the version — product facts, not analysis results.
+
+**Accessibility.** With scripting off every article renders in sequence as one page, with
+working in-page anchors (the article wrappers carry ids, which the shell removes once it
+mounts so the browser does not jump past the heading). The sidebar list is links, so an article
+can be opened in a new tab. Headings nest `h1` article, `h2` section, `h3` sub-heading. The FAQ
+uses native `<details>`. Every screenshot keeps descriptive alt text. The skip link targets
+`#docs-article`.
+
+`TODO(design): the privacy notice and terms of use are rendered as one plain sentence under
+Contact and feedback. They need legal text from WRI before launch.`

@@ -664,3 +664,133 @@ would have made the home page the odd one out. See DEC-11 on illustrative figure
 
 Never renumber. To reverse a decision, write a new entry that says which `DEC-` it supersedes,
 and add a "Superseded by DEC-nn" line to the old one.
+
+---
+
+## DEC-29 · The help centre is a static hub over the existing docs, and describes the product as specified rather than as prototyped
+
+**Date.** 2026-10-12 · **Status.** `documented`
+
+**Decision.** SCR-19 (`help.html`) is one hand-written static page, modelled on the Global
+Forest Watch help centre's shape — entry cards, grouped sidebar, search, task guides, FAQs as
+accordions, support — but built on the SCR-17/SCR-18 reading shell with a 65-line stylesheet
+and a 50-line inline filter. It carries no content engine and no live data. Where the
+prototype and the SCeNe Coalition's capacity-building guidance disagree about what the tool
+can do, **the help centre follows the guidance**: GeoPDF, tabular and GIS export; General and
+Carbon Project Documentation for Verra, Gold Standard and Plan Vivo; supplementary data upload.
+The analysis flow is described as the product owner specified it: an optional Phase 0 on the
+map, then seven phases from selecting a location to generating documents. The guidance
+documents are not linked or cited by title, because they are drafts. The support address is
+`support@nbstool.org`. English only.
+
+**Context.** The tool had two deep reference surfaces — SCR-18 answers *what does this button
+do*, SCR-17 answers *how was this number produced* — and no front door. A policymaker with one
+question had to read a chapter or a method article to find it. The Coalition's guidance also
+holds context that neither surface carries: who the Coalition is, where the tool sits in a
+project's life, and in plain terms what the tool is not.
+
+**Alternatives visible in the code.**
+
+- *Multi-page, one article per route, as GFW does* — rejected. With no build step, every
+  article would duplicate the nav, footer and shell; twenty-eight copies of the same chrome to
+  keep in step. Anchors on one page give the same deep links.
+- *Render it through `js/technical-docs.js`* — rejected for the reason DEC-27 gives: a second
+  content DSL to maintain, for content that is read by anchor rather than switched by view.
+- *Fold it into the walkthrough as a chapter* — rejected. The walkthrough is read in order;
+  a help centre is entered at a question. Different page, same shell.
+- *Describe the prototype as it is, and list the gaps as "known issues"* — rejected by the
+  product owner. The page faces stakeholders and describes the product being built. The gaps
+  are recorded here, not on the page.
+- *Duplicate the scroll-spy inline, as SCR-18 did* — rejected. It moved to `js/docs-spy.js`,
+  mounted by a `data-spy` attribute, and SCR-18 now loads the shared file.
+
+**Consequences.** The page works when the product is down and with JavaScript off, and a
+reader lands on an answer in one click from any footer. **The cost is that the help centre is
+ahead of the prototype.** Three how-to guides and three FAQ answers describe controls that do
+not exist yet: the map export controls (the legend's "Export as Image" is inert, see the TODO
+on SCR-03), the Plan Vivo template (SCR-05 offers CCB, Verra VCS + CCB and Gold Standard + CCB),
+and supplementary data upload. Nothing in the codebase flags that drift. The rule for whoever
+closes it: **change the prototype to match the help centre, not the other way round**, and
+re-read the matching article against the real screen when the feature ships. The TODO on
+SCR-19 in UI-STATES.md carries the list.
+
+## DEC-30 · Two documentation destinations, one workflow spine, one fact in one place
+
+**Date.** 2026-10-13 · **Status.** `documented`
+
+**Decision.** The product keeps two documentation pages, not three. **Help** (SCR-19) answers
+*how do I use the tool*; **Methodology** (SCR-17, renamed from Technical Documentation, URL
+unchanged) answers *how is this number produced*. The walkthrough (SCR-18) is retired: its
+screenshots and explanations became SCR-19's phase guides, and `walkthrough.html` is a redirect
+that maps each old chapter anchor to its guide. Every surface describes the workflow the same
+way — Phase 0 *Explore the map* to Phase 7 *Generate documents*, then *after the analysis*:
+manage projects, record and verify. The two pages link both ways at three levels: a Help |
+Methodology switch atop both sidebars (CMP-34); a *How it's calculated* box at the end of each
+Help guide and a *Do this in the tool* box at the end of each Methodology article, mapped one to
+one (SCREENS.md SCR-19); and an empty search on either page offering the same query on the other
+(`?q=`). User-facing copy shows no internal codes — no screen IDs, no "Phase 4a", no "Annex A.1".
+
+**Context.** Three pages answered overlapping questions, and the product described its own
+workflow five ways: six home-page features, a five-step footer strip, six walkthrough steps,
+five method phases and eight help phases. No page owned the spine, so every page re-derived it,
+and a reader moving between them met the same idea under different numbers.
+
+**Alternatives visible in the code.**
+
+- *Keep three pages behind a shared switcher* — rejected. It labels the overlap without
+  removing it; the walkthrough and help would still both explain the same screens.
+- *Merge the Methodology into Help as well* — rejected. Different reader (analyst, reviewer,
+  funder), different engine (the live-parameter article system of DEC-21/DEC-24), different
+  question. Linked, not merged.
+- *Split Help into a hub and a separate guides page* — rejected for now. One page keeps every
+  anchor on one URL and the search over everything. Revisit if the guides outgrow ~60
+  screenshots.
+- *Delete `walkthrough.html` outright* — rejected. Old links in slides, emails and training
+  material would 404. The redirect costs one small file.
+
+**Consequences.** One fact, one home: a new explanation goes on the page whose question it
+answers, and the other page links to it. Changing a Help guide's anchor, or a Methodology
+article id, breaks a mirrored link: the two tables (the boxes in `help.html`, `HELP_GUIDES` in
+`js/technical-docs.js`) change together. The footer strip now reads *Phases 0–1 · Phases 2–5 ·
+Phase 6 · Phase 7 · After the analysis*. The home page's feature cards are unchanged in shape:
+they describe modules, not steps, so they keep their grouping and their *See how* links point at
+the matching guide. The Document Generator screenshots are not reused, because they show
+templates the Help copy (DEC-29) says will change. Method section numbers (§) remain in SCR-17
+citations, where they trace a figure to its source document.
+
+## DEC-31 · Help and Methodology share one reading shell, one article index and one search
+
+**Date.** 2026-10-13 · **Status.** `documented`
+
+**Decision.** SCR-19 adopts SCR-17's layout — three columns, one article at a time, an "On this
+page" list, a previous/next pager — and both pages run on one engine, `js/docs-shell.js`
+(CMP-35), reading one list of articles, `js/docs-index.js`. The search box on either page
+searches both. The SCeNe Coalition introduction and *How the NbS Tool works* move from SCR-17
+to SCR-19 and are deleted from SCR-17; old links to them forward. Help's screenshots are shown
+inline, in the section they illustrate, instead of behind a disclosure.
+
+**Context.** The product owner preferred SCR-17's layout to SCR-19's single long page, found two
+documentation pages that look and behave differently harder to move between than one system
+with two halves, and judged the Coalition material redundant across the two. SCR-17's own
+sidebar, TOC and pager code was the better engine but lived inside a 2,300-line file of method
+content, where SCR-19 could not reuse it.
+
+**Alternatives visible in the code.**
+
+- *Load `js/technical-docs.js` on Help as well* — rejected. It drags every method article and
+  the live-parameter readers (`analysis-shared.js`, `f05-shared.js`, `people-context.js`) into a
+  page that needs none of them.
+- *Render Help's articles from JavaScript strings, as SCR-17 does* — rejected. Help has no live
+  data; authored HTML keeps it readable with scripting off and editable without touching code.
+  The shell takes either: `render(id)` returning a string, or `data-doc` elements already in the
+  page.
+- *Universal search over full article text* — rejected for now. The other page's text is not
+  loaded, so a cross-page index can only be what both pages share: label, group, keywords. Both
+  pages therefore search the same fields, and the same words find the same articles anywhere.
+
+**Consequences.** One place to change navigation behaviour for both pages, and one row to add
+for a new article. The cost: a Help article now needs a row in `docs-index.js` *and* a
+`data-doc` block, and its keywords are hand-written — an article whose body mentions a word its
+keywords do not will not be found by that word. With scripting off Help still reads as one long
+page, but its sidebar is empty. `css/walkthrough.css` and `js/docs-spy.js` are deleted; the
+classes Help still needed moved into `css/help.css` as `hc-*`.

@@ -20,7 +20,7 @@
     { page: 'home',     href: 'index.html',          label: 'Home' },
     { page: 'map',      href: 'interactive-map.html', label: 'Interactive Map' },
     { page: 'projects', href: 'dashboard.html',       label: 'My Project' },
-    { page: 'docs',     href: 'technical-docs.html',  label: 'Technical Doc' }
+    { page: 'docs',     href: 'technical-docs.html',  label: 'Methodology' }
   ];
 
   function brand() {
@@ -66,6 +66,7 @@
         '<a href="dashboard.html">My Projects</a>' +
         '<a href="document-generator.html">Document Generator</a>' +
         '<a href="account-settings.html"' + (acct ? ' aria-current="page"' : '') + '>Account settings</a>' +
+        '<a href="help.html">Help centre</a>' +
         '<button class="logout" onclick="window.location.href=\'login.html\'">Log out</button>' +
       '</div>' +
     '</div>';

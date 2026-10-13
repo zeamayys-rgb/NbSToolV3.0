@@ -68,16 +68,38 @@ body.docs-active .footer { display: none; }
   font-family: var(--font-text); font-size: 12px; line-height: 1.35;
 }
 .docs-nav-button:hover { background: var(--bg-base-second); color: var(--text-base-main); }
+/* The shell (CMP-35) renders the sidebar as links, so a reader can open an
+   article in a new tab or copy its address. */
+a.docs-nav-button { display: block; text-decoration: none; }
+/* A search hit on the other documentation page. */
+.docs-nav-elsewhere::after { content: " \2197"; color: var(--text-base-third); }
 .docs-nav-button[aria-current="page"] { background: var(--primary-25); color: var(--text-primary); font-weight: 600; }
 .docs-nav-button mark { background: var(--warning-100); color: var(--warning-700); padding: 0 1px; }
 .docs-nav-empty { padding: var(--space-12) var(--space-8); color: var(--text-base-third); font-size: 12px; line-height: 1.5; }
+.docs-nav-empty a { display: block; margin-top: var(--space-8); color: var(--text-primary); font-weight: 600; }
+
+/* ---------- Help | Methodology switch (CMP-34) ----------
+   The same two links at the top of both sidebars, so the other half of the
+   documentation is always one click away. Real links, not tabs: each half is
+   its own page. Stays visible on narrow screens, where the head is hidden. */
+.docs-switch {
+  display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-2);
+  margin-bottom: var(--space-16); padding: var(--space-2);
+  border: 1px solid var(--stroke-base); border-radius: var(--radius-md);
+  background: var(--bg-base-second);
+}
+.docs-switch a {
+  padding: var(--space-8); border-radius: var(--radius-sm);
+  color: var(--text-base-second); text-align: center; text-decoration: none;
+  font-size: 12px; font-weight: 600;
+}
+.docs-switch a:hover { background: var(--bg-base-main); color: var(--text-base-main); }
+.docs-switch a[aria-current="page"] { background: var(--bg-primary-main); color: var(--text-on-color); }
 
 /* ---------- article ---------- */
 .docs-article { min-width: 0; padding-bottom: var(--space-64); color: var(--text-base-main); }
 .docs-article:focus { outline: none; }
 
-.doc-breadcrumb { display: flex; align-items: center; gap: var(--space-8); margin-bottom: var(--space-20); color: var(--text-base-third); font-size: 10px; }
-.doc-breadcrumb i { width: 3px; height: 3px; flex: none; border-radius: var(--radius-full); background: var(--neutral-800); }
 
 .doc-hero { padding-bottom: var(--space-24); border-bottom: 1px solid var(--stroke-base); }
 .doc-kicker { display: block; margin-bottom: var(--space-12); color: var(--text-primary); font-size: 11px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; }
@@ -94,7 +116,7 @@ body.docs-active .footer { display: none; }
 .doc-section ul, .doc-section ol { margin: var(--space-8) 0 var(--space-16); padding-left: var(--space-20); color: var(--text-base-second); font-size: 13.5px; line-height: 1.7; }
 .doc-section li + li { margin-top: var(--space-4); }
 .doc-section strong { color: var(--text-base-main); font-weight: 600; }
-.doc-section a { color: var(--text-primary); text-decoration: underline; text-underline-offset: 2px; }
+.doc-section a, .doc-callout a { color: var(--text-primary); text-decoration: underline; text-underline-offset: 2px; }
 
 /* ---------- content components ---------- */
 .doc-callout { margin: var(--space-16) 0; padding: var(--space-16); border-left: 3px solid var(--stroke-primary); background: var(--primary-25); border-radius: 0 var(--radius-md) var(--radius-md) 0; }
@@ -189,11 +211,11 @@ body.docs-active .footer { display: none; }
 .docs-toc a.active { border-left: 2px solid var(--stroke-primary); margin-left: -1px; color: var(--text-primary); }
 
 .docs-article-footer { display: flex; justify-content: space-between; gap: var(--space-12); margin-top: var(--space-48); padding-top: var(--space-20); border-top: 1px solid var(--stroke-base); }
-.docs-article-footer button { max-width: 48%; display: grid; gap: var(--space-4); padding: var(--space-12); border: 1px solid var(--stroke-base); border-radius: var(--radius-md); background: var(--bg-base-main); color: var(--text-base-main); text-align: left; cursor: pointer; font-family: var(--font-text); }
-.docs-article-footer button:last-child { text-align: right; }
+.docs-article-footer a { max-width: 48%; text-decoration: none; display: grid; gap: var(--space-4); padding: var(--space-12); border: 1px solid var(--stroke-base); border-radius: var(--radius-md); background: var(--bg-base-main); color: var(--text-base-main); text-align: left; cursor: pointer; font-family: var(--font-text); }
+.docs-article-footer a:last-child { text-align: right; }
 .docs-article-footer span { color: var(--text-base-third); font-size: 8px; font-weight: 700; letter-spacing: .08em; }
 .docs-article-footer strong { font-size: 11.5px; font-weight: 600; }
-.docs-article-footer button:hover { border-color: var(--stroke-primary); background: var(--bg-base-second); }
+.docs-article-footer a:hover { border-color: var(--stroke-primary); background: var(--bg-base-second); }
 
 /* ---------- responsive: collapse TOC, then sidebar ---------- */
 @media (max-width: 1100px) {
@@ -226,5 +248,5 @@ body.docs-active .footer { display: none; }
    motion preference. Opt this page out; the JS honours it too (docScrollBehavior). */
 @media (prefers-reduced-motion: reduce) {
   html:has(.docs-page) { scroll-behavior: auto; }
-  .docs-nav-button, .docs-article-footer button { transition: none; }
+  .docs-nav-button, .docs-article-footer a { transition: none; }
 }

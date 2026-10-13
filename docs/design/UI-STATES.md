@@ -398,7 +398,8 @@ The best-covered screen in the product for real-world states.
 |---|---|---|---|
 | Default | Page load, or a `#docs/<id>` deep link | Grouped sidebar, article, TOC, prev/next pager | Yes |
 | Loading | N/A — every parameter is already in the page, read synchronously | — | N/A |
-| Empty | Search matches no article | `.docs-nav-empty` — "No methodology section matches “…”" | Yes |
+| Empty | Search matches nothing on either page | "Nothing in Help or Methodology matches “…”" (CMP-35). Matches on SCR-19 alone show under *Also in Help* | Yes |
+| Arrived with a query | `?q=` in the URL, from SCR-19's empty search | Search box pre-filled and the sidebar already filtered | Yes |
 | Partial | A live parameter cannot be read from the shared objects | Inline `.doc-todo` marker naming the missing path, in place of the figure. Tables and examples that need it degrade to a warn callout rather than printing a zero | Yes |
 | Error | A shared script (`analysis-shared.js`, `f05-shared.js`, `people-context.js`) fails to load | Every figure it would have supplied renders as `.doc-todo`; the page itself still renders. **No banner tells the user the page is degraded** | Partial |
 | Non-eligible | N/A | — | N/A |
@@ -406,7 +407,8 @@ The best-covered screen in the product for real-world states.
 | Offline / stale | No connection after first load | Fully functional — no network calls after the page and its scripts are cached | Yes |
 | Embedded figure blank | The §7.5 `<iframe>` of SCR-13 fails to load, or its CDN scripts do | An empty framed area. The caption and the *See the detailed activities matrix* CTA below it still render and still reach the page | Partial — the frame carries no fallback of its own; the CTA is the recovery path |
 | Embedded figure on a phone | Viewport below 820px | The frame is hidden; caption and CTA remain. Eight label columns across 1680px do not survive a phone, so the full page — which has pan and zoom — is the route | Yes |
-| Invalid deep link | `#docs/nonsense` | Falls back to the `introduction` article rather than an empty page | Yes |
+| Invalid deep link | `#docs/nonsense` | Falls back to *Region, ecosystems & pathways* rather than an empty page | Yes |
+| Moved article | `#docs/introduction` or `#docs/how-it-works` | Forwards to SCR-19 `#who` or `#workflow`, keeping any `?q=` | Yes |
 | Stale reference | The methodology documentation is reissued after the method articles were transcribed | Nothing — the *Introduction* article names the source and its date (`METHOD_DOC_DATE`, currently 26 August 2026), but the page cannot tell that a newer revision exists | Partial — by design, see DEC-24 |
 | Source contradicts itself | The methodology document gives two values for the same thing (reference CRS, hazard class count, the 44/12 constant) | Both are printed, with a `.doc-callout warn` naming the contradiction and saying which to use meanwhile. Collected in *Limitations* &rarr; "Known inconsistencies in the current method" | Yes — by design, see DEC-24 |
 | Reduced motion | `prefers-reduced-motion: reduce` | Honoured — `docScrollBehavior()` returns `auto`, and a media query opts the page out of the global `html { scroll-behavior: smooth }` in `tokens.css` | Yes |
@@ -419,6 +421,8 @@ The best-covered screen in the product for real-world states.
 ---
 
 ## SCR-18 · Walkthrough
+
+> **Retired (DEC-30).** The page is now a redirect to SCR-19. Its one state: an old `#anchor` maps to the matching guide; an unknown or missing anchor goes to `help.html#guides`; with JavaScript off a `<noscript>` refresh goes to `help.html#guides`. The matrix below is history.
 
 The only screen in the product with no data-driven state. It renders no figure it did not ship
 with, so it cannot be empty, partial, stale or out of scope. That is deliberate: a page whose
@@ -441,6 +445,34 @@ job is to explain the tool has to work when the tool does not.
 | Reduced motion | `prefers-reduced-motion: reduce` | Honoured — the `html:has(.docs-page)` opt-out in `technical-docs.css` covers this page, and the spy's chip-rail scroll uses `behavior: 'auto'` | Yes |
 
 `TODO(design): nothing detects a stale screenshot. A control can be renamed, moved or removed and this page will keep showing the old one with confident prose beside it. Decide on a regeneration trigger — per release, or per PR touching a captured screen — and record it in SCREENS.md SCR-18.`
+
+---
+
+## SCR-19 · Help Centre
+
+Runs on CMP-35, so it shares SCR-17's navigation and search states. Its content is authored,
+so it cannot be empty, partial, stale or out of scope.
+
+| State | Trigger | What the user sees | Implemented? |
+|---|---|---|---|
+| Default | Page load with no hash | *What the NbS Tool is*; sidebar of five groups; TOC; pager | Yes |
+| Deep link | `#<article-id>` | That article, scrolled to its top | Yes |
+| Unknown link | `#<not-an-article>` that matches no section either | The first article | Yes |
+| Searching | Words in the sidebar box | This page's matching articles by group, then *Also in Methodology* with links that carry `?q=` | Yes |
+| No match | Words that occur in neither page's index | "Nothing in Help or Methodology matches “…”" | Yes |
+| Arrived with a query | `?q=` from SCR-17's search | Box pre-filled, sidebar already filtered | Yes |
+| Loading | N/A — static HTML | — | N/A |
+| Error | A screenshot fails to load | Reserved box with alt text; the caption stays | Partial — by design |
+| JavaScript off | Scripting disabled | Every article in sequence as one long page; sidebar list and TOC empty; search inert | Partial — readable, not navigable from the sidebar |
+| Long content | Any viewport | Tables scroll inside their wrapper; screenshots scale to the column | Yes |
+| Narrow viewport | Below 1100px, then 820px | TOC drops, then the sidebar becomes a chip rail with the current chip in view | Yes |
+| Stale screenshots | A screen changes after capture | Nothing — most captures still show the nav's old "Technical Doc" label | No — `TODO(design)` |
+| Reduced motion | `prefers-reduced-motion: reduce` | Honoured — CMP-35 scrolls with `behavior: 'auto'` | Yes |
+
+`TODO(design): every reused screenshot that shows the top bar predates the Methodology rename
+and still reads "Technical Doc". Recapture them in one pass.`
+`TODO(design): the page describes capabilities (exports, three carbon templates, supplementary
+upload) that the prototype does not implement yet (DEC-29).`
 
 ---
 

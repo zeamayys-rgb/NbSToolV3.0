@@ -816,3 +816,83 @@ animation.
 and tabbed through twice. Focus inside the strip pauses the animation, so a keyboard user is
 not reading a moving target. The transition is removed under `prefers-reduced-motion: reduce`,
 along with the marquee itself.
+
+---
+
+## CMP-33 · Help entry card + numbered steps (`.hc-card` / `.hc-steps`)
+
+**Files.** [css/help.css](../../css/help.css) · [help.html](../../help.html) (SCR-19 only)
+
+**Purpose.** Give a help centre the two shapes documentation does not have: a card that is a
+door into a group of articles, and a step list whose marker is a number because the order
+matters.
+
+**Parts.** `.hc-cards` is a grid of three `.hc-card` anchors — a kicker `<span>`, a
+`<strong>` title and a `<small>` line — one column below 700px, three above. `.hc-steps` is an
+`<ol>` with `list-style: none` whose items draw a CSS-counter number in a filled circle
+(`::before`) and emphasise the action in a leading `<b>`. `.hc-contact` is the same card
+treatment, non-interactive, for the two support boxes.
+
+**States.** *Resting*, and *hover / focus-visible* on a card: primary border and tint. The
+steps have no state.
+
+**Accessibility contract.** A card is a plain `<a>` with real text, so it is announced as a
+link with its title; the kicker is part of the accessible name, which is intended ("New here?
+Start with what the tool is"). The step number is painted by `::before` and is decorative:
+the `<ol>` supplies the real numbering to assistive technology, so do not swap it for a `<ul>`.
+Focus rings come from the global `:focus-visible` baseline in `css/tokens.css`.
+
+**Addendum (DEC-30).** `.hc-steps-zero` resets the counter to −1 so a list of phases is
+numbered from 0. Guides close with `.hc-shots`, a `.doc-details` holding the screenshots
+(CMP-29 figures), and a `.doc-callout.hc-xref` linking into SCR-17.
+
+## CMP-34 · Help | Methodology switch (`.docs-switch`)
+
+**Files.** [css/technical-docs.css](../../css/technical-docs.css) · [help.html](../../help.html) ·
+[technical-docs.html](../../technical-docs.html)
+
+**Purpose.** Make the other half of the documentation one click away from anywhere in either
+half, so a reader never has to know which page holds an answer before looking.
+
+**Parts.** A `<nav aria-label="Documentation">` holding two `<a>` elements, *Help* and
+*Methodology*, laid out as a two-column segmented control directly under the sidebar head.
+
+**States.** *Current* — `aria-current="page"`, filled primary. *Other* — muted text; *hover*
+lifts to the base background. Stays visible below 820px, where the sidebar head is hidden.
+
+**Accessibility contract.** Real links to real pages, not tabs: each half is its own page, so
+`role="tab"` would be wrong. The current half is announced through `aria-current`. Focus rings
+come from the global `:focus-visible` baseline in `css/tokens.css`.
+
+**Addendum (DEC-31).** The entry cards (`.hc-card`) and the closed screenshot panels
+(`.hc-shots`) are removed: Help no longer has a hero, and screenshots now show inline. The
+numbered steps, `.hc-steps-zero` and `.hc-contact` remain, alongside `.hc-where` / `.hc-route`,
+`.hc-points` and `.hc-shot` / `.hc-shot-pair`, moved from the deleted `css/walkthrough.css`.
+
+## CMP-35 · Documentation shell (`js/docs-shell.js` + `js/docs-index.js`)
+
+**Files.** [js/docs-shell.js](../../js/docs-shell.js) · [js/docs-index.js](../../js/docs-index.js) ·
+used by [help.html](../../help.html) and [technical-docs.html](../../technical-docs.html)
+
+**Purpose.** One engine for every documentation page, so Help and Methodology look, navigate
+and search the same way, and a third page would cost one index entry and one `mount` call.
+
+**Parts.**
+- `DOCS_INDEX` — per page: `title`, `url`, `hashPrefix`, `defaultId`, optional `moved` map, and
+  `articles` (`id`, `group`, `label`, `keywords`). Labels are user-facing: no internal codes.
+- `DocsShell.mount({ page, render? })` — wires the search box, the hash router and `?q=`, then
+  opens the hashed article. Without `render`, articles are the page's own `data-doc` elements.
+- `DocsShell.open(id, sectionId?)`, `DocsShell.scrollToSection(id)`, `DocsShell.scrollBehavior()`.
+- Renders: the grouped sidebar as links (`a.docs-nav-button`), *Also in <page>* search hits
+  (`.docs-nav-elsewhere`), the "On this page" list from `.doc-section > h2` with an
+  IntersectionObserver highlight, and the pager (`.docs-article-footer a`).
+
+**Required markup.** `#docs-search`, `#docs-article-nav`, `#docs-article`, optional `#docs-toc`.
+
+**States.** Default; searching (this page first, then other pages); no match; arrived with
+`?q=`; unknown hash (first article); moved hash (forwards). See UI-STATES SCR-17 and SCR-19.
+
+**Accessibility contract.** Sidebar items and pager are real links. The current article carries
+`aria-current="page"`. Opening an article moves focus to `#docs-article` (`tabindex="-1"`) without
+scrolling twice; TOC links move focus to their section. Scrolling honours
+`prefers-reduced-motion`. The document title names the open article.
