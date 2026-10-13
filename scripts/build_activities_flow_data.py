@@ -3,7 +3,7 @@ activities-longform sheet. Run: python3 build_rows.py [--write]"""
 import json, re, sys, collections, openpyxl
 
 ROOT = "/Users/abe/Work/Claude_Experiment/NbS Tool V3.0"
-XLSX = f"{ROOT}/uploads/Activities Deep Dive Fix Latest V 3.0.xlsx"
+XLSX = f"{ROOT}/uploads/sheets/Activities Deep Dive Fix Latest V 3.0.xlsx"
 HTML = f"{ROOT}/NbS_Activities_Flow_v2.html"
 TAG = '<script id="dataScript" type="application/json">'
 

@@ -794,3 +794,33 @@ for a new article. The cost: a Help article now needs a row in `docs-index.js` *
 keywords do not will not be found by that word. With scripting off Help still reads as one long
 page, but its sidebar is empty. `css/walkthrough.css` and `js/docs-spy.js` are deleted; the
 classes Help still needed moved into `css/help.css` as `hc-*`.
+
+---
+
+## DEC-32 · Generated output and reference material live apart; superseded screens go to `archive/`
+
+**Date.** 2026-10-13 · **Status.** `documented`
+
+**Decision.** The local-only `docs/` folder splits in two. `docs/generated/` holds what Claude
+produced: QA and audit reports, built Word and PowerPoint documents, working changelogs, and
+the scripts that build them. `docs/reference/` holds the source material the product owner
+keeps for reference: the GUI design document, the GIS methodology, the capacity-building
+guidebooks. `docs/design/` stays as the tracked canon. SCR-15 and SCR-16 move to
+`archive/screens/`, which is tracked but excluded from the Vercel deploy. `deliverables/` leaves
+git and becomes local-only, and `AGENTS.md` becomes a pointer to `CLAUDE.md`.
+
+**Context.** `docs/` mixed generated reports with source documents, so it was hard to tell what
+was authoritative and what could be regenerated. SCR-15 and SCR-16 were unlinked and drifting
+(the open question in README.md). `deliverables/` put a 10 MB video on the design-test server.
+`AGENTS.md` was a full copy of `CLAUDE.md` and would drift.
+
+**Alternatives visible in the code.** *Move every route into `pages/`* — rejected. Every page
+links to its siblings by relative path (`href="dashboard.html"`), and both Vercel and the
+design-test server (`.github/workflows/abdan-deploy.yml`, a `git pull`) serve the repo root, so
+moving routes would break every link and every shared URL.
+
+**Consequences.** One rule decides where a new document goes: if Claude made it, it's in
+`generated`; if it came from the team, it's in `reference`. Generated files can be deleted and
+rebuilt, reference files cannot. The build scripts now write next to themselves
+(`../documents/`), not into the current directory. The archived pages still work by URL on the
+design-test server but no longer on Vercel.

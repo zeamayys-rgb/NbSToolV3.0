@@ -40,8 +40,10 @@ build step.
 └── .vercelignore         # keeps local-only folders out of the deploy
 ```
 
-`uploads/`, `scraps/` and `docs/` are local-only (gitignored) — source material,
-backups, and QA/changelog notes, not part of the shipped site.
+`docs/design/` is the tracked design canon. The rest is local-only (gitignored) and not part
+of the shipped site: `docs/generated/` (reports and documents Claude produced),
+`docs/reference/` (source documents), `uploads/`, `scraps/` and `deliverables/`. Superseded
+screens live in `archive/screens/`.
 
 ## Run locally
 

@@ -66,9 +66,13 @@ css/              tokens.css is the shared token layer; the rest are per-screen
 js/               nav-mobile.js loads everywhere; analysis-shared.js, f05-shared.js
                   and people-context.js are shared across screens
 assets/           images, SVGs, icons
+archive/screens/  superseded screens kept for history (tracked; not deployed to Vercel)
+scripts/          tracked data builders (activities flow)
 docs/design/      the design canon (tracked in git; excluded from deploys)
-docs/             everything else here is local-only, gitignored
-uploads/ scraps/  local-only, gitignored
+docs/generated/   local-only: what Claude produced — reports/, documents/, changelogs/, scripts/
+docs/reference/   local-only: source documents from the team — GUI doc, methodology, guidebook/
+uploads/          local-only: raw inputs sorted by type (sheets/, pdf/, screenshots/, sketches/…)
+scraps/ deliverables/  local-only, gitignored
 ```
 
 **Shared code, in order of reach:**

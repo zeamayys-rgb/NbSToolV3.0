@@ -153,7 +153,6 @@ Collected from all eight files. `TODO-nn` refers to
 - Is the Ocean Calculator unbuilt, renamed, or in the sibling repo? Nothing in this codebase
   matches it.
 - Confirm `inputmode="numeric"` and `autocomplete="one-time-code"` on the OTP boxes.
-- Are SCR-15 / SCR-16 reference-only, and should they be excluded from QA or deleted?
 
 ### Nice to have
 

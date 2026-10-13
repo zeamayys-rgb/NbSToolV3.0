@@ -7,3 +7,5 @@ docs/*
 !docs/design/
 .claude/
 .DS_Store
+# Shareable outputs (copy approvals, teaser video) — keep local, don't serve
+deliverables/

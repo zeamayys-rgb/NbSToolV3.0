@@ -18,33 +18,37 @@ State matrices (`SCR-nn`) are in [UI-STATES.md](UI-STATES.md).
 
 ## Inventory
 
-| ID | Route | Name | Purpose | Primary user goal | Key components | Data dependencies |
-|---|---|---|---|---|---|---|
-| SCR-01 | `/` | Home | Explain the Design-to-MRV proposition to a first-time visitor | Understand what the tool does and start an analysis | CMP-01, CMP-02, CMP-03, CMP-21, CMP-22 | None (static marketing copy + images) |
-| SCR-02 | `/login` | Log in / Sign up | Authenticate, or register a new organisation account | Get into the tool | CMP-01, CMP-02, CMP-10, CMP-11, CMP-21 | None — no auth backend exists |
-| SCR-03 | `/interactive-map` | Interactive Map / Data Analyser | The analytical core. Draw or upload an area, then read its baseline across 5 steps | Turn a boundary on a map into a scoped NbS pathway | CMP-01, CMP-04, CMP-05, CMP-06, CMP-07, CMP-08, CMP-09, CMP-20, CMP-23 | Basemap tiles; Nominatim geocoding; boundary geometry; all five analysis layers |
-| SCR-04 | `/new-project` | Create New Project (F05.0) | Create a project from scratch when the user already has a boundary file | Register a project without going through the map | CMP-01, CMP-02, CMP-10, CMP-12, CMP-13, CMP-23 | SHP/GeoJSON upload; ecosystem + activity catalogue |
-| SCR-05 | `/document-generator` | Document Generator (F03) | Fill donor/standard templates (General, CCB) from project data | Produce a funder-ready document | CMP-01, CMP-02, CMP-10, CMP-14, CMP-24 | Project record; template field schema; `localStorage` (`f03_gen`, `f03_ccb`) |
-| SCR-06 | `/dashboard` | My Project Dashboard (F04) | List and manage the user's projects | Find and open a project | CMP-01, CMP-02, CMP-15, CMP-16, CMP-17, CMP-24 | Project list for the signed-in user; `localStorage` (`nbs_deleted_project`) |
-| SCR-07 | `/project-detail` | Project Detail (F04.1) | One project across 7 tabs: overview, collaborators, privacy, history, analysis, monitoring, MRV | Review and administer a single project | CMP-01, CMP-02, CMP-06, CMP-07, CMP-18, CMP-23, CMP-24 | Project record; collaborator list; edit history; the SCR-03 analysis result |
-| SCR-08 | `/create-monitoring-plan` | Create Monitoring Plan (F05) | 6-step wizard turning selected activities into a monitoring plan | Produce a downloadable monitoring plan | CMP-01, CMP-02, CMP-12, CMP-13, CMP-19, CMP-24 | Selected activities (`localStorage` `nbs_selected_activities`); indicator + methodology catalogue |
-| SCR-09 | `/monitoring-form` | Monitoring Form (F05.1.1) | Field data entry against the plan's indicators | Record this period's observations with evidence | CMP-01, CMP-02, CMP-10, CMP-19, CMP-20 | Indicator list from the plan; `localStorage` (`f0511_data`); evidence file store |
-| SCR-10 | `/mrv` | MRV Dashboard (F06) | Show verification status and monitoring results | See whether the project is on track and verified | CMP-01, CMP-02, CMP-16, CMP-18, CMP-24 | Submitted monitoring records; verification status; indicator time series |
-| SCR-11 | `/account-settings` | Account Settings (F08) | Manage identity, password, organisation | Change my details securely | CMP-01, CMP-02, CMP-10, CMP-11, CMP-25, CMP-26 | User profile; org record; **live** country/state/city API |
-| SCR-12 | `/sitemap` | Sitemap | Full page index for testers and reviewers | Reach any screen directly | CMP-01, CMP-02 | None |
-| SCR-13 | `/NbS_Activities_Flow_v2` | Activity Matrix Flow | Reference Sankey of ecosystem → intervention → activity → benefit → indicator | Understand the taxonomy behind the tool | CMP-02, CMP-27 | `scripts/build_activities_flow_data.py` output, inlined; **D3 + d3-sankey from CDN** |
-| SCR-14 | `/design-system` | Design System reference | Living catalogue of tokens and primitives | Look up a component before building | CMP-02, and every primitive | `css/tokens.css`, `css/styleguide.css` |
-| SCR-15 | `/F02-P4_Pathway_Selection` | Pathway Selection (superseded) | Original Figma rebuild of Step 4 | — | — | Superseded by SCR-03 Step 4 |
-| SCR-16 | `/F02-P5_Potential_Benefit_1` | Potential Benefit (superseded) | Original Figma rebuild of Step 5 | — | — | Superseded by SCR-03 Step 5 |
-| SCR-17 | `/technical-docs` | Methodology (F09) | In-app rendering of the Data & methodology documentation: scope, analysis phases 1 to 5, benefit detail, data layers, limits; every article links back to its SCR-19 guide | Understand and audit how a number was produced | CMP-01, CMP-28 | Reads live parameters from `NBS_DATA`, `NBS_ANALYSIS`, `NBS_LAYER_INFO`, `ecosystems`, `indicatorMeta`, `NBS_PEOPLE` — no static copies |
-| SCR-18 | `/walkthrough` | Walkthrough — **retired** | Redirect only: maps each old chapter anchor to its SCR-19 guide (DEC-30) | Keep old links working | — | None |
-| SCR-19 | `/help` | Help Centre | The single place for "how do I use the tool": what it is, the eight-phase workflow, one guide per phase with screenshots, after-the-analysis guides, reading results, FAQs, support | Learn the tool, or get one question answered | CMP-01, CMP-22, CMP-28, CMP-29, CMP-33, CMP-34 | None — static HTML; every guide with a method behind it links to its SCR-17 `#docs/` article (DEC-29, DEC-30) |
+**Status** says what a screen is for today, so you can tell at a glance what to test:
+`live` is part of the product flow · `reference` is a tool for the team (sitemap, design
+system, taxonomy) · `redirect` only forwards old links · `archived` is kept for history in
+`archive/screens/`, out of QA and out of the Vercel deploy (DEC-32). Add the row, with its
+status, in the same change that adds or retires a route.
 
-**Orphans.** SCR-14, SCR-15, SCR-16 and SCR-17 are reachable by URL but linked from no nav, footer or
-sitemap. SCR-15 and SCR-16 are the Figma-rebuild sources whose content now lives inside
-`js/analysis-shared.js` and renders in SCR-03; they are kept for visual reference and will
-drift.
-`TODO(design): confirm SCR-15/SCR-16 are reference-only and should be excluded from QA, or delete them.`
+| ID | Status | Route | Name | Purpose | Primary user goal | Key components | Data dependencies |
+|---|---|---|---|---|---|---|---|
+| SCR-01 | live | `/` | Home | Explain the Design-to-MRV proposition to a first-time visitor | Understand what the tool does and start an analysis | CMP-01, CMP-02, CMP-03, CMP-21, CMP-22 | None (static marketing copy + images) |
+| SCR-02 | live | `/login` | Log in / Sign up | Authenticate, or register a new organisation account | Get into the tool | CMP-01, CMP-02, CMP-10, CMP-11, CMP-21 | None — no auth backend exists |
+| SCR-03 | live | `/interactive-map` | Interactive Map / Data Analyser | The analytical core. Draw or upload an area, then read its baseline across 5 steps | Turn a boundary on a map into a scoped NbS pathway | CMP-01, CMP-04, CMP-05, CMP-06, CMP-07, CMP-08, CMP-09, CMP-20, CMP-23 | Basemap tiles; Nominatim geocoding; boundary geometry; all five analysis layers |
+| SCR-04 | live | `/new-project` | Create New Project (F05.0) | Create a project from scratch when the user already has a boundary file | Register a project without going through the map | CMP-01, CMP-02, CMP-10, CMP-12, CMP-13, CMP-23 | SHP/GeoJSON upload; ecosystem + activity catalogue |
+| SCR-05 | live | `/document-generator` | Document Generator (F03) | Fill donor/standard templates (General, CCB) from project data | Produce a funder-ready document | CMP-01, CMP-02, CMP-10, CMP-14, CMP-24 | Project record; template field schema; `localStorage` (`f03_gen`, `f03_ccb`) |
+| SCR-06 | live | `/dashboard` | My Project Dashboard (F04) | List and manage the user's projects | Find and open a project | CMP-01, CMP-02, CMP-15, CMP-16, CMP-17, CMP-24 | Project list for the signed-in user; `localStorage` (`nbs_deleted_project`) |
+| SCR-07 | live | `/project-detail` | Project Detail (F04.1) | One project across 7 tabs: overview, collaborators, privacy, history, analysis, monitoring, MRV | Review and administer a single project | CMP-01, CMP-02, CMP-06, CMP-07, CMP-18, CMP-23, CMP-24 | Project record; collaborator list; edit history; the SCR-03 analysis result |
+| SCR-08 | live | `/create-monitoring-plan` | Create Monitoring Plan (F05) | 6-step wizard turning selected activities into a monitoring plan | Produce a downloadable monitoring plan | CMP-01, CMP-02, CMP-12, CMP-13, CMP-19, CMP-24 | Selected activities (`localStorage` `nbs_selected_activities`); indicator + methodology catalogue |
+| SCR-09 | live | `/monitoring-form` | Monitoring Form (F05.1.1) | Field data entry against the plan's indicators | Record this period's observations with evidence | CMP-01, CMP-02, CMP-10, CMP-19, CMP-20 | Indicator list from the plan; `localStorage` (`f0511_data`); evidence file store |
+| SCR-10 | live | `/mrv` | MRV Dashboard (F06) | Show verification status and monitoring results | See whether the project is on track and verified | CMP-01, CMP-02, CMP-16, CMP-18, CMP-24 | Submitted monitoring records; verification status; indicator time series |
+| SCR-11 | live | `/account-settings` | Account Settings (F08) | Manage identity, password, organisation | Change my details securely | CMP-01, CMP-02, CMP-10, CMP-11, CMP-25, CMP-26 | User profile; org record; **live** country/state/city API |
+| SCR-12 | reference | `/sitemap` | Sitemap | Full page index for testers and reviewers | Reach any screen directly | CMP-01, CMP-02 | None |
+| SCR-13 | reference | `/NbS_Activities_Flow_v2` | Activity Matrix Flow | Reference Sankey of ecosystem → intervention → activity → benefit → indicator | Understand the taxonomy behind the tool | CMP-02, CMP-27 | `scripts/build_activities_flow_data.py` output, inlined; **D3 + d3-sankey from CDN** |
+| SCR-14 | reference | `/design-system` | Design System reference | Living catalogue of tokens and primitives | Look up a component before building | CMP-02, and every primitive | `css/tokens.css`, `css/styleguide.css` |
+| SCR-15 | archived | `/archive/screens/F02-P4_Pathway_Selection` | Pathway Selection (superseded) | Original Figma rebuild of Step 4 | — | — | Superseded by SCR-03 Step 4 |
+| SCR-16 | archived | `/archive/screens/F02-P5_Potential_Benefit_1` | Potential Benefit (superseded) | Original Figma rebuild of Step 5 | — | — | Superseded by SCR-03 Step 5 |
+| SCR-17 | live | `/technical-docs` | Methodology (F09) | In-app rendering of the Data & methodology documentation: scope, analysis phases 1 to 5, benefit detail, data layers, limits; every article links back to its SCR-19 guide | Understand and audit how a number was produced | CMP-01, CMP-28 | Reads live parameters from `NBS_DATA`, `NBS_ANALYSIS`, `NBS_LAYER_INFO`, `ecosystems`, `indicatorMeta`, `NBS_PEOPLE` — no static copies |
+| SCR-18 | redirect | `/walkthrough` | Walkthrough — **retired** | Redirect only: maps each old chapter anchor to its SCR-19 guide (DEC-30) | Keep old links working | — | None |
+| SCR-19 | live | `/help` | Help Centre | The single place for "how do I use the tool": what it is, the eight-phase workflow, one guide per phase with screenshots, after-the-analysis guides, reading results, FAQs, support | Learn the tool, or get one question answered | CMP-01, CMP-22, CMP-28, CMP-29, CMP-33, CMP-34 | None — static HTML; every guide with a method behind it links to its SCR-17 `#docs/` article (DEC-29, DEC-30) |
+
+**Orphans.** SCR-14 and SCR-17 are reachable by URL but linked from no nav, footer or
+sitemap. SCR-15 and SCR-16, the Figma-rebuild sources whose content now lives in
+`js/analysis-shared.js`, are archived (DEC-32).
 `TODO(design): SCR-17 ships with a nav entry point on its own page only. Decide where the docs
 button lives on every other screen (nav actions, footer meta, or both) and add it to CMP-01.`
 
