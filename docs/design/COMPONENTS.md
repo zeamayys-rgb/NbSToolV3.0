@@ -92,8 +92,18 @@ to turn them into `<a>`.`
 
 ## CMP-02 · Footer (`.footer`)
 
-**File.** [css/footer.css](../../css/footer.css)
-**Purpose.** Brand close, two link columns, the five-step Design-to-MRV flow strip, socials.
+**Files.** [css/footer.css](../../css/footer.css) · [js/footer.js](../../js/footer.js) (markup)
+**Purpose.** Brand close, two link columns, the five-step workflow strip, socials.
+
+**One source of markup (DEC-33).** A screen ships only a placeholder; `js/footer.js` renders
+it and marks the link to the current page with `aria-current="page"`:
+
+```html
+<footer class="footer" data-screen-label="Footer"></footer>
+<script src="js/footer.js"></script>
+```
+
+A footer that already has children is left alone.
 
 No props, no variants, no states beyond link hover/focus.
 
@@ -102,7 +112,7 @@ No props, no variants, no states beyond link hover/focus.
   `assets/nbs-logo-light.png` · 1px `.footer-lockup-rule` · SCeNe `assets/scene-logo-light.png`)
   and the one-sentence positioning line. Right: `.footer-cols`, a
   `<nav aria-label="Footer links">` of two `.footer-col` blocks — **Supporting Materials**
-  (Activity Matrix, Methodology, NbS Tool Tutorial) and **Other Page** (Sitemap, About SCeNe
+  (Activity Matrix, Methodology, Help Centre) and **Other Page** (Sitemap, About SCeNe
   Coalition, Contact Us).
 - `.footer-flow` — `<nav aria-label="The Design-to-MRV workflow">`, five labelled steps
   (Step 1–5: Scope, Analyse, Document, Manage, Plan) and the clearest expression of the

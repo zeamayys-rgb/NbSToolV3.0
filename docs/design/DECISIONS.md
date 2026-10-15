@@ -824,3 +824,21 @@ moving routes would break every link and every shared URL.
 rebuilt, reference files cannot. The build scripts now write next to themselves
 (`../documents/`), not into the current directory. The archived pages still work by URL on the
 design-test server but no longer on Vercel.
+
+---
+
+## DEC-33 · The site footer is rendered from one file, like the navigation
+**Date.** 2026-10-13 · **Status.** `documented`
+
+**Decision.** `js/footer.js` owns the footer markup. Every screen with a footer ships an empty
+`<footer class="footer">` placeholder followed by the script, the same pattern as DEC-22.
+The Activity Matrix (`NbS_Activities_Flow_v2.html`) now also carries the shared top bar; it
+loads `css/tokens.css` and `css/nav.css` for it, and its body padding moved to `body > .wrap`
+so the bar and footer run full width.
+
+**Context.** The same 2.6 KB footer was copied into 14 screens; Help had already drifted
+(its own `aria-current`). The Activity Matrix had no way back into the tool except the footer.
+
+**Consequences.** A footer change is one edit. Without JavaScript the footer is absent — the
+same trade-off DEC-22 accepted for the nav. Login, the design system and the walkthrough
+redirect keep their own layouts and get no top bar.
