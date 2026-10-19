@@ -78,23 +78,21 @@ a.docs-nav-button { display: block; text-decoration: none; }
 .docs-nav-empty { padding: var(--space-12) var(--space-8); color: var(--text-base-third); font-size: 12px; line-height: 1.5; }
 .docs-nav-empty a { display: block; margin-top: var(--space-8); color: var(--text-primary); font-weight: 600; }
 
-/* ---------- Help | Methodology switch (CMP-34) ----------
-   The same two links at the top of both sidebars, so the other half of the
-   documentation is always one click away. Real links, not tabs: each half is
-   its own page. Stays visible on narrow screens, where the head is hidden. */
-.docs-switch {
-  display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-2);
-  margin-bottom: var(--space-16); padding: var(--space-2);
-  border: 1px solid var(--stroke-base); border-radius: var(--radius-md);
-  background: var(--bg-base-second);
+/* ---------- the Help Centre tree (CMP-35) ----------
+   An entry page with children (the four science pages) shows a chevron and,
+   while it or one of its children is open, its children indented beneath it. */
+a.docs-nav-parent { display: flex; align-items: center; justify-content: space-between; gap: var(--space-8); }
+.docs-nav-parent::after {
+  content: ""; flex: none; width: var(--space-8); height: var(--space-8);
+  border-right: 1px solid currentColor; border-bottom: 1px solid currentColor;
+  transform: rotate(-45deg); opacity: .6;
 }
-.docs-switch a {
-  padding: var(--space-8); border-radius: var(--radius-sm);
-  color: var(--text-base-second); text-align: center; text-decoration: none;
-  font-size: 12px; font-weight: 600;
+.docs-nav-parent.is-open::after { transform: rotate(45deg); }
+.docs-nav-children {
+  display: grid; gap: var(--space-2);
+  margin: var(--space-2) 0 var(--space-4) var(--space-12); padding-left: var(--space-8);
+  border-left: 1px solid var(--stroke-base);
 }
-.docs-switch a:hover { background: var(--bg-base-main); color: var(--text-base-main); }
-.docs-switch a[aria-current="page"] { background: var(--bg-primary-main); color: var(--text-on-color); }
 
 /* ---------- article ---------- */
 .docs-article { min-width: 0; padding-bottom: var(--space-64); color: var(--text-base-main); }
@@ -235,6 +233,8 @@ a.docs-nav-button { display: block; text-decoration: none; }
   .docs-nav-group { display: none; }
   .docs-nav-button { width: auto; flex: 0 0 auto; padding: var(--space-8) var(--space-12); border: 1px solid var(--stroke-base); border-radius: var(--radius-pill); background: var(--bg-base-main); white-space: nowrap; }
   .docs-nav-button[aria-current="page"] { background: var(--bg-primary-main); color: var(--text-on-color); border-color: var(--stroke-primary); }
+  .docs-nav-children { display: contents; }
+  .docs-nav-parent::after { display: none; }
   .doc-hero h1 { font-size: 32px; }
   .doc-section h2 { font-size: 23px; }
   .doc-flow .step { min-width: 150px; }

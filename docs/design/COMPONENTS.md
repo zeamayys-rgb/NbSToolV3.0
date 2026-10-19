@@ -856,7 +856,11 @@ Focus rings come from the global `:focus-visible` baseline in `css/tokens.css`.
 numbered from 0. Guides close with `.hc-shots`, a `.doc-details` holding the screenshots
 (CMP-29 figures), and a `.doc-callout.hc-xref` linking into SCR-17.
 
-## CMP-34 · Help | Methodology switch (`.docs-switch`)
+## CMP-34 · Help | Methodology switch (`.docs-switch`) — **retired (DEC-34)**
+
+> Removed 2026-10-19. The Help Centre tree (CMP-35) shows both halves of the documentation
+> in one sidebar, so there is nothing to switch between. `.docs-switch` is gone from
+> `css/technical-docs.css`. The entry below is history.
 
 **Files.** [css/technical-docs.css](../../css/technical-docs.css) · [help.html](../../help.html) ·
 [technical-docs.html](../../technical-docs.html)
@@ -878,6 +882,14 @@ come from the global `:focus-visible` baseline in `css/tokens.css`.
 (`.hc-shots`) are removed: Help no longer has a hero, and screenshots now show inline. The
 numbered steps, `.hc-steps-zero` and `.hc-contact` remain, alongside `.hc-where` / `.hc-route`,
 `.hc-points` and `.hc-shot` / `.hc-shot-pair`, moved from the deleted `css/walkthrough.css`.
+
+**Addendum (DEC-34).** The entry cards are back, as the Help Centre's main navigation device.
+`.hc-cards` is a grid (`.hc-cards-3` for three across) of `.hc-card` anchors: an optional `<em>`
+kicker ("Phase 6"), a `<strong>` title, a `<span>` line and an inline arrow `<svg>`. They are the
+landing page, every *Where to go next*, and the four science entry pages. `.hc-card.hc-card-soon`
+is the same card as a `<div>`, dashed, with a `.hc-soon` pill, for an external document that has
+no address yet: not a link, and says so. `.hc-steps-zero` is gone (the chart, CMP-36, numbers the
+phases now).
 
 ## CMP-35 · Documentation shell (`js/docs-shell.js` + `js/docs-index.js`)
 
@@ -906,3 +918,54 @@ and search the same way, and a third page would cost one index entry and one `mo
 `aria-current="page"`. Opening an article moves focus to `#docs-article` (`tabindex="-1"`) without
 scrolling twice; TOC links move focus to their section. Scrolling honours
 `prefers-reduced-motion`. The document title names the open article.
+
+**Addendum (DEC-34).** The sidebar is one tree for both pages. Rows may carry `parent`: an
+article nested under a help entry page, shown indented (`.docs-nav-children`) only while the
+parent or one of its children is open; the parent link carries `.docs-nav-parent` and a chevron.
+Searching lists every matching article on both pages flat, under its section heading, with
+cross-page links carrying `?q=`; *Also in <page>* is gone. On the authored page a hash that names
+a section inside an article opens that article scrolled to it (`state.owner`), and the section
+hash stays in the address. The document title omits the label when it equals the page title.
+
+## CMP-36 · Eight-phase chart (`.hc-phases`)
+
+**Files.** [css/help.css](../../css/help.css) · [help.html](../../help.html) (SCR-19, *The eight phases*)
+
+**Purpose.** Show the whole workflow on one chart, in the manual's order, and make every phase a
+door to its guide.
+
+**Parts.** An `<ol class="hc-phases">` of four `.hc-lane` items, one per *How it works* page.
+Each lane is a `.hc-lane-head` (an `<em>` range such as "Phases 0 to 5", the page link, a
+`<small>` line) beside an `<ol class="hc-flow">` of `.hc-phase` links flowing left to right with
+an arrow between them: a numbered circle `<b>` and the phase name. `.is-optional` greys the
+circle (Phase 0); `.is-after` colours it success and shows a tick (after the analysis).
+`.hc-flow-note` is a full-width footnote inside a flow.
+
+**States.** *Resting*, and *hover / focus-visible* on a phase or page link: primary border and
+tint. Below 900px the lane head stacks above the flow; the flow wraps.
+
+**Accessibility contract.** Two nested ordered lists, so the lane order and the phase order are
+announced. The circle's number is text, not a pseudo-element; the tick is `aria-hidden` and the
+link text carries the meaning. Arrows are `::before` content and decorative. Focus rings come
+from the global `:focus-visible` baseline.
+
+## CMP-37 · Demo video (`.hc-video`)
+
+**Files.** [css/help.css](../../css/help.css) · [help.html](../../help.html) (SCR-19, *Demo of the NbS Tool*; script inline)
+
+**Purpose.** Show the tool moving before the reader reads about it, without forcing a 49-second
+video on anyone.
+
+**Parts.** A `.hc-shot.hc-demo` figure holding `.hc-video` (a `<video>` of the 12-second loop:
+`muted loop playsinline autoplay`, with the poster, and `data-full` naming the full file) and a
+`.hc-video-play` button ("Watch the full demo · 49 s"), then the figure caption.
+
+**States.** *Cover* — the loop plays silently, button over it. *Full* (`.is-full`) — the button
+is hidden; the video's source is the full file, with native controls, not looping. *Reduced
+motion* — the loop does not autoplay; the poster shows with the button. *Remounted* — the shell
+re-inserts the article on every visit; a `MutationObserver` restarts the loop.
+
+**Accessibility contract.** The loop is `muted` and labelled; the swap is a real `<button>`, so
+it has a keyboard path; the full video uses native controls. Neither file has an audio track, so
+there are no captions to provide. If the browser refuses autoplay the poster stands in and the
+button still works.

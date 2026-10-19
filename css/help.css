@@ -2,17 +2,130 @@
    help.css — SCR-19 Help Centre
 
    Loaded only by help.html, ON TOP OF css/technical-docs.css, which carries the
-   whole reading shell Help shares with the Methodology: three columns, sidebar,
-   search, "On this page", hero, sections, callouts, tables, pager (DEC-31).
-   This file adds only what a how-to guide needs and a method article does not:
-   route chips, a key-points list, numbered steps, screenshots and contact cards.
+   whole reading shell Help shares with "The science behind it": three
+   columns, sidebar tree, search, "On this page", hero, sections, callouts,
+   tables, pager (DEC-31, DEC-34). This file adds only what a help centre
+   needs and a method article does not: the landing page's actions and entry
+   cards, the eight-phase chart, the demo video, numbered steps, key points,
+   screenshots, external-resource cards and contact cards.
 
-   Colour, spacing, radius and elevation come from css/tokens.css. Font sizes
-   and line heights are literal for the same reason they are literal in
+   Colour, spacing, radius, elevation and motion come from css/tokens.css. Font
+   sizes and line heights are literal for the same reason they are literal in
    technical-docs.css: the token layer has no type-size scale (TODO-14 /
    TODO-15 in docs/design/tokens.json). No colour, space or radius literal
    appears below.
    ============================================================================ */
+
+/* ---------- landing page (the `home` article) ----------
+   Every section is a door: a heading, one line, then cards. */
+.hc-home .doc-hero { border-bottom: 0; padding-bottom: var(--space-8); }
+.hc-home .doc-section { padding-top: var(--space-24); }
+.hc-home .doc-section + .doc-section { margin-top: var(--space-12); }
+.hc-home .doc-section > p { margin-top: 0; }
+
+.hc-actions { display: flex; flex-wrap: wrap; gap: var(--space-12); margin-top: var(--space-24); }
+.hc-actions .doc-cta { padding: var(--space-12) var(--space-20); font-size: 13.5px; }
+.hc-actions .doc-cta svg { width: var(--space-16); height: var(--space-16); fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.hc-actions .hc-ghost { background: transparent; color: var(--text-primary); border: 1px solid var(--stroke-primary); }
+.hc-actions .hc-ghost:hover { background: var(--primary-25); }
+
+/* ---------- entry cards (CMP-33) ----------
+   A card is one link: title, one line, arrow. Three across when there is room. */
+.hc-cards { display: grid; gap: var(--space-12); margin: var(--space-16) 0 var(--space-8); }
+@media (min-width: 640px) { .hc-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1000px) { .hc-cards-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.hc-card {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--space-4) var(--space-12);
+  align-items: start; align-content: start;
+  padding: var(--space-16);
+  border: 1px solid var(--stroke-base); border-radius: var(--radius-lg);
+  background: var(--bg-base-main);
+  transition: border-color var(--motion-fast), background var(--motion-fast);
+}
+.doc-section a.hc-card, a.hc-card { color: var(--text-base-main); text-decoration: none; }
+.hc-card em {
+  grid-column: 1; font-style: normal;
+  color: var(--text-primary); font-size: 9.5px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+}
+.hc-card strong { grid-column: 1; color: var(--text-title); font-size: 14px; font-weight: 600; line-height: 1.3; }
+.hc-card span { grid-column: 1; color: var(--text-base-second); font-size: 12.5px; line-height: 1.55; }
+.hc-card > svg {
+  grid-column: 2; grid-row: 1 / span 3; align-self: start;
+  width: var(--space-16); height: var(--space-16); margin-top: var(--space-2);
+  fill: none; stroke: var(--text-base-third); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+}
+a.hc-card:hover, a.hc-card:focus-visible { border-color: var(--stroke-primary); background: var(--primary-25); }
+a.hc-card:hover > svg, a.hc-card:focus-visible > svg { stroke: var(--text-primary); }
+/* An external resource that has no published address yet: the same card,
+   not a link, with a pill saying so (see UI-STATES SCR-19). */
+.hc-card-soon { border-style: dashed; background: var(--bg-base-second); }
+.hc-card-soon .hc-soon {
+  grid-column: 2; grid-row: 1; justify-self: end;
+  padding: var(--space-2) var(--space-8); border-radius: var(--radius-pill);
+  background: var(--bg-base-main); border: 1px solid var(--stroke-base);
+  color: var(--text-base-third); font-size: 10px; font-weight: 600; white-space: nowrap;
+}
+
+/* ---------- the eight-phase chart (CMP-36) ----------
+   One lane per Help Centre page, the phases flowing left to right inside it.
+   Every phase is a link to the section that explains it. */
+.hc-phases { list-style: none; margin: var(--space-16) 0 var(--space-8); padding: 0; display: grid; gap: var(--space-12); }
+.hc-lane {
+  display: grid; gap: var(--space-12);
+  padding: var(--space-16);
+  border: 1px solid var(--stroke-base); border-radius: var(--radius-lg);
+  background: var(--bg-base-second);
+}
+/* The lane head column is a layout measure with no token, like the sidebar column in technical-docs.css. */
+@media (min-width: 900px) { .hc-lane { grid-template-columns: 190px minmax(0, 1fr); gap: var(--space-20); } }
+.hc-lane-head { display: grid; gap: var(--space-4); align-content: start; }
+.hc-lane-head em { font-style: normal; color: var(--text-base-third); font-size: 9.5px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+.doc-section .hc-lane-head a { color: var(--text-title); font-size: 14.5px; font-weight: 600; line-height: 1.3; text-decoration: none; }
+.doc-section .hc-lane-head a:hover { color: var(--text-primary); text-decoration: underline; text-underline-offset: var(--space-2); }
+.hc-lane-head small { color: var(--text-base-second); font-size: 12px; line-height: 1.5; }
+.hc-flow { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-8); }
+.hc-flow li { display: flex; align-items: center; gap: var(--space-8); }
+.hc-flow li + li::before { content: "\2192"; color: var(--text-base-third); font-size: 14px; }
+.hc-flow .hc-flow-note { flex-basis: 100%; margin-top: var(--space-4); color: var(--text-base-third); font-size: 11.5px; line-height: 1.5; }
+.hc-flow .hc-flow-note::before { content: none; }
+.hc-phase {
+  display: inline-flex; align-items: center; gap: var(--space-8);
+  padding: var(--space-4) var(--space-12) var(--space-4) var(--space-4);
+  border: 1px solid var(--stroke-base); border-radius: var(--radius-pill);
+  background: var(--bg-base-main);
+  font-size: 12.5px; font-weight: 600; line-height: 1.3;
+  transition: border-color var(--motion-fast), background var(--motion-fast);
+}
+.doc-section a.hc-phase { color: var(--text-base-main); text-decoration: none; }
+.doc-section a.hc-phase:hover, .doc-section a.hc-phase:focus-visible { border-color: var(--stroke-primary); background: var(--primary-25); color: var(--text-primary); }
+.hc-phase b {
+  display: grid; place-items: center; flex: none;
+  width: var(--space-24); height: var(--space-24); border-radius: var(--radius-full);
+  background: var(--bg-primary-main); color: var(--text-on-color); font-size: 11px; font-weight: 700;
+}
+.hc-phase.is-optional b { background: var(--bg-base-third); color: var(--text-base-second); }
+.hc-phase.is-after b { background: var(--bg-success-main); }
+.hc-phase small { font-weight: 500; color: var(--text-base-third); font-size: 11px; }
+
+/* ---------- demo video (CMP-37) ----------
+   A silent 12-second loop as the cover; the button swaps in the full demo
+   with controls. The figure and caption are the screenshot figure's. */
+.hc-video { position: relative; border-radius: var(--radius-lg); overflow: hidden; background: var(--base-black); }
+.hc-video video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; }
+.hc-video-play {
+  position: absolute; left: 50%; bottom: var(--space-20); transform: translateX(-50%);
+  display: inline-flex; align-items: center; gap: var(--space-8);
+  padding: var(--space-12) var(--space-20);
+  border: 0; border-radius: var(--radius-pill);
+  background: var(--bg-base-main); color: var(--text-title);
+  box-shadow: var(--elevation-3);
+  font-family: var(--font-text); font-size: 13px; font-weight: 600; line-height: 1;
+  cursor: pointer; white-space: nowrap;
+}
+.hc-video-play svg { width: var(--space-16); height: var(--space-16); fill: currentColor; }
+.hc-video-play span { color: var(--text-base-third); font-weight: 500; }
+.hc-video-play:hover { background: var(--primary-25); color: var(--text-primary); }
+.hc-video.is-full .hc-video-play { display: none; }
 
 /* ---------- route chips ----------
    "Where to find it" — the real href, so a guide is also a launcher. */
@@ -29,7 +142,7 @@
   font-size: 11.5px; font-weight: 600; text-decoration: none;
 }
 .hc-where a.hc-route:hover { border-color: var(--stroke-primary); background: var(--primary-25); color: var(--text-primary); }
-.hc-route svg { width: 12px; height: 12px; flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.hc-route svg { width: var(--space-12); height: var(--space-12); flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
 /* ---------- key-points list ----------
    Each item names one thing, so the label is emphasised and the rest explains. */
@@ -61,12 +174,10 @@
   color: var(--text-on-color); font-size: 11px; font-weight: 700;
 }
 .hc-steps li b { color: var(--text-base-main); font-weight: 600; }
-/* The workflow list counts phases, and phases start at 0. */
-.hc-steps-zero { counter-reset: step -1; }
 
 /* ---------- screenshot figure (CMP-29) ----------
-   Captured at 1440x884 CSS px on a 2x display: 2880px files in a ~900px
-   column. Never set a height; the intrinsic ratio keeps the UI readable. */
+   The manual's captures: 1600px wide in a ~900px column. Never set a height;
+   the intrinsic ratio keeps the UI readable. */
 .hc-shot { margin: var(--space-16) 0 var(--space-24); }
 .hc-shot img {
   display: block; width: 100%; height: auto;
@@ -89,9 +200,14 @@
 .hc-contact > div { padding: var(--space-16); border: 1px solid var(--stroke-base); border-radius: var(--radius-md); background: var(--bg-base-main); }
 .hc-contact h3 { margin-top: 0; }
 .hc-contact p:last-child { margin-bottom: 0; }
+.hc-contact .doc-cta svg { width: var(--space-16); height: var(--space-16); fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
-/* ---------- cross-link to the Methodology (DEC-30) ---------- */
+/* ---------- cross-link to the science pages (DEC-30) ---------- */
 .hc-xref { margin-top: var(--space-24); }
 
 /* With scripting off every article shows, one after another; keep them apart. */
 [data-doc] + [data-doc] { margin-top: var(--space-64); padding-top: var(--space-32); border-top: 1px solid var(--stroke-base); }
+
+@media (prefers-reduced-motion: reduce) {
+  .hc-card, .hc-phase { transition: none; }
+}

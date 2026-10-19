@@ -1,14 +1,20 @@
 /* ============================================================================
-   docs-shell.js — the reading shell shared by Help and Methodology (CMP-35)
+   docs-shell.js — the reading shell of the Help Centre (CMP-35)
 
-   One engine, two pages. It owns everything the two pages have in common:
-     · the grouped sidebar, built from js/docs-index.js
-     · the search box, which searches BOTH pages: matches on this page first,
-       then "Also in <other page>" links that open the other page with the
-       query still in the box (?q=)
-     · one article at a time, routed by the URL hash (#id or #docs/id)
+   One engine, two pages. help.html holds the authored Help Centre articles;
+   technical-docs.html generates the "science behind it" articles from
+   js/technical-docs.js. Both read js/docs-index.js and show the same sidebar:
+     · the Help Centre tree — five sections in order; an entry page with
+       children (the four science pages) expands while it, or one of its
+       children, is the open article
+     · the search box, which searches every article on both pages and lists
+       the matches flat; a match on the other page links there with the query
+       still in the box (?q=)
+     · one article at a time, routed by the URL hash (#id or #docs/id). On the
+       authored page a hash naming a section inside an article opens that
+       article and scrolls to the section, so every heading is deep-linkable
      · the "On this page" list, built from the article's .doc-section > h2
-     · the previous / next pager
+     · the previous / next pager, in this page's own article order
    A page only says where its articles come from:
 
      DocsShell.mount({ page: 'help' });
@@ -26,7 +32,7 @@
 (function () {
   'use strict';
 
-  var state = { page: null, cfg: null, render: null, active: null, toc: null };
+  var state = { page: null, cfg: null, render: null, owner: null, active: null, toc: null };
 
   function $(sel) { return document.querySelector(sel); }
   function esc(s) {
@@ -69,34 +75,59 @@
   }
 
   /* ------------------------------------------------------------- sidebar */
+  function heading(label) { return '<div class="docs-nav-group">' + esc(label) + '</div>'; }
+
+  function item(page, a, ws, cls) {
+    var current = page === state.page && a.id === state.active;
+    return '<a class="docs-nav-button' + (cls || '') + '" href="' + link(page, a.id, ws.length ? query() : '') + '"' +
+      (current ? ' aria-current="page"' : '') + '>' + highlight(a.label, ws) + '</a>';
+  }
+
+  /* The children of an entry page, from every page of the index. */
+  function children(id) {
+    var out = [];
+    Object.keys(DOCS_INDEX).forEach(function (page) {
+      DOCS_INDEX[page].articles.forEach(function (a) {
+        if (a.parent === id) out.push({ page: page, a: a });
+      });
+    });
+    return out;
+  }
+
   function renderNav() {
     var host = $('#docs-article-nav');
     if (!host) return;
     var q = query(), ws = words(q), html = '', group = '';
 
-    state.cfg.articles.forEach(function (a) {
-      if (ws.length && !matches(a, ws)) return;
-      if (a.group !== group) { group = a.group; html += '<div class="docs-nav-group">' + esc(group) + '</div>'; }
-      html += '<a class="docs-nav-button" href="' + link(state.page, a.id) + '"' +
-        (a.id === state.active ? ' aria-current="page"' : '') + '>' + highlight(a.label, ws) + '</a>';
-    });
-
-    /* Universal search: every other documentation page, after this one. */
+    /* Searching: every matching article on both pages, flat, under its section. */
     if (ws.length) {
       Object.keys(DOCS_INDEX).forEach(function (page) {
-        if (page === state.page) return;
-        var hits = DOCS_INDEX[page].articles.filter(function (a) { return matches(a, ws); });
-        if (!hits.length) return;
-        html += '<div class="docs-nav-group">Also in ' + esc(DOCS_INDEX[page].title) + '</div>' +
-          hits.map(function (a) {
-            return '<a class="docs-nav-button docs-nav-elsewhere" href="' + link(page, a.id, q) + '">' +
-              highlight(a.label, ws) + '</a>';
-          }).join('');
+        DOCS_INDEX[page].articles.forEach(function (a) {
+          if (!matches(a, ws)) return;
+          if (a.group && a.group !== group) { group = a.group; html += heading(group); }
+          html += item(page, a, ws);
+        });
       });
+      host.innerHTML = html ||
+        '<div class="docs-nav-empty">Nothing in the Help Centre matches &ldquo;' + esc(q) + '&rdquo;.</div>';
+      return;
     }
 
-    host.innerHTML = html ||
-      '<div class="docs-nav-empty">Nothing in Help or Methodology matches &ldquo;' + esc(q) + '&rdquo;.</div>';
+    /* Browsing: the Help Centre tree. An entry page with children expands only
+       while it, or one of its children, is the open article. */
+    DOCS_INDEX.help.articles.forEach(function (a) {
+      if (a.parent) return;
+      if (a.group && a.group !== group) { group = a.group; html += heading(group); }
+      var kids = children(a.id);
+      var open = (state.page === 'help' && a.id === state.active) ||
+        kids.some(function (k) { return k.page === state.page && k.a.id === state.active; });
+      html += item('help', a, ws, kids.length ? ' docs-nav-parent' + (open ? ' is-open' : '') : '');
+      if (kids.length && open) {
+        html += '<div class="docs-nav-children">' +
+          kids.map(function (k) { return item(k.page, k.a, ws); }).join('') + '</div>';
+      }
+    });
+    host.innerHTML = html;
   }
 
   /* Keep the current article visible in the sidebar: scrolled into the
@@ -172,12 +203,14 @@
     /* nav-mobile.js hides unlabelled inline SVGs; re-run for freshly placed markup. */
     if (typeof window.hardenSvgs === 'function') window.hardenSvgs();
 
-    document.title = entry.label + ' · ' + state.cfg.title + ' · NbS Tool';
-    var hash = '#' + state.cfg.hashPrefix + entry.id;
+    document.title = (entry.label === state.cfg.title ? '' : entry.label + ' · ') + state.cfg.title + ' · NbS Tool';
+    /* A section hash stays in the address, so the link a reader copies still
+       lands on the heading they are reading. */
+    var hash = '#' + state.cfg.hashPrefix + (section || entry.id);
     if (location.hash !== hash && history.replaceState) history.replaceState(null, '', location.pathname + location.search + hash);
 
-    if (section) scrollToSection(section);
-    else window.scrollTo({ top: 0, behavior: scrollBehavior() });
+    if (section) { scrollToSection(section); return; }
+    window.scrollTo({ top: 0, behavior: scrollBehavior() });
     host.focus({ preventScroll: true });
   }
 
@@ -197,10 +230,12 @@
     var id = idFromHash();
     if (find(state.page, id)) { if (id !== state.active) open(id); return; }
     if (forwardIfMoved(id)) return;
-    /* Not an article: a section inside the open one (a plain in-page link),
-       or a stale link, which lands on the first article. */
-    if (id && document.getElementById(id)) scrollToSection(id);
-    else open(state.cfg.defaultId);
+    /* A section inside the open article: a plain in-page link. */
+    if (id && document.getElementById(id)) { scrollToSection(id); return; }
+    /* A section inside another article: open that article there. Anything
+       else is a stale link, which lands on the first article. */
+    var owner = id && state.owner ? state.owner(id) : '';
+    if (owner) open(owner, id); else open(state.cfg.defaultId);
   }
 
   /* Articles authored in the page itself: lift them out of the flow so only
@@ -214,6 +249,14 @@
       el.removeAttribute('id');
       el.remove();
     });
+    /* Which article holds a given section id. */
+    state.owner = function (sectionId) {
+      var hit = '';
+      Object.keys(store).forEach(function (id) {
+        if (!hit && store[id].querySelector('#' + CSS.escape(sectionId))) hit = id;
+      });
+      return hit;
+    };
     return function (id) { return store[id]; };
   }
 
@@ -229,7 +272,7 @@
       input.addEventListener('input', renderNav);
     }
     window.addEventListener('hashchange', onHash);
-    if (!forwardIfMoved(idFromHash())) open(idFromHash());
+    if (!forwardIfMoved(idFromHash())) onHash();
   }
 
   window.DocsShell = { mount: mount, open: open, scrollToSection: scrollToSection, scrollBehavior: scrollBehavior };

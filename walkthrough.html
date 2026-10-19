@@ -12,12 +12,12 @@
 <script>
   (function () {
     var map = {
-      start: 'what-is', shell: 'getting-around', account: 'accounts',
+      start: 'what-is', shell: 'home', account: 'faq-accounts',
       map: 'phase-0', layers: 'phase-0', area: 'phase-1',
       site: 'phase-2', provenance: 'phase-2', threat: 'phase-3',
-      pathway: 'phase-4', benefit: 'phase-5', plan: 'phase-6', documents: 'phase-7',
-      dashboard: 'projects', detail: 'projects', 'import': 'projects',
-      field: 'record', mrv: 'record', reference: 'results-sources'
+      pathway: 'phase-4', benefit: 'phase-5', plan: 'monitoring', documents: 'documents',
+      dashboard: 'projects', detail: 'project-inside', 'import': 'project-import',
+      field: 'record', mrv: 'record-progress', reference: 'sources'
     };
     var target = map[location.hash.slice(1)] || 'phase-0';
     location.replace('help.html#' + target);

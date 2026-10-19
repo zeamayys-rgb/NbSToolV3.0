@@ -49,6 +49,9 @@ body {
   font-weight: 700; font-size: 24px; line-height: 1; letter-spacing: -1px;
   color: var(--text-base-main);
 }
+.brand-img { height: var(--space-48); width: auto; }
+.brand-img-dark, [data-theme="dark"] .brand-img-light { display: none; }
+[data-theme="dark"] .brand-img-dark { display: block; }
 .brand-sub { font-size: 12px; line-height: 18px; color: var(--text-base-second); }
 .brand-version {
   display: inline-flex; align-self: flex-start; align-items: center; gap: 6px;

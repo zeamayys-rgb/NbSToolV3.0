@@ -386,9 +386,9 @@
         <!-- RIGHT: Privacy levels + controls -->
         <div>
           <div class="plevels" id="privacyLevels">
-            <div class="plevel" data-level="1" onclick="selectPrivacy(1)"><span class="rb"></span><div><h4>Level 1 · Private</h4><p>Only you and invited collaborators can view this project. Excluded from the public NbS Portfolio.</p></div></div>
-            <div class="plevel sel" data-level="2" onclick="selectPrivacy(2)"><span class="rb"></span><div><h4>Level 2 · Coalition <span class="badge i-na" id="currentBadge" style="margin-left:6px">Current</span></h4><p>Visible to verified SCeNe Coalition members and the NbS Incubator for review and funding matchmaking.</p></div></div>
-            <div class="plevel" data-level="3" onclick="selectPrivacy(3)"><span class="rb"></span><div><h4>Level 3 · Public</h4><p>Listed in the public NbS Portfolio as a high-quality example. Baseline summaries are visible to anyone.</p></div></div>
+            <div class="plevel sel" data-level="1" onclick="selectPrivacy(1)"><span class="rb"></span><div><h4>Level 1 · Temporary <span class="badge i-na" id="currentBadge" style="margin-left:6px">Current</span></h4><p>User data will not be stored on the NbS Tool server; it is accessible to the User only within a 24-hour period.</p></div></div>
+            <div class="plevel" data-level="2" onclick="selectPrivacy(2)"><span class="rb"></span><div><h4>Level 2 · Private</h4><p>User data is obtained, collected, and stored on the NbS Tool server to be used for analysis across NbS Tool features, in accordance with the User's needs.</p></div></div>
+            <div class="plevel" data-level="3" onclick="selectPrivacy(3)"><span class="rb"></span><div><h4>Level 3 · Limited Shared</h4><p>User data obtained, collected, and stored on the NbS Tool server may be used for analysis within any NbS Tool feature according to the User's needs; furthermore, such data may be used by WRI Indonesia and institutions partnering with WRI under the SCeNe Coalition cooperation scheme for the joint development of NbS Projects with the user, subject to the user's consent.</p></div></div>
           </div>
           <div class="note" style="margin-top:14px"><b>Heads up:</b> raising the privacy level shares your baseline and documentation more widely and cannot be silently reversed — collaborators are notified.</div>
           <div style="margin-top:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
@@ -403,8 +403,8 @@
       </div>
     </div>
       <script>
-        let savedLevel = 2;
-        let pendingLevel = 2;
+        let savedLevel = 1;
+        let pendingLevel = 1;
         let editing = false;
 
         function togglePrivacyEdit() {
@@ -431,11 +431,12 @@
             el.classList.toggle('sel', lv === pendingLevel);
           });
           const badge = document.getElementById('currentBadge');
-          if (badge) badge.style.display = pendingLevel === 2 ? 'inline-block' : 'none';
+          if (badge) document.querySelector(`.plevel[data-level="${savedLevel}"] h4`).append(badge);
         }
 
         function savePrivacy() {
           savedLevel = pendingLevel;
+          renderPrivacy();
           editing = false;
           document.getElementById('savePrivacyBtn').style.display = 'none';
           document.getElementById('changePrivacyBtn').textContent = 'Change privacy level';

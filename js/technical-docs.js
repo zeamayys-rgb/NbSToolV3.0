@@ -249,7 +249,7 @@ function readLiveParameters() {
 
 /* ------------------------------------- 2.1 Region, ecosystems, time frame */
 function docsScope() {
-  return docHero('SCOPE', 'Region, ecosystems and pathways',
+  return docHero('What the tool analyses', 'Region, ecosystems and pathways',
     'Three decisions bound everything the tool can say: where it works, which ecosystems it recognises, and which interventions it is willing to recommend. This page sets out all three, together with the reasoning the methodology document gives for each.',
     ['11 countries', '3 ecosystems + 1 guardrail', '2014 &rarr; 2024']) +
 
@@ -309,7 +309,7 @@ function docsScope() {
 
 /* ------------------------------------------------ 2.3 Land cover classes */
 function docsLandcover() {
-  return docHero('SCOPE', 'Land cover classes',
+  return docHero('What the tool analyses', 'Land cover classes',
     'Land cover is the base layer of the tool. The 2024 map classifies the land surface of Southeast Asia into twenty classes: the nineteen land cover types defined below, plus an “other land” class for surfaces that fit none of them. Everything the tool concludes about ecological state, trajectory and pathway is built on this classification.',
     ['20 classes', 'SERVIR RLCMS', 'AlphaEarth embeddings · 30 m']) +
 
@@ -358,7 +358,7 @@ function docsLandcover() {
 
 /* ------------------------------------------- 2.3 Analysis conventions */
 function docsConventions() {
-  return docHero('SCOPE', 'Analysis conventions',
+  return docHero('What the tool analyses', 'Analysis conventions',
     'Three conventions apply everywhere in the tool. They explain several choices further down the method: why every area figure is trustworthy but every distance figure needs a correction, why a site is never reduced to a single label, and why the output states its own uncertainty instead of hiding it.',
     ['Equal-area projection', 'Area-weighted distributions', 'Screening instrument']) +
 
@@ -400,7 +400,7 @@ function docsPhase1() {
     `<span class="num">${docFmt(e[k].loss)}</span>`,
     `<span class="num">${docFmt(e[k].gain)}</span>`
   ]);
-  return docHero('PHASE 1', 'Select location',
+  return docHero('How each phase is calculated · Phase 1', 'Select location',
     'The user supplies a project boundary. Everything the tool produces is derived from that input and from layers already held on the server. No other user input is required, and none is requested.',
     [`AOI ${docNum('aoi.total')} ha`, `Duration ${docNum('aoi.duration')} years`, 'No minimum area check']) +
 
@@ -449,7 +449,7 @@ function docsPhase2() {
     docEsc(l.resolution || '—'),
     docEsc(l.dateOfContent || '—')
   ]) : [];
-  return docHero('PHASE 2', 'Site characterisation',
+  return docHero('How each phase is calculated · Phase 2', 'Site characterisation',
     'Site characterisation answers one question: what is here. It reads data and makes no recommendation. Every layer held by the tool is clipped to the boundary and summarised, and the results are grouped exactly as the interface groups them — general context, nature, climate and people.',
     ['Four groups', '29 data layers', 'Area-weighted, never a single label']) +
 
@@ -516,7 +516,7 @@ function docsPhase2() {
 
 /* ------------------------------------------- 6 Phase 3: Threat profile */
 function docsPhase3() {
-  return docHero('PHASE 3', 'Threat profile',
+  return docHero('How each phase is calculated · Phase 3', 'Threat profile',
     'The threat profile answers a different question from site characterisation: not what is here, but what is happening to it. It does not choose the pathway. It decides which activities within a pathway are worth switching on, and it gates two of the benefit components.',
     ['4 components', 'Drivers, not symptoms', 'Gates two benefits']) +
 
@@ -565,7 +565,7 @@ function docsPhase3() {
 
 /* ------------------ 7.1–7.4 Phase 4a: ecological state and trajectory */
 function docsPhase4State() {
-  return docHero('PHASE 4', 'Ecological state and trajectory',
+  return docHero('How each phase is calculated · Phase 4', 'Ecological state and trajectory',
     'Pathway selection is where the tool stops describing and starts deciding. Everything before it reports what is on the ground; this phase turns that description into a statement about what kind of intervention the land can take. Identifying the ecosystem alone is not enough — the ecological state has to be understood as well, and it is built from three components.',
     ['6 state classes', '10 trajectory categories', '5 reference values']) +
 
@@ -679,7 +679,7 @@ function docsPhase4State() {
 function docsPhase4Matrix() {
   const row = (n, cat, traj, def, cond, pw) =>
     [`<span class="num">${n}</span>`, `<strong>${cat}</strong>`, traj, def, cond, `<strong>${pw}</strong>`];
-  return docHero('PHASE 4', 'The decision matrix',
+  return docHero('How each phase is calculated · Phase 4', 'The decision matrix',
     'Ten trajectory categories become seventeen decision rows once the conditional splits are applied. This table is the whole of the pathway logic: every pixel in every project area resolves to exactly one of these rows, and the row number is carried in band 3 of the pathway raster so the assignment can be audited afterwards.',
     ['17 rows', '4 outcomes', 'Auditable per pixel']) +
 
@@ -731,7 +731,7 @@ function docsPhase4Matrix() {
 /* ------------------------------------ 7.6–7.9 the four pathway outcomes */
 function docsPhase4Pathways() {
   const m = docParam('matrix', null);
-  return docHero('PHASE 4', 'Protect, Manage, Restore and Ineligible',
+  return docHero('How each phase is calculated · Phase 4', 'Protect, Manage, Restore and Ineligible',
     'What each outcome means on the ground: which decision rows produce it, what the pathway is for, which site characteristics are read against it, and the circumstances in which a project area is reported as ineligible for it.',
     m ? [`${m.ecosystemCount} ecosystems`, `${m.activityCount} activities`, 'Eligibility, not ranking'] : ['Protect · Manage · Restore · Ineligible']) +
 
@@ -809,7 +809,7 @@ function docsPhase5() {
   const B = docParam('benefits', []);
   const quant = Array.isArray(B) ? B.filter(b => b.metric) : [];
   const qual  = Array.isArray(B) ? B.filter(b => !b.metric) : [];
-  return docHero('PHASE 5', 'Potential benefit',
+  return docHero('How each phase is calculated · Phase 5', 'Potential benefit',
     'Potential benefit is the last phase and the one the whole chain exists to produce. The page is built from a set of quantified components that read rasters directly. Nothing is invented at this stage: every qualitative benefit shown comes from a benefit tag attached to an activity that the pathway logic already selected. If an activity is not eligible on this ground, its benefits do not appear.',
     ['Nature · People · Climate', 'General & unique', `${docNum('aoi.duration')}-year horizon`]) +
 
@@ -869,7 +869,7 @@ function docsPhase5() {
 
 /* ------------------------------------------------ 8.2 Nature benefits */
 function docsBenefitNature() {
-  return docHero('BENEFIT DETAIL', 'Nature benefits',
+  return docHero('How each phase is calculated · Phase 5 detail', 'Nature benefits',
     'Five components make up the nature pillar: three general and two unique. Each states plainly what its number is, how it is derived, what it cannot support, and — for two of the five — that it is specified in the interface design but not yet implemented in the benefit notebook.',
     ['5 components', '3 general · 2 unique', '2 not yet implemented']) +
 
@@ -927,7 +927,7 @@ function docsBenefitNature() {
 
 /* ------------------------------------------------ 8.3 People benefits */
 function docsBenefitPeople() {
-  return docHero('BENEFIT DETAIL', 'People benefits',
+  return docHero('How each phase is calculated · Phase 5 detail', 'People benefits',
     'In version 3 the people pillar is purely qualitative and generates no numbers from raster data, as the interface indicates. That is a deliberate constraint, not a gap waiting to be filled with a proxy.',
     ['Qualitative by design', '4 general benefits', '5 unique benefits']) +
 
@@ -981,7 +981,7 @@ function docsBenefitClimate() {
   const av = c.avoided, sq = c.sequestration;
   const dur = docParam('aoi.duration', null);
   const el  = docParam('aoi.eligible', null);
-  return docHero('BENEFIT DETAIL', 'Climate benefits and carbon',
+  return docHero('How each phase is calculated · Phase 5 detail', 'Climate benefits and carbon',
     'The climate pillar carries the carbon quantification and two site-specific components. Carbon is the part of this tool most likely to be quoted out of context, so each component states plainly what its number is and what it is not.',
     ['tCO₂e', `${docNum('aoi.duration')}-year horizon`, 'Gross &rarr; net']) +
 
@@ -1168,7 +1168,7 @@ const ANNEX_INTRO = `<p>Each layer below is described the same way: why it is th
 
 /* ------------------------------------------------ A.1 General context */
 function docsAnnexGeneral() {
-  return docHero('DATA LAYERS', 'General context layers',
+  return docHero('The data behind each figure', 'General context layers',
     'Ten layers that answer where the site is and what it is made of. Three of them — Land Cover 2024, Forest Cover 2014 and the deforestation rate — carry the whole downstream chain, and an error in any of them propagates into every pathway and every benefit figure.',
     ['10 layers', 'F02 General Context', '3 carry the chain']) +
 
@@ -1316,7 +1316,7 @@ function docsAnnexGeneral() {
 
 /* ------------------------------------------------------ A.2 Nature */
 function docsAnnexNature() {
-  return docHero('DATA LAYERS', 'Nature layers',
+  return docHero('The data behind each figure', 'Nature layers',
     'Seven layers describing the biodiversity and habitat value of the site. Three of them — the Area of Habitat rasters — are the direct input to the nature benefit components, where they are intersected with projected deforestation or with the restoration area.',
     ['7 layers', 'F02 Nature', 'Modelled, not observed']) +
 
@@ -1422,7 +1422,7 @@ function docsAnnexNature() {
 
 /* ----------------------------------------------------- A.3 Climate */
 function docsAnnexClimate() {
-  return docHero('DATA LAYERS', 'Climate layers',
+  return docHero('The data behind each figure', 'Climate layers',
     'Eight layers covering carbon stocks and climate conditions. Biomass carbon and soil carbon are reported as two separate headline numbers and are deliberately not summed — adding them would look like a complete carbon account when it is not.',
     ['8 layers', 'F02 Climate', 'Two carbon pools, never summed']) +
 
@@ -1539,7 +1539,7 @@ function docsAnnexClimate() {
 
 /* ------------------------------------------------------ A.4 People */
 function docsAnnexPeople() {
-  return docHero('DATA LAYERS', 'People layers',
+  return docHero('The data behind each figure', 'People layers',
     'Unlike the nature and climate layers, which are spatially explicit, most socio-economic data are jurisdiction-based: reported for an administrative unit rather than for the project area itself. The two gridded population layers are the exception — and even they are modelled estimates, not a head count.',
     ['4 layers', 'F02 People', 'Jurisdiction-based, mostly']) +
 
@@ -1603,7 +1603,7 @@ function docsAnnexPeople() {
 
 /* ------------------------------------ A.5 Threat profile · A.6 Pathway */
 function docsAnnexThreat() {
-  return docHero('DATA LAYERS', 'Threat profile layers',
+  return docHero('The data behind each figure', 'Threat profile layers',
     'The three layers behind Phase 3 — the ones that report not what is here, but what is happening to it. Two read structural decline in forest that is still standing and what is driving it; the third reads the hydrology that decides whether anything on peat can work at all. All three carry the same instruction: field verification is required.',
     ['3 layers', 'F02 Threat Profile', 'Field verification required']) +
 
@@ -1655,7 +1655,7 @@ function docsAnnexThreat() {
 
 /* ------------------------------------------------------ A.6 Pathway */
 function docsAnnexPathway() {
-  return docHero('DATA LAYERS', 'Pathway layers',
+  return docHero('The data behind each figure', 'Pathway layers',
     'The two layers that turn the site reading into a pathway assignment. The first says what happened between 2014 and 2024; the second is where the whole chain lands — one raster with three bands carrying the pathway, the reference ecosystem and the decision row that produced them.',
     ['2 layers', 'F02 Pathway Selection', 'Screening recommendation']) +
 
@@ -1695,7 +1695,7 @@ function docsAnnexPathway() {
 
 /* ================================================== CHECKS & LIMITS */
 function docsLimits() {
-  return docHero('CHECKS & LIMITS', 'Limitations and how to read a figure',
+  return docHero('Limits, carbon and how to cite', 'Limitations and how to read a figure',
     'Every limit the methodology states, collected in one place. It exists because limitations buried in a footnote get skipped, and this tool produces material that goes to funders and government partners — where an overstated figure does real damage.',
     ['Read before reporting', 'Screening only', 'Not verified']) +
 
@@ -1825,7 +1825,7 @@ function docsReference() {
   const rCanal = `${docJump('§6', 'phase3#phase3-peat')}, ${docJump('Threat profile layers', 'annex-threat#annex-a5-peat')}`;
   const rFlii  = docJump('Nature layers', 'annex-nature#annex-a2-condition');
 
-  return docHero('REFERENCE', 'Parameters, formulas and glossary',
+  return docHero('Limits, carbon and how to cite', 'Parameters, formulas and glossary',
     'Everything a reviewer needs to reproduce the main calculations without reading the whole documentation: the method constants in one table, the live site parameters in another, every formula in one list, and a worked example they can follow end to end.',
     ['Method constants', 'Live site values', 'One page']) +
 
@@ -1980,14 +1980,14 @@ function docsReference() {
     'glossary');
 }
 
-/* Every article closes with a link to the Help guide that does the same thing in
-   the tool. The mirror of this table is the "How it's calculated" box at the end
-   of each Help guide; change both together (DEC-30, SCREENS.md SCR-17/SCR-19). */
+/* Every article closes with a link to the Help Centre section that does the same
+   thing in the tool. The mirror of this table is the "How it's calculated" box at
+   the end of each Help section; change both together (DEC-30, SCREENS.md SCR-17/SCR-19). */
 const HELP_GUIDES = {
   scope:             [['Phase 0 · Explore the map', 'phase-0']],
   landcover:         [['Phase 0 · Explore the map', 'phase-0']],
   conventions:       [['Phase 1 · Select location', 'phase-1']],
-  phase1:            [['Phase 1 · Select location', 'phase-1'], ['Accounts and area limits', 'accounts']],
+  phase1:            [['Phase 1 · Select location', 'phase-1'], ['Accounts and area limits', 'faq-accounts']],
   phase2:            [['Phase 2 · Site characterisation', 'phase-2']],
   phase3:            [['Phase 3 · Threat profile', 'phase-3']],
   'phase4-state':    [['Phase 4 · Pathway selection', 'phase-4']],
@@ -1996,22 +1996,22 @@ const HELP_GUIDES = {
   phase5:            [['Phase 5 · Potential benefit', 'phase-5']],
   'benefit-nature':  [['Phase 5 · Potential benefit', 'phase-5']],
   'benefit-people':  [['Phase 5 · Potential benefit', 'phase-5']],
-  'benefit-climate': [['Phase 5 · Potential benefit', 'phase-5'], ['Carbon finance and standards', 'results-carbon']],
-  'annex-general':   [['Phase 2 · Site characterisation', 'phase-2'], ['Where the numbers come from', 'results-sources']],
+  'benefit-climate': [['Phase 5 · Potential benefit', 'phase-5'], ['Carbon finance and standards', 'carbon']],
+  'annex-general':   [['Phase 2 · Site characterisation', 'phase-2'], ['Where the numbers come from', 'sources']],
   'annex-nature':    [['Phase 2 · Site characterisation', 'phase-2']],
   'annex-climate':   [['Phase 2 · Site characterisation', 'phase-2']],
   'annex-people':    [['Phase 2 · Site characterisation', 'phase-2']],
   'annex-threat':    [['Phase 3 · Threat profile', 'phase-3']],
   'annex-pathway':   [['Phase 4 · Pathway selection', 'phase-4']],
-  limits:            [['What the tool does not do', 'results-limits']],
-  reference:         [['How to cite', 'results-cite']]
+  limits:            [['What the tool does not do', 'not-do']],
+  reference:         [['How to cite', 'cite']]
 };
 function docsHelpLink(id) {
   const guides = HELP_GUIDES[id];
   if (!guides) return '';
   return docCallout('Do this in the tool',
     guides.map(([label, anchor]) => `<a href="help.html#${anchor}">${label}</a>`).join(' &middot; ') +
-    ' &mdash; step-by-step in Help, with screenshots.', 'hc-xref');
+    ' &mdash; step by step in the Help Centre, with screenshots.', 'hc-xref');
 }
 
 function docsArticleHtml(id) {

@@ -842,3 +842,51 @@ so the bar and footer run full width.
 **Consequences.** A footer change is one edit. Without JavaScript the footer is absent — the
 same trade-off DEC-22 accepted for the nav. Login, the design system and the walkthrough
 redirect keep their own layouts and get no top bar.
+
+---
+
+## DEC-34 · The Help Centre is a hub of five sections, and the Methodology is its science half
+
+**Date.** 2026-10-19 · **Status.** `documented`
+
+**Decision.** SCR-19 is rebuilt as a help centre in the shape of Global Nature Watch's: a landing
+page of entry cards that only directs, then five sections — *Get started* (what it is, a demo,
+who is behind it), *How it works* (the eight phases on a chart, then one page per stage with the
+manual's screenshots), *The science behind it* (four entry pages: what the tool analyses, how
+each phase is calculated, the data behind each figure, limits / carbon / citation), *Resources*
+(the Coalition's external documents) and *Support* (FAQ, contact). SCR-17 keeps its URL and its
+engine but becomes the science half: its twenty articles are nested under the four science entry
+pages in one sidebar tree that both pages render, its kickers name their parent, and its title is
+*The science behind it*. The CMP-34 switch is retired. The site navigation's *Methodology* item
+becomes *Help Centre*. The content source is the product owner's contextualised NbS Tool v3.0
+User Manual; the previous Help Centre's articles are retired, their ids forwarded or kept as
+section ids.
+
+**Context.** The previous SCR-19 was twenty-five articles in the Methodology's clothes: the
+product owner found it read like a second methods page rather than a help centre, and the
+manual had since been rewritten to speak to users directly. The reference was GNW's help
+centre: a landing that directs, short section pages, and external documents as cards.
+
+**Alternatives visible in the code.**
+
+- *Split the science section into four new articles and rewrite the twenty method articles into
+  them* — rejected. The method articles are the live-parameter engine of DEC-21/DEC-24; four
+  entry pages that group them cost twelve cards and no rewrite, and the sidebar nesting makes
+  them read as one section.
+- *Keep the Help | Methodology switch* — rejected. With one tree there is nothing to switch
+  between; a reader on a method page sees the whole Help Centre and where they are in it.
+- *One page per phase under How it works* — rejected. The brief asked for one page for phases 0
+  to 5; the "On this page" list and section deep links (`#phase-2`) give each phase its own
+  address without a page each.
+- *Order How it works as the brief listed it (plan, manage, generate)* — rejected. The chart
+  numbers the phases, so the sidebar follows the manual's order (6, 7, after the analysis) to
+  avoid contradicting it.
+- *Link the Resources cards to the local reference documents* — rejected. They are not deployed
+  and not public; the cards wait for published addresses and say so.
+
+**Consequences.** One tree, two pages: adding a method article means a row with a `parent`;
+adding a help page means a row and a `data-doc` block. Old links keep working through `moved`
+and through section ids that match the retired article ids (`#phase-0` to `#phase-5`,
+`#projects`, `#record`). The repo now carries 7.9 MB of video for the demo. Screenshots are the
+manual's, so a screen change means recapturing for the manual and copying across, not
+recapturing twice. The spelling stays *Help Centre*, as everywhere else in the product's copy.

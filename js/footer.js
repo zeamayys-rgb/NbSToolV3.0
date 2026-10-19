@@ -31,7 +31,7 @@
           '<h2>Other Page</h2>' +
           '<a href="sitemap.html">Sitemap</a>' +
           '<a href="index.html#about">About SCeNe Coalition</a>' +
-          '<a href="index.html#about">Contact Us</a>' +
+          '<a href="help.html#contact">Contact Us</a>' +
         '</div>' +
       '</nav>' +
     '</div>' +

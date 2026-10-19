@@ -398,7 +398,7 @@ The best-covered screen in the product for real-world states.
 |---|---|---|---|
 | Default | Page load, or a `#docs/<id>` deep link | Grouped sidebar, article, TOC, prev/next pager | Yes |
 | Loading | N/A — every parameter is already in the page, read synchronously | — | N/A |
-| Empty | Search matches nothing on either page | "Nothing in Help or Methodology matches “…”" (CMP-35). Matches on SCR-19 alone show under *Also in Help* | Yes |
+| Empty | Search matches nothing on either page | "Nothing in the Help Centre matches “…”" (CMP-35). Matches on either page list flat under their section | Yes |
 | Arrived with a query | `?q=` in the URL, from SCR-19's empty search | Search box pre-filled and the sidebar already filtered | Yes |
 | Partial | A live parameter cannot be read from the shared objects | Inline `.doc-todo` marker naming the missing path, in place of the figure. Tables and examples that need it degrade to a warn callout rather than printing a zero | Yes |
 | Error | A shared script (`analysis-shared.js`, `f05-shared.js`, `people-context.js`) fails to load | Every figure it would have supplied renders as `.doc-todo`; the page itself still renders. **No banner tells the user the page is degraded** | Partial |
@@ -408,7 +408,7 @@ The best-covered screen in the product for real-world states.
 | Embedded figure blank | The §7.5 `<iframe>` of SCR-13 fails to load, or its CDN scripts do | An empty framed area. The caption and the *See the detailed activities matrix* CTA below it still render and still reach the page | Partial — the frame carries no fallback of its own; the CTA is the recovery path |
 | Embedded figure on a phone | Viewport below 820px | The frame is hidden; caption and CTA remain. Eight label columns across 1680px do not survive a phone, so the full page — which has pan and zoom — is the route | Yes |
 | Invalid deep link | `#docs/nonsense` | Falls back to *Region, ecosystems & pathways* rather than an empty page | Yes |
-| Moved article | `#docs/introduction` or `#docs/how-it-works` | Forwards to SCR-19 `#who` or `#workflow`, keeping any `?q=` | Yes |
+| Moved article | `#docs/introduction` or `#docs/how-it-works` | Forwards to SCR-19 `#who` or `#phases`, keeping any `?q=` | Yes |
 | Stale reference | The methodology documentation is reissued after the method articles were transcribed | Nothing — the *Introduction* article names the source and its date (`METHOD_DOC_DATE`, currently 26 August 2026), but the page cannot tell that a newer revision exists | Partial — by design, see DEC-24 |
 | Source contradicts itself | The methodology document gives two values for the same thing (reference CRS, hazard class count, the 44/12 constant) | Both are printed, with a `.doc-callout warn` naming the contradiction and saying which to use meanwhile. Collected in *Limitations* &rarr; "Known inconsistencies in the current method" | Yes — by design, see DEC-24 |
 | Reduced motion | `prefers-reduced-motion: reduce` | Honoured — `docScrollBehavior()` returns `auto`, and a media query opts the page out of the global `html { scroll-behavior: smooth }` in `tokens.css` | Yes |
@@ -455,22 +455,28 @@ so it cannot be empty, partial, stale or out of scope.
 
 | State | Trigger | What the user sees | Implemented? |
 |---|---|---|---|
-| Default | Page load with no hash | *What the NbS Tool is*; sidebar of five groups; TOC; pager | Yes |
-| Deep link | `#<article-id>` | That article, scrolled to its top | Yes |
-| Unknown link | `#<not-an-article>` that matches no section either | The first article | Yes |
-| Searching | Words in the sidebar box | This page's matching articles by group, then *Also in Methodology* with links that carry `?q=` | Yes |
-| No match | Words that occur in neither page's index | "Nothing in Help or Methodology matches “…”" | Yes |
+| Default | Page load with no hash | The landing page: hero, two actions, one card group per section; sidebar tree; TOC of the five sections; pager | Yes |
+| Deep link to a page | `#<article-id>` | That page, scrolled to its top; its parent expanded in the tree if it has children | Yes |
+| Deep link to a section | `#<section-id>` inside a page (`#phase-2`, `#carbon`) | The owning page, scrolled to that heading, with the section hash kept in the address | Yes |
+| Retired link | An id of the previous Help Centre (`#workflow`, `#results-carbon`) | Forwards to the page or section that replaced it (`moved`) | Yes |
+| Unknown link | `#<nothing>` | The landing page | Yes |
+| Searching | Words in the sidebar box | Every matching page on both halves, flat under its section, other-page links carrying `?q=` | Yes |
+| No match | Words that occur in neither page's index | "Nothing in the Help Centre matches “…”" | Yes |
 | Arrived with a query | `?q=` from SCR-17's search | Box pre-filled, sidebar already filtered | Yes |
+| Demo cover | The demo page opens | The 12-second loop plays silently with a *Watch the full demo* button over it | Yes |
+| Demo full | The button is pressed | The full video with native controls; the button is gone | Yes |
+| Demo under reduced motion | `prefers-reduced-motion: reduce` | The poster, not the loop; the button still works | Yes |
+| Demo autoplay refused | The browser blocks autoplay | The poster; the button still works | Yes |
+| Resource without an address | A Resources card whose document is not yet published | A dashed, non-link card with a "Link coming soon" pill | Yes — by design, `TODO(design)` |
 | Loading | N/A — static HTML | — | N/A |
-| Error | A screenshot fails to load | Reserved box with alt text; the caption stays | Partial — by design |
-| JavaScript off | Scripting disabled | Every article in sequence as one long page; sidebar list and TOC empty; search inert | Partial — readable, not navigable from the sidebar |
-| Long content | Any viewport | Tables scroll inside their wrapper; screenshots scale to the column | Yes |
-| Narrow viewport | Below 1100px, then 820px | TOC drops, then the sidebar becomes a chip rail with the current chip in view | Yes |
-| Stale screenshots | A screen changes after capture | Nothing — most captures still show the nav's old "Technical Doc" label | No — `TODO(design)` |
-| Reduced motion | `prefers-reduced-motion: reduce` | Honoured — CMP-35 scrolls with `behavior: 'auto'` | Yes |
+| Error | A screenshot or video file fails to load | Reserved box with alt text; the caption stays | Partial — by design |
+| JavaScript off | Scripting disabled | Every page in sequence as one long page; sidebar and TOC empty; search inert; the loop does not play | Partial — readable, not navigable from the sidebar |
+| Long content | Any viewport | Tables scroll inside their wrapper; screenshots scale to the column; the phase chart's flows wrap | Yes |
+| Narrow viewport | Below 1100px, then 820px | TOC drops, then the sidebar becomes a chip rail with children flattened into it and the current chip in view | Yes |
+| Stale screenshots | A screen changes after the manual's capture | Nothing — recapture for the manual and copy across | No — `TODO(design)` |
+| Reduced motion | `prefers-reduced-motion: reduce` | Honoured — CMP-35 scrolls with `behavior: 'auto'`; card and chip transitions off | Yes |
 
-`TODO(design): every reused screenshot that shows the top bar predates the Methodology rename
-and still reads "Technical Doc". Recapture them in one pass.`
+`TODO(design): the three Resources cards need published addresses before they become links.`
 `TODO(design): the page describes capabilities (exports, three carbon templates, supplementary
 upload) that the prototype does not implement yet (DEC-29).`
 
