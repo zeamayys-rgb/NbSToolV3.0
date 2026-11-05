@@ -515,7 +515,8 @@ section { position: relative; }
 }
 
 /* ---- teaser marquee of field-project cards (staging parity) ---- */
-.pmarquee { margin-top: clamp(30px, 4vw, 48px); overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none; }
+/* Full-bleed: breaks out of .wrap to the viewport edges; body's overflow-x: hidden absorbs the scrollbar width. */
+.pmarquee { margin-top: clamp(30px, 4vw, 48px); margin-inline: calc(50% - 50vw); overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none; }
 .pmarquee::-webkit-scrollbar { display: none; }
 .pmarquee-track { display: flex; gap: 16px; width: max-content; animation: pslide 48s linear infinite; }
 .pmarquee:hover .pmarquee-track,
@@ -531,7 +532,11 @@ section { position: relative; }
 .pf-face { position: absolute; inset: 0; border-radius: var(--radius-2xl); overflow: hidden;
   backface-visibility: hidden; display: flex; flex-direction: column; justify-content: flex-end; }
 .pf-front { border: 1px solid var(--hair-d2); background: linear-gradient(162deg, var(--ink-700), var(--ink-850)); padding: 22px; }
-.pf-front img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: bottom; opacity: .8; }
+.pf-front img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: bottom; opacity: .8;
+  /* TODO(design) TODO-20: no slow-duration token; .6s matches the card flip above. */
+  transition: opacity .6s ease-out, transform .6s cubic-bezier(.2,.7,.3,1); }
+/* Hover/focus: photo comes forward at full colour with a slow push-in. The veil stays for title contrast. */
+.pflip:hover .pf-front img, .pflip:focus-visible .pf-front img { opacity: 1; transform: scale(1.05); }
 .pf-veil { position: absolute; inset: 0; background: linear-gradient(2deg, var(--card-veil), transparent 82%); }
 .pf-front h4, .pf-front .pf-loc { position: relative; }
 .pf-front h4 { font-family: var(--font-display); font-weight: 700; font-size: 25px; line-height: 1.02;
@@ -640,11 +645,13 @@ section { position: relative; }
 .partner-group { width: 100%; }
 .pg-label { font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase;
   color: var(--paper-sub); margin: 0 0 20px; }
-.logo-img { display: block; width: 100%; height: auto; margin: 0 auto; filter: saturate(.2) opacity(.9); transition: filter .3s; }
-.partner-group:hover .logo-img { filter: none; }
+/* One <li class="reveal"> per logo: the home reveal observer staggers them in. Hover is per logo. */
+.logo-grid { list-style: none; margin: 0 auto; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px 24px; }
+.logo-img { display: block; width: 100%; height: auto; margin: 0 auto; filter: saturate(.2) opacity(.9); transition: filter .3s, transform .3s; }
+.logo-img:hover { filter: none; transform: translateY(-3px); }
 .logo-members { max-width: 700px; }
-.partner-group.support .logo-img { max-width: 600px; }
-.partner-group.strategic .logo-img { max-width: 120px; }
+.logo-support { max-width: 600px; }
+.logo-strategic { max-width: 120px; grid-template-columns: 1fr; }
 
 /* ============================================================
    9 · FINAL CTA + FOOTER
@@ -682,5 +689,6 @@ section { position: relative; }
   .scrollcue .rail::after { animation: none; }
   .pmarquee-track { animation: none; }
   .pflip-in { transition: none; }
+  .pflip:hover .pf-front img, .pflip:focus-visible .pf-front img { transform: none; }
   .odo-col { transition: none; }
 }

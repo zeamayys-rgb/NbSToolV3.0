@@ -79,7 +79,6 @@ is used a sixth as often. **No `cubic-bezier()` is defined anywhere.**
 | `ds-spin` | `rotate(360deg)` | **Duplicate spinner** | `styleguide.css` |
 | `sp` | `translateY(-50%) rotate(360deg)` | **Duplicate spinner, centred variant** | `settings.css` |
 | `pulse` | `opacity 1 → .35 → 1` | Live / loading indicator | `f01.css` |
-| `vuPulse` | expanding `box-shadow` ring | Version badge | `version-modal.js` |
 | `aoidash` | `stroke-dashoffset → -18` | Marching-ants AOI outline on the map | `f01-step1.css` |
 | `drop` | `top: -40% → 120%` | Ambient home-page decoration | `home.css` |
 | `fpillShake` | `translateX ±3px` | Invalid-input shake | `f01-step2.css` |
@@ -97,7 +96,7 @@ others, so the same class name animates differently depending on which styleshee
 | File | What it does | Quality |
 |---|---|---|
 | `css/home.css` | `*` animation → `.001ms`, iteration count 1, `scroll-behavior: auto`, `.reveal` forced visible, scroll cue and HUD dots stopped | **Correct and thorough** |
-| `js/version-modal.js` | `.vu-ovl, .vu, .vu-badge i { transition: none; animation: none }` | Correct |
+| `js/version-modal.js` | `.vu-ovl, .vu { transition: none }` | Correct |
 | `new-project.html` | `.export-toast` transform removed, countdown bar animation off | Correct |
 | `create-monitoring-plan.html` | Same as above | Correct |
 | `index.html` | Reads the query into a `REDUCED` constant for its JS path | Correct |

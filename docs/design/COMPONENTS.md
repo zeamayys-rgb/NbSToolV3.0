@@ -542,22 +542,23 @@ the codebase.** `index.html` also reads the query into a `REDUCED` constant for 
 
 ## CMP-22 · Version / "What's new" modal
 
-**File.** [js/version-modal.js](../../js/version-modal.js) (307 lines)
-**Purpose.** Announces a release on SCR-01, with a newsletter subscribe view.
+**File.** [js/version-modal.js](../../js/version-modal.js) (210 lines)
+**Purpose.** Introduces v3.0 on SCR-01 as a live release ("Welcome to NbS Tool v3.0") and asks
+the visitor to create an account. One view: what's new, then a sign-up CTA in the footer. The
+pre-launch subscribe and confirmation views were removed once v3.0 shipped (December 2026).
 
 | Prop | Type | Required | Default | Controls |
 |---|---|---|---|---|
-| `NBSVU_ONCE` | global | no | truthy | Whether to remember dismissal |
+| `NBSVU_ONCE` | global | no | `false` | Whether to remember dismissal |
 | `RELEASE` | constant | yes | — | Value written to `localStorage` key `nbs-vu-seen` |
-| `data-vu-view` | attribute | — | `'news'` | Switches between news / subscribe / confirmation |
+| `data-vu-signup` | attribute | — | — | Closes the modal and clicks the page's `[data-auth="signup"]` (CMP auth modal, Sign up tab). With no auth modal on the page, the link follows `login.html#signup` |
 | `data-vu-close` | attribute | — | — | Marks any element as a close trigger |
 
 **Interactive states.** Entering (`.in` added on the next frame) · open · closing (removed after
 260ms). Injects its own `<style>` on open and removes it on close.
 
-**Accessibility contract.** Scroll lock ✅, Escape ✅, initial focus ✅, per-view focus into the
-first email input ✅, reduced-motion ✅. **No `role="dialog"`, no `aria-modal`, no focus trap, no
-focus restore.**
+**Accessibility contract.** Scroll lock ✅, Escape ✅, initial focus ✅, reduced-motion ✅, `role="dialog"` +
+`aria-modal` ✅. **No focus trap, no focus restore.**
 
 **Known limitations.** If `localStorage` is unavailable the `try/catch` swallows the failure and
 the modal reappears on every visit. Self-injected CSS bypasses the token layer.
