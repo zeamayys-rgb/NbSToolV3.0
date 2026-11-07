@@ -774,7 +774,10 @@ transition is removed and the final offset is applied immediately.
 
 ---
 
-## CMP-31 · Feature tab set (`.ftabs` / `.fpanel`)
+## CMP-31 · Feature tab set (`.ftabs` / `.fpanel`) — retired
+
+**Retired 2026-11-06 (DEC-35).** Removed from SCR-01; its content now lives in the journey
+chapters. Kept for history; the ID is not reused.
 
 **Files.** [css/home.css](../../css/home.css) · inline script in
 [index.html](../../index.html) (SCR-01 only)
@@ -970,3 +973,36 @@ re-inserts the article on every visit; a `MutationObserver` restarts the loop.
 it has a keyboard path; the full video uses native controls. Neither file has an audio track, so
 there are no captions to provide. If the browser refuses autoplay the poster stands in and the
 button still works.
+
+---
+
+## CMP-38 · Data flow (`.mrv-flow` / `.mf-node` / `.mf-detail`)
+
+**Files.** [css/home.css](../../css/home.css) · inline script in
+[index.html](../../index.html) (SCR-01 only)
+
+**Purpose.** Show how the ASEAN MRV Framework turns global standards and national systems into
+one indicator set, and how three data tiers (regional, national, field) become a dataset for one
+site. Redrawn as HTML from the framework's own diagram (DEC-36).
+
+**Parts.** One markup, two layouts. The boxes sit in five `.mf-stage` wrappers (each with a
+`.mf-step` number and label). **Above 900px** the wrappers are `display: contents`, the step labels
+hide, and every box is placed in one five-column diagram: four global standards beside the
+country-standards box (eleven flags); definition, pathway and joint reporting; the indicator set
+with country indicators feeding it from the right; three data tiers on a bus; the site dataset.
+Arrows are `::before`/`::after` on `.has-down` nodes. **900px and below** the same markup is a
+numbered stepper with no arrows. Beside the diagram, a sticky `.mf-detail` card (200px of content)
+holds the picked node's title and text and one button, "How this works", which links to that
+node's `technical-docs.html#docs/…` section (the methodology home until a node is picked).
+
+**States.** Idle (all nodes at full strength). Focused, on click or hover: `.has-focus` on the
+flow; the picked node gets `.is-on` + `aria-pressed="true"`, its ancestors and descendants
+`.is-lit`, everything else drops to 0.28 opacity; on the stepper, each stage holding a lit node
+fills its number. At 900px and below the card stops being sticky and sits under the flow.
+
+**Accessibility contract.** Every node is a `<button>` with a visible text label. Flags are
+decorative (`aria-hidden`); the node's text names the eleven Member States. The card's text sits
+in an `aria-live="polite"` region. Hover previews a node but never replaces click/keyboard.
+
+**Known gap.** Flags load from cdnjs (`flag-icons` 7.2.3), the site's only image from a CDN. At
+900px and below the card sits below the flow, so a tap near the top updates text off-screen.

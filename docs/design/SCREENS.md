@@ -77,17 +77,20 @@ is relevant to their organisation.
 **Entry** — direct link, coalition site, search. **Exit** — "Interactive Map" (SCR-03) or the
 auth modal (SCR-02 in overlay form).
 
-**Layout.** Full-bleed hero with a scroll-driven `.stage` sequence, then seven `.band`
-sections: benefits ("Actions that pay back"), the `#journey` step strip, lifecycle features,
-proof ("Real places. Real hectares."), a mint data band, testimony, and the `#about` coalition
+**Layout.** Full-bleed hero with a scroll-driven `.stage` sequence, then six `.band`
+sections: benefits (opens with a plain-terms strip: what the tool is, who it is for, the eleven countries and three ecosystems; then "Nature, people, climate." — its logo card names the SCeNe Coalition as the developer and carries the page's only outbound link, a text link to scenecoalition.org that opens in a new tab), the `#journey` step strip (which also serves as the
+feature index and tutorial entry point, DEC-35; its six steps follow the v3 Reference Methodology, and a step that spans more than one phase names each phase in an `h4` with the same "Phase N · Name" label the Help Centre uses), field stories ("Before anyone drew a boundary, we went and listened."), a mint data-flow band (the ASEAN MRV Framework drawn as an interactive flow, CMP-38, DEC-36), testimony (seven quotes from the field visits, the V3 concept interviews and the hands-on trainings, shown as two full-bleed `.tq-row` marquees drifting in opposite directions with cards of three widths, DEC-38; a person's words are never rewritten, and the field stories carry no visit dates), and the `#about` coalition
 band, closing on a `.finale` CTA.
 
-Held in parity with the implemented page at `staging-fe.scenecoalition.org` (DEC-28). Hero and
-proof counters are `.odo` odometer reels; the benefit cards carry a 233px photo header; the
-feature index is a three-tab set (`.ftabs`) of two `.fcard` photo cards each; and the proof
+Held in parity with the implemented page at `staging-fe.scenecoalition.org` (DEC-28). Hero counters are `.odo` odometer reels (the field-stories band has no figures: it tells
+the field visits as narrative, and each card ends on how that site moves through scoping,
+documents and the NbS Incubator); the benefit cards carry a 233px photo header; and the proof
 band's portfolio is a paused-on-hover `.pmarquee` of `.pflip` flip cards behind a
-"coming very soon" pill. The journey chapters carry a step number only — no F-code, tag row or
-per-step CTA.
+"coming very soon" pill. Each journey chapter carries a step number, a tag row naming the feature it uses and
+one or two "See how" links into `help.html`; the
+journey header links to the demo video (`help.html#demo`) and the Help Centre. The sticky stage frame on the
+left shows the matching Help Centre screenshot (`.s-shot`) for the active step, under a plain
+feature label (no F-codes); it replaced the hand-built mock-ups.
 
 **Components.** CMP-01, CMP-02, CMP-03 (auth modal — the same login form as SCR-02, overlaid),
 CMP-21 (scroll-reveal), CMP-22 (version / "what's new" modal, fired once per visitor and

@@ -890,3 +890,89 @@ and through section ids that match the retired article ids (`#phase-0` to `#phas
 `#projects`, `#record`). The repo now carries 7.9 MB of video for the demo. Screenshots are the
 manual's, so a screen change means recapturing for the manual and copying across, not
 recapturing twice. The spelling stays *Help Centre*, as everywhere else in the product's copy.
+
+---
+
+## DEC-35 · The journey replaces the home page's feature tabs
+
+**Date.** 2026-11-06 · **Status.** `documented`
+
+**Context.** The home page told the same story twice: six journey steps, then six feature cards
+in three tabs, all using one placeholder photo. Neither pointed clearly to the Help Centre.
+
+**Decision.** Merge them. Each journey chapter now names its feature in a tag and links to the matching Help Centre section. The journey
+header links to the demo video and the Help Centre. The `#features` section, its CSS and its tab
+script are removed (CMP-31 retired). The sticky stage frame swaps its hand-built mock-ups (and their sample
+figures) for the real Help Centre screenshot of each step, under a plain label with no F-code.
+
+**Consequences.** One section, one story, real pictures. Screenshots are shared with
+`help.html`, so a recapture updates both. Per-step GIFs are not made yet: the only video is the
+full demo. If short clips are recorded later, they replace the `.s-shot` images in the stage frame.
+
+---
+
+## DEC-36 · The home page explains its data as the ASEAN MRV Framework flow
+
+**Date.** 2026-11-06 · **Status.** `documented`
+
+**Context.** The mint band ("Decision-grade data, not guesswork") listed three data tiers,
+four standard chips and six IUCN-style criteria beside a workshop photo. It said the data was
+defensible without showing where it came from.
+
+**Decision.** Replace it with the framework's own thinking-process diagram, redrawn in HTML and
+made interactive: global standards and the eleven Member States feed one indicator set, which is
+fed by three data tiers (global layers harmonised with SERVIR-Mekong's RLCMS land cover, national
+statistics offices, field data) and ends in a dataset for the user's site. Each node links to the
+methodology page section that explains it. The tier ladder, standards chips, photo and criteria
+grid are removed (recoverable from git).
+
+**Consequences.** Node copy is sourced from `js/technical-docs.js`. The "85 items" count comes
+from the framework diagram and needs confirming against the published framework. Flags are the
+first image loaded from a CDN; vendoring them into `assets/` would remove that dependency.
+
+---
+
+## DEC-37 · Home page copy is written in the product's own voice, ahead of staging
+
+**Date.** 2026-11-06 · **Status.** `documented`
+
+**Context.** DEC-28 keeps SCR-01 in parity with the staging front-end, and the copy that came
+with it overclaimed: "a climate project the world can verify", "regulator-grade documents",
+"donor-ready MRV record", carbon "on a five-pool basis" (the tool reads biomass and soil
+only), FPIC "in the record" (the tool holds no consent process). It also read as machine
+written: stacked em dashes, triplets, slogans.
+
+**Decision.** Rewrite the hero, benefit cards, journey steps, coalition and closing copy from
+the v3 Reference Methodology and the Help Centre, in plain English, claiming only what the
+tool does: a free screening tool that reports what is there, what is happening to it, which
+pathway fits, and drafts the documents and monitoring plan. Where staging and this copy
+disagree, this copy is the proposal and staging should adopt it, an exception to DEC-28
+for copy only. Layout parity stands. Testimony quotes are untouched.
+
+**Consequences.** The page no longer promises verification, bankability or regulator-grade
+output. "Choose the pathway", "Write it up", "Keep it in one place" and "Keep the record"
+replace the step titles. The `<title>` and meta description changed, so search snippets will
+change. Figures in the hero strip are unchanged and still illustrative (DEC-11).
+
+---
+
+## DEC-38 · Testimony drifts instead of sitting in a grid
+
+**Date.** 2026-11-07 · **Status.** `documented`
+
+**Context.** The seven quotes sat in a tidy two-column grid, which read as a gallery of equals
+and made the band feel like a template.
+
+**Decision.** Show them as two full-bleed rows (`.tq-slider` > `.tq-row` > `.tq-track`) that drift
+in opposite directions, each row holding all seven quotes in a different order and at one of
+three widths (280, 360, 460px), the second row offset so the columns never line up. Every card
+shares one quote size and one height (the tallest card sets it), so only the widths vary. Edges are
+masked, hover or focus pauses the drift, and the clone set is `aria-hidden`. With reduced motion
+each row becomes a scroll-snap strip and the clones are hidden. Modelled on the moving
+testimonial rows at nonprofitbuilder.org. Layout parity with staging (DEC-28) is set aside for
+this band only.
+
+**Consequences.** Quote text is unchanged. Widths and the row offset are literals in
+`css/home.css` until a width scale exists (TODO-22). Seven quotes are enough for a seamless loop
+up to about 2,800px of viewport; add quotes before adding a third row.
+

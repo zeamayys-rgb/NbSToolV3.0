@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>NbS Tool — From a place on the map to verified climate impact</title>
-<meta name="description" content="NbS Tool helps frontline organisations across Southeast Asia scope a site, analyse its baseline, choose a Nature-based pathway, document it for donors, and verify impact — the full Design-to-MRV workflow on one standardised platform." />
+<title>NbS Tool: from a boundary on the map to a project you can defend</title>
+<meta name="description" content="A free web tool from the SCeNe Coalition for planning Nature-based Solutions in Southeast Asia. Draw or upload a boundary and it reports what is there, what is happening to it, which pathway fits, the benefits that could follow, and the documents and monitoring plan to take it further." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Barlow+Semi+Condensed:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -37,8 +37,8 @@
 
 
   <div class="hero-inner">
-    <h1 class="reveal">Turn a place into a climate project <span class="lit">the world can verify.</span></h1>
-    <p class="hero-sub reveal">NbS Tool helps frontline organisations across Southeast Asia scope a site, read its baseline, choose a Nature-based pathway, and carry it all the way to a monitored, donor-ready MRV record — on one standardised platform.</p>
+    <h1 class="reveal">Draw a boundary. <span class="lit">See what the land can take.</span></h1>
+    <p class="hero-sub reveal">NbS Tool is a free web tool for planning Nature-based Solutions in Southeast Asia. Give it a boundary and it reports what’s already there, what’s happening to it, and whether protecting, managing or restoring it fits. From there you can write the project up, plan the monitoring and keep the record as it runs. No GIS software needed.</p>
     <div class="hero-cta reveal">
       <a class="cbtn cbtn-spring" href="interactive-map.html">
         <svg viewBox="0 0 24 24" fill="none"><path d="M9 4L3 7v13l6-3 6 3 6-3V4l-6 3-6-3z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 4v13M15 7v13" stroke="currentColor" stroke-width="1.8"/></svg>
@@ -55,10 +55,11 @@
     <div class="wrap">
       <!-- Figures mirror the staging front-end (staging-fe.scenecoalition.org, read 2026-09-15).
            A snapshot of its live counters, not a live feed — illustrative, per DEC-11. -->
-      <div class="hstat reveal"><div class="v"><span class="odo" data-odo="260"></span> <small>User</small></div><div class="k">is active since 2024</div></div>
-      <div class="hstat reveal"><div class="v"><span class="odo" data-odo="524,054.82"></span> <small>ha</small></div><div class="k">Polygon area was analysed</div></div>
-      <div class="hstat reveal"><div class="v"><span class="odo" data-odo="9"></span> <em>(3 x 3)</em> <small>NbS Pathways</small></div><div class="k">3 pathways for 3 ecosystems</div></div>
-      <div class="hstat reveal"><div class="v"><span class="odo" data-odo="31"></span> <small>NbS Activities</small></div><div class="k">Mapped with for monitoring plan</div></div>
+      <div class="hstat reveal"><div class="v"><span class="odo" data-odo="260"></span> <small>users</small></div><div class="k">Signed up to NbS Tool since 2024</div></div>
+      <div class="hstat reveal"><div class="v"><span class="odo" data-odo="524,054.82"></span> <small>ha</small></div><div class="k">Analysed in the Data Analyser</div></div>
+      <div class="hstat reveal"><div class="v"><span class="odo" data-odo="167"></span> <small>field projects</small></div><div class="k">Documented and monitored with the tool</div></div>
+      <!-- TODO(data): placeholder, not from staging. Replace with the real count of generated documents. -->
+      <div class="hstat reveal"><div class="v"><span class="odo" data-odo="418"></span> <small>documents</small></div><div class="k">Project documents and monitoring plans generated</div></div>
     </div>
   </div>
 
@@ -71,10 +72,24 @@
      ============================================================ -->
 <section class="band band-paper grain" data-screen-label="What is NbS">
   <div class="wrap">
+    <dl class="plain reveal">
+      <div>
+        <dt class="kicker no-rule">What it is</dt>
+        <dd>A free website. Draw a boundary and it reads what’s inside: the ecosystems, the pressures on them, the people nearby, and what protecting, managing or restoring the land could do. It runs in a browser, so a laptop and a connection are enough. The result is a first assessment, not a pre-feasibility study.</dd>
+      </div>
+      <div>
+        <dt class="kicker no-rule">Who it’s for</dt>
+        <dd>Project developers first: community organisations and local NGOs that want to scope a site but don’t have a GIS team. Then the funders and partners who need to compare the projects they’re offered on the same footing.</dd>
+      </div>
+      <div>
+        <dt class="kicker no-rule">Where it works</dt>
+        <dd>Eleven countries: Brunei, Cambodia, Indonesia, Laos, Malaysia, Myanmar, the Philippines, Singapore, Thailand, Timor-Leste and Vietnam. Three ecosystems: dryland forest, mangrove and peatland. Country-specific layers vary, so what the map can show in one place it may not show in another.</dd>
+      </div>
+    </dl>
     <div class="triple-lead">
       <div class="head">
-        <h2 class="reveal">Actions that pay back <span class="em">three times over.</span></h2>
-        <p class="reveal">Protect, sustainably manage, or restore an ecosystem to solve a real societal challenge — and a <em>high-quality</em> solution delivers measurable benefit across three intertwined dimensions at once.</p>
+        <h2 class="reveal">Nature, people, climate. <span class="em">A good project answers to all three.</span></h2>
+        <p class="reveal">A Nature-based Solution protects, manages or restores an ecosystem to deal with a problem people actually have: a river that floods, a harvest that fails, a forest being cleared. The Coalition’s test is whether a project delivers for nature, people and climate at the same time, so the tool reports its results in those three columns.</p>
       </div>
       <div class="triple-logo-note reveal">
         <div class="tln-marks">
@@ -82,7 +97,8 @@
           <span class="tln-rule" aria-hidden="true"></span>
           <img class="tln-nbs" src="assets/nbs-logo-dark.png" alt="NbS Tool" />
         </div>
-        <p>It's why our mark holds three things at once — an <b>Orangutan</b>, a <b>face</b> and a <b>cloud</b>. Nature, People, and Climate, inseparable.</p>
+        <p>NbS Tool is developed by the <b>SCeNe Coalition</b>, the Southeast Asia Climate and Nature-based Solutions Coalition: non-governmental organisations with a long presence in the region, working to get more good projects funded. Its mark holds three things at once, an <b>orangutan</b>, a <b>face</b> and a <b>cloud</b>. Nature, people and climate, inseparable.</p>
+        <a class="cbtn cbtn-text tln-link" href="https://scenecoalition.org" target="_blank" rel="noopener">Visit scenecoalition.org <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="sr-only"> (opens in a new tab)</span></a>
       </div>
     </div>
 
@@ -94,7 +110,7 @@
             <div class="ic"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21V11M12 11c0-3-2-5.5-5-6m5 6c0-3.5 2.5-6 6-6.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 21c-4 0-8-3-8-8 0-2 1-4 1-4s3 1 5 4M12 21c4 0 8-3 8-9 0 0-3 0-5 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
             <h3>Nature</h3>
           </div>
-          <p>Living systems restored — biodiversity and ecosystem integrity, tracked through habitat condition over time.</p>
+          <p>What’s living there and how intact it is: forest integrity, habitat for threatened species, overlap with protected areas and Key Biodiversity Areas, and whether the habitat still connects.</p>
         </div>
       </article>
       <article class="tcard people reveal">
@@ -104,7 +120,7 @@
             <div class="ic"><svg viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3" stroke="currentColor" stroke-width="1.8"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16 7a3 3 0 010 6M21 20c0-2.5-1.5-4.6-3.5-5.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></div>
             <h3>People</h3>
           </div>
-          <p>Communities at the centre – livelihoods, resilience and GEDSI, with free, prior &amp; informed consent in the record.</p>
+          <p>Who lives with the site: how many people, how exposed they are to flood and drought, and the official district figures on work, income, schooling and water. Tenure and consent still come from the community itself.</p>
         </div>
       </article>
       <article class="tcard climate reveal">
@@ -114,7 +130,7 @@
             <div class="ic"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.8"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></div>
             <h3>Climate</h3>
           </div>
-          <p>Carbon you can count — biomass and emissions avoided, quantified from vegetation cover on a five-pool basis.</p>
+          <p>Carbon in the trees and in the soil, measured now and projected over the project’s life: what protecting a forest keeps out of the air, what restoring one could pull back in. Screening figures, labelled as such.</p>
         </div>
       </article>
     </div>
@@ -128,8 +144,12 @@
 <section class="journey" id="journey" data-screen-label="The Design-to-MRV workflow">
   <div class="journey-top">
     <div class="wrap head center">
-      <h2 class="reveal">The Design-to-MRV journey, <span class="em">end to end.</span></h2>
-      <p class="reveal">Most tools hand you a map and stop. NbS Tool threads every stage together — so the polygon you draw on day one becomes the impact you verify years later. Scroll to follow a single project through.</p>
+      <h2 class="reveal">One project, <span class="em">start to finish.</span></h2>
+      <p class="reveal">Each step uses what the one before it produced, so the boundary you draw on day one is the one your monitoring plan is built on. Scroll to follow a project through.</p>
+      <div class="journey-cta reveal">
+        <a class="cbtn cbtn-spring" href="help.html#demo">Watch the demo</a>
+        <a class="cbtn cbtn-ghost" href="help.html">Open the Help Centre</a>
+      </div>
     </div>
   </div>
 
@@ -144,116 +164,48 @@
           <!-- STAGE 1 — SCOPE -->
           <div class="stage" data-stage="0">
             <div class="stage-pad">
-              <div class="mini-h">F01 · Interactive Map</div>
-              <div class="s-map" style="margin-top:10px;background-image:url(assets/genctx/eco-map.png)">
-                <svg class="poly" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M14,42 L34,26 L52,20 L74,30 L84,52 L70,74 L44,80 L24,66 Z"/></svg>
-                <span class="s-pin" style="left:42%;top:46%">Project A · 1,240 ha</span>
-              </div>
-              <div class="s-chips">
-                <span class="s-chip on"><span class="sw" style="background:#2c6639"></span>Land cover</span>
-                <span class="s-chip on"><span class="sw" style="background:#5fe6a0"></span>Mangrove</span>
-                <span class="s-chip"><span class="sw" style="background:#8bb4e6"></span>Protected areas</span>
-                <span class="s-chip"><span class="sw" style="background:#f2b559"></span>Deforestation risk</span>
-                <span class="s-chip">+ 5 groups</span>
-              </div>
+              <div class="mini-h">Interactive Map</div>
+              <img class="s-shot" src="assets/help/select-draw.jpg" alt="Drawing an Area of Interest on the NbS Tool map" width="1600" height="986" />
             </div>
           </div>
 
           <!-- STAGE 2 — ANALYSE -->
           <div class="stage" data-stage="1">
             <div class="stage-pad">
-              <div class="mini-h">F02 · Data Analyser — baseline &amp; threats</div>
-              <div class="s-an" style="margin-top:10px">
-                <div class="s-thumb" style="background-image:url(assets/genctx/terrain-sm.jpg)"><span>Elevation</span></div>
-                <div class="s-thumb" style="background-image:url(assets/genctx/risk-map.png);background-color:#fff"><span>Threat profile</span></div>
-              </div>
-              <div class="s-read">
-                <div class="s-stat"><div class="n">184<i>t/ha</i></div><div class="l">Biomass</div></div>
-                <div class="s-stat"><div class="n">92.4<i>tC</i></div><div class="l">Carbon stock</div></div>
-                <div class="s-stat"><div class="n">76<i>%</i></div><div class="l">Veg. cover</div></div>
-              </div>
-              <div class="s-threats">
-                <span class="s-threat"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M12 3l9 16H3L12 3z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 10v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Deforestation</span>
-                <span class="s-threat"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M12 3l9 16H3L12 3z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 10v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Fire risk</span>
-                <span class="s-threat"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M12 3l9 16H3L12 3z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 10v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Tidal flood</span>
-              </div>
+              <div class="mini-h">Data Analyser · baseline and threats</div>
+              <img class="s-shot" src="assets/help/site-general.jpg" alt="Data Analyser showing the general site baseline" loading="lazy" width="1600" height="982" />
             </div>
           </div>
 
           <!-- STAGE 3 — DECIDE -->
           <div class="stage" data-stage="2">
             <div class="stage-pad">
-              <div class="mini-h">F02 · Pathway selection — Mangrove</div>
-              <div class="s-paths" style="margin-top:12px">
-                <div class="s-path"><img src="assets/pathway/protect-mangrove.svg" alt="" /><div class="pn">Protect</div><div class="pe">eligible</div></div>
-                <div class="s-path"><img src="assets/pathway/manage-mangrove.svg" alt="" /><div class="pn">Manage</div><div class="pe">eligible</div></div>
-                <div class="s-path sel"><span class="check"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span><img src="assets/pathway/restore-mangrove.svg" alt="" /><div class="pn">Restore</div><div class="pe">selected</div></div>
-              </div>
+              <div class="mini-h">Pathway selection · Mangrove</div>
+              <img class="s-shot" src="assets/help/pathway-blocks.jpg" alt="Pathway selection with Protect, Manage and Restore options" loading="lazy" width="1600" height="982" />
             </div>
           </div>
 
           <!-- STAGE 4 — DOCUMENT -->
           <div class="stage" data-stage="3">
             <div class="stage-pad">
-              <div class="mini-h">F03 · Document Generator</div>
-              <div class="s-doc" style="margin-top:10px">
-                <div class="s-paper">
-                  <span class="badge">CCB · VERRA</span>
-                  <h6>Climate, Community &amp; Biodiversity Project Document</h6>
-                  <div class="ln m"></div><div class="ln"></div><div class="ln s"></div>
-                  <div class="ln m" style="margin-top:14px"></div><div class="ln"></div><div class="ln s"></div>
-                </div>
-                <div class="s-doc-side">
-                  <div class="s-docrow"><svg viewBox="0 0 24 24" fill="none"><path d="M7 3h7l5 5v13H7a1 1 0 01-1-1V4a1 1 0 011-1z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M14 3v5h5" stroke="currentColor" stroke-width="1.7"/></svg><div>General Feasibility Study<div class="meta">Auto-filled from analysis</div></div></div>
-                  <div class="s-docrow"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><div>CCB Standard document<div class="meta">Donor &amp; auditor ready</div></div></div>
-                </div>
-              </div>
+              <div class="mini-h">Document Generator</div>
+              <img class="s-shot" src="assets/help/docgen-sections.jpg" alt="Document Generator with its section list" loading="lazy" width="1600" height="982" />
             </div>
           </div>
 
           <!-- STAGE 5 — MANAGE -->
           <div class="stage" data-stage="4">
             <div class="stage-pad">
-              <div class="mini-h">F04 · My Project Dashboard</div>
-              <div class="s-dash">
-                <div class="s-prow">
-                  <span class="eco"><img src="assets/pathway/eco-mangrove.svg" alt="" style="width:34px;height:34px"/></span>
-                  <div><div class="nm">Kubu Raya Mangrove</div><div class="mt">West Kalimantan · 1,240 ha · Restore</div></div>
-                  <span class="s-pill live">Monitoring active</span>
-                </div>
-                <div class="s-prow">
-                  <span class="eco"><img src="assets/pathway/eco-peatland.svg" alt="" style="width:34px;height:34px"/></span>
-                  <div><div class="nm">Sebangau Peatland</div><div class="mt">Central Kalimantan · 3,500 ha · Restore</div></div>
-                  <span class="s-pill wait">MRV plan due</span>
-                </div>
-                <div class="s-prow">
-                  <span class="eco"><img src="assets/pathway/eco-forest.svg" alt="" style="width:34px;height:34px"/></span>
-                  <div><div class="nm">Leuser Lowland Forest</div><div class="mt">Aceh · 2,120 ha · Manage</div></div>
-                  <span class="s-pill live">64 entries</span>
-                </div>
-              </div>
+              <div class="mini-h">My Project Dashboard</div>
+              <img class="s-shot" src="assets/help/projects-table.jpg" alt="My Projects dashboard listing saved projects" loading="lazy" width="1600" height="982" />
             </div>
           </div>
 
           <!-- STAGE 6 — VERIFY -->
           <div class="stage" data-stage="5">
             <div class="stage-pad">
-              <div class="mini-h">F06 · MRV Dashboard — Q2 2026</div>
-              <div class="s-ver" style="margin-top:10px">
-                <div class="s-inds">
-                  <div class="s-ind"><div class="mini-row"><span class="il">Area of habitats restored</span><span class="iv">412 / 600 ha</span></div><div class="s-track"><div class="s-fill" style="width:69%"></div></div></div>
-                  <div class="s-ind"><div class="mini-row"><span class="il">Mangrove cover change</span><span class="iv">+38 ha/yr</span></div><div class="s-track"><div class="s-fill" style="width:76%"></div></div></div>
-                  <div class="s-ind"><div class="mini-row"><span class="il">Seedling survival rate</span><span class="iv">74 %</span></div><div class="s-track"><div class="s-fill" style="width:92%"></div></div></div>
-                  <div class="s-ind"><div class="mini-row"><span class="il">Canal blocks installed</span><span class="iv">34 / 50</span></div><div class="s-track"><div class="s-fill" style="width:68%"></div></div></div>
-                </div>
-                <div class="s-ring">
-                  <div class="s-ringwrap">
-                    <svg viewBox="0 0 120 120"><circle class="track" cx="60" cy="60" r="50" fill="none" stroke-width="10"/><circle class="prog" cx="60" cy="60" r="50" fill="none" stroke-width="10" stroke-dasharray="314" stroke-dashoffset="100"/></svg>
-                    <div class="pct">68%</div>
-                  </div>
-                  <div class="lbl">indicators reported<br>8 of 12 filled</div>
-                </div>
-              </div>
+              <div class="mini-h">MRV Dashboard · Q2 2026</div>
+              <img class="s-shot" src="assets/help/mrv-dashboard.jpg" alt="MRV dashboard tracking indicator progress" loading="lazy" width="1600" height="982" />
             </div>
           </div>
 
@@ -265,37 +217,58 @@
         <article class="chapter" data-chapter="0">
           <div class="chapter-no"><span class="bar"></span>STEP 01</div>
           <h3>Find the place.</h3>
-          <p>Search a location or drop into the field, then read it through five thematic layer groups — land cover, nature, climate, people and country-specific permits. Draw the boundary that becomes your Area of Interest.</p>
+          <h4>Phase 0 · Explore the map</h4>
+          <p>Five layer groups sit on the map while you look around: country-specific layers, site information, nature, climate and people. Search a province or district and its boundary is drawn as a tracing guide. It doesn’t become your project polygon.</p>
+          <h4>Phase 1 · Select location</h4>
+          <p>Draw a polygon, or upload a zipped shapefile, KML or KMZ. The upload is the one method you can repeat exactly, so use it for anything you’ll need to defend. Check the area on the confirm card, set the project duration, and confirm. Nothing is computed before that point.</p>
+          <div class="tags"><span class="tag">Interactive Map</span></div>
+          <div class="chapter-links"><a class="chapter-link" href="help.html#phase-0">See how to explore the map <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="chapter-link" href="help.html#phase-1">Draw or upload your area <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
         </article>
 
         <article class="chapter" data-chapter="1">
           <div class="chapter-no"><span class="bar"></span>STEP 02</div>
           <h3>Read the land.</h3>
-          <p>The analyser builds a technical baseline automatically — biomass, carbon stock, vegetation cover — then profiles the threats: deforestation, fire and flood. No manual data compilation, harmonised to a Southeast-Asia standard.</p>
+          <h4>Phase 2 · Site characterisation</h4>
+          <p>What is here. Every layer is clipped to your boundary and summarised in four groups: general context, nature, climate and people. This phase reads and makes no recommendation. Three of its figures carry everything that follows: land cover now, forest cover ten years earlier, and the yearly rate of forest loss.</p>
+          <h4>Phase 3 · Threat profile</h4>
+          <p>What is happening to it. How much of each ecosystem is disturbed and what’s driving that, whether small farms, logging, roads or fire; drainage pressure on peat; and the risk of flood, fire, landslide and drought. It doesn’t pick the pathway. It decides which activities are worth switching on.</p>
+          <div class="tags"><span class="tag">Data Analyser</span></div>
+          <div class="chapter-links"><a class="chapter-link" href="help.html#phase-2">See how to read the baseline <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="chapter-link" href="help.html#phase-3">The threat profile <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
         </article>
 
         <article class="chapter" data-chapter="2">
           <div class="chapter-no"><span class="bar"></span>STEP 03</div>
-          <h3>Choose the intervention.</h3>
-          <p>Based on what's actually eligible for your ecosystem, pick a Nature-based pathway — Protect, Manage or Restore — across Forest, Mangrove or Peatland. Recommendations are framed as conditional examples, never prescriptions.</p>
+          <h3>Choose the pathway.</h3>
+          <h4>Phase 4 · Pathway selection</h4>
+          <p>Land cover now is compared with land cover ten years earlier, and both are read against the reference ecosystem: a modelled picture of what should grow there, which is the only way to tell degraded land from naturally open land. Each hectare lands on one answer, Protect, Manage, Restore or carbon ineligible, with the reason stated. The activities then follow from the ground, not the label. Restoring forest means planting; restoring mangrove means breaching pond dykes; restoring peat means raising the water table. It’s a screening answer, not a prescription.</p>
+          <h4>Phase 5 · Potential benefit</h4>
+          <p>The benefits those activities are expected to deliver, in three pillars, with carbon projected over the duration you set. Nothing appears here that an earlier phase didn’t select. Say it’s a carbon project and the tool also shows the deductions for leakage, uncertainty and buffer, and the net figures. Screening figures, labelled as such.</p>
+          <div class="tags"><span class="tag">Data Analyser</span><span class="tag">Pathway selection</span></div>
+          <div class="chapter-links"><a class="chapter-link" href="help.html#phase-4">See how to choose a pathway <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="chapter-link" href="help.html#phase-5">See how benefits are estimated <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
         </article>
 
         <article class="chapter" data-chapter="3">
           <div class="chapter-no"><span class="bar"></span>STEP 04</div>
-          <h3>Make it bankable.</h3>
-          <p>Generate standardised, regulator-grade documents straight from your analysis — a General Feasibility Study and a Climate, Community &amp; Biodiversity (CCB) document aligned with Verra. Bridge the credibility gap with donors and auditors.</p>
+          <h3>Write it up.</h3>
+          <p>Turn the analysis into a General Project Document, with the maps, baselines and benefit assessment a feasibility study or funding concept starts from, or a Carbon Project Document laid out to the structure of Verra, Gold Standard or Plan Vivo. The tool fills in what it can. The parts only your project knows are left for you. Documents are built from a saved project, so save first.</p>
+          <div class="tags"><span class="tag">Document Generator</span></div>
+          <div class="chapter-links"><a class="chapter-link" href="help.html#documents">See how to generate a document <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
         </article>
 
         <article class="chapter" data-chapter="4">
           <div class="chapter-no"><span class="bar"></span>STEP 05</div>
-          <h3>Run the portfolio.</h3>
-          <p>Every project lives in one dashboard — boundaries, analyses, documents, collaborators and incubator status, from draft to ready-to-submit. Manage privacy, invite your team, and send a project to the NbS Incubator.</p>
+          <h3>Keep it in one place.</h3>
+          <p>Every project you save sits in one dashboard: the boundary, the analysis, the documents, the monitoring plan and who you’ve shared it with. Set the privacy level, invite collaborators, import a project that’s already running, and when it’s ready, put it forward to the NbS Incubator. Saving is also what unlocks the documents and the monitoring plan.</p>
+          <div class="tags"><span class="tag">My Project Dashboard</span></div>
+          <div class="chapter-links"><a class="chapter-link" href="help.html#projects">See how to manage projects <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
         </article>
 
         <article class="chapter" data-chapter="5">
           <div class="chapter-no"><span class="bar"></span>STEP 06</div>
-          <h3>Prove the impact.</h3>
-          <p>Translate your pathway into a monitoring plan — indicators, methods and frequency — then track them live in the MRV dashboard. Compare year on year, attach field evidence, and export a verifiable summary report.</p>
+          <h3>Keep the record.</h3>
+          <p>The activities you chose come with the indicators that can show whether they’re working. Keep, drop or add to them and set how often each is measured. Then record field data against the plan period by period, with photos as evidence, and export a report when someone asks for one.</p>
+          <div class="tags"><span class="tag">Monitoring Plan</span><span class="tag">NbS MRV</span></div>
+          <div class="chapter-links"><a class="chapter-link" href="help.html#monitoring">See how to build a monitoring plan <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="chapter-link" href="help.html#record">Record field data <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
         </article>
       </div>
 
@@ -305,136 +278,33 @@
 
 
 <!-- ============================================================
-     4 · FEATURES — module index
+     5 · FIELD STORIES — what we heard on the ground
      ============================================================ -->
-<section class="band band-paper" id="features" data-screen-label="Core Features">
-  <div class="wrap">
-    <div class="feat-head reveal">
-      <h2>Everything the lifecycle needs, <span class="em">nothing it doesn't.</span></h2>
-      <a class="cbtn cbtn-text" href="help.html#phases">See how the tool works <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-    </div>
-
-    <div class="ftabs-wrap reveal">
-      <div class="ftabs" role="tablist" aria-label="NbS Tool features">
-        <button type="button" role="tab" id="ftab-map" aria-controls="fpanel-map" aria-selected="true" class="is-on">Interactive Map</button>
-        <button type="button" role="tab" id="ftab-analyser" aria-controls="fpanel-analyser" aria-selected="false" tabindex="-1">Data Analyzer</button>
-        <button type="button" role="tab" id="ftab-projects" aria-controls="fpanel-projects" aria-selected="false" tabindex="-1">Project Management</button>
-      </div>
-
-      <div class="fpanel" role="tabpanel" id="fpanel-map" aria-labelledby="ftab-map">
-        <article class="fcard">
-          <div class="fc-shot">
-            <img src="assets/home/features/map-preview.png" alt="NbS Tool interactive map with a drawn Area of Interest" loading="lazy" />
-            <a class="fc-tut" href="help.html#phase-0">See how <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-          </div>
-          <div class="fc-body">
-            <div class="ic"><img src="assets/home/features/interactive-map.svg" alt="" /></div>
-            <h4>Interactive Map</h4>
-            <p>Search a site, toggle five thematic layer groups, inspect legends, and export generated maps for baseline documentation.</p>
-          </div>
-        </article>
-        <article class="fcard">
-          <div class="fc-shot">
-            <img src="assets/home/features/map-preview.png" alt="NbS Tool interactive map with a drawn Area of Interest" loading="lazy" />
-            <a class="fc-tut" href="help.html#phase-2">See how <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-          </div>
-          <div class="fc-body">
-            <div class="ic"><img src="assets/home/features/analyser.svg" alt="" /></div>
-            <h4>Data Analyser</h4>
-            <p>Build a technical baseline across Climate, People and Nature, profile the threats, then select a pathway: Protect, Manage, Restore.</p>
-          </div>
-        </article>
-      </div>
-
-      <div class="fpanel" role="tabpanel" id="fpanel-analyser" aria-labelledby="ftab-analyser" hidden>
-        <article class="fcard">
-          <div class="fc-shot">
-            <img src="assets/home/features/map-preview.png" alt="NbS Tool interactive map with a drawn Area of Interest" loading="lazy" />
-            <a class="fc-tut" href="help.html#documents">See how <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-          </div>
-          <div class="fc-body">
-            <div class="ic"><img src="assets/home/features/documents.svg" alt="" /></div>
-            <h4>Project Documents</h4>
-            <p>Generate compliance and pre-feasibility documents from your analysis — ready for donors and auditors.</p>
-          </div>
-        </article>
-        <article class="fcard">
-          <div class="fc-shot">
-            <img src="assets/home/features/map-preview.png" alt="NbS Tool interactive map with a drawn Area of Interest" loading="lazy" />
-            <a class="fc-tut" href="help.html#monitoring">See how <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-          </div>
-          <div class="fc-body">
-            <div class="ic"><img src="assets/home/features/analyser.svg" alt="" /></div>
-            <h4>Create Monitoring Plan</h4>
-            <p>Design a long-term monitoring framework with mandatory and additional indicators tied to your pathway.</p>
-          </div>
-        </article>
-      </div>
-
-      <div class="fpanel" role="tabpanel" id="fpanel-projects" aria-labelledby="ftab-projects" hidden>
-        <article class="fcard">
-          <div class="fc-shot">
-            <img src="assets/home/features/map-preview.png" alt="NbS Tool interactive map with a drawn Area of Interest" loading="lazy" />
-            <a class="fc-tut" href="help.html#projects">See how <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-          </div>
-          <div class="fc-body">
-            <div class="ic"><img src="assets/home/features/analyser.svg" alt="" /></div>
-            <h4>My Project Dashboard</h4>
-            <p>Manage every project in one place — statuses, baselines, documents and monitoring, paginated and searchable.</p>
-          </div>
-        </article>
-        <article class="fcard">
-          <div class="fc-shot">
-            <img src="assets/home/features/map-preview.png" alt="NbS Tool interactive map with a drawn Area of Interest" loading="lazy" />
-            <a class="fc-tut" href="help.html#record">See how <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-          </div>
-          <div class="fc-body">
-            <div class="ic"><img src="assets/home/features/analyser.svg" alt="" /></div>
-            <h4>NbS MRV</h4>
-            <p>Monitor, report and verify impact over the life of the project — closing the loop on the Design-to-MRV workflow.</p>
-          </div>
-        </article>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-<!-- ============================================================
-     5 · PROOF — portfolio + live numbers
-     ============================================================ -->
-<section class="band proof grain" id="portfolio" data-screen-label="Proof in the field">
+<section class="band proof grain" id="portfolio" data-screen-label="Stories from the field">
   <div class="wrap">
     <div class="head proof-head reveal">
-      <h2>Real places.<br>Real hectares.<br><span class="em">Real numbers.</span></h2>
-      <p>A live snapshot of triple-benefit projects already documented and monitored with the tool, across 3 ecosystems and 8 provinces of Southeast Asia.</p>
+      <h2>Before anyone drew a boundary, <span class="em">we went and listened.</span></h2>
+      <!-- TODO(content): confirm each site's real next step (scoping, documents, NbS Incubator) with the field team before launch. -->
+      <p>SCeNe Coalition teams went to these sites to sit with the people who look after the land, before any boundary was drawn. What they heard decides how each project is scoped in NbS Tool, what its project document says, and what is put forward to the NbS Incubator. One thing held everywhere: the communities agreed to a study, not to a project. Every rule that comes later goes back to them for a decision.</p>
     </div>
 
-    <!-- Figures mirror the staging front-end, read 2026-09-15. Illustrative snapshot, per DEC-11. -->
-    <div class="proof-stats">
-      <div class="proof-hero reveal"><div class="bignum xl"><span class="odo" data-odo="524,054.82"></span><span class="u">ha</span></div><div class="k">Mapped &amp; under active management</div></div>
-      <div class="proof-mini">
-        <div class="pstat reveal"><div class="v"><span class="odo" data-odo="167"></span></div><div class="k">Field projects</div></div>
-        <div class="pstat reveal"><div class="v"><span class="odo" data-odo="3"></span></div><div class="k">Ecosystems</div></div>
-        <div class="pstat reveal"><div class="v"><span class="odo" data-odo="8"></span></div><div class="k">Provinces</div></div>
-      </div>
-    </div>
-
-    <!-- Teaser marquee. The second set is a visual clone for the seamless loop, hidden from AT. -->
+    <!-- Teluk Pambang, Kampong Thom and Kibongcog follow the project's Lesson Learned Report on NbS
+         Implementation (draft). Lematang Waterfall predates that report and keeps its earlier source.
+         Teaser marquee. The second set is a visual clone for the seamless loop, hidden from AT. -->
     <div class="pmarquee reveal">
       <div class="pmarquee-track">
-        <div class="pflip" role="button" tabindex="0" aria-pressed="false" aria-label="Kibongcog, Bukidnon, Phillipine. Show details.">
+        <div class="pflip" role="button" tabindex="0" aria-pressed="false" aria-label="Kibongcog, Bukidnon, Philippines. Show details.">
           <div class="pflip-in">
             <div class="pf-face pf-front">
               <img src="assets/home/portfolio/kibongcog.jpg" alt="Aerial view of the forested Kibongcog valley" loading="lazy" />
               <span class="pf-veil" aria-hidden="true"></span>
               <h4>Kibongcog</h4>
-              <p class="pf-loc"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s-7-5-7-11a7 7 0 1114 0c0 6-7 11-7 11z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="2"/></svg>Bukidnon, Phillipine</p>
+              <p class="pf-loc"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s-7-5-7-11a7 7 0 1114 0c0 6-7 11-7 11z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="2"/></svg>Bukidnon, Philippines</p>
             </div>
             <div class="pf-face pf-back">
               <h4>Kibongcog</h4>
-              <p class="pf-loc"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s-7-5-7-11a7 7 0 1114 0c0 6-7 11-7 11z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="2"/></svg>Bukidnon, Phillipine</p>
-              <div class="pf-copy"><p>12–16 March 2026. Corn climbs the mountainside where loggers stopped in the 2000s. Above it, closed forest and the Philippine Eagle. A 2024 ordinance protects the forest, which also means no carbon buyer will pay to keep it standing.</p><p>Half the participants were given cameras. The women photographed the waste and the broken facilities. The men photographed the landslide. Dozens of women from here work abroad as domestic helpers. The work they left behind went to someone else in the house.</p></div>
+              <p class="pf-loc"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s-7-5-7-11a7 7 0 1114 0c0 6-7 11-7 11z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="2"/></svg>Bukidnon, Philippines</p>
+              <div class="pf-copy"><p>Corn climbs the slopes the loggers left, and above it the forest closes in, still home to the Philippine Eagle. The village has declared that forest protected: good for the eagle, awkward for finance, since a forest that would stand anyway earns no carbon credit.</p><p>Men name landslides first; women name waste and broken facilities, and their maps barely show the forest at all.</p><p>In NbS Tool that becomes two cases: cleared slopes scoped for native agroforestry with the landslide layer open, and an intact forest that grants or public money, not credits, will have to carry. The feasibility document says so.</p></div>
               <a class="pf-ext" href="#" aria-label="Open Kibongcog"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 4h6v6M20 4l-8.5 8.5M18 14v5a1 1 0 01-1 1H5a1 1 0 01-1-1V7a1 1 0 011-1h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
             </div>
           </div>
@@ -450,7 +320,7 @@
             <div class="pf-face pf-back">
               <h4>Lematang Waterfall</h4>
               <p class="pf-loc"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s-7-5-7-11a7 7 0 1114 0c0 6-7 11-7 11z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="2"/></svg>South Sumatra, Indonesia</p>
-              <div class="pf-copy"><p>Nature can deliver 30% of what the climate needs by 2030, and Indonesia finally has the rules to pay for it. What the province does not have is data anyone can defend.</p><p>HaKI laid out its paperwork: social baselines pulled from permit files, carbon baselines lifted from provincial emission plans, biodiversity baselines taken from what villagers remember seeing. Then the tool went on the table and the room was asked to break it.</p><p>In Semendo the same test ran against the ground, where one polygon sat four kilometres off and two village forests overlapped. Triple benefit is the ambition. A map you can trust is the price of entry.</p></div>
+              <div class="pf-copy"><p>HaKI laid its paperwork on the table: social baselines pulled from permit files, carbon baselines lifted from provincial emission plans, and biodiversity baselines built from what villagers remember seeing. Then NbS Tool went on the table too, and we asked the room to break it.</p><p>In Semendo we ran the same test on the ground. One polygon sat four kilometres from where it belonged, and two village forests overlapped.</p><p>Those corrections come first. Nobody writes a document for the incubator on a map the village doesn’t recognise.</p></div>
               <a class="pf-ext" href="#" aria-label="Open Lematang Waterfall"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 4h6v6M20 4l-8.5 8.5M18 14v5a1 1 0 01-1 1H5a1 1 0 01-1-1V7a1 1 0 011-1h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
             </div>
           </div>
@@ -466,7 +336,7 @@
             <div class="pf-face pf-back">
               <h4>Teluk Pambang</h4>
               <p class="pf-loc"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s-7-5-7-11a7 7 0 1114 0c0 6-7 11-7 11z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="2"/></svg>Riau, Indonesia</p>
-              <div class="pf-copy"><p>9–13 February 2026. A village on mangrove, 979 hectares of it, protected by decree. The forest used to feed charcoal kilns. Now the same families patrol it, though some still cut.</p><p>Ten ponds sit on the coast and two belong to the village. Women wake at two and finish at ten, which is why they miss the meetings. The sea keeps taking the shoreline. They build breakwaters from mangrove wood to shield the mangroves they planted.</p></div>
+              <div class="pf-copy"><p>A decree has put this mangrove in the village’s hands. The women know it best: they gather shellfish and crabs in it and do most of the planting, and their day runs from before dawn to late evening, so they miss the meetings.</p><p>Most of what threatens the forest sits outside the boundary: shrimp ponds, their access roads, plantations. Few of the pond owners are from the village.</p><p>So the team draws two boundaries in NbS Tool, the village forest and the wider area around it, and the restoration target stays provisional until the tide at the old oil-palm ground is checked.</p></div>
               <a class="pf-ext" href="#" aria-label="Open Teluk Pambang"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 4h6v6M20 4l-8.5 8.5M18 14v5a1 1 0 01-1 1H5a1 1 0 01-1-1V7a1 1 0 011-1h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
             </div>
           </div>
@@ -482,7 +352,7 @@
             <div class="pf-face pf-back">
               <h4>Kampong Thom</h4>
               <p class="pf-loc"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s-7-5-7-11a7 7 0 1114 0c0 6-7 11-7 11z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="2"/></svg>Cambodia</p>
-              <div class="pf-copy"><p>23–27 February 2026. Three community forests, 451 hectares to restore. Nobody wanted this land. Cashew and rubber took the rest.</p><p>Ask about the gibbon and one village says the 1970s. Ask about the hornbill and Ou Pong Rong says twenty of them, every fruiting season. Something is still here. A four-hectare lake where the village prays once a year.</p><p>Men map the boundary and the road. Women map the water point. Only one of those maps earns money.</p></div>
+              <div class="pf-copy"><p>Three community forests share one catchment and one project, and little else: one hears the gibbon and prays at a lake, another counts hornbills each fruiting season.</p><p>Women have the run of forest and fields, and little say over what gets sold. Cattle would put income in their hands; grazing already threatens all three forests. Acacia pays, and acacia is invasive here.</p><p>Each forest gets its own boundary in NbS Tool, fire and drought come off the threat profile before anyone picks species, and grazing and acacia rules are agreed with the committees first.</p></div>
               <a class="pf-ext" href="#" aria-label="Open Kampong Thom"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 4h6v6M20 4l-8.5 8.5M18 14v5a1 1 0 01-1 1H5a1 1 0 01-1-1V7a1 1 0 011-1h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
             </div>
           </div>
@@ -493,12 +363,12 @@
               <img src="assets/home/portfolio/kibongcog.jpg" alt="" loading="lazy" />
               <span class="pf-veil" aria-hidden="true"></span>
               <h4>Kibongcog</h4>
-              <p class="pf-loc"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s-7-5-7-11a7 7 0 1114 0c0 6-7 11-7 11z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="2"/></svg>Bukidnon, Phillipine</p>
+              <p class="pf-loc"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s-7-5-7-11a7 7 0 1114 0c0 6-7 11-7 11z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="2"/></svg>Bukidnon, Philippines</p>
             </div>
             <div class="pf-face pf-back">
               <h4>Kibongcog</h4>
-              <p class="pf-loc"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s-7-5-7-11a7 7 0 1114 0c0 6-7 11-7 11z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="2"/></svg>Bukidnon, Phillipine</p>
-              <div class="pf-copy"><p>12–16 March 2026. Corn climbs the mountainside where loggers stopped in the 2000s. Above it, closed forest and the Philippine Eagle. A 2024 ordinance protects the forest, which also means no carbon buyer will pay to keep it standing.</p><p>Half the participants were given cameras. The women photographed the waste and the broken facilities. The men photographed the landslide. Dozens of women from here work abroad as domestic helpers. The work they left behind went to someone else in the house.</p></div>
+              <p class="pf-loc"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s-7-5-7-11a7 7 0 1114 0c0 6-7 11-7 11z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="2"/></svg>Bukidnon, Philippines</p>
+              <div class="pf-copy"><p>Corn climbs the slopes the loggers left, and above it the forest closes in, still home to the Philippine Eagle. The village has declared that forest protected: good for the eagle, awkward for finance, since a forest that would stand anyway earns no carbon credit.</p><p>Men name landslides first; women name waste and broken facilities, and their maps barely show the forest at all.</p><p>In NbS Tool that becomes two cases: cleared slopes scoped for native agroforestry with the landslide layer open, and an intact forest that grants or public money, not credits, will have to carry. The feasibility document says so.</p></div>
               <a class="pf-ext" href="#" aria-label="Open Kibongcog"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 4h6v6M20 4l-8.5 8.5M18 14v5a1 1 0 01-1 1H5a1 1 0 01-1-1V7a1 1 0 011-1h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
             </div>
           </div>
@@ -514,7 +384,7 @@
             <div class="pf-face pf-back">
               <h4>Lematang Waterfall</h4>
               <p class="pf-loc"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s-7-5-7-11a7 7 0 1114 0c0 6-7 11-7 11z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="2"/></svg>South Sumatra, Indonesia</p>
-              <div class="pf-copy"><p>Nature can deliver 30% of what the climate needs by 2030, and Indonesia finally has the rules to pay for it. What the province does not have is data anyone can defend.</p><p>HaKI laid out its paperwork: social baselines pulled from permit files, carbon baselines lifted from provincial emission plans, biodiversity baselines taken from what villagers remember seeing. Then the tool went on the table and the room was asked to break it.</p><p>In Semendo the same test ran against the ground, where one polygon sat four kilometres off and two village forests overlapped. Triple benefit is the ambition. A map you can trust is the price of entry.</p></div>
+              <div class="pf-copy"><p>HaKI laid its paperwork on the table: social baselines pulled from permit files, carbon baselines lifted from provincial emission plans, and biodiversity baselines built from what villagers remember seeing. Then NbS Tool went on the table too, and we asked the room to break it.</p><p>In Semendo we ran the same test on the ground. One polygon sat four kilometres from where it belonged, and two village forests overlapped.</p><p>Those corrections come first. Nobody writes a document for the incubator on a map the village doesn’t recognise.</p></div>
               <a class="pf-ext" href="#" aria-label="Open Lematang Waterfall"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 4h6v6M20 4l-8.5 8.5M18 14v5a1 1 0 01-1 1H5a1 1 0 01-1-1V7a1 1 0 011-1h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
             </div>
           </div>
@@ -530,7 +400,7 @@
             <div class="pf-face pf-back">
               <h4>Teluk Pambang</h4>
               <p class="pf-loc"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s-7-5-7-11a7 7 0 1114 0c0 6-7 11-7 11z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="2"/></svg>Riau, Indonesia</p>
-              <div class="pf-copy"><p>9–13 February 2026. A village on mangrove, 979 hectares of it, protected by decree. The forest used to feed charcoal kilns. Now the same families patrol it, though some still cut.</p><p>Ten ponds sit on the coast and two belong to the village. Women wake at two and finish at ten, which is why they miss the meetings. The sea keeps taking the shoreline. They build breakwaters from mangrove wood to shield the mangroves they planted.</p></div>
+              <div class="pf-copy"><p>A decree has put this mangrove in the village’s hands. The women know it best: they gather shellfish and crabs in it and do most of the planting, and their day runs from before dawn to late evening, so they miss the meetings.</p><p>Most of what threatens the forest sits outside the boundary: shrimp ponds, their access roads, plantations. Few of the pond owners are from the village.</p><p>So the team draws two boundaries in NbS Tool, the village forest and the wider area around it, and the restoration target stays provisional until the tide at the old oil-palm ground is checked.</p></div>
               <a class="pf-ext" href="#" aria-label="Open Teluk Pambang"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 4h6v6M20 4l-8.5 8.5M18 14v5a1 1 0 01-1 1H5a1 1 0 01-1-1V7a1 1 0 011-1h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
             </div>
           </div>
@@ -546,7 +416,7 @@
             <div class="pf-face pf-back">
               <h4>Kampong Thom</h4>
               <p class="pf-loc"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s-7-5-7-11a7 7 0 1114 0c0 6-7 11-7 11z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="2"/></svg>Cambodia</p>
-              <div class="pf-copy"><p>23–27 February 2026. Three community forests, 451 hectares to restore. Nobody wanted this land. Cashew and rubber took the rest.</p><p>Ask about the gibbon and one village says the 1970s. Ask about the hornbill and Ou Pong Rong says twenty of them, every fruiting season. Something is still here. A four-hectare lake where the village prays once a year.</p><p>Men map the boundary and the road. Women map the water point. Only one of those maps earns money.</p></div>
+              <div class="pf-copy"><p>Three community forests share one catchment and one project, and little else: one hears the gibbon and prays at a lake, another counts hornbills each fruiting season.</p><p>Women have the run of forest and fields, and little say over what gets sold. Cattle would put income in their hands; grazing already threatens all three forests. Acacia pays, and acacia is invasive here.</p><p>Each forest gets its own boundary in NbS Tool, fire and drought come off the threat profile before anyone picks species, and grazing and acacia rules are agreed with the committees first.</p></div>
               <a class="pf-ext" href="#" aria-label="Open Kampong Thom"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 4h6v6M20 4l-8.5 8.5M18 14v5a1 1 0 01-1 1H5a1 1 0 01-1-1V7a1 1 0 011-1h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
             </div>
           </div>
@@ -554,54 +424,70 @@
       </div>
     </div>
 
-    <div class="proof-foot reveal"><span class="soon-pill">NbS Portfolio is coming very soon!</span></div>
+    <div class="proof-foot reveal"><span class="soon-pill">More stories arrive with the NbS Portfolio, soon</span></div>
   </div>
 </section>
 
 
 <!-- ============================================================
-     6 · CREDIBILITY — tiered data + standards + criteria
+     6 · DATA FLOW — ASEAN MRV Framework, global to site
      ============================================================ -->
-<section class="band band-mint" data-screen-label="Why it holds up">
+<section class="band band-mint" data-screen-label="From global data to your site">
   <div class="wrap">
     <div class="head reveal">
-      <h2>Decision-grade data, <span class="em">not guesswork.</span></h2>
-      <p>The tool is built to move data from exploratory to defensible — so your findings stand up to certification bodies, officials and auditors.</p>
+      <h2>From global data<br><span class="em">to your site’s context.</span></h2>
+      <p>NbS Tool follows the ASEAN MRV Framework. Four global standards and the eleven Member States’ own systems feed one shared set of indicators, and the data behind it comes in three tiers, from regional maps down to your own field plots. Tap any box to see where it leads.</p>
     </div>
 
-    <div class="cred-grid">
-      <div class="reveal">
-        <div class="tier-ladder">
-          <div class="tier t1"><div class="tn">TIER 1</div><div><h5>Global baseline</h5><p>System-generated layers give every site an instant starting point.</p></div></div>
-          <div class="tier-arrow"><svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M6 13l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> override with</div>
-          <div class="tier t2"><div class="tn">TIER 2</div><div><h5>National data</h5><p>Harmonised with national definitions and regulatory guidance.</p></div></div>
-          <div class="tier-arrow"><svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M6 13l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> override with</div>
-          <div class="tier t3"><div class="tn">TIER 3</div><div><h5>Field-verified</h5><p>Upload your own project-derived measurements — the gold standard for certification.</p></div></div>
+    <!-- Redrawn from the framework's "thinking process" diagram (ASEAN MRV Framework, UK PACT ASEAN GTF).
+         Sources per node match js/technical-docs.js. TODO(content): confirm the 85-item count against the published framework. -->
+    <div class="mrv reveal">
+      <div class="mrv-flow" id="mrvFlow">
+        <div class="mf-stage mf-s1">
+          <div class="mf-step"><span class="mf-no">01</span><span class="mf-sl">Two starting points</span></div>
+          <div class="mf-row">
+            <div class="mf-global"><div class="mf-label">Global standards</div><button type="button" class="mf-node has-down" data-id="iucn" data-desc="Sets the test for what counts as a Nature-based Solution: eight criteria a project has to meet." data-href="technical-docs.html#docs/scope"><span class="mf-t">IUCN Global Standard for NbS</span></button><button type="button" class="mf-node has-down" data-id="ncs" data-desc="Groups the land actions that store carbon or stop it escaping. That grouping is where the protect, manage and restore pathways come from." data-href="technical-docs.html#docs/phase4-pathways"><span class="mf-t">Natural Climate Solutions framework</span></button><button type="button" class="mf-node has-down" data-id="ec" data-desc="A handbook for measuring what an NbS changes for climate, nature and society. The framework takes from it the habit of reporting all three together." data-href="technical-docs.html#docs/phase5"><span class="mf-t">European Commission NbS impact assessment</span></button><button type="button" class="mf-node has-down" data-id="ccb" data-desc="The Climate, Community &amp; Biodiversity Standard, which the tool’s project document is written to meet." data-href="technical-docs.html#docs/science-limits"><span class="mf-t">Verra CCB Standard</span></button></div>
+            <button type="button" class="mf-node mf-country has-down" data-id="country" data-desc="Each ASEAN Member State already tracks some of this through its own ministries and statistics office. The framework starts from that instead of asking countries to measure twice." data-href="technical-docs.html#docs/annex-people"><span class="mf-t">Country standards</span><small>Eleven Member States: what each already measures, and the national office that produces it.</small><span class="mf-flags" aria-hidden="true"><img src="https://cdnjs.cloudflare.com/ajax/libs/flag-icons/7.2.3/flags/1x1/bn.svg" alt="" title="Brunei Darussalam" width="22" height="22" loading="lazy" /><img src="https://cdnjs.cloudflare.com/ajax/libs/flag-icons/7.2.3/flags/1x1/kh.svg" alt="" title="Cambodia" width="22" height="22" loading="lazy" /><img src="https://cdnjs.cloudflare.com/ajax/libs/flag-icons/7.2.3/flags/1x1/id.svg" alt="" title="Indonesia" width="22" height="22" loading="lazy" /><img src="https://cdnjs.cloudflare.com/ajax/libs/flag-icons/7.2.3/flags/1x1/la.svg" alt="" title="Lao PDR" width="22" height="22" loading="lazy" /><img src="https://cdnjs.cloudflare.com/ajax/libs/flag-icons/7.2.3/flags/1x1/my.svg" alt="" title="Malaysia" width="22" height="22" loading="lazy" /><img src="https://cdnjs.cloudflare.com/ajax/libs/flag-icons/7.2.3/flags/1x1/mm.svg" alt="" title="Myanmar" width="22" height="22" loading="lazy" /><img src="https://cdnjs.cloudflare.com/ajax/libs/flag-icons/7.2.3/flags/1x1/ph.svg" alt="" title="Philippines" width="22" height="22" loading="lazy" /><img src="https://cdnjs.cloudflare.com/ajax/libs/flag-icons/7.2.3/flags/1x1/sg.svg" alt="" title="Singapore" width="22" height="22" loading="lazy" /><img src="https://cdnjs.cloudflare.com/ajax/libs/flag-icons/7.2.3/flags/1x1/th.svg" alt="" title="Thailand" width="22" height="22" loading="lazy" /><img src="https://cdnjs.cloudflare.com/ajax/libs/flag-icons/7.2.3/flags/1x1/tl.svg" alt="" title="Timor-Leste" width="22" height="22" loading="lazy" /><img src="https://cdnjs.cloudflare.com/ajax/libs/flag-icons/7.2.3/flags/1x1/vn.svg" alt="" title="Viet Nam" width="22" height="22" loading="lazy" /></span></button>
+          </div>
         </div>
-        <div class="standards reveal">
-          <div class="sl">Aligned with</div>
-          <div class="row">
-            <span class="stdchip"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>CCB Standard</span>
-            <span class="stdchip"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Verra VM0048</span>
-            <span class="stdchip"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Plan Vivo</span>
-            <span class="stdchip"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>ASEAN MRV Framework</span>
+        <div class="mf-stage mf-s2">
+          <div class="mf-step"><span class="mf-no">02</span><span class="mf-sl">What the standards settle</span></div>
+          <div class="mf-row">
+            <button type="button" class="mf-node mf-concept has-down" data-id="def" data-desc="The tool uses the definition UN member states agreed at the UN Environment Assembly in 2022, so “NbS” means the same thing in every country it covers." data-href="technical-docs.html#docs/scope"><span class="mf-t">Definition of NbS</span><small>UNEA (2022)</small></button>
+            <button type="button" class="mf-node mf-concept has-down" data-id="pathway" data-desc="Every site lands on one pathway, decided by the state its ecosystem is in today and where it’s heading." data-href="technical-docs.html#docs/phase4-matrix"><span class="mf-t">NbS pathway</span><small>protect, manage, restore</small></button>
+            <button type="button" class="mf-node mf-concept mf-type has-down" data-id="type" data-desc="A carbon figure never travels alone: the same report carries what the project does for nature and for the people who live there." data-href="technical-docs.html#docs/phase5"><span class="mf-t">NbS type and joint reporting</span><small>climate, nature and people reported together</small></button>
+            <span class="mf-pipe" aria-hidden="true"></span>
+            <button type="button" class="mf-node mf-concept mf-cind" data-id="cind" data-desc="What each country already reports, matched to the shared list so a project and a ministry describe the same thing in the same words." data-href="technical-docs.html#docs/annex-people"><span class="mf-t">Country indicators</span></button>
+          </div>
+        </div>
+        <div class="mf-stage mf-s3">
+          <div class="mf-step"><span class="mf-no">03</span><span class="mf-sl">One shared list</span></div>
+          <div class="mf-row">
+            <button type="button" class="mf-node mf-core mf-set has-down short" data-id="set" data-desc="One shared list that every monitoring plan draws from. Each indicator says what to measure and which data route can feed it." data-href="technical-docs.html#docs/science-method"><span class="mf-t">Indicator set of the framework</span><small>85 items</small></button>
+          </div>
+        </div>
+        <div class="mf-stage mf-s4">
+          <div class="mf-step"><span class="mf-no">04</span><span class="mf-sl">Three data routes</span></div>
+          <div class="mf-row">
+            <div class="mf-tiers"><button type="button" class="mf-node mf-tier has-down" data-id="t1" data-desc="Global datasets clipped to Southeast Asia and aligned to the SERVIR Regional Land Cover Monitoring System, on a single 30 m grid. Every site gets this on day one, before anyone visits." data-href="technical-docs.html#docs/landcover"><span class="mf-t">Tier 1 · Regional layers</span><small>Global datasets harmonised with SERVIR-Mekong’s land cover onto one 30 m grid</small></button><button type="button" class="mf-node mf-tier has-down" data-id="t2" data-desc="Official figures from each country’s statistics office (BPS, DOSM, PSA and the rest), tagged with the administrative level they come from: village, district, province or country." data-href="technical-docs.html#docs/annex-people"><span class="mf-t">Tier 2 · National statistics</span><small>From eleven national statistics offices, labelled by level</small></button><button type="button" class="mf-node mf-tier has-down" data-id="t3" data-desc="The measurements your team collects in the field. Where they exist, they take over from the regional and national figures." data-href="technical-docs.html#docs/limits"><span class="mf-t">Tier 3 · Field data</span><small>What implementers measure on site</small></button></div>
+          </div>
+        </div>
+        <div class="mf-stage mf-s5">
+          <div class="mf-step"><span class="mf-no">05</span><span class="mf-sl">Context for your site</span></div>
+          <div class="mf-row">
+            <button type="button" class="mf-node mf-core mf-ctx" data-id="ctx" data-desc="The three routes come together for your boundary. You can still see whether a number came from a regional map, a national table or your own plots, which is what an auditor will ask first." data-href="technical-docs.html#docs/science-data"><span class="mf-t">A dataset that fits your site</span><small>Regional, national and field data in one place, each figure pointing back to its source</small></button>
           </div>
         </div>
       </div>
 
-      <div class="reveal">
-        <div class="cred-photo"><img src="assets/home/workshop-mapping.webp" alt="Six people leaning over a printed land-cover map on a table, two of them pointing at the same area, with notes, pens and phones beside it" width="499" height="350" loading="lazy" /></div>
-        <div class="criteria">
-          <div class="crit"><div class="cn">1</div><div><h5>Addresses societal challenges</h5><p>Tied to a clear adaptation, mitigation or resilience need for the community it serves.</p></div></div>
-          <div class="crit"><div class="cn">2</div><div><h5>Designed at the right scale</h5><p>Scoped to the ecosystem and landscape, not arbitrary administrative lines.</p></div></div>
-          <div class="crit"><div class="cn">3</div><div><h5>Net biodiversity gain</h5><p>Improves habitat condition and ecosystem integrity, tracked through degradation layers.</p></div></div>
-          <div class="crit"><div class="cn">4</div><div><h5>Economically viable</h5><p>Backed by a baseline credible enough to attract and withstand climate finance.</p></div></div>
-          <div class="crit"><div class="cn">5</div><div><h5>Inclusive &amp; equitable governance</h5><p>Centres local organisations, with GEDSI indicators built into monitoring.</p></div></div>
-          <div class="crit"><div class="cn">6</div><div><h5>Monitored &amp; verified</h5><p>Carried into a long-term MRV plan so impact is measured, reported and verified.</p></div></div>
+      <aside class="mf-detail">
+        <div aria-live="polite">
+          <div class="mf-kicker" id="mfKicker">How it fits together</div>
+          <h3 id="mfTitle">Start anywhere</h3>
+          <p id="mfDesc">Pick a box in the flow to see what it does, what it feeds, and where the methodology explains it.</p>
         </div>
-        <p class="cred-note">↳ Every figure links back to its method — the math behind the map — so you can explain your project to anyone who asks.</p>
-        <a class="cbtn cbtn-text cred-link" href="technical-docs.html">Learn the methodology behind NbS Tool <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-      </div>
+        <a class="cbtn cbtn-text mf-more" id="mfMore" href="technical-docs.html">How this works <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </aside>
     </div>
   </div>
 </section>
@@ -616,50 +502,302 @@
       <h2>Shaped by the people who'll <span class="em">use it.</span></h2>
     </div>
 
-    <div class="tq-grid">
-      <figure class="tq reveal">
-        <blockquote>NbS Tool would really enhance the ability of indigenous people to plan their land management. With the right facilitation and support, the NbS Tool would be very empowering.</blockquote>
-        <figcaption>
-          <span class="tq-av"><span class="tq-ini" aria-hidden="true">JI</span><img src="assets/testimony/jayson.png" alt="Jayson Ibanez" loading="lazy" onerror="this.remove()" /></span>
-          <span class="tq-meta">
-            <span class="tq-n">Jayson Ibanez, PhD</span>
-            <span class="tq-r">Director for Research and Conservation, Philippine Eagle Foundation (PEF) · Philippines</span>
-          </span>
-        </figcaption>
-      </figure>
-
-      <figure class="tq reveal">
-        <blockquote>NbS Tool is able to improve IP groups' Ancestral Domains Sustainable Development and Protection Plan (ADSPP) by providing more data, ensuring secure data protection.</blockquote>
-        <figcaption>
-          <span class="tq-av"><span class="tq-ini" aria-hidden="true">JL</span><img src="assets/testimony/jimbae.jpg" alt="Jimbae Lucino" loading="lazy" onerror="this.remove()" /></span>
-          <span class="tq-meta">
-            <span class="tq-n">Jimbae Lucino</span>
-            <span class="tq-r">Project Manager, Philippine Eagle Foundation (PEF) · Philippines</span>
-          </span>
-        </figcaption>
-      </figure>
-
-      <figure class="tq reveal">
-        <blockquote>NbS Tool could support our diverse needs like generating documents for social forestry or management plans by measuring areas and potential carbon sequestration.</blockquote>
-        <figcaption>
-          <span class="tq-av"><span class="tq-ini" aria-hidden="true">A</span><img src="assets/testimony/adios.jpg" alt="Adiosyafri" loading="lazy" onerror="this.remove()" /></span>
-          <span class="tq-meta">
-            <span class="tq-n">Adiosyafri</span>
-            <span class="tq-r">Director for Research and Campaign, Hutan Kita Institute (HaKI) · Indonesia</span>
-          </span>
-        </figcaption>
-      </figure>
-
-      <figure class="tq reveal">
-        <blockquote>NbS Tool will help processing and collecting data, so it would be better documented for related stakeholders who will manage sustainable social forestry after the permit.</blockquote>
-        <figcaption>
-          <span class="tq-av"><span class="tq-ini" aria-hidden="true">DP</span><img src="assets/testimony/dedi.jpg" alt="Dedi Permana" loading="lazy" onerror="this.remove()" /></span>
-          <span class="tq-meta">
-            <span class="tq-n">Dedi Permana</span>
-            <span class="tq-r">Executive Director, Hutan Kita Institute (HaKI) · Indonesia</span>
-          </span>
-        </figcaption>
-      </figure>
+    <!-- Added from the NbS Tool V3 hands-on training (Jakarta) and the V3 concept interviews.
+           Quotes are the participants' own words; interview quotes have only fillers removed.
+           TODO(content): confirm each person's title and organisation name, and get their OK and a photo before launch. -->
+    <!-- ponytail: two drifting rows, each the seven quotes in a different order and width, then a clone set.
+         Uneven widths and a staggered second row keep it from reading as a gallery. Pauses on hover/focus. -->
+    <div class="tq-slider reveal" aria-label="What people said about NbS Tool, moving. Hover or focus to pause.">
+      <div class="tq-row">
+        <div class="tq-track">
+        <figure class="tq tq-lg">
+                <blockquote>NbS Tool would really enhance the ability of indigenous people to plan their land management. With the right facilitation and support, the NbS Tool would be very empowering.</blockquote>
+                <figcaption>
+                  <span class="tq-av"><span class="tq-ini" aria-hidden="true">JI</span><img src="assets/testimony/jayson.png" alt="Jayson Ibanez" loading="lazy" onerror="this.remove()" /></span>
+                  <span class="tq-meta">
+                    <span class="tq-n">Jayson Ibanez, PhD</span>
+                    <span class="tq-r">Director for Research and Conservation, Philippine Eagle Foundation (PEF) · Philippines</span>
+                  </span>
+                </figcaption>
+              </figure>
+        <figure class="tq tq-sm">
+                <blockquote>NbS Tool is able to improve IP groups' Ancestral Domains Sustainable Development and Protection Plan (ADSPP) by providing more data, ensuring secure data protection.</blockquote>
+                <figcaption>
+                  <span class="tq-av"><span class="tq-ini" aria-hidden="true">JL</span><img src="assets/testimony/jimbae.jpg" alt="Jimbae Lucino" loading="lazy" onerror="this.remove()" /></span>
+                  <span class="tq-meta">
+                    <span class="tq-n">Jimbae Lucino</span>
+                    <span class="tq-r">Project Manager, Philippine Eagle Foundation (PEF) · Philippines</span>
+                  </span>
+                </figcaption>
+              </figure>
+        <figure class="tq tq-md">
+                <blockquote>NbS Tool could support our diverse needs like generating documents for social forestry or management plans by measuring areas and potential carbon sequestration.</blockquote>
+                <figcaption>
+                  <span class="tq-av"><span class="tq-ini" aria-hidden="true">A</span><img src="assets/testimony/adios.jpg" alt="Adiosyafri" loading="lazy" onerror="this.remove()" /></span>
+                  <span class="tq-meta">
+                    <span class="tq-n">Adiosyafri</span>
+                    <span class="tq-r">Director for Research and Campaign, Hutan Kita Institute (HaKI) · Indonesia</span>
+                  </span>
+                </figcaption>
+              </figure>
+        <figure class="tq tq-lg">
+                <blockquote>NbS Tool will help processing and collecting data, so it would be better documented for related stakeholders who will manage sustainable social forestry after the permit.</blockquote>
+                <figcaption>
+                  <span class="tq-av"><span class="tq-ini" aria-hidden="true">DP</span><img src="assets/testimony/dedi.jpg" alt="Dedi Permana" loading="lazy" onerror="this.remove()" /></span>
+                  <span class="tq-meta">
+                    <span class="tq-n">Dedi Permana</span>
+                    <span class="tq-r">Executive Director, Hutan Kita Institute (HaKI) · Indonesia</span>
+                  </span>
+                </figcaption>
+              </figure>
+        <figure class="tq tq-sm">
+                <blockquote>I will not remove anything from NbS Tool because it is important for our organisation.</blockquote>
+                <figcaption>
+                  <span class="tq-av"><span class="tq-ini" aria-hidden="true">LG</span><img src="assets/testimony/leopoldina.jpg" alt="Leopoldina Joana Guterres" loading="lazy" onerror="this.remove()" /></span>
+                  <span class="tq-meta">
+                    <span class="tq-n">Leopoldina Joana Guterres</span>
+                    <span class="tq-r">FRM · Timor-Leste</span>
+                  </span>
+                </figcaption>
+              </figure>
+        <figure class="tq tq-md">
+                <blockquote>On this kind of analysis, I think it’s really great, because it really helps the user understand the drivers of degradation and the drivers of change.</blockquote>
+                <figcaption>
+                  <span class="tq-av"><span class="tq-ini" aria-hidden="true">NQ</span><img src="assets/testimony/quyen.jpg" alt="Nguyen Hanh Quyen" loading="lazy" onerror="this.remove()" /></span>
+                  <span class="tq-meta">
+                    <span class="tq-n">Nguyen Hanh Quyen</span>
+                    <span class="tq-r">Asian Disaster Preparedness Center (ADPC) · Vietnam</span>
+                  </span>
+                </figcaption>
+              </figure>
+        <figure class="tq tq-sm">
+                <blockquote>My first impression is that for the planning stage it is very useful, to identify which area should be studied.</blockquote>
+                <figcaption>
+                  <span class="tq-av"><span class="tq-ini" aria-hidden="true">WW</span><img src="assets/testimony/wahwah.jpg" alt="Wah Wah" loading="lazy" onerror="this.remove()" /></span>
+                  <span class="tq-meta">
+                    <span class="tq-n">Wah Wah</span>
+                    <span class="tq-r">General Manager, Nippon Koei · Myanmar</span>
+                  </span>
+                </figcaption>
+              </figure>
+        <!-- clone set for the seamless loop, hidden from AT -->
+        <figure class="tq tq-lg" aria-hidden="true">
+                <blockquote>NbS Tool would really enhance the ability of indigenous people to plan their land management. With the right facilitation and support, the NbS Tool would be very empowering.</blockquote>
+                <figcaption>
+                  <span class="tq-av"><span class="tq-ini" aria-hidden="true">JI</span><img src="assets/testimony/jayson.png" alt="Jayson Ibanez" loading="lazy" onerror="this.remove()" /></span>
+                  <span class="tq-meta">
+                    <span class="tq-n">Jayson Ibanez, PhD</span>
+                    <span class="tq-r">Director for Research and Conservation, Philippine Eagle Foundation (PEF) · Philippines</span>
+                  </span>
+                </figcaption>
+              </figure>
+        <figure class="tq tq-sm" aria-hidden="true">
+                <blockquote>NbS Tool is able to improve IP groups' Ancestral Domains Sustainable Development and Protection Plan (ADSPP) by providing more data, ensuring secure data protection.</blockquote>
+                <figcaption>
+                  <span class="tq-av"><span class="tq-ini" aria-hidden="true">JL</span><img src="assets/testimony/jimbae.jpg" alt="Jimbae Lucino" loading="lazy" onerror="this.remove()" /></span>
+                  <span class="tq-meta">
+                    <span class="tq-n">Jimbae Lucino</span>
+                    <span class="tq-r">Project Manager, Philippine Eagle Foundation (PEF) · Philippines</span>
+                  </span>
+                </figcaption>
+              </figure>
+        <figure class="tq tq-md" aria-hidden="true">
+                <blockquote>NbS Tool could support our diverse needs like generating documents for social forestry or management plans by measuring areas and potential carbon sequestration.</blockquote>
+                <figcaption>
+                  <span class="tq-av"><span class="tq-ini" aria-hidden="true">A</span><img src="assets/testimony/adios.jpg" alt="Adiosyafri" loading="lazy" onerror="this.remove()" /></span>
+                  <span class="tq-meta">
+                    <span class="tq-n">Adiosyafri</span>
+                    <span class="tq-r">Director for Research and Campaign, Hutan Kita Institute (HaKI) · Indonesia</span>
+                  </span>
+                </figcaption>
+              </figure>
+        <figure class="tq tq-lg" aria-hidden="true">
+                <blockquote>NbS Tool will help processing and collecting data, so it would be better documented for related stakeholders who will manage sustainable social forestry after the permit.</blockquote>
+                <figcaption>
+                  <span class="tq-av"><span class="tq-ini" aria-hidden="true">DP</span><img src="assets/testimony/dedi.jpg" alt="Dedi Permana" loading="lazy" onerror="this.remove()" /></span>
+                  <span class="tq-meta">
+                    <span class="tq-n">Dedi Permana</span>
+                    <span class="tq-r">Executive Director, Hutan Kita Institute (HaKI) · Indonesia</span>
+                  </span>
+                </figcaption>
+              </figure>
+        <figure class="tq tq-sm" aria-hidden="true">
+                <blockquote>I will not remove anything from NbS Tool because it is important for our organisation.</blockquote>
+                <figcaption>
+                  <span class="tq-av"><span class="tq-ini" aria-hidden="true">LG</span><img src="assets/testimony/leopoldina.jpg" alt="Leopoldina Joana Guterres" loading="lazy" onerror="this.remove()" /></span>
+                  <span class="tq-meta">
+                    <span class="tq-n">Leopoldina Joana Guterres</span>
+                    <span class="tq-r">FRM · Timor-Leste</span>
+                  </span>
+                </figcaption>
+              </figure>
+        <figure class="tq tq-md" aria-hidden="true">
+                <blockquote>On this kind of analysis, I think it’s really great, because it really helps the user understand the drivers of degradation and the drivers of change.</blockquote>
+                <figcaption>
+                  <span class="tq-av"><span class="tq-ini" aria-hidden="true">NQ</span><img src="assets/testimony/quyen.jpg" alt="Nguyen Hanh Quyen" loading="lazy" onerror="this.remove()" /></span>
+                  <span class="tq-meta">
+                    <span class="tq-n">Nguyen Hanh Quyen</span>
+                    <span class="tq-r">Asian Disaster Preparedness Center (ADPC) · Vietnam</span>
+                  </span>
+                </figcaption>
+              </figure>
+        <figure class="tq tq-sm" aria-hidden="true">
+                <blockquote>My first impression is that for the planning stage it is very useful, to identify which area should be studied.</blockquote>
+                <figcaption>
+                  <span class="tq-av"><span class="tq-ini" aria-hidden="true">WW</span><img src="assets/testimony/wahwah.jpg" alt="Wah Wah" loading="lazy" onerror="this.remove()" /></span>
+                  <span class="tq-meta">
+                    <span class="tq-n">Wah Wah</span>
+                    <span class="tq-r">General Manager, Nippon Koei · Myanmar</span>
+                  </span>
+                </figcaption>
+              </figure>
+        </div>
+      </div>
+      <div class="tq-row tq-rev">
+        <div class="tq-track">
+        <figure class="tq tq-md">
+                <blockquote>I will not remove anything from NbS Tool because it is important for our organisation.</blockquote>
+                <figcaption>
+                  <span class="tq-av"><span class="tq-ini" aria-hidden="true">LG</span><img src="assets/testimony/leopoldina.jpg" alt="Leopoldina Joana Guterres" loading="lazy" onerror="this.remove()" /></span>
+                  <span class="tq-meta">
+                    <span class="tq-n">Leopoldina Joana Guterres</span>
+                    <span class="tq-r">FRM · Timor-Leste</span>
+                  </span>
+                </figcaption>
+              </figure>
+        <figure class="tq tq-lg">
+                <blockquote>My first impression is that for the planning stage it is very useful, to identify which area should be studied.</blockquote>
+                <figcaption>
+                  <span class="tq-av"><span class="tq-ini" aria-hidden="true">WW</span><img src="assets/testimony/wahwah.jpg" alt="Wah Wah" loading="lazy" onerror="this.remove()" /></span>
+                  <span class="tq-meta">
+                    <span class="tq-n">Wah Wah</span>
+                    <span class="tq-r">General Manager, Nippon Koei · Myanmar</span>
+                  </span>
+                </figcaption>
+              </figure>
+        <figure class="tq tq-md">
+                <blockquote>NbS Tool is able to improve IP groups' Ancestral Domains Sustainable Development and Protection Plan (ADSPP) by providing more data, ensuring secure data protection.</blockquote>
+                <figcaption>
+                  <span class="tq-av"><span class="tq-ini" aria-hidden="true">JL</span><img src="assets/testimony/jimbae.jpg" alt="Jimbae Lucino" loading="lazy" onerror="this.remove()" /></span>
+                  <span class="tq-meta">
+                    <span class="tq-n">Jimbae Lucino</span>
+                    <span class="tq-r">Project Manager, Philippine Eagle Foundation (PEF) · Philippines</span>
+                  </span>
+                </figcaption>
+              </figure>
+        <figure class="tq tq-sm">
+                <blockquote>NbS Tool will help processing and collecting data, so it would be better documented for related stakeholders who will manage sustainable social forestry after the permit.</blockquote>
+                <figcaption>
+                  <span class="tq-av"><span class="tq-ini" aria-hidden="true">DP</span><img src="assets/testimony/dedi.jpg" alt="Dedi Permana" loading="lazy" onerror="this.remove()" /></span>
+                  <span class="tq-meta">
+                    <span class="tq-n">Dedi Permana</span>
+                    <span class="tq-r">Executive Director, Hutan Kita Institute (HaKI) · Indonesia</span>
+                  </span>
+                </figcaption>
+              </figure>
+        <figure class="tq tq-md">
+                <blockquote>NbS Tool would really enhance the ability of indigenous people to plan their land management. With the right facilitation and support, the NbS Tool would be very empowering.</blockquote>
+                <figcaption>
+                  <span class="tq-av"><span class="tq-ini" aria-hidden="true">JI</span><img src="assets/testimony/jayson.png" alt="Jayson Ibanez" loading="lazy" onerror="this.remove()" /></span>
+                  <span class="tq-meta">
+                    <span class="tq-n">Jayson Ibanez, PhD</span>
+                    <span class="tq-r">Director for Research and Conservation, Philippine Eagle Foundation (PEF) · Philippines</span>
+                  </span>
+                </figcaption>
+              </figure>
+        <figure class="tq tq-lg">
+                <blockquote>On this kind of analysis, I think it’s really great, because it really helps the user understand the drivers of degradation and the drivers of change.</blockquote>
+                <figcaption>
+                  <span class="tq-av"><span class="tq-ini" aria-hidden="true">NQ</span><img src="assets/testimony/quyen.jpg" alt="Nguyen Hanh Quyen" loading="lazy" onerror="this.remove()" /></span>
+                  <span class="tq-meta">
+                    <span class="tq-n">Nguyen Hanh Quyen</span>
+                    <span class="tq-r">Asian Disaster Preparedness Center (ADPC) · Vietnam</span>
+                  </span>
+                </figcaption>
+              </figure>
+        <figure class="tq tq-sm">
+                <blockquote>NbS Tool could support our diverse needs like generating documents for social forestry or management plans by measuring areas and potential carbon sequestration.</blockquote>
+                <figcaption>
+                  <span class="tq-av"><span class="tq-ini" aria-hidden="true">A</span><img src="assets/testimony/adios.jpg" alt="Adiosyafri" loading="lazy" onerror="this.remove()" /></span>
+                  <span class="tq-meta">
+                    <span class="tq-n">Adiosyafri</span>
+                    <span class="tq-r">Director for Research and Campaign, Hutan Kita Institute (HaKI) · Indonesia</span>
+                  </span>
+                </figcaption>
+              </figure>
+        <!-- clone set for the seamless loop, hidden from AT -->
+        <figure class="tq tq-md" aria-hidden="true">
+                <blockquote>I will not remove anything from NbS Tool because it is important for our organisation.</blockquote>
+                <figcaption>
+                  <span class="tq-av"><span class="tq-ini" aria-hidden="true">LG</span><img src="assets/testimony/leopoldina.jpg" alt="Leopoldina Joana Guterres" loading="lazy" onerror="this.remove()" /></span>
+                  <span class="tq-meta">
+                    <span class="tq-n">Leopoldina Joana Guterres</span>
+                    <span class="tq-r">FRM · Timor-Leste</span>
+                  </span>
+                </figcaption>
+              </figure>
+        <figure class="tq tq-lg" aria-hidden="true">
+                <blockquote>My first impression is that for the planning stage it is very useful, to identify which area should be studied.</blockquote>
+                <figcaption>
+                  <span class="tq-av"><span class="tq-ini" aria-hidden="true">WW</span><img src="assets/testimony/wahwah.jpg" alt="Wah Wah" loading="lazy" onerror="this.remove()" /></span>
+                  <span class="tq-meta">
+                    <span class="tq-n">Wah Wah</span>
+                    <span class="tq-r">General Manager, Nippon Koei · Myanmar</span>
+                  </span>
+                </figcaption>
+              </figure>
+        <figure class="tq tq-md" aria-hidden="true">
+                <blockquote>NbS Tool is able to improve IP groups' Ancestral Domains Sustainable Development and Protection Plan (ADSPP) by providing more data, ensuring secure data protection.</blockquote>
+                <figcaption>
+                  <span class="tq-av"><span class="tq-ini" aria-hidden="true">JL</span><img src="assets/testimony/jimbae.jpg" alt="Jimbae Lucino" loading="lazy" onerror="this.remove()" /></span>
+                  <span class="tq-meta">
+                    <span class="tq-n">Jimbae Lucino</span>
+                    <span class="tq-r">Project Manager, Philippine Eagle Foundation (PEF) · Philippines</span>
+                  </span>
+                </figcaption>
+              </figure>
+        <figure class="tq tq-sm" aria-hidden="true">
+                <blockquote>NbS Tool will help processing and collecting data, so it would be better documented for related stakeholders who will manage sustainable social forestry after the permit.</blockquote>
+                <figcaption>
+                  <span class="tq-av"><span class="tq-ini" aria-hidden="true">DP</span><img src="assets/testimony/dedi.jpg" alt="Dedi Permana" loading="lazy" onerror="this.remove()" /></span>
+                  <span class="tq-meta">
+                    <span class="tq-n">Dedi Permana</span>
+                    <span class="tq-r">Executive Director, Hutan Kita Institute (HaKI) · Indonesia</span>
+                  </span>
+                </figcaption>
+              </figure>
+        <figure class="tq tq-md" aria-hidden="true">
+                <blockquote>NbS Tool would really enhance the ability of indigenous people to plan their land management. With the right facilitation and support, the NbS Tool would be very empowering.</blockquote>
+                <figcaption>
+                  <span class="tq-av"><span class="tq-ini" aria-hidden="true">JI</span><img src="assets/testimony/jayson.png" alt="Jayson Ibanez" loading="lazy" onerror="this.remove()" /></span>
+                  <span class="tq-meta">
+                    <span class="tq-n">Jayson Ibanez, PhD</span>
+                    <span class="tq-r">Director for Research and Conservation, Philippine Eagle Foundation (PEF) · Philippines</span>
+                  </span>
+                </figcaption>
+              </figure>
+        <figure class="tq tq-lg" aria-hidden="true">
+                <blockquote>On this kind of analysis, I think it’s really great, because it really helps the user understand the drivers of degradation and the drivers of change.</blockquote>
+                <figcaption>
+                  <span class="tq-av"><span class="tq-ini" aria-hidden="true">NQ</span><img src="assets/testimony/quyen.jpg" alt="Nguyen Hanh Quyen" loading="lazy" onerror="this.remove()" /></span>
+                  <span class="tq-meta">
+                    <span class="tq-n">Nguyen Hanh Quyen</span>
+                    <span class="tq-r">Asian Disaster Preparedness Center (ADPC) · Vietnam</span>
+                  </span>
+                </figcaption>
+              </figure>
+        <figure class="tq tq-sm" aria-hidden="true">
+                <blockquote>NbS Tool could support our diverse needs like generating documents for social forestry or management plans by measuring areas and potential carbon sequestration.</blockquote>
+                <figcaption>
+                  <span class="tq-av"><span class="tq-ini" aria-hidden="true">A</span><img src="assets/testimony/adios.jpg" alt="Adiosyafri" loading="lazy" onerror="this.remove()" /></span>
+                  <span class="tq-meta">
+                    <span class="tq-n">Adiosyafri</span>
+                    <span class="tq-r">Director for Research and Campaign, Hutan Kita Institute (HaKI) · Indonesia</span>
+                  </span>
+                </figcaption>
+              </figure>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -671,8 +809,8 @@
 <section class="band band-paper coalition" id="about" data-screen-label="Coalition Members">
   <div class="wrap">
     <div class="head center reveal" style="margin-inline:auto">
-      <h2>A partnership of leading <span class="em">Southeast Asian institutions.</span></h2>
-      <p>Built under the ASEAN-NbS Tool project by a coalition working to improve data access, showcase high-quality projects, and direct funding to local communities.</p>
+      <h2>Built by the <span class="em">SCeNe Coalition.</span></h2>
+      <p>The Southeast Asia Climate and Nature-based Solutions Coalition is a group of conservation and research organisations that have long worked across the region. They want more money going to projects that are good for nature and fair to the people who live there, and better data is how you tell those projects apart. The tool is one of three things they’ve built, alongside a set of high-integrity criteria and the NbS Incubator.</p>
       <div class="rule"></div>
     </div>
     <div class="partner-groups">
@@ -719,7 +857,7 @@
   <div class="finale-bg" aria-hidden="true"></div>
   <div class="wrap">
     <h2 class="reveal">Let's make it count.</h2>
-    <p class="reveal">Start where every great Nature-based Solution starts: a boundary on a map. Scope it, analyse it, and build the proof that unlocks the finance to protect it.</p>
+    <p class="reveal">It starts with a boundary on a map. Draw one, read what the tool reports, and decide whether the project is worth taking further. A guest can run the whole analysis; keeping it needs a free account.</p>
     <div class="cbtn-row reveal">
       <a class="cbtn cbtn-spring" href="interactive-map.html">
         <svg viewBox="0 0 24 24" fill="none"><path d="M9 4L3 7v13l6-3 6 3 6-3V4l-6 3-6-3z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 4v13M15 7v13" stroke="currentColor" stroke-width="1.8"/></svg>
@@ -990,7 +1128,14 @@ const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
      One sliding column per digit, punctuation passes through untouched.
      Two full 0-9 cycles give the reel something to travel through. */
   function buildOdo(el) {
-    const text = el.getAttribute('data-odo');
+    let text = el.getAttribute('data-odo');
+    // A million hectares or more reads as Mha (1,250,000 ha → 1.25 Mha) so the figure stays on one line.
+    const unit = el.nextElementSibling;
+    const n = parseFloat(text.replace(/,/g, ''));
+    if (unit && unit.textContent.trim() === 'ha' && n >= 1e6) {
+      text = (n / 1e6).toFixed(2);
+      unit.textContent = 'Mha';
+    }
     el.setAttribute('aria-label', text);
     let html = '', d = 0;
     for (const ch of text) {
@@ -1024,28 +1169,51 @@ const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     odos.forEach(rollOdo);
   }
 
-  /* ---- features: tabs ---- */
-  const ftabs = Array.from(document.querySelectorAll('.ftabs [role="tab"]'));
-  function selectFeature(idx) {
-    ftabs.forEach(function (t, i) {
-      const on = i === idx;
-      t.classList.toggle('is-on', on);
-      t.setAttribute('aria-selected', on ? 'true' : 'false');
-      t.tabIndex = on ? 0 : -1;
-      document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+  /* ---- data flow: ASEAN MRV framework ---- */
+  (function () {
+    const flow = document.getElementById('mrvFlow');
+    if (!flow) return;
+    const nodes = Array.from(flow.querySelectorAll('.mf-node'));
+    const byId = {}; nodes.forEach(function (n) { byId[n.dataset.id] = n; });
+    const EDGES = { iucn: ['def'], ncs: ['pathway'], ec: ['type'], ccb: ['type'], country: ['cind'],
+      def: ['set'], pathway: ['set'], type: ['set'], cind: ['set'], set: ['t1', 't2', 't3'],
+      t1: ['ctx'], t2: ['ctx'], t3: ['ctx'] };
+    const UP = {};
+    Object.keys(EDGES).forEach(function (a) { EDGES[a].forEach(function (b) { (UP[b] = UP[b] || []).push(a); }); });
+    function walk(id, map, seen) {
+      (map[id] || []).forEach(function (n) { if (!seen.has(n)) { seen.add(n); walk(n, map, seen); } });
+      return seen;
+    }
+    const kicker = document.getElementById('mfKicker'), title = document.getElementById('mfTitle'),
+      desc = document.getElementById('mfDesc'), more = document.getElementById('mfMore');
+
+    function light(ids, onId) {
+      flow.classList.add('has-focus');
+      nodes.forEach(function (n) {
+        n.classList.toggle('is-lit', ids.has(n.dataset.id));
+        n.classList.toggle('is-on', n.dataset.id === onId);
+        n.setAttribute('aria-pressed', n.dataset.id === onId ? 'true' : 'false');
+      });
+      flow.querySelectorAll('.mf-stage').forEach(function (st) {
+        st.classList.toggle('is-lit', !!st.querySelector('.mf-node.is-lit'));
+      });
+    }
+    function select(id) {
+      const n = byId[id];
+      const ids = walk(id, EDGES, walk(id, UP, new Set([id])));
+      light(ids, id);
+      const next = (EDGES[id] || []).map(function (x) { return byId[x].querySelector('.mf-t').textContent; });
+      kicker.textContent = next.length ? 'Feeds ' + next.join(', ') : 'Where it all lands';
+      title.textContent = n.querySelector('.mf-t').textContent;
+      desc.textContent = n.dataset.desc;
+      more.href = n.dataset.href;
+    }
+    nodes.forEach(function (n) {
+      n.setAttribute('aria-pressed', 'false');
+      n.addEventListener('click', function () { select(n.dataset.id); });
+      n.addEventListener('mouseenter', function () { select(n.dataset.id); });
     });
-  }
-  ftabs.forEach(function (t, i) {
-    t.addEventListener('click', function () { selectFeature(i); });
-    t.addEventListener('keydown', function (e) {
-      const step = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
-      if (!step) return;
-      e.preventDefault();
-      const next = (i + step + ftabs.length) % ftabs.length;
-      selectFeature(next);
-      ftabs[next].focus();
-    });
-  });
+  })();
 
   /* ---- portfolio: flip cards ---- */
   document.querySelectorAll('.pflip:not([aria-hidden])').forEach(function (card) {
