@@ -976,3 +976,163 @@ this band only.
 `css/home.css` until a width scale exists (TODO-22). Seven quotes are enough for a seamless loop
 up to about 2,800px of viewport; add quotes before adding a third row.
 
+## DEC-39 · Help moves out of the link row into a "?" icon
+
+**Date.** 2026-11-09 · **Status.** `documented`
+
+**Context.** *Help Centre* sat in the centred link row beside Home, Interactive Map and My
+Project. Those three are places you work in; Help is something you reach for from anywhere.
+
+**Decision.** Drop it from `LINKS` in `js/navbar.js` and render it as a round "?" icon link
+(`.sitenav-help`) at the far right of `.sitenav-actions`, after the language selector, on every
+screen. Its accessible name is `aria-label="Help"`; a tooltip reading "Help" appears on hover and
+on keyboard focus and is `aria-hidden` so it is not announced twice. The icon is a solid disc in the
+logo's orange (`--logo-orange`, #e99f4a, a new primitive) with a white glyph, darkening slightly on
+hover, so Help stands apart from the green actions. On the Help Centre it carries `aria-current="page"` and an
+orange ring (`--ring-warning`). In the mobile drawer there is no hover, so
+the tooltip text shows as a visible label beside the icon.
+
+**Consequences.** The link row now holds three items. White on `--logo-orange` is about
+2.2:1, below the 3:1 WCAG 1.4.11 asks of a meaningful icon; a darker orange is a design question.
+The tooltip font size is a literal until a
+type-size scale exists (see the type-scale TODO in `tokens.json`).
+
+## DEC-40 · Testimony cards: Poppins quote, Acumin name, width follows the quote
+
+**Date.** 2026-11-09 · **Status.** `documented`
+
+**Context.** In DEC-38's cards the quote was set in the condensed display face and the name in
+Poppins, the role was in mono, and widths were dealt out without regard to quote length. Long
+quotes landed in 280px cards and short ones in 460px cards, so every row grew to the tallest
+narrow card and the wide cards were left half empty. Browser default `figure` margins also added
+80px between cards.
+
+**Decision.** Each card reads top to bottom: quote mark, quote in `--font-text` (Poppins), a
+hairline, then avatar, name in `--font-display` (Acumin Pro Condensed) and role in Poppins. A
+card's width now follows its quote's length (`tq-sm` short, `tq-md` mid, `tq-lg` long), so the
+same quote is the same width in both rows. The second row is reordered so the widths alternate.
+The three widths, the drift, the clones and the reduced-motion behaviour from DEC-38 are unchanged.
+
+**Consequences.** Quote text and who said it are unchanged. Cards now sit 20px apart, and the
+loop seam no longer jumps 2px. A new quote needs a width class chosen by its length.
+
+## DEC-41 · Home sections reordered; every band changes tone from the one before
+
+**Date.** 2026-11-09 · **Status.** `documented`
+
+**Context.** The home page sections were reordered to: hero, journey, data flow, triple benefit,
+field stories, testimony, coalition, final CTA. With their old backgrounds that put dark next to
+dark (hero → journey, stories → testimony) and light next to light (data flow → triple benefit),
+so section breaks did not show.
+
+**Decision.** Neighbouring bands never share a tone. Strict dark/light alternation is impossible
+because the coalition band has to stay light (partner logos) and the CTA dark, so a third tone,
+brand green, takes the testimony band:
+
+| # | Section | Tone |
+|---|---|---|
+| 1 | Hero | dark (`--ink-800`) |
+| 2 | Journey | light mint (`--paper-2`); the product frame inside stays dark |
+| 3 | Data flow | dark (`.band-dark`) |
+| 4 | Triple benefit | light (`--paper`) |
+| 5 | Field stories | dark (`--ink-850`) |
+| 6 | Testimony | brand green (`--primary-600`) |
+| 7 | Coalition | light (`--paper`) |
+| 8 | Final CTA | dark (`--ink-900`) |
+
+Content was recoloured with each band: the journey's chapters, tags and links moved to the light
+palette and its buttons to `cbtn-solid` / `cbtn-light`; the data-flow labels and step names went
+light, the core node became `--ink-650` with a spring border, and the white detail card sets its
+own dark text and link colour; testimony accents moved to `--spring-soft` and the card hairlines
+and fills to white tints.
+
+**Consequences.** `.band-mint` is no longer used on the home page. Moving a section again means
+checking this table first. Role text on testimony cards is at 90% opacity to keep 12px text above
+4.5:1 on the green.
+
+## DEC-42 · SCR-17 follows the WRI App Plan where it and the methodology document differ
+
+**Date.** 2026-11-09 · **Status.** `documented`
+
+**Context.** A review of "The science behind it" against the WRI App Plan (revised 14/08/2026)
+found six places where the page disagreed with the plan or with itself (review findings C-01 to
+C-06). The page is otherwise a transcription of the methodology document (DEC-24).
+
+**Decision.** Where the App Plan is the more authoritative or more recent statement, the page
+follows it, and says so where the methodology document reads differently:
+
+| Finding | Change in `js/technical-docs.js` | Basis |
+|---|---|---|
+| C-01 | Phase 1 states the maximum area: 100,000 ha without an account, 500,000 ha with one, larger on request | App Plan p. 8 |
+| C-02 | "ASEAN NbS/EbA MRV Framework" renamed **ASEAN NbS Framework**; a status callout says it is under review for ASEAN endorsement and names the old title once | App Plan p. 3 |
+| C-03 | Phase 1 intro no longer says "no other user input is requested"; it names duration, activities and the carbon-project question | App Plan p. 10; the page's own 8.4.4 |
+| C-04 | Duration stays in the Phase 1 table (methodology Table 4) but is marked as set in Phase 4 | App Plan p. 8 diagram; `interactive-map.html` |
+| C-05 | Restore definition in 2.2 says "assisted natural regeneration (ANR)", matching 7.8 and the 0.8 stocking factor | Internal consistency |
+| C-06 | Phase 2 says "29 characterisation layers" and lists the 3 threat and 2 pathway layers read on top | Annex A counts |
+
+**Consequences.** Three gaps stay open:
+
+- The rest of the build still says **200,000 ha** for guests (`help.html`, the map's "area is too
+  big" warning). Until those change, the methodology page and the product disagree (review
+  finding O-02).
+- The App Plan diagram counts the pathway raster inside its 29 layers, while this page counts 29
+  without it. The Geospatial Data Lead should confirm which count is correct.
+- The Data Analyser's source line still cites an "ASEAN NbS / EbA toolkit"
+  (`js/analysis-shared.js`). It may be a separate document, so it was not renamed.
+
+C-05 departs from the GUI Design Document's wording and needs the Substance Lead's confirmation.
+
+## DEC-42 · Field stories and testimony share one dark-green band
+
+**Date.** 2026-11-09 · **Status.** `documented`
+
+**Context.** After DEC-41 the field stories (near-black `--ink-850`) and the testimony (brand
+green `--primary-600`) sat in two bands next to each other. Both say what people on the ground
+told us, and the third tone existed only to separate them.
+
+**Decision.** The testimony moves inside the `#portfolio` section as a second `.wrap.proof-tq`,
+spaced from the stories by a top margin, and the `.testimony-band` section is gone. The combined
+`.proof` band is a `.band-dark` (same `--ink-800`, no gradient, no grain). The "More stories arrive with the NbS Portfolio,
+soon" pill under the stories (`.proof-foot`, `.soon-pill`) is removed. The page tones are now
+strictly alternating: dark, light mint, dark, light, dark, light, dark. This supersedes the
+testimony row of DEC-41's table.
+
+**Consequences.** `#portfolio` still targets the start of the stories. Testimony card colours
+from DEC-41 (white-tint hairlines and fills, `--spring-soft` accents) were tuned for brand
+green and stay legible on the dark band. Nothing on the page says the portfolio is coming any
+more; put that back elsewhere if it is still needed.
+
+## DEC-43 · SCR-17 gains Phase 6 and Phase 7 articles, a review record, and App Plan wording
+
+**Date.** 2026-11-09 · **Status.** `documented`
+
+**Context.** The App Plan review of SCR-17 (follows DEC-42, the SCR-17 entry) left ten
+"fix before launch" and "should fix" findings that needed no team decision. Two of them are
+missing methods: the App Plan promises a Monitoring Plan with "recommended indicators,
+monitoring methods, and frequencies" and a Document Generator, and the methodology document,
+which ends at potential benefit, explains neither.
+
+**Decision.**
+
+| Finding | Change |
+|---|---|
+| G-01 | New article **Phase 6 · Monitoring Plan** (`#docs/phase6`). It explains the activity → benefit → indicator chain and the three steps of the F05 screen. It reads the indicator catalogue live from `indicatorMeta`: the frequency counts, plus every indicator with its method and frequency in a collapsed table. The Framework mapping per indicator is a visible TODO, because the catalogue does not record it. |
+| G-02 | New article **Phase 7 · Generated documents** (`#docs/phase7`). It covers the three sources of content (analysis, user, template), the two F03 templates, where each of the three planned deliverables is produced, and the output. *Project Summary* is a visible TODO, because no template for it exists in the build. |
+| G-05 | Phase 1 names the accepted files (.zip shapefile, .kml, .kmz) and the area check. Geometry checks are a TODO. |
+| G-06, D-01 | *About this documentation* records the 1 and 8 September review (19 reviewers), the specialist partners' roles, the sign-off still open, and that the Technical Note is the planned publication. A *How to cite* callout says to cite the draft as a draft until then. |
+| G-07 | The People layers annex opens with a data provenance statement, taken from the App Plan's wording. |
+| D-02, D-03 | Glossary: FO defined, plus CSO, IPLC and Triple benefit. §8 names the three pillars as the triple benefit. |
+| D-04 | §2.1 explains that the data covers four ecosystems, interventions are recommended for three, and savanna is a guardrail. |
+| D-06 | §2.2 flags that the pathway definitions come from the GUI document and points to §7.6–7.9 until the Substance Team confirms them. |
+
+**Why the two new articles break the DEC-24 rule.** Every other method article is a
+transcription of the methodology document. Phases 6 and 7 have no source there, so they
+describe the build instead, and each section says so in a `doc-source` line ("Not part of the
+methodology document"). Phase 6 follows DEC-21 and reads its figures live. Phase 7 is prose,
+because `js/f03-app.js` keeps its template fields private inside an IIFE and SCR-17 does not
+load it. If the F03 templates change, Phase 7 must be edited by hand.
+
+**Consequences.** SCR-19's science entry page gains an *After the analysis* card row. The
+*Plan the monitoring* and *Generate the documents* sections link to the new articles, and
+`HELP_GUIDES` links back. Findings G-03, G-04, D-05, V-01, O-01 and O-02 still need a team
+decision and are untouched.

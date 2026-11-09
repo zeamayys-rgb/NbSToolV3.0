@@ -64,6 +64,7 @@ to turn them into `<a>`.`
 | `.sitenav-link.active` | class (set by JS) | no | — | Marks the current section |
 | `#profileWrap` / `#profileBtn` | id | for signed-in screens | — | Presence enables the profile dropdown |
 | `.sitenav-login` / `.sitenav-signup` | class | no | — | Logged-out variant (SCR-01, SCR-02); rendered as `<a href="login.html" data-auth>` so SCR-01's auth modal can intercept it and every other screen just follows the link |
+| `.sitenav-help` | class (rendered by JS) | no | always shown | "?" icon link to `help.html`, last item on the right; tooltip `.sitenav-help-tip` on hover / focus-visible, shown as a visible label in the mobile drawer; `aria-current="page"` on SCR-19 (DEC-39) |
 | `.open` | class (set by JS) | — | off | Mobile drawer open |
 
 **Variants.** Signed-in (profile dropdown + language) · Logged-out (Log in + Sign up) · Mobile

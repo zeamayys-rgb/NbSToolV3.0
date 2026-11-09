@@ -85,6 +85,9 @@
   --success-900: #082517;
   --success-950: #04130c;
 
+  /* ---------- Logo orange (DEC-39) ---------- */
+  --logo-orange: #e99f4a;
+
   /* ---------- Warning (amber) ---------- */
   --warning-25:  #fdf6ea;
   --warning-50:  #fcecd5;

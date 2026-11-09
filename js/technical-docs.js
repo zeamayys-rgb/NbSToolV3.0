@@ -266,6 +266,7 @@ function docsScope() {
       ['<strong>Savanna / natural grassland</strong><br><small>a reference class, not a target</small>',
        'Carried inside the pathway data but never offered as a restoration target. It acts as a guardrail: planting trees on land whose natural state is savanna is <em>conversion</em>, not restoration, so those areas are held as carbon ineligible instead of being restored.']
     ])}
+    <p>The data behind the tool covers four ecosystems: dryland forest, mangrove, peatland, and savanna or natural grassland. The tool recommends interventions for the first three only. Savanna is used as a guardrail, never as a target.</p>
     <h3>Why these three</h3>
     <p>The ecosystems were chosen on ecological grounds. Tropical forests in Southeast Asia hold high biodiversity and large carbon stocks. The region holds over <strong>70% of the world&rsquo;s tropical peatland</strong>, where the soil rather than the vegetation carries most of the carbon. Mangroves can store up to <strong>six times more carbon</strong> than land forests, and are under heavy pressure in the region.</p>
     ${docCallout('The three are not mutually exclusive', 'Peat swamp forest is both forest and peatland. Mangrove can grow on peat. The tool therefore reports a <strong>combination</strong> where one exists, rather than forcing a single label onto the site.', 'note')}`,
@@ -287,8 +288,9 @@ function docsScope() {
     ${docCallout('The order is a rule of thumb, not a ranking of worth', 'Cook-Patton et al. are explicit that the three are complementary and in practice sit together in one portfolio; which of them leads on a given site depends on biophysical, political, institutional, economic and socio-cultural context. The NbS Tool follows that reading. <strong>It does not tell a user which pathway is best.</strong> It reports which pathways the land is eligible for, and how many hectares fall under each.', 'note')}`,
     'pathway-hierarchy') +
 
-  docSection('2.2 &mdash; Alignment with the ASEAN NbS/EbA MRV Framework', `
-    <p>The ASEAN NbS/EbA MRV Framework adopts the same three pathways. In that framework the process begins with ecosystem identification for the selected ecosystems &mdash; forests, mangroves and peatlands &mdash; from land-use data. Each ecosystem is then assigned an NbS pathway according to its level of degradation. Key degradation drivers &mdash; forest fires, flooding, erosion, abrasion, landslides and logging &mdash; are identified to inform the choice of intervention.</p>
+  docSection('2.2 &mdash; Alignment with the ASEAN NbS Framework', `
+    ${docCallout('Status', 'The ASEAN NbS Framework is <strong>under review for ASEAN endorsement</strong>. Until it is endorsed, read references to it on these pages as alignment with a draft, not with an adopted ASEAN standard. The methodology document calls it the <em>ASEAN NbS/EbA MRV Framework</em>.', 'warn')}
+    <p>The ASEAN NbS Framework adopts the same three pathways. In that framework the process begins with ecosystem identification for the selected ecosystems &mdash; forests, mangroves and peatlands &mdash; from land-use data. Each ecosystem is then assigned an NbS pathway according to its level of degradation. Key degradation drivers &mdash; forest fires, flooding, erosion, abrasion, landslides and logging &mdash; are identified to inform the choice of intervention.</p>
     ${docCallout('NbS Tool v3 is the spatial implementation of that logic', 'The tool reads degradation from a ten-year land cover trajectory and turns it into a pathway. The rules are set out in <em>Ecological state &amp; trajectory</em> and <em>Decision matrix</em>.', 'note')}`,
     'asean-framework') +
 
@@ -299,11 +301,12 @@ function docsScope() {
       ['<strong>Manage</strong>',
        'Balance human livelihoods with ecological health on lands that transitioned into active use between 2014 and 2024. Manage pathways include silvofishery, paludiculture, soil and water enrichment, and buffer management. This strategy optimises working-land productivity, lowers carbon intensity, and minimises ecosystem impacts without requiring full rewilding.'],
       ['<strong>Restore</strong>',
-       'Actively heal heavily degraded landscapes, targeting degraded vegetation, barren lands, and long-term non-forested areas. Driven by the Afforestation, Reforestation and Revegetation (ARR) framework, the activities include native species planting, ecosystem restoration, and allowing natural forest regeneration. This pathway re-establishes high-integrity forest cover, secures long-term carbon removals, and creates ecosystem services.'],
+       'Actively heal heavily degraded landscapes, targeting degraded vegetation, barren lands, and long-term non-forested areas. Driven by the Afforestation, Reforestation and Revegetation (ARR) framework, the activities include native species planting, ecosystem restoration, and assisted natural regeneration (ANR). This pathway re-establishes high-integrity forest cover, secures long-term carbon removals, and creates ecosystem services.'],
       ['<strong>Ineligible</strong>',
        'Not a pathway, but a screening outcome reported in the same field. The land cannot generate carbon credits under the tool&rsquo;s current criteria, although non-carbon options may still exist. It covers natural forest converted to managed tree cover, plantation that was already established in 2014, settlement, and the savanna-reference categories.']
     ])}
-    ${docSource("Table 1; definitions follow the GUI Design Document NbS Tool V 3.0")}`,
+    ${docSource("Table 1; definitions follow the GUI Design Document NbS Tool V 3.0")}
+    ${docCallout('Where these definitions come from', 'These four definitions are taken from the interface design, not from the method itself. Until the Substance Team confirms them in the Technical Note, quote the method sections instead: <em>Protect</em> (7.6), <em>Manage</em> (7.7), <em>Restore</em> (7.8) and <em>Carbon ineligible areas</em> (7.9).', 'note')}`,
     'pathway-definitions');
 }
 
@@ -401,16 +404,18 @@ function docsPhase1() {
     `<span class="num">${docFmt(e[k].gain)}</span>`
   ]);
   return docHero('How each phase is calculated · Phase 1', 'Select location',
-    'The user supplies a project boundary. Everything the tool produces is derived from that input and from layers already held on the server. No other user input is required, and none is requested.',
+    'The user supplies a project boundary. The spatial analysis needs nothing else: every layer is read from the server against that boundary. Three later choices change the results: the project duration, the activities selected in Phase 4, and whether this is a carbon project. Data a user uploads goes into the generated documents, not into the spatial analysis.',
     [`AOI ${docNum('aoi.total')} ha`, `Duration ${docNum('aoi.duration')} years`, 'No minimum area check']) +
 
   docSection('What the user provides', `
     ${docTable(['Input', 'What it is', 'Detail'], [
-      ['<strong>Project boundary (AOI)</strong>', 'A polygon drawn on the interactive map, or uploaded as a spatial file.',
+      ['<strong>Project boundary (AOI)</strong>', 'A polygon drawn on the interactive map, or an uploaded file: a zipped shapefile (the .shp, .shx, .dbf and .prj files together), .kml or .kmz.',
+       '<p><strong>Checks before the analysis runs.</strong> The tool measures the boundary and will not start the analysis if it is larger than the account allows (see <em>Maximum area</em> below). Geometry checks: ' + docTodo('geometry checks not yet documented') + '</p>' +
        '<p><strong>How it is used.</strong> The boundary is reprojected to the reference CRS, World Cylindrical Equal Area, and every subsequent layer is clipped and read against it. A stable identifier is derived from the geometry, and every phase writes its result under that identifier, so a boundary can be re-analysed without repeating earlier phases.</p>' +
+       '<p><strong>Maximum area.</strong> Without an account, a boundary can cover up to <strong>100,000 ha</strong>; with a free account, up to <strong>500,000 ha</strong>. Larger areas are available on request.</p>' +
        '<p><strong>Limits.</strong> There is <strong>no minimum area check</strong>. A boundary smaller than the coarsest layer&rsquo;s cell will fall inside a single cell of that layer, and the tool will report that layer&rsquo;s value for the whole site.</p>'],
       ['<strong>Project duration</strong>', 'The number of years the project is expected to run.',
-       'Carried into every projection in Phase 5. It sets <em>t</em> in the shared loss projection, the growth years in the ARR carbon method, and the horizon named in every benefit narrative. A saved result stores the duration it was produced with.']
+       '<strong>Set in Phase 4</strong>, alongside pathway and activity selection; listed here because the methodology document treats it as a project input. Carried into every projection in Phase 5. It sets <em>t</em> in the shared loss projection, the growth years in the ARR carbon method, and the horizon named in every benefit narrative. A saved result stores the duration it was produced with.']
     ])}
     ${docSource('Table 4')}`,
     'phase1-inputs') +
@@ -451,10 +456,11 @@ function docsPhase2() {
   ]) : [];
   return docHero('How each phase is calculated · Phase 2', 'Site characterisation',
     'Site characterisation answers one question: what is here. It reads data and makes no recommendation. Every layer held by the tool is clipped to the boundary and summarised, and the results are grouped exactly as the interface groups them — general context, nature, climate and people.',
-    ['Four groups', '29 data layers', 'Area-weighted, never a single label']) +
+    ['Four groups', '29 characterisation layers', 'Area-weighted, never a single label']) +
 
   docSection('The rule for every group', `
-    <p>Results are area-weighted distributions over the project area, not single labels, because a project area almost always spans several classes at once. The full description of each layer &mdash; its source, resolution, update frequency, method and disclaimer &mdash; is in Annex&nbsp;A. This page states what each group is for and what it contributes downstream.</p>`,
+    <p>Results are area-weighted distributions over the project area, not single labels, because a project area almost always spans several classes at once. The full description of each layer &mdash; its source, resolution, update frequency, method and disclaimer &mdash; is in Annex&nbsp;A. This page states what each group is for and what it contributes downstream.</p>
+    <p>The four groups hold <strong>29 layers</strong>: 10 general context, 7 nature, 8 climate and 4 people. They are not the only layers the tool reads. The threat profile reads 3 more and pathway selection reads 2, including the pathway raster; Annex&nbsp;A documents those separately.</p>`,
     'phase2-rule') +
 
   docSection('5 &mdash; General context', `
@@ -816,7 +822,7 @@ function docsPhase5() {
   docSection('8 &mdash; How benefits are split', `
     <p>Quantified and qualitative benefits sit side by side, and the interface marks which is which. The interface splits benefits two ways, and this documentation follows the same split.</p>
     ${docTable(['Split', 'Values', 'What it means'], [
-      ['<strong>By pillar</strong>', 'Nature · People · Climate', 'The three sides of the triple-benefit framing the SCeNe Coalition works to'],
+      ['<strong>By pillar</strong>', 'Nature · People · Climate', 'Together these are the <strong>triple benefit</strong>: what a project delivers for nature, for people and for the climate. The SCeNe Coalition assesses every project on all three.'],
       ['<strong>By type</strong>', 'General · Unique',
        '<strong>General benefits</strong> are the outcomes any project on this pathway would deliver. <strong>Unique benefits</strong> depend on the specific conditions of the site &mdash; the threatened species present, or the hazards the community faces.']
     ])}
@@ -1155,6 +1161,118 @@ function docsBenefitClimate() {
     <p>Three further gaps are worth naming. Rates are <strong>regional averages, not site measurements</strong> &mdash; actual growth and stock vary widely with soil, hydrology and management. <strong>Peatland emissions depend strongly on water-table depth</strong>, which this method does not model, and peat soil carbon is out of scope entirely. And the estimate assumes the carbon stays stored for the full duration; <strong>permanence beyond the project period is not assessed at all</strong>.</p>`,
     'carbon-limits');
 }
+
+/* ============================================================================
+   PHASES 6 AND 7 — AFTER THE ANALYSIS (DEC-43)
+   The methodology document ends at potential benefit, so these two articles
+   are NOT transcriptions. Phase 6 reads the activity and indicator catalogue
+   live (f05-shared.js); Phase 7 describes the F03 templates in js/f03-app.js,
+   which this page does not load, so that article is prose and says so.
+   ========================================================================== */
+const BUILD_SOURCE = what => `<p class="doc-source">Source: ${what} in the current build. Not part of the methodology document.</p>`;
+
+/* ------------------------------------------- Phase 6: the Monitoring Plan */
+function docsPhase6() {
+  const I = docParam('indicators', null);
+  const meta = I && I.meta ? I.meta : null;
+  const freqRows = I ? Object.entries(I.frequencies)
+    .sort((a, b) => b[1] - a[1])
+    .map(([f, n]) => [`<strong>${docEsc(f)}</strong>`, `<span class="num">${n}</span>`]) : [];
+  const indRows = meta ? Object.keys(meta).sort().map(k =>
+    [`<strong>${docEsc(k)}</strong>`, docEsc(meta[k].source || '—'), docEsc(meta[k].freq || '—')]) : [];
+
+  return docHero('How each phase is calculated · Phase 6', 'The Monitoring Plan',
+    'The Monitoring Plan turns the activities chosen for a project into a list of things to measure in the field. Each indicator comes with a suggested monitoring method and a frequency. This article explains how that list is put together. It is not transcribed from the methodology document, which ends at potential benefit; it describes the activity and indicator catalogue the tool uses.',
+    [`${docNum('indicators.total')} indicators`, `${docNum('matrix.activityCount')} activities`, 'A draft to adapt']) +
+
+  docSection('Where each indicator comes from', `
+    <p>Every indicator in a plan traces back to an activity chosen for the project. The tool adds nothing that is not attached to one.</p>
+    ${docFlow([
+      ['1', 'Activity',             'Chosen by ecosystem and pathway'],
+      ['2', 'Benefit',              'What the activity is expected to deliver'],
+      ['3', 'Indicator',            'What measures that benefit'],
+      ['4', 'Method and frequency', 'One suggestion per indicator']
+    ])}
+    <p>The activities and benefits come from the same catalogue Phase 4 offers when activities are selected, described in <em>Protect, Manage, Restore and Ineligible</em>. The full chain from trajectory to indicator is drawn in the activities matrix.</p>
+    ${docCallout('One indicator can measure more than one benefit', 'Forest carbon stock, for example, measures both reduced emissions from deforestation and increased carbon sequestration. Read the indicator count as the number of distinct measurements, not the number of benefits.', 'note')}
+    ${BUILD_SOURCE('the activity and indicator catalogue')}`,
+    'phase6-chain') +
+
+  docSection('What you decide, step by step', `
+    ${docTable(['Step', 'What the tool does', 'What you decide'], [
+      ['<strong>1 &middot; Define NbS activities</strong>', 'Lists the activities for each ecosystem and pathway.', 'Which activities the project will carry out. At least one is required.'],
+      ['<strong>2 &middot; Define monitoring indicators</strong>', 'Generates the recommended indicators for those activities, each with a data source and a monitoring frequency.', 'Review the list, filtered by ecosystem, pathway or benefit type.'],
+      ['<strong>3 &middot; Review and finalise</strong>', 'Assembles the plan and its summary.', 'Adjust indicators, methods and frequencies; assign responsibilities; add local context, assumptions and evidence; set the duration for each ecosystem; then generate the plan.']
+    ])}
+    ${BUILD_SOURCE('the Monitoring Plan screen')}`,
+    'phase6-steps') +
+
+  docSection('How often each indicator is measured', `
+    <p>Each indicator carries one suggested frequency. These counts are read from the catalogue the tool uses:</p>
+    ${freqRows.length ? docTable(['Frequency', 'Indicators'], freqRows)
+                      : docCallout('Missing', docTodo('indicator frequencies not readable'), 'warn')}
+    ${indRows.length ? docDetails(`All ${indRows.length} indicators, with their suggested method and frequency`, docTable(['Indicator', 'Suggested method', 'Frequency'], indRows)) : ''}`,
+    'phase6-frequency') +
+
+  docSection('Alignment with the ASEAN NbS Framework', `
+    <p>The Monitoring Plan is designed to align with the ASEAN NbS Framework, which is under review for ASEAN endorsement.</p>
+    ${docCallout('Not yet traceable indicator by indicator', 'The catalogue does not record which Framework indicator each entry corresponds to, so this page cannot show that mapping yet. ' + docTodo('Framework reference per indicator'), 'warn')}`,
+    'phase6-framework') +
+
+  docSection('What a generated plan is not', `
+    ${docCallout('A draft to adapt, not a monitoring design', 'A generated plan is an automatically generated draft. Field verification, stakeholder consultation and a data-quality review are required before formal reporting. The methods are suggestions: the plan does not set sample sizes, plot locations or a budget, and it does not by itself meet the monitoring requirements of any carbon standard.', 'warn')}`,
+    'phase6-limits');
+}
+
+/* ------------------------------------------- Phase 7: generated documents */
+function docsPhase7() {
+  return docHero('How each phase is calculated · Phase 7', 'Generated documents',
+    'The Document Generator turns a saved analysis and your own answers into editable project documents. This article explains what goes into each document and where each part comes from. It is not transcribed from the methodology document; it describes the templates the tool uses.',
+    ['2 templates', 'Pre-filled where the analysis can', 'Editable Word file']) +
+
+  docSection('Three sources of content', `
+    ${docTable(['Source', 'What it supplies', 'How it appears in the form'], [
+      ['<strong>Your saved analysis</strong>',
+       'A first draft of the narrative the analysis can support: the project summary, the without-project baseline, the leakage assessment, the stakeholder groups, the expected community impacts, and the biodiversity condition of the site.',
+       'Pre-filled and marked as generated from project data. Every pre-filled field can be edited.'],
+      ['<strong>You</strong>',
+       'Everything the analysis cannot know: land tenure, the standard and version you are writing for, the crediting period, implementation and monitoring dates, the consent (FPIC) process, benefit-sharing and grievance arrangements, and all the socio-economic data in the Feasibility Document.',
+       'Empty fields with guidance text.'],
+      ['<strong>The template</strong>',
+       'The section structure and headings of the chosen template.',
+       'Fixed.']
+    ])}
+    <p>Project data you add yourself is held under the privacy level chosen for the project.</p>
+    ${BUILD_SOURCE('the Document Generator')}`,
+    'phase7-sources') +
+
+  docSection('The two templates', `
+    ${docTable(['Template', 'Sections', 'Pre-filled from the analysis'], [
+      ['<strong>CCB project document</strong><br><small>Climate, Community &amp; Biodiversity Standards; you choose the version and any paired carbon standard</small>',
+       'Basic information · General description · Climate and carbon accounting · Community impacts · Nature and biodiversity, including flora and fauna inventories',
+       'Project summary · baseline scenario · leakage assessment · stakeholder groups · community impacts · existing and current biodiversity condition'],
+      ['<strong>Socio-economic Feasibility Document</strong>',
+       'Demography · Social · Economics · Housing and settlements · Governance',
+       'None. These figures come from you and your own field data.']
+    ])}
+    ${BUILD_SOURCE('the Document Generator')}`,
+    'phase7-templates') +
+
+  docSection('The three planned deliverables', `
+    <p>Version 3 plans three project deliverables. This is where each one is produced today:</p>
+    ${docTable(['Deliverable', 'Where it is produced'], [
+      ['<strong>Project Summary</strong>', docTodo('no Project Summary template in this build')],
+      ['<strong>Feasibility Document</strong>', 'The socio-economic Feasibility Document template, above'],
+      ['<strong>Monitoring Plan</strong>', `The Monitoring Plan screen, described in ${docJump('Phase 6 · The Monitoring Plan', 'phase6')}`]
+    ])}`,
+    'phase7-deliverables') +
+
+  docSection('What you receive', `
+    <p>The document is generated as an editable Word file (.docx) and sent to the email address on the account. It can be generated before every field is answered; the gaps can then be completed in Word, or later from the project dashboard.</p>
+    ${docCallout('A generated document is a starting draft', 'Pre-filled text is written from screening estimates and carries their limits; see <em>Limitations and how to read a figure</em>. A CCB document produced here has not been validated against the CCB Standards. That requires independent validation under the standard.', 'warn')}`,
+    'phase7-output');
+}
+
 
 /* ============================================================================
    ANNEX A — SPATIAL DATA LAYERS
@@ -1543,7 +1661,9 @@ function docsAnnexPeople() {
     'Unlike the nature and climate layers, which are spatially explicit, most socio-economic data are jurisdiction-based: reported for an administrative unit rather than for the project area itself. The two gridded population layers are the exception — and even they are modelled estimates, not a head count.',
     ['4 layers', 'F02 People', 'Jurisdiction-based, mostly']) +
 
-  docSection('The two gridded population layers', ANNEX_INTRO +
+  docSection('The two gridded population layers',
+    docCallout('Where this data comes from', 'The tool does not collect personal, community-level or Indigenous Peoples and Local Communities (IPLC) information from individuals or communities. Every socio-economic figure on these pages comes from publicly available datasets published by national statistics agencies and other authoritative data providers. They are used only as reference layers for spatial analysis and project planning. Data you enter or upload yourself, such as the socio-economic form for the Feasibility Document, is project data and is held under the privacy level you choose for the project.', 'note') +
+    ANNEX_INTRO +
 
     docLayer('Gridded Population',
       'Total estimated population inside the project area, population density, settled area (ha) and the share of the project area that is settled.', {
@@ -1664,11 +1784,11 @@ function docsAnnexPathway() {
     docLayer('Forest Cover Trajectory',
       'The transition each part of the project area went through between 2014 and 2024, as a trajectory category.', {
       why: '<strong>A single snapshot cannot tell a Protect site from a Restore site.</strong> Degraded shrubland that was forest ten years ago and native shrubland that has never been forest look identical in a 2024 land cover map, but they call for opposite interventions. The trajectory is what separates them, and it is therefore the layer the pathway assignment rests on.',
-      citation: 'Trajectory rules follow the ASEAN NbS/EbA MRV Framework (ASEAN&ndash;UK GTF, Output 2).',
+      citation: 'Trajectory rules follow the ASEAN NbS Framework (ASEAN&ndash;UK GTF, Output 2; under review for ASEAN endorsement).',
       attributes: 'Trajectory categories: forest persisting, forest lost to plantation, forest degraded to vegetation, forest converted to active use, forest converted to barren, forest recovery, plantation stable or established, non-forest vegetation stable, active use stable or established, barren stable or established.',
       sources: 'Forest Cover 2014 (binary forest / non-forest) and Land Cover 2024 (grouped into six ecological state classes). 30 m.',
       prep: 'Land Cover 2024 is grouped into the six ecological state classes. Forest Cover 2014 is held as forest or non-forest, because <strong>a full six-class map for 2014 does not exist across the whole region</strong>.',
-      method: 'Pixel-by-pixel comparison of the 2014 state against the 2024 class, applying the trajectory rules in the NbS MRV Framework. Because the 2014 side has two states and the 2024 side has six classes, the comparison produces a <strong>2 &times; 6 matrix of transitions</strong>. Each pixel is assigned one trajectory category. <strong>The layer describes the transition only</strong>, before any restoration or protection pathway is assigned.',
+      method: 'Pixel-by-pixel comparison of the 2014 state against the 2024 class, applying the trajectory rules in the ASEAN NbS Framework. Because the 2014 side has two states and the 2024 side has six classes, the comparison produces a <strong>2 &times; 6 matrix of transitions</strong>. Each pixel is assigned one trajectory category. <strong>The layer describes the transition only</strong>, before any restoration or protection pathway is assigned.',
       screen: 'Not displayed as a layer. It is the input to the pathway raster.',
       limits: 'Forest Cover 2014 and Land Cover 2024 were built from different sources using different methods, so a transition between the two dates may partly reflect the change in mapping approach rather than a change on the ground. <strong>This is the single largest source of uncertainty in the pathway assignment.</strong>'
     }) +
@@ -1681,7 +1801,7 @@ function docsAnnexPathway() {
     docLayer('NbS Pathway (predefined)',
       'Area (ha) and share of the project area under each pathway: Protect, Manage, Restore, or Ineligible.', {
       why: 'It is the output the whole site characterisation builds towards: the recommended nature-based response for each part of the site, and how much land falls under each. It also carries the <strong>two join keys &mdash; category and reference ecosystem &mdash; that select which specific activities the tool can offer.</strong>',
-      citation: 'Pathway rules follow the ASEAN NbS/EbA MRV Framework (ASEAN&ndash;UK GTF, Output 2). Hierarchy rationale: Cook-Patton, S. C., Drever, C. R., Griscom, B. W., Hamrick, K., Hardman, H., Kroeger, T., Pacheco, P., Raghav, S., Stevenson, M., Webb, C., Yeo, S., &amp; Ellis, P. W. (2021). Protect, manage and then restore lands for climate mitigation. <em>Nature Climate Change</em>, 11, 1027&ndash;1034.',
+      citation: 'Pathway rules follow the ASEAN NbS Framework (ASEAN&ndash;UK GTF, Output 2; under review for ASEAN endorsement). Hierarchy rationale: Cook-Patton, S. C., Drever, C. R., Griscom, B. W., Hamrick, K., Hardman, H., Kroeger, T., Pacheco, P., Raghav, S., Stevenson, M., Webb, C., Yeo, S., &amp; Ellis, P. W. (2021). Protect, manage and then restore lands for climate mitigation. <em>Nature Climate Change</em>, 11, 1027&ndash;1034.',
       attributes: 'One raster with three bands.<br><strong>Band 1, pathway:</strong> 0 no data, 1 Protect, 2 Manage, 3 Restore, 4 Ineligible.<br><strong>Band 2, reference ecosystem:</strong> 0 none, 1 dryland forest, 2 mangrove, 3 peatland, 4 savanna.<br><strong>Band 3, category index:</strong> 1 to 17, the canonical decision row.',
       sources: 'Derived from the Forest Cover Trajectory and the Ecosystem Type layer. 30 m.',
       prep: 'None in the tool. <strong>The raster is pre-computed</strong>; the tool summarises a finished raster rather than assigning pathways at run time.',
@@ -1803,13 +1923,17 @@ function docsAboutThisDocumentation() {
       ['<strong>Title</strong>', METHOD_DOC],
       ['<strong>Owners</strong>', 'SCeNe Coalition'],
       ['<strong>Contributors</strong>', 'NbS Tool Substance Team'],
-      ['<strong>Reviewers</strong>', 'Coalition members'],
+      ['<strong>Technical review</strong>', 'A structured review on 1 and 8 September 2026 by 19 technical reviewers from SCeNe Coalition partner organisations and external NbS institutions. They tested uploaded and drawn boundaries, ecosystem outputs, threat profiles, pathway eligibility and benefit estimates.'],
+      ['<strong>Specialist partners</strong>', 'TNC, BirdLife International and WCS: NbS expertise, ecological guidance and biodiversity frameworks · Spatial Informatics Group (SIG): spatial modelling, remote sensing and carbon yield modelling · Nanyang Technological University (NTU): scientific peer review and validation of the biodiversity benefit model · Asian Disaster Preparedness Center (ADPC): climate disaster risk and natural hazard profiling'],
       ['<strong>Last updated</strong>', METHOD_DOC_DATE],
       ['<strong>Status</strong>', 'Draft / under review'],
+      ['<strong>Still to sign off</strong>', 'Final validation of the scientific outputs by the SCeNe Coalition Steering Committee and the ASEAN&ndash;UK Green Transition Fund NbS experts, before the decision to launch'],
+      ['<strong>Published as</strong>', 'The NbS Tool Technical Note, now in review. Sign-off by WRI Research Integrity is required before launch; publication is planned for December 2026, alongside the ASEAN NbS MRV Working Paper.'],
       ['<strong>Category</strong>', 'Documentation'],
       ['<strong>Related material</strong>', 'Spatial Data Catalog (<em>NbS Tool V3 Data Management</em>) · Figma: NbS Tool V3 Design · Version 1: NbS Tool V1']
     ])}
-    ${docCallout('How to read the numbers on these pages', 'Constants, rates, class definitions and formulas are <strong>transcribed from the methodology document</strong> and cite their section number. Figures describing <em>this</em> project area &mdash; hectares, ecosystem shares, carbon totals &mdash; are read live from the same data the analysis screens render from. Where a value cannot be read, the page prints a visible TODO rather than a plausible constant.', 'note')}`,
+    ${docCallout('How to read the numbers on these pages', 'Constants, rates, class definitions and formulas are <strong>transcribed from the methodology document</strong> and cite their section number. Figures describing <em>this</em> project area &mdash; hectares, ecosystem shares, carbon totals &mdash; are read live from the same data the analysis screens render from. Where a value cannot be read, the page prints a visible TODO rather than a plausible constant.', 'note')}
+    ${docCallout('How to cite the method', 'Once the Technical Note is published, cite it for any formula, constant or rule. Until then, cite the methodology document named above and state that it is a draft under review.', 'warn')}`,
     'about-this-documentation');
 }
 
@@ -1955,7 +2079,10 @@ function docsReference() {
       ['<strong>ANR</strong>', 'Assisted Natural Regeneration &mdash; carries a stocking factor of 0.8'],
       ['<strong>AUD</strong>', 'Avoided Unplanned Deforestation &mdash; the construct component 8.4.2 estimates'],
       ['<strong>MRV</strong>', 'Monitoring, Reporting and Verification'],
-      ['<strong>FO</strong>', 'Frontline Organisation'],
+      ['<strong>FO</strong>', 'Frontline Organisation &mdash; a local organisation that develops NbS projects on the ground, such as a local NGO, a civil society organisation (CSO) or an Indigenous Peoples and Local Communities (IPLC) group. FOs are the tool&rsquo;s primary users'],
+      ['<strong>CSO</strong>', 'Civil Society Organisation'],
+      ['<strong>IPLC</strong>', 'Indigenous Peoples and Local Communities'],
+      ['<strong>Triple benefit</strong>', 'The three kinds of benefit every project is assessed on: nature, people and climate'],
       ['<strong>Net ERRs</strong>', 'Net Emission Reductions and Removals &mdash; avoided emissions plus removals, after deductions'],
       ['<strong>tCO₂e</strong>', 'Tonnes of carbon dioxide equivalent'],
       ['<strong>tC</strong>', 'Tonnes of carbon; 1 tC &asymp; 3.67 tCO₂e'],
@@ -1997,6 +2124,8 @@ const HELP_GUIDES = {
   'benefit-nature':  [['Phase 5 · Potential benefit', 'phase-5']],
   'benefit-people':  [['Phase 5 · Potential benefit', 'phase-5']],
   'benefit-climate': [['Phase 5 · Potential benefit', 'phase-5'], ['Carbon finance and standards', 'carbon']],
+  phase6:            [['Plan the monitoring', 'monitoring']],
+  phase7:            [['Generate the documents', 'documents'], ['Carbon finance and standards', 'carbon']],
   'annex-general':   [['Phase 2 · Site characterisation', 'phase-2'], ['Where the numbers come from', 'sources']],
   'annex-nature':    [['Phase 2 · Site characterisation', 'phase-2']],
   'annex-climate':   [['Phase 2 · Site characterisation', 'phase-2']],
@@ -2029,6 +2158,8 @@ function docsArticleHtml(id) {
     'benefit-nature': docsBenefitNature,
     'benefit-people': docsBenefitPeople,
     'benefit-climate': docsBenefitClimate,
+    phase6: docsPhase6,
+    phase7: docsPhase7,
     'annex-general': docsAnnexGeneral,
     'annex-nature': docsAnnexNature,
     'annex-climate': docsAnnexClimate,

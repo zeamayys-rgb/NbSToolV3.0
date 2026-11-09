@@ -212,6 +212,50 @@ a.sitenav-signup { display: inline-flex; align-items: center; text-decoration: n
 .sitenav-lang:hover { border-color: #066653; }
 .sitenav-lang svg { width: 12px; height: 12px; flex-shrink: 0; color: #68727d; }
 
+/* Help — "?" icon at the far right, tooltip on hover / keyboard focus (DEC-39) */
+.sitenav-help {
+  position: relative;
+  width: var(--space-40);
+  height: var(--space-40);
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-8);
+  border-radius: var(--radius-full);
+  /* TODO(design): white on --logo-orange is about 2.2:1, under the 3:1 WCAG asks of icons. */
+  background: var(--logo-orange);
+  border: 1.5px solid var(--logo-orange); /* width matches .sitenav-lang */
+  color: var(--text-on-color);
+  text-decoration: none;
+  transition: filter var(--motion-fast), box-shadow var(--motion-fast);
+}
+.sitenav-help svg { width: var(--space-20); height: var(--space-20); flex-shrink: 0; }
+.sitenav-help:hover { filter: brightness(.92); } /* no darker logo-orange step exists */
+.sitenav-help[aria-current="page"] { box-shadow: var(--ring-warning); }
+.sitenav-help-tip {
+  position: absolute;
+  top: calc(100% + var(--space-8));
+  left: 50%;
+  padding: var(--space-4) var(--space-8);
+  border-radius: var(--radius-sm);
+  background: var(--text-title);
+  color: var(--text-on-color);
+  font-size: 12px; /* no type-size scale yet, see tokens.json type-scale TODO */
+  font-weight: 600;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, calc(-1 * var(--space-4)));
+  transition: opacity var(--motion-fast), transform var(--motion-fast);
+  z-index: 300;
+}
+.sitenav-help:hover .sitenav-help-tip,
+.sitenav-help:focus-visible .sitenav-help-tip { opacity: 1; transform: translate(-50%, 0); }
+@media (prefers-reduced-motion: reduce) {
+  .sitenav-help-tip { transition: none; }
+}
+
 /* Profile avatar info inside dropdown */
 .sitenav-user-info {
   padding: 14px 18px 12px;
@@ -289,6 +333,14 @@ a.sitenav-signup { display: inline-flex; align-items: center; text-decoration: n
     margin-top: 8px;
   }
   .sitenav-lang { align-self: flex-start; height: 44px; }
+  /* In the drawer there is no hover, so the tooltip becomes a visible label. */
+  .sitenav-help { align-self: flex-start; width: auto; height: 44px; padding: 0 var(--space-16) 0 var(--space-12); border-radius: var(--radius-pill); }
+  .sitenav-help-tip,
+  .sitenav-help:hover .sitenav-help-tip,
+  .sitenav-help:focus-visible .sitenav-help-tip {
+    position: static; opacity: 1; transform: none;
+    padding: 0; background: none; color: inherit; font-size: 14px;
+  }
 }
 
 /* ============================================================

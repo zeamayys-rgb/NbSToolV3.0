@@ -77,16 +77,15 @@ is relevant to their organisation.
 **Entry** — direct link, coalition site, search. **Exit** — "Interactive Map" (SCR-03) or the
 auth modal (SCR-02 in overlay form).
 
-**Layout.** Full-bleed hero with a scroll-driven `.stage` sequence, then six `.band`
-sections: benefits (opens with a plain-terms strip: what the tool is, who it is for, the eleven countries and three ecosystems; then "Nature, people, climate." — its logo card names the SCeNe Coalition as the developer and carries the page's only outbound link, a text link to scenecoalition.org that opens in a new tab), the `#journey` step strip (which also serves as the
-feature index and tutorial entry point, DEC-35; its six steps follow the v3 Reference Methodology, and a step that spans more than one phase names each phase in an `h4` with the same "Phase N · Name" label the Help Centre uses), field stories ("Before anyone drew a boundary, we went and listened."), a mint data-flow band (the ASEAN MRV Framework drawn as an interactive flow, CMP-38, DEC-36), testimony (seven quotes from the field visits, the V3 concept interviews and the hands-on trainings, shown as two full-bleed `.tq-row` marquees drifting in opposite directions with cards of three widths, DEC-38; a person's words are never rewritten, and the field stories carry no visit dates), and the `#about` coalition
-band, closing on a `.finale` CTA.
+**Layout.** Full-bleed hero with a scroll-driven `.stage` sequence, then five `.band`
+sections: the `#journey` step strip (which also serves as the
+feature index and tutorial entry point, DEC-35; its six steps follow the v3 Reference Methodology, and a step that spans more than one phase names each phase in an `h4` with the same "Phase N · Name" label the Help Centre uses), a dark data-flow band (the ASEAN MRV Framework drawn as an interactive flow, CMP-38, DEC-36), benefits (opens with a plain-terms strip: what the tool is, who it is for, the eleven countries and three ecosystems; then "Nature, people, climate." — its logo card names the SCeNe Coalition as the developer and carries the page's only outbound link, a text link to scenecoalition.org that opens in a new tab), one `.band-dark` `#portfolio` band holding the field stories ("Before anyone drew a boundary, we went and listened.") and then the testimony (DEC-42; seven quotes from the field visits, the V3 concept interviews and the hands-on trainings, shown as two full-bleed `.tq-row` marquees drifting in opposite directions with cards of three widths set by quote length, DEC-38, DEC-40; a person's words are never rewritten, and the field stories carry no visit dates), and the `#about` coalition
+band, closing on a `.finale` CTA. Each band changes tone from the one before (dark, light mint, dark, light, dark, light, dark; DEC-41, DEC-42).
 
 Held in parity with the implemented page at `staging-fe.scenecoalition.org` (DEC-28). Hero counters are `.odo` odometer reels (the field-stories band has no figures: it tells
 the field visits as narrative, and each card ends on how that site moves through scoping,
 documents and the NbS Incubator); the benefit cards carry a 233px photo header; and the proof
-band's portfolio is a paused-on-hover `.pmarquee` of `.pflip` flip cards behind a
-"coming very soon" pill. Each journey chapter carries a step number, a tag row naming the feature it uses and
+band's portfolio is a paused-on-hover `.pmarquee` of `.pflip` flip cards (the "coming very soon" pill was removed, DEC-42). Each journey chapter (no "STEP 0N" eyebrow; the stage frame's HUD still reads "01 / 06 · Scope") carries a tag row naming the feature it uses and
 one or two "See how" links into `help.html`; the
 journey header links to the demo video (`help.html#demo`) and the Help Centre. The sticky stage frame on the
 left shows the matching Help Centre screenshot (`.s-shot`) for the active step, under a plain
@@ -376,6 +375,10 @@ the NbS Tool works*); old `#docs/introduction` and `#docs/how-it-works` links fo
 the index's `moved` map. *About this documentation* (source document, date, status) stays and
 closes *Parameters, formulas & glossary*. The page opens on *Region, ecosystems & pathways*.
 **Twenty-one articles in six groups** now; the paragraph below describes the earlier count.
+**Twenty-three since DEC-43:** *Phase 6 · Monitoring Plan* and *Phase 7 · Generated documents*
+follow *Climate benefits & carbon*. They are the only articles not transcribed from the
+methodology document: Phase 6 reads `indicatorMeta` live, and Phase 7 describes the F03
+templates in prose.
 
 **Layout.** Three-column reading grid, `230px / minmax(0,900px) / 180px`, gap 44px, sidebar and
 TOC both sticky. Below 1100px the TOC is dropped; below 820px the sidebar collapses to a
@@ -517,7 +520,7 @@ owner's contextualised version, October 2026), transcribed section by section wi
 screenshots. The Coalition page is the only one not in the manual; it keeps the text from the
 previous Help Centre, which came from the methodology document.
 
-**Entry** — the *Help Centre* item in the site navigation (CMP-01, replacing *Methodology*), the
+**Entry** — the "?" Help icon at the right end of the site navigation (CMP-01, DEC-39; previously the *Help Centre* link item, which replaced *Methodology*), the
 footer's *Help Centre* and *Contact Us* links, the home page's *See how* links, every *Do this in
 the tool* box on SCR-17, old walkthrough links via the SCR-18 redirect, and retired article ids
 via the `moved` map. **Exit** — route chips to the product screens, *The science behind it* boxes

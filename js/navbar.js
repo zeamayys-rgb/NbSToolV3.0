@@ -19,9 +19,9 @@
   var LINKS = [
     { page: 'home',     href: 'index.html',          label: 'Home' },
     { page: 'map',      href: 'interactive-map.html', label: 'Interactive Map' },
-    { page: 'projects', href: 'dashboard.html',       label: 'My Project' },
-    { page: 'docs',     href: 'help.html',            label: 'Help Centre' }
+    { page: 'projects', href: 'dashboard.html',       label: 'My Project' }
   ];
+  // Help sits at the far right as an icon (DEC-39); see help() below.
 
   function brand() {
     return '' +
@@ -71,6 +71,15 @@
     '</div>';
   }
 
+  function help(page) {
+    // The visible tooltip is aria-hidden; the link's name comes from aria-label.
+    return '<a class="sitenav-help" href="help.html" aria-label="Help"' +
+      (page === 'docs' ? ' aria-current="page"' : '') + '>' +
+      '<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9.25" stroke="currentColor" stroke-width="1.75"/><path d="M9.6 9.4a2.5 2.5 0 0 1 4.85.85c0 1.65-2.45 2.25-2.45 3.75" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="16.9" r="1.05" fill="currentColor"/></svg>' +
+      '<span class="sitenav-help-tip" aria-hidden="true">Help</span>' +
+    '</a>';
+  }
+
   function actions(page, auth) {
     // The F00 auth modal binds [data-auth]; screens without it follow the href.
     var guest =
@@ -79,6 +88,7 @@
     return '<div class="sitenav-actions">' +
       (auth === 'guest' ? guest : profile(page)) +
       '<button class="sitenav-lang" type="button" aria-label="Language: English">🇺🇸 ' + CHEV + '</button>' +
+      help(page) +
     '</div>';
   }
 
