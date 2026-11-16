@@ -1248,9 +1248,9 @@ window.addEventListener('load', function () {
       .fromTo('.hero-sub', { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: .8 }, .36)
       .fromTo('.hero-cta', { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: .7 }, .5)
       .fromTo('.hstat', { y: 22, opacity: 0 }, { y: 0, opacity: 1, duration: .7, stagger: .08 }, .6);
-    /* subtle parallax on the sticky stage frame + finale bg */
+    /* subtle parallax on the finale bg. The journey stage frame stays still:
+       it is sticky, and drifting it made the box creep upward while scrolling. */
     gsap.to('.finale-bg', { yPercent: 18, ease: 'none', scrollTrigger: { trigger: '.finale', start: 'top bottom', end: 'bottom top', scrub: true } });
-    gsap.to('.stage-frame', { yPercent: -4, ease: 'none', scrollTrigger: { trigger: '.journey', start: 'top top', end: 'bottom bottom', scrub: true } });
   }
 
   /* ---------- Three.js terrain ---------- */
