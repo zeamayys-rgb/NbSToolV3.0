@@ -33,7 +33,7 @@
   .vu-hd::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;
     background:repeating-linear-gradient(115deg,rgba(95,230,160,.07) 0 1px,transparent 1px 22px)}
   .vu-hd>*{position:relative}
-  .vu-hd h2{margin:0;padding-right:44px;font-family:'Barlow Semi Condensed','Poppins',sans-serif;font-weight:700;
+  .vu-hd h2{margin:0;padding-right:44px;font-family:var(--font-display,'Barlow Semi Condensed'),'Poppins',sans-serif;font-weight:700;
     font-size:clamp(26px,3.4vw,32px);line-height:1.08;letter-spacing:-.01em;color:#fff}
   .vu-hd h2 em{font-style:normal;color:#5fe6a0}
   .vu-hd p{margin:10px 0 0;max-width:56ch;font-size:14px;line-height:1.6;color:rgba(234,250,241,.78)}

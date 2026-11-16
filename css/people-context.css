@@ -9,7 +9,7 @@
     --text-main:#252525; --text-second:#68727d; --text-third:#c0c2c6;
     --stroke-base:#eaebf0; --bg-base-main:#ffffff; --bg-base-second:#fafbfc; --bg-base-third:#f7f7f8;
     --primary-600:#066653; --primary-500:#077f68; --primary-700:#044c3e;
-    --font-display:'Barlow Semi Condensed', sans-serif;
+    --font-display:'Acumin Pro Condensed', 'Barlow Semi Condensed', sans-serif;
     --font-ui:'Poppins', sans-serif;
     --radius-lg:8px; --radius-md:6px; --radius-sm:4px; --radius-xl:12px;
     --elev-2:0px 1px 3px 0px rgba(0,0,0,.08); --elev-4:0px 4px 12px 0px rgba(0,0,0,.04);
