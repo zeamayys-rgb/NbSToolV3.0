@@ -521,7 +521,7 @@ input[type="range"].range::-moz-range-thumb { width: 14px; height: 14px; border-
 .seg button.active { background: var(--bg-base-main); color: var(--text-base-main); font-weight: 600; box-shadow: var(--elevation-2); }
 
 /* Filter chips */
-.fchip { border: 1px solid var(--stroke-base); background: var(--bg-base-main); color: var(--text-base-second); border-radius: var(--radius-pill); padding: 6px 14px; font-family: var(--font-text); font-size: 13px; font-weight: 500; cursor: pointer; transition: background var(--motion-fast), color var(--motion-fast), border-color var(--motion-fast); }
+.fchip { border: 1px solid var(--stroke-base); background: var(--bg-base-main); color: var(--text-base-second); border-radius: var(--radius-md); padding: 6px 14px; font-family: var(--font-text); font-size: 13px; font-weight: 500; cursor: pointer; transition: background var(--motion-fast), color var(--motion-fast), border-color var(--motion-fast); }
 .fchip:hover { border-color: var(--primary-300); color: var(--text-primary); }
 .fchip.active { background: var(--bg-primary-main); border-color: var(--bg-primary-main); color: var(--text-on-color); font-weight: 600; }
 

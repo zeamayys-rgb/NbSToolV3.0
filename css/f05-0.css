@@ -86,7 +86,7 @@
 .upload-demo-btn {
   font-family: var(--font-text); font-size: 12px; font-weight: 600;
   color: var(--text-base-second); background: var(--bg-base-second);
-  border: 1px solid var(--stroke-base); border-radius: 20px;
+  border: 1px solid var(--stroke-base); border-radius: var(--radius-pill);
   padding: 5px 12px; cursor: pointer; transition: all .15s ease;
 }
 .upload-demo-btn:hover { border-color: var(--stroke-primary); color: var(--text-primary); background: var(--bg-success-second); }

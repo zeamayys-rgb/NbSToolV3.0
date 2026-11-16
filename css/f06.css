@@ -130,5 +130,5 @@
 
 /* ── Filter chips ── */
 .chip-row { display: flex; gap: 7px; }
-.fchip { border: 1px solid #eaebf0; background: #fff; border-radius: 20px; padding: 6px 14px; font-family: var(--font-text); font-size: 11px; font-weight: 600; color: #68727d; cursor: pointer; transition: all .15s; }
+.fchip { border: 1px solid #eaebf0; background: #fff; border-radius: var(--radius-md); padding: 6px 14px; font-family: var(--font-text); font-size: 11px; font-weight: 600; color: #68727d; cursor: pointer; transition: all .15s; }
 .fchip.active { background: #e9f8f1; color: #066653; border-color: #066653; }

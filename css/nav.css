@@ -96,7 +96,7 @@ a.ssm-item.is-current b { color: var(--text-primary); }
 .sitenav-login {
   height: 40px;
   padding: 0 24px;
-  border-radius: var(--radius-pill);
+  border-radius: var(--radius-md);
   background: #066653;
   color: #fff;
   border: none;
@@ -115,7 +115,7 @@ a.sitenav-signup { display: inline-flex; align-items: center; text-decoration: n
 .sitenav-signup {
   height: 40px;
   padding: 0 24px;
-  border-radius: var(--radius-pill);
+  border-radius: var(--radius-md);
   background: #fff;
   color: #066653;
   border: 2px solid #066653;
@@ -133,7 +133,7 @@ a.sitenav-signup { display: inline-flex; align-items: center; text-decoration: n
 .sitenav-profile {
   height: 40px;
   padding: 0 18px;
-  border-radius: var(--radius-pill);
+  border-radius: var(--radius-md);
   background: #066653;
   color: #fff;
   border: none;
@@ -198,7 +198,7 @@ a.sitenav-signup { display: inline-flex; align-items: center; text-decoration: n
 .sitenav-lang {
   height: 40px;
   padding: 0 12px;
-  border-radius: var(--radius-pill);
+  border-radius: var(--radius-md);
   background: #fff;
   border: 1.5px solid #eaebf0;
   font-size: 18px;

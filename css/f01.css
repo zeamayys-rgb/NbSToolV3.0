@@ -699,7 +699,7 @@
 .legend__bar h4 { margin: 0; font-size: 15px; font-weight: 700; letter-spacing: -0.01em; }
 .legend__export {
   display: inline-flex; align-items: center; gap: 7px;
-  height: 32px; padding: 0 14px; border-radius: var(--radius-pill);
+  height: 32px; padding: 0 14px; border-radius: var(--radius-md);
   background: #077f68; color: #fff; border: none; cursor: pointer;
   font-family: var(--font-text); font-size: 13px; font-weight: 700; letter-spacing: 0.01em;
   transition: background var(--motion-fast);

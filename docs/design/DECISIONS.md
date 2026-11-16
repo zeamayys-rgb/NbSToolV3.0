@@ -1136,3 +1136,23 @@ load it. If the F03 templates change, Phase 7 must be edited by hand.
 *Plan the monitoring* and *Generate the documents* sections link to the new articles, and
 `HELP_GUIDES` links back. Findings G-03, G-04, D-05, V-01, O-01 and O-02 still need a team
 decision and are untouched.
+
+## DEC-44 · Button shapes set by the November 2026 audit
+
+**Decision.** The button shape audit set each button's shape one at a time. Pills use
+`--radius-pill`, and rounded rectangles use `--radius-md` (6px).
+
+| Change | Selectors |
+|---|---|
+| Now a pill (`--radius-pill`) | `.upload-demo-btn` (F05.0), `.fpill` (F05.0, F05), `.pill` (Activities flow) |
+| Now a rounded rectangle (`--radius-md`) | `.sitenav-lang`, `.sitenav-login`, `.sitenav-signup`, `.sitenav-profile` (nav, every screen); `.cbtn` (Home); `.legend__export`, `.s1-back`, `.da-ctx__nav`, `.t3-nav` (F01); `.fchip` (F06, design system page); `.hc-where a.hc-route` (Walkthrough) |
+
+All other buttons in the audit keep their current shape, including the 2–4px corners on the
+small icon and map controls.
+
+**Why.** Before this, the same kind of action was a pill on one screen and a rectangle on
+the next. Rectangles use 6px to match `.btn`, the most-used button (93 uses).
+
+**Consequences.** `.fchip` (F06) is now a rectangle and `.fpill` (F05) is a pill, though both
+are filter controls. That is what the audit decided. It may be worth turning into a written
+rule later. `.privacy .pill` (F04.1) is a different component and is unchanged.

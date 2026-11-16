@@ -34,7 +34,7 @@
 .da-ctx__nav {
   display: inline-flex; align-items: center; justify-content: center; gap: 6px;
   flex: none; height: 28px; min-width: 80px; padding: 4px 6px;
-  border-radius: 20px; border: 1px solid #475467;      /* slate (not a token — see DA-14) */
+  border-radius: var(--radius-md); border: 1px solid #475467;      /* slate (not a token — see DA-14) */
   background: #ffffff; color: #475467; cursor: pointer;
   font-family: var(--font-text); font-size: 14px; font-weight: 600; letter-spacing: -0.01em;
   transition: background var(--motion-fast), border-color var(--motion-fast);

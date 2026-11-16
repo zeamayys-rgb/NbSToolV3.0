@@ -54,7 +54,7 @@
 .filter-label { font-family: var(--font-text); font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: #98a0aa; }
 .filter-divider { width: 1px; align-self: stretch; background: #eaebf0; margin: 2px 0; }
 .fpill-row { display: flex; gap: 6px; }
-.fpill { font-family: var(--font-text); font-size: 11px; font-weight: 600; border-radius: 20px; padding: 5px 11px; cursor: pointer; border: 1px solid #e2e5ea; background: #fff; color: #98a0aa; display: flex; align-items: center; gap: 6px; transition: background .15s, border-color .15s, color .15s; }
+.fpill { font-family: var(--font-text); font-size: 11px; font-weight: 600; border-radius: var(--radius-pill); padding: 5px 11px; cursor: pointer; border: 1px solid #e2e5ea; background: #fff; color: #98a0aa; display: flex; align-items: center; gap: 6px; transition: background .15s, border-color .15s, color .15s; }
 .fpill::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: currentColor; opacity: .3; transition: opacity .15s; }
 .fpill:hover { border-color: #c0c7cf; }
 .fpill.active::before { opacity: 1; }

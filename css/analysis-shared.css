@@ -219,7 +219,7 @@
   .t3{display:flex;flex-direction:column;gap:16px;font-family:'Poppins',sans-serif;}
   .t3-head{display:flex;align-items:flex-start;gap:12px;padding-top:4px;}
   /* Back/Next pill — shared spec (C-05): h28, slate #475467, 14px/600, radius 20 */
-  .t3-nav{display:inline-flex;align-items:center;justify-content:center;gap:6px;flex:none;height:28px;min-width:80px;padding:4px 6px;background:#fff;border:1px solid #475467;border-radius:20px;font:600 14px 'Poppins',sans-serif;letter-spacing:-.01em;color:#475467;cursor:pointer;transition:background .15s,border-color .15s;}
+  .t3-nav{display:inline-flex;align-items:center;justify-content:center;gap:6px;flex:none;height:28px;min-width:80px;padding:4px 6px;background:#fff;border:1px solid #475467;border-radius: var(--radius-md);font:600 14px 'Poppins',sans-serif;letter-spacing:-.01em;color:#475467;cursor:pointer;transition:background .15s,border-color .15s;}
   .t3-nav:hover{background:var(--primary-25,#e9f8f1);border-color:var(--primary-300,#6ab2a4);}
   .t3-nav svg{width:18px;height:18px;stroke:currentColor;fill:none;}
   .t3-nav[data-dm-finish]{padding:4px 10px;}
