@@ -41,7 +41,7 @@
 
   /* ---- type families ---- */
   --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
-  /* --font-display (Barlow Semi Condensed) + --font-text (Poppins) from tokens */
+  /* --font-display (Acumin Pro Condensed) + --font-text (Poppins) from tokens */
 
   /* ---- text colours on the dark bands (were repeated as literals) ---- */
   --on-dark:    #eafff5;     /* body copy on ink backgrounds    */

@@ -118,8 +118,8 @@ Collected from all eight files. `TODO-nn` refers to
 
 **Design foundation**
 
-31. **`TODO-04` — Acumin Pro Condensed is never loaded.** Every heading in the product renders
-    Barlow Semi Condensed instead. License and self-host, or name Barlow honestly.
+31. ~~**`TODO-04` — Acumin Pro Condensed is never loaded.**~~ Resolved by DEC-45: Acumin Pro
+    Condensed is self-hosted from `assets/fonts/`. Print/Word exports on F05 still name Barlow directly.
 32. **`TODO-01` — which green is the brand?** The brief says `#077F68`; the product paints
     `#066653` 219 times.
 33. **`TODO-14` — ~1,200 literal hexes bypass the token layer.** Dark theme and any brand change

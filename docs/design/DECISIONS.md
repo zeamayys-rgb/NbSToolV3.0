@@ -1156,3 +1156,29 @@ the next. Rectangles use 6px to match `.btn`, the most-used button (93 uses).
 **Consequences.** `.fchip` (F06) is now a rectangle and `.fpill` (F05) is a pill, though both
 are filter controls. That is what the audit decided. It may be worth turning into a written
 rule later. `.privacy .pill` (F04.1) is a different component and is unchanged.
+
+## DEC-45 · Acumin Pro Condensed self-hosted as the display face (supersedes DEC-06)
+
+**Date.** 2026-11-16 · **Status.** `decided`
+
+**Decision.** `--font-display: "Acumin Pro Condensed", "Barlow Semi Condensed", "Saira
+Condensed", sans-serif`. The condensed face is self-hosted. The files are
+`assets/fonts/AcuminProCond-{Regular,Bold}.woff`, taken from WRI's brand guidelines repo
+(`Vizzuality/wri-guidelines/fonts`). They are registered with `@font-face` at the top of
+`css/tokens.css`, so every screen that loads the token file gets them.
+
+**Why.** DEC-06 named Acumin Pro Condensed, but nothing loaded it, so every heading rendered
+Barlow (`TODO-04`). WRI's guidelines repo publishes the face.
+
+**Alternatives.** Acumin Pro at normal width was tried first and rejected the same day in
+favour of the condensed face that the type scale was designed for.
+
+**Consequences.**
+- Only weights 400 and 700 exist. Under CSS font matching, weight 500 renders Regular and
+  weight 600 renders Bold, so the Medium and Semibold steps on the type scale no longer look
+  different from their neighbours.
+- Hard-coded Barlow remains in the F05 print and Word export templates
+  (`create-monitoring-plan.html`). Those open as separate documents that do not load
+  `tokens.css`, and Word cannot use a web font.
+- Licensing: the files come from WRI's own brand repo. Before a public launch, confirm
+  that WRI's Adobe/Monotype licence covers self-hosting them for web use.

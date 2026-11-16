@@ -5,6 +5,22 @@
    Layer 2: semantic system tokens (theme-aware: light default, [data-theme=dark])
    ============================================================ */
 
+/* ---------- Brand display face: Acumin Pro Condensed (DEC-45) ----------
+   Self-hosted .woff files from WRI's brand guidelines repo
+   (github.com/Vizzuality/wri-guidelines/tree/master/fonts).
+   Only Regular / Bold exist: weight 500 renders Regular,
+   600 renders Bold (standard CSS font matching). */
+@font-face {
+  font-family: "Acumin Pro Condensed";
+  src: url("../assets/fonts/AcuminProCond-Regular.woff") format("woff");
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Acumin Pro Condensed";
+  src: url("../assets/fonts/AcuminProCond-Bold.woff") format("woff");
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+
 :root {
   /* ---------- Base ---------- */
   --base-white: #ffffff;
@@ -215,6 +231,7 @@
   --ring-purple:  0px 0px 0px 3px rgba(86, 78, 250, 0.15);
 
   /* ---------- Type families ---------- */
+  /* Acumin Pro Condensed is self-hosted from assets/fonts/ (see @font-face above :root, DEC-45) */
   --font-display: "Acumin Pro Condensed", "Barlow Semi Condensed", "Saira Condensed", sans-serif;
   --font-text: "Poppins", system-ui, sans-serif;
   --font-override: "Poppins", system-ui, sans-serif; /* Inter dropped (DA-06) — not a system family */
