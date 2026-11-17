@@ -115,8 +115,8 @@ The highest-traffic and highest-risk screen. Broken out by step.
 | Default | Analysis complete | Four context panes — General, Nature, People, Climate — switched by `nbsShowSitePane()` | Yes |
 | Loading | Pane switch | Instant swap of pre-rendered HTML; no perceptible load | Yes (nothing to load) |
 | Empty | A pane has no data for this area | Not modelled — content is a constant, so the case can't arise today | No — `TODO(design)` |
-| Partial | Some layers missing (e.g. species data but no water data) | Not modelled | No — `TODO(design)` |
-| Error | A layer fails to compute | Not modelled | No — `TODO(design)` |
+| Partial | Some layers missing (e.g. species data but no water data) | **General, Nature and Climate, the fourteen GUI 3.1 cards:** the card keeps its head, "i" and source line, and its result is replaced by "Information is not available for this area." or by "No data available for this location." with a two-sentence explanation. Neutral tone, never danger. The other cards stay as they are. A species record with no date reads "Date not recorded" in its row. People: not modelled | Partial — built for General, Nature and Climate (`nbsCardState`, CMP-06) but not wired to data; preview with `?gcstate=landcover:nodata,soil:unavailable` |
+| Error | A layer fails to compute | **General, Nature and Climate, the fourteen GUI 3.1 cards:** "We couldn't load this result. Please try again." with a Try again button, danger tone, inside that card only. People: not modelled | Partial — preview with `?gcstate=terrain:failed,plants:failed,carbon:failed`. There is no pipeline, so Try again restores the sample result |
 | Non-eligible | Area outside layer coverage | Not modelled | No — `TODO(design)` |
 | Long content | Long species lists, many indicator cards | Panes scroll within the drawer | Yes |
 | Offline / stale | Analysis older than the underlying dataset | No indication anywhere that a result has an age | No — `TODO(design)` |
@@ -126,19 +126,28 @@ The highest-traffic and highest-risk screen. Broken out by step.
   "i" affordance (`gcInfo(key)`). **The attribution mechanism for stale-data messaging already
   exists** — it just isn't used to say when a figure was computed.
 - `TODO(design): should the source line carry an "analysed on <date>" stamp, and at what age does a result become visibly stale?`
-- `TODO(design): define the per-card missing-layer treatment. The inline "Not available" chip is the recommendation; confirm the copy and whether it keeps the "i" affordance pointing at the methodology.`
+- GUI 3.1 settles the per-card treatment for General (DEC-45): the message sits in the card, and the "i" and source line stay so the reader can check the dataset's coverage.
+- `TODO(design): GUI 3.1 gives two messages for a missing result — "Information is not available for this area." (Missing-data state) and "No data available for this location." (No Data, waiting approval). Say which one applies when. Both are built.`
+- `TODO(design): GUI 3.1 hides Protection/zoning status when the area overlaps no protected area. The sample area always overlaps one, so the hidden case is not built.`
+- `TODO(design): a valid zero (Upper montane, 0 ha) is drawn as an empty bar with "0 ha 0%". Confirm that reads as "none here" and not as "missing".`
+- Nature has two valid-zero results with GUI 3.1 wording: "No forest present to assess for landscape integrity." and "This project area does not overlap any Key Biodiversity Areas." Both are plain sentences in the card, not the dashed "missing" box. Preview with `?gcstate=flii:noforest,kba:nokba`.
+- `TODO(design): GUI 3.1 asks Charismatic species to label records from outside the selected area. The methodology (SCR-17, Key Species Presence) keeps only records that intersect the area, so there are none to label. Decide which is right; the label is not built.`
+- `TODO(design): GUI 3.1 asks the Forest Landscape Integrity Index to say when some forest has no data, and Key Biodiversity Area to show one site without a table. The sample area has full forest coverage and two sites, so neither case is built.`
+- `TODO(design): GUI 3.1 asks Carbon information to label an incomplete total as "partial" and never to count a missing pool as zero. It also says the Design team must approve that display first, so it is not built: today a missing pool can only be shown as the whole card being unavailable.`
+- `TODO(design): GUI 3.1 does not say what Peat depth shows when the area has no peatland. Canal proximity (step 3) hides in that case. Confirm the same rule here.`
+- `TODO(design): the Design team has not yet approved the Nature details views, the no-records message, or the Plant species occurrence layout (GUI 3.1 says so in each row).`
 
-### SCR-03 · Step 3 — Threat profile and NbS screening
+### SCR-03 · Step 3 — Threat profile
 
 | State | Trigger | What the user sees | Implemented? |
 |---|---|---|---|
-| Default | Region has threat data | Ranked threats by section; Overview shows every section at once (`nbsInitThreat`) | Yes |
-| Loading | Section switch | Instant | Yes (nothing to load) |
+| Default | Region has threat data | Three accordion groups (CMP-08, DEC-49): Observed Ecosystem Disturbance open, the other two closed. Seven result cards in all | Yes |
+| Loading | A group is opened | Instant | Yes (nothing to load) |
 | Empty | No modelled threats for this area | Not modelled | No — `TODO(design)` |
-| Partial | Some threat layers unavailable | Not modelled — a missing layer would simply be absent, reading as "no threat" | No — **dangerous default** |
-| Error | Threat model fails | Not modelled | No — `TODO(design)` |
+| Partial | Some threat layers unavailable | Every one of the seven cards keeps its head and source line and says "Information is not available for this area." or "No data available for this location.", never a low level. Historical burned area always shows its fire-susceptibility block as unavailable, beside the past-fire chart | Partial — built on every card, not wired to data. Preview with `?gcstate=degradation:nodata,hazard:unavailable` (the group opens itself) |
+| Error | Threat model fails | "We couldn't load this result. Please try again." with Try again, inside that card | Partial — preview with `?gcstate=defrisk:failed` |
 | Non-eligible | Area outside the screening model's scope | Not modelled | No — `TODO(design)` |
-| Long content | Many threats in one section | Section scrolls within the drawer | Yes |
+| Long content | Long narratives in every card | The groups are an accordion so the step is short until a group is opened; an open group scrolls within the drawer | Yes |
 | Offline / stale | — | No age indication | No |
 
 **Notes**
@@ -146,6 +155,11 @@ The highest-traffic and highest-risk screen. Broken out by step.
   layer is visually identical to an assessed-and-clear one. A user could scope a project
   believing a threat was ruled out when it was never evaluated.
   `TODO(design): a missing threat layer must render as an explicit "Not assessed" row, visually distinct from a zero-severity result. Confirm copy and treatment.` **Blocking.**
+  GUI 3.1 answers this, and since DEC-49 every card on the step has the states. The ecosystem
+  cards and overview totals, which did not, are gone.
+- `TODO(design): GUI 3.1 hides Drainage canal pressure when the area has no peatland, and offers "hide, or a badge reading No drainage" when there is no overlap with drainage pressure. Choose one. Neither is built: the sample always has peatland.`
+- `TODO(design): a group whose cards are all unavailable still opens onto messages. Should the head say so while it is closed?`
+- `TODO(design): Product, Design and Data must agree the label for a missing value (blank, dash or message); GUI 3.1 says the references disagree. The built states use the message.`
 
 ### SCR-03 · Step 4 — Design your NbS pathway
 

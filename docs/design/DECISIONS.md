@@ -1182,3 +1182,590 @@ favour of the condensed face that the type scale was designed for.
   `tokens.css`, and Word cannot use a web font.
 - Licensing: the files come from WRI's own brand repo. Before a public launch, confirm
   that WRI's Adobe/Monotype licence covers self-hosting them for web use.
+
+---
+
+## DEC-62 · General context follows GUI 3.1; the two leaving cards wait for the Threat profile
+
+**Date.** 2026-11-17 · **Status.** `documented`
+
+**Context.** The GUI Design Document v3.1 for Site Characterisation: General
+(`docs/reference/GUI3.1/`) lists five sections in its "Final Data Analyzer Structure": Reference
+ecosystem, Administration and zoning status, Terrain, Landcover and Soil classification. GUI 3.0
+had six, with Soil classification in Climate. Deforestation analysis and Natural disaster risk
+are absent from the General table and present in the Threat Profile table. The document never
+says they move; that is read from the two tables.
+
+**Decision.** General is rebuilt to the five GUI 3.1 sections, in that order.
+
+| Section | What changed |
+|---|---|
+| Reference ecosystem | Renamed from "Ecosystem type identification". Total as a big number, a compact donut, and a legend with hectares and share, all drawn from `NBS_DATA` |
+| Administration and zoning status | GUI 3.1 narrative for the "several sub-districts" case. A note that protected-area overlap can affect which NbS activities are eligible. Administration gets its own "i" row |
+| Terrain | New bars for the four elevation classes. Slope keeps its five classes and gains the share |
+| Landcover | Unchanged, apart from "Oil Palm" as two words |
+| Soil classification | Moved in from Climate, restyled to the General green |
+
+On all five, the dataset's own disclaimer replaces the general alert, the source line gives the
+GUI 3.1 source, resolution and year, and the card can show the three GUI 3.1 result states
+(CMP-06, UI-STATES SCR-03 step 2).
+
+Deforestation analysis and Natural disaster risk **stay in General, unchanged, below the five**,
+until step 3 is rebuilt. Removing them now would drop them from the prototype altogether.
+
+**Why.** GUI 3.1 is the team's current specification. Keeping the two leaving cards in place is
+the conservative reading of a move the document implies but does not state.
+
+**Consequences.**
+- General shows seven cards until the Threat profile pass, two of them in GUI 3.0 form with the
+  general alert and their old source lines.
+- The elevation-class figures (52,500 / 67,500 / 30,000 / 0 ha) are new sample data, chosen to
+  agree with the existing 45 to 1,860 m range and the 150,000 ha area. See DEC-11.
+- Three sentences are edited from the GUI 3.1 template for plain English: "majorly located"
+  became "mostly located", "hectare" became "hectares", and the NbS-activities note was
+  reworded. `TODO(design): Substance to confirm.`
+- GUI 3.1 leaves the Soil classification disclaimer blank. The card uses the one already in the
+  dataset catalogue (`NBS_LAYER_INFO["soil-groups"]`). `TODO(design): confirm.`
+- The soil percentages are shown as before. GUI 3.1 asks that they be labelled as probabilities
+  or as shares of the area, depending on the data. `TODO(design): which are they?`
+- The five dataset disclaimers no longer link to the NbS Tool Form ("replace it with your own
+  data"). The general alert carried that link. `TODO(design): where does the link live now?`
+- Not built here, because they belong to all four tabs: the confirmation before "Reselect
+  area", the selected-area line, the data guidance note, and the two extra fields GUI 3.1 wants
+  in the "i" pop-up ("how to read it" and "coverage").
+- The donut and legend colours are three literal hexes in `GC_ECO` (tokens.json TODO-23).
+
+---
+
+## DEC-63 · Nature context follows GUI 3.1
+
+**Date.** 2026-11-17 · **Status.** `documented`
+
+**Context.** The GUI Design Document v3.1 for Site Characterisation: Nature
+(`docs/reference/GUI3.1/`) keeps six sections, renames two and adds two tables. Follows DEC-62.
+
+**Decision.** Nature is rebuilt to the "Final Data Analyzer Structure" table.
+
+| Section | What changed |
+|---|---|
+| Habitat area | Split into "Total area of habitat" (the animal-group badges, unchanged) and a new "Area of habitat threshold": one sentence and a table of species per habitat-overlap band. A line explains how suitable habitat is mapped and that habitat areas are not added together |
+| Charismatic species | Renamed from "Indicative key species presence". Each row gains the year of its latest record; a record without a date says so. "occurrence" became "records" |
+| Conservation significance | The three scores are listed as text beside the chart, with a line on how to read them. Gains an "i" row |
+| Forest Landscape Integrity Index | Score reads "9.7 / 10" (was "9.7*"). A line says the percentages refer to the forest assessed |
+| Key Biodiversity Area | New table of sites: name, overlap in hectares, share of the selected area, and a total |
+| Plant species occurrence | Replaces "Endangered tree species": a GBIF narrative (species recorded 2000 to 2026, CITES Appendix I, II, III, share of global plant diversity) above the big number. Gains an "i" row |
+
+All six carry the dataset's own disclaimer, the GUI 3.1 source line and the result states
+(CMP-06). The demo card "Endangered Tree Species (Error)" is removed: its two treatments are now
+the `nodata` and `failed` states of every card. The step title drops "context" on this tab only,
+as GUI 3.1 writes it, and the tab has its own subtitle.
+
+**Consequences.**
+- **New sample figures (DEC-11).** The threshold bands 180 / 112 / 63 / 49 / 0 are the GUI 3.1
+  example table (80 / 50 / 28 / 22 / 0) scaled to the card's 404 species. The latest-record years
+  are invented. Plant species: the count stays 31 (the old card's figure); 1 / 6 / 2 CITES
+  species and 0.01% are invented.
+- **Sample figures changed.** The Key Biodiversity Area site figures were 4,512.3 ha and
+  1,776.7 ha, which could not add up to the 19,500 ha total shown beside them. They are now
+  13,200 ha and 6,300 ha, so the table sums to the unchanged total.
+- **Figures read from the existing chart.** The significance scores 8, 7 and 6 are read off
+  `radar.png`'s own 0 to 10 axis. They are not new.
+- "A higher score means a higher conservation priority" is my reading of the card.
+  `TODO(design): Substance to confirm the direction of the scale.`
+- GUI 3.1 heads the threshold narrative "Priority conservation actions for EDGE List species".
+  It is left out: nothing says the 404 species are EDGE species. `TODO(design): what does that heading label?`
+- "less than 90% habitat overlap with the project area" keeps the template's ambiguity.
+  `TODO(design): is the percentage a share of the species' habitat, or of the project area?`
+- GUI 3.1 renames the section "Charismatic species" but its narrative still says "keystone
+  species". The card says "charismatic". `TODO(design): confirm.`
+- GUI 3.1 gives no disclaimer for Plant species occurrence. The card reuses the GBIF one.
+  Its draft table asks for two blocks (flora richness and endangered trees); the final table,
+  followed here, asks for one. `TODO(design): confirm both.`
+- SCR-17 has no method for Plant species occurrence, and its "Endangered Tree Species Richness"
+  method now describes something no screen shows. The screen pointer says so; the article is
+  otherwise untouched because it is transcribed from the methodology document.
+- Not built: the label for records outside the selected area, the "some forest has no data"
+  message, the one-site KBA layout (see UI-STATES SCR-03 step 2).
+
+---
+
+## DEC-64 · Climate context follows GUI 3.1; Historical burned area waits for the Threat profile
+
+**Date.** 2026-11-17 · **Status.** `documented`
+
+**Context.** The GUI Design Document v3.1 for Site Characterisation: Climate
+(`docs/reference/GUI3.1/`) lists three sections in its "Final Data Analyzer Structure": Carbon
+information, Annual climate ledger and Peat depth. Soil classification moved to General in
+DEC-62. Historical burned area is absent from the Climate table and present in the Threat
+Profile table. Follows DEC-62 and DEC-63.
+
+**Decision.** Climate is rebuilt to the three GUI 3.1 sections, in that order.
+
+| Section | What changed |
+|---|---|
+| Carbon information | Layout unchanged. A line says the total is the sum of the three pools; soil organic carbon is labelled with its 30 cm depth |
+| The annual climate ledger | Precipitation now reads as a monthly range, a monthly average and an annual total, all worked out from the chart's own bars. Each metric says it is a long-term average. Chart axes say "Monthly" and use "°C" |
+| Peat depth | New. Peatland area as a big number, the GUI 3.1 narrative for medium-depth peat, and bars for the share of peatland in three depth classes |
+
+All three carry the result states (CMP-06). Carbon and the ledger carry the dataset's own
+disclaimer and the GUI 3.1 source lines. The step title drops "context" on this tab and the tab
+has its own subtitle.
+
+Historical burned area **stays in Climate, unchanged, below the three**, until step 3 is
+rebuilt — the same reasoning as the two General cards in DEC-62.
+
+**Consequences.**
+- **New sample figures (DEC-11).** Peat depth "0.4 to 4.6 metres" and the class areas 7,000 /
+  19,250 / 8,750 ha are invented; they sum to the existing 35,000 ha of peatland in `NBS_DATA`.
+- **Figures worked out, not new.** "167 mm per month" is the chart's twelve bars averaged
+  (2,000 mm / 12). "4 dry months" is dropped: nothing defines a dry month.
+- **Unit kept as tCO₂e.** GUI 3.1 writes "tons Carbon"; the methodology (SCR-17, annex A.3)
+  reports tCO₂e and Step 5 uses it. `TODO(design): Substance to confirm the unit.`
+- **Three sources disagree on soil organic carbon.** GUI 3.1 names OpenLandMap, 30 m, 2018;
+  the methodology and the dataset catalogue name SoilGrids, 250 m. The card's source line follows
+  GUI 3.1; the "i" pop-up still shows the catalogue row. The 30 cm depth label comes from the
+  methodology. `TODO(design): which dataset is it?`
+- The sample pools do not follow the methodology's fixed root-to-shoot ratio: below-ground
+  biomass is shown as 30% of the total and above-ground as 20%, where the method gives
+  below-ground = 0.28 x above-ground. Not changed here. `TODO(design): correct the sample.`
+- **Peat depth has no source and no disclaimer in GUI 3.1.** The card says the source is to be
+  confirmed, keeps the general alert, and has no "i". The PDF page that carries the deep-peat
+  narrative is cut off, so only the shallow and medium narratives can be read; the sample uses
+  medium. The narrative names three depth classes, the mock-up in the document shows four; the
+  card follows the narrative. `TODO(design): source, disclaimer, deep-peat text, three classes or four.`
+- GUI 3.1 gives one sentence shape for both metrics ("ranges from X to Y with an average of
+  Z"). The built precipitation sentence adds the annual total, as the same document's guidance
+  asks ("keep the monthly chart separate from the annual total"). `TODO(design): confirm.`
+- "WorldClim, 2000" is all GUI 3.1 gives for the reference period. `TODO(design): state the
+  period the normals cover.`
+- The GUI 3.1 subtitle for this tab still mentions soil and fire, both of which the same
+  document moves elsewhere. Used as written.
+- Not built: the "partial total" display for Carbon information, and the no-peatland case for
+  Peat depth (see UI-STATES SCR-03 step 2).
+
+---
+
+## DEC-65 · Threat profile follows GUI 3.1; three cards move in from Site characterisation
+
+**Date.** 2026-11-17 · **Status.** `documented`
+
+**Context.** The GUI Design Document v3.1 for the Threat Profile (`docs/reference/GUI3.1/`) has
+two parts. Parts A to D keep the existing screen (screening overview, disturbance map, one card
+per ecosystem) with refinements. Its "Final Data Analyzer Structure" then lists three groups of
+results: Observed ecosystem disturbance, Ecosystem pressure and hazard, Business-as-usual
+projection. The document does not say whether the groups sit beside the ecosystem views or
+replace them. Closes the waiting moves in DEC-62 and DEC-64.
+
+**Decision.** The groups sit **beside** the ecosystem views. They show in the All Ecosystem
+(Overview) view, below the three ecosystem cards, and not in a single-ecosystem view.
+
+| Group | Card | Where it came from |
+|---|---|---|
+| Observed ecosystem disturbance | Historical deforestation | Moved from General › Deforestation analysis |
+| | Historical burned area | Moved from Climate. Split into "Past fires" and "Fire susceptibility"; the second says its data are not available |
+| | Land degradation | New |
+| Ecosystem pressure and hazard | Drainage canal pressure (Canal proximity, Drainage pressure) | New as a card. The Peatland view keeps its three small badges, now reading Close / High / High to match |
+| | Natural disaster risk | Moved from General |
+| Business-as-usual projection | Deforestation risk | Moved from General › Deforestation analysis. A class badge and one sentence replace the 0 to 1 index figure |
+| | Fire risk | New |
+
+The three cards are **removed** from General and Climate. General now has five cards and Climate
+three, as GUI 3.1 lists them.
+
+Also changed: the step title ("Threat profile") and subtitle; the footer buttons ("Review site
+characterisation", which goes to step 2 and no longer to step 1, and "Select NbS pathways"); a
+heading and intro above the overview; a "View … details" button on each overview ecosystem
+card; an ecosystem boundary legend under the map; a source line on each ecosystem card, and for
+forest and mangrove a sentence on what "disturbance" means; Mangrove's main pressure as a line
+of text and no longer a fourth figure.
+
+**Why beside.** Parts A to D say "keep" on almost every row, so removing the ecosystem views
+would contradict the same document. Putting the groups in the overview needs no new tab and no
+new entry in the SCR-07 side menu.
+
+**Consequences.**
+- **New sample figures (DEC-11).** Land degradation: 24,000 ha degraded (3,000 potential false
+  positive, 2,400 potential false negative; 15,000 in forest, 9,000 outside), 18,000 ha improved
+  (15,000 likely improving, 3,000 possible false positive), 108,000 ha stable; they sum to the
+  150,000 ha area. Canal proximity: nearest canal 320 m. Fire risk: 96,000 ha (64%).
+- **Figure removed.** The deforestation risk index average "0.85" is gone, as GUI 3.1 asks; the
+  "top 15%" ranking stays.
+- The overview is long: four sections of the old screen, then seven cards. `TODO(design): confirm
+  beside, and whether the groups need their own tabs.`
+- Fire now appears four times: the Fire risk card, the fire badge in Natural disaster risk, the
+  fire-susceptibility block in Historical burned area, and the Fire risk badge in the Peatland
+  view. All read "High" or "not available". `TODO(design): which one owns the result?`
+- GUI 3.1 names no source, no disclaimer and no visual for Fire risk (the PDF page is cut off),
+  and no disclaimer for Drainage canal pressure. Fire risk says its source is to be confirmed;
+  both keep the general alert. Only the High narrative of Fire risk is built: the Medium and Low
+  texts are on the cut-off page.
+- The Land degradation template says "Of this [degraded] area … was flagged as Degraded –
+  Potential False Negative". A false negative is normally land *not* flagged. Kept as written.
+  `TODO(design): Substance to confirm what the two flags count.`
+- GUI 3.1's draft table says "do not describe the median as the average"; its final table says
+  "higher than the national average". The card follows the final table. `TODO(design): confirm.`
+- GUI 3.1 repeats the forest-canopy disclaimer on the Peatland rows, which reads as a copy-paste.
+  It is applied to forest and mangrove only. `TODO(design): confirm.`
+- "Accessed through Global Nature Watch on 01/09/2026" is ambiguous (1 September or 9 January),
+  so the source line says "accessed 2026".
+- The disturbance map image still carries its own baked-in legend (Stable / Disturbed /
+  Converted or lost), partly hidden by the on-screen legend (Remaining / Disturbed / Forest loss /
+  Forest gain). GUI 3.1 asks to confirm how the two sets of classes relate before relabelling.
+  Not changed.
+- SCR-07 still titles the section "Threats Profile". Not changed: that menu is page-specific.
+- Not built: the absent-ecosystem state, the no-peatland and no-drainage cases, result states on
+  the three ecosystem cards, and map switching by ecosystem (see UI-STATES SCR-03 step 3).
+
+---
+
+## DEC-66 · Threat profile is three accordion groups; the ecosystem views are removed
+
+**Date.** 2026-11-17 · **Status.** `documented` — decided by Abe; supersedes the "beside"
+choice in DEC-65
+
+**Context.** DEC-65 put the three GUI 3.1 groups beside the existing ecosystem views, because
+the document did not say which it wanted. The result was long: the old screen, then seven cards.
+
+**Decision.** The Threat profile follows the GUI 3.1 "Final Data Analyzer Structure" only.
+
+1. **Three groups, in this order:** Observed Ecosystem Disturbance, Ecosystem Pressure and
+   Hazard, Business as Usual Projection.
+2. **An accordion, not tabs.** The cards carry long narratives, so each group is a collapsible
+   section with an icon in its title. Built on native `<details>` (CMP-08). The first group
+   starts open.
+3. **No grouping by ecosystem.** Removed: the All Ecosystem / Forest / Mangrove / Peatland tabs;
+   the screening overview (total and disturbed area, the three ecosystem cards); the Ecosystem
+   Disturbance Map and both its legends; the Dryland forest, Mangrove and Peatland cards with
+   their driver lists, figures, peatland badges and field-verification notes.
+4. **Only what the final structure lists stays:** Historical deforestation, Historical burned
+   area, Land degradation · Drainage canal pressure, Natural disaster risk · Deforestation risk,
+   Fire risk.
+
+**Consequences.**
+- GUI 3.1 parts A to D describe the removed overview, map and ecosystem cards, mostly with
+  "keep". They are not in the final structure, and this decision follows the final structure.
+  `TODO(design): tell Substance that parts A to D are not built, or have the document updated.`
+- Figures that no longer appear anywhere in step 3: disturbed area per ecosystem, forest loss
+  and gain, remaining forest, the driver lists. Step 4 still shows its own ecosystem figures
+  from `NBS_DATA`, which is unchanged.
+- `nbsInitThreat()`, the `threat-sections` mount and about 150 lines of `.t3-*` styles are
+  deleted. `assets/f01-step3/disturbance-map.png` is no longer referenced; the file is kept.
+- SCR-07's side menu lists the three groups in place of Overview / Forest / Mangrove / Peatland,
+  and reads "Threat Profile" (was "Threats Profile").
+- SCR-17 keeps its methods for ecosystem disturbance screening and forest disturbance drivers;
+  their screen pointers now say the result is no longer shown.
+- The FigJam board "Data Analyser IA · GUI 3.0 to 3.1" still shows the ecosystem views as kept.
+
+---
+
+## DEC-67 · Fire risk: a half-doughnut gauge and three thresholds
+
+**Date.** 2026-11-17 · **Status.** `documented` — decided by Abe
+
+**Context.** GUI 3.1 gives the Fire risk card a narrative per level but no visual and no rule
+for which level applies (DEC-65). The card showed "High" beside a 64% overlap with nothing
+connecting the two.
+
+**Decision.**
+1. The card shows a half-doughnut gauge of the share of the project area that overlaps mapped
+   fire-risk areas (`gcGauge`, CMP-06).
+2. The level follows that share:
+
+   | Level | Share of the project area in mapped fire-risk areas |
+   |---|---|
+   | High | over 80% |
+   | Medium | 30% to 80% |
+   | Low | under 30% |
+
+   Exactly 30% and exactly 80% are Medium. The two boundaries are marked on the gauge and
+   listed under it, with the current level named in words.
+3. The badge, the gauge colour and the narrative are all worked out from the one figure
+   (`gcFireLevel`), so they cannot disagree.
+
+**Consequences.**
+- **The sample area now reads Medium, not High.** Its figure is unchanged (96,000 ha, 64%);
+  under the new thresholds 64% is Medium.
+- **The Medium and Low narratives are pieced together.** GUI 3.1 has them on a PDF page that
+  is cut off at the left edge, so only the ends of the lines can be read. The missing words
+  are filled in. `TODO(design): Substance to supply both texts.`
+- **Fire now disagrees with itself in the sample.** Natural disaster risk still shows "Fire
+  Risk: High risk". It is a different measure (a hazard class from ADPC), but a reader sees High
+  in one card and Medium in another. `TODO(design): align the sample, or say on screen how the
+  two differ.`
+- The thresholds are not in GUI 3.1. `TODO(design): have Substance confirm them and add them to
+  the document.`
+
+---
+
+## DEC-68 · Fire-risk thresholds sit on the gauge as coloured labels with a hover pop-up
+
+**Date.** 2026-11-17 · **Status.** `documented` — decided by Abe; revises the layout in DEC-67
+
+**Decision.** The list of thresholds under the gauge (DEC-67, point 2) is removed. In its place
+each band of the gauge carries a label in its own risk colour with a "?" mark: Low beside 0 to
+30%, Medium above 30 to 80%, High beside 80 to 100%. Pointing at a band or its label, or
+focusing the label from the keyboard, fades in a pop-up with the band's rule, and the band's
+arc thickens. The 30% and 80% marks stay on the arc. The thresholds themselves are unchanged.
+
+**Consequences.**
+- The rule for each band ("under 30%", "30% to 80%", "over 80%") is now one step away for a
+  sighted pointer user. It stays readable without hovering from the 30% and 80% marks and the
+  band labels, and it is in each label's accessible name and in the chart's description.
+- This is the first hover animation in the Data Analyser. It uses `--motion-fast`, the same
+  token as other transitions; MOTION.md's proposed scale is still not approved.
+
+---
+
+## DEC-69 · Fire risk: one pill for the current level, no badge under the gauge
+
+**Date.** 2026-11-17 · **Status.** `documented` — decided by Abe; revises DEC-67 and DEC-68
+
+**Context.** The level was shown four times in one card: the gauge colour, the outlined label
+on the gauge, a "Fire risk: Medium" badge under the gauge, and the narrative. All three band
+labels were pills, so the two levels that do not apply looked as selected as the one that does.
+
+**Decision.**
+1. The "Fire risk" badge under the gauge is removed. The label on the gauge is the badge.
+2. Only the label of the band the area falls in is a pill. The other two are plain text in
+   their band's colour. They keep the "?" mark and the hover and focus pop-up from DEC-68.
+
+**Consequences.**
+- The level is still written in words without relying on colour: in the narrative ("medium
+  fire risk"), in the chart's description, and in the current label's accessible name.
+- In the dark theme the plain labels use the light tints (`--success-300`, `--warning-300`,
+  `--danger-300`), because the pill's dark text is only readable on its pale fill.
+- `gcLevel` is unchanged and still used by Drainage canal pressure and Deforestation risk.
+
+---
+
+## DEC-70 · Natural disaster risk drops Fire and becomes a 2 x 2 gallery
+
+**Date.** 2026-11-17 · **Status.** `documented` — decided by Abe
+
+**Context.** Natural disaster risk listed five hazards in one row of small pictures, Fire among
+them. Fire risk has its own card under Business as Usual Projection, and the two disagreed in
+the sample: "High risk" here, Medium there (DEC-67).
+
+**Decision.**
+1. Fire is removed from the Natural disaster risk list. The Fire risk card owns fire.
+2. The remaining four hazards (Drought, Flood, Landslide, Tropical Typhoon) are shown two by
+   two, with larger pictures that keep the shape of their source files.
+
+**Consequences.**
+- This closes the DEC-67 `TODO(design)` about fire disagreeing with itself between these two
+  cards. The fire-susceptibility block in Historical burned area (DEC-65) is untouched.
+- The card's source line still says ADPC. `TODO(design): Substance to confirm that the ADPC
+  hazard set may be shown without its fire class.`
+- The pictures are 273 x 160 px files and are now shown wider than that, so they look soft,
+  most of all on high-density screens. `TODO(design): supply larger pictures.`
+- `assets/asset/Disaster Risk/fire risk.png` is no longer used. It stays in the repo.
+
+---
+
+## DEC-71 · Natural disaster risk: drawn scenes that play the hazard on hover
+
+**Date.** 2026-11-17 · **Status.** `documented` — decided by Abe
+
+**Context.** The four pictures were 273 x 160 px photographs shown wider than their files, so
+they looked soft (DEC-70). Abe asked for simple flat line drawings in the style of the Habitat
+Area species icons, each animating its hazard when the pointer is over it.
+
+**Decision.**
+1. Each tile's picture is an inline SVG scene, 270 x 120, drawn by `js/hazard-scenes.js`
+   (CMP-39). At rest it shows a healthy landscape. On hover it plays the hazard; on leave it
+   plays back.
+   - **Drought.** Rock, trees and bushes on green ground. The ground and hills turn from green
+     to brown, cracks open, and the leaves dry and drop to leave bare branches.
+   - **Flood.** Trees, flowers, a wading bird and a butterfly beside a stream. Rain starts and
+     blue waves rise over the land; the bird and butterfly fly up.
+   - **Landslide.** A hill with pines. Its right-hand edge breaks away and slides down with a
+     tree, leaving bare soil, falling rocks and dust.
+   - **Tropical typhoon.** A beach with a palm and mangroves. The sky darkens, a cyclone spins,
+     wind and rain cross the scene, the trees bend and the sea rises.
+2. GSAP 3.12.5 drives the motion, loaded from cdnjs on `interactive-map.html` and
+   `project-detail.html` (the same file `index.html` already loads). GSAP only moves and fades;
+   every colour is a token bound in `css/genctx.css` (`.hz-*`).
+3. The tiles are 270 / 120, not the photographs' 273 / 160.
+
+**Consequences.**
+- Closes the DEC-70 `TODO(design): supply larger pictures.` The drawings are vector.
+- The scenes are decorative (`aria-hidden`). The hazard name and risk level stay in text, so
+  nothing is lost for a screen reader, on touch, or with a keyboard, none of which can hover.
+- With `prefers-reduced-motion: reduce`, or if GSAP fails to load, the calm drawing stays still.
+- The calm drawing shows a healthy landscape for every hazard, whatever the risk level. The
+  drawings illustrate the hazard type only; they are not data.
+- Not delivered as Lottie files. Lottie is exported from After Effects; hand-written Lottie
+  JSON for four scenes could not be checked here. `TODO(design): decide whether a designer
+  should redraw these in After Effects and export Lottie, or whether the SVG scenes stay.`
+- The four photographs in `assets/asset/Disaster Risk/` are now only the fallback for a page
+  that mounts `js/analysis-shared.js` without `js/hazard-scenes.js`. They stay in the repo.
+- Durations (0.2 s to 1.4 s, loops up to 2.4 s) and GSAP eases are typed in
+  `js/hazard-scenes.js`: there is no token for illustrative motion (tokens.json TODO-24).
+- `TODO(design): Abe to review the four drawings. They were drawn in code, not by a designer.`
+
+---
+
+## DEC-72 · Hazard scenes keep their hazard state after the pointer leaves
+
+**Date.** 2026-11-17 · **Status.** `documented` — decided by Abe
+
+**Context.** DEC-71 played each scene back to the calm drawing when the pointer left the tile.
+
+**Decision.** A scene plays its hazard once, on the first hover, and stays in that state. If the
+pointer leaves part-way, the sequence still runs to its end. The repeating motion (rain, waves,
+wind, the cyclone) runs only while the pointer is over the tile and holds still otherwise.
+
+**Consequences.**
+- This replaces "on leave it plays back" in DEC-71, decision 1.
+- A scene is calm again only after the page reloads, or when the analyser redraws the card.
+- `TODO(design): decide whether a second hover should replay the hazard from the calm drawing.`
+
+---
+
+## DEC-73 · Hazard scenes are redrawn without outlines, in the land-cover icon style
+
+**Date.** 2026-11-17 · **Status.** `documented` — decided by Abe
+
+**Context.** The first drawings (DEC-71) followed the Habitat Area species icons: bright flat
+fills inside a dark outline. Abe found them childish and pointed to the land-cover icons
+(`assets/f01-step2/genctx/lc-*.svg`) as the direction.
+
+**Decision.**
+1. No outlines. Shapes are flat and separated by tone, with ridges layered back to front from
+   dark to pale.
+2. Land and leaves use the viridian ramp (`--primary-200` to `--primary-800`) instead of the
+   brighter success greens. Earth, sand and dust are muted tans; storm sky and funnel are slate.
+3. Lines are kept only for thin things: branches, roots, palm fronds, rain, wind, cracks, heat.
+4. Cartoon details are gone: the butterfly, the bird's eye and beak colour, the grass ticks.
+   The wading bird and the birds in flight are single-tone silhouettes.
+5. The typhoon is a side-view funnel of see-through rings, not a top-down swirl.
+
+**Consequences.**
+- This replaces "in the style of the Habitat Area species icons" in DEC-71. The motion,
+  the hover rule (DEC-72) and the accessibility contract are unchanged.
+- The muted tans and the slate sky have no token. They are written as `color-mix()` of two
+  existing tokens in `css/genctx.css`, so no hex is typed, but the resulting colours are not in
+  `tokens.json` (TODO-25). `color-mix()` needs a 2023 or newer browser.
+- `TODO(design): Abe to review the redrawn scenes. They are still drawn in code.`
+
+---
+
+## DEC-74 · Natural disaster risk shows its level as the shared pill, in five classes
+
+**Date.** 2026-11-17 · **Status.** `documented` — decided by Abe
+
+**Context.** Each hazard tile wrote its level as bold text ("Moderate risk"), while the other
+threat cards use a label and a pill (`gcLevel`, for example Deforestation risk).
+
+**Decision.**
+1. Each tile shows "Risk level" and a pill, through the same `gcLevel` helper.
+2. The level is one of five classes, lowest to highest: Very Low, Low, Moderate, High,
+   Very High (given by Abe).
+3. The pill has three tones, so the five classes share them: Very Low and Low take `ok`,
+   Moderate takes `warn`, High and Very High take `bad` (`GC_HAZARD_LEVELS` in
+   `js/analysis-shared.js`).
+
+**Consequences.**
+- The sample levels are unchanged: Drought Moderate, Flood High, Landslide Moderate, Tropical
+  Typhoon Low. They are still illustrative (DEC-11).
+- Two pairs of classes look the same and differ only in their words.
+  `TODO(design): decide whether five classes need five tones, and which.`
+- `TODO(design): Substance to confirm the five class names and their order against the source
+  hazard data.`
+
+---
+
+## DEC-75 · Hazard tiles put the name and the level on one line
+
+**Date.** 2026-11-17 · **Status.** `documented` — decided by Abe
+
+**Context.** DEC-74 left each tile with two lines under its picture: the hazard name, then
+"Risk level" and the pill.
+
+**Decision.** One line: the hazard name on the left and the pill on the right. The words "Risk
+level" are dropped; the card's title, Natural Disaster Risk, already says what the pill means.
+It is still the `gcLevel` helper, with the hazard name as its label.
+
+**Consequences.**
+- This replaces decision 1 of DEC-74. The five classes and their tones are unchanged.
+- On a tile too narrow for both, the pill wraps under the name.
+- The name was not drawn into the picture: the SVG is hidden from screen readers (CMP-39), so
+  the name has to stay as text.
+
+---
+
+## DEC-76 · The hazard scenes are also exported as Lottie files
+
+**Date.** 2026-11-17 · **Status.** `documented` — decided by Abe
+
+**Context.** DEC-71 left Lottie undelivered: hand-written Lottie JSON could not be checked. Abe
+asked for the four files in `assets/natural-disaster-risk/`.
+
+**Decision.**
+1. The files are recorded from the live scenes, not drawn again.
+   `docs/generated/scripts/build-hazard-lottie.html` draws each scene in the browser, steps its
+   GSAP animation one frame at a time, and writes what it reads back as Lottie JSON.
+2. Each file is 270 x 120, 30 frames a second, 6 seconds. Frames 0 to 90 are the hazard
+   arriving (marker `intro`); frames 90 to 180 are a seamless loop (marker `loop`).
+3. To make that loop clean, every repeat in `js/hazard-scenes.js` now lasts a whole fraction of
+   3 seconds and every delay lands on a frame. Eleven durations moved by 0.1 to 0.6 seconds.
+4. The product still draws the scenes as inline SVG with GSAP (CMP-39). The Lottie files are
+   for use elsewhere: slides, documents, a native app.
+
+**Consequences.**
+- Closes the DEC-71 `TODO(design)` about Lottie.
+- The files are `drought.json`, `flood.json`, `landslide.json` and `tropical-typhoon.json`:
+  62 to 324 KB, because every frame's motion is written out as keys rather than as eases.
+- Colours in the files are fixed at the token values on the day of the export. They do not
+  follow later token changes or the dark theme. Re-run the exporter after changing a drawing
+  or a colour.
+- The exporter is in `docs/generated/`, which is local-only, so it is not in git.
+  `TODO(design): decide whether the exporter should move to scripts/ so the files can be rebuilt
+  from a clone.`
+- Checked in lottie-web 5.12.2 (SVG renderer) only. `TODO(design): check the files in the
+  player they will actually ship in.`
+
+
+---
+
+## DEC-77 · The data disclaimer alert loses its stripe, border and label
+
+**Date.** 2026-11-17 · **Status.** `documented` — decided by Abe
+
+**Context.** The `.gc-alert` disclaimer under each Data Analyser card stacked four warning cues:
+a warning tint, a 1px border, a 4px orange left stripe and a 30px warning triangle, plus a
+"Disclaimer:" label and an arrow on the link. It repeats under almost every card, so it read as
+generated decoration and wore out the warning. Reviewed against the anti-slop checklist
+(github.com/miqdadbadjuber/anti-slop: "Colored Left Stripe", "Small Arrows"). Abe chose option C
+of three.
+
+**Decision.**
+1. Keep the warm tint (`--bg-warning-second`) and the warning icon, shrunk to 16px and set inline
+   with the first line.
+2. Drop the border and the left stripe.
+3. Drop the "Disclaimer:" prefix and the arrow after "NbS Tool Form". The disclaimer text itself
+   (GUI 3.1, per card) is unchanged.
+4. All colours are tokens; the four literal hexes are gone.
+
+**Consequences.**
+- The old CSS comment cited a "system alert spec DA-08", which is not in `docs/design/`.
+  `TODO(design): if DA-08 exists in Figma, update it to match.`
+- The icon is still decorative (`alt=""`); the tint plus the text carry the meaning.
+
+## DEC-78 · Fire risk gauge shows the overlap share only, with no levels
+
+**Status.** Accepted, 2026-11-17. Supersedes the gauge parts of DEC-67, DEC-68 and DEC-69.
+
+**Context.** The gauge drew Low / Medium / High bands on the arc. Those bands were thresholds on
+the share of the area that overlaps mapped fire-risk areas, which reads as if it were the fire
+risk level of the mapped areas themselves (Very Low to Very High). The two are different logics
+and the chart implied a link between them that does not exist.
+
+**Decision.** The gauge shows only the share of the project area that overlaps mapped fire-risk
+areas: a grey ring for the total area and an orange arc for the overlap. No bands, marks or level
+labels. Hovering or focusing the chart shows a pop-up with "Total area" and "Overlaps mapped
+fire-risk areas", each with its percentage and hectares.
+
+**Consequences.**
+- The narrative beside the gauge still uses `gcFireLevel(pct)` (DEC-67 thresholds).
+  `TODO(design): confirm whether that narrative should also stop naming a level.`

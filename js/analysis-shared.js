@@ -12,8 +12,7 @@
    is replaced by its chunk when this script loads, so include it AFTER the
    mount points and BEFORE the page's own inline script. Mount keys:
      site            → the 4 Site Characterisation context panes
-     threat          → threat tab bar + sections            (interactive map)
-     threat-sections → sections only, no tab bar            (project detail)
+     threat          → the three Threat profile accordion groups (both pages)
      benefit         → summary + tab bar + panels + foot    (interactive map)
      benefit-content → summary + panels + foot, no tab bar  (project detail)
    ============================================================================ */
@@ -50,14 +49,23 @@ if (typeof window !== 'undefined') window.NBS_DATA = NBS_DATA;
    Mark an icon with a key here via gcHead(title, icon, key) / gcSub(title, key);
    interactive-map.html renders the matching row in its layer-info modal. */
 const NBS_LAYER_INFO = {
+  "administration": {
+    name: "Administration",
+    category: "Site information",
+    dateOfContent: "2022",
+    description: "Administrative boundaries from GADM, the Database of Global Administrative Areas. The tool uses them to name the province, district and sub-district that the selected area overlaps, with the overlapping area of each.",
+    disclaimer: "Reference boundaries only, not a legal source for jurisdiction or tenure. The level of administrative detail varies by country.",
+    resolution: "N/A",
+    source: "GADM"
+  },
   "ecosystem-type": {
-    name: "Ecosystem type identification",
+    name: "Reference ecosystem",
     category: "Site information",
     dateOfContent: "Historical",
     description: "A composite classification layer for Southeast Asia that merges the mangrove, peatland, and dryland layers into a single ecosystem-type map, including the areas where two or all three overlap.",
     disclaimer: "Ecosystem types and area figures shown here are derived from regional remote-sensing and land-cover datasets across Southeast Asia. They are indicative estimates, not ground-verified measurements, and may differ from actual conditions. Boundaries between mangrove, peatland, and dryland forest can be misclassified depending on imagery date and resolution. Verify with field data before using these figures for planning or reporting",
     resolution: "30 meters",
-    source: ""
+    source: "SCeNe Coalition"
   },
   "protected-area": {
     name: "Protection / zoning status (Protected Areas)",
@@ -79,7 +87,7 @@ const NBS_LAYER_INFO = {
   },
   "deforestation-2014-2024": {
     name: "Historical deforestation (2014\u20132024)",
-    category: "Site information",
+    category: "Threat profile",
     dateOfContent: "2014 - 2024",
     description: "Deforestation 2014 to 2024 shows where natural forest standing in 2014 had been lost by 2024 across Southeast Asia, marking the areas that changed from forest to non-forest over the decade. The layer is derived directly from Forest Cover 2014 and Forest Cover 2024 using simple Boolean logic, flagging pixels that were natural forest in 2014 but no longer natural forest in 2024. These inputs draw on the SERVIR RLCMS land cover maps, with the 2014 baseline also using University of Maryland tree canopy cover and height data. It records the location and extent of loss but does not attribute its cause, which may range from clearing and conversion to other forms of disturbance.",
     disclaimer: "This layer is derived from modeled forest classifications and has not been field-verified at every location. Provided as is for landscape-scale analysis, it identifies forest loss without attributing its cause and should not be used as a legal or authoritative determination of deforestation, forest status, or boundaries.",
@@ -87,8 +95,8 @@ const NBS_LAYER_INFO = {
     source: "SIGnal"
   },
   "deforestation-risk": {
-    name: "Deforestation Risk Index",
-    category: "Site information",
+    name: "Deforestation risk",
+    category: "Threat profile",
     dateOfContent: "Deforestation was observed over 2014-2024",
     description: "This layer shows the modelled probability of future unplanned deforestation across Southeast Asia, serving as a baseline to project where and how much forest is likely to be lost without intervention \u2014 high-risk locations can be used to define an NbS project footprint or, under jurisdictional carbon frameworks (e.g. Verra JNR), to allocate baseline deforestation. The 30 m probability surface (0\u2013100%) follows the \"forestatrisk\" approach (Vieilledent et al. 2021, 2023; https://forestatrisk.cirad.fr) for selecting explanatory variables, but the probability itself is estimated with a Random Forest classifier trained on observed forest-cover change over 2014\u20132024",
     disclaimer: "1) The output is relative deforestation risk, not a calibrated rate. It should be read as a ranking of risk, not an absolute figure.\n2) Accuracy is reported in-sample (AUC). Independent or out-of-time validation has not yet been done.\n3) Only two dates (2014 and 2024) are available, so distance to past deforestation cannot be used as a leak-free predictor.",
@@ -106,29 +114,29 @@ const NBS_LAYER_INFO = {
   },
   "disaster-risk": {
     name: "Natural disaster risk",
-    category: "Site information",
+    category: "Threat profile",
     dateOfContent: "Dynamic",
     description: "Flood: The GAR Atlas global flood hazard assessment uses a probabilistic approach for modelling riverine flood major river basins around the globe. This has been possible after compiling a global database of stream-flow data, merging different sources and gathering more than 8000 stations over the globe in order to calculate the range of possible discharges from very low to the maximum possible scales at different locations along the rivers. The calculated discharges were introduced in the river sections to model water levels downstream. This procedure allowed for the determination of stochastic event-sets of riverine floods from which hazard maps for 100 return periods were obtained. The hazard maps are developed at 1kmx1km resolution and have been validated against satellite flood footprints from different sources (DFO archive, UNOSAT flood portal) performing well especially for big events For smaller events (lower return periods), the GAR Atlas flood hazard maps tend to overestimate with respect to similar maps produced locally (hazard maps where available for some countries and were used as benchmark). The main issue being that, due to the resolution, the GAR Atlas flood hazard maps do not take into account flood defenses that are normally present to preserve the value exposed to floods. More information about the flood hazard assessment can be found in the background paper (Rudari et al., 2015).\n\nLandslide: The Global Landslide Hazard Distribution is a 2.5 minute grid of global landslide and snow avalanche hazards based upon work of the Norwegian Geotechnical Institute (NGI). The hazards mapping of NGI incorporates a range of data including slope, soil, soil moisture conditions, precipitation, seismicity, and temperature. Shuttle Radar Topography Mission (SRTM) elevation data at 30 seconds resolution are also incorporated. Hazards values less than or equal to 4 are considered negligible and only values 5 through 9 are utilized in further analyses. To ensure compatibility with other data sets, value 1 is added to each of the values to provide a hazard ranking ranging 6 through 10 in increasing hazard. This data set is the result of collaboration among the Columbia University Center for Hazards and Risk Research (CHRR), Norwegian Geotechnical Institute (NGI), and Columbia University Center for International Earth Science and Information Network (CIESIN).\n\nDrought: The Global Drought Hazard Frequency and Distribution is a 2.5 minute grid based upon the International Research Institute for Climate Prediction's (IRI) Weighted Anomaly of Standardized Precipitation (WASP). Utilizing average monthly precipitation data from 1980 through 2000 at a resolution of 2.5 degrees, WASP assesses the precipitation deficit or surplus over a three month temporal window that is weighted by the magnitude of the seasonal cyclic variation in precipitation. The three months' averages are derived from the precipitation data and the median rainfall for the 21 year period is calculated for each grid cell. Grid cells where the three month running average of precipitation is less than 1 mm per day ae excluded. Drought events are identified when the magnitude of a monthly precipitation deficit is less than or equal to 50 percent of its longterm median value for three or more consecutive months. Grid cells are then divided into 10 classes having an approximately equal number of grid cells. Higher grid cell values denote higher frequencies of drought occurrences. This data set is the result of collaboration among the Columbia University Center for Hazards and Risk Research (CHRR), Columbia University International Research Institute for Climate Prediction (IRI), and Columbia University Center for International Earth Science Information Network (CIESIN).\n\nTropical typhoon: The Global Cyclone Hazard Frequency and Distribution is a 2.5 minute grid based on more than 1,600 storm tracks for the period 1 January 1980 through 31 December 2000 for the Atlantic, Pacific, and Indian Oceans that were assembled and modeled at UNEP/GRID-Geneva PreView. Windspeeds around storm tracks were modeled using Holland's model (1997) to assess the grid cells likely to have been exposed to high wind levels. Post-modeling, the cells were divided into deciles, 10 classes consisting of approximately equal number of grid cells. The higher the value of the grid cell, the higher the decile ranking and the greater the frequency of the hazard relative to other cells. This data set is the result of collaboration among the Columbia University Center for Hazards and Risk Research (CHRR), International Bank for Reconstruction and Development/The World Bank, United Nations Environment Programme Global Resource Information Database Geneva (UNEP/GRID-Geneva), and Columbia University Center for International Earth Science Information Network (CIESIN).",
-    disclaimer: "Data classification needs refinement (per GUI doc).",
+    disclaimer: "This disaster risk analysis is a screening-level assessment and should not be interpreted as a definitive measure of risk.",
     resolution: "N/A",
     source: "ADPC"
   },
   "biodiversity-aoh": {
     name: "Habitat area (Area of Habitat)",
     category: "Nature",
-    dateOfContent: "",
+    dateOfContent: "2024",
     description: "The Area of Habitat (AOH) refers to the accessible habitat within a species' range. Unlike mere range maps, AOH maps showcase where a species might likely dwell within its range, which minimizes inaccuracies. These maps are crafted by removing unsuitable habitats from a species' range, based on its known habitat preferences and elevation tolerances. Comprehensive AOH maps have been previously developed for mammals, amphibians, and certain birds. The portion of a species\u2019 range depicted in the AOH can differ due to various factors, including the techniques used to link species with their habitats, the detail of the range map, the species' geographical distribution, and specifics about its habitat preference and elevation boundaries.",
-    disclaimer: "",
-    resolution: "",
+    disclaimer: "Area of Habitat is not equivalent to Extent of Occurrence or Area of Occupancy (Brooks et al. 2019). Values represent mapped habitat overlap within the project area, not species abundance or confirmed presence.",
+    resolution: "30 meters",
     source: "Brooks, T. M., Pimm, S. L., Ak\u00e7akaya, H. R., Buchanan, G. M., Butchart, S. H. M., Foden, W., Hilton-Taylor, C., Hoffmann, M., Jenkins, C. N., Joppa, L., Li, B. V., Menon, V., Ocampo-Pe\u00f1uela, N., & Rondinini, C. (2019). Measuring terrestrial area of habitat (AOH) and its utility for the IUCN Red List. Trends in Ecology & Evolution, 34(11), 977\u2013986. https://doi.org/10.1016/j.tree.2019.06.009"
   },
   "species-occurrence": {
     name: "Species occurrences",
     category: "Nature",
-    dateOfContent: "",
-    description: "",
-    disclaimer: "",
-    resolution: "",
+    dateOfContent: "2000 - 2025",
+    description: "GBIF occurrence records for 2000 to 2025, compiled from natural history museums, citizen science networks, academic and research institutions, and government and conservation agencies. Records before 2000 are excluded.",
+    disclaimer: "GBIF aggregates heterogeneous sources; records may lack identification, location precision or date. Absence of a record is not evidence of absence of the species.",
+    resolution: "N/A",
     source: "GBIF"
   },
   "flii": {
@@ -151,7 +159,7 @@ const NBS_LAYER_INFO = {
   },
   "soil-groups": {
     name: "Soil classification (WRB 2006)",
-    category: "Climate",
+    category: "Site information",
     dateOfContent: "Dynamic",
     description: "The soil classification is based on the World Reference Base for Soil Resources (WRB) 2006, an international soil classification system developed by the International Union of Soil Sciences (IUSS). WRB provides a standardized framework for describing and classifying soils worldwide, enabling consistent soil mapping and comparison across countries and regions. The data layer is sourced from SoilGrids and is publicly accessible at https://soilgrids.org/.",
     disclaimer: "The classification provides a standardized international soil nomenclature and should not be interpreted as a substitute for site-specific soil surveys or field verification",
@@ -161,29 +169,29 @@ const NBS_LAYER_INFO = {
   "annual-precipitation": {
     name: "Annual precipitation",
     category: "Climate",
-    dateOfContent: "Dynamic",
+    dateOfContent: "2000",
     description: "Annual precipitation data is important in the context of Natural-based Solution project prepration. It can shows variability in water availability, plant selection, soil conservation, habitat suitability and economic viability as well. This data shows annual preciptation, taken from WorldClim data. WorldClim is a set of global climate layers (gridded climate data) with a spatial resolution of about 1 square kilometer.",
-    disclaimer: "",
-    resolution: "N/A",
+    disclaimer: "Interpolated long-term normals, not observations. Accuracy depends on weather station density, which is uneven across the region.",
+    resolution: "927 meters",
     source: "WorldClim"
   },
   "annual-temperature": {
     name: "Annual mean temperature",
     category: "Climate",
-    dateOfContent: "Dynamic",
+    dateOfContent: "2000",
     description: "Temperature information is pivotal in nature-based solution projects, particularly for avoided deforestation and ecosystem restoration, as it guides species selection, aiding in the resilience of local ecosystems to climate change. It facilitates the monitoring of project success, carbon sequestration estimation, and risk assessment related to climate change impacts, ensuring project effectiveness. This data shows average annual temperature, taken from WorldClim data. WorldClim is a set of global climate layers (gridded climate data) with a spatial resolution of about 1 square kilometer.",
-    disclaimer: "",
-    resolution: "N/A",
+    disclaimer: "A long-term climate normal interpolated from weather stations, not current or observed conditions at the site.",
+    resolution: "927 meters",
     source: "WorldClim"
   },
   "burned-area": {
     name: "Historical burned area",
-    category: "Climate",
+    category: "Threat profile",
     dateOfContent: "Dynamic",
     description: "Burned area becomes important to visualise due to when peatlands burn, huge amount of stored carbon is released and it is difficult to control and extinguish. This type of information can provide early detection and rapid response systems to rehabilitate degraded peatland ecosystems",
-    disclaimer: "",
-    resolution: "N/A",
-    source: "MODIS MCD64A1"
+    disclaimer: "Burn scars detected from satellite. Cropland burning is under-detected and small or short fires can be missed entirely.",
+    resolution: "30 meters",
+    source: "GABAM"
   },
   "kba": {
     name: "Key Biodiversity Area",
@@ -193,6 +201,24 @@ const NBS_LAYER_INFO = {
     disclaimer: "Key Biodiversity Area data are taken from the World Database of Key Biodiversity Areas. While it represents the most comprehensive global database of these sites, in some cases there may be inaccuracies and differences from national datasets.",
     resolution: "N/A",
     source: "BirdLife International (2023) World Database of Key Biodiversity Areas. Developed by the KBA Partnership: BirdLife International, International Union for the Conservation of Nature, American Bird Conservancy, Amphibian Survival Alliance, Conservation International, Critical Ecosystem Partnership Fund, Global Environment Facility, Re:wild, NatureServe, Rainforest Trust, Royal Society for the Protection of Birds, Wildlife Conservation Society and World Wildlife Fund. March 2023 version. Available at http://keybiodiversityareas.org/kba-data/request"
+  },
+  "conservation-significance": {
+    name: "Conservation significance",
+    category: "Nature",
+    dateOfContent: "2021",
+    description: "Places the site in a global context: the share of the project area that falls within the global top-ranked cells for biodiversity, carbon and water conservation priority. One axis per priority: biodiversity, carbon, water.",
+    disclaimer: "The ranked priority map is intended to provide broad spatial guidance for decision-makers. It is not intended to replace detailed national or sub-national planning.",
+    resolution: "10 km",
+    source: "Jung, M., Arnell, A., de Lamo, X., et al. (2021). Areas of global importance for conserving terrestrial biodiversity, carbon and water. Nature Ecology & Evolution, 5, 1499\u20131509."
+  },
+  "plant-occurrence": {
+    name: "Plant species occurrence",
+    category: "Nature",
+    dateOfContent: "2000 - 2026",
+    description: "Plant species recorded in the project area in GBIF occurrence records between 2000 and 2026, with the number of those species listed under CITES Appendix I, II and III.",
+    disclaimer: "GBIF aggregates heterogeneous sources; records may lack identification, location precision or date.",
+    resolution: "N/A",
+    source: "GBIF"
   }
 };
 if (typeof window !== 'undefined') window.NBS_LAYER_INFO = NBS_LAYER_INFO;
@@ -200,16 +226,133 @@ if (typeof window !== 'undefined') window.NBS_LAYER_INFO = NBS_LAYER_INFO;
 const NBS_ANALYSIS = (() => {
 
 /* ---- Step 2 — Site Characterisation context panes ---- */
-/* General Context — live HTML rebuilt from Figma (F02 P2, node 3892-33528).
-   Styles: css/genctx.css (.gc*). Assets: assets/f01-step2/genctx/. */
+/* General Context — the five sections of GUI Design Document v3.1 "Site
+   Char-General" (docs/reference/GUI3.1), in its order: Reference ecosystem,
+   Administration and zoning, Terrain, Landcover, Soil classification.
+   Deforestation analysis and Natural disaster risk moved to the Threat profile.
+   Styles: css/genctx.css (.gc*). Assets: assets/f01-step2/genctx/.
+   A card with data-gc="<key>" can show a GUI 3.1 result state — see nbsCardState. */
 const GC_ASSETS = 'assets/f01-step2/genctx';
 const gcAlert = `
           <div class="gc-alert">
             <img src="${GC_ASSETS}/ic-alert.svg" alt="" />
-            <p>Disclaimer: The information you see in NbS Tool is collected from diverse available sources across South-east Asia. Go to <a href="#">NbS Tool Form&rarr;</a> to edit and replace it with your own data.</p>
+            <p>The information you see in NbS Tool is collected from diverse available sources across South-east Asia. Go to <a href="#">NbS Tool Form</a> to edit and replace it with your own data.</p>
           </div>`;
 const gcSource = (data, source, year) => `
           <p class="gc-src">Data source:&nbsp; <b>${data}</b>: ${source}, ${year} <a href="#">See more</a>.</p>`;
+/* GUI 3.1 — the disclaimer under a card is the one written for that card's
+   dataset (the "Disclaimer" column of the GUI 3.1 tables). gcAlert, the general
+   alert, stays on the cards GUI 3.1 has not reached yet. */
+const gcDisc = (text) => `
+          <div class="gc-alert">
+            <img src="${GC_ASSETS}/ic-alert.svg" alt="" />
+            <p>${text}</p>
+          </div>`;
+/* Class bars (elevation, slope): rows = [label, hectares, colour]. The share is
+   worked out from the hectares, so a class with 0 ha draws an empty track — a
+   valid zero, which is not the same thing as a missing result. */
+const gcBars = (rows) => {
+  const total = rows.reduce((sum, r) => sum + r[1], 0);
+  return `<div class="gc-slopes">${rows.map(r => {
+    const pct = Math.round(r[1] / total * 100);
+    return `
+                  <div class="gc-slope"><div class="l"><span>${r[0]}</span><b>${NBS_DATA.grp(r[1])} ha <em>${pct}%</em></b></div><div class="t"><i style="width:${pct}%;background:${r[2]}"></i></div></div>`;
+  }).join('')}
+                </div>`;
+};
+/* Reference ecosystem donut + legend, drawn from NBS_DATA so the shares always
+   match the Threat profile and Pathway steps. [label, hectares, colour] */
+const GC_ECO = [
+  ['Dryland forest', NBS_DATA.eco.forest.area, '#1f6b47'],
+  ['Mangrove', NBS_DATA.eco.mangrove.area, '#1a9e96'],
+  ['Peatland', NBS_DATA.eco.peat.area, '#bea001'],
+  ['Other', NBS_DATA.nonEligible, 'var(--neutral-700)'],
+];
+/* Hover text for one chart segment, shown by the People Context tooltip
+   (js/people-context.js wires every [data-tip] inside .gc to .pcx-tip). */
+const gcTip = (label, ha, pct) => `data-tip="${label}: ${NBS_DATA.grp(ha)} ha (${pct}%)"`;
+/* The half-doughnut arc shared by gcGauge and the half form of gcDonut. With
+   pathLength="100", a dash length or offset is simply a percentage. */
+const GC_ARC = 'M20 100A80 80 0 0 1 180 100';
+/* Total + donut + legend for a set of [label, hectares, colour]. The shares
+   are worked out from the hectares; the legend repeats them as text. Each
+   segment is its own SVG path, so pointing at one names only that segment.
+   half = true draws the segments on the Fire risk half doughnut (gcGauge's look)
+   with the total in its centre, in place of the total line and the full ring. */
+const gcDonut = (items, totalLabel, ariaLead, half) => {
+  const total = items.reduce((sum, e) => sum + e[1], 0);
+  const pct = (ha) => ha / total * 100;
+  if (half) {
+    let at = 0;
+    const arcs = items.map(e => {
+      const p = pct(e[1]);
+      const s = `<path ${gcTip(e[0], e[1], Math.round(p))} d="${GC_ARC}" fill="none" stroke-width="22" pathLength="100" stroke-dasharray="${p.toFixed(2)} 100" stroke-dashoffset="${(-at).toFixed(2)}" style="stroke:${e[2]}"/>`;
+      at += p;
+      return s;
+    });
+    return `
+                  <div class="gc-eco__total"><span>${totalLabel}</span></div>
+                  <div class="gc-eco__chartrow">
+                    <div class="gc-gauge" role="img" aria-label="${ariaLead}, ${NBS_DATA.grp(total)} ha: ${items.map(e => `${e[0].toLowerCase()} ${Math.round(pct(e[1]))}%`).join(', ')}">
+                      <svg viewBox="0 0 200 110" aria-hidden="true">${arcs.join('')}</svg>
+                      <div class="gc-gauge__c" aria-hidden="true"><b>${NBS_DATA.grp(total)} ha</b></div>
+                    </div>
+                    <ul class="gc-legend">${items.map(e => `
+                      <li><i style="background:${e[2]}"></i><span>${e[0]}</span><b>${NBS_DATA.grp(e[1])} ha</b><em>${Math.round(pct(e[1]))}%</em></li>`).join('')}
+                    </ul>
+                  </div>`;
+  }
+  const R = 48, r = 28, pt = (rad, a) => `${(48 + rad * Math.cos(a)).toFixed(2)} ${(48 + rad * Math.sin(a)).toFixed(2)}`;
+  let a = -Math.PI / 2;
+  const segs = items.map(e => {
+    const sweep = Math.min(pct(e[1]) / 100 * 2 * Math.PI, 2 * Math.PI - 0.0001), b = a + sweep, big = sweep > Math.PI ? 1 : 0;
+    const d = `M${pt(R, a)}A${R} ${R} 0 ${big} 1 ${pt(R, b)}L${pt(r, b)}A${r} ${r} 0 ${big} 0 ${pt(r, a)}Z`;
+    a = b;
+    return `<path ${gcTip(e[0], e[1], Math.round(pct(e[1])))} d="${d}" style="fill:${e[2]}"/>`;
+  });
+  const label = items.map(e => `${e[0].toLowerCase()} ${Math.round(pct(e[1]))}%`).join(', ');
+  return `
+                  <div class="gc-eco__total"><span>${totalLabel}</span><b>${NBS_DATA.grp(total)} ha</b></div>
+                  <div class="gc-eco__chartrow">
+                    <svg class="gc-donut" viewBox="0 0 96 96" role="img" aria-label="${ariaLead}: ${label}">${segs.join('')}</svg>
+                    <ul class="gc-legend">${items.map(e => `
+                      <li><i style="background:${e[2]}"></i><span>${e[0]}</span><b>${NBS_DATA.grp(e[1])} ha</b><em>${Math.round(pct(e[1]))}%</em></li>`).join('')}
+                    </ul>
+                  </div>`;
+};
+const gcEcoChart = () => gcDonut(GC_ECO, 'Total area', 'Share of the selected area');
+/* A labelled level badge. tone: bad | warn | ok — the word carries the meaning,
+   the colour only repeats it. */
+const gcLevel = (label, value, tone) => `<p class="gc-lvl"><span>${label}</span><em class="nc-pill nc-pill--${tone}">${value}</em></p>`;
+/* Half-doughnut of a part against a whole: the whole is a grey ring, the part is orange.
+   It shows a share only; it carries no level or threshold (DEC-61). Pointing at either
+   arc names it, with its hectares, in the People Context tooltip (gcTip).
+   The arc reuses one path with pathLength="100", so the dash length is simply the percentage. */
+const gcGauge = (part, total, caption, partLabel) => {
+  const pct = Math.round(part / total * 100), arc = GC_ARC;
+  return `
+                      <div class="gc-gauge" role="img" aria-label="Total area ${NBS_DATA.grp(total)} ha. ${pct}%, ${NBS_DATA.grp(part)} ha, ${partLabel.toLowerCase()}.">
+                        <svg viewBox="0 0 200 110" aria-hidden="true">
+                          <path class="gc-gauge__t" ${gcTip('Total area', total, 100)} d="${arc}" fill="none" stroke-width="22"/>
+                          <path class="gc-gauge__v" ${gcTip(partLabel, part, pct)} d="${arc}" fill="none" stroke-width="22" pathLength="100" stroke-dasharray="${pct} 100"/>
+                        </svg>
+                        <div class="gc-gauge__c" aria-hidden="true"><b>${pct}%</b><span>${caption}</span></div>
+                      </div>`;
+};
+/* Fire risk: the level follows the share of the project area inside mapped fire-risk
+   areas. Thresholds set by the product owner (DEC-50): high above 80%, medium from
+   30% to 80%, low below 30%. The high narrative is the GUI 3.1 text; the medium and
+   low ones are pieced together from a cut-off page of that document. */
+const GC_FIRE_HA = 96000;
+const GC_FIRE_LEVELS = [
+  { key: 'low', label: 'Low', range: 'under 30%', tone: 'ok', from: 0, to: 30,
+    text: 'Most of the project area has <b>low</b> fire risk. Although fire occurrence is relatively low, continued monitoring and sustainable land management are important to prevent fire ignition and fire-related disturbances.' },
+  { key: 'medium', label: 'Medium', range: '30% to 80%', tone: 'warn', from: 30, to: 80,
+    text: 'Most of the project area is classified as having <b>medium</b> fire risk. Dry weather conditions may increase the likelihood of fire ignition and spread. Regular monitoring and preventive action are recommended to reduce the fire risk.' },
+  { key: 'high', label: 'High', range: 'over 80%', tone: 'bad', from: 80, to: 100,
+    text: 'Most of the project area has <b>high</b> fire risk. Fires detected frequently between 2000 and 2024 indicate areas with significant fire ignition. Regular monitoring and preventive fire management are recommended to reduce the likelihood of fire ignition.' },
+];
+const gcFireLevel = (pct) => GC_FIRE_LEVELS[pct > 80 ? 2 : pct >= 30 ? 1 : 0];
 /* Card-head chip icons — Google Material Design Icons (Apache 2.0), 24px filled */
 const GC_ICONS = {
   globe: '<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>',
@@ -219,7 +362,9 @@ const GC_ICONS = {
   layers: '<path d="M11.99 18.54l-7.37-5.73L3 14.07l9 7 9-7-1.63-1.27-7.38 5.74zM12 16l7.36-5.73L21 9l-9-7-9 7 1.63 1.27L12 16z"/>',
   warning: '<path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>',
   paw: '<circle cx="4.5" cy="9.5" r="2.5"/><circle cx="9" cy="5.5" r="2.5"/><circle cx="15" cy="5.5" r="2.5"/><circle cx="19.5" cy="9.5" r="2.5"/><path d="M17.34 14.86c-.87-1.02-1.6-1.89-2.48-2.91-.46-.54-1.05-1.08-1.75-1.32-.11-.04-.22-.07-.33-.09-.25-.04-.52-.04-.78-.04s-.53 0-.79.05c-.11.02-.22.05-.33.09-.7.24-1.28.78-1.75 1.32-.87 1.02-1.6 1.89-2.48 2.91-1.31 1.31-2.92 2.76-2.62 4.79.29 1.02 1.02 2.03 2.33 2.32.73.15 3.06-.44 5.54-.44h.18c2.48 0 4.81.58 5.54.44 1.31-.29 2.04-1.31 2.33-2.32.31-2.04-1.3-3.49-2.61-4.8z"/>',
-  eye: '<path d="M11,6H13V13H11V6M9,20A1,1 0 0,1 8,21H5A1,1 0 0,1 4,20V15L6,6H10V13A1,1 0 0,1 9,14V20M10,5H7V3H10V5M15,20V14A1,1 0 0,1 14,13V6H18L20,15V20A1,1 0 0,1 19,21H16A1,1 0 0,1 15,20M14,5V3H17V5H14Z"/>',
+  /* Observation: an eye in front of a magnifying glass. Drawn for the NbS Tool, 24px grid.
+     The mask cuts the glass back around the eye, so the two read apart on any chip colour. */
+  observe: '<defs><mask id="gc-observe-cut" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24"><rect width="24" height="24" fill="white"/><path d="M1.6 15.7C3.5 12.3 5.4 11.5 7.3 11.5s3.8.8 5.7 4.2c-1.9 3.4-3.8 4.2-5.7 4.2S3.5 19.1 1.6 15.7Z" fill="black" stroke="black" stroke-width="4" stroke-linejoin="round"/></mask></defs><g mask="url(#gc-observe-cut)" fill="none" stroke="currentColor" stroke-linecap="round"><circle cx="12.6" cy="8.6" r="6" stroke-width="2.2"/><path d="M17.6 13.6l3.6 3.6" stroke-width="3.2"/><path d="M9.3 7.3a3.8 3.8 0 0 1 3.1-2.5" stroke-width="1.1"/></g><path d="M1.6 15.7C3.5 12.3 5.4 11.5 7.3 11.5s3.8.8 5.7 4.2c-1.9 3.4-3.8 4.2-5.7 4.2S3.5 19.1 1.6 15.7Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><circle cx="7.3" cy="15.7" r="2.3" fill="none" stroke="currentColor" stroke-width="1.2"/><circle cx="7.3" cy="15.7" r=".7"/>',
   key: '<path d="M21 10h-8.35C11.83 7.67 9.61 6 7 6c-3.31 0-6 2.69-6 6s2.69 6 6 6c2.61 0 4.83-1.67 5.65-4H15v4h4v-4h2v-4zM7 15c-1.65 0-3-1.35-3-3s1.35-3 3-3 3 1.35 3 3-1.35 3-3 3z"/>',
   shield: '<path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>',
   chart: '<path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>',
@@ -236,6 +381,13 @@ const gcInfo = (key) => `<svg class="gc-info"${key ? ` data-layer-info="${key}"`
    Protection/zoning status, …) carries one per sub-title instead — pass
    key=false to gcHead and build those sub-titles with gcSub(title, key).
    The key names a row in NBS_LAYER_INFO below (the dataset catalogue). */
+// The five natural risk level classes, lowest to highest, and the pill tone each takes (DEC-57).
+const GC_HAZARD_LEVELS = { 'Very Low': 'ok', 'Low': 'ok', 'Moderate': 'warn', 'High': 'bad', 'Very High': 'bad' };
+// One Natural Disaster Risk tile. The drawing comes from js/hazard-scenes.js (DEC-54); the
+// photo is what a page shows when it mounts this file without that one. Under it, one line:
+// the hazard name on the left and its level on the right, as the pill the other threat cards
+// use (DEC-58).
+const gcHazard = (key, photo, name, level) => `<div class="gc-nditem"><figure>${typeof hazardScene === 'function' ? hazardScene(key) : `<img src="assets/asset/Disaster Risk/${photo}" alt="" />`}</figure>${gcLevel(name, `${level} risk`, GC_HAZARD_LEVELS[level])}</div>`;
 const gcHead = (t, ic, key) => `
           <div class="gc-card__head"><span class="gc-hchip"><svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">${GC_ICONS[ic] || ''}</svg></span><h4>${t}</h4>${key === false ? '' : gcInfo(key)}</div>`;
 const gcSub = (t, key) => `<h5 class="gc-sub gc-sub--info">${t}${gcInfo(key)}</h5>`;
@@ -244,33 +396,21 @@ const siteGeneral = `
         <div class="ctx-pane" data-ctx="general">
           <div class="gc">
 
-            <!-- 1 · Ecosystem type identification -->
-            <section class="gc-card">${gcHead('Ecosystem type identification', 'globe', 'ecosystem-type')}
+            <!-- 1 · Reference ecosystem (GUI 3.1; was "Ecosystem type identification") -->
+            <section class="gc-card" data-gc="ecosystem">${gcHead('Reference ecosystem', 'globe', 'ecosystem-type')}
               <div class="gc-eco">
                 <figure class="gc-eco__map"><img src="${GC_ASSETS}/map-eco.png" alt="Ecosystem map of the selected area" /></figure>
                 <div class="gc-eco__side">
-                  <p class="gc-p">This area spans all three settings: non-flooded mineral soil inland, a tidal coastal zone with salt or brackish water, and ground built on wet peat soil. It combines <b>dryland</b>, <b>mangrove</b>, and <b>peatland</b> references across different parts of the site.</p>
-                  <div class="gc-eco__chartrow">
-                    <div class="gc-donut">
-                      <img src="${GC_ASSETS}/eco-donut.svg" alt="Ecosystem share donut chart" />
-                      <div class="gc-donut__c"><span>Total</span><b>150,000 ha</b></div>
-                    </div>
-                    <ul class="gc-legend">
-                      <li><i style="background:#1a9e96"></i>Mangrove</li>
-                      <li><i style="background:#bea001"></i>Peatland</li>
-                      <li><i style="background:#1f6b47"></i>Dryland Forest</li>
-                      <li><i style="background:#e1e1e1"></i>Other</li>
-                    </ul>
-                  </div>
+                  <p class="gc-p">This area spans all three settings: non-flooded mineral soil inland, a tidal coastal zone with salt or brackish water, and ground built on wet peat soil. It combines <b>dryland</b>, <b>mangrove</b>, and <b>peatland</b> references across different parts of the site.</p>${gcEcoChart()}
                 </div>
-              </div>${gcAlert}${gcSource('Ecosystem extent', 'MoEF Indonesia (KLHK) land cover', '2024')}
+              </div>${gcDisc('A composite of several datasets with different scales and methods, so ecosystem boundaries are indicative. Peat and mangrove edges are the least certain.')}${gcSource('Reference ecosystem', 'SCeNe Coalition, 30 m', '2025')}
             </section>
 
             <!-- 2 · Administration and zoning status -->
-            <section class="gc-card">${gcHead('Administration and Zoning Status Information', 'gov', false)}
+            <section class="gc-card" data-gc="administration">${gcHead('Administration and Zoning Status Information', 'gov', false)}
               <div class="gc-block">
-                ${gcSub('Administration')}
-                <p class="gc-p">This project area is located in <b>Banjar, Buleleng, Bali, 150,000 ha</b><br />The project area intersects <b>3</b> sub-districts. The table below shows each sub-district and its overlapping area.</p>
+                ${gcSub('Administration', 'administration')}
+                <p class="gc-p">This project area is mostly located in <b>Buleleng, Bali</b>, with an approximate total area of <b>150,000 hectares</b>. Within this province, it also overlaps the following sub-districts:</p>
                 <table class="gc-table">
                   <thead><tr><th>Sub-district</th><th>District</th><th>Province</th><th>Area ha</th></tr></thead>
                   <tbody>
@@ -281,58 +421,44 @@ const siteGeneral = `
                 </table>
                 <p class="gc-note-it">See all completed administrative boundaries of your project in the <a href="#">Feasibility study document</a></p>
               </div>
+              <!-- GUI 3.1: this block is hidden when the area overlaps no protected area -->
               <div class="gc-block">
                 ${gcSub('Protection/zoning status', 'protected-area')}
-                <p class="gc-p">This project area overlaps with 30,000 hectares of protected areas (20% of the AOI). The protected area within the polygon is designated for <b>Taman Wisata Alam (nature recreation park)</b></p>
-              </div>${gcAlert}${gcSource('Administrative boundaries', 'Badan Informasi Geospasial (BIG)', '2024')}
+                <p class="gc-p">This project area also overlaps with <b>30,000 hectares</b> of protected areas. The protected area within the polygon is designated for <b>Taman Wisata Alam (nature recreation park)</b>.</p>
+                <p class="gc-p gc-p--note">Consider this when you select your NbS activities, as it may affect which activities are eligible.</p>
+              </div>${gcDisc('Reference boundaries only, not a legal source for jurisdiction or tenure. The level of administrative detail varies by country. Protected-area overlap is a screening result: it does not establish land tenure, permitted activities or complete local zoning restrictions. Verify with the relevant authority.')}${gcSource('Administrative boundaries', 'GADM', '2022')}${gcSource('Protected areas', 'World Database on Protected Areas (WDPA), 30 m', '2025')}
             </section>
 
-            <!-- 3 · Terrain -->
-            <section class="gc-card">${gcHead('Terrain', 'landscape', 'terrain')}
+            <!-- 3 · Terrain — elevation classes are new in GUI 3.1; slope gains its share -->
+            <section class="gc-card" data-gc="terrain">${gcHead('Terrain', 'landscape', 'terrain')}
               <figure class="gc-terrain"><img src="${GC_ASSETS}/terrain.jpg" alt="3D terrain render of the selected area" /></figure>
-              <div class="gc-block">
-                <p class="gc-p gc-p--lg">Elevation ranges from 45 to 1,860 m above sea level (asl), predominantly upland (500&ndash;1,000 m), and the slope of the area consists of:</p>
-                <div class="gc-slopes">
-                  <div class="gc-slope"><div class="l"><span>Flat (0-8%)</span><b>57,000 ha</b></div><div class="t"><i style="width:38%;background:#55b101"></i></div></div>
-                  <div class="gc-slope"><div class="l"><span>Gently sloping (8-15%)</span><b>39,000 ha</b></div><div class="t"><i style="width:26%;background:#8cb21a"></i></div></div>
-                  <div class="gc-slope"><div class="l"><span>Moderately steep (15-25%)</span><b>28,500 ha</b></div><div class="t"><i style="width:19%;background:#d9a600"></i></div></div>
-                  <div class="gc-slope"><div class="l"><span>Steep (25-40%)</span><b>15,000 ha</b></div><div class="t"><i style="width:10%;background:#d97300"></i></div></div>
-                  <div class="gc-slope"><div class="l"><span>Very steep (&gt;40%)</span><b>10,500 ha</b></div><div class="t"><i style="width:7%;background:#b2331a"></i></div></div>
+              <div class="gc-terr">
+                <div class="gc-block">
+                  <h5 class="gc-sub">Elevation class</h5>
+                  <p class="gc-p">Elevation ranges from 45 to 1,860 m above sea level (asl), predominantly submontane / hill (500&ndash;1,000 m).</p>
+                  ${gcBars([
+                    ['Lowland (0-500 m)', 52500, 'var(--primary-300)'],
+                    ['Submontane / hill (500-1,000 m)', 67500, 'var(--primary-500)'],
+                    ['Montane (1,000-2,000 m)', 30000, 'var(--primary-700)'],
+                    ['Upper montane (&gt;2,000 m)', 0, 'var(--primary-900)'],
+                  ])}
                 </div>
-              </div>${gcAlert}${gcSource('Elevation &amp; slope', 'NASADEM 30 m (NASA/USGS)', '2023')}
+                <div class="gc-block">
+                  <h5 class="gc-sub">Slope</h5>
+                  <p class="gc-p">The slope of the area, in percent, consists of:</p>
+                  ${gcBars([
+                    ['Flat (0-8%)', 57000, '#55b101'],
+                    ['Gently sloping (8-15%)', 39000, '#8cb21a'],
+                    ['Moderately steep (15-25%)', 28500, '#d9a600'],
+                    ['Steep (25-40%)', 15000, '#d97300'],
+                    ['Very steep (&gt;40%)', 10500, '#b2331a'],
+                  ])}
+                </div>
+              </div>${gcDisc('SRTM is a surface model (DSM), not a bare-earth model (DTM). Slope is derived from it, so it inherits that limit plus smoothing from the 30 m resolution. Local steep areas may not be resolved. Use field checks for site-level planning.')}${gcSource('Elevation and slope', 'SRTM, 30 m', '2000')}
             </section>
 
-            <!-- 4 · Deforestation analysis -->
-            <section class="gc-card">${gcHead('Deforestation analysis', 'tree', false)}
-              <div class="gc-block">
-                <div class="gc-def">
-                  <figure class="gc-def__map"><img src="${GC_ASSETS}/map-defor.png" alt="Historical deforestation map" /></figure>
-                  <div class="gc-def__side">
-                    <div>
-                      ${gcSub('Historical Deforestation', 'deforestation-2014-2024')}
-                      <p class="gc-p">Between 2014 and 2024, the project area lost <b>6,720 ha</b> of forest, an average of</p>
-                      <p class="gc-big">1.2<small>% / year</small></p>
-                    </div>
-                    <div class="gc-chip"><span><i style="background:#a5c47c"></i>Forest</span><span><i style="background:#e0418c"></i>Forest Loss</span></div>
-                  </div>
-                </div>
-              </div>
-              <div class="gc-block">
-                <div class="gc-def">
-                  <figure class="gc-def__map gc-def__map--plain"><img src="${GC_ASSETS}/map-risk.png" alt="National deforestation risk map" /></figure>
-                  <div class="gc-def__side">
-                    <div>
-                      ${gcSub('Deforestation Risk Index', 'deforestation-risk')}
-                      <p class="gc-p">Deforestation risk is mapped as a continuous index from <b>0</b> (lowest) to <b>1</b> (highest). Forest in this area averages <b>0.85</b>, higher than the national average &mdash; the top <b>15%</b> of the country&rsquo;s forest by deforestation risk.</p>
-                    </div>
-                    <div class="gc-chip gc-chip--ramp"><span>Deforestation risk index</span><span>0<i></i>1</span></div>
-                  </div>
-                </div>
-              </div>${gcAlert}${gcSource('Forest loss', 'Global Forest Watch (Hansen/UMD)', '2024')}
-            </section>
-
-            <!-- 5 · Landcover -->
-            <section class="gc-card">${gcHead('Landcover', 'layers', 'land-cover-2024')}
+            <!-- 4 · Landcover -->
+            <section class="gc-card" data-gc="landcover">${gcHead('Landcover', 'layers', 'land-cover-2024')}
               <div class="gc-block">
                 <p class="gc-p">The major land cover categories in the selected area are:</p>
                 <div class="gc-lcgrid">
@@ -341,47 +467,67 @@ const siteGeneral = `
                   <div class="gc-lcitem"><img src="${GC_ASSETS}/lc-rubber.svg" alt="" /><div><span>Rubber</span><b>18,000 ha</b><em>12%</em></div></div>
                   <div class="gc-lcitem"><img src="${GC_ASSETS}/lc-crop.svg" alt="" /><div><span>Crop Plantation</span><b>30,000 ha</b><em>20%</em></div></div>
                   <div class="gc-lcitem"><img src="${GC_ASSETS}/lc-evergreen.svg" alt="" /><div><span>Evergreen</span><b>52,500 ha</b><em>35%</em></div></div>
-                  <div class="gc-lcitem"><img src="${GC_ASSETS}/lc-oilpalm.svg" alt="" /><div><span>Oilpalm</span><b>21,000 ha</b><em>14%</em></div></div>
+                  <div class="gc-lcitem"><img src="${GC_ASSETS}/lc-oilpalm.svg" alt="" /><div><span>Oil Palm</span><b>21,000 ha</b><em>14%</em></div></div>
                 </div>
                 <p class="gc-note-it gc-note-it--center">View the detailed landcover breakdown for your specific site within the <a href="#">feasibility study document</a></p>
-              </div>${gcAlert}${gcSource('Land cover', 'ESA WorldCover 10 m', '2023')}
+              </div>${gcDisc('A machine-learning classification from satellite imagery that has not been field-verified. Provided as is, for landscape-scale analysis.')}${gcSource('Land cover', 'SIGnal, 30 m', '2024')}
             </section>
 
-            <!-- 6 · Natural disaster risk -->
-            <section class="gc-card">${gcHead('Natural Disaster Risk', 'warning', 'disaster-risk')}
+            <!-- 5 · Soil classification — moved here from Climate (GUI 3.1) -->
+            <section class="gc-card" data-gc="soil">${gcHead('Soil classification', 'terrain', 'soil-groups')}
               <div class="gc-block">
-                <p class="gc-p">The selected area is susceptible to several natural disaster risks, including:</p>
-                <div class="gc-ndgrid">
-                  <div class="gc-nditem"><figure><img src="assets/asset/Disaster Risk/drought.png" alt="Drought" /></figure><span>Drought</span><b>Moderate risk</b></div>
-                  <div class="gc-nditem"><figure><img src="assets/asset/Disaster Risk/flood.png" alt="Flood" /></figure><span>Flood</span><b>High risk</b></div>
-                  <div class="gc-nditem"><figure><img src="assets/asset/Disaster Risk/fire risk.png" alt="Fire risk" /></figure><span>Fire Risk</span><b>High risk</b></div>
-                  <div class="gc-nditem"><figure><img src="assets/asset/Disaster Risk/Landslide.png" alt="Landslide" /></figure><span>Landslide</span><b>Moderate risk</b></div>
-                  <div class="gc-nditem"><figure><img src="assets/asset/Disaster Risk/tropicaltyphon.png" alt="Tropical typhoon" /></figure><span>Tropical Typhoon</span><b>Low risk</b></div>
+                <p class="gc-p">Based on the World Reference Base for Soil Resources (WRB) 2006, the soils in this area are predominantly <b>Andosols</b>. The distribution of all identified soil types is presented below.</p>
+                <div class="cl-soil">
+                  <div class="cl-soil__list">
+                    <div class="cl-soilrow is-top" style="--c:#ed3a33"><span class="n">01</span><div><b>Andosols</b><i><s style="width:73%"></s></i></div><em>27%</em></div>
+                    <div class="cl-soilrow" style="--c:#fecd67"><span class="n">02</span><div><b>Cambisols</b><i><s style="width:62%"></s></i></div><em>25%</em></div>
+                    <div class="cl-soilrow" style="--c:#f6872d"><span class="n">03</span><div><b>Ferralsols</b><i><s style="width:48%"></s></i></div><em>17%</em></div>
+                    <div class="cl-soilrow" style="--c:#f7991d"><span class="n">04</span><div><b>Acrisols</b><i><s style="width:23%"></s></i></div><em>9%</em></div>
+                    <div class="cl-soilrow" style="--c:#f7a082"><span class="n">05</span><div><b>Nitisols</b><i><s style="width:10%"></s></i></div><em>7%</em></div>
+                  </div>
+                  <div class="cl-dominant">
+                    <span class="cl-dominant__t">Dominant Soil Type:</span>
+                    <div><b>Andosols</b></div>
+                    <hr />
+                    <p>Soils developed from volcanic ash, pumice, and other volcanic materials. They are usually dark-coloured, rich in organic matter, highly porous, and have excellent water-holding capacity. These soils are generally highly fertile, although phosphorus fertilization is often required because of their strong phosphorus fixation capacity.</p>
+                  </div>
                 </div>
-              </div>${gcAlert}${gcSource('Multi-hazard risk index', 'BNPB InaRISK', '2024')}
+              </div>${gcDisc('The classification provides a standardised international soil nomenclature and should not be interpreted as a substitute for site-specific soil surveys or field verification.')}${gcSource('Soil classification (WRB 2006)', 'ISRIC World Reference Base (2006) Soil Groups, 250 m', '2020')}
             </section>
 
           </div>
         </div>`;
 
-/* Nature Context — live HTML rebuilt from Figma (F02 P2, node 3892-33553).
+/* Nature Context — the six sections of GUI Design Document v3.1 "Site
+   char-Nature" (docs/reference/GUI3.1), in its order: Habitat area, Charismatic
+   species, Conservation significance, Forest Landscape Integrity Index, Key
+   Biodiversity Area, Plant species occurrence.
    Shares the .gc* card/alert/source styles; Nature-only pieces are .nc*. */
 const NC_ASSETS = 'assets/f01-step2/natctx';
-/* Occurrence counts are per species only. list = [common, latin, occurrence] */
+/* One row per species: list = [common, latin, records, year of latest record].
+   GBIF records can lack a date, so a missing year reads "Date not recorded". */
 const ncSpecies = (icon, name, dot, list) => `
                 <div class="nc-splist${list.length > 5 ? ' nc-splist--scroll' : ''}">
                   <img class="nc-splist__ic" src="${NC_ASSETS}/${icon}.svg" alt="" />
                   <div class="nc-splist__id"><span>${name}</span></div>
-                  <ul style="--dot:${dot}">${list.map(s => `<li><i>${s[0]}</i> <em>(${s[1]})</em><b>${s[2]} occurrence</b></li>`).join('')}</ul>
+                  <ul style="--dot:${dot}">${list.map(s => `<li><span class="nc-nm"><i>${s[0]}</i> <em>(${s[1]})</em></span><span class="nc-rec">${s[3] ? 'Latest record ' + s[3] : 'Date not recorded'}</span><b>${s[2]} ${s[2] === 1 ? 'record' : 'records'}</b></li>`).join('')}</ul>
                 </div>`;
+/* Area of habitat threshold: species counted by how much habitat overlaps the
+   project area. [band, species]. The bands add up to the 404 species above. */
+const NC_AOH = [['&lt; 20%', 180], ['20 &ndash; 40%', 112], ['40 &ndash; 60%', 63], ['60 &ndash; 80%', 49], ['&gt; 80%', 0]];
+/* Key Biodiversity Areas the project area overlaps: [site, overlap ha]. */
+const NC_KBA = [['West Bali National Park', 13200], ['Batukaru Ridge Forest', 6300]];
+const ncKbaTotal = NC_KBA.reduce((sum, k) => sum + k[1], 0);
+const ncPct1 = (ha) => (ha / NBS_DATA.aoi * 100).toFixed(1) + '%';
 
 const siteNature = `
         <div class="ctx-pane" data-ctx="nature" hidden>
           <div class="gc">
 
-            <!-- 1 · Habitat area -->
-            <section class="gc-card">${gcHead('Habitat Area', 'paw', 'biodiversity-aoh')}
+            <!-- 1 · Habitat area — the threshold block is new in GUI 3.1 -->
+            <section class="gc-card" data-gc="habitat">${gcHead('Habitat Area', 'paw', 'biodiversity-aoh')}
               <div class="gc-block">
+                <h5 class="gc-sub">Total area of habitat</h5>
                 <p class="gc-p">The project area is a suitable habitat for a wide range of wildlife, including</p>
                 <div class="nc-habitat">
                   <div class="nc-habitat__grid">
@@ -392,39 +538,64 @@ const siteNature = `
                   </div>
                   <div class="nc-total"><span>Total Wildlife Species:</span><div><b>404</b><em>species</em></div></div>
                 </div>
-              </div>${gcAlert}${gcSource('Species occurrence', 'GBIF', '2024')}
-            </section>
-
-            <!-- 2 · Indicative key species presence -->
-            <section class="gc-card">${gcHead('Indicative Key Species Presence', 'key', 'species-occurrence')}
+                <p class="gc-note-it">Suitable habitat is mapped by refining each species&rsquo; IUCN range with regional land cover. The same land can be habitat for several species, so habitat areas are not added together.</p>
+              </div>
               <div class="gc-block">
-                <p class="gc-p">There are keystone species throughout the project area. The species featured are:</p>
-                <div class="nc-splists">
-${ncSpecies('sp-bird', 'Aves', 'var(--primary-500)', [['Bali Myna','Leucopsar rothschildi',96],['Java Sparrow','Padda oryzivora',74],['Black-winged Starling','Acridotheres melanopterus',61],['Javan Kingfisher','Halcyon cyanoventris',48]])}
-${ncSpecies('sp-mammal', 'Mammalia', 'var(--primary-500)', [['Javan Rusa','Rusa timorensis',37],['Long-tailed Macaque','Macaca fascicularis',52]])}
-${ncSpecies('sp-reptile', 'Reptilia', 'var(--primary-500)', [['Reticulated Python','Malayopython reticulatus',23],['Asian Water Monitor','Varanus salvator',44]])}
-                </div>
-              </div>${gcAlert}${gcSource('Threatened species', 'IUCN Red List', '2024')}
+                <h5 class="gc-sub">Area of habitat threshold</h5>
+                <p class="gc-p">The project area supports the area of habitat for <b>${NC_AOH.reduce((sum, r) => sum + r[1], 0)} species</b>. Most of these species have less than 90% habitat overlap with the project area.</p>
+                <table class="gc-table gc-table--auto">
+                  <thead><tr><th>Habitat overlap</th><th>Species present at the site</th></tr></thead>
+                  <tbody>${NC_AOH.map(r => `
+                    <tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join('')}
+                  </tbody>
+                </table>
+                <p class="gc-note-it">See the details of habitat area and IUCN status in the <a href="#">feasibility study document</a></p>
+              </div>${gcDisc('Area of Habitat is not equivalent to Extent of Occurrence or Area of Occupancy (Brooks et al. 2019). Values represent mapped habitat overlap within the project area, not species abundance or confirmed presence.')}${gcSource('Area of habitat', 'IUCN refined by NTU, 30 m', '2024')}
             </section>
 
-            <!-- 3 · Conservation significance -->
-            <section class="gc-card">${gcHead('Conservation Significance', 'shield')}
-              <div class="nc-cons">
-                <figure class="nc-radar"><img src="${NC_ASSETS}/radar.png" alt="Conservation significance radar chart: biodiversity, water and carbon" /></figure>
-                <div class="nc-cons__side">
-                  <p class="gc-p">The project area reflects the area&rsquo;s significance for <b>biodiversity</b> conservation.</p>
-                  <div class="gc-chip gc-chip--sq"><span><i style="background:#1d9e75"></i>Significance score (out of 10)</span></div>
+            <!-- 2 · Charismatic species (GUI 3.1; was "Indicative key species presence").
+                 No photo is licensed yet, so each record shows its name only. -->
+            <section class="gc-card" data-gc="species">${gcHead('Charismatic Species', 'key', 'species-occurrence')}
+              <div class="gc-block">
+                <p class="gc-p">There are charismatic species throughout the project area. The species featured are:</p>
+                <div class="nc-splists">
+${ncSpecies('sp-bird', 'Aves', 'var(--primary-500)', [['Bali Myna','Leucopsar rothschildi',96,2024],['Java Sparrow','Padda oryzivora',74,2023],['Black-winged Starling','Acridotheres melanopterus',61,2022],['Javan Kingfisher','Halcyon cyanoventris',48,2024]])}
+${ncSpecies('sp-mammal', 'Mammalia', 'var(--primary-500)', [['Javan Rusa','Rusa timorensis',37,2021],['Long-tailed Macaque','Macaca fascicularis',52,2025]])}
+${ncSpecies('sp-reptile', 'Reptilia', 'var(--primary-500)', [['Reticulated Python','Malayopython reticulatus',23,null],['Asian Water Monitor','Varanus salvator',44,2023]])}
                 </div>
-              </div>${gcAlert}${gcSource('Significance index', 'NbS Tool composite analysis', '2024')}
+              </div>${gcDisc('GBIF aggregates heterogeneous sources; records may lack identification, location precision or date.')}${gcSource('Species occurrence', 'GBIF', '2025')}
+            </section>
+
+            <!-- 3 · Conservation significance — the three values are also listed as text;
+                 they are read off radar.png's own 0-10 axis, so chart and text agree -->
+            <section class="gc-card" data-gc="significance">${gcHead('Conservation Significance', 'shield', 'conservation-significance')}
+              <div class="nc-cons">
+                <figure class="nc-radar"><img src="${NC_ASSETS}/radar.png" alt="Spider chart of conservation significance: biodiversity 8, water 7, carbon 6, each out of 10" /></figure>
+                <div class="nc-cons__side">
+                  <div class="gc-block">
+                    <p class="gc-p">The project area reflects the area&rsquo;s significance for <b>biodiversity</b> conservation.</p>
+                    <ul class="nc-scores">
+                      <li><span>Biodiversity</span><b>8</b></li>
+                      <li><span>Water</span><b>7</b></li>
+                      <li><span>Carbon</span><b>6</b></li>
+                    </ul>
+                    <p class="gc-note-it">Scores are out of 10. A higher score means a higher conservation priority.</p>
+                  </div>
+                  <div class="gc-chip gc-chip--sq"><span><i style="background:var(--success-600)"></i>Significance score (out of 10)</span></div>
+                </div>
+              </div>${gcDisc('The ranked priority map is intended to provide broad spatial guidance for decision-makers. It is not intended to replace detailed national or sub-national planning.')}${gcSource('Conservation significance', 'Jung et al., 10 km', '2021')}
             </section>
 
             <!-- 4 · Forest Landscape Integrity Index -->
-            <section class="gc-card">${gcHead('Forest Landscape Integrity Index', 'chart', 'flii')}
+            <section class="gc-card" data-gc="flii">${gcHead('Forest Landscape Integrity Index', 'chart', 'flii')}
               <div class="nc-flii">
-                <p class="gc-p">Within the forest in this area, <b>68%</b> has high landscape integrity, <b>24%</b> medium, and <b>8%</b> low. The forest is predominantly high integrity, indicating largely intact and well-connected forest under low human pressure.</p>
+                <div class="nc-flii__tx">
+                  <p class="gc-p">Within the forest in this area, <b>68%</b> has high landscape integrity, <b>24%</b> medium, and <b>8%</b> low. The forest is predominantly high integrity, indicating largely intact and well-connected forest under low human pressure.</p>
+                  <p class="gc-note-it">Percentages refer to the forest assessed, not the whole selected area.</p>
+                </div>
                 <div class="nc-score">
-                  <span class="nc-score__t">FLII Score</span>
-                  <div><b>9.7*</b><em class="nc-pill nc-pill--high">High Integrity</em></div>
+                  <span class="nc-score__t">Forest landscape integrity</span>
+                  <div><b>9.7<small> / 10</small></b><em class="nc-pill nc-pill--high">High Integrity</em></div>
                   <p>Largely intact and well-connected forest</p>
                 </div>
                 <div class="nc-gauge">
@@ -437,54 +608,47 @@ ${ncSpecies('sp-reptile', 'Reptilia', 'var(--primary-500)', [['Reticulated Pytho
                   <em class="nc-pill nc-pill--med" style="top:48px">Med</em><span class="nc-gauge__rng" style="top:51px">6.0 &ndash; 9.5</span>
                   <em class="nc-pill nc-pill--low" style="top:136px">Low</em><span class="nc-gauge__rng" style="top:139px">0 &ndash; 5.9</span>
                 </div>
-              </div>${gcAlert}${gcSource('Forest Landscape Integrity Index', 'Grantham et al.', '2024')}
+              </div>${gcDisc('A modelled index, not an observation. It treats all fire as natural, so forest under fire pressure can score higher than it should.')}${gcSource('Forest Landscape Integrity Index', 'Forest Landscape Integrity Index, 30 m', '2020')}
             </section>
 
-            <!-- 5 · Key Biodiversity Area -->
-            <section class="gc-card">${gcHead('Key Biodiversity Area', 'pin', 'kba')}
+            <!-- 5 · Key Biodiversity Area — the table shows when more than one site overlaps -->
+            <section class="gc-card" data-gc="kba">${gcHead('Key Biodiversity Area', 'pin', 'kba')}
               <div class="gc-block">
-                <p class="gc-p">This project area overlaps with <b>19,500 ha (13.0% of total AOI area)</b> of Key Biodiversity Areas, across <b>2</b> sites. The largest is <b>West Bali National Park (4,512.3 ha)</b>, followed by <b>Batukaru Ridge Forest (1,776.7 ha)</b>. Key Biodiversity Areas are sites that contribute significantly to the global persistence of biodiversity.</p>
+                <p class="gc-p">This project area overlaps with <b>${NBS_DATA.grp(ncKbaTotal)} ha (${ncPct1(ncKbaTotal)} of total AOI area)</b> of Key Biodiversity Areas, across <b>${NC_KBA.length}</b> sites. The largest is <b>${NC_KBA[0][0]} (${NBS_DATA.grp(NC_KBA[0][1])} ha)</b>, followed by <b>${NC_KBA[1][0]} (${NBS_DATA.grp(NC_KBA[1][1])} ha)</b>. Key Biodiversity Areas are sites that contribute significantly to the global persistence of biodiversity.</p>
+                <table class="gc-table gc-table--auto">
+                  <thead><tr><th>Key Biodiversity Area</th><th>Overlap (ha)</th><th>Share of the selected area</th></tr></thead>
+                  <tbody>${NC_KBA.map(k => `
+                    <tr><td>${k[0]}</td><td>${NBS_DATA.grp(k[1])}</td><td>${ncPct1(k[1])}</td></tr>`).join('')}
+                    <tr class="gc-table__total"><td>Total</td><td>${NBS_DATA.grp(ncKbaTotal)}</td><td>${ncPct1(ncKbaTotal)}</td></tr>
+                  </tbody>
+                </table>
+                <p class="gc-note-it">Where sites overlap each other, the shared land is counted once in the total.</p>
                 <div class="nc-kba">
                   <img src="${NC_ASSETS}/kba-map.png" alt="Key Biodiversity Area overlap map" />
-                  <div class="nc-kba__card"><span>Total overlapping area</span><b>19,500 ha</b></div>
-                  <div class="nc-kba__lg"><i></i>West Bali National Park</div>
+                  <div class="nc-kba__card"><span>Total overlapping area</span><b>${NBS_DATA.grp(ncKbaTotal)} ha</b></div>
+                  <div class="nc-kba__lg"><i></i>${NC_KBA[0][0]}</div>
                 </div>
-              </div>${gcAlert}${gcSource('Key Biodiversity Areas', 'KBA Partnership / BirdLife International', '2024')}
+              </div>${gcDisc('Data do not imply the expression of, or represent, any opinion by the KBA Partners concerning the legal status of any country, territory or area, or concerning the delimitation of its frontiers or boundaries.')}${gcSource('Key Biodiversity Areas', 'World Database of Key Biodiversity Areas (WDKBA)', '2022')}
             </section>
 
-            <!-- 6 · Endangered tree species -->
-            <section class="gc-card">${gcHead('Endangered Tree Species', 'park')}
-              <div class="nc-tree">
-                <img src="${NC_ASSETS}/tree.jpg" alt="Endangered tree species" />
-                <div><span>The project area is home to Endangered Tree as</span><b>31 Species</b></div>
-              </div>${gcAlert}${gcSource('Threatened tree species', 'BGCI GlobalTreeSearch &amp; IUCN Red List', '2024')}
-            </section>
-
-            <!-- 6b · Endangered tree species — error / edge-case states -->
-            <section class="gc-card">${gcHead('Endangered Tree Species (Error)', 'park')}
+            <!-- 6 · Plant species occurrence (GUI 3.1; replaces "Endangered tree species") -->
+            <section class="gc-card" data-gc="plants">${gcHead('Plant Species Occurrence', 'park', 'plant-occurrence')}
               <div class="gc-block">
-                <div class="nc-err nc-err--empty">
-                  <span class="nc-err__ic"><svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">${GC_ICONS.warning}</svg></span>
-                  <div>
-                    <b>Data not available</b>
-                    <p>Endangered tree species data is not available &mdash; or only partially available &mdash; for this project area. Dataset coverage varies across South-east Asia; results shown may be incomplete.</p>
-                  </div>
+                <p class="gc-p">Based on GBIF occurrence records, the project area recorded occurrences of <b>31</b> plant species between 2000 and 2026. Among these, <b>1</b> species is listed under CITES Appendix I, <b>6</b> under Appendix II, and <b>2</b> under Appendix III. These records represent <b>0.01%</b> of the global plant species diversity.</p>
+                <div class="nc-tree">
+                  <img src="${NC_ASSETS}/tree.jpg" alt="" />
+                  <div><span>Plant species recorded in the project area, 2000 to 2026</span><b>31 Species</b></div>
                 </div>
-                <div class="nc-err nc-err--fail">
-                  <span class="nc-err__ic"><svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">${GC_ICONS.warning}</svg></span>
-                  <div>
-                    <b>Failed to load</b>
-                    <p>We couldn&rsquo;t load endangered tree species data for this area. Check your connection and try again.</p>
-                  </div>
-                  <button type="button" class="nc-err__retry">Retry</button>
-                </div>
-              </div>${gcAlert}${gcSource('Threatened tree species', 'BGCI GlobalTreeSearch &amp; IUCN Red List', '2024')}
+              </div>${gcDisc('GBIF aggregates heterogeneous sources; records may lack identification, location precision or date.')}${gcSource('Plant species occurrence', 'GBIF', '2026')}
             </section>
 
           </div>
         </div>`;
 
-/* Climate Context — live HTML rebuilt from Figma (F02 P2, node 3892-33578).
+/* Climate Context — the three sections of GUI Design Document v3.1 "Site
+   char-Climate" (docs/reference/GUI3.1), in its order: Carbon information,
+   Annual climate ledger, Peat depth. Historical burned area moved to the
+   Threat profile.
    Shares the .gc* card/alert/source styles; Climate-only pieces are .cl*.
    Charts are plain CSS bars — heights are the Figma bar pixel heights over the
    plot height, so the shapes match the design without a chart library. */
@@ -505,12 +669,13 @@ const siteClimate = `
           <div class="gc">
 
             <!-- 1 · Carbon information -->
-            <section class="gc-card gc-card--blue">${gcHead('Carbon information', 'cloud', 'carbon-pools')}
+            <section class="gc-card gc-card--blue" data-gc="carbon">${gcHead('Carbon information', 'cloud', 'carbon-pools')}
               <div class="gc-block">
                 <div class="cl-carbon">
                   <p class="gc-p">The area hosts extensive carbon sinks that currently store <b>27,193,712.20</b> tCO<sub>2</sub>e, adding to the vital fight against global warming.</p>
                   <div class="cl-total"><span>Total Carbon Storage:</span><b>27,193,712.20 <em>tCO<sub>2</sub>e</em></b></div>
                 </div>
+                <p class="gc-note-it">The total is the sum of the three pools below. Soil organic carbon is counted to a depth of 30 cm.</p>
               </div>
               <div class="gc-block">
                 <div class="cl-pool">
@@ -525,68 +690,53 @@ const siteClimate = `
                     </div>
                     <img src="${CL_ASSETS}/carbon-scene.png" alt="Cross-section of trees above ground and roots in soil" />
                     <div class="cl-pool__tag cl-pool__tag--agb"><span>Above Ground Biomass</span><div><b>5,438,742.44 <em>tCO<sub>2</sub>e</em></b><i>20%</i></div></div>
-                    <div class="cl-pool__tag cl-pool__tag--soc"><span>Soil Organic Carbon</span><div><b>13,596,856.10 <em>tCO<sub>2</sub>e</em></b><i>50%</i></div></div>
+                    <div class="cl-pool__tag cl-pool__tag--soc"><span>Soil Organic Carbon (0&ndash;30 cm)</span><div><b>13,596,856.10 <em>tCO<sub>2</sub>e</em></b><i>50%</i></div></div>
                     <div class="cl-pool__tag cl-pool__tag--bgb"><span>Below Ground Biomass</span><div><b>8,158,113.66 <em>tCO<sub>2</sub>e</em></b><i>30%</i></div></div>
                   </figure>
                 </div>
-              </div>${gcAlert}${gcSource('Carbon density', 'Spawn &amp; Gibbs global biomass; ISRIC SoilGrids', '2023')}
+              </div>${gcDisc('Above-ground biomass and soil organic carbon values are modelled estimates, not direct measurements. Depth to bedrock has been ignored, so total soil carbon stocks might be about 10 to 15% lower than reported.')}${gcSource('Carbon storage', 'SCeNe Coalition, 250 m', '2024')}${gcSource('Soil organic carbon', 'OpenLandMap, 30 m', '2018')}
             </section>
 
-            <!-- 2 · Soil classification -->
-            <section class="gc-card gc-card--blue">${gcHead('Soil classification', 'terrain', 'soil-groups')}
-              <div class="gc-block">
-                <p class="gc-p">Based on the World Reference Base for Soil Resources (WRB) 2006, the soils in this area are predominantly <b>Andosols</b>. The distribution of all identified soil types is presented below.</p>
-                <div class="cl-soil">
-                  <div class="cl-soil__list">
-                    <div class="cl-soilrow is-top" style="--c:#ed3a33"><span class="n">01</span><div><b>Andosols</b><i><s style="width:73%"></s></i></div><em>27%</em></div>
-                    <div class="cl-soilrow" style="--c:#fecd67"><span class="n">02</span><div><b>Cambisols</b><i><s style="width:62%"></s></i></div><em>25%</em></div>
-                    <div class="cl-soilrow" style="--c:#f6872d"><span class="n">03</span><div><b>Ferralsols</b><i><s style="width:48%"></s></i></div><em>17%</em></div>
-                    <div class="cl-soilrow" style="--c:#f7991d"><span class="n">04</span><div><b>Acrisols</b><i><s style="width:23%"></s></i></div><em>9%</em></div>
-                    <div class="cl-soilrow" style="--c:#f7a082"><span class="n">05</span><div><b>Nitisols</b><i><s style="width:10%"></s></i></div><em>7%</em></div>
-                  </div>
-                  <div class="cl-dominant">
-                    <span class="cl-dominant__t">Dominant Soil Type:</span>
-                    <div><b>Andosols</b></div>
-                    <hr />
-                    <p>Soils developed from volcanic ash, pumice, and other volcanic materials. They are usually dark-coloured, rich in organic matter, highly porous, and have excellent water-holding capacity. These soils are generally highly fertile, although phosphorus fertilization is often required because of their strong phosphorus fixation capacity.</p>
-                  </div>
-                </div>
-              </div>${gcAlert}${gcSource('Soil classification (WRB 2006)', 'ISRIC SoilGrids 250 m', '2023')}
-            </section>
-
-            <!-- 3 · The annual climate ledger -->
-            <section class="gc-card gc-card--blue">${gcHead('The Annual Climate Ledger', 'thermo', false)}
+            <!-- 2 · The annual climate ledger -->
+            <section class="gc-card gc-card--blue" data-gc="ledger">${gcHead('The Annual Climate Ledger', 'thermo', false)}
               <div class="cl-ledger">
                 <div class="cl-metric">
                   <span class="cl-metric__ic" style="background:#125e92"><img src="${CL_ASSETS}/ic-rain.svg" alt="" /></span>
                   ${gcSub('Annual precipitation', 'annual-precipitation')}
-                  <p class="gc-p">Annual precipitation in the selected area ranges from 45 to 320 mm per month, with an annual total of 2,000 mm and 4 dry months.</p>
-${clChart([127.2,115.3,99.4,59.6,39.8,27.8,21.9,17.9,27.8,51.7,87.5,119.3], 159, MONTHS, [400,300,200,100,0], 'Precipitation (mm)', 'cl-chart--prec')}
+                  <p class="gc-p">Monthly precipitation in the selected area ranges from 45 to 320 mm, with an average of 167 mm per month and an annual total of 2,000 mm.</p>
+                  <p class="gc-note-it">Long-term average (WorldClim, 2000), not this year&rsquo;s rainfall.</p>
+${clChart([127.2,115.3,99.4,59.6,39.8,27.8,21.9,17.9,27.8,51.7,87.5,119.3], 159, MONTHS, [400,300,200,100,0], 'Monthly precipitation (mm)', 'cl-chart--prec')}
                 </div>
                 <div class="cl-metric">
                   <span class="cl-metric__ic" style="background:#4591c5"><img src="${CL_ASSETS}/ic-temp.svg" alt="" /></span>
                   ${gcSub('Annual mean temperature', 'annual-temperature')}
-                  <p class="gc-p">Annual mean temperature in the selected area ranges from 26.4&deg;C to 27.4&deg;C with an average of 26.9&deg;C</p>
-${clChart([104.9,105.7,106.9,108.5,108.9,107.3,105.3,104.9,106.9,108.9,108.5,106.5], 159, MONTHS, [40,30,20,10,0], 'Temperatures (c)', 'cl-chart--temp')}
+                  <p class="gc-p">Annual mean temperature in the selected area ranges from 26.4&deg;C to 27.4&deg;C, with an average of 26.9&deg;C.</p>
+                  <p class="gc-note-it">Long-term average (WorldClim, 2000), not today&rsquo;s temperature.</p>
+${clChart([104.9,105.7,106.9,108.5,108.9,107.3,105.3,104.9,106.9,108.9,108.5,106.5], 159, MONTHS, [40,30,20,10,0], 'Monthly mean temperature (&deg;C)', 'cl-chart--temp')}
                 </div>
-              </div>${gcAlert}${gcSource('Climate normals', 'WorldClim v2.1', '2023')}
+              </div>${gcDisc('Long-term climate normals interpolated from weather stations, not current or observed conditions at the site. Accuracy depends on weather station density, which is uneven across the region.')}${gcSource('Climate normals', 'WorldClim, 927 m', '2000')}
             </section>
 
-            <!-- 4 · Historical burned area -->
-            <section class="gc-card gc-card--red">${gcHead('Historical Burned Area', 'fire', 'burned-area')}
-              <div class="cl-fire">
-                <div class="cl-fire__graph">
-                  <p class="gc-p">This shows how likely the land is to burn under baseline conditions, based on factors such as land cover, dryness, and climate. It is not a forecast of current fire danger.</p>
-${clChart([103,165,109,152,133,133,109,109,88,109], 176, ['2011','2012','2013','2014','2015','2016','2017','2018','2019','2020'], [600,500,400,300,200,100,0], 'Burned Area (in ha)', 'cl-chart--fire')}
-                  <p class="cl-chart__xtitle">Years</p>
+            <!-- 3 · Peat depth — new in GUI 3.1. The document gives no source and no
+                 disclaimer yet, so the card says so and keeps the general alert.
+                 The bars are shares of the peatland, not of the whole selected area. -->
+            <section class="gc-card gc-card--blue" data-gc="peat">${gcHead('Peat depth', 'terrain', false)}
+              <div class="gc-terr">
+                <div class="gc-block">
+                  <div class="gc-eco__total"><span>Peatland area</span><b>${NBS_DATA.grp(NBS_DATA.eco.peat.area)} ha</b></div>
+                  <p class="gc-p">This area contains <b>${NBS_DATA.grp(NBS_DATA.eco.peat.area)} ha</b> of peatland, with peat depth ranging from <b>0.4 to 4.6 metres</b>. Most of the peatland in the project area has medium-depth peat, 100 to 300 cm thick. These areas may be cultivated with sustainable water management and soil conservation to enhance peat ecosystem services.</p>
                 </div>
-                <div class="cl-burned">
-                  <div>
-                    <p>In the past <b>10 years</b>, the selected area has experienced <b>fires</b> covering as total:</p>
-                    <b class="cl-burned__v">4,125.0 ha</b>
-                  </div>
+                <div class="gc-block">
+                  <h5 class="gc-sub">Peat depth distribution</h5>
+                  <p class="gc-p">Share of the peatland in each depth class:</p>
+                  ${gcBars([
+                    ['Shallow (under 1 m)', 7000, 'var(--info-200)'],
+                    ['Medium (1 to 3 m)', 19250, 'var(--info-400)'],
+                    ['Deep (over 3 m)', 8750, 'var(--info-700)'],
+                  ])}
                 </div>
-              </div>${gcAlert}${gcSource('Burned area', 'MODIS MCD64A1 (NASA FIRMS)', '2024')}
+              </div>${gcAlert}
+          <p class="gc-src">Data source:&nbsp; <b>Peat depth</b>: to be confirmed. GUI 3.1 does not name the dataset yet.</p>
             </section>
 
           </div>
@@ -602,216 +752,169 @@ const site = siteGeneral + `
         ${siteClimate}
 `;
 
-/* ---- Step 3 — Threats Profile & NbS Screening Overview ---- */
-const threatTabs = `
-          <div class="t3-tabs" id="t3Tabs" role="tablist" aria-label="Threat profile views">
-            <button class="is-active" data-t3tab="overview"><svg viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/></svg> All Ecosystem</button>
-            <button data-t3tab="forest"><img class="ic" src="assets/asset/ECOSYSTEM%20ICON_Ecosystem%20Type=Forest,%20Filled=No.svg" alt="" /> Forest</button>
-            <button data-t3tab="mangrove"><img class="ic" src="assets/asset/ECOSYSTEM%20ICON_Ecosystem%20Type=Mangrove,%20Filled=No.svg" alt="" /> Mangrove</button>
-            <button data-t3tab="peatland"><img class="ic" src="assets/asset/ECOSYSTEM%20ICON_Ecosystem%20Type=Peatland,%20Filled=No.svg" alt="" /> Peatland</button>
-          </div>
-`;
+/* ---- Step 3 — Threat profile ----
+   GUI Design Document v3.1 "Threat Profile", "Final Data Analyzer Structure"
+   (docs/reference/GUI3.1): three groups, seven result cards, and nothing else.
+   There is no grouping by ecosystem any more: the All Ecosystem / Forest /
+   Mangrove / Peatland views, the screening overview and the disturbance map are
+   gone (DEC-49).
+   Each group is a native <details> accordion — keyboard and screen-reader
+   behaviour come from the browser, no script. The first group starts open.
+   Cards are .gc-card, so they take gcDisc, gcSource and the result states. */
+const threat = `
+          <div class="t3-accs">
 
-const threatSections = `
-          <div class="t3-sections">
+            <details class="t3-acc t3-acc--observed" data-t3grp="observed" open>
+              <summary class="t3-acc__head">
+                <span class="t3-acc__ic"><svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">${GC_ICONS.observe}</svg></span>
+                <span class="t3-acc__tx"><h3>Observed Ecosystem Disturbance</h3><span>What has already happened in the selected area: forest loss, fire and land degradation.</span></span>
+                <svg class="t3-acc__chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+              </summary>
+              <div class="gc">
 
-            <!-- ---------- OVERVIEW ---------- -->
-            <div class="t3-sec" data-t3sec="overview">
-              <div class="t3-metrics">
-                <div class="t3-metric">
-                  <span class="ic" style="background:#e8f5f1;color:#077f68"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 2.5 15.4 0 18M12 3c-2.5 2.6-2.5 15.4 0 18"/></svg></span>
-                  <div class="tx"><b>Total ecosystem area</b><span>100% of total area</span></div>
-                  <div class="num">140,000 <small>ha</small></div>
-                </div>
-                <div class="t3-metric">
-                  <span class="ic" style="background:#fdecec;color:#e33b32"><svg viewBox="0 0 24 24"><path d="M12 21V9M12 13l-3.5-3.5M12 13l3.5-3.5M12 9l-2.5-3M12 9l2.5-3M4 21h16"/><path d="M18.5 3.5l-3 3M15.5 3.5l3 3"/></svg></span>
-                  <div class="tx"><b>Total Disturbed area</b><span>28% of total area</span></div>
-                  <div class="num">39,760 <small>ha</small></div>
-                </div>
-              </div>
-
-              <div class="t3-ecos">
-                <div class="t3-eco">
-                  <div class="top"><span class="t3-echip"><img src="assets/asset/ECOSYSTEM%20ICON_Ecosystem%20Type=Forest,%20Filled=No.svg" alt="" /></span><div><div class="nm">Dryland forest</div><div class="ha">56,000 <small>ha</small></div></div></div>
-                  <div class="t3-bar"><span style="width:40%;background:#1b7a3b" data-lbl="Dryland forest" data-pct="40%" data-ha="56,000 ha"></span></div>
-                  <div class="cap"><b>40%</b> of total area</div>
-                  <div class="kv"><span>Disturbed</span><b class="red">14,000 ha (25%)</b></div>
-                </div>
-                <div class="t3-eco">
-                  <div class="top"><span class="t3-echip"><img src="assets/asset/ECOSYSTEM%20ICON_Ecosystem%20Type=Mangrove,%20Filled=No.svg" alt="" /></span><div><div class="nm">Mangrove</div><div class="ha">49,000 <small>ha</small></div></div></div>
-                  <div class="t3-bar"><span style="width:35%;background:#1a9e96" data-lbl="Mangrove" data-pct="35%" data-ha="49,000 ha"></span></div>
-                  <div class="cap"><b>35%</b> of total area</div>
-                  <div class="kv"><span>Disturbed</span><b class="red">11,760 ha (24%)</b></div>
-                </div>
-                <div class="t3-eco">
-                  <div class="top"><span class="t3-echip"><img src="assets/asset/ECOSYSTEM%20ICON_Ecosystem%20Type=Peatland,%20Filled=No.svg" alt="" /></span><div><div class="nm">Peatland</div><div class="ha">35,000 <small>ha</small></div></div></div>
-                  <div class="t3-bar"><span style="width:14%;background:#594b00" data-lbl="Peat forest" data-pct="14%" data-ha="20,000 ha"></span><span style="width:11%;background:#bea001" data-lbl="Peat non-forest" data-pct="11%" data-ha="15,000 ha"></span></div>
-                  <div class="cap"><b>25%</b> of total area</div>
-                  <div class="kv"><span>Disturbed</span><b class="red">14,000 ha (40%)</b></div>
-                </div>
-              </div>
-
-              <div class="t3-card">
-                <div class="t3-echead__top"><span class="t3-echip"><svg viewBox="0 0 24 24" fill="#055143" aria-hidden="true"><path d="M20.5 3l-.16.03L15 5.1 9 3 3.38 4.9c-.23.07-.38.25-.38.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.62-1.9c.23-.08.38-.26.38-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/></svg></span><h4 class="t3-map-h">Ecosystem Disturbance Map</h4></div>
-                <p class="t3-mapdesc">Explore the distribution of disturbed forest within the project area. Disturbance drivers are summarised in statistics to show the main pressures affecting the ecosystem</p>
-                <div class="t3-map">
-                  <img src="assets/f01-step3/disturbance-map.png" alt="Ecosystem disturbance map" />
-                  <div class="t3-map__legend">
-                    <h5>Disturbance class</h5>
-                    <div><i style="background:#3d8b40"></i>Remaining</div>
-                    <div><i style="background:#f0ad2d"></i>Disturbed</div>
-                    <div><i style="background:#e04638"></i>Forest loss</div>
-                    <div><i style="background:#35e07a"></i>Forest Gain</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- ---------- DRYLAND FOREST ---------- -->
-            <div class="t3-sec" data-t3sec="forest">
-              <div class="t3-card">
-                <div class="t3-echead" style="--ecoclr:#2c6639">
-                  <div class="t3-echead__top"><span class="t3-echip"><img src="assets/asset/ECOSYSTEM%20ICON_Ecosystem%20Type=Forest,%20Filled=No.svg" alt="" /></span><h4>Dryland Forest</h4></div>
-                  <p>From 2015 to 2024, the selected dryland forest area experienced 14,000 ha of disturbance, driven mainly by smallholder clearing and fire.</p>
-                </div>
-                <div class="t3-stats cols5">
-                  <div><span>Total area</span><b>56,000 ha</b></div>
-                  <div><span>Remaining forest</span><b>37,520 ha</b></div>
-                  <div><span>Disturbed</span><b class="org">14,000 ha (25%)</b></div>
-                  <div><span>Forest loss</span><b class="red">4,480 ha (8%)</b></div>
-                  <div><span>Forest gain</span><b class="grn">1,680 ha (3%)</b></div>
-                </div>
-                <div class="t3-alerts open">
-                  <button class="t3-alerts__head">Dryland forest disturbance drivers <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
-                  <div class="t3-alerts__body">
-                    <p class="t3-drivers-intro">Dryland forest disturbance drivers are grouped into three categories: anthropogenic (human-caused), natural, and other drivers that cannot be identified yet. A &ldquo;disturbance&rdquo; refers to a significant change in tree canopy cover and canopy height which indicates degradation without a significant loss of standing trees.</p>
-                    <div class="t3-drivers">
-                      <div>
-                        <h5 class="c-non">Non-natural drivers (human caused)</h5>
-                        <ul style="--dot:#077f68">
-                          <li>Small-scale agriculture</li>
-                          <li>Small-scale agriculture (fire)</li>
-                          <li>Large-scale agriculture</li>
-                          <li>Large-scale agriculture (fire)</li>
-                          <li>Road development</li>
-                          <li>Selective logging</li>
-                          <li>Mining</li>
-                        </ul>
+                <!-- moved from General › Deforestation analysis -->
+                <section class="gc-card" data-gc="deforestation">${gcHead('Historical deforestation', 'tree', 'deforestation-2014-2024')}
+                  <div class="gc-block">
+                    <div class="gc-def">
+                      <figure class="gc-def__map"><img src="${GC_ASSETS}/map-defor.png" alt="Historical deforestation map" /></figure>
+                      <div class="gc-def__side">
+                        <div>
+                          <p class="gc-p">Between 2014 and 2024, the project area lost <b>6,720 ha</b> of forest, an average of</p>
+                          <p class="gc-big">1.2<small>% / year</small></p>
+                        </div>
+                        <div class="gc-chip"><span><i style="background:#a5c47c"></i>Forest</span><span><i style="background:#e0418c"></i>Forest Loss</span></div>
                       </div>
-                      <div>
-                        <h5 class="c-nat">Natural drivers</h5>
-                        <ul style="--dot:#1a9e96">
-                          <li>Flooding</li>
-                          <li>Forest fire</li>
-                          <li>Drought</li>
-                          <li>Typhoon</li>
-                          <li>Landslide</li>
-                          <li>Extreme climate event</li>
-                        </ul>
+                    </div>
+                  </div>${gcDisc('Derived by differencing two independently produced layers. The loss is not attributed to a cause.')}${gcSource('Forest loss', 'SIGnal, 30 m', '2014 to 2024')}
+                </section>
+
+                <!-- moved from Climate. GUI 3.1: past fires and fire susceptibility are two
+                     separate results, and burned-area history is never read as a forecast. -->
+                <section class="gc-card gc-card--red" data-gc="burned">${gcHead('Historical Burned Area', 'fire', 'burned-area')}
+                  <div class="gc-block">
+                    <h5 class="gc-sub">Past fires</h5>
+                    <div class="cl-fire">
+                      <div class="cl-fire__graph">
+                        <p class="gc-p">Burned area detected in each year, in hectares.</p>
+${clChart([103,165,109,152,133,133,109,109,88,109], 176, ['2011','2012','2013','2014','2015','2016','2017','2018','2019','2020'], [600,500,400,300,200,100,0], 'Burned Area (in ha)', 'cl-chart--fire')}
+                        <p class="cl-chart__xtitle">Years</p>
                       </div>
-                      <div>
-                        <h5 class="c-oth">Other drivers</h5>
-                        <ul style="--dot:#bea001">
-                          <li>Non-productive conversion</li>
-                          <li>Unknown</li>
-                        </ul>
+                      <div class="cl-burned">
+                        <div>
+                          <p>In the past <b>10 years</b>, <b>fires</b> in the selected area covered a total of:</p>
+                          <b class="cl-burned__v">4,125.0 ha</b>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div class="t3-disc">
-                  <svg viewBox="0 0 26 26"><path d="M13 3.5 2.5 22h21L13 3.5Z"/><path d="M13 10v5" fill="none"/><circle cx="13" cy="18.2" r="1.1" fill="#efa22f" stroke="none"/></svg>
-                  <p><span style="font-weight:500">Disclaimer: </span><b>Field verification required</b><br>The information in NbS Tool is intended to support your pre-feasibility study. Always verify in the field before use.</p>
-                </div>
-              </div>
-            </div>
+                  <div class="gc-block">
+                    <h5 class="gc-sub">Fire susceptibility</h5>
+                    <p class="gc-p">This shows how likely the land is to burn under baseline conditions, based on factors such as land cover, dryness, and climate. It is not a forecast of current fire danger.</p>
+                    <div class="nc-err nc-err--empty" role="status"><div><b>Fire susceptibility data are not available for this area.</b><p>The chart above shows where fire has happened. It is not a probability of future fire.</p></div></div>
+                  </div>${gcDisc('Burn scars detected from satellite. Cropland burning is under-detected and small or short fires can be missed entirely.')}${gcSource('Burned area', 'GABAM, 30 m', '2024')}
+                </section>
 
-            <!-- ---------- MANGROVE ---------- -->
-            <div class="t3-sec" data-t3sec="mangrove">
-              <div class="t3-card">
-                <div class="t3-echead" style="--ecoclr:#1a9e96">
-                  <div class="t3-echead__top"><span class="t3-echip"><img src="assets/asset/ECOSYSTEM%20ICON_Ecosystem%20Type=Mangrove,%20Filled=No.svg" alt="" /></span><h4>Mangrove Disturbance</h4></div>
-                  <p>From 2015 to 2024, the selected mangrove area experienced 11,760 ha of disturbance, driven mainly by aquaculture conversion and coastal erosion.</p>
-                </div>
-                <div class="t3-stats cols4">
-                  <div><span>Total area</span><b>49,000 ha</b></div>
-                  <div><span>Remaining mangrove Forest</span><b>34,300 ha</b></div>
-                  <div><span>Disturbed</span><b class="org">11,760 ha (24%)</b></div>
-                  <div><span>Main Pressure</span><b class="red">Commodities</b></div>
-                </div>
-                <div class="t3-alerts open">
-                  <button class="t3-alerts__head">Mangrove disturbance drivers <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
-                  <div class="t3-alerts__body">
-                    <p class="t3-drivers-intro">Mangrove disturbance drivers are grouped into three categories: anthropogenic (human-caused), natural, and other drivers that cannot be identified yet. A &ldquo;disturbance&rdquo; refers to a significant change in tree canopy cover and canopy height which indicates degradation without a significant loss of standing trees.</p>
-                    <div class="t3-drivers">
-                      <div>
-                        <h5 class="c-non">Non-natural drivers (human caused)</h5>
-                        <ul style="--dot:#077f68">
-                          <li>Commodities</li>
-                          <li>Settlement</li>
-                        </ul>
-                      </div>
-                      <div>
-                        <h5 class="c-nat">Natural drivers</h5>
-                        <ul style="--dot:#1a9e96">
-                          <li>Extreme climate event</li>
-                        </ul>
-                      </div>
-                      <div>
-                        <h5 class="c-oth">Other drivers</h5>
-                        <ul style="--dot:#bea001">
-                          <li>Non-productive conversion</li>
-                        </ul>
+                <!-- new in GUI 3.1 -->
+                <section class="gc-card" data-gc="degradation">${gcHead('Land degradation', 'layers', false)}
+                  <div class="gc-terr gc-terr--mid">
+                    <div class="gc-block">
+                      <p class="gc-p">A total of <b>24,000 ha</b> within the project area showed signs of land degradation between 2014 and 2024. Of this area, <b>3,000 ha</b> was flagged as a potential false positive and <b>2,400 ha</b> as a potential false negative. Of the degraded area, <b>15,000 ha</b> is in forest and <b>9,000 ha</b> is outside forest.</p>
+                      <p class="gc-p">In contrast, <b>18,000 ha</b> showed positive changes in land condition: <b>15,000 ha</b> is classified as likely improving and <b>3,000 ha</b> is flagged as a possible false positive.</p>
+                      <p class="gc-p">The remaining <b>108,000 ha</b> is classified as stable, with no significant improvement or deterioration in the assessed land condition indicators between 2014 and 2024.</p>
+                    </div>
+                    <div class="gc-block">${gcDonut([['Degraded', 24000, 'var(--danger-600)'], ['Stable', 108000, 'var(--success-300)'], ['Improved', 18000, 'var(--success-700)']], 'Area assessed, 2014 to 2024', 'Land condition, share of the selected area', true)}
+                    </div>
+                  </div>${gcDisc('Potential false-positive or false-negative outcomes should be interpreted and validated using ground-truth data, field observations and other locally available evidence.')}${gcSource('Land degradation', 'UNCCD refined by SCeNe Coalition, 30 m', '2024')}
+                </section>
+              </div>
+            </details>
+
+            <details class="t3-acc t3-acc--pressure" data-t3grp="pressure">
+              <summary class="t3-acc__head">
+                <span class="t3-acc__ic"><svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">${GC_ICONS.warning}</svg></span>
+                <span class="t3-acc__tx"><h3>Ecosystem Pressure and Hazard</h3><span>Pressures and hazards acting on the selected area now: peatland drainage and natural hazards.</span></span>
+                <svg class="t3-acc__chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+              </summary>
+              <div class="gc">
+
+                <!-- GUI 3.1 hides this card when the area has no peatland (not built: the sample always has peatland) -->
+                <section class="gc-card" data-gc="drainage">${gcHead('Drainage canal pressure', 'terrain', false)}
+                  <p class="gc-p">Peatland disturbance may be associated with hydrological alteration. Disturbance refers to possible changes in peatland condition caused by canals, reduced soil moisture, fire occurrence, or altered water table conditions, even when vegetation cover remains present.</p>
+                  <div class="gc-terr">
+                    <div class="gc-block">
+                      <h5 class="gc-sub gc-sub--ic"><span class="gc-sub__ic"><svg viewBox="0 0 24 24"><path d="M3 17c1.5 0 2.2-1 3.5-1s2 1 3.5 1 2.2-1 3.5-1 2 1 3.5 1 2.2-1 3.5-1"/><path d="M6 13l6-7 6 7M12 6v7"/></svg></span>Canal proximity</h5>
+                      ${gcLevel('Distance class', 'Close (0 to 500 m)', 'bad')}
+                      <p class="gc-p">The peatland area is located close to mapped drainage canals, with the nearest canal approximately <b>320 m</b> away. Being within 0 to 500 metres of mapped drainage canals indicates potential hydrological disturbance. Drainage canals may lower water table levels in adjacent peatland, increasing peat susceptibility to fire.</p>
+                    </div>
+                    <div class="gc-block">
+                      <h5 class="gc-sub gc-sub--ic"><span class="gc-sub__ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg></span>Drainage pressure</h5>
+                      ${gcLevel('Drainage density', 'High (over 5 km/km&sup2;)', 'bad')}
+                      <p class="gc-p">The peatland areas are also classified as having high drainage density. High drainage density indicates substantial hydrological disturbance and is associated with accelerated peat subsidence, increased carbon emissions, and significant peat-fire risk.</p>
+                    </div>
+                  </div>${gcAlert}${gcSource('Canal proximity', 'Dadap et al., 5 m', '2021')}${gcSource('Drainage density', 'Dadap et al., 1,000 m', '2021')}
+                </section>
+
+                <!-- moved from General -->
+                <section class="gc-card" data-gc="hazard">${gcHead('Natural Disaster Risk', 'warning', 'disaster-risk')}
+                  <div class="gc-block">
+                    <p class="gc-p">The selected area is susceptible to several natural disaster risks, including:</p>
+                    <!-- four hazards, 2 x 2. Fire is not listed here: the Fire risk card under
+                         Business as Usual Projection owns it (DEC-53). Each picture is a drawn
+                         scene that plays its hazard on hover (DEC-54). -->
+                    <div class="gc-ndgrid">
+                      ${gcHazard('drought', 'drought.png', 'Drought', 'Moderate')}
+                      ${gcHazard('flood', 'flood.png', 'Flood', 'High')}
+                      ${gcHazard('landslide', 'Landslide.png', 'Landslide', 'Moderate')}
+                      ${gcHazard('typhoon', 'tropicaltyphon.png', 'Tropical Typhoon', 'Low')}
+                    </div>
+                  </div>${gcDisc('This disaster risk analysis is a screening-level assessment and should not be interpreted as a definitive measure of risk.')}${gcSource('Natural hazards', 'ADPC', '2024')}
+                </section>
+              </div>
+            </details>
+
+            <details class="t3-acc t3-acc--bau" data-t3grp="bau">
+              <summary class="t3-acc__head">
+                <span class="t3-acc__ic"><svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">${GC_ICONS.chart}</svg></span>
+                <span class="t3-acc__tx"><h3>Business as Usual Projection</h3><span>Where the selected area is heading if nothing changes: relative deforestation risk and fire risk.</span></span>
+                <svg class="t3-acc__chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+              </summary>
+              <div class="gc">
+
+                <!-- moved from General › Deforestation analysis. GUI 3.1: a class and a
+                     short narrative replace the 0 to 1 index figure. -->
+                <section class="gc-card" data-gc="defrisk">${gcHead('Deforestation risk', 'tree', 'deforestation-risk')}
+                  <div class="gc-block">
+                    <div class="gc-def">
+                      <figure class="gc-def__map gc-def__map--plain"><img src="${GC_ASSETS}/map-risk.png" alt="National deforestation risk map" /></figure>
+                      <div class="gc-def__side">
+                        <div>
+                          <p class="gc-p">Forest in this area has a higher deforestation risk than the national average, ranking in the top <b>15%</b> of the country&rsquo;s forest with deforestation risk.</p>
+                          ${gcLevel('Compared with the national average', 'Higher risk', 'bad')}
+                        </div>
+                        <div class="gc-chip gc-chip--ramp"><span>Deforestation risk</span><span>Lower<i></i>Higher</span></div>
                       </div>
                     </div>
-                  </div>
-                </div>
-                <div class="t3-disc">
-                  <svg viewBox="0 0 26 26"><path d="M13 3.5 2.5 22h21L13 3.5Z"/><path d="M13 10v5" fill="none"/><circle cx="13" cy="18.2" r="1.1" fill="#efa22f" stroke="none"/></svg>
-                  <p><span style="font-weight:500">Disclaimer: </span><b>Field verification required</b><br>The information in NbS Tool is intended to support your pre-feasibility study. Always verify in the field before use.</p>
-                </div>
-              </div>
-            </div>
+                  </div>${gcDisc('This is a relative national ranking, not a probability of forest loss or a predicted annual deforestation rate. It does not establish what will happen at the site.')}${gcSource('Deforestation risk', 'SCeNe Coalition, 30 m', '2024')}
+                </section>
 
-            <!-- ---------- PEATLAND ---------- -->
-            <div class="t3-sec" data-t3sec="peatland">
-              <div class="t3-card">
-                <div class="t3-echead" style="--ecoclr:#bea001">
-                  <div class="t3-echead__top"><span class="t3-echip"><img src="assets/asset/ECOSYSTEM%20ICON_Ecosystem%20Type=Peatland,%20Filled=No.svg" alt="" /></span><h4>Peatland disturbance</h4></div>
-                  <p>This peatland area shows potential drainage-related disturbance, as the occurrence of drainage is the primary driver of peatland degradation.</p>
-                </div>
-                <div class="t3-stats cols4">
-                  <div><span>Total area</span><b>35,000 ha</b></div>
-                  <div><span>Remaining peatland forest</span><b>18,200 ha</b></div>
-                  <div><span>Disturbed</span><b class="org">14,000 ha (40%)</b></div>
-                  <div><span>Converted/Loss</span><b class="red">2,800 ha (8%)</b></div>
-                </div>
-                <div class="t3-alerts open">
-                  <button class="t3-alerts__head">Peatland disturbance drivers <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
-                  <div class="t3-alerts__body">
-                    <p class="t3-drivers-intro">Peatland disturbance may be associated with drainage pressure, fire risk, hydrological alteration. Disturbance refers to possible changes in peatland condition caused by canals, reduced soil moisture, fire occurrence, or altered water table conditions, even when vegetation cover remains present.</p>
-                    <div class="t3-minis">
-                      <div class="t3-mini">
-                        <span class="ic"><svg viewBox="0 0 24 24"><path d="M3 17c1.5 0 2.2-1 3.5-1s2 1 3.5 1 2.2-1 3.5-1 2 1 3.5 1 2.2-1 3.5-1"/><path d="M6 13l6-7 6 7M12 6v7"/></svg></span>
-                        <div class="tx"><span>Canal proximity</span><b>High</b></div>
-                      </div>
-                      <div class="t3-mini">
-                        <span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg></span>
-                        <div class="tx"><span>Drainage pressure</span><b>High</b></div>
-                      </div>
-                      <div class="t3-mini">
-                        <span class="ic"><svg viewBox="0 0 24 24"><path d="M12 22c4 0 7-2.6 7-6.5 0-3-2-5.4-3-7-.4 1.6-1.4 2.5-2.4 2.8C14 8 13 4.5 10.5 2 11 5 8 6.5 6.5 9.5 5.6 11.2 5 13 5 15.5 5 19.4 8 22 12 22Z"/></svg></span>
-                        <div class="tx"><span>Fire risk</span><b>High</b></div>
-                      </div>
+                <!-- new in GUI 3.1. The document gives no visual and no source for this row; the
+                     thresholds were set by the product owner (DEC-50); the gauge shows the share only (DEC-61). -->
+                <section class="gc-card gc-card--red" data-gc="firerisk">${gcHead('Fire risk', 'fire', false)}${(() => {
+                  const pct = Math.round(GC_FIRE_HA / NBS_DATA.aoi * 100), lvl = gcFireLevel(pct);
+                  return `
+                  <div class="gc-terr gc-terr--text-end">
+                    <div class="gc-block">${gcGauge(GC_FIRE_HA, NBS_DATA.aoi, 'of the project area', 'Overlaps mapped fire-risk areas')}
+                      <p class="gc-p gc-gauge__n"><b>${NBS_DATA.grp(GC_FIRE_HA)} ha</b> of ${NBS_DATA.grp(NBS_DATA.aoi)} ha overlaps mapped fire-risk areas</p>
                     </div>
-                  </div>
-                </div>
-                <div class="t3-disc">
-                  <svg viewBox="0 0 26 26"><path d="M13 3.5 2.5 22h21L13 3.5Z"/><path d="M13 10v5" fill="none"/><circle cx="13" cy="18.2" r="1.1" fill="#efa22f" stroke="none"/></svg>
-                  <p><span style="font-weight:500">Disclaimer: </span><b>Field verification required</b><br>The information in NbS Tool is intended to support your pre-feasibility study. Always verify in the field before use.</p>
-                </div>
+                    <div class="gc-block">
+                      <p class="gc-p">A total of <b>${NBS_DATA.grp(GC_FIRE_HA)} ha (${pct}%)</b> of the project area overlaps with mapped fire-risk areas. Fire can threaten ongoing projects and can also cause leakage of carbon stocks, both within and beyond project areas.</p>
+                      <p class="gc-p">${lvl.text}</p>
+                    </div>
+                  </div>`; })()}${gcAlert}
+          <p class="gc-src">Data source:&nbsp; <b>Fire risk</b>: to be confirmed. GUI 3.1 does not name the dataset yet.</p>
+                </section>
               </div>
-            </div>
+            </details>
 
           </div>
 `;
@@ -1149,8 +1252,7 @@ const benefitFoot = `
 
 return {
   'site': site,
-  'threat': threatTabs + threatSections,
-  'threat-sections': threatSections,
+  'threat': threat,
   'benefit': benefitSummary + benefitTabs + benefitPanels + benefitFoot,
   'benefit-content': benefitSummary + benefitPanels + benefitFoot,
 };
@@ -1174,20 +1276,48 @@ function nbsShowSitePane(root, key){
   root.querySelectorAll('.ctx-pane').forEach(function(p){ p.hidden = p.dataset.ctx !== key; });
 }
 
-/* ---- Threat Profile behavior: section switching (Overview shows all sections)
-   + collapsible disturbance alerts. root wraps .t3-sections (and, on the
-   interactive map, the .t3-tabs bar — wired here when present). ---- */
-function nbsInitThreat(root, onShow){
-  if (!root) return null;
-  function show(key){
-    root.querySelectorAll('[data-t3sec]').forEach(function(s){ s.hidden = key !== 'overview' && s.dataset.t3sec !== key; });
-    root.querySelectorAll('.t3-tabs [data-t3tab]').forEach(function(t){ t.classList.toggle('is-active', t.dataset.t3tab === key); });
-    if (onShow) onShow(key);
-  }
-  root.querySelectorAll('.t3-tabs [data-t3tab]').forEach(function(tb){ tb.addEventListener('click', function(){ show(tb.dataset.t3tab); }); });
-  root.querySelectorAll('.t3-alerts__head').forEach(function(h){ h.addEventListener('click', function(){ h.closest('.t3-alerts').classList.toggle('open'); }); });
-  return { show: show };
+/* ---- Site Characterisation: GUI 3.1 result states, one card at a time ----
+   nbsCardState(card, state) swaps a card's result for one of the three GUI 3.1
+   messages; any other value restores the result. The head (with its "i") and the
+   data-source line stay, so the reader can still check the dataset's coverage.
+   The other cards are not touched: a missing result never hides the rest.
+   Preview without a data pipeline: add ?gcstate=terrain:failed,soil:nodata to
+   the page address (keys are the data-gc values; states are the keys below).
+   Built on the General, Nature, Climate and Threat profile cards (not People). */
+var NBS_CARD_STATES = {
+  unavailable: { tone: 'empty', title: 'Information is not available for this area.' },
+  nodata: { tone: 'empty', title: 'No data available for this location.',
+    text: 'The selected project area does not contain valid observations for this dataset. This does not necessarily mean the feature is absent. Review the dataset coverage or select another location.' },
+  failed: { tone: 'fail', title: 'We couldn’t load this result. Please try again.', retry: true },
+  /* valid results that happen to be nothing: plain sentences, not a "missing" box */
+  noforest: { tone: 'zero', title: 'No forest present to assess for landscape integrity.' },
+  nokba: { tone: 'zero', title: 'This project area does not overlap any Key Biodiversity Areas.' }
+};
+function nbsCardState(card, state){
+  var old = card.querySelector('.gc-state'); if (old) old.remove();
+  var s = NBS_CARD_STATES[state];
+  if (!s) { card.removeAttribute('data-state'); return; }
+  card.setAttribute('data-state', state);
+  if (s.tone === 'zero') { card.querySelector('.gc-card__head').insertAdjacentHTML('afterend', '<p class="gc-state gc-p" role="status">' + s.title + '</p>'); return; }
+  card.querySelector('.gc-card__head').insertAdjacentHTML('afterend',
+    '<div class="gc-state nc-err nc-err--' + s.tone + '" role="' + (s.retry ? 'alert' : 'status') + '">' +
+      '<div><b>' + s.title + '</b>' + (s.text ? '<p>' + s.text + '</p>' : '') + '</div>' +
+      (s.retry ? '<button type="button" class="nc-err__retry">Try again</button>' : '') +
+    '</div>');
 }
+/* ponytail: there is no pipeline to retry against, so "Try again" restores the
+   sample result. Wire it to the real request when the analysis API exists. */
+document.addEventListener('click', function(e){
+  var btn = e.target.closest ? e.target.closest('.gc-state .nc-err__retry') : null;
+  if (btn) nbsCardState(btn.closest('.gc-card'), null);
+});
+(new URLSearchParams(location.search).get('gcstate') || '').split(',').forEach(function(pair){
+  var kv = pair.split(':');
+  document.querySelectorAll('.gc-card[data-gc="' + kv[0].replace(/[^a-z]/g, '') + '"]').forEach(function(card){
+    nbsCardState(card, kv[1]);
+    var acc = card.closest('details'); if (acc && card.dataset.state) acc.open = true;
+  });
+});
 
 /* ---- Benefit card "i" modal: the two things the GUI doc stores per benefit —
    the definition of the data and how it is calculated. Both are read off the
