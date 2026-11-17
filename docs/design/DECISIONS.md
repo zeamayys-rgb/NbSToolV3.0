@@ -1157,9 +1157,35 @@ the next. Rectangles use 6px to match `.btn`, the most-used button (93 uses).
 are filter controls. That is what the audit decided. It may be worth turning into a written
 rule later. `.privacy .pill` (F04.1) is a different component and is unchanged.
 
+## DEC-45 · Acumin Pro Condensed self-hosted as the display face (supersedes DEC-06)
+
+**Date.** 2026-11-16 · **Status.** `decided`
+
+**Decision.** `--font-display: "Acumin Pro Condensed", "Barlow Semi Condensed", "Saira
+Condensed", sans-serif`. The condensed face is self-hosted. The files are
+`assets/fonts/AcuminProCond-{Regular,Bold}.woff`, taken from WRI's brand guidelines repo
+(`Vizzuality/wri-guidelines/fonts`). They are registered with `@font-face` at the top of
+`css/tokens.css`, so every screen that loads the token file gets them.
+
+**Why.** DEC-06 named Acumin Pro Condensed, but nothing loaded it, so every heading rendered
+Barlow (`TODO-04`). WRI's guidelines repo publishes the face.
+
+**Alternatives.** Acumin Pro at normal width was tried first and rejected the same day in
+favour of the condensed face that the type scale was designed for.
+
+**Consequences.**
+- Only weights 400 and 700 exist. Under CSS font matching, weight 500 renders Regular and
+  weight 600 renders Bold, so the Medium and Semibold steps on the type scale no longer look
+  different from their neighbours.
+- Hard-coded Barlow remains in the F05 print and Word export templates
+  (`create-monitoring-plan.html`). Those open as separate documents that do not load
+  `tokens.css`, and Word cannot use a web font.
+- Licensing: the files come from WRI's own brand repo. Before a public launch, confirm
+  that WRI's Adobe/Monotype licence covers self-hosting them for web use.
+
 ---
 
-## DEC-45 · General context follows GUI 3.1; the two leaving cards wait for the Threat profile
+## DEC-62 · General context follows GUI 3.1; the two leaving cards wait for the Threat profile
 
 **Date.** 2026-11-17 · **Status.** `documented`
 
@@ -1211,12 +1237,12 @@ the conservative reading of a move the document implies but does not state.
 
 ---
 
-## DEC-46 · Nature context follows GUI 3.1
+## DEC-63 · Nature context follows GUI 3.1
 
 **Date.** 2026-11-17 · **Status.** `documented`
 
 **Context.** The GUI Design Document v3.1 for Site Characterisation: Nature
-(`docs/reference/GUI3.1/`) keeps six sections, renames two and adds two tables. Follows DEC-45.
+(`docs/reference/GUI3.1/`) keeps six sections, renames two and adds two tables. Follows DEC-62.
 
 **Decision.** Nature is rebuilt to the "Final Data Analyzer Structure" table.
 
@@ -1263,15 +1289,15 @@ as GUI 3.1 writes it, and the tab has its own subtitle.
 
 ---
 
-## DEC-47 · Climate context follows GUI 3.1; Historical burned area waits for the Threat profile
+## DEC-64 · Climate context follows GUI 3.1; Historical burned area waits for the Threat profile
 
 **Date.** 2026-11-17 · **Status.** `documented`
 
 **Context.** The GUI Design Document v3.1 for Site Characterisation: Climate
 (`docs/reference/GUI3.1/`) lists three sections in its "Final Data Analyzer Structure": Carbon
 information, Annual climate ledger and Peat depth. Soil classification moved to General in
-DEC-45. Historical burned area is absent from the Climate table and present in the Threat
-Profile table. Follows DEC-45 and DEC-46.
+DEC-62. Historical burned area is absent from the Climate table and present in the Threat
+Profile table. Follows DEC-62 and DEC-63.
 
 **Decision.** Climate is rebuilt to the three GUI 3.1 sections, in that order.
 
@@ -1286,7 +1312,7 @@ disclaimer and the GUI 3.1 source lines. The step title drops "context" on this 
 has its own subtitle.
 
 Historical burned area **stays in Climate, unchanged, below the three**, until step 3 is
-rebuilt — the same reasoning as the two General cards in DEC-45.
+rebuilt — the same reasoning as the two General cards in DEC-62.
 
 **Consequences.**
 - **New sample figures (DEC-11).** Peat depth "0.4 to 4.6 metres" and the class areas 7,000 /
@@ -1319,7 +1345,7 @@ rebuilt — the same reasoning as the two General cards in DEC-45.
 
 ---
 
-## DEC-48 · Threat profile follows GUI 3.1; three cards move in from Site characterisation
+## DEC-65 · Threat profile follows GUI 3.1; three cards move in from Site characterisation
 
 **Date.** 2026-11-17 · **Status.** `documented`
 
@@ -1328,7 +1354,7 @@ two parts. Parts A to D keep the existing screen (screening overview, disturbanc
 per ecosystem) with refinements. Its "Final Data Analyzer Structure" then lists three groups of
 results: Observed ecosystem disturbance, Ecosystem pressure and hazard, Business-as-usual
 projection. The document does not say whether the groups sit beside the ecosystem views or
-replace them. Closes the waiting moves in DEC-45 and DEC-47.
+replace them. Closes the waiting moves in DEC-62 and DEC-64.
 
 **Decision.** The groups sit **beside** the ecosystem views. They show in the All Ecosystem
 (Overview) view, below the three ecosystem cards, and not in a single-ecosystem view.
@@ -1392,12 +1418,12 @@ new entry in the SCR-07 side menu.
 
 ---
 
-## DEC-49 · Threat profile is three accordion groups; the ecosystem views are removed
+## DEC-66 · Threat profile is three accordion groups; the ecosystem views are removed
 
 **Date.** 2026-11-17 · **Status.** `documented` — decided by Abe; supersedes the "beside"
-choice in DEC-48
+choice in DEC-65
 
-**Context.** DEC-48 put the three GUI 3.1 groups beside the existing ecosystem views, because
+**Context.** DEC-65 put the three GUI 3.1 groups beside the existing ecosystem views, because
 the document did not say which it wanted. The result was long: the old screen, then seven cards.
 
 **Decision.** The Threat profile follows the GUI 3.1 "Final Data Analyzer Structure" only.
@@ -1432,12 +1458,12 @@ the document did not say which it wanted. The result was long: the old screen, t
 
 ---
 
-## DEC-50 · Fire risk: a half-doughnut gauge and three thresholds
+## DEC-67 · Fire risk: a half-doughnut gauge and three thresholds
 
 **Date.** 2026-11-17 · **Status.** `documented` — decided by Abe
 
 **Context.** GUI 3.1 gives the Fire risk card a narrative per level but no visual and no rule
-for which level applies (DEC-48). The card showed "High" beside a 64% overlap with nothing
+for which level applies (DEC-65). The card showed "High" beside a 64% overlap with nothing
 connecting the two.
 
 **Decision.**
@@ -1471,11 +1497,11 @@ connecting the two.
 
 ---
 
-## DEC-51 · Fire-risk thresholds sit on the gauge as coloured labels with a hover pop-up
+## DEC-68 · Fire-risk thresholds sit on the gauge as coloured labels with a hover pop-up
 
-**Date.** 2026-11-17 · **Status.** `documented` — decided by Abe; revises the layout in DEC-50
+**Date.** 2026-11-17 · **Status.** `documented` — decided by Abe; revises the layout in DEC-67
 
-**Decision.** The list of thresholds under the gauge (DEC-50, point 2) is removed. In its place
+**Decision.** The list of thresholds under the gauge (DEC-67, point 2) is removed. In its place
 each band of the gauge carries a label in its own risk colour with a "?" mark: Low beside 0 to
 30%, Medium above 30 to 80%, High beside 80 to 100%. Pointing at a band or its label, or
 focusing the label from the keyboard, fades in a pop-up with the band's rule, and the band's
@@ -1490,9 +1516,9 @@ arc thickens. The 30% and 80% marks stay on the arc. The thresholds themselves a
 
 ---
 
-## DEC-52 · Fire risk: one pill for the current level, no badge under the gauge
+## DEC-69 · Fire risk: one pill for the current level, no badge under the gauge
 
-**Date.** 2026-11-17 · **Status.** `documented` — decided by Abe; revises DEC-50 and DEC-51
+**Date.** 2026-11-17 · **Status.** `documented` — decided by Abe; revises DEC-67 and DEC-68
 
 **Context.** The level was shown four times in one card: the gauge colour, the outlined label
 on the gauge, a "Fire risk: Medium" badge under the gauge, and the narrative. All three band
@@ -1501,7 +1527,7 @@ labels were pills, so the two levels that do not apply looked as selected as the
 **Decision.**
 1. The "Fire risk" badge under the gauge is removed. The label on the gauge is the badge.
 2. Only the label of the band the area falls in is a pill. The other two are plain text in
-   their band's colour. They keep the "?" mark and the hover and focus pop-up from DEC-51.
+   their band's colour. They keep the "?" mark and the hover and focus pop-up from DEC-68.
 
 **Consequences.**
 - The level is still written in words without relying on colour: in the narrative ("medium
@@ -1512,13 +1538,13 @@ labels were pills, so the two levels that do not apply looked as selected as the
 
 ---
 
-## DEC-53 · Natural disaster risk drops Fire and becomes a 2 x 2 gallery
+## DEC-70 · Natural disaster risk drops Fire and becomes a 2 x 2 gallery
 
 **Date.** 2026-11-17 · **Status.** `documented` — decided by Abe
 
 **Context.** Natural disaster risk listed five hazards in one row of small pictures, Fire among
 them. Fire risk has its own card under Business as Usual Projection, and the two disagreed in
-the sample: "High risk" here, Medium there (DEC-50).
+the sample: "High risk" here, Medium there (DEC-67).
 
 **Decision.**
 1. Fire is removed from the Natural disaster risk list. The Fire risk card owns fire.
@@ -1526,8 +1552,8 @@ the sample: "High risk" here, Medium there (DEC-50).
    two, with larger pictures that keep the shape of their source files.
 
 **Consequences.**
-- This closes the DEC-50 `TODO(design)` about fire disagreeing with itself between these two
-  cards. The fire-susceptibility block in Historical burned area (DEC-48) is untouched.
+- This closes the DEC-67 `TODO(design)` about fire disagreeing with itself between these two
+  cards. The fire-susceptibility block in Historical burned area (DEC-65) is untouched.
 - The card's source line still says ADPC. `TODO(design): Substance to confirm that the ADPC
   hazard set may be shown without its fire class.`
 - The pictures are 273 x 160 px files and are now shown wider than that, so they look soft,
@@ -1536,12 +1562,12 @@ the sample: "High risk" here, Medium there (DEC-50).
 
 ---
 
-## DEC-54 · Natural disaster risk: drawn scenes that play the hazard on hover
+## DEC-71 · Natural disaster risk: drawn scenes that play the hazard on hover
 
 **Date.** 2026-11-17 · **Status.** `documented` — decided by Abe
 
 **Context.** The four pictures were 273 x 160 px photographs shown wider than their files, so
-they looked soft (DEC-53). Abe asked for simple flat line drawings in the style of the Habitat
+they looked soft (DEC-70). Abe asked for simple flat line drawings in the style of the Habitat
 Area species icons, each animating its hazard when the pointer is over it.
 
 **Decision.**
@@ -1562,7 +1588,7 @@ Area species icons, each animating its hazard when the pointer is over it.
 3. The tiles are 270 / 120, not the photographs' 273 / 160.
 
 **Consequences.**
-- Closes the DEC-53 `TODO(design): supply larger pictures.` The drawings are vector.
+- Closes the DEC-70 `TODO(design): supply larger pictures.` The drawings are vector.
 - The scenes are decorative (`aria-hidden`). The hazard name and risk level stay in text, so
   nothing is lost for a screen reader, on touch, or with a keyboard, none of which can hover.
 - With `prefers-reduced-motion: reduce`, or if GSAP fails to load, the calm drawing stays still.
@@ -1579,28 +1605,28 @@ Area species icons, each animating its hazard when the pointer is over it.
 
 ---
 
-## DEC-55 · Hazard scenes keep their hazard state after the pointer leaves
+## DEC-72 · Hazard scenes keep their hazard state after the pointer leaves
 
 **Date.** 2026-11-17 · **Status.** `documented` — decided by Abe
 
-**Context.** DEC-54 played each scene back to the calm drawing when the pointer left the tile.
+**Context.** DEC-71 played each scene back to the calm drawing when the pointer left the tile.
 
 **Decision.** A scene plays its hazard once, on the first hover, and stays in that state. If the
 pointer leaves part-way, the sequence still runs to its end. The repeating motion (rain, waves,
 wind, the cyclone) runs only while the pointer is over the tile and holds still otherwise.
 
 **Consequences.**
-- This replaces "on leave it plays back" in DEC-54, decision 1.
+- This replaces "on leave it plays back" in DEC-71, decision 1.
 - A scene is calm again only after the page reloads, or when the analyser redraws the card.
 - `TODO(design): decide whether a second hover should replay the hazard from the calm drawing.`
 
 ---
 
-## DEC-56 · Hazard scenes are redrawn without outlines, in the land-cover icon style
+## DEC-73 · Hazard scenes are redrawn without outlines, in the land-cover icon style
 
 **Date.** 2026-11-17 · **Status.** `documented` — decided by Abe
 
-**Context.** The first drawings (DEC-54) followed the Habitat Area species icons: bright flat
+**Context.** The first drawings (DEC-71) followed the Habitat Area species icons: bright flat
 fills inside a dark outline. Abe found them childish and pointed to the land-cover icons
 (`assets/f01-step2/genctx/lc-*.svg`) as the direction.
 
@@ -1615,8 +1641,8 @@ fills inside a dark outline. Abe found them childish and pointed to the land-cov
 5. The typhoon is a side-view funnel of see-through rings, not a top-down swirl.
 
 **Consequences.**
-- This replaces "in the style of the Habitat Area species icons" in DEC-54. The motion,
-  the hover rule (DEC-55) and the accessibility contract are unchanged.
+- This replaces "in the style of the Habitat Area species icons" in DEC-71. The motion,
+  the hover rule (DEC-72) and the accessibility contract are unchanged.
 - The muted tans and the slate sky have no token. They are written as `color-mix()` of two
   existing tokens in `css/genctx.css`, so no hex is typed, but the resulting colours are not in
   `tokens.json` (TODO-25). `color-mix()` needs a 2023 or newer browser.
@@ -1624,7 +1650,7 @@ fills inside a dark outline. Abe found them childish and pointed to the land-cov
 
 ---
 
-## DEC-57 · Natural disaster risk shows its level as the shared pill, in five classes
+## DEC-74 · Natural disaster risk shows its level as the shared pill, in five classes
 
 **Date.** 2026-11-17 · **Status.** `documented` — decided by Abe
 
@@ -1649,11 +1675,11 @@ threat cards use a label and a pill (`gcLevel`, for example Deforestation risk).
 
 ---
 
-## DEC-58 · Hazard tiles put the name and the level on one line
+## DEC-75 · Hazard tiles put the name and the level on one line
 
 **Date.** 2026-11-17 · **Status.** `documented` — decided by Abe
 
-**Context.** DEC-57 left each tile with two lines under its picture: the hazard name, then
+**Context.** DEC-74 left each tile with two lines under its picture: the hazard name, then
 "Risk level" and the pill.
 
 **Decision.** One line: the hazard name on the left and the pill on the right. The words "Risk
@@ -1661,18 +1687,18 @@ level" are dropped; the card's title, Natural Disaster Risk, already says what t
 It is still the `gcLevel` helper, with the hazard name as its label.
 
 **Consequences.**
-- This replaces decision 1 of DEC-57. The five classes and their tones are unchanged.
+- This replaces decision 1 of DEC-74. The five classes and their tones are unchanged.
 - On a tile too narrow for both, the pill wraps under the name.
 - The name was not drawn into the picture: the SVG is hidden from screen readers (CMP-39), so
   the name has to stay as text.
 
 ---
 
-## DEC-59 · The hazard scenes are also exported as Lottie files
+## DEC-76 · The hazard scenes are also exported as Lottie files
 
 **Date.** 2026-11-17 · **Status.** `documented` — decided by Abe
 
-**Context.** DEC-54 left Lottie undelivered: hand-written Lottie JSON could not be checked. Abe
+**Context.** DEC-71 left Lottie undelivered: hand-written Lottie JSON could not be checked. Abe
 asked for the four files in `assets/natural-disaster-risk/`.
 
 **Decision.**
@@ -1687,7 +1713,7 @@ asked for the four files in `assets/natural-disaster-risk/`.
    for use elsewhere: slides, documents, a native app.
 
 **Consequences.**
-- Closes the DEC-54 `TODO(design)` about Lottie.
+- Closes the DEC-71 `TODO(design)` about Lottie.
 - The files are `drought.json`, `flood.json`, `landslide.json` and `tropical-typhoon.json`:
   62 to 324 KB, because every frame's motion is written out as keys rather than as eases.
 - Colours in the files are fixed at the token values on the day of the export. They do not
@@ -1702,7 +1728,7 @@ asked for the four files in `assets/natural-disaster-risk/`.
 
 ---
 
-## DEC-60 · The data disclaimer alert loses its stripe, border and label
+## DEC-77 · The data disclaimer alert loses its stripe, border and label
 
 **Date.** 2026-11-17 · **Status.** `documented` — decided by Abe
 
@@ -1726,9 +1752,9 @@ of three.
   `TODO(design): if DA-08 exists in Figma, update it to match.`
 - The icon is still decorative (`alt=""`); the tint plus the text carry the meaning.
 
-## DEC-61 · Fire risk gauge shows the overlap share only, with no levels
+## DEC-78 · Fire risk gauge shows the overlap share only, with no levels
 
-**Status.** Accepted, 2026-11-17. Supersedes the gauge parts of DEC-50, DEC-51 and DEC-52.
+**Status.** Accepted, 2026-11-17. Supersedes the gauge parts of DEC-67, DEC-68 and DEC-69.
 
 **Context.** The gauge drew Low / Medium / High bands on the arc. Those bands were thresholds on
 the share of the area that overlaps mapped fire-risk areas, which reads as if it were the fire
@@ -1741,5 +1767,5 @@ labels. Hovering or focusing the chart shows a pop-up with "Total area" and "Ove
 fire-risk areas", each with its percentage and hectares.
 
 **Consequences.**
-- The narrative beside the gauge still uses `gcFireLevel(pct)` (DEC-50 thresholds).
+- The narrative beside the gauge still uses `gcFireLevel(pct)` (DEC-67 thresholds).
   `TODO(design): confirm whether that narrative should also stop naming a level.`
