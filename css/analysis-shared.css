@@ -215,7 +215,7 @@
   .p5 .disc-body b{color:#3f3620;font-weight:600;}
   .p5 .disc-body code{font:500 11px/1.4 'IBM Plex Mono',ui-monospace,Menlo,monospace;background:#fbf1dc;border:1px solid #efd9ab;border-radius:3px;padding:1px 5px;color:#5f5330;}
 
-/* ---- Step 3 — Threats Profile & NbS Screening Overview (.t3) ---- */
+/* ---- Step 3 — Threat profile (.t3): step header, then three accordion groups ---- */
   .t3{display:flex;flex-direction:column;gap:16px;font-family:'Poppins',sans-serif;}
   .t3-head{display:flex;align-items:flex-start;gap:12px;padding-top:4px;}
   /* Back/Next pill — shared spec (C-05): h28, slate #475467, 14px/600, radius 20 */
@@ -226,136 +226,43 @@
   .t3-titles{flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;}
   .t3-titles h2,.t3-titles h3{margin:0;font-size:16px;font-weight:600;line-height:1.2;letter-spacing:-.2px;color:#2d3648;}
   .t3-titles p{margin:0;font-size:13px;line-height:20px;color:#68727d;}
-  .t3-rule{width:100px;height:3px;border-radius:2px;background:linear-gradient(90deg,#077f68 0%,#efa22f 50%,#3b82f6 100%);}
-  /* tabs — shared underline spec (D-01: steps 2/3/5 identical) */
-  .t3-tabs{position:sticky;top:calc(-1 * var(--da-body-pad, 18px));z-index:6;display:flex;gap:2px;background:#fff;border-bottom:1px solid var(--stroke-base,#eaebf0);}
-  .t3-tabs button{flex:1 1 0;display:flex;align-items:center;justify-content:center;gap:7px;background:transparent;border:none;border-bottom:3px solid transparent;padding:13px 10px;font:600 14px/1 'Poppins',sans-serif;color:#68727d;cursor:pointer;}
-  .t3-tabs button svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
-  .t3-tabs button img.ic{width:18px;height:18px;flex:none;display:block;}
-  .t3-tabs button{transition:color .15s ease-out,background .15s ease-out,border-bottom-color .15s ease-out;}
-  .t3-tabs button img.ic,.t3-tabs button svg{transition:opacity .15s ease-out,transform .15s ease-out;}
-  .t3-tabs button:hover{color:#044c3e;background:#f1faf5;border-bottom-color:#9ed3c3;}
-  .t3-tabs button:hover img.ic,.t3-tabs button:hover svg{transform:translateY(-1px);}
-  .t3-tabs button.is-active{color:#044c3e;border-bottom-color:#044c3e;}
-  .t3-sec[hidden]{display:none;}
-  .t3-sec{display:flex;flex-direction:column;gap:16px;}
-  .t3-sections{display:flex;flex-direction:column;gap:16px;}
-  /* top metric cards */
-  .t3-metrics{display:flex;gap:8px;}
-  .t3-metric{flex:1 1 0;min-width:0;display:flex;gap:12px;align-items:flex-start;background:#fff;border:1px solid var(--stroke-base,#eaebf0);border-radius:8px;padding:17px;}
-  .t3-metric .ic{flex:none;width:36px;height:36px;border-radius:8px;display:grid;place-items:center;}
-  .t3-metric .ic svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
-  .t3-metric .tx{flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:2px;}
-  .t3-metric .tx b{font-size:12px;font-weight:500;line-height:18px;color:#68727d;}
-  .t3-metric .tx span{font-size:11px;line-height:16.5px;color:#a0a4ac;}
-  .t3-metric .num{font:700 20px var(--font-display,'Barlow Semi Condensed',sans-serif);letter-spacing:-.4px;color:#252525;white-space:nowrap;}
-  .t3-metric .num small{font:500 13px var(--font-display,'Barlow Semi Condensed',sans-serif);color:#68727d;margin-left:2px;}
-  /* ecosystem summary cards */
-  .t3-ecos{display:flex;gap:12px;align-items:stretch;}
-  .t3-eco{flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:8px;background:#fff;border:1px solid var(--stroke-base,#eaebf0);border-radius:12px;padding:12px;}
-  .t3-eco .top{display:flex;gap:6px;align-items:center;margin-bottom:2px;min-height:30px;}
-  .t3-eco .top>div{flex:1 1 0;min-width:0;display:flex;gap:6px;justify-content:space-between;align-items:center;}
-  .t3-eco .top>div .nm{min-width:0;}
-  .t3-eco .ic{flex:none;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;}
-  .t3-eco img.ic{display:block;}   /* Filled=Yes asset brings its own tinted circle */
-  .t3-eco .ic svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;}
-  .t3-eco .cap b{font-weight:600;color:#252525;}
-  .t3-eco .nm{font-size:12px;font-weight:500;color:#68727d;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  .t3-eco .ha{font:700 20px var(--font-display,'Barlow Semi Condensed',sans-serif);letter-spacing:-.3px;color:#252525;white-space:nowrap;}
-  .t3-eco .ha small{font:500 12px var(--font-display,'Barlow Semi Condensed',sans-serif);color:#68727d;}
-  .t3-bar{height:8px;border-radius:4px;background:#f5f5f5;display:flex;position:relative;}
-  .t3-bar span{display:block;height:100%;position:relative;cursor:default;}
-  .t3-bar span:first-child{border-radius:4px 0 0 4px;}
-  .t3-bar span:last-child{border-radius:0 4px 4px 0;}
-  .t3-bar span:only-child{border-radius:4px;}
-  /* hover tooltip: name · percentage · area */
-  .t3-bar span[data-lbl]:hover::after{
-    content:attr(data-lbl) "\A" attr(data-pct) "  ·  " attr(data-ha);
-    position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);
-    white-space:pre;text-align:center;z-index:5;pointer-events:none;
-    background:#252525;color:#fff;font:500 11px/16px 'Poppins',sans-serif;letter-spacing:0;
-    padding:6px 9px;border-radius:6px;box-shadow:0 6px 16px rgba(0,0,0,.18);
-  }
-  .t3-bar span[data-lbl]:hover::before{
-    content:"";position:absolute;bottom:calc(100% + 3px);left:50%;transform:translateX(-50%);
-    border:5px solid transparent;border-top-color:#252525;z-index:5;pointer-events:none;
-  }
-  .t3-eco .cap{font-size:11px;color:#68727d;}
-  .t3-eco .kv{display:flex;justify-content:space-between;gap:10px;align-items:baseline;font-size:12px;color:#68727d;padding-top:6px;}
-  .t3-eco .kv b{font-size:13px;font-weight:600;color:#2d3648;text-align:right;}
-  .t3-eco .kv b.red{color:#e33b32;font-weight:500;}
-  /* generic card + map */
-  /* full cards carry the system 12px radius (DA-09); tiles stay 6–8px */
-  .t3-card{background:#fff;border:1px solid var(--stroke-base,#eaebf0);border-radius:12px;padding:17px;display:flex;flex-direction:column;gap:14px;}
-  .t3-card h4{margin:0;font-size:14px;font-weight:600;color:#252525;}
-  .t3-card h4.t3-map-h{font-family:var(--font-text);font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#055143;}
-  .t3-mapdesc{margin:-8px 0 0;font-size:13px;line-height:19.5px;color:#505760;}
-  .t3-map{position:relative;border-radius:7px;overflow:hidden;}
-  .t3-map img{display:block;width:100%;height:auto;}
-  .t3-map__legend{position:absolute;top:10px;left:10px;z-index:2;background:#fff;border:1px solid var(--stroke-base,#eaebf0);border-radius:10px;box-shadow:var(--elevation-3,0 6px 16px -6px rgba(16,24,40,.18));padding:14px 16px;display:flex;flex-direction:column;gap:11px;min-width:172px;}
-  .t3-map__legend h5{margin:0;font:700 14px/1.2 'Poppins',sans-serif;color:#252525;}
-  .t3-map__legend div{display:flex;align-items:center;gap:10px;font:400 13px/1 'Poppins',sans-serif;color:var(--text-base-second,#68727d);}
-  .t3-map__legend i{width:16px;height:16px;border-radius:4px;flex:none;}
-  /* ecosystem detail cards */
-  .t3-echead{display:flex;flex-direction:column;gap:10px;border-bottom:1px solid var(--stroke-base,#eaebf0);padding-bottom:17px;}
-  .t3-echead__top{display:flex;gap:8px;align-items:center;}
-  /* chip + eyebrow title — matches the site-characterisation .gc-card__head spec */
-  .t3-echip{width:26px;height:26px;flex:none;border-radius:7px;background:#e3f3ee;display:grid;place-items:center;}
-  [data-t3sec="mangrove"] .t3-echip{background:#e4eefb;}
-  [data-t3sec="peatland"] .t3-echip{background:#fbf3d7;}
-  .t3-echip:has(img[src*="Mangrove"]){background:#e4eefb;}
-  .t3-echip:has(img[src*="Peatland"]){background:#fbf3d7;}
-  .t3-echip img,.t3-echip svg{width:15px;height:15px;display:block;}
-  .t3-echead h4{margin:0;font-family:var(--font-text);font-size:11px;font-weight:700;line-height:1.2;letter-spacing:.05em;text-transform:uppercase;color:#055143;}
-  .t3-echead p{margin:0;font-size:13px;line-height:19.5px;color:#505760;}
-  .t3-stats{display:grid;border:1px solid var(--stroke-base,#eaebf0);border-radius:10px;overflow:hidden;}
-  .t3-stats.cols5{grid-template-columns:repeat(5,1fr);}
-  .t3-stats.cols4{grid-template-columns:repeat(4,1fr);}
-  .t3-stats > div{display:flex;flex-direction:column;gap:4px;padding:8px 13px 8px 12px;border-right:1px solid var(--stroke-base,#eaebf0);}
-  .t3-stats > div:last-child{border-right:none;}
-  .t3-stats span{font-size:11px;font-weight:500;line-height:16.5px;color:#68727d;}
-  .t3-stats b{font-size:15px;font-weight:600;line-height:24px;color:#252525;white-space:nowrap;}
-  .t3-stats b.org{color:var(--warning-500,#efa22f);}
-  .t3-stats b.red{color:#e33b32;}
-  .t3-stats b.grn{color:#077f68;}
-  /* disturbance alerts (collapsible) */
-  .t3-alerts{border:1px solid var(--stroke-base,#eaebf0);border-radius:8px;overflow:hidden;}
-  .t3-alerts__head{display:flex;align-items:center;justify-content:space-between;width:100%;background:#fafbfa;border:none;border-bottom:1px solid transparent;padding:10px 16px;font:600 13px 'Poppins',sans-serif;color:#2d3648;cursor:pointer;text-align:left;transition:background .15s ease-out,color .15s ease-out;}
-  .t3-alerts__head svg{width:16px;height:16px;stroke:#68727d;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform .15s ease;}
-  /* hover: mint tint, darker per system rule (backgrounds get darker/tinted, never lighter) */
-  .t3-alerts__head:hover{background:#e9f8f1;color:var(--primary-700,#044c3e);}
-  .t3-alerts__head:hover svg{stroke:var(--primary-700,#044c3e);}
-  .t3-alerts__body{display:none;padding:14px 16px 18px;}
-  .t3-alerts.open .t3-alerts__body{display:block;}
-  .t3-alerts.open .t3-alerts__head{border-bottom-color:var(--stroke-base,#eaebf0);}
-  .t3-alerts.open .t3-alerts__head svg{transform:rotate(180deg);}
-  /* intro paragraph sits ABOVE the columns (Figma 302-44638) */
-  .t3-drivers-intro{margin:0 0 16px;font-size:12px;line-height:18px;color:#505760;}
-  /* Figma column widths: 281.64 / 222.18 / 198.18 of 702 — Non-natural is widest
-     so "Non-natural drivers (human caused)" stays on one line */
-  .t3-drivers{display:grid;grid-template-columns:40.12% 31.65% 28.23%;gap:0;align-items:start;}
-  .t3-drivers > div{padding-right:14px;}
-  .t3-drivers > div:last-child{padding-right:0;}
-  .t3-drivers h5{margin:0 0 10px;padding-bottom:6px;border-bottom:1px dashed var(--stroke-base,#eaebf0);font-size:12px;font-weight:600;white-space:nowrap;}
-  .t3-drivers h5.c-non{color:#077f68;}
-  .t3-drivers h5.c-nat{color:#1a9e96;}
-  .t3-drivers h5.c-oth{color:#bea001;}
-  .t3-drivers ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:7px;}
-  .t3-drivers li{display:flex;gap:8px;align-items:center;font-size:11px;line-height:16.5px;color:#505760;}
-  .t3-drivers li::before{content:"";width:10px;height:10px;border-radius:50%;flex:none;background:var(--dot,#077f68);}
-  /* peatland mini alert cards */
-  .t3-minis{display:flex;gap:12px;}
-  .t3-mini{flex:1 1 0;min-width:0;display:flex;gap:12px;align-items:center;background:#fff;border:1px solid var(--stroke-base,#eaebf0);border-radius:8px;padding:12px;}
-  .t3-mini .ic{flex:none;width:36px;height:36px;border-radius:8px;background:#fff4e5;color:#8f611c;display:grid;place-items:center;}
-  .t3-mini .ic svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
-  .t3-mini .tx{display:flex;flex-direction:column;gap:1px;}
-  .t3-mini .tx span{font-size:11px;color:#68727d;}
-  .t3-mini .tx b{font-size:14px;font-weight:600;color:#252525;}
-  .t3-mini .tx small{font-size:11px;color:#a0a4ac;}
-  /* disclaimer — system alert spec: warning tint + 4px coloured left border (DA-08) */
-  .t3-disc{background:#fdf6ea;border:1px solid var(--stroke-base,#eaebf0);border-left:4px solid var(--warning-500,#efa22f);border-radius:6px;padding:10px;display:flex;gap:8px;align-items:flex-start;}
-  .t3-disc svg{flex:none;width:26px;height:26px;stroke:#efa22f;fill:#fdf6ea;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
-  .t3-disc p{margin:0;font-size:12px;line-height:20px;color:#252525;}
+
+  /* ---- GUI 3.1: three accordion groups (native <details>), each holding .gc-card
+     cards from css/genctx.css. The head is fixed white, so its text uses fixed tokens. ---- */
+  .t3-accs{display:flex;flex-direction:column;gap:var(--space-16);}
+  /* no overflow:hidden here — it would stop the head from sticking; the head and the body
+     round their own corners instead */
+  .t3-acc{border:1px solid var(--stroke-base);border-radius:var(--radius-xl);background:var(--base-white);}
+  /* the head of an open group stays in view while its cards scroll under it, like the
+     site-characterisation tabs. --t3-sticky-top is where the scrolling area starts: the top of
+     the drawer on the map, below the site navigation on project detail. */
+  .t3-acc__head{display:flex;align-items:center;gap:var(--space-12);padding:var(--space-16);cursor:pointer;list-style:none;
+    position:sticky;top:var(--t3-sticky-top, calc(-1 * var(--da-body-pad, 18px)));z-index:5;background:var(--base-white);border-radius:var(--radius-xl);}
+  .t3-acc__head::-webkit-details-marker{display:none;}
+  .t3-acc__head:hover{background:var(--neutral-100);}
+  .t3-acc[open] > .t3-acc__head{border-bottom:1px solid var(--stroke-base);border-radius:var(--radius-xl) var(--radius-xl) 0 0;}
+  /* each group sets one colour pair; its own icon, and the icon chip, title and "i" button of
+     every card inside it, use the pair, so a card always matches its group */
+  .t3-acc{--t3-ic-bg:var(--primary-25);--t3-ic-fg:var(--primary-700);}
+  .t3-acc--pressure{--t3-ic-bg:var(--warning-25);--t3-ic-fg:var(--warning-700);}
+  .t3-acc--bau{--t3-ic-bg:var(--info-25);--t3-ic-fg:var(--info-700);}
+  .t3-acc__ic{flex:none;width:var(--space-40);height:var(--space-40);border-radius:var(--radius-lg);display:grid;place-items:center;background:var(--t3-ic-bg);color:var(--t3-ic-fg);}
+  .t3-acc__ic svg{width:var(--space-24);height:var(--space-24);}
+  /* three classes, so it also wins over the red card variant in css/genctx.css */
+  .t3-acc .gc-card .gc-hchip{background:var(--t3-ic-bg);color:var(--t3-ic-fg);}
+  /* the card title and its "i" button take the same colour as the icon (and so also beat the
+     red variant) */
+  .t3-acc .gc-card .gc-card__head h4,
+  .t3-acc .gc-card .gc-info{color:var(--t3-ic-fg);}
+  .t3-acc__tx{flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:var(--space-2);}
+  /* one step below the step title (.t3-titles h2, 16px) so the h2 > h3 order also reads by eye;
+     14px/600 is the size the tab labels used */
+  .t3-acc__tx h3{margin:0;font-size:14px;font-weight:600;line-height:20px;letter-spacing:-.1px;color:var(--text-title);}
+  .t3-acc__tx span{font-size:12px;line-height:18px;color:var(--gray-100);}
+  .t3-acc__chev{flex:none;width:var(--space-20);height:var(--space-20);fill:none;stroke:var(--gray-400);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform var(--motion-fast);}
+  .t3-acc[open] > .t3-acc__head .t3-acc__chev{transform:rotate(180deg);}
+  .t3-acc > .gc{padding:var(--space-16);background:var(--neutral-300);border-radius:0 0 var(--radius-xl) var(--radius-xl);}
+  @media (prefers-reduced-motion: reduce){ .t3-acc__chev{transition:none;} }
 
   /* ---- Step 4 — Pathway Selection (.pathway) — moved from interactive-map.html inline styles (C-06) ---- */
   .pathway{

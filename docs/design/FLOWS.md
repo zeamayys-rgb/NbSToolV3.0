@@ -77,9 +77,9 @@ flowchart TD
 6. **SCR-03 Step 2.** Four context panes switched by `nbsShowSitePane()`. People Context is
    rendered by a separate module with its own SVG charts. Every card carries a source-and-year
    line and an "i" affordance.
-7. **SCR-03 Step 3.** Threats ranked by section; Overview shows every section. A missing layer
-   is not distinguished from an assessed-and-clear one — the most consequential gap in the
-   flow, because it changes what a user believes about their site.
+7. **SCR-03 Step 3.** Three accordion groups of threat results (DEC-49); the first is open. Each
+   card can say that its result is missing or failed, so a missing layer no longer reads as
+   "no threat" — but those states are not wired to data yet (UI-STATES SCR-03 step 3).
 8. **SCR-03 Step 4 → Step 5.** Pathway design feeds benefit estimation. Step 4 writes
    `localStorage` key `nbs_selected_activities`, which FLW-03 depends on.
 9. **Exit.** Either create a project (SCR-04) or attach the result to an existing one (SCR-07).

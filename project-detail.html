@@ -117,6 +117,9 @@
 /* analyser panel chrome — mirrors the 810px .da-body (f01.css / f01-step2.css) */
 #p-analysis .ctx-pane:not([hidden]) { display:block; background:#f5f6f8; border:1px solid var(--stroke-base); border-radius:14px; overflow:hidden; }
 #p-analysis .t3, #p-analysis .p5 { background:var(--neutral-200); border:1px solid var(--stroke-base); border-radius:14px; padding:18px; }
+/* Threat profile accordion heads stick just under the site navigation (68px tall; there is no
+   nav-height token, so it is built from the space scale: 64 + 4) */
+#p-analysis .t3 { --t3-sticky-top: calc(var(--space-64) + var(--space-4)); }
 
 @media (max-width:880px){ .an2 { grid-template-columns:1fr; } .an2-nav { position:static; } }
 </style>
@@ -494,14 +497,13 @@
         </div>
         <div class="an2-step" id="an2-step-2">
           <button class="an2-step__hd" onclick="an2ToggleStep(2)">
-            <span class="an2-num">2</span><span class="an2-step__lbl">Threats Profile</span>
+            <span class="an2-num">2</span><span class="an2-step__lbl">Threat Profile</span>
             <svg class="an2-chev" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </button>
           <div class="an2-subs">
-            <button class="an2-sub" data-pane="threat-overview" onclick="an2Go('threat-overview')">Overview</button>
-            <button class="an2-sub" data-pane="threat-forest" onclick="an2Go('threat-forest')">Forest</button>
-            <button class="an2-sub" data-pane="threat-mangrove" onclick="an2Go('threat-mangrove')">Mangrove</button>
-            <button class="an2-sub" data-pane="threat-peatland" onclick="an2Go('threat-peatland')">Peatland</button>
+            <button class="an2-sub" data-pane="threat-observed" onclick="an2Go('threat-observed')">Observed Ecosystem Disturbance</button>
+            <button class="an2-sub" data-pane="threat-pressure" onclick="an2Go('threat-pressure')">Ecosystem Pressure and Hazard</button>
+            <button class="an2-sub" data-pane="threat-bau" onclick="an2Go('threat-bau')">Business as Usual Projection</button>
           </div>
         </div>
         <div class="an2-step" id="an2-step-3">
@@ -524,9 +526,9 @@
           <div data-nbs="site"></div>
         </div>
         <div class="an2-pane" data-pane="threat">
-          <div class="an2-title">Threats Profile: Overview</div>
+          <div class="an2-title">Threat Profile</div>
           <div class="t3" id="an2T3">
-            <div data-nbs="threat-sections"></div>
+            <div data-nbs="threat"></div>
           </div>
         </div>
         <div class="an2-pane" data-pane="benefit">
@@ -540,6 +542,8 @@
     </div>
   </section>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+  <script src="js/hazard-scenes.js"></script>
   <script src="js/analysis-shared.js"></script>
   <script src="js/people-context.js"></script>
   <script>
@@ -548,15 +552,13 @@
     'nature':           { pane:'site',    step:1, title:'Site Characterisation: Nature' },
     'people':           { pane:'site',    step:1, title:'Site Characterisation: People' },
     'climate':          { pane:'site',    step:1, title:'Site Characterisation: Climate' },
-    'threat-overview':  { pane:'threat',  step:2, title:'Threats Profile: Overview' },
-    'threat-forest':    { pane:'threat',  step:2, title:'Threats Profile: Forest' },
-    'threat-mangrove':  { pane:'threat',  step:2, title:'Threats Profile: Mangrove' },
-    'threat-peatland':  { pane:'threat',  step:2, title:'Threats Profile: Peatland' },
+    'threat-observed':  { pane:'threat',  step:2, title:'Threat Profile' },
+    'threat-pressure':  { pane:'threat',  step:2, title:'Threat Profile' },
+    'threat-bau':       { pane:'threat',  step:2, title:'Threat Profile' },
     'benefit-nature':   { pane:'benefit', step:3, title:'Potential Benefit: Nature' },
     'benefit-people':   { pane:'benefit', step:3, title:'Potential Benefit: People' },
     'benefit-climate':  { pane:'benefit', step:3, title:'Potential Benefit: Climate' }
   };
-  var an2T3 = nbsInitThreat(document.getElementById('an2T3'));
   var an2P5 = nbsInitBenefit(document.getElementById('an2P5'));
   function an2Go(key) {
     var view = AN2_VIEWS[key]; if (!view) return;
@@ -570,7 +572,11 @@
     var pane = document.querySelector('#p-analysis .an2-pane[data-pane="' + view.pane + '"]');
     pane.querySelector('.an2-title').textContent = view.title;
     if (view.pane === 'site') nbsShowSitePane(pane, key);
-    if (view.pane === 'threat') an2T3.show(key.replace('threat-', ''));
+    // Threat profile: the menu opens that accordion group, closes the others and brings it into view
+    if (view.pane === 'threat') pane.querySelectorAll('[data-t3grp]').forEach(function (g) {
+      g.open = g.dataset.t3grp === key.replace('threat-', '');
+      if (g.open) g.scrollIntoView({ block: 'nearest' });
+    });
     if (view.pane === 'benefit') an2P5.show(key.replace('benefit-', ''));
   }
   function an2ToggleStep(n) {

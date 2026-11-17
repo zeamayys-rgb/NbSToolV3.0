@@ -507,5 +507,7 @@ function mount(container,opts){opts=opts||{};
  wireTips(app);}
 /* auto-mount the Data Analyser panes injected by analysis-shared.js */
 document.querySelectorAll('[data-people-context]').forEach(el=>mount(el));
+/* the other analyser panes' charts (gcDonut, gcGauge) use the same tooltip */
+document.querySelectorAll('.gc').forEach(wireTips);
 return {mount:mount,DATA:C,ORDER:ORDER};
 })();

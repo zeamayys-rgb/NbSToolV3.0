@@ -210,8 +210,26 @@ loses all analysis progress, and a step cannot be linked to or shared.**
 | `gcSub` | `(title, key)` | Sub-heading with an "i" |
 | `gcInfo` | `(key)` | The "i" affordance itself — `role="button"`, `tabindex="0"`, `aria-label="More information"`, `data-layer-info="<key>"` |
 | `gcSource` | `(data, source, year)` | The attribution line under a card |
-| `ncSpecies` | `(icon, name, dot, list)` | Species row; `list` is `[common, latin, occurrence]` |
+| `gcDisc` | `(text)` | The disclaimer written for that card's dataset (GUI 3.1). Replaces the general `gcAlert` on the five General cards. Styled as `.gc-alert`: warm tint, 16px inline icon, no border, stripe or "Disclaimer:" prefix (DEC-60) |
+| `gcBars` | `(rows)` | Class bars for elevation and slope; `rows` is `[label, hectares, colour]`. The share is worked out from the hectares, and a class with 0 ha draws an empty track |
+| `gcDonut` | `(items, totalLabel, ariaLead, half)` | Total, donut and legend for `[label, hectares, colour]` rows. With `half = true` the segments are drawn on the Fire risk half doughnut (`gcGauge`'s look, shared arc `GC_ARC`) with `totalLabel` as the chart title above it and only the total (number and ha) in its centre, replacing the full ring (Land degradation). The donut is an SVG with one path per segment, `role="img"` with the shares in its `aria-label`; the legend repeats them as text. **Interaction:** pointing at a segment dims it and names only that segment in the People Context tooltip ("Degraded: 24,000 ha (16%)"), the same `data-tip` + `.pcx-tip` behaviour as the People Context charts (`js/people-context.js` wires every `.gc`). Mouse only; the legend carries the same figures for keyboard and screen-reader users. **Layout:** next to a long text column, put `gc-terr--mid` on the `.gc-terr` grid so the chart sits on the text's centre line; inside it the chart stacks above a full-width legend, both left-aligned (Land degradation does this). Elsewhere the donut stays 96px beside its legend. Used by Reference ecosystem (`gcEcoChart()`, drawn from `NBS_DATA`) and Land degradation |
+| `gcTip` | `(label, ha, pct)` | The `data-tip` attribute for one chart segment: "Label: 12,345 ha (16%)". Shared by `gcDonut` and `gcGauge` |
+| `gcGauge` | `(part, total, caption, partLabel)` | Half-doughnut of a part against a whole, 0 to 100%. Two colours only: the whole is a grey ring (`--neutral-800`), the part is orange (`--warning-500`). It shows a share, not a level: no bands, thresholds or level labels (DEC-61). **Interaction:** pointing at an arc dims it and names it in the People Context tooltip (`gcTip`): the grey arc reads "Total area: … ha (100%)", the orange arc reads `partLabel` with its hectares and share. Mouse only. **Accessibility:** the wrapper is `role="img"` and its `aria-label` says both figures; the caption under the gauge repeats them as text. Used by Fire risk |
+| `gcLevel` | `(label, value, tone)` | A labelled level badge; `tone` is `bad`, `warn` or `ok`. The word carries the meaning, the colour only repeats it |
+| `.gc-sub--ic` | markup: `<h5 class="gc-sub gc-sub--ic"><span class="gc-sub__ic"><svg …/></span>Title</h5>` | Sub-title with a 36px tinted icon tile in front (`--warning-25` tile, `--warning-700` stroke icon, `--radius-lg`), the look of the earlier Threat profile "t3-mini" cards. The icon is decorative (`hardenSvgs()` hides it); the heading text is the name. Used by Drainage canal pressure (Canal proximity, Drainage pressure) |
+| `ncSpecies` | `(icon, name, dot, list)` | Species row; `list` is `[common, latin, records, year of latest record]`. A missing year reads "Date not recorded". Names only: no photo is licensed yet |
 | `clChart` | `(bars, plot, labels, yTicks, yTitle, cls)` | Climate chart |
+
+**Result states.** `nbsCardState(card, state)` swaps one card's result for a GUI 3.1 message:
+`unavailable`, `nodata` or `failed`. Any other value restores the result. The card head, its
+"i" and the source line stay; the other cards are not touched. Only cards with a `data-gc` key
+take part — today the five GUI 3.1 General cards, the six Nature cards, the three Climate cards
+and the seven result cards in the Threat profile accordion (CMP-08). Two more states,
+`noforest` (Forest Landscape Integrity Index) and `nokba` (Key Biodiversity Area), are valid
+results that happen to be nothing, so they render as a plain sentence, not as a "missing" box. `failed` is `role="alert"` and carries a real
+`<button>` ("Try again"); the other two are `role="status"` and use the neutral tone, because
+missing coverage is not an error (UI-STATES convention 1). Preview with
+`?gcstate=terrain:failed,soil:nodata`. See UI-STATES.md, SCR-03 step 2.
 
 **Accessibility contract.** `gcInfo` is a `<svg>` with `role="button"` and `tabindex="0"` — it is
 reachable and labelled, but **it is not a real button**, so it does not fire on Enter or Space
@@ -258,18 +276,43 @@ the only contrast handling in the file.
 
 ---
 
-## CMP-08 · Threat list
+## CMP-08 · Threat profile accordion (`.t3-acc`)
 
-**File.** [js/analysis-shared.js](../../js/analysis-shared.js) — `nbsInitThreat(root, onShow)`
-**Purpose.** Step 3 threat profile with section switching; Overview shows all sections.
+**File.** [js/analysis-shared.js](../../js/analysis-shared.js) — the `threat` mount
+(`<div data-nbs="threat">`), styles in [css/analysis-shared.css](../../css/analysis-shared.css)
+**Purpose.** Step 3. Three groups of result cards, as GUI 3.1 lists them (DEC-49). There is no
+script: `nbsInitThreat()` was removed with the ecosystem views it switched.
 
-| Arg | Type | Required | Default | Controls |
-|---|---|---|---|---|
-| `root` | Element | yes | — | Container |
-| `onShow` | `(key) => void` | no | — | Callback on section change |
+| Part | Markup | Notes |
+|---|---|---|
+| Group | `<details class="t3-acc t3-acc--observed \| --pressure \| --bau" data-t3grp="…">` | `open` on the first group only. Groups open and close independently |
+| Head | `<summary class="t3-acc__head">` | Icon chip (`.t3-acc__ic`, a `GC_ICONS` glyph), an `<h3>` title, a one-line description, a chevron. **Sticky:** the head of an open group stays at the top of the scrolling area while its cards scroll under it, and leaves with the group. The offset is `--t3-sticky-top`: the top of the drawer on SCR-03 (the default), just under the site navigation on SCR-07 |
+| Body | `<div class="gc">` | The group's `.gc-card` cards (CMP-06): `gcDisc`, `gcSource`, result states |
 
-**Known limitations.** A missing threat layer is indistinguishable from an assessed-and-clear
-one. See UI-STATES.md SCR-03 Step 3 — the most consequential state gap in the analysis flow.
+**Icon colour.** Each group sets one pair, `--t3-ic-bg` and `--t3-ic-fg` (green for Observed,
+amber for Pressure and Hazard, blue for Business as Usual). The group's own icon, and the icon
+chip, title and "i" button of every card inside it, use that pair. That includes the two fire cards, which
+are red everywhere else. The Observed icon (`GC_ICONS.observe`, an eye in front of a magnifying glass) was drawn
+for this project; the other glyphs are Material icons.
+
+**States.** Closed (head only) · open (head, a rule, then the cards) · open and scrolled (head
+pinned, cards passing under it) · hover on the head ·
+keyboard focus on the head (the shared `summary:focus-visible` ring). A card inside takes the
+CMP-06 result states; previewing one with `?gcstate=` opens its group.
+
+**Accessibility contract.** Native `<details>/<summary>`: focusable, toggles on Enter and
+Space, and announces expanded or collapsed without ARIA. The title is a real `<h3>` inside the
+summary, so the groups appear in the heading outline. The icon and chevron are `aria-hidden`.
+The chip colour differs per group but the title carries the meaning. The chevron's turn is the
+only motion and is switched off under `prefers-reduced-motion`.
+
+**Known limitations.** The "See more" link on a source line does nothing on a card with no
+dataset catalogue row (Land degradation, Drainage canal pressure, Fire risk). `.t3-acc` must not
+get `overflow: hidden`: it would stop the head from sticking, which is why the head and the
+body round their own corners. SCR-07 drives the
+groups from its own side menu (`an2Go('threat-observed' | 'threat-pressure' | 'threat-bau')`),
+which opens the chosen group and closes the other two; on SCR-03 nothing closes a group but the
+user.
 
 ---
 
@@ -1007,3 +1050,45 @@ in an `aria-live="polite"` region. Hover previews a node but never replaces clic
 
 **Known gap.** Flags load from cdnjs (`flag-icons` 7.2.3), the site's only image from a CDN. At
 900px and below the card sits below the flow, so a tap near the top updates text off-screen.
+
+---
+
+## CMP-39 · Hazard scene (`.hz`)
+
+**Files.** [js/hazard-scenes.js](../../js/hazard-scenes.js) · colours in
+[css/genctx.css](../../css/genctx.css) · used by `gcHazard()` in
+[js/analysis-shared.js](../../js/analysis-shared.js) (SCR-03, Natural Disaster Risk; DEC-54)
+
+**Purpose.** Picture one natural hazard as a small flat drawing, without outlines (DEC-56), that
+plays the hazard when the pointer is over its tile. The tile under it is one line: the hazard name on the left and its level on the right as the
+shared pill, in one of five classes followed by the word "risk", for example "Moderate risk"
+(DEC-57, DEC-58).
+
+**Props.** `hazardScene(key)` returns the SVG markup. `key` is `drought`, `flood`, `landslide`
+or `typhoon`. Load the file before `js/analysis-shared.js`; GSAP may load later.
+
+**Parts.** One 270 x 120 inline SVG. Shapes take a fill class (`.hz-land`, `.hz-water`, …) and
+no stroke; thin things (branches, rain, wind, cracks) are `.hz-l` lines with a colour modifier.
+Classes starting `a-` only mark what GSAP moves.
+A shape that changes colour is drawn twice; the second copy (`.a-alt`) fades in over the first.
+
+**States.** Calm (default, until the first hover). Hazard, from the first time the pointer is
+over the `.gc-nditem` tile: one timeline plays forward once and the scene keeps that state after
+the pointer leaves (DEC-55); it is calm again only when the page reloads. Every scene also has motion that repeats while the pointer is over the tile and
+holds still when it leaves: drought, the sun's rays turn and pulse and heat rises off the ground;
+flood, rain and waves; landslide, pebbles roll down the scar and dust lifts at its foot; typhoon,
+the funnel (drawn from the side, as stacked rings that writhe and spin), rain, wind, waves and
+swaying trees. Reduced
+motion, or no GSAP: calm only.
+
+**Accessibility contract.** Decorative: `aria-hidden="true"`, not focusable, no role. The tile's
+text carries the hazard name and risk level. Never put information only in the animation.
+
+**Lottie copies.** The same four scenes exist as Lottie files in
+`assets/natural-disaster-risk/`, recorded from this component by
+`docs/generated/scripts/build-hazard-lottie.html` (DEC-59). The product does not load them. The
+exporter needs every repeat to last a whole fraction of 3 seconds; the comment above `MOTION`
+in the script says so.
+
+**Known gap.** Hover only, so touch and keyboard users see the calm drawing. The page that mounts
+it without `js/hazard-scenes.js` gets the old photograph instead.

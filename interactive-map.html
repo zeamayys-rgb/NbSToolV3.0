@@ -344,7 +344,7 @@
             </button>
             <div class="da-ctx__tt">
               <h2 id="daCtxTitle">Site characterisation: General context</h2>
-              <p>Baseline conditions of your selected area.</p>
+              <p id="daCtxSub">Explore the ecosystems, administrative boundaries, terrain, land cover, and environmental conditions within your selected area.</p>
             </div>
             <button class="da-ctx__nav da-ctx__next" data-ctx-next aria-label="Next context">
               Next
@@ -369,8 +369,8 @@
           <div class="t3-head">
             <button class="t3-nav" data-go="2"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M14 7l-5 5 5 5"/></svg> Back</button>
             <div class="t3-titles">
-              <h2>Threat profile and NbS screening overview</h2>
-              <p>Integrated screening summary for the ecosystems in your selected area.</p>
+              <h2>Threat profile</h2>
+              <p>Explore mapped disturbance and possible pressures affecting ecosystems in your selected area. Review the results alongside their data limits and local knowledge.</p>
             </div>
             <button class="t3-nav" data-go="4">Next <svg viewBox="0 0 24 24" stroke-width="2"><path d="M10 7l5 5-5 5"/></svg></button>
           </div>
@@ -777,11 +777,12 @@
       </button>
     </footer>
     <footer class="da-foot" data-step="3">
-      <button class="btn btn-outline" data-go="1">
-        <svg viewBox="0 0 24 24" fill="none"><path d="M21 12a9 9 0 1 1-3.5-7.1M21 4v5h-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        Reselect area
+      <!-- GUI 3.1: back to site characterisation with the area and results intact -->
+      <button class="btn btn-outline" data-go="2">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M14 7l-5 5 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Review site characterisation
       </button>
-      <button class="btn btn-primary grow" data-go="4">Pathway Selection
+      <button class="btn btn-primary grow" data-go="4">Select NbS pathways
         <svg viewBox="0 0 24 24" fill="none"><path d="M6 7l5 5-5 5M13 7l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
     </footer>
@@ -998,6 +999,8 @@
   </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+<script src="js/hazard-scenes.js"></script>
 <script src="js/analysis-shared.js"></script>
 <script src="js/people-context.js"></script>
 <script src="js/f05-shared.js"></script>
@@ -1152,12 +1155,20 @@
   if (ctx) {
     const tabs = [...ctx.querySelectorAll('[role="tab"][data-ctx]')];
     const KEYS = tabs.map(t => t.dataset.ctx);
-    const CTX_TITLES = { general: 'General context', nature: 'Nature context', people: 'People context', climate: 'Climate context' };
+    // GUI 3.1 titles: General keeps "context"; Nature and Climate drop it. People has no GUI 3.1 document.
+    const CTX_TITLES = { general: 'General context', nature: 'Nature', people: 'People context', climate: 'Climate' };
     const ctxTitle = document.getElementById('daCtxTitle');
+    // GUI 3.1 gives each tab its own subtitle. People has no GUI 3.1 document and keeps
+    // the shared sentence.
+    const ctxSub = document.getElementById('daCtxSub');
+    const CTX_SUBS = { general: ctxSub.textContent,
+      nature: 'Explore habitats, species records and places important for nature in your selected area. Use these results as a starting point and check local conditions through field surveys.',
+      climate: 'Explore stored carbon, soil, temperature, precipitation and fire information in your selected area. Check the source, time period and limits of each result.' };
     function showCtx(key){
       tabs.forEach(t => t.setAttribute('aria-selected', t.dataset.ctx === key ? 'true' : 'false'));
       panel.querySelectorAll('.da-step-body[data-step="2"] .ctx-pane').forEach(p => { p.hidden = (p.dataset.ctx !== key); });
       if (ctxTitle) ctxTitle.textContent = 'Site characterisation: ' + CTX_TITLES[key];
+      ctxSub.textContent = CTX_SUBS[key] || 'Baseline conditions of your selected area.';
       body.scrollTop = 0;
     }
     tabs.forEach(tab => tab.addEventListener('click', () => showCtx(tab.dataset.ctx)));
@@ -1167,9 +1178,9 @@
     ctx.querySelector('[data-ctx-next]').addEventListener('click', () => goStep(3));
   }
 
-  /* Step 3 — Threat Profile — markup + behavior shared with project-detail.html
-     via js/analysis-shared.js (single source of truth). */
-  nbsInitThreat(panel.querySelector('.t3'), function(){ body.scrollTop = 0; });
+  /* Step 3 — Threat profile — markup shared with project-detail.html via
+     js/analysis-shared.js. Its three groups are native <details> accordions, so
+     there is nothing to wire here. */
 
   /* Step 4 — pathway selection; activities sourced from NbS Activities Matrix */
   /* Activity list = the F05 activity data (js/f05-shared.js, generated from

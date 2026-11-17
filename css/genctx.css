@@ -1,7 +1,11 @@
 /* ============================================================
-   F02 · Step 2 — General Context  (Figma node 3892-33528)
-   Live rebuild of the six section cards, scoped under .gc inside
-   .ctx-pane[data-ctx="general"]. Assets: assets/f01-step2/genctx/.
+   F02 · Step 2 — General Context
+   The five GUI 3.1 section cards (Reference ecosystem, Administration
+   and zoning, Terrain, Landcover, Soil classification), scoped under
+   .gc inside .ctx-pane[data-ctx="general"]. The deforestation and
+   natural-disaster pieces further down (.gc-def, .gc-ndgrid) and the
+   burned-area pieces (.cl-fire) are now used by the Threat profile.
+   Assets: assets/f01-step2/genctx/.
    Loaded by interactive-map.html and project-detail.html.
    ============================================================ */
 
@@ -46,9 +50,24 @@
 /* sub-title that owns the card's "i" (cards covering more than one subject) —
    flex so the icon's margin-left:auto parks it on the right */
 .gc-sub--info { display: flex; align-items: center; gap: 8px; }
+/* sub-title with a tinted icon tile in front (Drainage canal pressure), the look of
+   the earlier Threat profile "t3-mini" cards; the icon is decorative */
+.gc-sub--ic { display: flex; align-items: center; gap: var(--space-12); margin-bottom: var(--space-4); }
+.gc-sub__ic {
+  flex: none; display: grid; place-items: center;
+  width: calc(var(--space-32) + var(--space-4)); height: calc(var(--space-32) + var(--space-4));
+  border-radius: var(--radius-lg); background: var(--warning-25); color: var(--warning-700);
+}
+.gc-sub__ic svg { width: var(--space-20); height: var(--space-20); fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 .gc-p { margin: 0; font-size: 14px; line-height: 22px; color: #252525; }
 .gc-p b { font-weight: 700; }
-.gc-p--lg { font-size: 14px; line-height: 1.42; color: #2d3648; letter-spacing: -0.01em; }
+.gc-p--lg { font-size: 14px; line-height: 1.42; color: var(--text-title); letter-spacing: -0.01em; }
+/* a consequence the reader should act on, set apart from the result above it */
+.gc-p--note { margin-top: var(--space-8); padding-left: var(--space-12); border-left: var(--space-2) solid var(--warning-500); color: var(--text-base-second); }
+
+/* ---------- GUI 3.1 result state: the message replaces the result, the head
+   and the data-source line stay. Block styles are .nc-err (below). ---------- */
+.gc-card[data-state] > :not(.gc-card__head):not(.gc-state):not(.gc-src) { display: none; }
 
 /* Italic footnote link line */
 .gc-note-it { margin: 8px 0 0; font-size: 12px; line-height: 20px; font-style: italic; font-weight: 500; color: #68727d; }
@@ -56,15 +75,15 @@
 .gc-note-it--center { align-self: center; text-align: center; }
 
 /* ---------- Disclaimer alert (Widget= Alert) ---------- */
+/* DEC-60: warm tint only — no border, no left stripe, small inline icon */
 .gc-alert {
   display: flex; align-items: flex-start; gap: 8px;
-  padding: 10px; border-radius: 6px;
-  /* system alert spec: warning tint + 4px coloured left border (DA-08) */
-  background: #fdf6ea; border: 1px solid var(--stroke-base, #eaebf0); border-left: 4px solid #efa22f;   /* Warning/500 */
+  padding: 10px 12px; border-radius: 6px;
+  background: var(--bg-warning-second);
 }
-.gc-alert img { width: 30px; height: 30px; flex: none; }
-.gc-alert p { margin: 0; font-size: 12px; line-height: 20px; font-weight: 500; color: #252525; }
-.gc-alert a { color: #8f611c; font-weight: 700; text-decoration: underline; }
+.gc-alert img { width: 16px; height: 16px; flex: none; margin-top: 2px; } /* centres on the 20px first line */
+.gc-alert p { margin: 0; font-size: 12px; line-height: 20px; font-weight: 500; color: var(--text-base-main); }
+.gc-alert a { color: var(--warning-700); font-weight: 600; text-decoration: underline; }
 
 /* ---------- Data source line ---------- */
 .gc-src { margin: 0; font-size: 11px; line-height: 18px; color: #68727d; }
@@ -72,29 +91,55 @@
 .gc-src a { color: inherit; font-style: italic; text-decoration: underline; }
 
 /* ============================================================
-   1 · Ecosystem type identification
+   1 · Reference ecosystem — map, total, compact donut + legend
    ============================================================ */
-.gc-eco { display: flex; gap: 20px; align-items: flex-start; }
+.gc-eco { display: flex; gap: var(--space-20); align-items: flex-start; }
 .gc-eco__map {
   margin: 0; flex: 1 1 0; min-width: 0; height: 293px;
-  border: 1.5px solid #ffffff; border-radius: 12px; overflow: hidden;
+  border: 1.5px solid var(--base-white); border-radius: var(--radius-xl); overflow: hidden;
   background: rgba(255,255,255,0.1);
   box-shadow: 1.5px 3px 3px rgba(0,0,0,0.07), 11px 8px 14px rgba(0,0,0,0.07);
 }
 .gc-eco__map img { display: block; width: 100%; height: 100%; object-fit: cover; }
-.gc-eco__side { flex: none; width: 355px; display: flex; flex-direction: column; gap: 16px; }
-.gc-eco__chartrow { display: flex; gap: 10px; align-items: flex-end; }
-.gc-donut { position: relative; width: 184px; height: 184px; flex: none; }
-.gc-donut img { display: block; width: 100%; height: 100%; }
-.gc-donut__c {
-  position: absolute; inset: 0; display: flex; flex-direction: column;
-  align-items: center; justify-content: center; text-align: center; color: #252525;
-}
-.gc-donut__c span { font-size: 16px; font-weight: 500; line-height: 1.3; }
-.gc-donut__c b { font-family: var(--font-display); font-size: 20px; font-weight: 700; letter-spacing: -0.01em; }
-.gc-legend { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
-.gc-legend li { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 500; color: #000; white-space: nowrap; }
-.gc-legend i { width: 12px; height: 12px; border-radius: 3px; flex: none; }
+.gc-eco__side { flex: none; width: 355px; display: flex; flex-direction: column; gap: var(--space-16); }
+.gc-eco__total { display: flex; flex-direction: column; }
+.gc-eco__total span { font-size: 12px; font-weight: 500; line-height: 20px; color: var(--text-base-second); }
+.gc-eco__total b { font-family: var(--font-display); font-size: 32px; font-weight: 600; line-height: 36px; color: var(--text-base-main); letter-spacing: -0.015em; }
+.gc-eco__chartrow { display: flex; gap: var(--space-16); align-items: center; }
+/* SVG ring, one path per segment, written by gcDonut() */
+.gc-donut { display: block; width: 96px; height: 96px; flex: none; }
+/* beside a long text column (Land degradation): the half doughnut on top, the legend
+   under it at full width, both on the left edge */
+.gc-terr--mid .gc-eco__chartrow { flex-direction: column; align-items: flex-start; }
+.gc-terr--mid .gc-gauge { margin-inline: 0; align-self: flex-start; }
+.gc-terr--mid .gc-gauge__c { bottom: var(--space-16); }
+/* the chart title sits centred over the half doughnut (same width as .gc-gauge) */
+.gc-terr--mid .gc-eco__total { max-width: calc(var(--space-100) * 2.6); align-items: center; }
+.gc-terr--mid .gc-legend { flex: none; width: 100%; }
+.gc-legend { flex: 1 1 0; min-width: 0; list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-4); }
+.gc-legend li { display: flex; align-items: center; gap: var(--space-8); font-size: 13px; font-weight: 500; line-height: 20px; color: var(--text-base-main); white-space: nowrap; }
+.gc-legend i { width: var(--space-12); height: var(--space-12); border-radius: var(--radius-sm); flex: none; }
+.gc-legend span { flex: 1 1 0; min-width: 0; }
+.gc-legend b { font-weight: 500; color: var(--text-base-second); }
+.gc-legend em { flex: none; width: var(--space-32); text-align: right; font-style: normal; font-weight: 600; }
+
+/* ---------- Half-doughnut gauge (gcGauge): a part of a whole, 0 to 100% ----------
+   Two colours only: the whole is grey, the part is orange. No levels (DEC-61). */
+.gc-gauge { position: relative; width: 100%; max-width: calc(var(--space-100) * 2.6); align-self: center; margin-inline: auto; }
+.gc-gauge svg { display: block; width: 100%; height: auto; }
+.gc-gauge__t { stroke: var(--neutral-800); }
+.gc-gauge__v { stroke: var(--warning-500); }
+.gc-gauge__c { position: absolute; left: 0; right: 0; bottom: 0; display: flex; flex-direction: column; align-items: center; pointer-events: none; }
+.gc-gauge__c b { font-family: var(--font-display); font-size: 32px; font-weight: 600; line-height: 36px; color: var(--text-base-main); letter-spacing: -0.015em; }
+.gc-gauge__c span { font-size: 12px; font-weight: 500; line-height: 18px; color: var(--text-base-second); }
+.gc-gauge__n { text-align: center; margin-top: var(--space-8); }
+
+/* Chart segments (gcDonut, gcGauge) carry data-tip: the People Context tooltip
+   (.pcx-tip, css/people-context.css) names the one under the pointer, and it dims
+   the same way the People Context charts do. */
+.gc svg [data-tip] { cursor: pointer; transition: opacity var(--motion-fast); }
+.gc svg [data-tip]:hover { opacity: .72; }
+@media (prefers-reduced-motion: reduce) { .gc svg [data-tip] { transition: none; } }
 
 /* ============================================================
    2 · Administration & zoning — table
@@ -114,19 +159,30 @@
 .gc-table th:last-child { width: 120px; }
 .gc-table td { background: #ffffff; color: #2d3648; font-weight: 400; }
 .gc-table tbody tr:nth-child(even) td { background: #f5f6f9; }
+/* tables whose columns size to their content (habitat threshold, KBA sites) */
+.gc-table--auto th:first-child, .gc-table--auto th:last-child { width: auto; }
+.gc-table .gc-table__total td { font-weight: 600; color: var(--gray-900); }
 
 /* ============================================================
    3 · Terrain
    ============================================================ */
 .gc-terrain { margin: 0; height: 162px; border-radius: 6px; overflow: hidden; background: #000; }
 .gc-terrain img { display: block; width: 100%; height: 100%; object-fit: cover; }
-.gc-slopes { display: flex; flex-direction: column; gap: 12px; padding: 12px 0; }
+/* elevation classes and slope side by side, each with its own class bars */
+.gc-terr { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-24); align-items: start; }
+/* text beside a compact chart: the chart sits on the text's centre line instead of
+   hanging from the top with an empty block under it */
+.gc-terr--mid { align-items: center; grid-template-columns: calc(var(--space-100) * 4) minmax(0, 1fr); }
+/* chart on the left, 400px text column on the right (Fire risk) */
+.gc-terr--text-end { grid-template-columns: minmax(0, 1fr) calc(var(--space-100) * 4); }
+.gc-slopes { display: flex; flex-direction: column; gap: var(--space-12); padding: var(--space-12) 0 0; }
 .gc-slope .l {
   display: flex; align-items: baseline; justify-content: space-between;
   margin-bottom: 4px; font-family: var(--font-override); font-size: 12px;
 }
 .gc-slope .l span { color: #4d4d4d; }
-.gc-slope .l b { color: #333333; font-weight: 500; }
+.gc-slope .l b { color: #333333; font-weight: 500; white-space: nowrap; }
+.gc-slope .l em { font-style: normal; color: var(--text-base-second); margin-left: var(--space-4); }
 .gc-slope .t { height: 8px; border-radius: 4px; background: #f2f2f2; overflow: hidden; }
 .gc-slope .t i { display: block; height: 100%; border-radius: 4px; }
 
@@ -160,7 +216,9 @@
 }
 .gc-chip span { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 500; color: #505760; white-space: nowrap; }
 .gc-chip i { width: 12px; height: 12px; border-radius: 50%; flex: none; }
-/* continuous-scale legend (deforestation risk index 0–1) */
+/* continuous-scale legend (deforestation risk, lower to higher). It may wrap: the card is
+   narrower inside a Threat profile accordion than it was in the General pane. */
+.gc-chip--ramp { flex-wrap: wrap; max-width: 100%; }
 .gc-chip--ramp i {
   width: 110px; height: 10px; border-radius: 3px;
   /* YlOrRd 9-class sequential ramp (ColorBrewer) */
@@ -188,18 +246,62 @@
 /* ============================================================
    6 · Natural disaster risk
    ============================================================ */
+/* 2 x 2 (DEC-53). Each picture is a 270 x 120 hazard scene (DEC-54). */
 .gc-ndgrid {
-  display: grid; grid-template-columns: repeat(5, 1fr);
-  gap: 16px 12px; margin-top: 8px; width: 100%;
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-16) var(--space-12); margin-top: var(--space-8); width: 100%;
 }
 .gc-nditem { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
-.gc-nditem figure { margin: 0; height: 80px; border-radius: 6px; overflow: hidden; }
+.gc-nditem figure { margin: 0; aspect-ratio: 270 / 120; border-radius: var(--radius-md); overflow: hidden; }
 .gc-nditem figure img { display: block; width: 100%; height: 100%; object-fit: cover; }
-.gc-nditem span { font-size: 14px; font-weight: 500; line-height: 22px; color: #252525; }
-.gc-nditem b { font-family: var(--font-display); font-size: 20px; font-weight: 600; line-height: 28px; color: #252525; letter-spacing: -0.01em; }
+
+/* Hazard scenes (DEC-54, restyled in DEC-56): inline SVG from js/hazard-scenes.js. No
+   outlines: shapes are flat, muted and layered by tone, after the land-cover icons. Every
+   colour binds here so the drawings follow the tokens; GSAP only moves and fades. The dry
+   earth, sand, dust and storm tones have no token, so they are mixed from two that do
+   (tokens.json TODO-25). Stroke widths are SVG user units. */
+.hz { display: block; width: 100%; height: 100%; }
+.hz-l { fill: none; stroke: var(--primary-700); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.hz-l--cut   { stroke-linecap: butt; }
+.hz-l--fine  { stroke-width: 1; }
+.hz-l--neck  { stroke-width: 2.4; }
+.hz-l--ink   { stroke: var(--primary-800); }
+.hz-l--soft  { stroke: var(--primary-300); }
+.hz-l--wood  { stroke: var(--warning-800); }
+.hz-l--crack { stroke: var(--warning-800); stroke-width: 1.2; stroke-opacity: .65; }
+.hz-l--frond { stroke: var(--primary-500); stroke-width: 3; }
+.hz-l--sun   { stroke: var(--warning-400); stroke-width: 2; }
+.hz-l--heat  { stroke: var(--warning-500); stroke-width: 1; }
+.hz-l--rain  { stroke: var(--info-400); stroke-width: 1; }
+.hz-l--pale  { stroke: var(--neutral-25); stroke-width: 1; }
+.hz-l--wind  { stroke: var(--neutral-25); stroke-width: 1.2; stroke-opacity: .7; }
+.hz-ink { fill: var(--primary-800); }
+.hz-faint { opacity: .35; }
+.hz-sky { fill: var(--primary-25); }     .hz-sky--hot { fill: var(--warning-25); }
+.hz-sky--rain { fill: var(--info-50); }  .hz-sky--storm { fill: color-mix(in srgb, var(--gray-100) 45%, var(--info-50)); }
+.hz-sun { fill: var(--warning-300); }
+.hz-cloud { fill: var(--neutral-25); }   .hz-cloud--storm { fill: var(--gray-50); }
+.hz-far  { fill: var(--primary-200); }   .hz-far--dry  { fill: color-mix(in srgb, var(--warning-700) 22%, var(--warning-25)); }
+.hz-mid  { fill: var(--primary-300); }   .hz-mid--dry  { fill: color-mix(in srgb, var(--warning-700) 38%, var(--warning-25)); }
+.hz-land { fill: var(--primary-400); }   .hz-land--dry { fill: color-mix(in srgb, var(--warning-700) 55%, var(--warning-25)); }
+.hz-near { fill: var(--primary-500); }
+.hz-leaf { fill: var(--primary-600); }   .hz-leaf--lit { fill: var(--primary-500); }
+.hz-leaf--deep { fill: var(--primary-700); } .hz-tier2 { opacity: .8; } .hz-tier3 { opacity: .6; }
+.hz-leaf--dry { fill: color-mix(in srgb, var(--warning-700) 60%, var(--warning-200)); }
+.hz-wood { fill: var(--warning-800); }   .hz-wood--pale { fill: color-mix(in srgb, var(--warning-800) 60%, var(--warning-200)); }
+.hz-soil { fill: color-mix(in srgb, var(--warning-700) 75%, var(--warning-200)); }
+.hz-sand { fill: color-mix(in srgb, var(--warning-700) 25%, var(--warning-25)); }
+.hz-dust { fill: color-mix(in srgb, var(--warning-700) 30%, var(--neutral-25)); }
+.hz-rock { fill: var(--gray-25); }       .hz-rock--lit { fill: var(--neutral-800); }
+.hz-water { fill: var(--info-300); }     .hz-water--deep { fill: var(--info-500); }
+.hz-water--storm { fill: var(--info-700); }
+.hz-wet { fill-opacity: .85; }
+.hz-funnel { fill: var(--gray-200); fill-opacity: .6; }
+.gc-nditem span { font-size: 14px; font-weight: 500; line-height: 22px; color: var(--text-base-main); }
+.gc-nditem .gc-lvl { margin: 0; justify-content: space-between; }   /* name left, level right (DEC-58) */
 
 /* ============================================================
-   NATURE CONTEXT  (Figma node 3892-33553)
+   NATURE CONTEXT — the six GUI 3.1 sections
    Reuses .gc-card / .gc-alert / .gc-src above; .nc* = Nature-only.
    Assets: assets/f01-step2/natctx/
    ============================================================ */
@@ -216,13 +318,13 @@
 .nc-stat span { font-size: 14px; font-weight: 500; line-height: 22px; color: #252525; }
 .nc-stat b {
   font-family: var(--font-display); font-size: 24px; font-weight: 500;
-  line-height: 30px; height: 30px; color: #066653; letter-spacing: -0.015em;
+  line-height: 30px; height: 30px; color: var(--primary-600); letter-spacing: -0.015em;
 }
 .nc-stat img { position: absolute; right: 0; top: -2px; width: 80px; height: 74px; object-fit: contain; }
 .nc-total {
   flex: none; width: 141px;
   display: flex; flex-direction: column; justify-content: space-between;
-  padding: 12px; border-radius: 8px; background: #04473a;
+  padding: 12px; border-radius: 8px; background: var(--primary-750);
 }
 .nc-total span { font-size: 14px; font-weight: 500; line-height: 1.45; color: #e2e7f0; letter-spacing: -0.03em; }
 .nc-total b {
@@ -234,7 +336,7 @@
   font-size: 24px; font-weight: 400; line-height: 30px; color: #feffff; letter-spacing: -0.01em;
 }
 
-/* ---------- 2 · Indicative key species presence ---------- */
+/* ---------- 2 · Charismatic species ---------- */
 .nc-splists { display: flex; flex-direction: column; gap: 16px; margin-top: 8px; }
 .nc-splist {
   display: flex; align-items: center; gap: 4px;
@@ -246,7 +348,7 @@
 .nc-splist__id span { display: block; font-size: 14px; font-weight: 500; line-height: 22px; color: #252525; }
 .nc-splist__id b {
   font-family: var(--font-display); font-size: 24px; font-weight: 500;
-  line-height: 36px; color: #066653; letter-spacing: -0.015em;
+  line-height: 36px; color: var(--primary-600); letter-spacing: -0.015em;
 }
 .nc-splist ul {
   flex: 1 1 0; min-width: 0; list-style: none; margin: 0; padding: 0 0 0 20px;
@@ -263,7 +365,11 @@
 }
 .nc-splist li i { font-style: normal; }
 .nc-splist li em { font-style: italic; }
-.nc-splist li b { margin-left: auto; font-weight: 600; color: #066653; white-space: nowrap; }
+/* name + latin wrap together as one text; the latest-record date and the count keep
+   fixed columns on the right so rows align */
+.nc-nm { flex: 1 1 0; min-width: 0; }
+.nc-rec { flex: none; color: var(--text-base-second); white-space: nowrap; }
+.nc-splist li b { flex: none; width: var(--space-80); text-align: right; font-weight: 600; color: var(--primary-600); white-space: nowrap; }
 /* >5 occurrences — the card scrolls (Figma 18-30298). The 30px right padding is the
    scrollbar gutter, so the occurrence rows keep their width whether it shows or not. */
 .nc-splist--scroll {
@@ -289,20 +395,27 @@
 .nc-radar img { position: absolute; left: -22px; top: -49px; width: 357px; height: 365px; }
 .nc-cons__side { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; justify-content: space-between; gap: 12px; }
 .gc-chip--sq i { border-radius: 3px; }
+/* the three scores as text, so the chart is not the only way to read them */
+.nc-scores { list-style: none; margin: var(--space-12) 0 0; padding: 0; display: flex; gap: var(--space-24); }
+.nc-scores li { display: flex; flex-direction: column; }
+.nc-scores span { font-size: 12px; font-weight: 500; line-height: 20px; color: var(--text-base-second); }
+.nc-scores b { font-family: var(--font-display); font-size: 24px; font-weight: 600; line-height: 30px; color: var(--text-base-main); letter-spacing: -0.01em; }
 
 /* ---------- 4 · Forest Landscape Integrity Index ---------- */
 .nc-flii { display: flex; gap: 20px; align-items: flex-start; }
-.nc-flii > .gc-p { flex: 1 1 0; min-width: 0; color: #2d3648; }
+.nc-flii__tx { flex: 1 1 0; min-width: 0; }
+.nc-flii__tx > .gc-p { color: var(--text-title); }
 .nc-score {
   flex: none; width: 170px; height: 168px;
   display: flex; flex-direction: column; justify-content: space-between;
-  padding: 12px; border-radius: 8px; background: #04473a;
+  padding: 12px; border-radius: 8px; background: var(--primary-750);
 }
 .nc-score__t { font-size: 16px; font-weight: 500; line-height: 1.45; color: #e2e7f0; letter-spacing: -0.03em; }
 .nc-score b {
   display: block; font-family: var(--font-display); font-size: 40px; font-weight: 600;
   line-height: 48px; color: #feffff; letter-spacing: -0.02em;
 }
+.nc-score b small { font-size: 20px; font-weight: 500; letter-spacing: 0; }
 .nc-score p { margin: 0; font-size: 11px; line-height: 18px; color: #f9f9f9; opacity: .7; }
 /* Level pills — shared by the score card and the gauge */
 .nc-pill {
@@ -311,9 +424,13 @@
   font-family: var(--font-text); font-size: 14px; font-weight: 600; font-style: normal;
   line-height: 22px; white-space: nowrap;
 }
-.nc-pill--high { background: #e9f8f1; border: 1px solid #27b973; color: #104a2e; }
-.nc-pill--med  { background: #fdf6ea; border: 1px solid #efa22f; color: #604113; }
-.nc-pill--low  { background: #ffefee; border: 1px solid #e33b32; color: #901f1b; }
+/* --high/--med/--low name an integrity level; --ok/--warn/--bad name a tone, for levels
+   where "high" is the bad end (risk, pressure). Same three treatments. */
+.nc-pill--high, .nc-pill--ok   { background: var(--success-25); border: 1px solid var(--success-500); color: var(--success-800); }
+.nc-pill--med,  .nc-pill--warn { background: var(--warning-25); border: 1px solid var(--warning-500); color: var(--warning-800); }
+.nc-pill--low,  .nc-pill--bad  { background: var(--danger-50);  border: 1px solid var(--danger-600);  color: var(--danger-800); }
+/* label + level badge on one line (gcLevel) */
+.gc-lvl { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-8); margin: var(--space-4) 0 var(--space-8); font-size: 12px; font-weight: 500; line-height: 20px; color: var(--text-base-second); }
 .nc-score .nc-pill { color: #111729; }
 /* Vertical gradient gauge with tick marks and range labels */
 .nc-gauge { position: relative; flex: none; width: 226px; height: 168px; }
@@ -356,12 +473,12 @@
   display: flex; align-items: center; gap: 10px;
   font-size: 12px; font-weight: 600; color: #252525; letter-spacing: -0.05em;
 }
-.nc-kba__lg i { width: 16px; height: 16px; border-radius: 50%; background: #04473a; flex: none; }
+.nc-kba__lg i { width: 16px; height: 16px; border-radius: 50%; background: var(--primary-750); flex: none; }
 
-/* ---------- 6 · Endangered tree species ---------- */
+/* ---------- 6 · Plant species occurrence (big-number band) ---------- */
 .nc-tree {
-  display: flex; gap: 16px; align-items: stretch;
-  padding: 12px; border-radius: 8px; background: #04473a;
+  display: flex; gap: var(--space-16); align-items: stretch; margin-top: var(--space-8);
+  padding: 12px; border-radius: 8px; background: var(--primary-750);
 }
 .nc-tree img {
   flex: none; width: 200px; height: 88px; object-fit: cover;
@@ -374,7 +491,7 @@
   line-height: 48px; color: #feffff; letter-spacing: -0.02em;
 }
 
-/* ---------- 6b · Endangered tree species — error states ---------- */
+/* ---------- Result-state blocks (nbsCardState): neutral for missing, danger for failed ---------- */
 .nc-err {
   display: flex; gap: 12px; align-items: flex-start;
   padding: 12px; border-radius: 8px;
@@ -387,18 +504,19 @@
 .nc-err--empty .nc-err__ic { color: var(--gray-100); }
 .nc-err--fail  .nc-err__ic { color: var(--danger-600); }
 .nc-err > div { flex: 1 1 0; min-width: 0; }
-.nc-err b { display: block; font-size: 13px; font-weight: 600; line-height: 20px; color: #252525; }
+.nc-err b { display: block; font-size: 13px; font-weight: 600; line-height: 20px; color: var(--gray-900); }
 .nc-err p { margin: 2px 0 0; font-size: 12px; font-weight: 400; line-height: 18px; color: var(--gray-100); }
 .nc-err__retry {
   flex: none; align-self: center;
   padding: 6px 14px; border: 0; border-radius: 6px; cursor: pointer;
-  font: 600 12px/18px var(--font-text); color: #ffffff; background: var(--danger-600);
+  font: 600 12px/18px var(--font-text); color: var(--text-on-color); background: var(--danger-600);
 }
 .nc-err__retry:hover { background: var(--danger-700); }
 
 /* ============================================================
-   CLIMATE CONTEXT  (Figma node 3892-33578)
+   CLIMATE CONTEXT — the three GUI 3.1 sections
    Reuses .gc-card / .gc-alert / .gc-src above; .cl* = Climate-only.
+   Peat depth is built from the General pieces (.gc-terr, .gc-eco__total, .gc-slopes).
    Charts are CSS bars — no chart library. Assets: assets/f01-step2/climctx/
    ============================================================ */
 
@@ -408,6 +526,8 @@
 }
 .cl-carbon { display: flex; gap: 20px; align-items: flex-start; margin-top: 8px; }
 .cl-carbon > .gc-p { flex: 1 1 0; min-width: 0; }
+/* climate reads blue: the Peat depth sub-title and total follow the card head */
+.gc-card--blue .gc-eco__total b { color: var(--info-800); }
 .cl-total {
   flex: none; width: 250px;
   display: flex; flex-direction: column; gap: 6px;
@@ -461,7 +581,7 @@
 .cl-pool__tag--soc { bottom: 7%; left: 3%; }
 .cl-pool__tag--bgb { bottom: 7%; right: 3%; }
 
-/* ---------- 2 · Soil classification ---------- */
+/* ---------- Soil classification (General pane since GUI 3.1; was Climate) ---------- */
 .cl-soil { display: flex; gap: 20px; align-items: stretch; margin-top: 8px; }
 .cl-soil__list { flex: none; width: 419px; display: flex; flex-direction: column; gap: 12px; }
 .cl-soilrow {
@@ -487,6 +607,7 @@
   display: flex; flex-direction: column; justify-content: space-between; gap: 12px;
   padding: 12px; border-radius: 8px; background: #0f3b63;
 }
+.ctx-pane[data-ctx="general"] .cl-dominant { background: var(--primary-750); }
 .cl-dominant__t { font-size: 16px; font-weight: 500; line-height: 1.45; color: #e2e7f0; letter-spacing: -0.03em; }
 .cl-dominant b {
   display: block; font-family: var(--font-display); font-size: 32px; font-weight: 600;

@@ -16,7 +16,7 @@ Every animation currently in the code, then a proposed set of house rules derive
 | `@keyframes` definitions | 16 unique names (several redefined per file) |
 | Distinct durations typed | 20 |
 | Distinct easing functions | 4 |
-| Files honouring `prefers-reduced-motion` | **6 of 25** |
+| Files honouring `prefers-reduced-motion` | **7 of 26** |
 
 Durations, by how often each appears:
 
@@ -61,6 +61,7 @@ is used a sixth as often. **No `cubic-bezier()` is defined anywhere.**
 | Export toast | `opacity`, `transform` | `.2s` | `ease` | ✅ (SCR-04, SCR-08) |
 | Home reveal (`.reveal`) | `opacity`, `transform` | `.55s` | `ease` | ✅ |
 | Home stage sequence (`.stage`) | `opacity` | `.2s`–`.8s` | `ease` | ✅ |
+| Hazard scene hover (CMP-39, DEC-54, DEC-55; plays once, no return) | `opacity`, SVG `transform`, `stroke-dashoffset`, via GSAP | `.2s`–`1.4s` in; loops `.3s`–`3s` | GSAP `power1`/`power2`, `bounce.out`, `none` for loops | ✅ (stays on the calm drawing) |
 
 ### The keyframes
 
@@ -91,12 +92,13 @@ four times.
 **Two `fade`s under one name.** `fade` is defined with a 6px offset in one file and 4px in three
 others, so the same class name animates differently depending on which stylesheet won.
 
-### Reduced motion — the six files that honour it
+### Reduced motion — the seven files that honour it
 
 | File | What it does | Quality |
 |---|---|---|
 | `css/home.css` | `*` animation → `.001ms`, iteration count 1, `scroll-behavior: auto`, `.reveal` forced visible, scroll cue and HUD dots stopped | **Correct and thorough** |
 | `js/version-modal.js` | `.vu-ovl, .vu { transition: none }` | Correct |
+| `js/hazard-scenes.js` | Reads the query on each hover and does not animate | Correct |
 | `new-project.html` | `.export-toast` transform removed, countdown bar animation off | Correct |
 | `create-monitoring-plan.html` | Same as above | Correct |
 | `index.html` | Reads the query into a `REDUCED` constant for its JS path | Correct |
