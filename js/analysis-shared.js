@@ -268,12 +268,63 @@ const GC_ECO = [
   ['Peatland', NBS_DATA.eco.peat.area, '#bea001'],
   ['Other', NBS_DATA.nonEligible, 'var(--neutral-700)'],
 ];
+/* ---- Doughnut segments with soft corners ----
+   Every ring chart (gcDonut, gcGauge, the Carbon Pool ring, the People Context
+   donut) draws its segments with nbsRingSeg: a filled ring slice whose four
+   corners are rounded to --radius-sm, with a --space-4 gap between slices. Both
+   sizes are read from tokens.css in screen pixels; k converts them to the
+   chart's viewBox units (viewBox width / rendered width). */
+const nbsCssPx = (name) => parseFloat(getComputedStyle(document.documentElement).getPropertyValue(name)) || 0;
+const NBS_RING = { corner: nbsCssPx('--radius-sm'), gap: nbsCssPx('--space-4') };
+/* Path for the slice of the ring centred on (cx, cy), outer radius R, inner r,
+   from angle a0 to a1 (radians, clockwise, 0 = 3 o'clock).
+   o.k: viewBox units per pixel (default 1). o.gapStart / o.gapEnd = false keep an
+   end flush, for the outer ends of a half doughnut. Returns '' when the gap
+   leaves no room for the slice. */
+function nbsRingSeg(cx, cy, R, r, a0, a1, o) {
+  o = o || {};
+  const k = o.k || 1, TAU = 2 * Math.PI;
+  const P = (p) => `${(cx + p[0]).toFixed(2)} ${(cy + p[1]).toFixed(2)}`;
+  if (a1 - a0 >= TAU - 1e-6) {
+    return `M${P([R, 0])}A${R} ${R} 0 1 1 ${P([-R, 0])}A${R} ${R} 0 1 1 ${P([R, 0])}M${P([r, 0])}A${r} ${r} 0 1 0 ${P([-r, 0])}A${r} ${r} 0 1 0 ${P([r, 0])}Z`;
+  }
+  const d0 = o.gapStart === false ? 0 : NBS_RING.gap * k / 2;
+  const d1 = o.gapEnd === false ? 0 : NBS_RING.gap * k / 2;
+  /* One straight end of the slice: the side line sits d off the radius at angle a,
+     on the slice's side (dir +1 for the start, -1 for the end); c is the corner. */
+  const end = (a, d, c, dir) => {
+    const ux = Math.cos(a), uy = Math.sin(a), nx = -uy * dir, ny = ux * dir, off = d + c;
+    const to = Math.sqrt(Math.max((R - c) ** 2 - off ** 2, 0));
+    const ti = Math.sqrt(Math.max((r + c) ** 2 - off ** 2, 0));
+    const at = (n, t) => [n * nx + t * ux, n * ny + t * uy];
+    const oc = at(off, to), ic = at(off, ti);
+    return { oArc: [oc[0] * R / (R - c), oc[1] * R / (R - c)], oSide: at(d, to),
+             iArc: [ic[0] * r / (r + c), ic[1] * r / (r + c)], iSide: at(d, ti) };
+  };
+  const rel = (p) => ((Math.atan2(p[1], p[0]) - a0) % TAU + TAU) % TAU;
+  let c = Math.min(NBS_RING.corner * k, (R - r) / 2), s, e;
+  /* a thin slice cannot hold full corners: shrink them until both arcs fit */
+  for (let i = 0; i < 10; i++, c *= 0.6) {
+    s = end(a0, d0, c, 1); e = end(a1, d1, c, -1);
+    if (rel(e.oArc) > rel(s.oArc) && rel(e.iArc) > rel(s.iArc)) break;
+    if (i === 9) return '';
+  }
+  const bigO = rel(e.oArc) - rel(s.oArc) > Math.PI ? 1 : 0;
+  const bigI = rel(e.iArc) - rel(s.iArc) > Math.PI ? 1 : 0;
+  const cc = c.toFixed(2);
+  return `M${P(s.oArc)}A${R} ${R} 0 ${bigO} 1 ${P(e.oArc)}A${cc} ${cc} 0 0 1 ${P(e.oSide)}L${P(e.iSide)}A${cc} ${cc} 0 0 1 ${P(e.iArc)}A${r} ${r} 0 ${bigI} 0 ${P(s.iArc)}A${cc} ${cc} 0 0 1 ${P(s.iSide)}L${P(s.oSide)}A${cc} ${cc} 0 0 1 ${P(s.oArc)}Z`;
+}
+/* js/people-context.js (loaded after this file) draws its donut with it too */
+window.nbsRingSeg = nbsRingSeg;
+/* The half doughnuts (gcGauge, half gcDonut): centre (100, 100) in a 200-wide
+   viewBox, the band 69 to 91 (the old 22-unit stroke on radius 80), drawn
+   from 9 o'clock (PI) to 3 o'clock (2 PI). Rendered at most --space-100 x 2.6 wide. */
+const GC_HALF = { R: 91, r: 69, k: 200 / (nbsCssPx('--space-100') * 2.6 || 200) };
+const gcHalfSeg = (from, to, first, last) => nbsRingSeg(100, 100, GC_HALF.R, GC_HALF.r,
+  Math.PI * (1 + from / 100), Math.PI * (1 + to / 100), { k: GC_HALF.k, gapStart: !first, gapEnd: !last });
 /* Hover text for one chart segment, shown by the People Context tooltip
    (js/people-context.js wires every [data-tip] inside .gc to .pcx-tip). */
 const gcTip = (label, ha, pct) => `data-tip="${label}: ${NBS_DATA.grp(ha)} ha (${pct}%)"`;
-/* The half-doughnut arc shared by gcGauge and the half form of gcDonut. With
-   pathLength="100", a dash length or offset is simply a percentage. */
-const GC_ARC = 'M20 100A80 80 0 0 1 180 100';
 /* Total + donut + legend for a set of [label, hectares, colour]. The shares
    are worked out from the hectares; the legend repeats them as text. Each
    segment is its own SVG path, so pointing at one names only that segment.
@@ -282,11 +333,12 @@ const GC_ARC = 'M20 100A80 80 0 0 1 180 100';
 const gcDonut = (items, totalLabel, ariaLead, half) => {
   const total = items.reduce((sum, e) => sum + e[1], 0);
   const pct = (ha) => ha / total * 100;
+  const shown = items.filter(e => e[1] > 0);
   if (half) {
     let at = 0;
-    const arcs = items.map(e => {
+    const arcs = shown.map((e, i) => {
       const p = pct(e[1]);
-      const s = `<path ${gcTip(e[0], e[1], Math.round(p))} d="${GC_ARC}" fill="none" stroke-width="22" pathLength="100" stroke-dasharray="${p.toFixed(2)} 100" stroke-dashoffset="${(-at).toFixed(2)}" style="stroke:${e[2]}"/>`;
+      const s = `<path ${gcTip(e[0], e[1], Math.round(p))} d="${gcHalfSeg(at, at + p, i === 0, i === shown.length - 1)}" style="fill:${e[2]}"/>`;
       at += p;
       return s;
     });
@@ -302,11 +354,10 @@ const gcDonut = (items, totalLabel, ariaLead, half) => {
                     </ul>
                   </div>`;
   }
-  const R = 48, r = 28, pt = (rad, a) => `${(48 + rad * Math.cos(a)).toFixed(2)} ${(48 + rad * Math.sin(a)).toFixed(2)}`;
+  /* 96-unit viewBox drawn at 96px (.gc-donut), so k = 1 */
   let a = -Math.PI / 2;
-  const segs = items.map(e => {
-    const sweep = Math.min(pct(e[1]) / 100 * 2 * Math.PI, 2 * Math.PI - 0.0001), b = a + sweep, big = sweep > Math.PI ? 1 : 0;
-    const d = `M${pt(R, a)}A${R} ${R} 0 ${big} 1 ${pt(R, b)}L${pt(r, b)}A${r} ${r} 0 ${big} 0 ${pt(r, a)}Z`;
+  const segs = shown.map(e => {
+    const b = a + pct(e[1]) / 100 * 2 * Math.PI, d = nbsRingSeg(48, 48, 48, 28, a, b);
     a = b;
     return `<path ${gcTip(e[0], e[1], Math.round(pct(e[1])))} d="${d}" style="fill:${e[2]}"/>`;
   });
@@ -326,15 +377,19 @@ const gcEcoChart = () => gcDonut(GC_ECO, 'Total area', 'Share of the selected ar
 const gcLevel = (label, value, tone) => `<p class="gc-lvl"><span>${label}</span><em class="nc-pill nc-pill--${tone}">${value}</em></p>`;
 /* Half-doughnut of a part against a whole: the whole is a grey ring, the part is orange.
    It shows a share only; it carries no level or threshold (DEC-61). Pointing at either
-   arc names it, with its hectares, in the People Context tooltip (gcTip).
+   arc names it, with its hectares, in the People Context tooltip (gcTip): the orange
+   part as partLabel, the grey rest as restLabel.
    The arc reuses one path with pathLength="100", so the dash length is simply the percentage. */
-const gcGauge = (part, total, caption, partLabel) => {
-  const pct = Math.round(part / total * 100), arc = GC_ARC;
+const gcGauge = (part, total, caption, partLabel, restLabel) => {
+  const pct = Math.round(part / total * 100);
+  /* the orange part runs from the left end; the grey rest of the whole follows it */
+  const v = pct > 0 ? `
+                          <path class="gc-gauge__v" ${gcTip(partLabel, part, pct)} d="${gcHalfSeg(0, pct, true, pct >= 100)}"/>` : '';
+  const t = pct < 100 ? `
+                          <path class="gc-gauge__t" ${gcTip(restLabel, total - part, 100 - pct)} d="${gcHalfSeg(pct, 100, pct <= 0, true)}"/>` : '';
   return `
                       <div class="gc-gauge" role="img" aria-label="Total area ${NBS_DATA.grp(total)} ha. ${pct}%, ${NBS_DATA.grp(part)} ha, ${partLabel.toLowerCase()}.">
-                        <svg viewBox="0 0 200 110" aria-hidden="true">
-                          <path class="gc-gauge__t" ${gcTip('Total area', total, 100)} d="${arc}" fill="none" stroke-width="22"/>
-                          <path class="gc-gauge__v" ${gcTip(partLabel, part, pct)} d="${arc}" fill="none" stroke-width="22" pathLength="100" stroke-dasharray="${pct} 100"/>
+                        <svg viewBox="0 0 200 110" aria-hidden="true">${v}${t}
                         </svg>
                         <div class="gc-gauge__c" aria-hidden="true"><b>${pct}%</b><span>${caption}</span></div>
                       </div>`;
@@ -540,16 +595,19 @@ const siteNature = `
                 </div>
                 <p class="gc-note-it">Suitable habitat is mapped by refining each species&rsquo; IUCN range with regional land cover. The same land can be habitat for several species, so habitat areas are not added together.</p>
               </div>
-              <div class="gc-block">
-                <h5 class="gc-sub">Area of habitat threshold</h5>
-                <p class="gc-p">The project area supports the area of habitat for <b>${NC_AOH.reduce((sum, r) => sum + r[1], 0)} species</b>. Most of these species have less than 90% habitat overlap with the project area.</p>
+              <!-- flexible text column beside a 400px table -->
+              <div class="gc-block gc-terr gc-terr--mid gc-terr--text-end gc-terr--fill">
+                <div class="gc-block">
+                  <h5 class="gc-sub">Area of habitat threshold</h5>
+                  <p class="gc-p">The project area supports the area of habitat for <b>${NC_AOH.reduce((sum, r) => sum + r[1], 0)} species</b>. Most of these species have less than 90% habitat overlap with the project area.</p>
+                  <p class="gc-note-it">See the details of habitat area and IUCN status in the <a href="#">feasibility study document</a></p>
+                </div>
                 <table class="gc-table gc-table--auto">
                   <thead><tr><th>Habitat overlap</th><th>Species present at the site</th></tr></thead>
                   <tbody>${NC_AOH.map(r => `
                     <tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join('')}
                   </tbody>
                 </table>
-                <p class="gc-note-it">See the details of habitat area and IUCN status in the <a href="#">feasibility study document</a></p>
               </div>${gcDisc('Area of Habitat is not equivalent to Extent of Occurrence or Area of Occupancy (Brooks et al. 2019). Values represent mapped habitat overlap within the project area, not species abundance or confirmed presence.')}${gcSource('Area of habitat', 'IUCN refined by NTU, 30 m', '2024')}
             </section>
 
@@ -596,14 +654,13 @@ ${ncSpecies('sp-reptile', 'Reptilia', 'var(--primary-500)', [['Reticulated Pytho
                 <div class="nc-score">
                   <span class="nc-score__t">Forest landscape integrity</span>
                   <div><b>9.7<small> / 10</small></b><em class="nc-pill nc-pill--high">High Integrity</em></div>
-                  <p>Largely intact and well-connected forest</p>
                 </div>
                 <div class="nc-gauge">
                   <div class="nc-gauge__bar"></div>
                   <div class="nc-gauge__tick" style="top:0"><span>10</span></div>
-                  <div class="nc-gauge__tick" style="top:22px"><span>9.6</span></div>
-                  <div class="nc-gauge__tick" style="top:81px"><span>6</span></div>
-                  <div class="nc-gauge__tick" style="bottom:0"><span>0</span></div>
+                  <div class="nc-gauge__tick" style="top:33px"><span>9.6</span></div>
+                  <div class="nc-gauge__tick" style="top:92px"><span>6</span></div>
+                  <div class="nc-gauge__tick" style="top:100%"><span>0</span></div>
                   <em class="nc-pill nc-pill--high" style="top:0">High</em><span class="nc-gauge__rng" style="top:3px">9.6 &ndash; 10</span>
                   <em class="nc-pill nc-pill--med" style="top:48px">Med</em><span class="nc-gauge__rng" style="top:51px">6.0 &ndash; 9.5</span>
                   <em class="nc-pill nc-pill--low" style="top:136px">Low</em><span class="nc-gauge__rng" style="top:139px">0 &ndash; 5.9</span>
@@ -664,6 +721,27 @@ const clChart = (bars, plot, labels, yTicks, yTitle, cls) => `
                     <ul class="cl-chart__x">${labels.map(l => `<li>${l}</li>`).join('')}</ul>
                   </div>`;
 
+/* Carbon pools in the donut's drawing order (clockwise from 12 o'clock).
+   [label, tCO2e, share %, colour]. Sample figures, see DEC-11. */
+const CL_POOLS = [
+  ['Soil Organic Carbon', '13,596,856.10', 50, '#2f80c4'],
+  ['Below Ground Biomass', '8,158,113.66', 30, '#103a63'],
+  ['Above Ground Biomass', '5,438,742.44', 20, '#a9cce6'],
+];
+/* The Carbon Pool ring: one SVG path per pool, so pointing at a segment names
+   it in the shared People Context tooltip (data-tip, wired on every .gc). */
+const clPoolDonut = () => {
+  /* 148-unit viewBox drawn at 148px (.cl-donut), so k = 1; band 52 to 74 */
+  let a = -Math.PI / 2;
+  const segs = CL_POOLS.map(([label, t, pct, colour]) => {
+    const b = a + pct / 100 * 2 * Math.PI, d = nbsRingSeg(74, 74, 74, 52, a, b);
+    a = b;
+    return `<path data-tip="${label}: ${t} tCO&#8322;e (${pct}%)" d="${d}" style="fill:${colour}"/>`;
+  });
+  return `<div class="cl-donut" role="img" aria-label="Carbon pool: ${CL_POOLS.map(e => `${e[0].toLowerCase()} ${e[2]}%`).join(', ')}"><svg viewBox="0 0 148 148" aria-hidden="true">${segs.join('')}</svg><span>Carbon Pool</span></div>`;
+};
+const clPoolSwatch = (name) => CL_POOLS.find(e => e[0] === name)[3];
+
 const siteClimate = `
         <div class="ctx-pane" data-ctx="climate" hidden>
           <div class="gc">
@@ -681,11 +759,11 @@ const siteClimate = `
                 <div class="cl-pool">
                   <figure class="cl-pool__scene">
                     <div class="cl-pool__top">
-                      <div class="cl-donut" role="img" aria-label="Carbon pool: above ground biomass 20%, soil organic carbon 50%, below ground biomass 30%"><span>Carbon Pool</span></div>
+                      ${clPoolDonut()}
                       <ul class="cl-pool__legend">
-                        <li><i style="--c:#a9cce6"></i>Above Ground Biomass</li>
-                        <li><i style="--c:#2f80c4"></i>Soil Organic Carbon</li>
-                        <li><i style="--c:#103a63"></i>Below Ground Biomass</li>
+                        <li><i style="--c:${clPoolSwatch('Above Ground Biomass')}"></i>Above Ground Biomass</li>
+                        <li><i style="--c:${clPoolSwatch('Soil Organic Carbon')}"></i>Soil Organic Carbon</li>
+                        <li><i style="--c:${clPoolSwatch('Below Ground Biomass')}"></i>Below Ground Biomass</li>
                       </ul>
                     </div>
                     <img src="${CL_ASSETS}/carbon-scene.png" alt="Cross-section of trees above ground and roots in soil" />
@@ -903,7 +981,7 @@ ${clChart([103,165,109,152,133,133,109,109,88,109], 176, ['2011','2012','2013','
                   const pct = Math.round(GC_FIRE_HA / NBS_DATA.aoi * 100), lvl = gcFireLevel(pct);
                   return `
                   <div class="gc-terr gc-terr--text-end">
-                    <div class="gc-block">${gcGauge(GC_FIRE_HA, NBS_DATA.aoi, 'of the project area', 'Overlaps mapped fire-risk areas')}
+                    <div class="gc-block">${gcGauge(GC_FIRE_HA, NBS_DATA.aoi, 'of the project area', 'Overlaps mapped fire-risk areas', 'Outside mapped fire-risk areas')}
                       <p class="gc-p gc-gauge__n"><b>${NBS_DATA.grp(GC_FIRE_HA)} ha</b> of ${NBS_DATA.grp(NBS_DATA.aoi)} ha overlaps mapped fire-risk areas</p>
                     </div>
                     <div class="gc-block">

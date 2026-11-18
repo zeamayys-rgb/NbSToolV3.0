@@ -127,8 +127,8 @@
    Two colours only: the whole is grey, the part is orange. No levels (DEC-61). */
 .gc-gauge { position: relative; width: 100%; max-width: calc(var(--space-100) * 2.6); align-self: center; margin-inline: auto; }
 .gc-gauge svg { display: block; width: 100%; height: auto; }
-.gc-gauge__t { stroke: var(--neutral-800); }
-.gc-gauge__v { stroke: var(--warning-500); }
+.gc-gauge__t { fill: var(--neutral-800); }
+.gc-gauge__v { fill: var(--warning-500); }
 .gc-gauge__c { position: absolute; left: 0; right: 0; bottom: 0; display: flex; flex-direction: column; align-items: center; pointer-events: none; }
 .gc-gauge__c b { font-family: var(--font-display); font-size: 32px; font-weight: 600; line-height: 36px; color: var(--text-base-main); letter-spacing: -0.015em; }
 .gc-gauge__c span { font-size: 12px; font-weight: 500; line-height: 18px; color: var(--text-base-second); }
@@ -175,6 +175,10 @@
 .gc-terr--mid { align-items: center; grid-template-columns: calc(var(--space-100) * 4) minmax(0, 1fr); }
 /* chart on the left, 400px text column on the right (Fire risk) */
 .gc-terr--text-end { grid-template-columns: minmax(0, 1fr) calc(var(--space-100) * 4); }
+/* text column as tall as its neighbour: title at the top, closing note at the
+   bottom (Area of habitat threshold) */
+.gc-terr--fill { align-items: stretch; }
+.gc-terr--fill > .gc-block > .gc-note-it:last-child { margin-top: auto; }
 .gc-slopes { display: flex; flex-direction: column; gap: var(--space-12); padding: var(--space-12) 0 0; }
 .gc-slope .l {
   display: flex; align-items: baseline; justify-content: space-between;
@@ -416,7 +420,6 @@
   line-height: 48px; color: #feffff; letter-spacing: -0.02em;
 }
 .nc-score b small { font-size: 20px; font-weight: 500; letter-spacing: 0; }
-.nc-score p { margin: 0; font-size: 11px; line-height: 18px; color: #f9f9f9; opacity: .7; }
 /* Level pills — shared by the score card and the gauge */
 .nc-pill {
   display: inline-flex; align-items: center; justify-content: center;
@@ -439,7 +442,9 @@
   background: linear-gradient(0deg, #bf0039 0%, #f9e682 56.4%, #ffef5c 62.5%, #d1c662 79.1%, #30b85e 100%);
   box-shadow: 0 2px 10px rgba(0,0,0,0.13);
 }
-.nc-gauge__tick { position: absolute; left: 12px; display: flex; align-items: center; gap: 7px; }
+/* `top` names where the tick LINE sits, not the row's top edge: the row is centred on it,
+   so top:0 and top:100% land exactly on the bar's two ends. */
+.nc-gauge__tick { position: absolute; left: 6px; display: flex; align-items: center; gap: 7px; transform: translateY(-50%); }
 .nc-gauge__tick span {
   width: 32px; text-align: right;
   font-size: 14px; font-weight: 500; line-height: 22px; color: #111729;
@@ -543,11 +548,13 @@
 .cl-pool__top { display: flex; align-items: center; gap: 28px; position: absolute; left: -1px; top: 0px; z-index: 1; }
 .cl-donut {
   flex: none; width: 148px; height: 148px; border-radius: 50%;
-  background: conic-gradient(#2f80c4 0 50%, #103a63 50% 80%, #a9cce6 80% 100%);
   display: grid; place-items: center; position: relative; z-index: 1; margin: 4px 0 8px 4px;
 }
-.cl-donut::before { content: ""; position: absolute; inset: 22px; border-radius: 50%; background: #ffffff; }
-.cl-donut span { position: relative; font-size: 14px; font-weight: 600; color: #252525; }
+/* Segments are SVG paths with data-tip (see clPoolDonut); the hole is a white
+   disc behind them so the label stays legible on the scene image. */
+.cl-donut::before { content: ""; position: absolute; inset: 22px; border-radius: 50%; background: var(--base-white); }
+.cl-donut svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.cl-donut span { position: relative; font-size: 14px; font-weight: 600; color: #252525; pointer-events: none; }
 .cl-pool__legend { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
 .cl-pool__legend li { display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 500; color: #252525; }
 .cl-pool__legend i { flex: none; width: 14px; height: 14px; border-radius: 3px; background: var(--c); }
@@ -662,7 +669,10 @@
   background-image: radial-gradient(circle at 1px 0.5px, #cfd8e3 0.6px, transparent 0.7px);
   background-size: 6px 7.23px;
 }
-.cl-chart__plot i { display: block; width: 8px; flex: none; background: var(--bar, #125e92); }
+.cl-chart__plot i {
+  display: block; width: 8px; flex: none; background: var(--bar, #125e92);
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0; /* soft top, flat on the axis */
+}
 .cl-chart__x {
   grid-column: 3; grid-row: 2; list-style: none; margin: 4px 0 0; padding: 0 6px;
   display: flex; justify-content: space-between;
