@@ -64,7 +64,7 @@ to turn them into `<a>`.`
 | `.sitenav-link.active` | class (set by JS) | no | — | Marks the current section |
 | `#profileWrap` / `#profileBtn` | id | for signed-in screens | — | Presence enables the profile dropdown |
 | `.sitenav-login` / `.sitenav-signup` | class | no | — | Logged-out variant (SCR-01, SCR-02); rendered as `<a href="login.html" data-auth>` so SCR-01's auth modal can intercept it and every other screen just follows the link |
-| `.sitenav-help` | class (rendered by JS) | no | always shown | "?" icon link to `help.html`, last item on the right; tooltip `.sitenav-help-tip` on hover / focus-visible, shown as a visible label in the mobile drawer; `aria-current="page"` on SCR-19 (DEC-39) |
+| `.sitenav-help` | class (rendered by JS) | no | always shown | "?" icon link (Material `question_mark`, DEC-80) to `help.html`, last item on the right; tooltip `.sitenav-help-tip` on hover / focus-visible, shown as a visible label in the mobile drawer; `aria-current="page"` on SCR-19 (DEC-39) |
 | `.open` | class (set by JS) | — | off | Mobile drawer open |
 
 **Variants.** Signed-in (profile dropdown + language) · Logged-out (Log in + Sign up) · Mobile
@@ -213,8 +213,9 @@ loses all analysis progress, and a step cannot be linked to or shared.**
 | `gcDisc` | `(text)` | The disclaimer written for that card's dataset (GUI 3.1). Replaces the general `gcAlert` on the five General cards. Styled as `.gc-alert`: warm tint, 16px inline icon, no border, stripe or "Disclaimer:" prefix (DEC-60) |
 | `gcBars` | `(rows)` | Class bars for elevation and slope; `rows` is `[label, hectares, colour]`. The share is worked out from the hectares, and a class with 0 ha draws an empty track |
 | `gcDonut` | `(items, totalLabel, ariaLead, half)` | Total, donut and legend for `[label, hectares, colour]` rows. With `half = true` the segments are drawn on the Fire risk half doughnut (`gcGauge`'s look, shared arc `GC_ARC`) with `totalLabel` as the chart title above it and only the total (number and ha) in its centre, replacing the full ring (Land degradation). The donut is an SVG with one path per segment, `role="img"` with the shares in its `aria-label`; the legend repeats them as text. **Interaction:** pointing at a segment dims it and names only that segment in the People Context tooltip ("Degraded: 24,000 ha (16%)"), the same `data-tip` + `.pcx-tip` behaviour as the People Context charts (`js/people-context.js` wires every `.gc`). Mouse only; the legend carries the same figures for keyboard and screen-reader users. **Layout:** next to a long text column, put `gc-terr--mid` on the `.gc-terr` grid so the chart sits on the text's centre line; inside it the chart stacks above a full-width legend, both left-aligned (Land degradation does this). Elsewhere the donut stays 96px beside its legend. Used by Reference ecosystem (`gcEcoChart()`, drawn from `NBS_DATA`) and Land degradation |
+| `nbsRingSeg` | `(cx, cy, R, r, a0, a1, o)` | The shape of one doughnut segment, used by every ring chart: `gcDonut` (full and half), `gcGauge`, the Carbon Pool ring (`clPoolDonut`) and the People Context donut (`svgDonut`, via `window.nbsRingSeg`). A filled ring slice whose four corners are rounded to `--radius-sm`, with a `--space-4` gap between slices; both are read from `tokens.css` in screen pixels and `o.k` converts them to viewBox units. The outer ends of a half doughnut stay flush (`o.gapStart` / `o.gapEnd = false`). A slice too thin for full corners gets smaller ones; a 0% slice is not drawn (DEC-79) |
 | `gcTip` | `(label, ha, pct)` | The `data-tip` attribute for one chart segment: "Label: 12,345 ha (16%)". Shared by `gcDonut` and `gcGauge` |
-| `gcGauge` | `(part, total, caption, partLabel)` | Half-doughnut of a part against a whole, 0 to 100%. Two colours only: the whole is a grey ring (`--neutral-800`), the part is orange (`--warning-500`). It shows a share, not a level: no bands, thresholds or level labels (DEC-61). **Interaction:** pointing at an arc dims it and names it in the People Context tooltip (`gcTip`): the grey arc reads "Total area: … ha (100%)", the orange arc reads `partLabel` with its hectares and share. Mouse only. **Accessibility:** the wrapper is `role="img"` and its `aria-label` says both figures; the caption under the gauge repeats them as text. Used by Fire risk |
+| `gcGauge` | `(part, total, caption, partLabel, restLabel)` | Half-doughnut of a part against a whole, 0 to 100%. Two colours only: the whole is a grey ring (`--neutral-800`), the part is orange (`--warning-500`). It shows a share, not a level: no bands, thresholds or level labels (DEC-61). **Interaction:** pointing at an arc dims it and names it in the People Context tooltip (`gcTip`): the orange arc reads `partLabel` with its hectares and share, and the grey arc (the rest of the whole) reads `restLabel` with the remaining hectares and share. Fire risk passes "Overlaps mapped fire-risk areas" and "Outside mapped fire-risk areas" (DEC-79). Mouse only. **Accessibility:** the wrapper is `role="img"` and its `aria-label` says both figures; the caption under the gauge repeats them as text. Used by Fire risk |
 | `gcLevel` | `(label, value, tone)` | A labelled level badge; `tone` is `bad`, `warn` or `ok`. The word carries the meaning, the colour only repeats it |
 | `.gc-sub--ic` | markup: `<h5 class="gc-sub gc-sub--ic"><span class="gc-sub__ic"><svg …/></span>Title</h5>` | Sub-title with a 36px tinted icon tile in front (`--warning-25` tile, `--warning-700` stroke icon, `--radius-lg`), the look of the earlier Threat profile "t3-mini" cards. The icon is decorative (`hardenSvgs()` hides it); the heading text is the name. Used by Drainage canal pressure (Canal proximity, Drainage pressure) |
 | `ncSpecies` | `(icon, name, dot, list)` | Species row; `list` is `[common, latin, records, year of latest record]`. A missing year reads "Date not recorded". Names only: no photo is licensed yet |
@@ -1092,3 +1093,45 @@ in the script says so.
 
 **Known gap.** Hover only, so touch and keyboard users see the calm drawing. The page that mounts
 it without `js/hazard-scenes.js` gets the old photograph instead.
+
+---
+
+## CMP-40 · Icon (Material Symbols)
+
+**Files.** [assets/icons/material/](../../assets/icons/material/) (one SVG per icon, plus
+Google's Apache 2.0 `LICENSE`) · [scripts/fetch-material-icons.mjs](../../scripts/fetch-material-icons.mjs)
+(the list of icons, and the script that copies them in)
+**Purpose.** The one icon set for the product's interface (DEC-80). Every icon is Material
+Symbols, **Outlined**, weight 400, grade 0, optical size 24.
+
+**Only what we use is in the repo.** The folder holds the icons named in `ICONS` at the top of
+the script, not the whole library. To add one: find its name at fonts.google.com/icons (style
+Outlined), add it to `ICONS`, run `node scripts/fetch-material-icons.mjs`. A name followed by
+`:fill` also writes the filled version as `name-fill.svg`. Removing a name removes its file.
+
+**How to use one.** Paste the file's `<svg>` inline into the markup or JS template. Each file
+already draws in `fill="currentColor"` with Material's own `viewBox="0 -960 960 960"` and no
+fixed size, so:
+
+| Prop | Type | Controls |
+|---|---|---|
+| `color` on the parent | CSS | The icon's colour. Use a token (`var(--text-body)`), never a hex |
+| `width` / `height` on the `svg` | CSS | Size. `var(--space-16)`, `var(--space-20)` or `var(--space-24)`; 24 is the size it is drawn for |
+
+An `<img src="assets/icons/material/….svg">` also works but cannot be recoloured, so it shows
+black. Use it only where black is right.
+
+**Accessibility.** An icon is decorative by default: `hardenSvgs()` hides it. Name the control,
+not the icon: an icon-only button carries `aria-label` on the `<button>`. Give the `svg` itself a
+label only when the icon is the content, with no text or control around it.
+
+**What is not a Material icon.** The domain artwork is drawn for this project and stays as it is:
+ecosystem and pathway icons (`assets/asset/`, `assets/pathway/`), land cover, species and
+climate glyphs (`assets/f01-step2/`), the hazard scenes (CMP-39), the home feature
+illustrations, the logo, and the Observed glyph `GC_ICONS.observe` (CMP-08).
+
+**Known gap.** About 600 inline icons predate this rule. Most are hand-drawn 2px-stroke outlines
+in the Feather style, and `js/analysis-shared.js` also uses Bootstrap Icons paths (16-unit grid).
+They are swapped for Material as each screen is touched; the nav Help icon (CMP-01) is the first.
+The `GC_ICONS` card glyphs are Material's older filled "Material Icons" set, not Symbols Outlined.
+`TODO(design): confirm whether card head chips should move to Outlined or keep the filled look.`

@@ -1769,3 +1769,53 @@ fire-risk areas", each with its percentage and hectares.
 **Consequences.**
 - The narrative beside the gauge still uses `gcFireLevel(pct)` (DEC-67 thresholds).
   `TODO(design): confirm whether that narrative should also stop naming a level.`
+
+## DEC-79 · Doughnut segments have soft corners and a small gap
+
+**Status.** Accepted, 2026-11-18.
+
+**Context.** The ring charts were drawn two ways: full doughnuts as filled SVG slices with sharp
+corners, and the half doughnuts as one stroked arc cut with dash offsets. The Carbon Pool ring was
+a CSS `conic-gradient`. Segments ran into each other with no separation.
+
+**Decision.** Every doughnut segment is a filled slice with corners rounded to `--radius-sm` (4px)
+and a `--space-4` gap between neighbours, drawn by one shared builder, `nbsRingSeg`
+(`js/analysis-shared.js`). This covers Reference ecosystem, Land degradation, Fire risk, the
+Carbon Pool ring and the People Context donut.
+
+**Consequences.**
+- On the Fire risk gauge the grey part is now drawn as the remainder after the orange part rather
+  than a full ring behind it, so its tooltip no longer reads "Total area" (DEC-78). It names
+  the remainder instead: "Outside mapped fire-risk areas", with its hectares and share. The
+  orange part still reads "Overlaps mapped fire-risk areas". Wording requested by the product
+  owner, 2026-11-18.
+- Sizes are tokens read at runtime, so changing `--radius-sm` or `--space-4` changes the charts too.
+
+## DEC-80 · Material Symbols is the icon set, copied in one icon at a time
+
+**Status.** Accepted, 2026-11-18. The product owner chose Material icons as the iconography of
+the brand kit.
+
+**Context.** Icons were drawn by hand per screen in at least three styles: 2px-stroke outlines,
+Bootstrap Icons paths in the Data Analyser, and filled Material Icons in the card heads. Nothing
+said which to use for a new one. The full `google/material-design-icons` repository is about
+4.9 GB on GitHub; the npm packages that hold every Symbols icon as SVG are about 13 MB and 23,000
+files. The site has no build step and no `package.json` to tree-shake either.
+
+**Decision.** Material Symbols, Outlined, weight 400, grade 0, optical size 24, is the icon set
+for all interface icons. Only the icons the product uses are copied into
+`assets/icons/material/`, by `scripts/fetch-material-icons.mjs`, which holds the list. Each file
+draws in `currentColor`. Google's Apache 2.0 licence ships beside them. See CMP-40.
+
+**Alternatives rejected.**
+- *Load the icon font from Google Fonts.* No files in the repo, but every page would make a
+  request to Google, the font is about 975 KB unless every page lists its icon names in the URL,
+  and icons would not show offline or before the font loads.
+- *Commit an npm package.* 13 MB of icons nobody uses.
+
+**Consequences.**
+- The first set is 83 icons (88 files with five filled versions), about 32 KB.
+- Domain artwork (ecosystems, pathways, land cover, species, hazard scenes) is not an interface
+  icon and stays custom.
+- Existing inline icons move to Material as their screens are touched (CMP-40, Known gap). The
+  nav Help icon is the first: Material `question_mark` (CMP-01).

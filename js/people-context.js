@@ -92,10 +92,9 @@ function yearLabels(unit,n){const m=/(\d{4})\s*[–-]\s*(\d{4})/.exec(unit||'');
 /* ============ svg chart builders (hover → tooltip via data-tip) ============ */
 function svgDonut(segs,colors,unit){const size=116,tot=segs.reduce((a,s)=>a+s.v,0)||1;
  const R=size*.42,r=size*.26,cx=size/2,cy=size/2;let a=-Math.PI/2,p='';
- segs.forEach((s,i)=>{const ang=Math.min(s.v/tot*2*Math.PI,2*Math.PI-.0001),a2=a+ang,big=ang>Math.PI?1:0;
-  const x1=cx+R*Math.cos(a),y1=cy+R*Math.sin(a),x2=cx+R*Math.cos(a2),y2=cy+R*Math.sin(a2);
-  const xi1=cx+r*Math.cos(a),yi1=cy+r*Math.sin(a),xi2=cx+r*Math.cos(a2),yi2=cy+r*Math.sin(a2);
-  p+=`<path data-tip="${esc(s.n)}: ${s.v}%" d="M${x1} ${y1} A${R} ${R} 0 ${big} 1 ${x2} ${y2} L${xi2} ${yi2} A${r} ${r} 0 ${big} 0 ${xi1} ${yi1} Z" fill="${colors[i%colors.length]}"/>`;a=a2;});
+ /* soft-cornered slices from the shared ring builder (js/analysis-shared.js) */
+ segs.forEach((s,i)=>{if(!(s.v>0))return;const a2=a+s.v/tot*2*Math.PI;
+  p+=`<path data-tip="${esc(s.n)}: ${s.v}%" d="${nbsRingSeg(cx,cy,R,r,a,a2)}" fill="${colors[i%colors.length]}"/>`;a=a2;});
  return `<svg viewBox="0 0 ${size} ${size}" width="${size}" height="${size}" style="flex-shrink:0">${p}</svg>`;}
 function svgLine(pts,color,soft,labels){const W=270,H=88,pad=8,mn=Math.min(...pts),mx=Math.max(...pts);
  const xy=pts.map((v,i)=>[pad+i/(pts.length-1)*(W-2*pad),H-pad-((v-mn)/((mx-mn)||1))*(H-2*pad-8)]);

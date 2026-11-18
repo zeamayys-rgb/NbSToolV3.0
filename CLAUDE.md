@@ -67,7 +67,7 @@ js/               nav-mobile.js loads everywhere; analysis-shared.js, f05-shared
                   and people-context.js are shared across screens
 assets/           images, SVGs, icons
 archive/screens/  superseded screens kept for history (tracked; not deployed to Vercel)
-scripts/          tracked data builders (activities flow)
+scripts/          tracked data builders (activities flow) and the Material icon fetcher
 docs/design/      the design canon (tracked in git; excluded from deploys)
 docs/generated/   local-only: what Claude produced — reports/, documents/, changelogs/, scripts/
 docs/reference/   local-only: source documents from the team — GUI doc, methodology, guidebook/
@@ -96,6 +96,14 @@ layer.
   placeholder contrast, `.sr-only`, `.skip-link`) applies everywhere — don't override it. New
   interactive elements need a real role, a keyboard path, and a label. See the blocking list in
   `docs/design/README.md` for the gaps that already exist; don't add more.
+- **Icons are Material Symbols, Outlined** (weight 400, grade 0, size 24) — the brand kit's
+  iconography (DEC-80, CMP-40). Use a file from [`assets/icons/material/`](assets/icons/material/),
+  pasted inline so it draws in `currentColor`. If the icon you need isn't there, add its name to
+  `ICONS` in [`scripts/fetch-material-icons.mjs`](scripts/fetch-material-icons.mjs) and run
+  `node scripts/fetch-material-icons.mjs`. Never copy in the whole library or a package, never
+  hand-draw a new interface icon, and never load the icon font from Google. Domain artwork
+  (ecosystem, pathway, species, land cover, hazard scenes) is not an interface icon and stays
+  custom. When you touch a screen, swap its old hand-drawn icons for Material ones.
 - **An icon is decorative by default.** `hardenSvgs()` hides any inline `<svg>` without an
   `aria-label`, `role="img"` or `<title>`. To make one meaningful, label it.
 - **Never invent data.** Every figure in this product is illustrative sample data (see DEC-11).
