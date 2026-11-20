@@ -5,9 +5,10 @@
    whole reading shell Help shares with "The science behind it": three
    columns, sidebar tree, search, "On this page", hero, sections, callouts,
    tables, pager (DEC-31, DEC-34). This file adds only what a help centre
-   needs and a method article does not: the landing page's actions and entry
-   cards, the eight-phase chart, the demo video, numbered steps, key points,
-   screenshots, external-resource cards and contact cards.
+   needs and a method article does not: the landing page's actions, entry
+   cards and phase table, the eight-phase chart, the demo video and the video
+   tutorial slots, numbered steps, key points, screenshots, external-resource
+   cards and contact cards.
 
    Colour, spacing, radius, elevation and motion come from css/tokens.css. Font
    sizes and line heights are literal for the same reason they are literal in
@@ -25,7 +26,7 @@
 
 .hc-actions { display: flex; flex-wrap: wrap; gap: var(--space-12); margin-top: var(--space-24); }
 .hc-actions .doc-cta { padding: var(--space-12) var(--space-20); font-size: 13.5px; }
-.hc-actions .doc-cta svg { width: var(--space-16); height: var(--space-16); fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.hc-actions .doc-cta svg { width: var(--space-16); height: var(--space-16); fill: currentColor; stroke: none; }
 .hc-actions .hc-ghost { background: transparent; color: var(--text-primary); border: 1px solid var(--stroke-primary); }
 .hc-actions .hc-ghost:hover { background: var(--primary-25); }
 
@@ -52,15 +53,15 @@
 .hc-card > svg {
   grid-column: 2; grid-row: 1 / span 3; align-self: start;
   width: var(--space-16); height: var(--space-16); margin-top: var(--space-2);
-  fill: none; stroke: var(--text-base-third); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+  fill: var(--text-base-third);
 }
 a.hc-card:hover, a.hc-card:focus-visible { border-color: var(--stroke-primary); background: var(--primary-25); }
-a.hc-card:hover > svg, a.hc-card:focus-visible > svg { stroke: var(--text-primary); }
+a.hc-card:hover > svg, a.hc-card:focus-visible > svg { fill: var(--text-primary); }
 /* An external resource that has no published address yet: the same card,
    not a link, with a pill saying so (see UI-STATES SCR-19). */
 .hc-card-soon { border-style: dashed; background: var(--bg-base-second); }
-.hc-card-soon .hc-soon {
-  grid-column: 2; grid-row: 1; justify-self: end;
+.hc-card-soon .hc-soon { grid-column: 2; grid-row: 1; justify-self: end; }
+.hc-soon {
   padding: var(--space-2) var(--space-8); border-radius: var(--radius-pill);
   background: var(--bg-base-main); border: 1px solid var(--stroke-base);
   color: var(--text-base-third); font-size: 10px; font-weight: 600; white-space: nowrap;
@@ -127,6 +128,23 @@ a.hc-card:hover > svg, a.hc-card:focus-visible > svg { stroke: var(--text-primar
 .hc-video-play:hover { background: var(--primary-25); color: var(--text-primary); }
 .hc-video.is-full .hc-video-play { display: none; }
 
+/* ---------- video tutorial slot (CMP-42) ----------
+   A YouTube video behind a play button. The frame is the demo's; with no
+   address yet it is a dashed box saying so. The player loads only on press. */
+.hc-yt-frame { display: grid; place-items: center; aspect-ratio: 16 / 9; }
+.hc-yt-frame iframe { width: 100%; height: 100%; border: 0; }
+.hc-yt-frame .hc-video-play { position: static; transform: none; }
+/* No address yet: a short dashed strip, not an empty 16:9 box. */
+.hc-yt-frame:has(> .hc-soon) { aspect-ratio: auto; padding: var(--space-32); background: var(--bg-base-second); border: 1px dashed var(--stroke-base); }
+
+/* ---------- the phase table on the landing page ----------
+   One row per phase, with its guide and its method side by side. */
+.hc-spine small { color: var(--text-base-third); font-weight: 500; }
+.hc-spine td:nth-child(n+3) { white-space: nowrap; }
+
+/* A line under a guide sub-section that opens the matching method section. */
+.doc-section p.hc-more { margin: var(--space-8) 0 var(--space-24); font-size: 12.5px; font-weight: 600; }
+
 /* ---------- route chips ----------
    "Where to find it" — the real href, so a guide is also a launcher. */
 .hc-where { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-8); margin: var(--space-16) 0 0; }
@@ -142,7 +160,7 @@ a.hc-card:hover > svg, a.hc-card:focus-visible > svg { stroke: var(--text-primar
   font-size: 11.5px; font-weight: 600; text-decoration: none;
 }
 .hc-where a.hc-route:hover { border-color: var(--stroke-primary); background: var(--primary-25); color: var(--text-primary); }
-.hc-route svg { width: var(--space-12); height: var(--space-12); flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.hc-route svg { width: var(--space-12); height: var(--space-12); flex: none; fill: currentColor; }
 
 /* ---------- key-points list ----------
    Each item names one thing, so the label is emphasised and the rest explains. */
@@ -200,7 +218,7 @@ a.hc-card:hover > svg, a.hc-card:focus-visible > svg { stroke: var(--text-primar
 .hc-contact > div { padding: var(--space-16); border: 1px solid var(--stroke-base); border-radius: var(--radius-md); background: var(--bg-base-main); }
 .hc-contact h3 { margin-top: 0; }
 .hc-contact p:last-child { margin-bottom: 0; }
-.hc-contact .doc-cta svg { width: var(--space-16); height: var(--space-16); fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.hc-contact .doc-cta svg { width: var(--space-16); height: var(--space-16); fill: currentColor; stroke: none; }
 
 /* ---------- cross-link to the science pages (DEC-30) ---------- */
 .hc-xref { margin-top: var(--space-24); }

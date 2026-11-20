@@ -219,7 +219,7 @@ loses all analysis progress, and a step cannot be linked to or shared.**
 | `gcLevel` | `(label, value, tone)` | A labelled level badge; `tone` is `bad`, `warn` or `ok`. The word carries the meaning, the colour only repeats it |
 | `.gc-sub--ic` | markup: `<h5 class="gc-sub gc-sub--ic"><span class="gc-sub__ic"><svg …/></span>Title</h5>` | Sub-title with a 36px tinted icon tile in front (`--warning-25` tile, `--warning-700` stroke icon, `--radius-lg`), the look of the earlier Threat profile "t3-mini" cards. The icon is decorative (`hardenSvgs()` hides it); the heading text is the name. Used by Drainage canal pressure (Canal proximity, Drainage pressure) |
 | `ncSpecies` | `(icon, name, dot, list)` | Species row; `list` is `[common, latin, records, year of latest record]`. A missing year reads "Date not recorded". Names only: no photo is licensed yet |
-| `clChart` | `(bars, plot, labels, yTicks, yTitle, cls)` | Climate chart |
+| `clChart` | `(bars, plot, labels, yTicks, yTitle, cls, fmt)` | Climate chart. Each bar carries a `data-tip` read off the y axis, formatted by `fmt`; bars are `--bar-w` (14px) wide and dim on hover |
 
 **Result states.** `nbsCardState(card, state)` swaps one card's result for a GUI 3.1 message:
 `unavailable`, `nodata` or `failed`. Any other value restores the result. The card head, its
@@ -976,6 +976,12 @@ cross-page links carrying `?q=`; *Also in <page>* is gone. On the authored page 
 a section inside an article opens that article scrolled to it (`state.owner`), and the section
 hash stays in the address. The document title omits the label when it equals the page title.
 
+**Section addresses (DEC-81).** On the authored page a section is addressed by its own id
+(`help.html#phase-4b`). On the generated page a section cannot be found before its article is
+rendered, so its address names both: `technical-docs.html#docs/<article>/<section>`
+(`#docs/phase2/phase2-nature`). `open()` writes that form into the address bar, so a copied link
+survives a reload.
+
 ## CMP-36 · Eight-phase chart (`.hc-phases`)
 
 **Files.** [css/help.css](../../css/help.css) · [help.html](../../help.html) (SCR-19, *The eight phases*)
@@ -983,7 +989,7 @@ hash stays in the address. The document title omits the label when it equals the
 **Purpose.** Show the whole workflow on one chart, in the manual's order, and make every phase a
 door to its guide.
 
-**Parts.** An `<ol class="hc-phases">` of four `.hc-lane` items, one per *How it works* page.
+**Parts.** An `<ol class="hc-phases">` of two `.hc-lane` items: *Run an analysis* (phases 0 to 7, each chip a link to that phase's page) and *Manage your project* (DEC-82; four lanes before).
 Each lane is a `.hc-lane-head` (an `<em>` range such as "Phases 0 to 5", the page link, a
 `<small>` line) beside an `<ol class="hc-flow">` of `.hc-phase` links flowing left to right with
 an arrow between them: a numbered circle `<b>` and the phase name. `.is-optional` greys the
@@ -1135,3 +1141,84 @@ in the Feather style, and `js/analysis-shared.js` also uses Bootstrap Icons path
 They are swapped for Material as each screen is touched; the nav Help icon (CMP-01) is the first.
 The `GC_ICONS` card glyphs are Material's older filled "Material Icons" set, not Symbols Outlined.
 `TODO(design): confirm whether card head chips should move to Outlined or keep the filled look.`
+
+---
+
+## CMP-41 · Soil type accordion (`.cl-soil` / `.cl-soilrow`)
+
+**Files.** `gcSoil()` and `GC_SOIL` in [js/analysis-shared.js](../../js/analysis-shared.js) ·
+styles in [css/genctx.css](../../css/genctx.css) (SCR-03, General context, Soil classification).
+
+**Purpose.** List the WRB soil groups in the area with their share, and explain each one inside
+the same card. It replaces the separate dark "Dominant Soil Type" panel. Figma reference: NbS
+Tool V3, node 5076:22358.
+
+**Props.** `GC_SOIL` rows are `[group, share %, colour, description]`. Descriptions and colours
+come from the soil-groups layer legend (Soil Classification sheet, WRB 2006), so the card matches
+the map. Shares follow the Figma frame and are illustrative sample data (DEC-11). The bar width equals the share.
+
+**States.** Every row: light grey, 3px top rule in its soil colour, share in dark text on a grey pill, then a Material `expand_more` chevron that rotates to point up while the row is open (decorative; `<details>` already announces the state). Hover
+(collapsed rows only): darker grey, plus the shared `.pcx-tip` tooltip "Learn more about [group]";
+a capture-phase `toggle` listener removes the tooltip while a row is open.
+Open: description below, indented to the name column. One row is open at a time
+(`<details name="cl-soil">`), and the first row (the dominant group) starts open. Clicking the
+open row closes it.
+
+**Accessibility contract.** Native `<details>`/`<summary>`: focusable, Enter/Space toggles,
+expanded state announced. The focus ring comes from the tokens.css baseline.
+
+**Known gap.** The Figma frame uses a muted palette (#6c8f4f, #c59a3c, …); the code uses the map
+legend colours instead. The light ones are too pale for text, so the share is set in
+`--text-base-main` rather than the soil colour. The white badge number still fails contrast on
+Cambisols #FECD67 and Nitisols #F7A082. `TODO(design)`: update the Figma frame to match. Figma draws the bars at about twice their share
+(Andosols 27% fills about 54% of the track, Nitisols 7% about 7%); the code draws them at their
+share. The tooltip is pointer-only. No loading, empty or failed
+state yet (UI-STATES.md).
+
+## CMP-42 · Video tutorial slot (`.hc-yt`)
+
+**Where.** SCR-19: the landing page (overview), *Video tutorials* (all), and under the hero of
+each guide page. Introduced by DEC-81.
+
+**Parts.** A `<figure class="hc-shot hc-yt" data-video="<key>" data-title="…">` holding a
+`.hc-video.hc-yt-frame` and a `figcaption`. The frame and the play button are CMP-37's; the
+"Video coming soon" pill is CMP-33's `.hc-soon`.
+
+**Props.** `data-video` — a key of `HC_VIDEOS` in the inline script of `help.html`, whose value
+is a YouTube link in any common form or a bare video id. `data-title` — the accessible name of
+the play button and the `title` of the player. `hidden` — on a guide page's slot, so it takes
+no space until its video exists.
+
+**States.** *Coming soon* (no address): a short dashed strip with the pill. *Ready*: a 16:9
+dark frame with a *Play video* button. *Playing*: the YouTube iframe. See UI-STATES SCR-19.
+
+**Behaviour.** Nothing is loaded from YouTube until the button is pressed; the player then
+comes from `youtube-nocookie.com` and takes focus. An address that is not a YouTube link is
+treated as empty.
+
+**Accessibility contract.** The button is a real `<button>` named "Play video: <title>". The
+iframe carries the same title. The caption links to the written guide, so the content is never
+video-only. There is no autoplay before a press, so reduced motion needs no special case.
+
+**Known gap.** No captions or transcript requirement is enforced here; that belongs to the
+videos themselves. `TODO(design): decide whether each tutorial needs a written transcript link.`
+
+## CMP-43 · Horizontal threshold bar (`gcScale()` / `.gc-scale`)
+
+**Files.** `gcScale()` and `drRow()` in [js/analysis-shared.js](../../js/analysis-shared.js) ·
+styles in [css/genctx.css](../../css/genctx.css) (SCR-03, Threat profile, Drainage canal pressure).
+
+**Purpose.** Show which class a site falls in on a three-class scale, next to the badge and
+sentence that name it. A horizontal, discrete take on the FLII vertical gauge.
+
+**Props.** `classes`: `[name, range, tone, colour, …]` in axis order, one equal-width segment
+each, flat colour (no gradient). `at`: 0 to 100 along the bar, or `null` for no marker. `mark`:
+the marker's label (a value such as "320 m", or the class name when only the class is known).
+
+**States.** Marker over the site's position; no marker when the layer has no data (the badge
+then reads "No drainage"). Canal proximity places the marker by distance within its class
+(past 1,000 m it runs to 2,000 m and stops). Drainage density has only a class, so the marker
+sits mid-segment.
+
+**Accessibility contract.** `aria-hidden`: decorative. The badge and sentence beside it carry
+the same information as text. Colour is never the only cue: each segment is named.

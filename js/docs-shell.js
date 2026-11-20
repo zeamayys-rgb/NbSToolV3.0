@@ -12,7 +12,8 @@
        still in the box (?q=)
      · one article at a time, routed by the URL hash (#id or #docs/id). On the
        authored page a hash naming a section inside an article opens that
-       article and scrolls to the section, so every heading is deep-linkable
+       article and scrolls to the section, so every heading is deep-linkable;
+       on the generated page the same link is #docs/<article>/<section>
      · the "On this page" list, built from the article's .doc-section > h2
      · the previous / next pager, in this page's own article order
    A page only says where its articles come from:
@@ -206,7 +207,9 @@
     document.title = (entry.label === state.cfg.title ? '' : entry.label + ' · ') + state.cfg.title + ' · NbS Tool';
     /* A section hash stays in the address, so the link a reader copies still
        lands on the heading they are reading. */
-    var hash = '#' + state.cfg.hashPrefix + (section || entry.id);
+    /* On the generated page a section cannot be found before its article is
+       rendered, so its address names both: #docs/<article>/<section>. */
+    var hash = '#' + state.cfg.hashPrefix + (section ? (state.owner ? section : entry.id + '/' + section) : entry.id);
     if (location.hash !== hash && history.replaceState) history.replaceState(null, '', location.pathname + location.search + hash);
 
     if (section) { scrollToSection(section); return; }
@@ -230,6 +233,9 @@
     var id = idFromHash();
     if (find(state.page, id)) { if (id !== state.active) open(id); return; }
     if (forwardIfMoved(id)) return;
+    /* "<article>/<section>": a section of an article, named in full. */
+    var cut = id.indexOf('/');
+    if (cut > 0 && find(state.page, id.slice(0, cut))) { open(id.slice(0, cut), id.slice(cut + 1)); return; }
     /* A section inside the open article: a plain in-page link. */
     if (id && document.getElementById(id)) { scrollToSection(id); return; }
     /* A section inside another article: open that article there. Anything

@@ -193,6 +193,14 @@ const NBS_LAYER_INFO = {
     resolution: "30 meters",
     source: "GABAM"
   },
+  /* GUI 3.1 names no dataset for Fire risk yet (DEC-50): only what the card already
+     states is filled in; the modal shows a dash for the rest. */
+  "fire-risk": {
+    name: "Fire risk",
+    category: "Threat profile",
+    description: "The share of the project area that overlaps mapped fire-risk areas. Fire can threaten ongoing projects and can also cause leakage of carbon stocks, both within and beyond project areas. The level (low, medium or high) follows that share.",
+    source: "To be confirmed. GUI 3.1 does not name the dataset yet."
+  },
   "kba": {
     name: "Key Biodiversity Area",
     category: "Nature",
@@ -256,10 +264,37 @@ const gcBars = (rows) => {
   return `<div class="gc-slopes">${rows.map(r => {
     const pct = Math.round(r[1] / total * 100);
     return `
-                  <div class="gc-slope"><div class="l"><span>${r[0]}</span><b>${NBS_DATA.grp(r[1])} ha <em>${pct}%</em></b></div><div class="t"><i style="width:${pct}%;background:${r[2]}"></i></div></div>`;
+                  <div class="gc-slope"><div class="l"><span>${r[0]}</span><b>${NBS_DATA.grp(r[1])} ha <em>${pct}%</em></b></div><div class="t"><i ${gcTip(r[0], r[1], pct)} style="width:${pct}%;background:${r[2]}"></i></div></div>`;
   }).join('')}
                 </div>`;
 };
+/* Soil classification accordion (Figma NbS Tool V3, node 5076:22358): rows =
+   [WRB group, share %, colour, description]. Descriptions are the soil-groups
+   and colours are the soil-groups layer legend ("Soil Classification" sheet,
+   WRB 2006), so the card matches the map; shares follow the Figma frame. Each
+   row is a <details> in one name group, so opening one closes the others; the
+   dominant group starts open. Only closed rows carry the "Learn more" tooltip. */
+const GC_SOIL = [
+  ['Andosols', 27.21, '#ed3a33', 'Soils developed from volcanic ash, pumice, and other volcanic materials. They are usually dark-coloured, rich in organic matter, highly porous, and have excellent water-holding capacity. These soils are generally highly fertile, although phosphorus fertilisation is often required because of their strong phosphorus fixation capacity.'],
+  ['Cambisols', 25.24, '#fecd67', 'Young to moderately developed soils showing evidence of soil formation, such as changes in colour, structure, or texture, but lacking strongly developed diagnostic horizons. They are among the most widespread soil groups globally. Their moderate natural fertility allows a wide range of agricultural uses with appropriate nutrient management and erosion control.'],
+  ['Ferralsols', 17.22, '#f6872d', 'Highly weathered tropical soils dominated by stable iron and aluminium oxides and low-activity clays. They are generally deep, well-drained, and structurally stable but often have low natural fertility due to extensive nutrient leaching. Maintaining productivity typically requires regular nutrient replenishment, liming where appropriate, and organic matter management.'],
+  ['Acrisols', 9.21, '#f7991d', 'Strongly weathered soils characterised by a clay-enriched subsoil and low base saturation. They are typically acidic, nutrient-poor, and occur in humid tropical and subtropical regions where intense weathering and leaching have removed many plant nutrients. Acrisols generally exhibit low natural fertility and often require liming, organic matter amendments, and balanced fertilisation to improve soil productivity and restore degraded sites.'],
+  ['Nitisols', 7.22, '#f7a082', 'Deep, red, well-drained tropical soils with a strong, stable structure and high clay content. They are often associated with volcanic or basaltic parent materials and are valued for agriculture due to their favourable physical properties. These soils generally possess high natural fertility and are well suited for intensive agriculture with balanced nutrient management.'],
+];
+const gcSoil = () => `<div class="cl-soil">${GC_SOIL.map(([name, pct, c, desc], i) => `
+                  <details class="cl-soilrow" name="cl-soil" style="--c:${c}"${i === 0 ? ' open' : ''}>
+                    <summary${i === 0 ? '' : ` data-tip="Learn more about ${name}"`}><span class="n">${String(i + 1).padStart(2, '0')}</span><div><b>${name}</b><i><s style="width:${pct}%"></s></i></div><em>${pct.toFixed(2)}%</em><svg class="cl-soilchev" viewBox="0 -960 960 960" fill="currentColor"><path d="M480-345 240-585l56-56 184 184 184-184 56 56-240 240Z"/></svg></summary>
+                    <p>${desc}</p>
+                  </details>`).join('')}
+                </div>`;
+/* toggle does not bubble, so listen in the capture phase. */
+document.addEventListener('toggle', (e) => {
+  const row = e.target;
+  if (!row.classList || !row.classList.contains('cl-soilrow')) return;
+  const sum = row.querySelector('summary');
+  if (row.open) sum.removeAttribute('data-tip');
+  else sum.dataset.tip = `Learn more about ${sum.querySelector('b').textContent}`;
+}, true);
 /* Reference ecosystem donut + legend, drawn from NBS_DATA so the shares always
    match the Threat profile and Pathway steps. [label, hectares, colour] */
 const GC_ECO = [
@@ -320,8 +355,8 @@ window.nbsRingSeg = nbsRingSeg;
    viewBox, the band 69 to 91 (the old 22-unit stroke on radius 80), drawn
    from 9 o'clock (PI) to 3 o'clock (2 PI). Rendered at most --space-100 x 2.6 wide. */
 const GC_HALF = { R: 91, r: 69, k: 200 / (nbsCssPx('--space-100') * 2.6 || 200) };
-const gcHalfSeg = (from, to, first, last) => nbsRingSeg(100, 100, GC_HALF.R, GC_HALF.r,
-  Math.PI * (1 + from / 100), Math.PI * (1 + to / 100), { k: GC_HALF.k, gapStart: !first, gapEnd: !last });
+const gcHalfSeg = (from, to, first, last, R = GC_HALF.R, r = GC_HALF.r, k = GC_HALF.k) => nbsRingSeg(100, 100, R, r,
+  Math.PI * (1 + from / 100), Math.PI * (1 + to / 100), { k, gapStart: !first, gapEnd: !last });
 /* Hover text for one chart segment, shown by the People Context tooltip
    (js/people-context.js wires every [data-tip] inside .gc to .pcx-tip). */
 const gcTip = (label, ha, pct) => `data-tip="${label}: ${NBS_DATA.grp(ha)} ha (${pct}%)"`;
@@ -354,22 +389,159 @@ const gcDonut = (items, totalLabel, ariaLead, half) => {
                     </ul>
                   </div>`;
   }
-  /* 96-unit viewBox drawn at 96px (.gc-donut), so k = 1 */
+  /* 96-unit viewBox drawn at --space-100 x 2 (.gc-donut), so the gaps scale by k.
+     The total sits in the hole; the legend is a 2 x 2 grid under the ring. */
+  const k = 96 / (nbsCssPx('--space-100') * 2 || 96);
   let a = -Math.PI / 2;
   const segs = shown.map(e => {
-    const b = a + pct(e[1]) / 100 * 2 * Math.PI, d = nbsRingSeg(48, 48, 48, 28, a, b);
+    const b = a + pct(e[1]) / 100 * 2 * Math.PI, d = nbsRingSeg(48, 48, 48, 34, a, b, { k });
     a = b;
     return `<path ${gcTip(e[0], e[1], Math.round(pct(e[1])))} d="${d}" style="fill:${e[2]}"/>`;
   });
   const label = items.map(e => `${e[0].toLowerCase()} ${Math.round(pct(e[1]))}%`).join(', ');
   return `
-                  <div class="gc-eco__total"><span>${totalLabel}</span><b>${NBS_DATA.grp(total)} ha</b></div>
-                  <div class="gc-eco__chartrow">
-                    <svg class="gc-donut" viewBox="0 0 96 96" role="img" aria-label="${ariaLead}: ${label}">${segs.join('')}</svg>
-                    <ul class="gc-legend">${items.map(e => `
-                      <li><i style="background:${e[2]}"></i><span>${e[0]}</span><b>${NBS_DATA.grp(e[1])} ha</b><em>${Math.round(pct(e[1]))}%</em></li>`).join('')}
+                  <div class="gc-ecochart">
+                    <div class="gc-donutwrap">
+                      <svg class="gc-donut" viewBox="0 0 96 96" role="img" aria-label="${ariaLead}, ${NBS_DATA.grp(total)} ha: ${label}">${segs.join('')}</svg>
+                      <div class="gc-donut__c" aria-hidden="true"><span>${totalLabel}</span><b>${NBS_DATA.grp(total)} ha</b></div>
+                    </div>
+                    <ul class="gc-legend gc-legend--grid">${items.map(e => `
+                      <li><i style="background:${e[2]}"></i><span>${e[0]}</span><b>${NBS_DATA.grp(e[1])} ha &middot; ${Math.round(pct(e[1]))}%</b></li>`).join('')}
                     </ul>
                   </div>`;
+};
+/* drawn up to --space-100 x 4 wide (.gc-gauge--sun), so its gaps use their own scale */
+const GC_SUN_K = 200 / (nbsCssPx('--space-100') * 4 || 200);
+/* Two-ring half doughnut (a half sunburst): the inner ring is each group's share,
+   the outer ring splits every group into the same categories, each slice sitting
+   over its parent. groups: [[label, colour, [[category, hectares, colour], ...]], ...].
+   The outer ring uses a quarter of the usual gap so sub-1% slices still show. */
+const gcSunHalf = (groups, totalLabel, ariaLead, mirror) => {
+  const sum = (rows) => rows.reduce((t, e) => t + e[1], 0);
+  const total = groups.reduce((t, g) => t + sum(g[2]), 0);
+  const pct = (ha) => ha / total * 100;
+  /* GAP: extra space between groups, in % of the half circle, on both rings so each
+     outer slice still sits over its parent. pos() maps a running share to the arc. */
+  const GAP = 1.2, scale = (100 - GAP * (groups.length - 1)) / 100;
+  const pos = (share, gi) => share * scale + gi * GAP;
+  const inner = [], outer = [];
+  let at = 0, ato = 0;
+  groups.forEach(([label, colour, rows], gi) => {
+    const p = pct(sum(rows));
+    inner.push(`<path ${gcTip(label, sum(rows), Math.round(p))} d="${gcHalfSeg(pos(at, gi), pos(at + p, gi), gi === 0, gi === groups.length - 1, 70, 54, GC_SUN_K)}" style="fill:${colour}"/>`);
+    at += p;
+    /* mirror: the first group draws its categories in reverse, so the two groups
+       read outward from the centre gap (the legend keeps one order for both) */
+    const shown = rows.filter(e => e[1] > 0);
+    if (mirror && gi === 0) shown.reverse();
+    shown.forEach((e, i) => {
+      const q = pct(e[1]);
+      outer.push(`<path ${gcTip(`${label}, ${e[0]}`, e[1], Math.round(q))} d="${gcHalfSeg(pos(ato, gi), pos(ato + q, gi), gi === 0 && i === 0, gi === groups.length - 1 && i === shown.length - 1, 91, 74, GC_SUN_K / 4)}" style="fill:${e[2]}"/>`);
+      ato += q;
+    });
+  });
+  const row = (cls, label, ha, colour) => `
+                      <li class="${cls}"><i style="background:${colour}"></i><span>${label}</span><b>${NBS_DATA.grp(ha)} ha</b><em>${Math.round(pct(ha))}%</em></li>`;
+  const aria = groups.map(([label, , rows]) => `${label.toLowerCase()} ${Math.round(pct(sum(rows)))}% (${rows.map(e => `${e[0].toLowerCase()} ${NBS_DATA.grp(e[1])} ha`).join(', ')})`).join('; ');
+  return `
+                  <div class="gc-sun">
+                    <div class="gc-gauge gc-gauge--sun" role="img" aria-label="${ariaLead}, ${NBS_DATA.grp(total)} ha: ${aria}">
+                      <svg viewBox="0 0 200 110" aria-hidden="true">${inner.join('')}${outer.join('')}</svg>
+                      <div class="gc-gauge__c" aria-hidden="true"><b>${NBS_DATA.grp(total)} ha</b><span>${totalLabel}</span></div>
+                    </div>
+                    <div class="gc-legend-cols">${groups.map(([label, colour, rows]) => `
+                    <ul class="gc-legend gc-legend--tree">${row('gc-legend__grp', label, sum(rows), colour)}${rows.map(e => row('gc-legend__sub', e[0], e[1], e[2])).join('')}
+                    </ul>`).join('')}
+                    </div>
+                  </div>`;
+};
+/* Land degradation, 2014 to 2024: illustrative sample data (DEC-11, DEC-86). The
+   category totals keep the earlier copy's figures (24,000 ha degradation-related,
+   15,000 ha of it in forest; 108,000 ha stable; 18,000 ha improved); the
+   forest / non-forest split of each category is new sample data. */
+/* The three degradation-related classes sit together so the reds read as one block. */
+const LD_CAT = [['Degraded', 'var(--danger-600)'], ['Degraded – potential false positive', 'var(--danger-300)'],
+  ['Degraded – potential false negative', 'var(--danger-800)'], ['Stable', 'var(--neutral-800)'], ['Improved', 'var(--success-500)']];
+const LD_DATA = [['Forest', 'var(--primary-750)', [11400, 2000, 1600, 63000, 12000]],
+  ['Non-forest', 'var(--warning-700)', [7200, 1000, 800, 45000, 6000]]];
+const LD = { deg: 0, fp: 1, fn: 2, stable: 3, improved: 4 };
+/* The chart shows three classes only: the two flagged classes are folded into Degraded
+   (the narrative still reports them on their own). */
+const ldGroups = () => LD_DATA.map(([label, colour, ha]) => [label, colour, [
+  ['Degraded', ha[LD.deg] + ha[LD.fp] + ha[LD.fn], LD_CAT[LD.deg][1]],
+  ['Stable', ha[LD.stable], LD_CAT[LD.stable][1]],
+  ['Improved', ha[LD.improved], LD_CAT[LD.improved][1]],
+]]);
+/* category i summed over forest and non-forest; deg = Degraded + both flagged classes */
+const ldSum = (i, g) => (g ? [g] : LD_DATA).reduce((t, d) => t + d[2][i], 0);
+const ldNarrative = () => {
+  const ha = (v) => `<b>${NBS_DATA.grp(v)} ha</b>`;
+  const deg = (g) => ldSum(LD.deg, g) + ldSum(LD.fp, g) + ldSum(LD.fn, g);
+  const [forest, other] = LD_DATA;
+  const fp = ldSum(LD.fp), fn = ldSum(LD.fn);
+  return [
+    `A total of ${ha(deg())} within the project area showed signs of land degradation between 2014 and 2024. Of the total degradation-related area, ${ha(deg(forest))} occurred within forest areas, while ${ha(deg(other))} occurred outside forest areas.`,
+    ldSum(LD.improved) > 0 && `In contrast, ${ha(ldSum(LD.improved))} within the project area showed positive changes in land condition.`,
+    ldSum(LD.stable) > 0 && `The remaining ${ha(ldSum(LD.stable))} was classified as stable, indicating no significant improvement or deterioration in the assessed land condition.`,
+    fp + fn > 0 && `Of the total area classified under degradation-related land-condition categories, ${ha(fp)} was flagged as <b>Degraded &ndash; Potential False Positive</b>, while ${ha(fn)} was flagged as <b>Degraded &ndash; Potential False Negative</b>.`,
+  ].filter(Boolean).map(t => `
+                      <p class="gc-p">${t}</p>`).join('');
+};
+/* Drainage canal pressure (GUI 3.1). Sample values (DEC-11): canalM is the distance
+   to the nearest mapped canal in metres; density is 'high' | 'moderate' | 'low', or
+   null when the peatland does not overlap the drainage-density layer. */
+const DR_DATA = { canalM: 320, density: 'high' };
+/* Classes in axis order (left to right on the threshold bar).
+   [class name, range, badge tone, bar colour, sentence; canal also the "located …" phrase] */
+const DR_CANAL = [
+  ['Close', '0 to 500 m', 'bad', 'var(--danger-600)', 'The peatland area is located within <b>0 to 500 meters</b> of mapped drainage canals, indicating potential hydrological disturbance.', 'close to'],
+  ['Intermediate', '500 to 1,000 m', 'warn', 'var(--warning-500)', 'The peatland area is located approximately <b>500 to 1,000 meters</b> from mapped drainage canals, indicating moderate potential drainage-related pressure, and hydrological influence may be lower.', 'at an intermediate distance from'],
+  ['Distant', 'over 1,000 m', 'ok', 'var(--success-500)', 'The peatland area is located more than <b>1,000 m</b> from the nearest mapped drainage canal, indicating relatively low drainage-related pressure based on canal proximity.', 'far from'],
+];
+const DR_DENSITY = [
+  ['Low', 'under 2.5 km/km&sup2;', 'ok', 'var(--success-500)', 'Low drainage density (<b>under 2.5 km/km&sup2;</b>) indicates low drainage disturbance.'],
+  ['Moderate', '2.5 to 5 km/km&sup2;', 'warn', 'var(--warning-500)', 'Moderate drainage density (<b>2.5 to 5 km/km&sup2;</b>) indicates substantial drainage-related hydrological disturbance and is associated with higher subsidence and carbon-loss potential than lower drainage classes.'],
+  ['High', 'over 5 km/km&sup2;', 'bad', 'var(--danger-600)', 'High drainage density (<b>over 5 km/km&sup2;</b>) indicates substantial hydrological disturbance and is associated with accelerated peat subsidence, increased carbon emissions, and significant peat-fire risk.'],
+];
+/* Horizontal threshold bar: equal discrete segments, one per class, a marker over the
+   site's position and each class named under its segment. at: 0-100 along the bar;
+   null = no marker. suffix: a word set on its own line under each class name.
+   Decorative: the badge and sentence beside it carry the meaning. */
+const gcScale = (classes, at, mark, suffix) => `
+                      <div class="gc-scale" aria-hidden="true">
+                        <div class="gc-scale__track">${at == null ? '' : `<span class="gc-scale__mark" style="left:${at.toFixed(1)}%">${mark}</span>`}${classes.map(c => `<i style="background:${c[3]}"></i>`).join('')}</div>
+                        <div class="gc-scale__lbls">${classes.map(c => `<span><b>${c[0]}</b>${suffix ? `<b>${suffix}</b>` : ''}${c[1]}</span>`).join('')}</div>
+                      </div>`;
+/* A section row: heading with its level badge, then the sentence, on the left; its
+   threshold bar on the right. badge: [text, tone]; the class name only, the bar
+   carries the ranges. */
+const drRow = (icon, title, badge, text, scale) => `
+                  <div class="gc-thr">
+                    <div class="gc-block">
+                      <h5 class="gc-sub gc-sub--ic"><span class="gc-sub__ic"><svg viewBox="0 0 24 24">${icon}</svg></span><span class="gc-sub__t">${title}</span><em class="nc-pill nc-pill--${badge[1]}">${badge[0]}</em></h5>${text ? `
+                      <p class="gc-p">${text}</p>` : ''}
+                    </div>${scale}
+                  </div>`;
+/* Material Symbols "water" (assets/icons/material/water.svg), filled, scaled into 24 units */
+const DR_WATER_ICON = '<path class="gc-ms" transform="translate(0 24) scale(0.025)" d="M80-240v-80q38 0 56.5-20t77.5-20q59 0 77.5 20t54.5 20q38 0 56.5-20t77.5-20q57 0 77.5 20t56.5 20q38 0 55.5-20t76.5-20q59 0 77.5 20t56.5 20v80q-57 0-77.5-20T746-280q-36 0-54.5 20T614-240q-57 0-77.5-20T480-280q-38 0-56.5 20T346-240q-59 0-76.5-20T214-280q-38 0-56.5 20T80-240Zm0-160v-80q38 0 56.5-20t77.5-20q57 0 76.5 20t55.5 20q38 0 56.5-20t77.5-20q57 0 77 20t55 20q38 0 56.5-20t77.5-20q57 0 77.5 20t56.5 20v80q-59 0-78.5-20T746-440q-36 0-54.5 20T614-400q-57 0-77.5-20T480-440q-38 0-55.5 20T348-400q-59 0-78.5-20T214-440q-36 0-56.5 20T80-400Zm0-160v-80q38 0 56.5-20t77.5-20q57 0 76.5 20t55.5 20q38 0 56.5-20t77.5-20q57 0 77 20t55 20q38 0 56.5-20t77.5-20q57 0 77.5 20t56.5 20v80q-59 0-78.5-20T746-600q-36 0-54.5 20T614-560q-57 0-77.5-20T480-600q-38 0-55.5 20T348-560q-59 0-78.5-20T214-600q-36 0-56.5 20T80-560Z"/>';
+/* No peatland: the card is not shown at all. */
+const drCard = () => {
+  if (!(NBS_DATA.eco.peat.area > 0)) return '';
+  const m = DR_DATA.canalM;
+  const ci = m <= 500 ? 0 : m <= 1000 ? 1 : 2;
+  const c = DR_CANAL[ci];
+  /* each class is a third of the bar; past 1,000 m the marker runs to 2,000 m and stops */
+  const cAt = (ci + Math.min((ci === 2 ? (m - 1000) / 1000 : (m - ci * 500) / 500), 0.94)) * 100 / 3;
+  const di = DR_DENSITY.findIndex(d => d[0].toLowerCase() === DR_DATA.density);
+  const d = DR_DENSITY[di];
+  return `<section class="gc-card" data-gc="drainage">${gcHead('Drainage canal pressure', 'terrain', false)}
+                  <p class="gc-p">The peatland area is located ${c[5]} mapped drainage canals, with the nearest canal approximately <b>${NBS_DATA.grp(m)} m</b> away.</p>
+                  <div class="gc-stack">${drRow('<path d="M3 17c1.5 0 2.2-1 3.5-1s2 1 3.5 1 2.2-1 3.5-1 2 1 3.5 1 2.2-1 3.5-1"/><path d="M6 13l6-7 6 7M12 6v7"/>', 'Canal proximity',
+    [c[0], c[2]], c[4], gcScale(DR_CANAL, cAt, `${NBS_DATA.grp(m)} m`))}${drRow(DR_WATER_ICON, 'Drainage pressure',
+    d ? [d[0], d[2]] : ['No drainage', 'ok'], d && d[4],
+    gcScale(DR_DENSITY, d ? (di + 0.5) * 100 / 3 : null, d && d[0], 'density'))}
+                  </div>${gcDisc('Peatland disturbance may be associated with hydrological alteration. Disturbance refers to possible changes in peatland condition caused by canals, reduced soil moisture, fire occurrence, or altered water table conditions, even when vegetation cover remains present.')}${gcSource('Canal proximity', 'Dadap et al., 5 m', '2021')}${gcSource('Drainage density', 'Dadap et al., 1,000 m', '2021')}
+                </section>`;
 };
 const gcEcoChart = () => gcDonut(GC_ECO, 'Total area', 'Share of the selected area');
 /* A labelled level badge. tone: bad | warn | ok — the word carries the meaning,
@@ -410,6 +582,9 @@ const GC_FIRE_LEVELS = [
 const gcFireLevel = (pct) => GC_FIRE_LEVELS[pct > 80 ? 2 : pct >= 30 ? 1 : 0];
 /* Card-head chip icons — Google Material Design Icons (Apache 2.0), 24px filled */
 const GC_ICONS = {
+  /* Material Symbols "bolt", filled (assets/icons/material/bolt-fill.svg), drawn on
+     0 -960 960 960 and scaled into this map's 24-unit box */
+  bolt: '<path transform="translate(0 24) scale(0.025)" d="m320-80 40-280H160l360-520h80l-40 320h240L400-80h-80Z"/>',
   globe: '<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>',
   gov: '<path d="M4 10h3v7H4zM10.5 10h3v7h-3zM2 19h20v3H2zM17 10h3v7h-3zM12 1L2 6v2h20V6z"/>',
   landscape: '<path d="M14 6l-3.75 5 2.85 3.8-1.6 1.2C9.81 13.75 7 10 7 10l-6 8h22L14 6z"/>',
@@ -442,9 +617,12 @@ const GC_HAZARD_LEVELS = { 'Very Low': 'ok', 'Low': 'ok', 'Moderate': 'warn', 'H
 // photo is what a page shows when it mounts this file without that one. Under it, one line:
 // the hazard name on the left and its level on the right, as the pill the other threat cards
 // use (DEC-58).
-const gcHazard = (key, photo, name, level) => `<div class="gc-nditem"><figure>${typeof hazardScene === 'function' ? hazardScene(key) : `<img src="assets/asset/Disaster Risk/${photo}" alt="" />`}</figure>${gcLevel(name, `${level} risk`, GC_HAZARD_LEVELS[level])}</div>`;
+const gcHazard = (key, photo, name, level) => `<div class="gc-nditem"><figure>${typeof hazardScene === 'function' ? hazardScene(key) : `<img src="assets/asset/Disaster Risk/${photo}" alt="" />`}</figure>${gcLevel(`${name}:`, `${level} risk`, GC_HAZARD_LEVELS[level])}</div>`;
 const gcHead = (t, ic, key) => `
           <div class="gc-card__head"><span class="gc-hchip"><svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">${GC_ICONS[ic] || ''}</svg></span><h4>${t}</h4>${key === false ? '' : gcInfo(key)}</div>`;
+/* Climate sub-title in the Drainage canal pressure look (gc-sub--ic): a blue icon tile,
+   the title, then its info button. icon: a Material Symbols path (filled, 0 -960 960 960). */
+const clSub = (t, key, icon) => `<h5 class="gc-sub gc-sub--ic"><span class="gc-sub__ic gc-sub__ic--blue"><svg viewBox="0 -960 960 960">${icon}</svg></span><span class="gc-sub__t">${t}</span>${gcInfo(key)}</h5>`;
 const gcSub = (t, key) => `<h5 class="gc-sub gc-sub--info">${t}${gcInfo(key)}</h5>`;
 
 const siteGeneral = `
@@ -456,9 +634,11 @@ const siteGeneral = `
               <div class="gc-eco">
                 <figure class="gc-eco__map"><img src="${GC_ASSETS}/map-eco.png" alt="Ecosystem map of the selected area" /></figure>
                 <div class="gc-eco__side">
-                  <p class="gc-p">This area spans all three settings: non-flooded mineral soil inland, a tidal coastal zone with salt or brackish water, and ground built on wet peat soil. It combines <b>dryland</b>, <b>mangrove</b>, and <b>peatland</b> references across different parts of the site.</p>${gcEcoChart()}
+                  ${gcEcoChart()}
                 </div>
-              </div>${gcDisc('A composite of several datasets with different scales and methods, so ecosystem boundaries are indicative. Peat and mangrove edges are the least certain.')}${gcSource('Reference ecosystem', 'SCeNe Coalition, 30 m', '2025')}
+              </div>
+              <!-- narrative under the map and chart, full width -->
+              <p class="gc-p">This area spans all three settings: non-flooded mineral soil inland, a tidal coastal zone with salt or brackish water, and ground built on wet peat soil. It combines <b>dryland</b>, <b>mangrove</b>, and <b>peatland</b> references across different parts of the site.</p>${gcDisc('A composite of several datasets with different scales and methods, so ecosystem boundaries are indicative. Peat and mangrove edges are the least certain.')}${gcSource('Reference ecosystem', 'SCeNe Coalition, 30 m', '2025')}
             </section>
 
             <!-- 2 · Administration and zoning status -->
@@ -474,13 +654,13 @@ const siteGeneral = `
                     <tr><td>Seririt</td><td>Buleleng</td><td>Bali</td><td>34,400</td></tr>
                   </tbody>
                 </table>
-                <p class="gc-note-it">See all completed administrative boundaries of your project in the <a href="#">Feasibility study document</a></p>
+                <p class="gc-note-it">See all completed administrative boundaries of your project in the <a href="help.html#documents/doc-types">Feasibility study document</a></p>
               </div>
               <!-- GUI 3.1: this block is hidden when the area overlaps no protected area -->
               <div class="gc-block">
                 ${gcSub('Protection/zoning status', 'protected-area')}
                 <p class="gc-p">This project area also overlaps with <b>30,000 hectares</b> of protected areas. The protected area within the polygon is designated for <b>Taman Wisata Alam (nature recreation park)</b>.</p>
-                <p class="gc-p gc-p--note">Consider this when you select your NbS activities, as it may affect which activities are eligible.</p>
+                <p class="gc-note-it">Consider this when you select your NbS activities, as it may affect which activities are eligible.</p>
               </div>${gcDisc('Reference boundaries only, not a legal source for jurisdiction or tenure. The level of administrative detail varies by country. Protected-area overlap is a screening result: it does not establish land tenure, permitted activities or complete local zoning restrictions. Verify with the relevant authority.')}${gcSource('Administrative boundaries', 'GADM', '2022')}${gcSource('Protected areas', 'World Database on Protected Areas (WDPA), 30 m', '2025')}
             </section>
 
@@ -524,7 +704,7 @@ const siteGeneral = `
                   <div class="gc-lcitem"><img src="${GC_ASSETS}/lc-evergreen.svg" alt="" /><div><span>Evergreen</span><b>52,500 ha</b><em>35%</em></div></div>
                   <div class="gc-lcitem"><img src="${GC_ASSETS}/lc-oilpalm.svg" alt="" /><div><span>Oil Palm</span><b>21,000 ha</b><em>14%</em></div></div>
                 </div>
-                <p class="gc-note-it gc-note-it--center">View the detailed landcover breakdown for your specific site within the <a href="#">feasibility study document</a></p>
+                <p class="gc-note-it">View the detailed landcover breakdown for your specific site within the <a href="help.html#documents/doc-types">feasibility study document</a></p>
               </div>${gcDisc('A machine-learning classification from satellite imagery that has not been field-verified. Provided as is, for landscape-scale analysis.')}${gcSource('Land cover', 'SIGnal, 30 m', '2024')}
             </section>
 
@@ -532,21 +712,7 @@ const siteGeneral = `
             <section class="gc-card" data-gc="soil">${gcHead('Soil classification', 'terrain', 'soil-groups')}
               <div class="gc-block">
                 <p class="gc-p">Based on the World Reference Base for Soil Resources (WRB) 2006, the soils in this area are predominantly <b>Andosols</b>. The distribution of all identified soil types is presented below.</p>
-                <div class="cl-soil">
-                  <div class="cl-soil__list">
-                    <div class="cl-soilrow is-top" style="--c:#ed3a33"><span class="n">01</span><div><b>Andosols</b><i><s style="width:73%"></s></i></div><em>27%</em></div>
-                    <div class="cl-soilrow" style="--c:#fecd67"><span class="n">02</span><div><b>Cambisols</b><i><s style="width:62%"></s></i></div><em>25%</em></div>
-                    <div class="cl-soilrow" style="--c:#f6872d"><span class="n">03</span><div><b>Ferralsols</b><i><s style="width:48%"></s></i></div><em>17%</em></div>
-                    <div class="cl-soilrow" style="--c:#f7991d"><span class="n">04</span><div><b>Acrisols</b><i><s style="width:23%"></s></i></div><em>9%</em></div>
-                    <div class="cl-soilrow" style="--c:#f7a082"><span class="n">05</span><div><b>Nitisols</b><i><s style="width:10%"></s></i></div><em>7%</em></div>
-                  </div>
-                  <div class="cl-dominant">
-                    <span class="cl-dominant__t">Dominant Soil Type:</span>
-                    <div><b>Andosols</b></div>
-                    <hr />
-                    <p>Soils developed from volcanic ash, pumice, and other volcanic materials. They are usually dark-coloured, rich in organic matter, highly porous, and have excellent water-holding capacity. These soils are generally highly fertile, although phosphorus fertilization is often required because of their strong phosphorus fixation capacity.</p>
-                  </div>
-                </div>
+                ${gcSoil()}
               </div>${gcDisc('The classification provides a standardised international soil nomenclature and should not be interpreted as a substitute for site-specific soil surveys or field verification.')}${gcSource('Soil classification (WRB 2006)', 'ISRIC World Reference Base (2006) Soil Groups, 250 m', '2020')}
             </section>
 
@@ -559,12 +725,29 @@ const siteGeneral = `
    Biodiversity Area, Plant species occurrence.
    Shares the .gc* card/alert/source styles; Nature-only pieces are .nc*. */
 const NC_ASSETS = 'assets/f01-step2/natctx';
+/* Conservation significance spider chart, inline so it takes the theme tokens.
+   Reach is a relative priority rank traced from the old Jung et al. render, not a
+   score, so no values or rings are labelled (DEC-83). [axis, reach 0–1, angle°] */
+const NC_RADAR = [['Biodiversity', 0.72, -90], ['Water', 0.62, 30], ['Carbon', 0.53, 150]];
+const ncRadar = () => {
+  const cx = 150, cy = 141, R = 78;
+  const at = (f, deg) => [cx + R * f * Math.cos(deg * Math.PI / 180), cy + R * f * Math.sin(deg * Math.PI / 180)];
+  const pts = (f) => NC_RADAR.map(([, v, a]) => at(f === undefined ? v : f, a).map(n => n.toFixed(1)).join(',')).join(' ');
+  const rings = [1 / 3, 2 / 3, 1].map(f => `<polygon class="nc-radar__ring" points="${pts(f)}"/>`).join('');
+  const spokes = NC_RADAR.map(([, , a]) => { const [x, y] = at(1, a); return `<line class="nc-radar__ring" x1="${cx}" y1="${cy}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}"/>`; }).join('');
+  const dots = NC_RADAR.map(([, v, a]) => { const [x, y] = at(v, a); return `<circle class="nc-radar__dot" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="4"/>`; }).join('');
+  /* labels sit just past each spoke tip: above the top one, below the two lower ones */
+  const labels = NC_RADAR.map(([name, , a]) => { const [x, y] = at(1, a); return `<text class="nc-radar__lbl" x="${x.toFixed(1)}" y="${(a < 0 ? y - 14 : y + 28).toFixed(1)}">${name}</text>`; }).join('');
+  return `<svg viewBox="0 0 299 247" role="img" aria-label="Spider chart of conservation significance across biodiversity, water and carbon. Biodiversity has the highest priority, then water, then carbon.">${rings}${spokes}<polygon class="nc-radar__area" points="${pts()}"/>${dots}${labels}</svg>`;
+};
 /* One row per species: list = [common, latin, records, year of latest record].
    GBIF records can lack a date, so a missing year reads "Date not recorded". */
+/* Labels are plain English; the tooltip gives the taxonomic class GBIF records them under. */
+const NC_CLASS = { Amphibian: 'Amphibia', Bird: 'Aves', Mammal: 'Mammalia', Reptile: 'Reptilia' };
 const ncSpecies = (icon, name, dot, list) => `
                 <div class="nc-splist${list.length > 5 ? ' nc-splist--scroll' : ''}">
                   <img class="nc-splist__ic" src="${NC_ASSETS}/${icon}.svg" alt="" />
-                  <div class="nc-splist__id"><span>${name}</span></div>
+                  <div class="nc-splist__id" data-tip="${name}s (class ${NC_CLASS[name]})"><span>${name}</span></div>
                   <ul style="--dot:${dot}">${list.map(s => `<li><span class="nc-nm"><i>${s[0]}</i> <em>(${s[1]})</em></span><span class="nc-rec">${s[3] ? 'Latest record ' + s[3] : 'Date not recorded'}</span><b>${s[2]} ${s[2] === 1 ? 'record' : 'records'}</b></li>`).join('')}</ul>
                 </div>`;
 /* Area of habitat threshold: species counted by how much habitat overlaps the
@@ -595,17 +778,17 @@ const siteNature = `
                 </div>
                 <p class="gc-note-it">Suitable habitat is mapped by refining each species&rsquo; IUCN range with regional land cover. The same land can be habitat for several species, so habitat areas are not added together.</p>
               </div>
-              <!-- flexible text column beside a 400px table -->
-              <div class="gc-block gc-terr gc-terr--mid gc-terr--text-end gc-terr--fill">
+              <!-- flexible text column beside a 300px table -->
+              <div class="gc-block gc-terr gc-terr--mid gc-terr--text-end gc-terr--narrow-end gc-terr--fill">
                 <div class="gc-block">
                   <h5 class="gc-sub">Area of habitat threshold</h5>
                   <p class="gc-p">The project area supports the area of habitat for <b>${NC_AOH.reduce((sum, r) => sum + r[1], 0)} species</b>. Most of these species have less than 90% habitat overlap with the project area.</p>
-                  <p class="gc-note-it">See the details of habitat area and IUCN status in the <a href="#">feasibility study document</a></p>
+                  <p class="gc-note-it">See the details of habitat area and IUCN status in the <a href="help.html#documents/doc-types">feasibility study document</a></p>
                 </div>
                 <table class="gc-table gc-table--auto">
-                  <thead><tr><th>Habitat overlap</th><th>Species present at the site</th></tr></thead>
+                  <thead><tr><th>Habitat overlap</th><th>n Present at the site</th></tr></thead>
                   <tbody>${NC_AOH.map(r => `
-                    <tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join('')}
+                    <tr><td>${r[0]}</td><td>${r[1]} Species</td></tr>`).join('')}
                   </tbody>
                 </table>
               </div>${gcDisc('Area of Habitat is not equivalent to Extent of Occurrence or Area of Occupancy (Brooks et al. 2019). Values represent mapped habitat overlap within the project area, not species abundance or confirmed presence.')}${gcSource('Area of habitat', 'IUCN refined by NTU, 30 m', '2024')}
@@ -613,33 +796,28 @@ const siteNature = `
 
             <!-- 2 · Charismatic species (GUI 3.1; was "Indicative key species presence").
                  No photo is licensed yet, so each record shows its name only. -->
-            <section class="gc-card" data-gc="species">${gcHead('Charismatic Species', 'key', 'species-occurrence')}
+            <section class="gc-card" data-gc="species">${gcHead('Charismatic Species Occurrences', 'key', 'species-occurrence')}
               <div class="gc-block">
-                <p class="gc-p">There are charismatic species throughout the project area. The species featured are:</p>
+                <p class="gc-p">A total of <b>8</b> candidate charismatic species have recorded occurrences within the project area based on GBIF data.</p>
                 <div class="nc-splists">
-${ncSpecies('sp-bird', 'Aves', 'var(--primary-500)', [['Bali Myna','Leucopsar rothschildi',96,2024],['Java Sparrow','Padda oryzivora',74,2023],['Black-winged Starling','Acridotheres melanopterus',61,2022],['Javan Kingfisher','Halcyon cyanoventris',48,2024]])}
-${ncSpecies('sp-mammal', 'Mammalia', 'var(--primary-500)', [['Javan Rusa','Rusa timorensis',37,2021],['Long-tailed Macaque','Macaca fascicularis',52,2025]])}
-${ncSpecies('sp-reptile', 'Reptilia', 'var(--primary-500)', [['Reticulated Python','Malayopython reticulatus',23,null],['Asian Water Monitor','Varanus salvator',44,2023]])}
+${ncSpecies('sp-bird', 'Bird', 'var(--primary-500)', [['Bali Myna','Leucopsar rothschildi',96,2024],['Java Sparrow','Padda oryzivora',74,2023],['Black-winged Starling','Acridotheres melanopterus',61,2022],['Javan Kingfisher','Halcyon cyanoventris',48,2024]])}
+${ncSpecies('sp-mammal', 'Mammal', 'var(--primary-500)', [['Javan Rusa','Rusa timorensis',37,2021],['Long-tailed Macaque','Macaca fascicularis',52,2025]])}
+${ncSpecies('sp-reptile', 'Reptile', 'var(--primary-500)', [['Reticulated Python','Malayopython reticulatus',23,null],['Asian Water Monitor','Varanus salvator',44,2023]])}
                 </div>
               </div>${gcDisc('GBIF aggregates heterogeneous sources; records may lack identification, location precision or date.')}${gcSource('Species occurrence', 'GBIF', '2025')}
             </section>
 
-            <!-- 3 · Conservation significance — the three values are also listed as text;
-                 they are read off radar.png's own 0-10 axis, so chart and text agree -->
+            <!-- 3 · Conservation significance — qualitative only: the source is a priority
+                 ranking, not a measurable score, so no numbers are shown (DEC-83) -->
             <section class="gc-card" data-gc="significance">${gcHead('Conservation Significance', 'shield', 'conservation-significance')}
               <div class="nc-cons">
-                <figure class="nc-radar"><img src="${NC_ASSETS}/radar.png" alt="Spider chart of conservation significance: biodiversity 8, water 7, carbon 6, each out of 10" /></figure>
+                <figure class="nc-radar">${ncRadar()}</figure>
                 <div class="nc-cons__side">
                   <div class="gc-block">
                     <p class="gc-p">The project area reflects the area&rsquo;s significance for <b>biodiversity</b> conservation.</p>
-                    <ul class="nc-scores">
-                      <li><span>Biodiversity</span><b>8</b></li>
-                      <li><span>Water</span><b>7</b></li>
-                      <li><span>Carbon</span><b>6</b></li>
-                    </ul>
-                    <p class="gc-note-it">Scores are out of 10. A higher score means a higher conservation priority.</p>
+                    <p class="gc-note-it">The chart compares biodiversity, water and carbon. A point further from the centre means a higher conservation priority. It shows a ranking, not a measured score.</p>
                   </div>
-                  <div class="gc-chip gc-chip--sq"><span><i style="background:var(--success-600)"></i>Significance score (out of 10)</span></div>
+                  <div class="gc-chip gc-chip--sq"><span><i style="background:var(--warning-400)"></i>Relative conservation priority</span></div>
                 </div>
               </div>${gcDisc('The ranked priority map is intended to provide broad spatial guidance for decision-makers. It is not intended to replace detailed national or sub-national planning.')}${gcSource('Conservation significance', 'Jung et al., 10 km', '2021')}
             </section>
@@ -691,7 +869,7 @@ ${ncSpecies('sp-reptile', 'Reptilia', 'var(--primary-500)', [['Reticulated Pytho
             <!-- 6 · Plant species occurrence (GUI 3.1; replaces "Endangered tree species") -->
             <section class="gc-card" data-gc="plants">${gcHead('Plant Species Occurrence', 'park', 'plant-occurrence')}
               <div class="gc-block">
-                <p class="gc-p">Based on GBIF occurrence records, the project area recorded occurrences of <b>31</b> plant species between 2000 and 2026. Among these, <b>1</b> species is listed under CITES Appendix I, <b>6</b> under Appendix II, and <b>2</b> under Appendix III. These records represent <b>0.01%</b> of the global plant species diversity.</p>
+                <p class="gc-p">Based on GBIF occurrence records, the project area recorded occurrences of <b>31</b> plant species between 2000 and 2026. Among these, <b>1</b> species is listed under CITES Appendix I, <b>6</b> under Appendix II, and <b>2</b> under Appendix III.</p>
                 <div class="nc-tree">
                   <img src="${NC_ASSETS}/tree.jpg" alt="" />
                   <div><span>Plant species recorded in the project area, 2000 to 2026</span><b>31 Species</b></div>
@@ -711,12 +889,14 @@ ${ncSpecies('sp-reptile', 'Reptilia', 'var(--primary-500)', [['Reticulated Pytho
    plot height, so the shapes match the design without a chart library. */
 const CL_ASSETS = 'assets/f01-step2/climctx';
 const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-const clChart = (bars, plot, labels, yTicks, yTitle, cls) => `
+/* Hover text reads the value off the y axis: bar height / plot height x the top
+   tick. `fmt` turns that value into text with its unit. */
+const clChart = (bars, plot, labels, yTicks, yTitle, cls, fmt) => `
                   <div class="cl-chart ${cls}">
                     <span class="cl-chart__ytitle">${yTitle}</span>
                     <ul class="cl-chart__y">${yTicks.map(t => `<li>${t}</li>`).join('')}</ul>
                     <div class="cl-chart__plot">
-                      ${bars.map(h => `<i style="height:${(h / plot * 100).toFixed(1)}%"></i>`).join('')}
+                      ${bars.map((h, i) => `<i data-tip="${labels[i]}: ${fmt(h / plot * yTicks[0])}" style="height:${(h / plot * 100).toFixed(1)}%"></i>`).join('')}
                     </div>
                     <ul class="cl-chart__x">${labels.map(l => `<li>${l}</li>`).join('')}</ul>
                   </div>`;
@@ -750,10 +930,12 @@ const siteClimate = `
             <section class="gc-card gc-card--blue" data-gc="carbon">${gcHead('Carbon information', 'cloud', 'carbon-pools')}
               <div class="gc-block">
                 <div class="cl-carbon">
-                  <p class="gc-p">The area hosts extensive carbon sinks that currently store <b>27,193,712.20</b> tCO<sub>2</sub>e, adding to the vital fight against global warming.</p>
+                  <div class="gc-block cl-carbon__tx">
+                    <p class="gc-p">The area hosts extensive carbon sinks that currently store <b>27,193,712.20</b> tCO<sub>2</sub>e, adding to the vital fight against global warming.</p>
+                    <p class="gc-note-it">The total is the sum of the three pools below. Soil organic carbon is counted to a depth of 30 cm.</p>
+                  </div>
                   <div class="cl-total"><span>Total Carbon Storage:</span><b>27,193,712.20 <em>tCO<sub>2</sub>e</em></b></div>
                 </div>
-                <p class="gc-note-it">The total is the sum of the three pools below. Soil organic carbon is counted to a depth of 30 cm.</p>
               </div>
               <div class="gc-block">
                 <div class="cl-pool">
@@ -779,18 +961,16 @@ const siteClimate = `
             <section class="gc-card gc-card--blue" data-gc="ledger">${gcHead('The Annual Climate Ledger', 'thermo', false)}
               <div class="cl-ledger">
                 <div class="cl-metric">
-                  <span class="cl-metric__ic" style="background:#125e92"><img src="${CL_ASSETS}/ic-rain.svg" alt="" /></span>
-                  ${gcSub('Annual precipitation', 'annual-precipitation')}
+                  ${clSub('Annual precipitation', 'annual-precipitation', '<path d="M491-200q12-1 20.5-9.5T520-230q0-14-9-22.5t-23-7.5q-41 3-87-22.5T343-375q-2-11-10.5-18t-19.5-7q-14 0-23 10.5t-6 24.5q17 91 80 130t127 35Zm-239.5 26Q160-268 160-408q0-100 79.5-217.5T480-880q161 137 240.5 254.5T800-408q0 140-91.5 234T480-80q-137 0-228.5-94ZM652-230.5Q720-301 720-408q0-73-60.5-165T480-774Q361-665 300.5-573T240-408q0 107 68 177.5T480-160q104 0 172-70.5ZM480-480Z"/>')}
                   <p class="gc-p">Monthly precipitation in the selected area ranges from 45 to 320 mm, with an average of 167 mm per month and an annual total of 2,000 mm.</p>
                   <p class="gc-note-it">Long-term average (WorldClim, 2000), not this year&rsquo;s rainfall.</p>
-${clChart([127.2,115.3,99.4,59.6,39.8,27.8,21.9,17.9,27.8,51.7,87.5,119.3], 159, MONTHS, [400,300,200,100,0], 'Monthly precipitation (mm)', 'cl-chart--prec')}
+${clChart([127.2,115.3,99.4,59.6,39.8,27.8,21.9,17.9,27.8,51.7,87.5,119.3], 159, MONTHS, [400,300,200,100,0], 'Monthly precipitation (mm)', 'cl-chart--prec', v => `${Math.round(v)} mm`)}
                 </div>
                 <div class="cl-metric">
-                  <span class="cl-metric__ic" style="background:#4591c5"><img src="${CL_ASSETS}/ic-temp.svg" alt="" /></span>
-                  ${gcSub('Annual mean temperature', 'annual-temperature')}
+                  ${clSub('Annual mean temperature', 'annual-temperature', '<path d="M338.5-138.5Q280-197 280-280q0-48 21-89.5t59-70.5v-320q0-50 35-85t85-35q50 0 85 35t35 85v320q38 29 59 70.5t21 89.5q0 83-58.5 141.5T480-80q-83 0-141.5-58.5ZM440-520h80v-40h-40v-40h40v-80h-40v-40h40v-40q0-17-11.5-28.5T480-800q-17 0-28.5 11.5T440-760v240Z"/>')}
                   <p class="gc-p">Annual mean temperature in the selected area ranges from 26.4&deg;C to 27.4&deg;C, with an average of 26.9&deg;C.</p>
                   <p class="gc-note-it">Long-term average (WorldClim, 2000), not today&rsquo;s temperature.</p>
-${clChart([104.9,105.7,106.9,108.5,108.9,107.3,105.3,104.9,106.9,108.9,108.5,106.5], 159, MONTHS, [40,30,20,10,0], 'Monthly mean temperature (&deg;C)', 'cl-chart--temp')}
+${clChart([104.9,105.7,106.9,108.5,108.9,107.3,105.3,104.9,106.9,108.9,108.5,106.5], 159, MONTHS, [40,30,20,10,0], 'Monthly mean temperature (&deg;C)', 'cl-chart--temp', v => `${v.toFixed(1)} &deg;C`)}
                 </div>
               </div>${gcDisc('Long-term climate normals interpolated from weather stations, not current or observed conditions at the site. Accuracy depends on weather station density, which is uneven across the region.')}${gcSource('Climate normals', 'WorldClim, 927 m', '2000')}
             </section>
@@ -854,13 +1034,13 @@ const threat = `
                 <section class="gc-card" data-gc="deforestation">${gcHead('Historical deforestation', 'tree', 'deforestation-2014-2024')}
                   <div class="gc-block">
                     <div class="gc-def">
-                      <figure class="gc-def__map"><img src="${GC_ASSETS}/map-defor.png" alt="Historical deforestation map" /></figure>
+                      <figure class="gc-def__map"><img src="${GC_ASSETS}/map-defor.png" alt="Historical deforestation map of the project area: forest cover with forest loss, 2014 to 2024, concentrated along the north-west edge" /></figure>
                       <div class="gc-def__side">
                         <div>
                           <p class="gc-p">Between 2014 and 2024, the project area lost <b>6,720 ha</b> of forest, an average of</p>
                           <p class="gc-big">1.2<small>% / year</small></p>
                         </div>
-                        <div class="gc-chip"><span><i style="background:#a5c47c"></i>Forest</span><span><i style="background:#e0418c"></i>Forest Loss</span></div>
+                        <div class="gc-chip"><span><i style="background:#2c6639"></i>Forest</span><span><i style="background:var(--danger-600)"></i>Forest Loss</span></div>
                       </div>
                     </div>
                   </div>${gcDisc('Derived by differencing two independently produced layers. The loss is not attributed to a cause.')}${gcSource('Forest loss', 'SIGnal, 30 m', '2014 to 2024')}
@@ -869,38 +1049,28 @@ const threat = `
                 <!-- moved from Climate. GUI 3.1: past fires and fire susceptibility are two
                      separate results, and burned-area history is never read as a forecast. -->
                 <section class="gc-card gc-card--red" data-gc="burned">${gcHead('Historical Burned Area', 'fire', 'burned-area')}
+                  <!-- intro, then the yearly chart with its summary beside it. Figures are the sample burned-area series
+                       (DEC-11): 2011 to 2020, 4,125 ha in total, peak 563 ha in 2012. -->
                   <div class="gc-block">
-                    <h5 class="gc-sub">Past fires</h5>
-                    <div class="cl-fire">
-                      <div class="cl-fire__graph">
-                        <p class="gc-p">Burned area detected in each year, in hectares.</p>
-${clChart([103,165,109,152,133,133,109,109,88,109], 176, ['2011','2012','2013','2014','2015','2016','2017','2018','2019','2020'], [600,500,400,300,200,100,0], 'Burned Area (in ha)', 'cl-chart--fire')}
-                        <p class="cl-chart__xtitle">Years</p>
-                      </div>
-                      <div class="cl-burned">
-                        <div>
-                          <p>In the past <b>10 years</b>, <b>fires</b> in the selected area covered a total of:</p>
-                          <b class="cl-burned__v">4,125.0 ha</b>
-                        </div>
-                      </div>
-                    </div>
+                    <p class="gc-p">This shows how likely the land is to burn under baseline conditions, based on factors such as land cover, dryness, and climate.</p>
                   </div>
-                  <div class="gc-block">
-                    <h5 class="gc-sub">Fire susceptibility</h5>
-                    <p class="gc-p">This shows how likely the land is to burn under baseline conditions, based on factors such as land cover, dryness, and climate. It is not a forecast of current fire danger.</p>
-                    <div class="nc-err nc-err--empty" role="status"><div><b>Fire susceptibility data are not available for this area.</b><p>The chart above shows where fire has happened. It is not a probability of future fire.</p></div></div>
+                  <!-- chart 70%, the narrative that summarises it 30% beside it -->
+                  <div class="cl-burnrow">
+                    <div class="gc-block">
+${clChart([103,165,109,152,133,133,109,109,88,109], 176, ['2011','2012','2013','2014','2015','2016','2017','2018','2019','2020'], [600,500,400,300,200,100,0], 'Burned Area (in ha)', 'cl-chart--fire', v => `${NBS_DATA.grp(Math.round(v))} ha`)}
+                      <p class="cl-chart__xtitle">Years</p>
+                    </div>
+                    <p class="gc-p">The project area recorded a cumulative burned area of <b>4,125 ha</b> between 2011 and 2020, with an average annual burned area of <b>413 ha</b>. The highest annual burned area was recorded in <b>2012</b>, when <b>563 ha</b> was affected by fire.</p>
                   </div>${gcDisc('Burn scars detected from satellite. Cropland burning is under-detected and small or short fires can be missed entirely.')}${gcSource('Burned area', 'GABAM, 30 m', '2024')}
                 </section>
 
                 <!-- new in GUI 3.1 -->
                 <section class="gc-card" data-gc="degradation">${gcHead('Land degradation', 'layers', false)}
-                  <div class="gc-terr gc-terr--mid">
+                  <div class="gc-stack">
                     <div class="gc-block">
-                      <p class="gc-p">A total of <b>24,000 ha</b> within the project area showed signs of land degradation between 2014 and 2024. Of this area, <b>3,000 ha</b> was flagged as a potential false positive and <b>2,400 ha</b> as a potential false negative. Of the degraded area, <b>15,000 ha</b> is in forest and <b>9,000 ha</b> is outside forest.</p>
-                      <p class="gc-p">In contrast, <b>18,000 ha</b> showed positive changes in land condition: <b>15,000 ha</b> is classified as likely improving and <b>3,000 ha</b> is flagged as a possible false positive.</p>
-                      <p class="gc-p">The remaining <b>108,000 ha</b> is classified as stable, with no significant improvement or deterioration in the assessed land condition indicators between 2014 and 2024.</p>
+                      ${ldNarrative()}
                     </div>
-                    <div class="gc-block">${gcDonut([['Degraded', 24000, 'var(--danger-600)'], ['Stable', 108000, 'var(--success-300)'], ['Improved', 18000, 'var(--success-700)']], 'Area assessed, 2014 to 2024', 'Land condition, share of the selected area', true)}
+                    <div class="gc-block">${gcSunHalf(ldGroups(), 'Area assessed, 2014 to 2024', 'Land condition by forest and non-forest area', true)}
                     </div>
                   </div>${gcDisc('Potential false-positive or false-negative outcomes should be interpreted and validated using ground-truth data, field observations and other locally available evidence.')}${gcSource('Land degradation', 'UNCCD refined by SCeNe Coalition, 30 m', '2024')}
                 </section>
@@ -915,25 +1085,10 @@ ${clChart([103,165,109,152,133,133,109,109,88,109], 176, ['2011','2012','2013','
               </summary>
               <div class="gc">
 
-                <!-- GUI 3.1 hides this card when the area has no peatland (not built: the sample always has peatland) -->
-                <section class="gc-card" data-gc="drainage">${gcHead('Drainage canal pressure', 'terrain', false)}
-                  <p class="gc-p">Peatland disturbance may be associated with hydrological alteration. Disturbance refers to possible changes in peatland condition caused by canals, reduced soil moisture, fire occurrence, or altered water table conditions, even when vegetation cover remains present.</p>
-                  <div class="gc-terr">
-                    <div class="gc-block">
-                      <h5 class="gc-sub gc-sub--ic"><span class="gc-sub__ic"><svg viewBox="0 0 24 24"><path d="M3 17c1.5 0 2.2-1 3.5-1s2 1 3.5 1 2.2-1 3.5-1 2 1 3.5 1 2.2-1 3.5-1"/><path d="M6 13l6-7 6 7M12 6v7"/></svg></span>Canal proximity</h5>
-                      ${gcLevel('Distance class', 'Close (0 to 500 m)', 'bad')}
-                      <p class="gc-p">The peatland area is located close to mapped drainage canals, with the nearest canal approximately <b>320 m</b> away. Being within 0 to 500 metres of mapped drainage canals indicates potential hydrological disturbance. Drainage canals may lower water table levels in adjacent peatland, increasing peat susceptibility to fire.</p>
-                    </div>
-                    <div class="gc-block">
-                      <h5 class="gc-sub gc-sub--ic"><span class="gc-sub__ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg></span>Drainage pressure</h5>
-                      ${gcLevel('Drainage density', 'High (over 5 km/km&sup2;)', 'bad')}
-                      <p class="gc-p">The peatland areas are also classified as having high drainage density. High drainage density indicates substantial hydrological disturbance and is associated with accelerated peat subsidence, increased carbon emissions, and significant peat-fire risk.</p>
-                    </div>
-                  </div>${gcAlert}${gcSource('Canal proximity', 'Dadap et al., 5 m', '2021')}${gcSource('Drainage density', 'Dadap et al., 1,000 m', '2021')}
-                </section>
+                ${drCard()}
 
                 <!-- moved from General -->
-                <section class="gc-card" data-gc="hazard">${gcHead('Natural Disaster Risk', 'warning', 'disaster-risk')}
+                <section class="gc-card" data-gc="hazard">${gcHead('Natural Disaster Risk', 'bolt', 'disaster-risk')}
                   <div class="gc-block">
                     <p class="gc-p">The selected area is susceptible to several natural disaster risks, including:</p>
                     <!-- four hazards, 2 x 2. Fire is not listed here: the Fire risk card under
@@ -963,7 +1118,7 @@ ${clChart([103,165,109,152,133,133,109,109,88,109], 176, ['2011','2012','2013','
                 <section class="gc-card" data-gc="defrisk">${gcHead('Deforestation risk', 'tree', 'deforestation-risk')}
                   <div class="gc-block">
                     <div class="gc-def">
-                      <figure class="gc-def__map gc-def__map--plain"><img src="${GC_ASSETS}/map-risk.png" alt="National deforestation risk map" /></figure>
+                      <figure class="gc-def__map gc-def__map--plain"><img src="${GC_ASSETS}/map-defor-risk.png" alt="Deforestation risk map of the project area, mostly low risk with higher-risk patches along the north-west edge" /></figure>
                       <div class="gc-def__side">
                         <div>
                           <p class="gc-p">Forest in this area has a higher deforestation risk than the national average, ranking in the top <b>15%</b> of the country&rsquo;s forest with deforestation risk.</p>
@@ -977,7 +1132,7 @@ ${clChart([103,165,109,152,133,133,109,109,88,109], 176, ['2011','2012','2013','
 
                 <!-- new in GUI 3.1. The document gives no visual and no source for this row; the
                      thresholds were set by the product owner (DEC-50); the gauge shows the share only (DEC-61). -->
-                <section class="gc-card gc-card--red" data-gc="firerisk">${gcHead('Fire risk', 'fire', false)}${(() => {
+                <section class="gc-card gc-card--red" data-gc="firerisk">${gcHead('Fire risk', 'fire', 'fire-risk')}${(() => {
                   const pct = Math.round(GC_FIRE_HA / NBS_DATA.aoi * 100), lvl = gcFireLevel(pct);
                   return `
                   <div class="gc-terr gc-terr--text-end">

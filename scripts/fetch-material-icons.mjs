@@ -34,7 +34,7 @@ const ICONS = [
   'account_balance', 'settings',
   // Place, nature and climate (the Data Analyser card heads, GC_ICONS)
   'public', 'landscape', 'terrain', 'park', 'nature', 'forest', 'eco', 'pets',
-  'water_drop', 'cloud', 'sunny', 'device_thermostat', 'local_fire_department',
+  'water_drop', 'cloud', 'sunny', 'device_thermostat', 'local_fire_department', 'bolt:fill', 'water',
 ];
 
 const SRC = 'https://fonts.gstatic.com/s/i/short-term/release/materialsymbolsoutlined';

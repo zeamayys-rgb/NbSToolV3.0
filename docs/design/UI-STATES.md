@@ -157,7 +157,7 @@ The highest-traffic and highest-risk screen. Broken out by step.
   `TODO(design): a missing threat layer must render as an explicit "Not assessed" row, visually distinct from a zero-severity result. Confirm copy and treatment.` **Blocking.**
   GUI 3.1 answers this, and since DEC-49 every card on the step has the states. The ecosystem
   cards and overview totals, which did not, are gone.
-- `TODO(design): GUI 3.1 hides Drainage canal pressure when the area has no peatland, and offers "hide, or a badge reading No drainage" when there is no overlap with drainage pressure. Choose one. Neither is built: the sample always has peatland.`
+- Drainage canal pressure (`drCard()`): no peatland, the card is not rendered. No overlap with the drainage-density layer, the Drainage pressure block shows a "No drainage" badge and no narrative (the badge option from GUI 3.1, chosen in DEC-87). Canal proximity picks Close / Intermediate / Distant from the distance in metres. The sample always has peatland and high density, so these branches are reachable only by editing `DR_DATA`.
 - `TODO(design): a group whose cards are all unavailable still opens onto messages. Should the head say so while it is closed?`
 - `TODO(design): Product, Design and Data must agree the label for a missing value (blank, dash or message); GUI 3.1 says the references disagree. The built states use the message.`
 
@@ -469,9 +469,9 @@ so it cannot be empty, partial, stale or out of scope.
 
 | State | Trigger | What the user sees | Implemented? |
 |---|---|---|---|
-| Default | Page load with no hash | The landing page: hero, two actions, one card group per section; sidebar tree; TOC of the five sections; pager | Yes |
+| Default | Page load with no hash | The landing page: hero, two actions, one group per section, the overview video slot and the phase table; sidebar tree; TOC of the six groups; pager | Yes |
 | Deep link to a page | `#<article-id>` | That page, scrolled to its top; its parent expanded in the tree if it has children | Yes |
-| Deep link to a section | `#<section-id>` inside a page (`#phase-2`, `#carbon`) | The owning page, scrolled to that heading, with the section hash kept in the address | Yes |
+| Deep link to a section | `#<section-id>` or a sub-heading id inside a page (`#phase-2`, `#phase-4b`, `#carbon`) | The owning page, scrolled to that heading, with the section hash kept in the address | Yes |
 | Retired link | An id of the previous Help Centre (`#workflow`, `#results-carbon`) | Forwards to the page or section that replaced it (`moved`) | Yes |
 | Unknown link | `#<nothing>` | The landing page | Yes |
 | Searching | Words in the sidebar box | Every matching page on both halves, flat under its section, other-page links carrying `?q=` | Yes |
@@ -481,10 +481,14 @@ so it cannot be empty, partial, stale or out of scope.
 | Demo full | The button is pressed | The full video with native controls; the button is gone | Yes |
 | Demo under reduced motion | `prefers-reduced-motion: reduce` | The poster, not the loop; the button still works | Yes |
 | Demo autoplay refused | The browser blocks autoplay | The poster; the button still works | Yes |
+| Tutorial without an address | A video slot whose key in `HC_VIDEOS` is empty or not a YouTube address | On the landing page and *Video tutorials*: a short dashed strip with a "Video coming soon" pill and the caption. Under a guide page's hero: nothing, the slot stays hidden | Yes — by design, `TODO(design)` |
+| Tutorial ready | A slot whose key holds a YouTube link or id | A dark 16:9 frame with a *Play video* button labelled with the video's title. Nothing is requested from YouTube yet | Yes |
+| Tutorial playing | The button is pressed | The YouTube player (no-cookie domain) replaces the button and takes focus | Yes |
+| Tutorial blocked | YouTube is unreachable or blocked on the reader's network | The browser's own error inside the frame; the caption and its *Read the guide* link stay | Partial — no fallback message |
 | Resource without an address | A Resources card whose document is not yet published | A dashed, non-link card with a "Link coming soon" pill | Yes — by design, `TODO(design)` |
 | Loading | N/A — static HTML | — | N/A |
 | Error | A screenshot or video file fails to load | Reserved box with alt text; the caption stays | Partial — by design |
-| JavaScript off | Scripting disabled | Every page in sequence as one long page; sidebar and TOC empty; search inert; the loop does not play | Partial — readable, not navigable from the sidebar |
+| JavaScript off | Scripting disabled | Every page in sequence as one long page; sidebar and TOC empty; search inert; the loop does not play; every video slot reads "Video coming soon" | Partial — readable, not navigable from the sidebar |
 | Long content | Any viewport | Tables scroll inside their wrapper; screenshots scale to the column; the phase chart's flows wrap | Yes |
 | Narrow viewport | Below 1100px, then 820px | TOC drops, then the sidebar becomes a chip rail with children flattened into it and the current chip in view | Yes |
 | Stale screenshots | A screen changes after the manual's capture | Nothing — recapture for the manual and copy across | No — `TODO(design)` |
