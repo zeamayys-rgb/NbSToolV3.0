@@ -253,12 +253,12 @@ function docsScope() {
     'Three decisions bound everything the tool can say: where it works, which ecosystems it recognises, and which interventions it is willing to recommend. This page sets out all three, together with the reasoning the methodology document gives for each.',
     ['11 countries', '3 ecosystems + 1 guardrail', '2014 &rarr; 2024']) +
 
-  docSection('2.1 &mdash; Region', `
+  docSection('Region', `
     <p>The tool covers <strong>eleven countries</strong> in Southeast Asia:</p>
     <p>Brunei Darussalam · Cambodia · Indonesia · Lao PDR · Malaysia · Myanmar · the Philippines · Singapore · Thailand · Timor-Leste · Viet Nam.</p>`,
     'region') +
 
-  docSection('2.1 &mdash; Three ecosystems, and a fourth reference class', `
+  docSection('Three ecosystems, and a fourth reference class', `
     ${docTable(['Ecosystem', 'Definition'], [
       ['<strong>Dryland forest</strong>', 'Sits on mineral soil that is well drained and not regularly flooded.'],
       ['<strong>Mangrove</strong>', 'Sits on a coastal zone with salt or brackish water shaped by the tides.'],
@@ -272,13 +272,13 @@ function docsScope() {
     ${docCallout('The three are not mutually exclusive', 'Peat swamp forest is both forest and peatland. Mangrove can grow on peat. The tool therefore reports a <strong>combination</strong> where one exists, rather than forcing a single label onto the site.', 'note')}`,
     'ecosystems') +
 
-  docSection('2.1 &mdash; Time frame', `
+  docSection('Time frame', `
     <p>The time frame is <strong>2014 to 2024</strong>. Everything the tool says about change &mdash; forest loss, disturbance, and the trajectory that selects the pathway &mdash; is measured between those two dates.</p>
     ${docEquation('observation window = 2014 &rarr; 2024 (10 years)',
       'The same window sets BASELINE_RATE_MAX_YEARS = 10 in the carbon method. A project duration longer than the window extrapolates beyond the evidence, and the tool flags it.')}`,
     'time-frame') +
 
-  docSection('2.2 &mdash; Why protect, manage, then restore', `
+  docSection('Why protect, manage, then restore', `
     <p>Nature-based Solutions can act on land in three ways: by keeping intact ecosystems intact, by changing how working land is used so that it holds more carbon and supports more life, and by bringing back what has been lost. <strong>Cook-Patton et al. (2021)</strong> set these out as a hierarchy &mdash; protect, manage, then restore &mdash; and argue the order on four criteria: the magnitude of mitigation potential, the immediacy of that mitigation, cost-effectiveness, and the co-benefits each option offers.</p>
     ${docTable(['Pathway', 'The argument for its position'], [
       ['<strong>Protect</strong>', 'Protection avoids emissions that would otherwise happen now, so it acts immediately and cannot be undone by a failed planting season.'],
@@ -288,21 +288,21 @@ function docsScope() {
     ${docCallout('The order is a rule of thumb, not a ranking of worth', 'Cook-Patton et al. are explicit that the three are complementary and in practice sit together in one portfolio; which of them leads on a given site depends on biophysical, political, institutional, economic and socio-cultural context. The NbS Tool follows that reading. <strong>It does not tell a user which pathway is best.</strong> It reports which pathways the land is eligible for, and how many hectares fall under each.', 'note')}`,
     'pathway-hierarchy') +
 
-  docSection('2.2 &mdash; Alignment with the ASEAN NbS Framework', `
+  docSection('Alignment with the ASEAN NbS Framework', `
     ${docCallout('Status', 'The ASEAN NbS Framework is <strong>under review for ASEAN endorsement</strong>. Until it is endorsed, read references to it on these pages as alignment with a draft, not with an adopted ASEAN standard. The methodology document calls it the <em>ASEAN NbS/EbA MRV Framework</em>.', 'warn')}
     <p>The ASEAN NbS Framework adopts the same three pathways. In that framework the process begins with ecosystem identification for the selected ecosystems &mdash; forests, mangroves and peatlands &mdash; from land-use data. Each ecosystem is then assigned an NbS pathway according to its level of degradation. Key degradation drivers &mdash; forest fires, flooding, erosion, abrasion, landslides and logging &mdash; are identified to inform the choice of intervention.</p>
     ${docCallout('NbS Tool v3 is the spatial implementation of that logic', 'The tool reads degradation from a ten-year land cover trajectory and turns it into a pathway. The rules are set out in <em>Ecological state &amp; trajectory</em> and <em>Decision matrix</em>.', 'note')}`,
     'asean-framework') +
 
-  docSection('2.2 &mdash; The four pathway outcomes', `
+  docSection('The four pathway outcomes', `
     ${docTable(['Pathway', 'Definition'], [
       ['<strong>Protect</strong>',
        'Maintain forest cover based on spatial data from 2014 and 2024. Driven by avoided deforestation initiatives such as mitigating legal land clearing and illegal logging, this strategy preserves forests as carbon sinks, prevents wildlife habitat fragmentation, and enhances social wellbeing for forest-dependent communities.'],
       ['<strong>Manage</strong>',
        'Balance human livelihoods with ecological health on lands that transitioned into active use between 2014 and 2024. Manage pathways include silvofishery, paludiculture, soil and water enrichment, and buffer management. This strategy optimises working-land productivity, lowers carbon intensity, and minimises ecosystem impacts without requiring full rewilding.'],
       ['<strong>Restore</strong>',
-       'Actively heal heavily degraded landscapes, targeting degraded vegetation, barren lands, and long-term non-forested areas. Driven by the Afforestation, Reforestation and Revegetation (ARR) framework, the activities include native species planting, ecosystem restoration, and assisted natural regeneration (ANR). This pathway re-establishes high-integrity forest cover, secures long-term carbon removals, and creates ecosystem services.'],
-      ['<strong>Ineligible</strong>',
+       'Actively heal heavily degraded landscapes, targeting degraded vegetation, barren lands, and long-term non-forested areas. Driven by the Afforestation, Reforestation and Revegetation (ARR) framework, the activities include native species planting, ecosystem restoration, and allowing natural forest regeneration. This pathway re-establishes high-integrity forest cover, secures long-term carbon removals, and creates ecosystem services.'],
+      ['<strong>Carbon ineligible</strong>',
        'Not a pathway, but a screening outcome reported in the same field. The land cannot generate carbon credits under the tool&rsquo;s current criteria, although non-carbon options may still exist. It covers natural forest converted to managed tree cover, plantation that was already established in 2014, settlement, and the savanna-reference categories.']
     ])}
     ${docSource("Table 1; definitions follow the GUI Design Document NbS Tool V 3.0")}
@@ -327,7 +327,7 @@ function docsLandcover() {
     <p>Full provenance, accuracy figures per country and the publisher&rsquo;s disclaimer are in <em>A.1 General context layers</em>.</p>`,
     'landcover-production') +
 
-  docSection('2.3 &mdash; The nineteen class definitions', `
+  docSection('The nineteen class definitions', `
     ${docTable(['No.', 'Class', 'Definition'], [
       ['1', '<strong>Aquaculture</strong>', 'The farming of aquatic organisms, including fish, molluscs, crustaceans and aquatic plants. It includes man-made pond systems within fresh and salt water bodies or temporarily flooded regions.'],
       ['2', '<strong>Barren</strong>', 'Natural or semi-natural lands characterised by exposed soil, sand or rock, including rocky mountains and mining sites.'],
@@ -365,7 +365,7 @@ function docsConventions() {
     'Three conventions apply everywhere in the tool. They explain several choices further down the method: why every area figure is trustworthy but every distance figure needs a correction, why a site is never reduced to a single label, and why the output states its own uncertainty instead of hiding it.',
     ['Equal-area projection', 'Area-weighted distributions', 'Screening instrument']) +
 
-  docSection('1 &mdash; The boundary is reprojected once', `
+  docSection('The boundary is reprojected once', `
     <p>Whatever coordinate system a user supplies, the tool reprojects the boundary to a <strong>World Cylindrical Equal Area</strong> projection. Every hectare figure is therefore computed on an equal-area grid.</p>
     ${docEquation('any input CRS &rarr; World Cylindrical Equal Area (reference CRS)',
       'Applied once, at the boundary. Every subsequent layer is clipped and read against the reprojected boundary.')}
@@ -373,7 +373,7 @@ function docsConventions() {
     ${docCallout('One discrepancy in the source document', 'The methodology document gives the reference CRS as <code>ESRI:54043</code> in the analysis conventions section, and as <code>ESRI:54034</code> in the Phase&nbsp;1 table and throughout Annex&nbsp;A. Both are cited here as written. <strong>Confirm the intended code with the Substance Team before quoting it</strong>; the method itself &mdash; a single reprojection to an equal-area CRS &mdash; is unambiguous.', 'warn')}`,
     'equal-area') +
 
-  docSection('2 &mdash; The site is treated as mixed, not uniform', `
+  docSection('The site is treated as mixed, not uniform', `
     <p>A project area covers many pixels and usually spans several categories at once. Results are therefore reported as <strong>area-weighted distributions</strong>, not single labels. A site is never reduced to one ecosystem, one land cover class or one risk level.</p>
     ${docExample('What this looks like in practice',
       `<p>A site made up of 60% evergreen forest, 30% shrubland and 10% cropland is reported as those three shares.</p>
@@ -383,10 +383,10 @@ function docsConventions() {
          <li>Cropland &mdash; <strong>10%</strong></li>
        </ul>`,
       'It is <strong>never</strong> reported as “a forest site”.')}
-    ${docCallout('The exceptions are declared', 'A handful of components do produce a single representative value &mdash; natural hazard risk takes the highest class covering at least 20% of the project area, and the climate vulnerability cards round an area-weighted mean to one class. Each says so at the point where it does it.', 'note')}`,
+    ${docCallout('The exceptions are declared', 'A handful of components do produce a single representative value &mdash; natural hazard risk takes the highest class covering at least 20% of the valid hazard area, and the climate vulnerability cards round an area-weighted mean to one class. Each says so at the point where it does it.', 'note')}`,
     'mixed-site') +
 
-  docSection('3 &mdash; The tool is a screening instrument', `
+  docSection('The tool is a screening instrument', `
     <p>Where a method is uncertain, <strong>the tool reports the uncertainty rather than hiding it</strong>. That principle is why the annex prints publisher disclaimers verbatim, why unimplemented components are marked as unimplemented, and why a contradiction between a printed sentence and the code that produced it is flagged on the page instead of being quietly reconciled.</p>
     ${docCallout('What “screening” means for a reader', 'A figure here means &ldquo;this site is worth investigating at roughly this scale&rdquo;. It does not mean the figure has been measured, verified, or that it can be claimed. All information in the NbS Tool is provided to support a pre-feasibility study; further data collection and field verification are required before a pathway is committed to.', 'warn')}`,
     'screening-instrument');
@@ -404,32 +404,31 @@ function docsPhase1() {
     `<span class="num">${docFmt(e[k].gain)}</span>`
   ]);
   return docHero('How each phase is calculated · Phase 1', 'Select location',
-    'The user supplies a project boundary. The spatial analysis needs nothing else: every layer is read from the server against that boundary. Three later choices change the results: the project duration, the activities selected in Phase 4, and whether this is a carbon project. Data a user uploads goes into the generated documents, not into the spatial analysis.',
+    'The user supplies a project boundary. The spatial analysis needs nothing else: every layer is read from the server against that boundary. Three later choices change the results: the project duration, the activities selected in Phase 4b, and whether this is a carbon project. Data a user uploads goes into the generated documents, not into the spatial analysis.',
     [`AOI ${docNum('aoi.total')} ha`, `Duration ${docNum('aoi.duration')} years`, 'No minimum area check']) +
 
   docSection('What the user provides', `
     ${docTable(['Input', 'What it is', 'Detail'], [
       ['<strong>Project boundary (AOI)</strong>', 'A polygon drawn on the interactive map, or an uploaded file: a zipped shapefile (the .shp, .shx, .dbf and .prj files together), .kml or .kmz.',
-       '<p><strong>Checks before the analysis runs.</strong> The tool measures the boundary and will not start the analysis if it is larger than the account allows (see <em>Maximum area</em> below). Geometry checks: ' + docTodo('geometry checks not yet documented') + '</p>' +
-       '<p><strong>How it is used.</strong> The boundary is reprojected to the reference CRS, World Cylindrical Equal Area, and every subsequent layer is clipped and read against it. A stable identifier is derived from the geometry, and every phase writes its result under that identifier, so a boundary can be re-analysed without repeating earlier phases.</p>' +
-       '<p><strong>Maximum area.</strong> Without an account, a boundary can cover up to <strong>100,000 ha</strong>; with a free account, up to <strong>500,000 ha</strong>. Larger areas are available on request.</p>' +
+       '<p><strong>Checks before the analysis runs.</strong> The tool measures the boundary and will not start the analysis if it is larger than the account allows (see <em>Maximum area</em> below). The boundary must be a polygon; a file with several parts or features is dissolved into one project area before it is measured. It can be in any coordinate system and is reprojected once by the tool, which is why a zipped shapefile needs its .prj file.</p>' +
+       '<p><strong>How it is used.</strong> The reported area is not computed from the polygon&rsquo;s geometry. The polygon is laid over the tool&rsquo;s reference grid, and the area is the sum of the ground areas of the grid cells whose centres fall inside it; cells the boundary only touches are not counted. Using the same grid and the same rule for the project area, the ecosystem areas, the disturbed area and the benefit areas is what makes those figures reconcile with each other. A stable identifier is derived from the geometry, and every phase writes its result under that identifier, so a boundary can be re-analysed without repeating earlier phases.</p>' +
+       '<p><strong>Maximum area.</strong> Without an account, a boundary can cover up to <strong>200,000 ha</strong>; with a free account, up to <strong>500,000 ha</strong>. A larger area has to be requested from the team or split into several boundaries.</p>' +
        '<p><strong>Limits.</strong> There is <strong>no minimum area check</strong>. A boundary smaller than the coarsest layer&rsquo;s cell will fall inside a single cell of that layer, and the tool will report that layer&rsquo;s value for the whole site.</p>'],
       ['<strong>Project duration</strong>', 'The number of years the project is expected to run.',
-       '<strong>Set in Phase 4</strong>, alongside pathway and activity selection; listed here because the methodology document treats it as a project input. Carried into every projection in Phase 5. It sets <em>t</em> in the shared loss projection, the growth years in the ARR carbon method, and the horizon named in every benefit narrative. A saved result stores the duration it was produced with.']
+       'Between <strong>10 and 70 years</strong>, 30 by default. <strong>Set in Phase 4</strong>, alongside pathway and activity selection; listed here because the methodology document treats it as a project input. Carried into every projection in Phase 5. It sets <em>t</em> in the shared loss projection, the growth years in the ARR carbon method, and the horizon named in every benefit narrative. A saved result stores the duration it was produced with.']
     ])}
     ${docSource('Table 4')}`,
     'phase1-inputs') +
 
   docSection('Which layers a small boundary can outrun', `
-    <p>The &ldquo;no minimum area&rdquo; limit bites hardest on the coarse layers. These are the native resolutions recorded in Annex&nbsp;A, coarsest first:</p>
+    <p>The &ldquo;no minimum area&rdquo; limit bites hardest on the coarse layers. A boundary smaller than one cell of a layer gets that cell&rsquo;s value for the whole site. These are the layers where that happens first, coarsest first:</p>
     ${docTable(['Layer', 'Native resolution', 'What a small AOI gets'], [
+      ['<strong>Cyclone and drought risk</strong> (ADPC)', 'About 11 km and 28 km', 'One risk class for the whole site'],
       ['<strong>Conservation significance</strong> (NatureMap)', '10 km (~100 km² per pixel)', 'A landscape-context statement only; the tool also reports the envelope inflation so the artefact is visible'],
       ['<strong>Endangered tree species richness</strong>', '4 km', 'The species count of the single grid cell with the largest overlap'],
-      ['<strong>Peatland canal density</strong> (Dadap et al.)', '1 km', 'A drainage-pressure class, not a canal inventory'],
-      ['<strong>Temperature and precipitation</strong> (WorldClim)', '~1 km', 'One climatological normal across the whole site'],
-      ['<strong>Soil organic carbon, soil groups</strong> (SoilGrids)', '250 m', 'A single soil profile for a small site'],
-      ['<strong>Forest landscape integrity</strong> (FLII)', '300 m', 'A mean over very few cells'],
-      ['<strong>Natural disaster risk</strong> (ADPC)', 'Varies by hazard, several coarse', 'Possibly a one-class distribution &mdash; expected, not an error'],
+      ['<strong>Temperature and precipitation</strong> (WorldClim)', '927 m', 'One climatological normal across the whole site'],
+      ['<strong>Fire susceptibility</strong> (ADPC, MODIS FIRMS)', '1,000 m', 'Possibly a one-class distribution &mdash; expected, not an error'],
+      ['<strong>Current carbon storage, soil groups</strong>', '250 m', 'A single value or soil group for a small site'],
       ['<strong>Most other layers</strong>', '30 m', 'Usable area statistics, subject to the 30 m detection limit']
     ])}
     ${docCallout('Resolution is a hard limit on what you can conclude', 'A layer at 30-metre resolution cannot resolve a feature narrower than about 30 metres; a 10-kilometre layer cannot describe a single valley. Any figure derived from a layer inherits that layer&rsquo;s limit, including hectare counts. Check the resolution recorded for each layer in Annex&nbsp;A before quoting a figure derived from it.', 'warn')}`,
@@ -463,30 +462,30 @@ function docsPhase2() {
     <p>The four groups hold <strong>29 layers</strong>: 10 general context, 7 nature, 8 climate and 4 people. They are not the only layers the tool reads. The threat profile reads 3 more and pathway selection reads 2, including the pathway raster; Annex&nbsp;A documents those separately.</p>`,
     'phase2-rule') +
 
-  docSection('5 &mdash; General context', `
+  docSection('General context', `
     <p><strong>What it reports.</strong> Where the site is and what it is made of: administrative boundaries, protected areas, land cover 2024, forest cover in 2014 and 2024, deforestation between the two dates and its annual rate, deforestation risk, elevation, slope, ecosystem type, and natural disaster risk.</p>
     <p><strong>Method and downstream use.</strong> Ten layers, described in Annex&nbsp;A.1. Three of them carry the whole downstream chain:</p>
     ${docTable(['Layer', 'What it becomes downstream'], [
-      ['<strong>Land Cover 2024</strong>', 'The current ecological state in Phase 4'],
-      ['<strong>Forest Cover 2014</strong>', 'The past state in Phase 4'],
+      ['<strong>Land Cover 2024</strong>', 'The current ecological state in Phase 4a'],
+      ['<strong>Forest Cover 2014</strong>', 'The past state in Phase 4a'],
       ['<strong>Deforestation rate</strong>', 'Computed with the Puyravaud (2003) formula over the ten-year window; becomes the baseline for every avoided-loss projection in Phase 5']
     ])}
     ${docCallout('The single most common misreading of this group', 'Ecosystem type is a <strong>reference layer</strong>: it is the ecosystem that <em>belongs</em> on the site, not the vegetation standing on it today. Reading it as current cover will produce the wrong conclusion about almost every degraded site.', 'warn')}`,
     'phase2-general') +
 
-  docSection('5 &mdash; Nature', `
+  docSection('Nature', `
     <p><strong>What it reports.</strong> The biodiversity and habitat value of the site: forest landscape integrity, refined area of habitat for mammals, birds, reptiles and amphibians, key species presence, key biodiversity areas, conservation significance, ecological connectivity, and endangered tree species richness.</p>
     <p><strong>Method and downstream use.</strong> Seven layers, described in Annex&nbsp;A.2. The Area of Habitat rasters are the input to three of the benefit components in the Nature pillar, where they are intersected with projected deforestation or with the restoration area.</p>
     ${docCallout('Limitation', 'Area of Habitat is <strong>modelled suitable habitat, not confirmed occurrence</strong>. It states where a species <em>could</em> live given cover, elevation and range &mdash; not where it has been recorded.', 'warn')}`,
     'phase2-nature') +
 
-  docSection('5 &mdash; Climate', `
+  docSection('Climate', `
     <p><strong>What it reports.</strong> Carbon stocks and climate conditions: above-ground biomass density, below-ground biomass, soil organic carbon for peatland, mangrove and dryland, annual temperature, annual precipitation, historical burned area, fire susceptibility, and soil groups.</p>
     <p><strong>Method and downstream use.</strong> Eight layers, described in Annex&nbsp;A.3. Above-ground biomass is the stock that the avoided-emissions component converts to avoided emissions, and that the removals component uses as the restoration baseline. Elevation and the twelve monthly precipitation bands derive the dryland climatic zone that sets the ARR growth rate.</p>
     ${docCallout('Two limitations to carry forward', '<strong>Below-ground biomass is not a mapped layer.</strong> It is derived from above-ground biomass by a fixed root-to-shoot ratio of 0.28. And <strong>soil organic carbon is reported in characterisation but does not enter the carbon quantification</strong> &mdash; peat soil carbon is out of scope there, which is the single largest pool on a peat site.', 'warn')}`,
     'phase2-climate') +
 
-  docSection('5 &mdash; People', `
+  docSection('People', `
     <p><strong>What it reports.</strong> Who lives with the site and how exposed they are: gridded population, gridded age and sex structure, climate vulnerability, and national socio-economic indicators.</p>
     <p><strong>Method and downstream use.</strong> Four layers, described in Annex&nbsp;A.4. Population and climate vulnerability feed the climate-hazard resilience component in the Climate pillar.</p>
     ${docCallout('Limitation', 'All four are gridded or national products. They describe <strong>the population of the cells the project area covers, not the community that holds rights over it</strong>. Tenure, customary claims and community composition are not spatial layers in this tool and have to come from the socio-economic form.', 'warn')}
@@ -530,7 +529,7 @@ function docsPhase3() {
     <p>A credible intervention addresses a <strong>driver</strong>, not a symptom. Knowing whether forest is being lost to small-scale agriculture, selective logging, road building or fire changes which activity is worth proposing and which is likely to fail.</p>`,
     'phase3-why') +
 
-  docSection('6 &mdash; Ecosystem disturbance screening', `
+  docSection('Ecosystem disturbance screening', `
     <p><strong>What it reports.</strong> How much of each ecosystem in the project area is disturbed, in hectares and as a share.</p>
     <p><strong>How it is derived.</strong> Disturbance means <em>structural decline within forest that is still standing</em>: a canopy height deficit measured against an undisturbed reference population, where that reference is forest at least <strong>120 m</strong> from any disturbed forest. The detection threshold is the <strong>5th percentile</strong> of the reference population&rsquo;s height change, which gives a nominal <strong>5% false-positive rate</strong>. The disturbance layer is crossed with the ecosystem layer inside the project boundary and areas are tabulated per ecosystem.</p>
     ${docEquation('disturbed = canopy height deficit &lt; 5th percentile of the undisturbed reference population',
@@ -538,7 +537,7 @@ function docsPhase3() {
     ${docCallout('Limits', 'Results are <strong>area statistics by stratum</strong>. Per-pixel interpretation is not supported at 30 m, given a product error of <strong>6.6 to 9.1 m</strong>. A ten-year window is long for detecting degradation; version 3.1 will move to an annual or five-year analysis.', 'warn')}`,
     'phase3-disturbance') +
 
-  docSection('6 &mdash; Disturbance drivers', `
+  docSection('Disturbance drivers', `
     <p><strong>What it reports.</strong> What is causing the disturbance, grouped into human-caused, natural and other.</p>
     <p><strong>How it is derived.</strong> The driver layer is masked to the disturbance layer and clipped to the project boundary, then the area of each driver class is tabulated.</p>
     ${docTable(['Group', 'Driver classes'], [
@@ -550,7 +549,7 @@ function docsPhase3() {
     ${docCallout('Limits', 'The source classifies <strong>key</strong> drivers and may not include every cause. Only <strong>high and very high</strong> disaster risk is treated as contributing to disturbance.', 'warn')}`,
     'phase3-drivers') +
 
-  docSection('6 &mdash; Peatland drainage pressure', `
+  docSection('Peatland drainage pressure', `
     <p><strong>What it reports.</strong> Canal proximity, drainage pressure and fire risk on peat, each reported as High, Moderate or Low, with the distance to the nearest canal.</p>
     <p><strong>How it is derived.</strong> Drainage is the primary driver of peatland degradation: canals lower the water table, which dries the peat, speeds up oxidation and subsidence, and makes the peat far more likely to burn. Drainage pressure <strong>deliberately includes canals outside the project boundary</strong>.</p>
     ${docTable(['Published finding', 'Distance', 'What it sets'], [
@@ -560,10 +559,10 @@ function docsPhase3() {
     ${docCallout('Limits', 'The canal layer was produced by a model trained with roads included, on the assumption that roads often carry drainage ditches. Read it as a <strong>drainage-infrastructure proxy, not a canal inventory</strong>. It indicates pressure, not measured water-table depth.', 'warn')}`,
     'phase3-peat') +
 
-  docSection('6 &mdash; Natural hazard risk', `
+  docSection('Natural hazard risk', `
     <p><strong>What it reports.</strong> Flood, landslide, typhoon, drought and fire risk, each as a single representative level for the project area.</p>
-    <p><strong>How it is derived.</strong> These are <strong>risk</strong> layers, not bare hazard layers: exposure and vulnerability are already folded in. A weighted vulnerability composite is multiplied by the classified hazard layer, normalised, and reclassified into risk classes. The tool then takes the highest class covering at least <strong>20%</strong> of the project area.</p>
-    ${docEquation('representative level = highest risk class covering &ge; 20% of the project area',
+    <p><strong>How it is derived.</strong> These are <strong>risk</strong> layers, not bare hazard layers: exposure and vulnerability are already folded in. A weighted vulnerability composite is multiplied by the classified hazard layer, normalised, and reclassified into risk classes. The tool then takes the highest class covering at least <strong>20%</strong> of the valid hazard area. The rule is deliberately cautious: a site that is 70% Moderate and 25% Very High reports as Very High.</p>
+    ${docEquation('representative level = highest risk class covering &ge; 20% of the valid hazard area',
       'The rule is deliberately conservative, because in risk screening a false negative costs more than a false positive.')}
     ${docCallout('Limits', 'The interface specifies <strong>five</strong> levels but the wired rasters carry <strong>four</strong>. No composite index is produced across hazards, because they are not comparable with one another. Coarse layers may fall inside a single cell for a small project area.', 'warn')}`,
     'phase3-hazard');
@@ -571,11 +570,11 @@ function docsPhase3() {
 
 /* ------------------ 7.1–7.4 Phase 4a: ecological state and trajectory */
 function docsPhase4State() {
-  return docHero('How each phase is calculated · Phase 4', 'Ecological state and trajectory',
+  return docHero('How each phase is calculated · Phase 4a · Pathway selection', 'Ecological state and trajectory',
     'Pathway selection is where the tool stops describing and starts deciding. Everything before it reports what is on the ground; this phase turns that description into a statement about what kind of intervention the land can take. Identifying the ecosystem alone is not enough — the ecological state has to be understood as well, and it is built from three components.',
     ['6 state classes', '10 trajectory categories', '5 reference values']) +
 
-  docSection('7 &mdash; The three components of ecological state', `
+  docSection('The three components of ecological state', `
     ${docTable(['Component', 'What it is', 'Where it comes from in the tool'], [
       ['<strong>The ecological state reference</strong>', 'The ecosystem that originally and naturally existed in the landscape &mdash; forest, savanna, grassland, peatland or mangrove.', 'The Ecosystem Type layer (General context layers)'],
       ['<strong>The current ecological state</strong>', 'What exists in that landscape now.', 'Land Cover 2024, grouped into the six ecological state classes below'],
@@ -584,7 +583,7 @@ function docsPhase4State() {
     <p>The trajectory, read against the reference ecosystem, is what selects the pathway.</p>`,
     'state-components') +
 
-  docSection('7 &mdash; Three questions behind the framework', `
+  docSection('Three questions behind the framework', `
     <p>Every rule and every row of the decision matrix is an answer to one of these three questions.</p>
     ${docTable(['Question', 'Type of answer', 'How the tool answers it'], [
       ['<strong>What happened here?</strong>', 'Measured, not assumed.',
@@ -596,7 +595,7 @@ function docsPhase4State() {
     ])}`,
     'three-questions') +
 
-  docSection('7.1 &mdash; The assignment chain', `
+  docSection('The assignment chain', `
     <p>The assignment runs in six steps, from two land cover maps to a list of activities and expected benefits.</p>
     ${docTable(['Step', 'Question', 'Input', 'Output'], [
       ['<strong>1</strong>', 'What is on the land now, and what was there in 2014?', 'Land cover 2014 and 2024', 'Ecological state, past and present'],
@@ -610,7 +609,7 @@ function docsPhase4State() {
     ${docCallout('Trajectory and reference are two different things, and both are needed', 'The trajectory says <em>what happened</em>. The reference says <em>what belongs</em>. A site can be losing forest cover and still be at its natural state, and a site can be stable and still be far below its natural state. The activity is <strong>not</strong> selected from the pathway alone: it comes from the trajectory category and the reference ecosystem together. Restore means planting trees on a forest reference, breaching pond dykes on a mangrove reference, and raising water tables on a peat reference &mdash; different projects, different costs, different carbon outcomes.', 'note')}`,
     'assignment-chain') +
 
-  docSection('7.2 &mdash; Six ecological state classes', `
+  docSection('Six ecological state classes', `
     <p>Current land cover is grouped into six ecological states. Grouping keeps the logic readable: the tool reasons about ecological condition, not about individual land cover labels. The classification represents the <strong>severity of ecosystem disturbance</strong>, so higher class numbers are more disturbed than lower ones. Numbers in brackets are the land cover <strong>raster codes</strong>.</p>
     ${docTable(['Class', 'Meaning', '2024 land cover classes', 'Justification'], [
       ['<strong>C1</strong>', 'Mature natural forest', 'Flooded forest (1), Mangrove (6), Evergreen (8)', 'Mature natural forest; highest carbon density, highest biodiversity'],
@@ -625,12 +624,12 @@ function docsPhase4State() {
     ${docCallout('C1 and C2 are always treated together in the pathway logic', 'The difference between them matters <strong>for carbon, not for the choice of intervention</strong>.', 'note')}`,
     'ecological-state') +
 
-  docSection('7.2 &mdash; Why the 2014 layer is only binary', `
+  docSection('Why the 2014 layer is only binary', `
     <p>The 2014 layer is binary: <strong>forest or non-forest</strong>. It is not divided into six states. This is a data limitation, and it is deliberate. A consistent, region-wide land cover product with the same class system for both years does not exist for the whole of Southeast Asia. Rather than force a detailed classification onto weaker data, the framework asks the 2014 layer only the one question it can answer reliably: <em>was there natural forest here?</em></p>
     ${docCallout('The consequence', 'The framework can detect <strong>forest loss and forest gain</strong>, but it cannot detect a change <em>within</em> the non-forest classes &mdash; cropland that became a settlement, for example. This is accepted at screening level.', 'warn')}`,
     'binary-2014') +
 
-  docSection('7.3 &mdash; The transition matrix', `
+  docSection('The transition matrix', `
     <p>The comparison is therefore not symmetric: two categories in 2014 against six classes in 2024, which gives twelve transitions.</p>
     ${docTable(['2014 &bsol; 2024', 'C1', 'C2', 'C3', 'C4', 'C5', 'C6'], [
       ['<strong>Forest</strong>', 'Forest persisting', 'Forest persisting', 'Forest lost to plantation', 'Forest degraded to vegetation', 'Forest converted to active use', 'Forest converted to barren'],
@@ -640,7 +639,7 @@ function docsPhase4State() {
     ${docCallout('* Treated with caution', 'A ten-year recovery from non-forest to mature natural forest is rare. These pixels are most likely a <strong>classification error</strong>, or a plantation misclassified as natural forest.', 'warn')}`,
     'transition-matrix') +
 
-  docSection('7.3 &mdash; The ten trajectory categories', `
+  docSection('The ten trajectory categories', `
     <p>With C1 and C2 merged, the twelve transitions collapse into ten trajectory categories.</p>
     ${docTable(['Cat', 'Pattern', 'Meaning'], [
       ['<strong>1</strong>', 'Forest &rarr; C1 or C2', 'Forest persisting. Natural forest in 2014, still natural forest in 2024'],
@@ -658,7 +657,7 @@ function docsPhase4State() {
     ${docCallout('Exhaustive and mutually exclusive', 'Every pixel that carries valid data in both years falls in <strong>exactly one</strong> of these ten. Four categories are then split further, because one trajectory can require different responses depending on the reference ecosystem or on the exact land use &mdash; which is what turns ten categories into seventeen decision rows.', 'note')}`,
     'trajectory-categories') +
 
-  docSection('7.4 &mdash; The reference ecosystem', `
+  docSection('The reference ecosystem', `
     <p>The reference ecosystem answers the question <em>what should grow here</em>. It is the <strong>potential natural vegetation</strong> of the site, not its current cover. Five values are used.</p>
     ${docTable(['Ecosystem type', 'Reference', 'What it implies for restoration'], [
       ['<strong>Dryland forest</strong>', 'Terrestrial forest, not flooded, not on peat', 'Tree planting on mineral soil'],
@@ -685,11 +684,11 @@ function docsPhase4State() {
 function docsPhase4Matrix() {
   const row = (n, cat, traj, def, cond, pw) =>
     [`<span class="num">${n}</span>`, `<strong>${cat}</strong>`, traj, def, cond, `<strong>${pw}</strong>`];
-  return docHero('How each phase is calculated · Phase 4', 'The decision matrix',
+  return docHero('How each phase is calculated · Phase 4a · Pathway selection', 'The decision matrix',
     'Ten trajectory categories become seventeen decision rows once the conditional splits are applied. This table is the whole of the pathway logic: every pixel in every project area resolves to exactly one of these rows, and the row number is carried in band 3 of the pathway raster so the assignment can be audited afterwards.',
     ['17 rows', '4 outcomes', 'Auditable per pixel']) +
 
-  docSection('7.5 &mdash; Seventeen decision rows', `
+  docSection('Seventeen decision rows', `
     <figure class="doc-embed">
       <iframe src="NbS_Activities_Flow_v2.html?embed" loading="lazy"
               title="Activity flow matrix: 2014 land cover through trajectory, pathway, ecosystem, activity and benefit to indicator"></iframe>
@@ -719,7 +718,7 @@ function docsPhase4Matrix() {
     ${docCallout('The first column is a raster band', 'The decision row number is the value carried in <strong>band 3 of the pathway raster</strong>. Band 1 carries the pathway, band 2 the reference ecosystem. See <em>A.5&ndash;A.6 Threat &amp; pathway layers</em>.', 'note')}`,
     'seventeen-rows') +
 
-  docSection('7.5 &mdash; Three properties reviewers test first', `
+  docSection('Three properties reviewers test first', `
     <h3>Protect appears only in Category 1</h3>
     <p>A stable natural savanna is a valuable ecosystem, but under the present carbon framework it does not support a credible carbon project, so it is reported as carbon ineligible rather than as Protect. <strong>This is a statement about carbon eligibility, not about ecological value.</strong></p>
 
@@ -737,11 +736,11 @@ function docsPhase4Matrix() {
 /* ------------------------------------ 7.6–7.9 the four pathway outcomes */
 function docsPhase4Pathways() {
   const m = docParam('matrix', null);
-  return docHero('How each phase is calculated · Phase 4', 'Protect, Manage, Restore and Ineligible',
+  return docHero('How each phase is calculated · Phase 4a · Pathway selection', 'Protect, Manage, Restore and Ineligible',
     'What each outcome means on the ground: which decision rows produce it, what the pathway is for, which site characteristics are read against it, and the circumstances in which a project area is reported as ineligible for it.',
     m ? [`${m.ecosystemCount} ecosystems`, `${m.activityCount} activities`, 'Eligibility, not ranking'] : ['Protect · Manage · Restore · Ineligible']) +
 
-  docSection('7.6 &mdash; Protect', `
+  docSection('Protect', `
     <p>Protect maintains existing forest cover, judged against spatial data from 2014 and 2024. Driven by avoided deforestation &mdash; including the mitigation of legal land clearing and illegal logging &mdash; it preserves forests as carbon sinks, prevents habitat fragmentation, and supports the wellbeing of forest-dependent communities.</p>
     <p><strong>Eligibility comes from one category.</strong> Category 1, forest persisting: natural forest that was forest in 2014 and is still natural forest in 2024. The condition in 2024 may be intact or degraded within the forest gradient, but it remains forest. The tool reports the area and share of the project area eligible for Protect, alongside the total remaining forest and the disturbed share within it.</p>
     <h3>Two characteristics read against the pathway, not used to define it</h3>
@@ -752,7 +751,7 @@ function docsPhase4Pathways() {
     ${docCallout('When Protect is reported as ineligible', 'A project area whose forest remains intact <strong>with no significant deforestation risk detected</strong> is reported as ineligible for Protect on those grounds &mdash; because there is nothing to avoid.', 'note')}`,
     'protect') +
 
-  docSection('7.7 &mdash; Manage', `
+  docSection('Manage', `
     <p>Manage balances human livelihoods with ecological health on land that stays in its current use. It covers <strong>silvofishery, paludiculture, soil and water enrichment, and buffer management</strong>. It raises the productivity of working land, lowers its carbon intensity, and reduces its ecosystem impact without requiring full rewilding.</p>
     ${docCallout('Manage is new in version 3', 'Version 2 had no equivalent: land under active use was either restored or excluded. The pathway matters because it covers the land where <strong>most people actually live and work</strong>, and because it requires no land-use change &mdash; which makes it the option most likely to be adopted and the cheapest per tonne.', 'note')}
     <h3>Four eligible categories</h3>
@@ -765,7 +764,7 @@ function docsPhase4Pathways() {
     ${docCallout('When Manage is reported as ineligible', 'Where the forest remains intact and shows no sufficient signs of degradation; where forest has already been converted to barren land and is no longer suitable for a forest management intervention; or where most of the area is stable non-forest vegetation.', 'note')}`,
     'manage') +
 
-  docSection('7.8 &mdash; Restore', `
+  docSection('Restore', `
     <p>Restore actively heals heavily degraded landscapes: degraded vegetation, barren land and long-term non-forested areas. Driven by the <strong>Afforestation, Reforestation and Revegetation (ARR)</strong> framework, it covers native species planting, ecosystem restoration and assisted natural regeneration. It re-establishes high-integrity cover, secures long-term carbon removals and rebuilds ecosystem services.</p>
     <h3>Six eligible categories</h3>
     ${docTable(['Category', 'What the land is'], [
@@ -786,7 +785,7 @@ function docsPhase4Pathways() {
     ${docCallout('When Restore is reported as ineligible', 'Where forest cover still persists; where forest was converted to active use or non-forest use that is already established; or where the site is a natural ecosystem in its own right that does not need restoring.', 'note')}`,
     'restore') +
 
-  docSection('7.9 &mdash; Carbon ineligible areas', `
+  docSection('Carbon ineligible areas', `
     <p><strong>Carbon ineligible</strong> means no carbon project is credible on this land under the current framework. Non-carbon interventions may still exist. The pixel is <strong>reported, not hidden</strong>.</p>
     <p>It is a deliberate fourth outcome rather than a gap in the logic. It covers four very different situations, spread across six of the seventeen decision rows.</p>
     ${docTable(['Situation', 'Decision rows', 'Why it is excluded'], [
@@ -800,7 +799,7 @@ function docsPhase4Pathways() {
     'ineligible') +
 
   docSection('From pathway to activity', `
-    <p>The pathway and the reference ecosystem are the two join keys into the activity catalogue. Selecting an activity is what commits the project to a set of benefits and, through those, to a set of monitoring indicators. This is the shape of the catalogue in the current build:</p>
+    <p>An activity is not chosen from the pathway alone. The trajectory category and the reference ecosystem are the two join keys into the activity catalogue, which ${docJump('Phase 4b · Activity selection', 'phase4-activities')} sets out in full. Selecting an activity is what commits the project to a set of benefits and, through those, to a set of monitoring indicators. This is the shape of the catalogue in the current build:</p>
     ${m ? docTable(['Ecosystem', 'Activities'], m.ecosystems.map(x => [`<strong>${docEsc(x.name)}</strong>`, `<span class="num">${x.activities}</span>`])
             .concat([['<strong>Total</strong>', `<span class="num"><strong>${m.activityCount}</strong></span>`]]))
         : docCallout('Missing', docTodo('activity matrix not readable'), 'warn')}
@@ -811,6 +810,62 @@ function docsPhase4Pathways() {
 }
 
 /* --------------------------------------- 8 / 8.1 Phase 5: potential benefit */
+/* Phase 4b. The catalogue below is the Reference Methodology's Table 17, transcribed.
+   TODO(design): the activity list the screens use (js/f05-shared.js) is keyed by
+   ecosystem and pathway, has no savanna column and offers four activities this
+   table marks "not offered". Reconcile the two with the methodology team. */
+function docsPhase4Activities() {
+  const no = '<em>not offered</em>';
+  return docHero('How each phase is calculated · Phase 4b', 'Activity selection',
+    'Phase 4a decides which pathway the land can take. Phase 4b decides what should be done on it. An activity is not selected from the pathway alone. It is selected from what happened to the land and the ecosystem that belongs there, together, because Restore means planting trees on a forest reference, breaching pond dykes on a mangrove reference, and raising water tables on a peat reference. These are different projects with different costs and different carbon outcomes.',
+    ['Keyed on trajectory and ecosystem', 'Not filtered by the user&rsquo;s choices']) +
+
+  docSection('How an activity is matched to the land', `
+    <p>The pathway raster from Phase 4a carries, for every pixel, the decision row it fell into and its reference ecosystem. Phase 4b reads those two bands on the same grid and lists the unique pairs present in the project area, each with its area. Each pair is then looked up in the activity catalogue, which is keyed on exactly that pair.</p>
+    ${docEquation('Pairs Present = unique ( Category, Reference Ecosystem ) combinations inside the boundary, with area')}
+    ${docEquation('Activities = join ( Pairs Present, Activity Catalogue ) on ( Category, Reference Ecosystem )',
+      'Category is the decision row, 1 to 17, from the decision matrix. Reference Ecosystem is dryland forest, mangrove, peatland or savanna. Carbon ineligible categories carry no activity by design. A category with no matching catalogue row is flagged, not dropped.')}
+    ${docCallout('Where this comes from', 'This phase is not covered in the methodology document. It is read from the tool&rsquo;s backend: the activity catalogue and the join logic of Phase 4.', 'note')}`,
+    'activity-join') +
+
+  docSection('What follows from the match', `
+    <ul>
+      <li><strong>One pathway can carry several activities.</strong> A project area has one activity for each category and ecosystem combination present, so a mixed site has a longer activity list than a uniform one.</li>
+      <li><strong>The list is not filtered by anything the user chooses.</strong> Switching a pathway on or off on the screen includes or leaves out its activities in the benefit roll-up. It does not change which activities the ground is eligible for.</li>
+      <li><strong>Savanna is shown with dryland.</strong> For display, the savanna reference is folded into the dryland group. That changes only the group heading, never the category, pathway or activity of a pixel.</li>
+    </ul>
+    <p>Besides its text, each catalogue row carries three benefit fields, one for each of nature, people and climate, and two carbon flags. Those travel through to ${docJump('Phase 5 · Potential benefit', 'phase5')}, where the benefit list is assembled from them.</p>`,
+    'activity-consequences') +
+
+  docSection('The activity catalogue', `
+    <p>One row per trajectory category, one column per reference ecosystem.</p>
+    ${docTable(['Category', 'Pathway', 'Dryland forest', 'Mangrove', 'Peatland', 'Savanna'], [
+      ['<strong>Cat 1</strong>', 'Protect', 'Establish protected areas, corridors, and enforce customary land rights', 'Establish marine protected areas and enforce strict prohibitions on coastal development', 'Protect peat domes within Peat Hydrological Units, enforce moratoria and ban canal construction', 'Establish protected areas, corridors, and enforce customary land rights'],
+      ['<strong>Cat 3B</strong>', 'Restore', 'Execute Assisted Natural Regeneration and enrichment planting', 'Breach coastal barriers for tidal flushing and actively plant native mangroves', 'Construct rewetting infrastructure to raise water tables and re-vegetate with native species', no],
+      ['<strong>Cat 4B</strong>', 'Restore', 'Conduct Forest Landscape Restoration to transition back to native forest', 'Reclaim active aquaculture ponds, restore hydrology, and re-establish intertidal elevation', 'Rewet drained croplands and implement paludiculture', no],
+      ['<strong>Cat 5</strong>', 'Restore', 'Soil terracing and gully plugs for erosion control, and active reforestation', 'Build permeable breakwaters to trap sediment and re-vegetate mudflats', 'Rewet degraded bare peat, control compaction, and reintroduce peatland native species', 'Savanna revegetation'],
+      ['<strong>Cat 6</strong>', 'Manage', 'Protect regenerating stands from fire and grazing, and apply community-based forest management', 'Protect colonising seedlings on mudflats and regulate non-timber harvesting', 'Maintain high peat water tables and establish community fire-monitoring teams', 'Protect regenerating stands from fire and grazing, and apply community-based forest management'],
+      ['<strong>Cat 8B</strong>', 'Manage', no, no, no, 'Optimise forage management, rotational grazing, and controlled patch burning'],
+      ['<strong>Cat 8C</strong>', 'Restore', 'Remove invasive flora, plant native non-forest trees, and restore riparian buffers', 'Restore degraded tidal marshlands and rehabilitate abandoned salt pans', 'Construct peat rewetting infrastructure to maintain water tables and revegetate with native species', no],
+      ['<strong>Cat 9A</strong>', 'Manage', 'Agroforestry with alley cropping and windbreaks, zero tillage, cover crops, and biochar', 'Manage saline-tolerant crops and establish protective mangrove greenbelts', 'Transition drained croplands to paludiculture and maintain water table management', 'Agroforestry with alley cropping and windbreaks, zero tillage, cover crops, and biochar'],
+      ['<strong>Cat 9B</strong>', 'Restore', no, 'Breach aquaculture pond dykes for full tidal flushing and replant endemic mangroves', 'Decommission drained peat farming and ponds, and build peat rewetting infrastructure', no],
+      ['<strong>Cat 9C</strong>', 'Manage', 'Establish vegetated riparian buffers around inland fish ponds', no, no, 'Establish vegetated riparian buffers around inland fish ponds'],
+      ['<strong>Cat 10</strong>', 'Restore', 'Bio-engineering, soil reclamation, and drought-tolerant native afforestation', 'Build artificial breakwaters to restore mud substrate and reintroduce pioneer flora', 'Rewet bare degraded peat and reintroduce native peatland species', 'Bio-engineering, soil reclamation, and drought-tolerant native savanna revegetation'],
+      ['<strong>Cat 2, 3A, 4A, 7, 8A, 9D</strong>', 'Carbon ineligible', '<em>No activity, by design.</em>', '<em>No activity.</em>', '<em>No activity.</em>', '<em>No activity.</em>']
+    ])}
+    <p>A carbon ineligible area is reported with a sentence naming the reason rather than hidden, so a user can see whether the constraint is the land&rsquo;s history, its reference ecosystem, or its current use. The categories are defined in ${docJump('the decision matrix', 'phase4-matrix')}.</p>`,
+    'activity-catalogue') +
+
+  docSection('Two deliberate gaps', `
+    <p>Two gaps in the catalogue are intended, not missing data.</p>
+    <ul>
+      <li><strong>Category 9B has no dryland or savanna row.</strong> Aquaculture outside mangrove and peat is sent to Manage under Category 9C instead.</li>
+      <li><strong>Categories 3B, 4B and 8C have no savanna row.</strong> A savanna reference sends those trajectories to carbon ineligible under Categories 3A, 4A and 8A. This is the guardrail against planting trees on land that is naturally open.</li>
+    </ul>
+    ${docCallout('What selection does not decide', 'The catalogue says an activity is <em>ecologically appropriate</em> for the ground. It does not consider cost, available labour, community consent, land tenure or market access. A shortlist from this phase is an input to a feasibility study, not a substitute for one.', 'warn')}`,
+    'activity-gaps');
+}
+
 function docsPhase5() {
   const B = docParam('benefits', []);
   const quant = Array.isArray(B) ? B.filter(b => b.metric) : [];
@@ -819,7 +874,7 @@ function docsPhase5() {
     'Potential benefit is the last phase and the one the whole chain exists to produce. The page is built from a set of quantified components that read rasters directly. Nothing is invented at this stage: every qualitative benefit shown comes from a benefit tag attached to an activity that the pathway logic already selected. If an activity is not eligible on this ground, its benefits do not appear.',
     ['Nature · People · Climate', 'General & unique', `${docNum('aoi.duration')}-year horizon`]) +
 
-  docSection('8 &mdash; How benefits are split', `
+  docSection('How benefits are split', `
     <p>Quantified and qualitative benefits sit side by side, and the interface marks which is which. The interface splits benefits two ways, and this documentation follows the same split.</p>
     ${docTable(['Split', 'Values', 'What it means'], [
       ['<strong>By pillar</strong>', 'Nature · People · Climate', 'Together these are the <strong>triple benefit</strong>: what a project delivers for nature, for people and for the climate. The SCeNe Coalition assesses every project on all three.'],
@@ -829,7 +884,7 @@ function docsPhase5() {
     ${docCallout('A benefit shown without a number is not a weaker benefit', 'It is one for which the tool has <strong>no defensible spatial method yet</strong>. Marking it as qualitative is the honest position, and it tells a project designer exactly what the monitoring plan has to fill in.', 'note')}`,
     'benefit-split') +
 
-  docSection('8.1 &mdash; The benefit summary band', `
+  docSection('The benefit summary band', `
     <p>The summary band at the top of the page is a roll-up, not a separate calculation.</p>
     ${docTable(['Element', 'What it reports'], [
       ['<strong>Project overview</strong>', 'Number of activities, project duration in years, and total project area in hectares'],
@@ -840,13 +895,25 @@ function docsPhase5() {
     ])}`,
     'benefit-summary') +
 
-  docSection('8.1 &mdash; The shared projection', `
+  docSection('The parameters you set', `
+    <p>Four choices made in Phase 4 enter the Phase 5 figures. All of them are written into every saved result, so a result records the settings it was produced with.</p>
+    ${docTable(['Parameter', 'Default and range', 'What it does'], [
+      ['<strong>Duration of intervention</strong>', '30 years; 10 to 70', 'Enters every projection as the time variable. The restoration growth curve is defined only to year 40, so a longer duration is flagged rather than extrapolated.'],
+      ['<strong>Carbon project</strong>', 'No', 'Answering Yes shows the three deductions below and the three net carbon figures. Answering No leaves only the gross figures visible.'],
+      ['<strong>Leakage deduction</strong>', '15%; 1 to 100', 'Emissions displaced outside the project boundary.'],
+      ['<strong>Uncertainty</strong>', '10%; 1 to 100', 'A discount for error in the data and models.'],
+      ['<strong>Buffer pool deduction</strong>', '12%; 1 to 100', 'A set-aside against reversal and non-permanence risk.']
+    ])}
+    ${docCallout('The three defaults are generic, not methodology-specific', 'A 15% leakage deduction is not a universal minimum requirement: it is an optional conservative default. The official buffer pool contribution must be determined with the non-permanence risk tool of the chosen standard during project validation. If you are working towards a particular standard, replace all three with that standard&rsquo;s values before quoting any net figure, and record what you used.', 'warn')}`,
+    'benefit-parameters') +
+
+  docSection('The shared projection', `
     <p>Five quantified components share one projection, so it is stated once here and referenced by the components that use it. The question all five answer is the same: <strong>how much of this project area would be lost over the project duration if nothing were done, and where.</strong> The answer has two parts.</p>
 
     <h3>How much &mdash; a compounding projection of the historical deforestation rate</h3>
     ${docEquation('projected_loss_ha = risk_area_ha &times; (1 &minus; exp(&minus;r &times; t))',
       'where r = rate_pct ÷ 100, and t = project duration in years.')}
-    <p>The tool calculates projected forest loss using the <strong>exponential Puyravaud (2003) formula</strong> rather than a linear one. This prevents over-projection over long timeframes and ensures the calculation asymptotically approaches the eligible area without exceeding it. The compounding approach provides a more realistic baseline for long-term projects than a simple linear multiplication of hectares-per-year figures.</p>
+    <p>The tool calculates projected forest loss as a <strong>compounding projection of the historical rate</strong> (the annual rate itself follows Puyravaud, 2003) rather than a linear one. This prevents over-projection over long timeframes and ensures the calculation asymptotically approaches the eligible area without exceeding it. The compounding approach provides a more realistic baseline for long-term projects than a simple linear multiplication of hectares-per-year figures.</p>
 
     <h3>Where &mdash; ranked allocation by deforestation risk</h3>
     <p>To determine where the loss occurs, the tool uses a <strong>ranked allocation method</strong> that prioritises pixels with the highest deforestation risk. Every eligible pixel is ranked from highest risk to lowest, and the tool moves down that list selecting the most threatened pixels one by one until the total selected area equals the projected loss.</p>
@@ -879,7 +946,7 @@ function docsBenefitNature() {
     'Five components make up the nature pillar: three general and two unique. Each states plainly what its number is, how it is derived, what it cannot support, and — for two of the five — that it is specified in the interface design but not yet implemented in the benefit notebook.',
     ['5 components', '3 general · 2 unique', '2 not yet implemented']) +
 
-  docSection('8.2.1 &mdash; Maintenance of ecological connectivity', `
+  docSection('Maintenance of ecological connectivity', `
     <p><strong>Type.</strong> General benefit. Quantifiable.</p>
     <p><strong>What it reports.</strong> Whether the site holds habitat that links otherwise separate blocks, and how much of it.</p>
     <p><strong>How it is derived.</strong> Connectivity is assessed <em>structurally</em> with <strong>Morphological Spatial Pattern Analysis (MSPA)</strong> in GuidosToolbox, run on a binary habitat mask derived from the 2024 land cover map plus a surrounding landscape buffer. MSPA classifies each habitat pixel into a structural type: core, edge, perforation, bridge, loop, branch or islet. The <strong>bridge and loop</strong> classes are the connectors, and their area is what the narrative reports.</p>
@@ -892,7 +959,7 @@ function docsBenefitNature() {
     ${docCallout('Status', 'Specified in the interface design. <strong>Not implemented in the benefit notebook at the time of writing.</strong>', 'warn')}`,
     'nature-connectivity') +
 
-  docSection('8.2.2 &mdash; Protection of watershed function', `
+  docSection('Protection of watershed function', `
     <p><strong>Type.</strong> General benefit. Quantifiable.</p>
     <p><strong>What it reports.</strong> The capacity of the landscape to capture, store, filter and slowly release water, and what keeping natural cover protects.</p>
     <p><strong>How it is derived.</strong> Reported <em>qualitatively</em> against the ecosystem and cover present. Keeping the site under healthy natural cover supports more stable river flow, lower erosion and sediment loads, and better water quality downstream.</p>
@@ -901,7 +968,7 @@ function docsBenefitNature() {
     ${docCallout('Status', 'Specified in the interface design. <strong>Not implemented in the benefit notebook at the time of writing.</strong>', 'warn')}`,
     'nature-watershed') +
 
-  docSection('8.2.3 &mdash; Enhanced biodiversity and ecosystem function', `
+  docSection('Enhanced biodiversity and ecosystem function', `
     <p><strong>Type.</strong> General benefit. Quantifiable.</p>
     <p><strong>What it reports.</strong> How many hectares of suitable habitat would be lost under the baseline, and therefore how much habitat loss conservation avoids.</p>
     <p><strong>How it is derived.</strong> Habitat loss avoided is the intersection of projected baseline deforestation with <strong>Area of Habitat</strong>. Area of Habitat comes from the species habitat rasters for mammals, birds, reptiles and amphibians, unioned into a single habitat mask. Projected loss follows the shared method, run inside the ecosystem mask on pixels that carry a risk value above the no-data floor. The overlap of the allocated loss with the habitat union is the habitat that would be expected to be lost under the baseline, and is therefore interpreted as habitat loss avoided through conservation.</p>
@@ -910,7 +977,7 @@ function docsBenefitNature() {
     ${docCallout('Limitations', 'Area of Habitat is <strong>modelled suitable habitat, not confirmed occurrence</strong>, so the species count is a count of species that <em>could</em> be present. The union mask means one hectare of habitat shared by fifty species is counted once &mdash; correct for area, but it means the figure carries <strong>no information about species richness</strong>. For that reason the component reports the number of species overlapping the projected loss separately.', 'warn')}`,
     'nature-biodiversity') +
 
-  docSection('8.2.4 &mdash; Reduced vulnerability to fire, pests and disease', `
+  docSection('Reduced vulnerability to fire, pests and disease', `
     <p><strong>Type.</strong> Unique benefit. Quantifiable. <strong>Protect pathway.</strong></p>
     <p><strong>What it reports.</strong> Which threatened species have habitat in the project area, and what share of that habitat projected deforestation would take.</p>
     <p><strong>How it is derived.</strong> The species inventory is filtered to those whose habitat raster intersects the project area. For each species the tool computes its Area of Habitat inside the boundary, intersects that habitat with the allocated projected loss, and expresses the overlap as a share of the species&rsquo; habitat in the project area. <strong>Threatened</strong> means Critically Endangered, Endangered or Vulnerable on the IUCN Red List. The overall figure is the sum of avoided habitat across threatened species divided by the sum of their habitat in the project area.</p>
@@ -919,7 +986,7 @@ function docsBenefitNature() {
     ${docCallout('Limitations', 'The method is an adaptation of the <strong>IUCN STAR</strong> threat metric, and it is a simplified one. STAR weights a species&rsquo; contribution by its extinction risk <em>and</em> by the share of its global range affected, whereas this component works on the share of habitat inside the project area only. A species with 1% of its global range in the project area and one with 90% are treated identically. <strong>The framing &ldquo;may reduce threat levels&rdquo; is deliberate and should not be tightened.</strong>', 'warn')}`,
     'nature-species') +
 
-  docSection('8.2.5 &mdash; Improved forest productivity and regeneration', `
+  docSection('Improved forest productivity and regeneration', `
     <p><strong>Type.</strong> Unique benefit. Quantifiable. <strong>Manage and Restore pathways.</strong></p>
     <p><strong>What it reports.</strong> The potential biodiversity uplift from restoration, expressed in condition-adjusted hectares, and the habitat gain per species.</p>
     <p><strong>How it is derived.</strong> A spatially explicit adaptation of the area-adjusted <strong>Condition</strong> approach of the <strong>SD VISta Nature Framework v1.0</strong>, which defines area-adjusted condition as ecosystem extent multiplied by standardised ecosystem condition. The tool applies that relationship at pixel level and sums the difference between projected project condition and baseline condition across eligible restoration pixels.</p>
@@ -937,12 +1004,12 @@ function docsBenefitPeople() {
     'In version 3 the people pillar is purely qualitative and generates no numbers from raster data, as the interface indicates. That is a deliberate constraint, not a gap waiting to be filled with a proxy.',
     ['Qualitative by design', '4 general benefits', '5 unique benefits']) +
 
-  docSection('8.3 &mdash; Why the people pillar carries no numbers', `
+  docSection('Why the people pillar carries no numbers', `
     <p>Key outcomes such as <strong>tenure security, benefit sharing, governance capacity and cultural continuity are institutional and unobservable via satellite</strong>. Creating spatial proxies for them would lack a defensible link to actual outcomes.</p>
     ${docCallout('The sole exception', 'Protection of watershed function is quantifiable for the <strong>Protect and Restore</strong> pathways in areas facing soil erosion risk &mdash; though even there it runs no hydrological model.', 'note')}`,
     'people-qualitative') +
 
-  docSection('8.3.1 &mdash; General benefits', `
+  docSection('General benefits', `
     <p>These are delivered by any project on the pathway.</p>
     ${docTable(['Benefit', 'What it means'], [
       ['<strong>Enhanced food and water security</strong>',
@@ -957,7 +1024,7 @@ function docsBenefitPeople() {
     ${docSource('Table 14')}`,
     'people-general') +
 
-  docSection('8.3.2 &mdash; Unique benefits', `
+  docSection('Unique benefits', `
     <p>Each is tied to a specific pathway.</p>
     ${docTable(['Benefit', 'Pathway', 'What it means'], [
       ['<strong>Secure land and resource tenure</strong>', 'Protect',
@@ -991,7 +1058,7 @@ function docsBenefitClimate() {
     'The climate pillar carries the carbon quantification and two site-specific components. Carbon is the part of this tool most likely to be quoted out of context, so each component states plainly what its number is and what it is not.',
     ['tCO₂e', `${docNum('aoi.duration')}-year horizon`, 'Gross &rarr; net']) +
 
-  docSection('8.4 &mdash; Two figures from opposite sides of the pathway assignment', `
+  docSection('Two figures from opposite sides of the pathway assignment', `
     ${docTable(['Component', 'Side', 'What is being counted'], [
       ['<strong>8.4.2 Reduced emissions from deforestation and degradation</strong>', 'Protect',
        'Avoided emissions from deforestation that would otherwise happen'],
@@ -1002,7 +1069,7 @@ function docsBenefitClimate() {
     ${docCallout('The Manage carbon component is not started', 'The Manage qualitative benefits already appear in the general benefit list, but there is no Manage carbon figure. An absence here is an absence, not a zero.', 'warn')}`,
     'climate-two-figures') +
 
-  docSection('8.4.1 &mdash; Constants used', `
+  docSection('Constants used', `
     ${docTable(['Constant', 'Value', 'Meaning'], [
       ['<code>CARBON_FRACTION (CF)</code>', '<span class="num">0.47</span>',
        'Dry matter to carbon, IPCC 2006 GL Vol 4 Ch 4. Mangrove uses <strong>0.451</strong> in the ARR method.'],
@@ -1016,7 +1083,7 @@ function docsBenefitClimate() {
     ${docSource('Table 16')}`,
     'carbon-constants') +
 
-  docSection('8.4.2 &mdash; Reduced emissions from deforestation and degradation', `
+  docSection('Reduced emissions from deforestation and degradation', `
     <p><strong>What it reports.</strong> How much CO₂e a Protect project could keep out of the atmosphere over its lifetime.</p>
     <p><strong>What kind of claim it is.</strong> This is the <strong>avoided unplanned deforestation (AUD)</strong> case: loss driven by diffuse, unsanctioned pressure, which is why the baseline comes from a spatial risk model rather than from a document. <em>Avoided planned deforestation is a different construct with a different baseline and is not what this component estimates.</em></p>
 
@@ -1031,7 +1098,7 @@ function docsBenefitClimate() {
     <p>Not all forest is equally vulnerable. Instead of assuming average carbon loss across the whole map, the model pinpoints which trees would fall first: every eligible pixel is ranked from highest deforestation risk to lowest, and the tool selects the most threatened pixels one by one until their total area equals the projected loss from step 2.</p>
 
     <h3>Step 4 &mdash; Calculate avoided emissions</h3>
-    ${docEquation('Avoided Emissions&#8348; = &Sigma; ( AGB &times; (1 + 0.28) &times; 0.47 &times; 44/12 )')}
+    ${docEquation('Avoided Emissions&#8348; = &Sigma; ( AGB &times; (1 + 0.28) &times; 0.47 &times; 44/12 &times; Pixel Area )')}
     ${docTable(['Term', 'What it is'], [
       ['<strong>AGB</strong>', 'Above-Ground Biomass — the physical dry weight of the wood, branches and leaves above ground, in megagrams per hectare'],
       ['<strong>(1 + 0.28)</strong>', 'Accounts for below-ground biomass (roots). Because there is no separate map for roots, the formula assumes roots add an extra 28% to the visible tree mass — a root-to-shoot ratio of 0.28'],
@@ -1046,15 +1113,15 @@ function docsBenefitClimate() {
       `Effective avoided rate: <strong>${docFmt(av.perHa / dur, 2)} tCO₂e per hectare per year</strong>.`) : ''}`,
     'carbon-avoided') +
 
-  docSection('8.4.3 &mdash; Increased carbon sequestration and storage', `
+  docSection('Increased carbon sequestration and storage', `
     <p><strong>What it reports.</strong> The carbon a restoration project could remove over its lifetime, as an <em>ex-ante</em> estimate.</p>
     <p><strong>How it is derived.</strong> The reference-rate method applied per hectare and summed over eligible pixels. Growth runs in two phases &mdash; <strong>young in years 1 to 20</strong> and <strong>old in years 21 to 40</strong> &mdash; at rates given per ecosystem and, for dryland, per climatic zone.</p>
     ${docEquation('1. AGB = (Growth Rate_young &times; Years_young) + (Growth Rate_old &times; Years_old)', 'Above-ground biomass in Mg of dry matter per hectare.')}
     ${docEquation('2. Total Biomass = AGB &times; (1 + R)', 'R is the per-ecosystem root-to-shoot ratio from the table below — not the flat 0.28 used by 8.4.2.')}
     ${docEquation('3. Total CO₂e = Total Biomass &times; Carbon Fraction &times; 44/12')}
-    ${docEquation('4. Net CO₂e = Total CO₂e &minus; Baseline CO₂e')}
+    ${docEquation('4. Net CO₂e = maximum of 0 and ( Total CO₂e &minus; Baseline CO₂e )')}
     ${docEquation('5. Adjusted Net CO₂e = Net CO₂e &times; Stocking Factor',
-      'Stocking Factor represents tree density: active planting gets 100% of the calculated potential (1.0); Assisted Natural Regeneration (ANR) is estimated at 80% (0.8).')}
+      'Stocking Factor represents tree density: active planting gets 100% of the calculated potential (1.0); Assisted Natural Regeneration (ANR) and ecological mangrove restoration are estimated at 80% (0.8).')}
     ${docEquation('6. Total Project Carbon = &Sigma; ( Adjusted Net CO₂e per pixel &times; area of pixel )')}
     ${docEquation('7. Low Estimate = Total Project Carbon &times; 0.70<br>&nbsp;&nbsp; High Estimate = Total Project Carbon &times; 1.20',
       'A conservative worst case assuming 30% underperformance, and an optimistic best case assuming 20% overperformance.')}
@@ -1091,7 +1158,7 @@ function docsBenefitClimate() {
     ${docCallout('Limitations', 'The low and high figures are simply the total multiplied by 0.7 and 1.2. They are an <strong>indicative screening range, not a confidence interval and not a creditable volume</strong>. Beyond year 40 nothing further is credited; the curve is defined only that far, and a longer duration is flagged. No-data above-ground biomass counts as a <strong>zero baseline, which over-credits</strong> — the opposite direction to the equivalent rule in 8.4.2. And even when peat is re-enabled it is <strong>biomass only</strong>: peat soil carbon and avoided emissions from rewetting, usually the largest peat pool, stay out of scope.', 'warn')}`,
     'carbon-sequestration') +
 
-  docSection('8.4.4 &mdash; Net carbon figures', `
+  docSection('Net carbon figures', `
     <p>The three net components appear <strong>only when the user answers Yes to the carbon project question</strong>. Otherwise they stay deactivated, and only the gross figures of 8.4.2 and 8.4.3 are shown.</p>
 
     <h3>8.4.4.1 &mdash; Net carbon emission reduction (the Protect side)</h3>
@@ -1138,14 +1205,14 @@ function docsBenefitClimate() {
       <div class="doc-callout note"><span>From the Data Analyser</span>${c.assumptionsNote}</div>` : ''}`,
     'carbon-net') +
 
-  docSection('8.4.5 &mdash; Enhanced resilience to climate hazards', `
+  docSection('Enhanced resilience to climate hazards', `
     <p><strong>What it reports.</strong> The reduction in people&rsquo;s and assets&rsquo; exposure to climate hazards achieved by using healthy ecosystems as natural buffers.</p>
     <p><strong>How it is derived.</strong> Combines the ADPC climate disaster risk layers with forest cover and gridded population. The area where the intervention overlaps mapped hazard exposure gives the <em>buffered area</em>, and the population within it gives the people or households whose risk is lowered.</p>
     <p><em>What the tool says.</em> &ldquo;Implementing NbS in this ecosystem can reduce disaster exposure across an estimated X hectares, helping to lower risk for an estimated Y people over the project&rsquo;s t-year duration.&rdquo;</p>
     ${docCallout('Limitations', 'The link between cover and hazard reduction is treated as <strong>binary presence, not modelled attenuation</strong>. The component says exposure overlaps intervention; it does not model how much a given hazard is attenuated by a given amount of cover. The hazard layers also carry the four-versus-five class inconsistency noted in the threat profile.', 'warn')}`,
     'climate-resilience') +
 
-  docSection('8.4.6 &mdash; Microclimate regulation', `
+  docSection('Microclimate regulation', `
     <p><strong>What it reports.</strong> The moderation of local temperature by vegetation, through canopy shading and evapotranspiration, expressed as the tree-cover area delivering that cooling function.</p>
     <p><strong>How it is derived.</strong> Uses the forest cover benchmark to derive an annual gain rate, then projects it forward linearly.</p>
     ${docEquation('annual_gain_rate = total_gain(2014 to 2024) &divide; 10',
@@ -1193,7 +1260,7 @@ function docsPhase6() {
       ['3', 'Indicator',            'What measures that benefit'],
       ['4', 'Method and frequency', 'One suggestion per indicator']
     ])}
-    <p>The activities and benefits come from the same catalogue Phase 4 offers when activities are selected, described in <em>Protect, Manage, Restore and Ineligible</em>. The full chain from trajectory to indicator is drawn in the activities matrix.</p>
+    <p>The activities and benefits come from the same catalogue Phase 4b offers when activities are selected, described in <em>Activity selection</em>. The full chain from trajectory to indicator is drawn in the activities matrix.</p>
     ${docCallout('One indicator can measure more than one benefit', 'Forest carbon stock, for example, measures both reduced emissions from deforestation and increased carbon sequestration. Read the indicator count as the number of distinct measurements, not the number of benefits.', 'note')}
     ${BUILD_SOURCE('the activity and indicator catalogue')}`,
     'phase6-chain') +
@@ -1833,7 +1900,7 @@ function docsLimits() {
     'not-implemented') +
 
   docSection('Known inconsistencies in the current method', `
-    <p>Three are recorded in the methodology document itself. They are reported here rather than reconciled, because reconciling them silently would hide a real disagreement between the specification and the build.</p>
+    <p>Several are recorded in the methodology document itself. They are reported here rather than reconciled, because reconciling them silently would hide a real disagreement between the specification and the build.</p>
     ${docTable(['Where', 'The inconsistency', 'How to handle it'], [
       ['<strong>Net ERRs narrative (8.4.4.3)</strong>',
        'The printed narrative says the figure does not yet subtract the buffer contribution; the code that produces it <em>does</em> subtract the buffer.',
@@ -2019,7 +2086,7 @@ function docsReference() {
     ${docEquation('projected_loss_ha = risk_area_ha &times; (1 &minus; exp(&minus;r &times; t))', 'r = rate_pct ÷ 100; t = project duration in years.')}
     <h3>Avoided emissions &mdash; the Protect side</h3>
     ${docEquation('Total Protect Area = &Sigma; ( pixels designated Protect &cap; pixels with a risk value )')}
-    ${docEquation('Avoided Emissions&#8348; = &Sigma; ( AGB &times; (1 + 0.28) &times; 0.47 &times; 44/12 )')}
+    ${docEquation('Avoided Emissions&#8348; = &Sigma; ( AGB &times; (1 + 0.28) &times; 0.47 &times; 44/12 &times; Pixel Area )')}
     <h3>Carbon removals &mdash; the Restore side</h3>
     ${docEquation('AGB = (Growth Rate_young &times; Years_young) + (Growth Rate_old &times; Years_old)')}
     ${docEquation('Total Biomass = AGB &times; (1 + R)')}
@@ -2058,7 +2125,7 @@ function docsReference() {
          <ul><li>disturbed = ${docFmt(f.area)} &times; ${f.disturbedPct}% = <strong>${docFmt(f.disturbed)} ha</strong></li>
              <li>loss = ${docFmt(f.area)} &times; ${f.lossPct}% = <strong>${docFmt(f.loss)} ha</strong></li>
              <li>remaining = <strong>${docFmt(f.remaining)} ha</strong></li></ul>
-         <p><strong>Phase 4 &mdash; Pathway.</strong> Forest persisting (Cat 1) &rarr; Protect. Forest degraded or converted on a non-savanna reference (Cat 3B, 4B, 5) &rarr; Restore.</p>
+         <p><strong>Phase 4a &mdash; Pathway selection.</strong> Forest persisting (Cat 1) &rarr; Protect. Forest degraded or converted on a non-savanna reference (Cat 3B, 4B, 5) &rarr; Restore.</p>
          <p><strong>Phase 5 &mdash; Gross carbon over ${dur} years.</strong></p>
          <ul><li>gross avoided = <strong>${docFmt(av.gross)} tCO₂e</strong> (${docFmt(av.perHa, 1)} tCO₂e/ha)</li>
              <li>gross removals = <strong>${docFmt(sq.gross)} tCO₂e</strong> (${docFmt(sq.perHa, 1)} tCO₂e/ha)</li></ul>
@@ -2117,30 +2184,32 @@ const HELP_GUIDES = {
   phase1:            [['Phase 1 · Select location', 'phase-1'], ['Accounts and area limits', 'faq-accounts']],
   phase2:            [['Phase 2 · Site characterisation', 'phase-2']],
   phase3:            [['Phase 3 · Threat profile', 'phase-3']],
-  'phase4-state':    [['Phase 4 · Pathway selection', 'phase-4']],
-  'phase4-matrix':   [['Phase 4 · Pathway selection', 'phase-4']],
-  'phase4-pathways': [['Phase 4 · Pathway selection', 'phase-4']],
-  phase5:            [['Phase 5 · Potential benefit', 'phase-5']],
+  'phase4-state':    [['Phase 4a · Ecosystem and pathway', 'phase-4a']],
+  'phase4-matrix':   [['Phase 4a · Ecosystem and pathway', 'phase-4a']],
+  'phase4-pathways': [['Phase 4a · Ecosystem and pathway', 'phase-4a']],
+  'phase4-activities': [['Phase 4b · Activities', 'phase-4b']],
+  phase5:            [['Phase 5 · Potential benefit', 'phase-5'], ['Duration and carbon', 'phase-4-duration']],
   'benefit-nature':  [['Phase 5 · Potential benefit', 'phase-5']],
   'benefit-people':  [['Phase 5 · Potential benefit', 'phase-5']],
   'benefit-climate': [['Phase 5 · Potential benefit', 'phase-5'], ['Carbon finance and standards', 'carbon']],
-  phase6:            [['Plan the monitoring', 'monitoring']],
-  phase7:            [['Generate the documents', 'documents'], ['Carbon finance and standards', 'carbon']],
+  phase6:            [['Phase 6 · Monitoring planning', 'monitoring']],
+  phase7:            [['Phase 7 · Generate documents', 'documents'], ['Carbon finance and standards', 'carbon']],
   'annex-general':   [['Phase 2 · Site characterisation', 'phase-2'], ['Where the numbers come from', 'sources']],
   'annex-nature':    [['Phase 2 · Site characterisation', 'phase-2']],
   'annex-climate':   [['Phase 2 · Site characterisation', 'phase-2']],
   'annex-people':    [['Phase 2 · Site characterisation', 'phase-2']],
   'annex-threat':    [['Phase 3 · Threat profile', 'phase-3']],
   'annex-pathway':   [['Phase 4 · Pathway selection', 'phase-4']],
+  /* the glossary of terms on the screens lives in the Help Centre */
   limits:            [['What the tool does not do', 'not-do']],
-  reference:         [['How to cite', 'cite']]
+  reference:         [['How to cite', 'cite'], ['Glossary of the terms on the screens', 'glossary']]
 };
 function docsHelpLink(id) {
   const guides = HELP_GUIDES[id];
   if (!guides) return '';
   return docCallout('Do this in the tool',
     guides.map(([label, anchor]) => `<a href="help.html#${anchor}">${label}</a>`).join(' &middot; ') +
-    ' &mdash; step by step in the Help Centre, with screenshots.', 'hc-xref');
+    ' &mdash; step by step in the user guide, with screenshots.', 'hc-xref');
 }
 
 function docsArticleHtml(id) {
@@ -2154,6 +2223,7 @@ function docsArticleHtml(id) {
     'phase4-state': docsPhase4State,
     'phase4-matrix': docsPhase4Matrix,
     'phase4-pathways': docsPhase4Pathways,
+    'phase4-activities': docsPhase4Activities,
     phase5: docsPhase5,
     'benefit-nature': docsBenefitNature,
     'benefit-people': docsBenefitPeople,

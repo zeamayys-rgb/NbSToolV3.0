@@ -3,8 +3,8 @@
    The five GUI 3.1 section cards (Reference ecosystem, Administration
    and zoning, Terrain, Landcover, Soil classification), scoped under
    .gc inside .ctx-pane[data-ctx="general"]. The deforestation and
-   natural-disaster pieces further down (.gc-def, .gc-ndgrid) and the
-   burned-area pieces (.cl-fire) are now used by the Threat profile.
+   natural-disaster pieces further down (.gc-def, .gc-ndgrid) are now used
+   by the Threat profile.
    Assets: assets/f01-step2/genctx/.
    Loaded by interactive-map.html and project-detail.html.
    ============================================================ */
@@ -59,20 +59,22 @@
   border-radius: var(--radius-lg); background: var(--warning-25); color: var(--warning-700);
 }
 .gc-sub__ic svg { width: var(--space-20); height: var(--space-20); fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+/* blue tile with a filled Material icon (Climate ledger) */
+.gc-sub__ic--blue { background: var(--info-25); color: var(--info-700); }
+.gc-sub__ic--blue svg { fill: currentColor; stroke: none; }
+/* a filled Material icon inside a stroked tile (Drainage pressure) */
+.gc-sub__ic svg .gc-ms { fill: currentColor; stroke: none; }
 .gc-p { margin: 0; font-size: 14px; line-height: 22px; color: #252525; }
 .gc-p b { font-weight: 700; }
 .gc-p--lg { font-size: 14px; line-height: 1.42; color: var(--text-title); letter-spacing: -0.01em; }
-/* a consequence the reader should act on, set apart from the result above it */
-.gc-p--note { margin-top: var(--space-8); padding-left: var(--space-12); border-left: var(--space-2) solid var(--warning-500); color: var(--text-base-second); }
 
 /* ---------- GUI 3.1 result state: the message replaces the result, the head
    and the data-source line stay. Block styles are .nc-err (below). ---------- */
 .gc-card[data-state] > :not(.gc-card__head):not(.gc-state):not(.gc-src) { display: none; }
 
 /* Italic footnote link line */
-.gc-note-it { margin: 8px 0 0; font-size: 12px; line-height: 20px; font-style: italic; font-weight: 500; color: #68727d; }
-.gc-note-it a { color: #252525; text-decoration: underline; }
-.gc-note-it--center { align-self: center; text-align: center; }
+.gc-note-it { margin: var(--space-8) 0 0; font-size: 12px; line-height: 20px; font-style: italic; font-weight: 500; color: var(--text-base-second); }
+.gc-note-it a { color: var(--text-base-main); text-decoration: underline; }
 
 /* ---------- Disclaimer alert (Widget= Alert) ---------- */
 /* DEC-60: warm tint only — no border, no left stripe, small inline icon */
@@ -107,7 +109,19 @@
 .gc-eco__total b { font-family: var(--font-display); font-size: 32px; font-weight: 600; line-height: 36px; color: var(--text-base-main); letter-spacing: -0.015em; }
 .gc-eco__chartrow { display: flex; gap: var(--space-16); align-items: center; }
 /* SVG ring, one path per segment, written by gcDonut() */
-.gc-donut { display: block; width: 96px; height: 96px; flex: none; }
+.gc-donut { display: block; width: calc(var(--space-100) * 2); height: calc(var(--space-100) * 2); flex: none; }
+/* Reference ecosystem: total inside the ring, legend in a 2 x 2 grid below it */
+.gc-ecochart { display: flex; flex-direction: column; align-items: center; gap: var(--space-16); }
+.gc-donutwrap { position: relative; }
+.gc-donut__c {
+  position: absolute; inset: 0; pointer-events: none;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+}
+.gc-donut__c span { font-size: 12px; font-weight: 500; line-height: 18px; color: var(--text-base-second); }
+.gc-donut__c b { font-family: var(--font-display); font-size: 24px; font-weight: 600; line-height: 28px; color: var(--text-base-main); letter-spacing: -0.015em; }
+.gc-legend.gc-legend--grid { align-self: stretch; flex: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-12) var(--space-16); }
+.gc-legend.gc-legend--grid li { display: grid; grid-template-columns: var(--space-12) minmax(0, 1fr); column-gap: var(--space-8); row-gap: 0; align-items: center; white-space: normal; }
+.gc-legend.gc-legend--grid b { grid-column: 2; }
 /* beside a long text column (Land degradation): the half doughnut on top, the legend
    under it at full width, both on the left edge */
 .gc-terr--mid .gc-eco__chartrow { flex-direction: column; align-items: flex-start; }
@@ -133,13 +147,53 @@
 .gc-gauge__c b { font-family: var(--font-display); font-size: 32px; font-weight: 600; line-height: 36px; color: var(--text-base-main); letter-spacing: -0.015em; }
 .gc-gauge__c span { font-size: 12px; font-weight: 500; line-height: 18px; color: var(--text-base-second); }
 .gc-gauge__n { text-align: center; margin-top: var(--space-8); }
+/* Two-ring half doughnut (gcSunHalf): wider than the other half doughnuts, centred
+   above a two-column legend (one column per group). Total and label sit in the hole. */
+.gc-stack { display: flex; flex-direction: column; gap: var(--space-24); }
+.gc-sun { display: flex; flex-direction: column; align-items: center; gap: var(--space-20); }
+.gc-gauge--sun { max-width: calc(var(--space-100) * 4); }
+.gc-gauge--sun .gc-gauge__c { bottom: var(--space-32); }
+/* Fire risk: the share and its label sit 16px up inside the arc */
+[data-gc="firerisk"] .gc-gauge__c { bottom: var(--space-16); }
+.gc-legend-cols { align-self: stretch; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-24); }
+/* Threshold row (Drainage canal pressure): text left, horizontal threshold bar right */
+.gc-thr { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--space-24); align-items: center; }
+/* the level badge sits beside the section title; it wraps under it before the title breaks */
+.gc-thr .gc-sub--ic { flex-wrap: wrap; }
+.gc-sub__t { white-space: nowrap; }
+.gc-scale { display: flex; flex-direction: column; gap: var(--space-8); padding-top: var(--space-32); }
+.gc-scale__track { position: relative; display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-2); }
+.gc-scale__track i { height: var(--space-12); }
+.gc-scale__track i:first-of-type { border-radius: var(--radius-sm) 0 0 var(--radius-sm); }
+.gc-scale__track i:last-of-type { border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+/* marker: value label above a stem that crosses the bar */
+.gc-scale__mark {
+  position: absolute; bottom: calc(100% + var(--space-4)); transform: translateX(-50%);
+  padding: var(--space-2) var(--space-8); border-radius: var(--radius-sm);
+  background: var(--base-black); color: var(--text-on-color);
+  font-size: 12px; font-weight: 600; line-height: 18px; white-space: nowrap;
+}
+.gc-scale__mark::after {
+  content: ''; position: absolute; left: 50%; top: 100%; transform: translateX(-50%);
+  width: var(--space-2); height: calc(var(--space-12) + var(--space-8)); background: var(--base-black);
+}
+.gc-scale__lbls { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-2); text-align: center; }
+.gc-scale__lbls span { display: flex; flex-direction: column; font-size: 12px; line-height: 18px; color: var(--text-base-second); }
+.gc-scale__lbls b { font-weight: 600; color: var(--text-base-main); }
+/* a suffix word ("density") hugs the class name above it */
+.gc-scale__lbls b + b { margin-top: calc(var(--space-4) * -1); }
+.gc-legend--tree span { white-space: normal; }
+/* Grouped legend: a group row (forest / non-forest), then its categories indented */
+.gc-legend--tree .gc-legend__grp { margin-top: var(--space-8); font-weight: 600; }
+.gc-legend--tree .gc-legend__grp:first-child { margin-top: 0; }
+.gc-legend--tree .gc-legend__sub { padding-left: var(--space-20); color: var(--text-base-second); }
 
 /* Chart segments (gcDonut, gcGauge) carry data-tip: the People Context tooltip
    (.pcx-tip, css/people-context.css) names the one under the pointer, and it dims
    the same way the People Context charts do. */
-.gc svg [data-tip] { cursor: pointer; transition: opacity var(--motion-fast); }
-.gc svg [data-tip]:hover { opacity: .72; }
-@media (prefers-reduced-motion: reduce) { .gc svg [data-tip] { transition: none; } }
+.gc svg [data-tip], .gc-slope .t i[data-tip] { cursor: pointer; transition: opacity var(--motion-fast); }
+.gc svg [data-tip]:hover, .gc-slope .t i[data-tip]:hover { opacity: .72; }
+@media (prefers-reduced-motion: reduce) { .gc svg [data-tip], .gc-slope .t i[data-tip] { transition: none; } }
 
 /* ============================================================
    2 · Administration & zoning — table
@@ -175,6 +229,8 @@
 .gc-terr--mid { align-items: center; grid-template-columns: calc(var(--space-100) * 4) minmax(0, 1fr); }
 /* chart on the left, 400px text column on the right (Fire risk) */
 .gc-terr--text-end { grid-template-columns: minmax(0, 1fr) calc(var(--space-100) * 4); }
+/* narrower end column, so the text beside it gets the room (Area of habitat threshold) */
+.gc-terr--narrow-end { grid-template-columns: minmax(0, 1fr) calc(var(--space-100) * 3); }
 /* text column as tall as its neighbour: title at the top, closing note at the
    bottom (Area of habitat threshold) */
 .gc-terr--fill { align-items: stretch; }
@@ -216,17 +272,20 @@
   align-self: flex-start;
   display: flex; gap: 10px; align-items: center;
   padding: 4px 10px; border-radius: 4px;
-  background: #fafbfc; border: 1px solid #efeff1;
+  background: var(--neutral-50); border: 1px solid var(--neutral-500);
 }
 .gc-chip span { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 500; color: #505760; white-space: nowrap; }
 .gc-chip i { width: 12px; height: 12px; border-radius: 50%; flex: none; }
 /* continuous-scale legend (deforestation risk, lower to higher). It may wrap: the card is
    narrower inside a Threat profile accordion than it was in the General pane. */
-.gc-chip--ramp { flex-wrap: wrap; max-width: 100%; }
+/* The chip spans the column and the ramp fills what the title leaves; below 110px
+   the ramp wraps to its own full-width row. */
+.gc-chip--ramp { flex-wrap: wrap; max-width: 100%; align-self: stretch; }
+.gc-chip--ramp span:last-child { flex: 1 1 auto; }
 .gc-chip--ramp i {
-  width: 110px; height: 10px; border-radius: 3px;
-  /* YlOrRd 9-class sequential ramp (ColorBrewer) */
-  background: linear-gradient(90deg, #ffffcc, #ffeda0, #fed976, #feb24c, #fd8d3c, #fc4e2a, #e31a1c, #bd0026, #800026);
+  flex: 1 1 auto; width: auto; min-width: 110px; height: 10px; border-radius: 3px;
+  /* the deforestation risk map layer's own ramp, index 0 to 1 (no token yet: TODO-26) */
+  background: linear-gradient(90deg, #258b21, #7e9614, #d9a006, #ea3c15, #000000);
 }
 
 /* ============================================================
@@ -302,7 +361,7 @@
 .hz-wet { fill-opacity: .85; }
 .hz-funnel { fill: var(--gray-200); fill-opacity: .6; }
 .gc-nditem span { font-size: 14px; font-weight: 500; line-height: 22px; color: var(--text-base-main); }
-.gc-nditem .gc-lvl { margin: 0; justify-content: space-between; }   /* name left, level right (DEC-58) */
+.gc-nditem .gc-lvl { margin: 0; }   /* name, then its level 12px after it (DEC-58 had them at opposite ends) */
 
 /* ============================================================
    NATURE CONTEXT — the six GUI 3.1 sections
@@ -390,20 +449,21 @@
 
 /* ---------- 3 · Conservation significance ---------- */
 .nc-cons { display: flex; gap: 20px; align-items: stretch; }
+/* Same deep green as the FLII score card; amber shape so it reads on the green. */
 .nc-radar {
-  position: relative; margin: 0; flex: none; width: 299px; height: 247px;
-  border-radius: 6px; overflow: hidden; background: #1f1f1e;
+  margin: 0; flex: none; width: 299px; height: 247px;
+  border-radius: var(--radius-sm); overflow: hidden; background: var(--primary-750);
 }
-/* Exact Figma crop — the source render carries a caption above the chart
-   that the design frames out. */
-.nc-radar img { position: absolute; left: -22px; top: -49px; width: 357px; height: 365px; }
+.nc-radar svg { display: block; width: 100%; height: 100%; }
+.nc-radar__ring { fill: none; stroke: var(--base-white); stroke-opacity: 0.18; stroke-width: 1; }
+.nc-radar__area { fill: var(--warning-400); fill-opacity: 0.35; stroke: var(--warning-400); stroke-width: 2; stroke-linejoin: round; }
+.nc-radar__dot { fill: var(--warning-300); stroke: var(--primary-750); stroke-width: 1.5; }
+.nc-radar__lbl {
+  fill: var(--text-on-color); text-anchor: middle;
+  font-family: var(--font-text); font-size: 16px; font-weight: 600;
+}
 .nc-cons__side { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; justify-content: space-between; gap: 12px; }
 .gc-chip--sq i { border-radius: 3px; }
-/* the three scores as text, so the chart is not the only way to read them */
-.nc-scores { list-style: none; margin: var(--space-12) 0 0; padding: 0; display: flex; gap: var(--space-24); }
-.nc-scores li { display: flex; flex-direction: column; }
-.nc-scores span { font-size: 12px; font-weight: 500; line-height: 20px; color: var(--text-base-second); }
-.nc-scores b { font-family: var(--font-display); font-size: 24px; font-weight: 600; line-height: 30px; color: var(--text-base-main); letter-spacing: -0.01em; }
 
 /* ---------- 4 · Forest Landscape Integrity Index ---------- */
 .nc-flii { display: flex; gap: 20px; align-items: flex-start; }
@@ -433,7 +493,7 @@
 .nc-pill--med,  .nc-pill--warn { background: var(--warning-25); border: 1px solid var(--warning-500); color: var(--warning-800); }
 .nc-pill--low,  .nc-pill--bad  { background: var(--danger-50);  border: 1px solid var(--danger-600);  color: var(--danger-800); }
 /* label + level badge on one line (gcLevel) */
-.gc-lvl { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-8); margin: var(--space-4) 0 var(--space-8); font-size: 12px; font-weight: 500; line-height: 20px; color: var(--text-base-second); }
+.gc-lvl { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-12); margin: var(--space-4) 0 var(--space-8); font-size: 12px; font-weight: 500; line-height: 20px; color: var(--text-base-second); }
 .nc-score .nc-pill { color: #111729; }
 /* Vertical gradient gauge with tick marks and range labels */
 .nc-gauge { position: relative; flex: none; width: 226px; height: 168px; }
@@ -530,7 +590,7 @@
   --linear-brand-gradient: linear-gradient(268deg, #1DA3DC 0.59%, #F3912A 41.24%, #9CC02B 74.09%);
 }
 .cl-carbon { display: flex; gap: 20px; align-items: flex-start; margin-top: 8px; }
-.cl-carbon > .gc-p { flex: 1 1 0; min-width: 0; }
+.cl-carbon__tx { flex: 1 1 0; min-width: 0; gap: var(--space-8); }
 /* climate reads blue: the Peat depth sub-title and total follow the card head */
 .gc-card--blue .gc-eco__total b { color: var(--info-800); }
 .cl-total {
@@ -589,56 +649,55 @@
 .cl-pool__tag--bgb { bottom: 7%; right: 3%; }
 
 /* ---------- Soil classification (General pane since GUI 3.1; was Climate) ---------- */
-.cl-soil { display: flex; gap: 20px; align-items: stretch; margin-top: 8px; }
-.cl-soil__list { flex: none; width: 419px; display: flex; flex-direction: column; gap: 12px; }
+/* Each row is a <details> (Figma 5076:22358): the summary is the clickable row,
+   the paragraph is the WRB description, indented to the name column. Every row
+   carries a top rule in its soil colour. */
+.cl-soil { display: flex; flex-direction: column; gap: 22px; margin-top: var(--space-8); }
 .cl-soilrow {
-  display: flex; align-items: center; gap: 13px;
-  padding: 10px 10px 10px 16px; border-radius: 12px; background: #f8f9fc;
+  padding: var(--space-16) var(--space-20);
+  border-top: 3px solid var(--c); border-radius: var(--radius-xl);
+  background: var(--neutral-100);
+  transition: background-color var(--motion-fast);
 }
-.cl-soilrow.is-top { border-left: 3px solid var(--c); padding-left: 13px; }
+.cl-soilrow:not([open]):hover { background: var(--neutral-500); }
+.cl-soilrow summary {
+  display: flex; align-items: flex-start; gap: 13px;
+  list-style: none; cursor: pointer;
+}
+.cl-soilrow summary::-webkit-details-marker { display: none; }
 .cl-soilrow .n {
-  flex: none; width: 30px; height: 30px; border-radius: 4px; background: var(--c);
+  flex: none; width: 30px; height: 30px; border-radius: var(--radius-sm); background: var(--c);
   display: grid; place-items: center;
-  font-size: 14px; line-height: 22px; color: #ffffff;
+  font-size: 14px; line-height: 22px; color: var(--text-on-color);
 }
-.cl-soilrow > div { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
-.cl-soilrow b { font-size: 14px; font-weight: 400; line-height: 22px; color: #000000; }
-.cl-soilrow i { display: block; height: 6px; border-radius: 4px; background: #e8eaed; }
-.cl-soilrow s { display: block; height: 100%; border-radius: 4px; background: var(--c); }
+.cl-soilrow summary > div { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.cl-soilrow b { font-size: 14px; font-weight: 400; line-height: 22px; color: var(--base-black); }
+.cl-soilrow i { display: block; height: 6px; border-radius: var(--radius-sm); background: var(--neutral-600); }
+.cl-soilrow s { display: block; height: 100%; border-radius: var(--radius-sm); background: var(--c); }
 .cl-soilrow em {
-  flex: none; font-style: normal; font-family: var(--font-display);
-  font-size: 20px; font-weight: 600; line-height: 28px; color: var(--c); letter-spacing: -0.01em;
+  flex: none; width: 70px; box-sizing: border-box; text-align: center;
+  padding: var(--space-2) var(--space-8); border-radius: var(--radius-lg); background: var(--neutral-600);
+  font-style: normal; font-family: var(--font-display);
+  font-size: 20px; font-weight: 600; line-height: 28px; color: var(--text-base-main); letter-spacing: -0.01em;
+  white-space: nowrap;
 }
-.cl-dominant {
-  flex: 1 1 0; min-width: 0;
-  display: flex; flex-direction: column; justify-content: space-between; gap: 12px;
-  padding: 12px; border-radius: 8px; background: #0f3b63;
+/* Material expand_more; points up while the row is open. */
+.cl-soilrow .cl-soilchev {
+  flex: none; width: 24px; height: 24px; align-self: center;
+  color: var(--text-base-main); transition: transform var(--motion-fast);
 }
-.ctx-pane[data-ctx="general"] .cl-dominant { background: var(--primary-750); }
-.cl-dominant__t { font-size: 16px; font-weight: 500; line-height: 1.45; color: #e2e7f0; letter-spacing: -0.03em; }
-.cl-dominant b {
-  display: block; font-family: var(--font-display); font-size: 32px; font-weight: 600;
-  line-height: 42px; color: #feffff; letter-spacing: -0.015em;
-}
-.cl-dominant em {
-  display: inline-block; font-style: normal; margin-top: 4px;
-  font-family: var(--font-override); font-size: 14px; font-weight: 500; line-height: 20px; color: #252525;
-  background: #f5f6f8; border-radius: 8px; padding: 2px 8px;
-}
-.cl-dominant hr { width: 100%; height: 0; margin: 0; border: none; border-top: 1px solid rgba(255,255,255,0.35); }
-.cl-dominant p { margin: 0; font-size: 14px; line-height: 22px; color: #ffffff; }
+.cl-soilrow[open] .cl-soilchev { transform: rotate(180deg); }
+/* 43px = badge (30) + gap (13); 120px = gap (13) + share label (70) + gap (13) + chevron (24) */
+.cl-soilrow p { margin: var(--space-12) 120px 0 43px; font-size: 14px; line-height: 22px; color: var(--text-base-main); }
+@media (prefers-reduced-motion: reduce) { .cl-soilrow, .cl-soilrow .cl-soilchev { transition: none; } }
 
 /* ---------- 3 · Annual climate ledger ---------- */
 .cl-ledger { display: flex; gap: 20px; align-items: flex-start; }
 .cl-metric { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 8px; }
-.cl-metric__ic {
-  width: 40px; height: 40px; border-radius: 8px; border: 1px solid #e2e8ef;
-  display: grid; place-items: center; flex: none;
-}
-.cl-metric__ic img { width: 24px; height: 24px; object-fit: contain; }
 
 /* ---------- Shared CSS bar chart ---------- */
 .cl-chart {
+  --bar-w: 14px; /* close to the People Context bars; shrinks in a narrow plot */
   position: relative; margin-top: 12px;
   display: grid; grid-template-columns: 14px 34px 1fr; grid-template-rows: 1fr auto;
   column-gap: 6px;
@@ -670,39 +729,30 @@
   background-size: 6px 7.23px;
 }
 .cl-chart__plot i {
-  display: block; width: 8px; flex: none; background: var(--bar, #125e92);
+  display: block; flex: 0 1 var(--bar-w); min-width: var(--space-4); background: var(--bar, #125e92);
   border-radius: var(--radius-sm) var(--radius-sm) 0 0; /* soft top, flat on the axis */
+  cursor: pointer; transition: opacity var(--motion-fast);
 }
+/* hover dims the bar like the other charts; the value shows in the shared .pcx-tip */
+.cl-chart__plot i:hover { opacity: .72; }
+@media (prefers-reduced-motion: reduce) { .cl-chart__plot i { transition: none; } }
 .cl-chart__x {
   grid-column: 3; grid-row: 2; list-style: none; margin: 4px 0 0; padding: 0 6px;
   display: flex; justify-content: space-between;
   font-size: 10.4px; font-weight: 500; color: #717d96; letter-spacing: -0.03em;
 }
-.cl-chart__x li { width: 8px; flex: none; transform: rotate(-45deg); transform-origin: center; white-space: nowrap; }
+/* each label box is as wide as its bar, so the label centres on it */
+.cl-chart__x li {
+  flex: 0 1 var(--bar-w); min-width: var(--space-4); display: flex; justify-content: center;
+  transform: rotate(-45deg); transform-origin: center; white-space: nowrap;
+}
 .cl-chart--prec .cl-chart__plot i { --bar: #125e92; }
 .cl-chart--temp .cl-chart__plot i { --bar: #4591c5; }
 
 /* ---------- 4 · Historical burned area ---------- */
-.cl-fire { display: flex; gap: 20px; align-items: stretch; }
-.cl-fire__graph { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 16px; }
+.cl-burnrow { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 3fr); gap: var(--space-24); align-items: center; }
 .cl-chart--fire .cl-chart__plot { height: 176px; }
-.cl-chart--fire .cl-chart__plot i { --bar: #ac1a13; width: 9px; }
-.cl-chart--fire .cl-chart__x li { width: auto; transform: none; }
-.cl-chart__xtitle {
-  margin: 0; text-align: center; font-size: 10px; font-weight: 500;
-  color: #1a202c; letter-spacing: -0.03em;
-}
-.cl-burned {
-  flex: none; width: 200px;
-  display: flex; flex-direction: column; justify-content: flex-start; gap: 16px;
-  padding: 16px 14px; border-radius: 8px; border: 1px solid #db2222;
-  background:
-    linear-gradient(180deg, rgba(20,8,4,.72) 0%, rgba(20,8,4,.42) 55%, rgba(20,8,4,.12) 100%),
-    url("../assets/f01-step2/climctx/burned-area.png") center / cover no-repeat;
-}
-.cl-burned p { margin: 0 0 10px; font-size: 14px; line-height: 22px; color: #f3e8e2; }
-.cl-burned p b { font-weight: 700; color: #ffffff; }
-.cl-burned__v {
-  font-family: var(--font-display); font-size: 24px; font-weight: 600;
-  line-height: 30px; color: #ffffff; letter-spacing: -0.01em;
-}
+.cl-chart--fire .cl-chart__plot i { --bar: var(--danger-800); }
+.cl-chart--fire .cl-chart__x li { transform: none; }
+.cl-chart__xtitle { margin: 0; text-align: center; font-size: 10px; font-weight: 500; color: var(--text-title); letter-spacing: -0.03em; }
+

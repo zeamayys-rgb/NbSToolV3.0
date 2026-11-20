@@ -44,7 +44,7 @@ status, in the same change that adds or retires a route.
 | SCR-16 | archived | `/archive/screens/F02-P5_Potential_Benefit_1` | Potential Benefit (superseded) | Original Figma rebuild of Step 5 | — | — | Superseded by SCR-03 Step 5 |
 | SCR-17 | live | `/technical-docs` | The science behind it (F09) | The Help Centre's method pages, generated from the Data & methodology documentation and nested under SCR-19's four science entry pages: scope, phases 1 to 5, benefit detail, data layers, limits; every article links back to its SCR-19 section | Understand and audit how a number was produced | CMP-01, CMP-28 | Reads live parameters from `NBS_DATA`, `NBS_ANALYSIS`, `NBS_LAYER_INFO`, `ecosystems`, `indicatorMeta`, `NBS_PEOPLE` — no static copies |
 | SCR-18 | redirect | `/walkthrough` | Walkthrough — **retired** | Redirect only: maps each old chapter anchor to its SCR-19 guide (DEC-30) | Keep old links working | — | None |
-| SCR-19 | live | `/help` | Help Centre | The hub for everything about the tool: a landing page of entry cards, then five sections — Get started, How it works (one page per stage, with the manual's screenshots), The science behind it (four entry pages over SCR-17), Resources, Support (FAQ, contact) | Learn the tool, find the method, or get one question answered | CMP-01, CMP-22, CMP-28, CMP-29, CMP-33, CMP-35, CMP-36, CMP-37 | None — static HTML plus two video files; every how-to section with a method behind it links to its SCR-17 `#docs/` article (DEC-29, DEC-30, DEC-34) |
+| SCR-19 | live | `/help` | Help Centre | The hub for everything about the tool: a landing page of entry cards, then five sections — Get started, User guide (the user manual; called *How it works* before DEC-81) (one page per stage, with the manual's screenshots), The science behind it (four entry pages over SCR-17), Resources, Support (FAQ, contact) | Learn the tool, find the method, or get one question answered | CMP-01, CMP-22, CMP-28, CMP-29, CMP-33, CMP-35, CMP-36, CMP-37 | None — static HTML plus two video files; every how-to section with a method behind it links to its SCR-17 `#docs/` article (DEC-29, DEC-30, DEC-34) |
 
 **Orphans.** SCR-14 and SCR-17 are reachable by URL but linked from no nav, footer or
 sitemap. SCR-15 and SCR-16, the Figma-rebuild sources whose content now lives in
@@ -416,7 +416,7 @@ this article's parent (one of the four *science behind it* entry pages) expanded
 kicker names that parent (*How each phase is calculated · Phase 3*). The search box searches
 both pages and lists every match flat. The page title is *The science behind it*. Every *Do this
 in the tool* box still links to a SCR-19 section (`HELP_GUIDES`), now by section id inside the
-*How it works* pages (`#phase-3`, `#faq-accounts`, `#carbon`, `#sources`, `#not-do`, `#cite`).
+*User guide* pages (`#phase-3`, `#phase-4b`, `#faq-accounts`, `#carbon`, `#sources`, `#not-do`, `#cite`).
 
 **Data dependencies — the point of the screen.** No figure on SCR-17 is typed into prose.
 `readLiveParameters()` reads the same objects the product renders from, including parsing the
@@ -515,9 +515,12 @@ check how a number was produced, find the Coalition's documents, or get one ques
 *is it free, what file do I upload, can I put this number in a proposal, who can see my project.*
 
 **Model.** A help centre in the shape of Global Nature Watch's: a landing page whose only job
-is to direct, then sections of pages. The content is the NbS Tool v3.0 User Manual (the product
-owner's contextualised version, October 2026), transcribed section by section with its
-screenshots. The Coalition page is the only one not in the manual; it keeps the text from the
+is to direct, then sections of pages. The content comes from four team documents in
+`docs/reference/GUI3.1/Help Page/` (November 2026): the NbS Tool v3.0 User Manual (the *User
+guide* section), the Reference Methodology (SCR-17, *The science behind it*), the FAQ and the
+Glossary (both under *Support*), reworded into plain English. Where those documents disagree
+with each other or with the GUI v3.1 screens, the screens win and the disagreement is a
+`TODO(design)` below (DEC-81). The Coalition page is the only one not in the manual; it keeps the text from the
 previous Help Centre, which came from the methodology document.
 
 **Entry** — the "?" Help icon at the right end of the site navigation (CMP-01, DEC-39; previously the *Help Centre* link item, which replaced *Methodology*), the
@@ -534,7 +537,7 @@ flattened into it. The site footer stays. `css/help.css` adds the landing action
 the eight-phase chart, the demo video, route chips, key points, numbered steps, screenshot
 figures and contact cards.
 
-**Content model.** Static HTML: sixteen `<div data-doc="id">` articles inside `#docs-article`,
+**Content model.** Static HTML: twenty-three `<div data-doc="id">` articles inside `#docs-article`,
 each a `.doc-hero` and one or more `.doc-section`s whose `h2`s feed the TOC. Their ids, groups,
 labels and search keywords are rows in `js/docs-index.js`. `DocsShell.mount({ page: 'help' })`
 lifts the articles out of the flow and shows one at a time, routed by `#id`; a hash that names a
@@ -542,19 +545,27 @@ section inside an article opens that article scrolled to it (`#phase-2`, `#carbo
 
 | Section | Pages (id) |
 |---|---|
-| — | Help Centre landing (`home`): hero, *Open the NbS Tool* / *Watch the demo*, one card group per section |
-| Get started | What the NbS Tool is (`what-is`) · Demo of the NbS Tool (`demo`) · Who is behind the NbS Tool (`who`) |
-| How it works | The eight phases (`phases`: the chart, calculated / reported / described, where the tool fits) · Start the analysis (`analysis`: sections `phase-0` to `phase-5`) · Plan the monitoring (`monitoring`) · Generate the documents (`documents`) · Manage your project (`manage`: sections `projects`, `project-inside`, `project-import`, `record`, `record-progress`, `record-own-data`) |
+| — | Help Centre landing (`home`): hero, *Open the NbS Tool* / *Watch the video tutorials*, then one group per section. *Video tutorials* (`home-videos`) carries the overview video slot; *User guide* (`home-how`) carries the phase table: one row per phase with its guide link and its method link |
+| Get started | What the NbS Tool is (`what-is`) · Video tutorials (`demo`: sections `demo-watch`, the 49-second demo, and `videos`, the YouTube tutorials) · Who is behind the NbS Tool (`who`) |
+| User guide | The eight phases (`phases`: the chart, calculated / reported / described, where the tool fits) · Run an analysis (`analysis`: an entry page of phase cards, like the science entry pages) with eight pages nested under it in the sidebar: `phase-0` to `phase-5` (their sub-headings are sections: `phase-2-general`, `phase-2-nature`, `phase-2-people`, `phase-2-climate`, `phase-4a`, `phase-4b`, `phase-4-duration`), `monitoring` (Phase 6) and `documents` (Phase 7) · Manage your project (`manage`: sections `projects`, `project-inside`, `project-import`, `record`, `record-progress`, `record-own-data`) |
 | The science behind it | What the tool analyses (`science-scope`) · How each phase is calculated (`science-method`) · The data behind each figure (`science-data`: sections `reports`, `sources`) · Limits, carbon and how to cite (`science-limits`: sections `not-do`, `carbon`, `cite`). Each is an entry page: a short lead, then cards to its SCR-17 articles, which the sidebar nests beneath it |
 | Resources | Guidebook, modules and manual (`resources`): three external-document cards |
-| Support | Frequently asked questions (`faq`: sections `faq-accounts`, `faq-using`, `faq-results`) · Contact us (`contact`) |
+| Support | Frequently asked questions (`faq`: sections `faq-results`, `faq-accounts`, `faq-using`, `faq-trouble`) · Glossary (`glossary`: sections `glossary-core`, `glossary-general`, `glossary-nature`, `glossary-climate`, `glossary-threat`) · Contact us (`contact`) |
 
-The page order inside *How it works* follows the manual's phase order (6, 7, then after the
+**One phase numbering (DEC-81).** Phases 0 to 7 as the chart draws them, with Phase 4 in two
+parts: 4a the pathway, 4b the activities. The landing page's table, the chart, the guide's
+headings, the FAQ's "main steps" answer, the sidebar labels in `js/docs-index.js` and the hero
+kickers of SCR-17 all use these numbers and names. A phase must never be numbered or named
+differently in one of them.
+
+The page order inside *User guide* follows the manual's phase order (6, 7, then after the
 analysis), not the order the brief listed them in; the chart on *The eight phases* would
 otherwise contradict the sidebar.
 
 **Screenshots (CMP-29).** The manual's 41 captures, in `assets/help/`, 1600px wide, named by
-what they show (`select-confirm.jpg`, `mrv-dashboard.jpg`). The nine PNG originals were
+what they show (`select-confirm.jpg`, `mrv-dashboard.jpg`). Four of them (`site-general`,
+`site-nature`, `site-climate`, `threat-profile`) were recaptured from this build in November
+2026, because the manual's showed the v3.0 layout of Phases 2 and 3. The nine PNG originals were
 re-encoded as JPEG. The previous `assets/walkthrough/` captures are deleted. The manual's figure
 of the old methodology page is not used: it shows the sidebar this change replaced.
 
@@ -562,10 +573,17 @@ of the old methodology page is not used: it shows the sidebar this change replac
 `demo-full.mp4` (48.5 s, 1080p, no audio track) plays on request. Together 7.9 MB, served
 statically.
 
-**Cross-links to SCR-17.** Every *How it works* section with a method behind it closes with a
-*The science behind it* box; SCR-17's `HELP_GUIDES` is the mirror, keyed by section id.
+**Video tutorials (CMP-42).** YouTube videos, one slot per stage, whose addresses are the
+`HC_VIDEOS` map in the inline script of `help.html`. Slots sit on the landing page (overview),
+on *Video tutorials* (all five) and under the hero of each guide page (hidden until its video
+has an address).
 
-**Behaviour.** All of it is CMP-35, plus the inline demo script in `help.html`.
+**Cross-links to SCR-17.** Every *User guide* section with a method behind it closes with a
+*The science behind it* box, and the sub-sections of Phases 2, 4 and 5 carry their own link to
+the matching method section (`technical-docs.html#docs/<article>/<section>`); SCR-17's
+`HELP_GUIDES` is the mirror, keyed by section id.
+
+**Behaviour.** All of it is CMP-35, plus the inline demo and video-tutorial script in `help.html`.
 
 **Data dependencies.** None. The only numbers are the two hectare allowances, the duration
 range, the privacy levels, the demo length and the version — product facts, not analysis
@@ -585,4 +603,10 @@ pill until then.`
 Contact us. They need legal text from WRI before launch.`
 `TODO(design): the member table lists ZSL and not IDH; the home page partner strip shows IDH.
 Confirm with the Coalition.`
-
+`TODO(design): the guest area allowance. The User Manual and SCR-03 say 200,000 ha; the
+Reference Methodology and the FAQ say 100,000 ha. The Help Centre and SCR-17 use 200,000 until
+the product owner confirms.`
+`TODO(design): the video tutorials have no addresses yet; every slot reads "Video coming soon".`
+`TODO(design): the Glossary source document is a draft due for review (25 November 2026).`
+`TODO(design): the Reference Methodology says the project duration is set in Phase 1; the
+screens and the User Manual set it in Phase 4. The Help Centre follows the screens.`

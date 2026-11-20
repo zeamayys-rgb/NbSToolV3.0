@@ -1819,3 +1819,202 @@ draws in `currentColor`. Google's Apache 2.0 licence ships beside them. See CMP-
   icon and stays custom.
 - Existing inline icons move to Material as their screens are touched (CMP-40, Known gap). The
   nav Help icon is the first: Material `question_mark` (CMP-01).
+
+## DEC-81 · One phase numbering across the Help Centre, the user guide and the method pages
+
+**Status.** Accepted, 2026-11-19. Asked for by the product owner with the four Help Page source
+documents (User Manual, Reference Methodology, FAQ, Glossary).
+
+**Context.** The source documents number the work differently. The User Manual has eight
+phases, 0 to 7. The Reference Methodology has a chain of six: 1, 2, 3, 4a, 4b, 5. The FAQ lists
+seven "main steps" in which step 6 is saving and step 7 is monitoring and documents together.
+The method pages still carried the chapter numbers of an older methodology document in their
+headings ("7.5 —", "8.4.2 —"), next to phase numbers. A reader moving between the three could
+meet three different "phase 4"s.
+
+**Decision.**
+- The numbering is the manual's and the Data Analyser's own: Phase 0 (optional) to Phase 7, with
+  Phases 1 to 5 being the five numbered steps of the analyser. Phase 4 has two parts, taken
+  from the Reference Methodology: 4a pathway selection, 4b activity selection.
+- Every surface uses it: the landing page's phase table, the chart (CMP-36), the guide headings,
+  the FAQ answer, the sidebar labels in `js/docs-index.js`, and the hero kickers and
+  `HELP_GUIDES` of SCR-17. Old chapter numbers are removed from SCR-17's headings.
+- SCR-17 gains a *Phase 4b · Activity selection* article, so every phase in the guide has a
+  method page with the same number.
+- The sidebar group *How it works* becomes *User guide*: it is the user manual, and the old name
+  was easy to confuse with *The science behind it*.
+- The guide links to the method at the level the reader is on: each phase closes with a *The
+  science behind it* box, and sub-sections link to the matching method section through a new
+  address form on the generated page, `#docs/<article>/<section>` (CMP-35).
+- Video tutorials are YouTube embeds behind a play button (CMP-42), with their addresses in one
+  map, `HC_VIDEOS`.
+- Where the source documents disagree with the GUI v3.1 screens, the Help Centre follows the
+  screens: Phases 2 and 3 are described as built (deforestation, fire and hazard sit in the
+  threat profile's three groups), and four screenshots were recaptured to match.
+
+**Alternatives rejected.**
+- *Number the method pages 1 to 6 as the Reference does.* It would make "Phase 6" mean activity
+  selection on one page and monitoring on another.
+- *Embed YouTube players directly.* Five iframes on a page load several megabytes and set
+  third-party cookies before the reader has chosen to watch anything.
+- *Keep the manual's v3.0 lists and screenshots for Phases 2 and 3.* The guide would describe
+  tabs and cards this build no longer shows.
+
+**Consequences.**
+- A new phase name or number must be changed in all the places listed above, in one change.
+- Open disagreements between the source documents are recorded as `TODO(design)` under SCR-19:
+  the guest area allowance (200,000 or 100,000 ha), where the duration is set, and the draft
+  status of the glossary.
+- SCR-17 still cites the older methodology document's table numbers in its source lines, and
+  several of its figures differ from the Reference Methodology. Those are listed for the
+  methodology team rather than changed silently.
+
+## DEC-82 · The user guide has one page per phase, nested under "Run an analysis"
+
+**Status.** Accepted, 2026-11-19. Asked for by the product owner. Supersedes the page layout of
+DEC-34, which rejected one page per phase.
+
+**Context.** Phases 0 to 5 shared one long page, *Start the analysis*, while Phases 6 and 7 had
+pages of their own beside it. The sidebar could not show the phases, the title did not say what
+the page held, and the guide's shape differed from the method pages, where *How each phase is
+calculated* opens onto one page per phase.
+
+**Decision.**
+- *Start the analysis* becomes *Run an analysis* (`analysis`), an entry page: a short lead, then
+  one card per phase, in the same form as the science entry pages.
+- Each of Phases 0 to 5 is its own page (`phase-0` … `phase-5`). Phases 6 and 7 keep their ids
+  (`monitoring`, `documents`) and are named for their phase: *Monitoring planning*, *Generate
+  documents*. All eight sit under `analysis` in the sidebar through `parent` in
+  `js/docs-index.js`, which CMP-35 already supported for the science pages.
+- The former sub-headings of each phase are now its sections, so they appear in "On this page".
+- The chart (CMP-36) has two lanes, *Run an analysis* and *Manage your project*.
+
+**Consequences.**
+- Every existing link keeps working: `#phase-2` was a section and is now a page; `#phase-4b`
+  is a section of the `phase-4` page.
+- The guide and the method now mirror each other page for page, which is what makes the
+  phase-to-phase cross-links of DEC-81 exact.
+
+
+## DEC-83 · Conservation significance shows no scores
+
+**Context.** DEC-63's Nature rebuild listed the three conservation-significance values as text
+beside the spider chart (Biodiversity 8, Water 7, Carbon 6, "out of 10"). The source (Jung et al.
+2021) is a global priority *ranking*, not a measured score, so the result cannot be quantified.
+GUI 3.1's narrative for this section is qualitative: "The project area reflects the area's
+significance for [biodiversity/water/carbon] conservation."
+
+**Decision.** The card keeps the narrative and the spider chart, and drops the numbers: no score
+list, no "out of 10" note, and no values in the chart's alt text. A note says that a point further
+from the centre means a higher priority, and that the chart shows a ranking, not a measured score.
+The legend reads "Relative conservation priority".
+
+**Consequences.** The text alternative to the chart is now the narrative (which priority is
+highest), not a list of values. This supersedes the "Conservation significance" row of DEC-63.
+
+## DEC-84 · The conservation spider chart is inline SVG on the brand green
+
+**Context.** The chart was `radar.png`, a render with pale grey axis labels on a near-black
+(#1f1f1e) panel and a green shape. The labels were hard to read, the shape blended into the
+green card around it, and the image could not take tokens or a dark theme.
+
+**Decision.** `ncRadar()` in `js/analysis-shared.js` draws the chart as inline SVG from
+`NC_RADAR`. The panel uses `--primary-750`, the same deep green as the FLII score card. Axis
+labels are 16px semibold in `--text-on-color`. The shape is `--warning-400` amber so it stands
+out on the green; the legend swatch matches. Grid rings are faint white and carry no values
+(DEC-83). The reach of each axis was traced from the old render and remains illustrative
+(DEC-11).
+
+**Consequences.** `assets/f01-step2/natctx/radar.png` is no longer referenced. The chart's text
+alternative is the SVG's `aria-label`.
+
+## DEC-85 · Historical burned area is narrative only
+
+**Context.** The card held two sub-sections: "Past fires" (a yearly bar chart and a dark
+summary box with the 10-year total) and "Fire susceptibility" (an intro and an empty-state box
+saying its data were not available). The design review asked for a single narrative.
+
+**Decision.** The card keeps its head, disclaimer and source line, and shows two paragraphs:
+what the layer means, then the cumulative, average-annual and peak-year burned area. The chart,
+summary box, both sub-titles and the empty-state box are gone, with their `.cl-fire`,
+`.cl-burned` and `.cl-chart--fire` styles. The figures come from the sample series the chart
+used (DEC-11): 2011 to 2020, 4,125 ha in total, 413 ha a year on average, 563 ha in 2012. The
+review copy said "between 2014 and 2024"; the period follows the sample data until real data
+set it. This supersedes the "split into Past fires and Fire susceptibility" row of DEC-65.
+
+**Consequences.** Nothing on the card says fire-susceptibility data are missing any more.
+`assets/f01-step2/climctx/burned-area.png` is no longer referenced.
+
+## DEC-86 · Land degradation splits by forest and non-forest, in a two-ring half doughnut
+
+**Context.** The Land degradation card showed one ring (Degraded, Stable, Improved) and fixed
+copy that mixed the false-positive and false-negative flags into the degraded and improved
+sentences. The review copy treats the flags as categories of their own, reports forest and
+non-forest separately, and makes the improved, stable and uncertainty sentences conditional.
+
+**Decision.** `gcSunHalf()` in `js/analysis-shared.js` draws a half sunburst on the existing
+half-doughnut geometry: the inner ring is Forest (`--primary-750`) against Non-forest
+(`--warning-700`); the outer ring splits each into Degraded, Stable, Improved, Degraded –
+potential false positive and Degraded – potential false negative, each slice over its parent.
+The outer ring uses a quarter of the usual slice gap so sub-1% slices stay visible. The card
+stacks vertically: narrative, then the chart centred at up to 400px wide with the total and
+"Area assessed, 2014 to 2024" inside the inner hole, then a two-column legend (Forest left,
+Non-forest right), each a group row followed by its five categories indented. A 1.2% gap separates the groups on
+both rings. The three degradation-related classes sit together, and Forest draws its categories
+in reverse, so both red blocks meet at the centre gap; the legend keeps one order for both.
+
+`ldNarrative()` builds the copy from `LD_DATA`: the degradation sentence always; the improved
+sentence only if improved area > 0; the stable sentence only if stable area > 0; the
+uncertainty sentence only if either flagged class has area.
+
+**Consequences.** Category totals keep the earlier copy's sample figures (DEC-11). The
+forest / non-forest split of each category is new illustrative sample data and must be replaced
+by real figures. "Degradation-related" means Degraded plus both flagged classes.
+
+## DEC-87 · Drainage canal pressure copy is chosen by class
+
+**Context.** The card's copy was written for one case (close canal, high density). GUI 3.1's
+narrative table gives a sentence per class: canal proximity Close (0 to 500 m), Intermediate
+(500 to 1,000 m), Distant (over 1,000 m); drainage density High, Moderate, Low, or no overlap.
+
+**Decision.** `drCard()` in `js/analysis-shared.js` builds the card from `DR_DATA` (sample
+values, DEC-11). The distance picks the proximity class, its badge tone (bad, warn, ok) and its
+sentence; the density class does the same for drainage pressure. No overlap with the density
+layer shows a "No drainage" badge with no narrative, rather than hiding the block, so the reader
+sees that it was checked. No peatland hides the whole card. The card opens with "The peatland
+area is located [close to / at an intermediate distance from / far from] mapped drainage canals,
+with the nearest canal approximately [X m] away."; the Canal proximity block holds only the class
+sentence. "Peatland disturbance may be associated…" is the card's disclaimer (`gcDisc`), in place
+of the generic data alert. Canal proximity and Drainage pressure stack vertically; each row puts
+its title, level badge and sentence beside a horizontal threshold bar (CMP-43). The badge sits
+beside the title and names the class only ("Close", "High"); the bar carries the ranges, so
+the "Distance class" and "Drainage density" labels are gone.
+
+**Consequences.** The old closing sentence about canals lowering the water table and raising
+fire susceptibility is gone; the class sentences replace it.
+
+## DEC-88 · Hazard level badges sit next to the hazard name
+
+**Context.** DEC-58 placed each Natural Disaster Risk hazard's name at the left and its level
+badge at the far right of the row.
+
+**Decision.** The badge follows the name with a 12px gap (`.gc-lvl`, `--space-12`), as it does
+everywhere else a label and its level badge appear. Supersedes the placement in DEC-58.
+
+## DEC-89 · Historical burned area shows its yearly chart again
+
+**Context.** DEC-85 reduced the card to narrative only and removed the 2011 to 2020 bar chart.
+
+**Decision.** The bar chart returns below the narrative, with the same sample series (DEC-11)
+the narrative's figures come from. The summary box, the sub-titles and the fire-susceptibility
+empty state stay removed. Supersedes DEC-85 on the chart only.
+
+## DEC-90 · The land degradation chart shows three classes
+
+**Context.** The half sunburst (DEC-86) split each of forest and non-forest into five
+classes, including Degraded – potential false positive and – potential false negative. The
+flagged slices were under 1% each and crowded the chart.
+
+**Decision.** The chart and its legend show Degraded, Stable and Improved. Degraded includes
+both flagged classes, so it matches the narrative's degradation-related total. The narrative's
+uncertainty sentence still reports the flagged areas on their own.

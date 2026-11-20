@@ -244,8 +244,10 @@
   /* each group sets one colour pair; its own icon, and the icon chip, title and "i" button of
      every card inside it, use the pair, so a card always matches its group */
   .t3-acc{--t3-ic-bg:var(--primary-25);--t3-ic-fg:var(--primary-700);}
+  .t3-acc--observed{--t3-ic-bg:var(--danger-50);--t3-ic-fg:var(--danger-800);}   /* same red as the burned-area bars */
   .t3-acc--pressure{--t3-ic-bg:var(--warning-25);--t3-ic-fg:var(--warning-700);}
-  .t3-acc--bau{--t3-ic-bg:var(--info-25);--t3-ic-fg:var(--info-700);}
+  /* orange: no orange ramp exists, so mixed from two tokens (TODO-25 covers color-mix) */
+  .t3-acc--bau{--t3-ic-bg:var(--warning-50);--t3-ic-fg:color-mix(in srgb, var(--warning-600), var(--danger-800));}
   .t3-acc__ic{flex:none;width:var(--space-40);height:var(--space-40);border-radius:var(--radius-lg);display:grid;place-items:center;background:var(--t3-ic-bg);color:var(--t3-ic-fg);}
   .t3-acc__ic svg{width:var(--space-24);height:var(--space-24);}
   /* three classes, so it also wins over the red card variant in css/genctx.css */
