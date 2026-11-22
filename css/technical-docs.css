@@ -121,14 +121,14 @@ a.docs-nav-parent { display: flex; align-items: center; justify-content: space-b
 .doc-callout > span { display: block; margin-bottom: var(--space-4); color: var(--text-primary); font-size: 9px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
 .doc-callout p { margin: 0; color: var(--text-base-second); font-size: 13px; line-height: 1.65; }
 .doc-callout p + p { margin-top: var(--space-8); }
-.doc-callout code { font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; font-size: 11.5px; color: var(--primary-700); }
+.doc-callout code { font-family: var(--font-text); font-size: 11.5px; color: var(--primary-700); }
 .doc-callout.warn { border-left-color: var(--stroke-warning); background: var(--bg-warning-second); }
 .doc-callout.warn > span { color: var(--warning-700); }
 .doc-callout.note { border-left-color: var(--neutral-800); background: var(--bg-base-second); }
 .doc-callout.note > span { color: var(--text-base-second); }
 
 .doc-equation { margin: var(--space-16) 0; padding: var(--space-16) var(--space-20); border: 1px solid var(--stroke-base); border-radius: var(--radius-md); background: var(--bg-base-second); }
-.doc-equation code { display: block; overflow-x: auto; color: var(--primary-700); font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; font-size: 14px; line-height: 1.6; font-weight: 600; white-space: nowrap; }
+.doc-equation code { display: block; overflow-x: auto; color: var(--primary-700); font-family: var(--font-text); font-size: 14px; line-height: 1.6; font-weight: 600; white-space: nowrap; }
 .doc-equation small { display: block; margin-top: var(--space-8); color: var(--text-base-second); font-size: 11px; line-height: 1.55; }
 
 .doc-flow { display: flex; align-items: stretch; margin: var(--space-20) 0; overflow-x: auto; padding-bottom: var(--space-4); }
@@ -156,7 +156,7 @@ a.docs-nav-parent { display: flex; align-items: center; justify-content: space-b
   cursor: pointer;
 }
 .doc-jump:hover { color: var(--primary-700); }
-.doc-table td code { color: var(--primary-700); font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; font-size: 11px; }
+.doc-table td code { color: var(--primary-700); font-family: var(--font-text); font-size: 11px; }
 .doc-table tr:hover td { background: var(--bg-base-second); }
 .doc-table .num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
 
