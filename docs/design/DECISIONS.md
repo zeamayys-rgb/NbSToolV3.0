@@ -2018,3 +2018,13 @@ flagged slices were under 1% each and crowded the chart.
 **Decision.** The chart and its legend show Degraded, Stable and Improved. Degraded includes
 both flagged classes, so it matches the narrative's degradation-related total. The narrative's
 uncertainty sentence still reports the flagged areas on their own.
+
+## DEC-91 · No monospace type: labels and code use Poppins
+
+**Context.** Eyebrows, section labels, phase labels, sitemap IDs and formula/code blocks were set
+in IBM Plex Mono (or a system `ui-monospace` stack). The small uppercase monospace label read as
+generic AI-generated styling rather than WRI's brand type.
+
+**Decision.** Every former monospace rule uses `--font-text` (Poppins). `--mono` stays as a name
+in `css/home.css` and `css/footer.css` but now resolves to `var(--font-text)`; new rules use
+`--font-text` directly. IBM Plex Mono is no longer loaded. Resolves TODO-05 and TODO-17.

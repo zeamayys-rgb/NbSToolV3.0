@@ -8,7 +8,7 @@
   --hair-d2: rgba(125, 233, 180, 0.30);
   --spring: #5fe6a0;
   --spring-dim: rgba(95, 230, 160, 0.55);
-  --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --mono: var(--font-text); /* was IBM Plex Mono (DEC-91) */
   background: var(--ink-850); color: #eafff5; margin: 0; max-width: none;
   padding: clamp(44px, 6vw, 64px) 0 32px; border-top: 1px solid var(--hair-d);
   font-size: 16px; line-height: 1.5;
@@ -38,12 +38,12 @@
   border-block: 1px solid var(--hair-d); }
 .footer-flow a { display: block; background: var(--ink-850); padding: 16px 18px; transition: background .15s; }
 .footer-flow a:hover { background: rgba(95,230,160,.08); }
-.footer-flow .fno { display: block; font-family: var(--mono); font-size: 11px; letter-spacing: .1em; color: var(--spring); margin-bottom: 7px; }
+.footer-flow .fno { display: block; font-family: var(--mono); font-weight: 600; font-size: 12px; color: var(--spring); margin-bottom: 7px; }
 .footer-flow b { display: block; font-size: 15px; font-weight: 600; color: #eafff5; }
 .footer-flow em { display: block; font-style: normal; font-size: 12.5px; color: rgba(200,240,220,.55); margin-top: 3px; }
 
-.footer-bottom { display: flex; align-items: center; justify-content: space-between; padding-top: 24px; font-family: var(--mono);
-  font-size: 11.5px; color: rgba(190,230,214,.55); flex-wrap: wrap; gap: 14px 24px; letter-spacing: .03em; }
+.footer-bottom { display: flex; align-items: center; justify-content: space-between; padding-top: 24px; font-family: var(--mono); font-weight: 600;
+  font-size: 12.5px; color: rgba(190,230,214,.55); flex-wrap: wrap; gap: 14px 24px; }
 .footer-bottom .soc { display: flex; gap: 10px; }
 .footer-bottom .soc a { width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--hair-d2); display: grid; place-items: center; color: #eafff5; transition: .2s; }
 .footer-bottom .soc a:hover { background: rgba(95,230,160,.12); border-color: var(--spring-dim); }

@@ -40,7 +40,7 @@
   --paper-sub:#4f6a60;       /* muted text on light             */
 
   /* ---- type families ---- */
-  --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --mono: var(--font-text); /* was IBM Plex Mono (DEC-91) */
   /* --font-display (Acumin Pro Condensed) + --font-text (Poppins) from tokens */
 
   /* ---- text colours on the dark bands (were repeated as literals) ---- */
@@ -80,7 +80,7 @@ section { position: relative; }
 /* mono eyebrow / kicker */
 .kicker {
   font-family: var(--mono);
-  font-size: 12px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase;
+  font-size: 13px; font-weight: 600;
   display: inline-flex; align-items: center; gap: 10px;
   color: var(--teal-deep);
 }
@@ -223,7 +223,7 @@ section { position: relative; }
 .hstat + .hstat::before { content: ""; position: absolute; left: -1px; top: 24px; bottom: 24px; width: 1px; background: var(--hair-d); }
 .hstat .v { font-family: var(--font-display); font-weight: 700; font-size: clamp(30px, 3.6vw, 46px);
   letter-spacing: -0.02em; color: var(--base-white); line-height: 1; display: flex; align-items: baseline; gap: 6px; }
-.hstat .v small { font-family: var(--mono); font-size: 13px; font-weight: 500; color: var(--spring); letter-spacing: 0; }
+.hstat .v small { font-family: var(--mono); font-size: 14px; font-weight: 600; color: var(--spring); letter-spacing: 0; }
 .hstat .k { margin-top: 9px; font-size: 12.5px; color: rgba(190, 230, 214, .7); }
 /* 36px each side below 1000px; no space-36 token yet, see tokens.json TODO-21. */
 @media (max-width: 999px){ .hero-stats .wrap { padding-inline: calc(var(--space-12) * 3); } }
@@ -234,7 +234,7 @@ section { position: relative; }
 
 /* scroll cue */
 .scrollcue { position: absolute; left: 50%; bottom: 150px; transform: translateX(-50%); z-index: 3;
-  font-family: var(--mono); font-size: 10px; letter-spacing: .2em; text-transform: uppercase;
+  font-family: var(--mono); font-weight: 600; font-size: 11px;
   color: rgba(155,242,196,.6); display: flex; flex-direction: column; align-items: center; gap: 8px; }
 .scrollcue .rail { width: 1px; height: 38px; background: linear-gradient(var(--spring), transparent); position: relative; overflow: hidden; }
 .scrollcue .rail::after { content:""; position:absolute; top:-40%; left:0; width:1px; height:40%; background: var(--spring); animation: drop 1.8s ease-in-out infinite; }
@@ -284,7 +284,7 @@ section { position: relative; }
 .tcard ul { list-style: none; margin: 0; padding: 16px 0 0; border-top: 1px dashed var(--stroke-base); display: grid; gap: 10px; }
 .tcard li { display: flex; gap: 10px; align-items: flex-start; font-size: 13px; color: var(--paper-ink); font-weight: 500; }
 .tcard li svg { width: 16px; height: 16px; flex: none; margin-top: 1px; color: var(--teal-deep); }
-.tcard .unit { margin-left: auto; font-family: var(--mono); font-size: 11px; color: var(--paper-sub); }
+.tcard .unit { margin-left: auto; font-family: var(--mono); font-weight: 600; font-size: 12px; color: var(--paper-sub); }
 @media (max-width: 880px){ .triple { grid-template-columns: 1fr; } .triple-lead { grid-template-columns: 1fr; align-items: start; } }
 
 /* ============================================================
@@ -309,7 +309,7 @@ section { position: relative; }
   position: absolute; top: 0; left: 0; right: 0; height: 38px; z-index: 6;
   display: flex; align-items: center; gap: 8px; padding: 0 14px;
   border-bottom: 1px solid var(--hair-d); background: rgba(3,19,13,.35);
-  font-family: var(--mono); font-size: 11px; letter-spacing: .08em; color: rgba(155,242,196,.8); text-transform: uppercase;
+  font-family: var(--mono); font-weight: 600; font-size: 12px; color: rgba(155,242,196,.8);
 }
 .frame-hud .d { width: 8px; height: 8px; border-radius: 50%; background: var(--hair-d2); }
 .frame-hud .d.live { background: var(--spring); box-shadow: 0 0 0 3px rgba(95,230,160,.2); }
@@ -328,7 +328,7 @@ section { position: relative; }
   letter-spacing: -0.02em; line-height: 1; margin: 0; color: color-mix(in srgb, var(--paper-ink) 35%, transparent); transition: color .4s; }
 .chapter p { margin: 16px 0 0; font-size: 16px; line-height: 1.62; color: color-mix(in srgb, var(--paper-sub) 60%, transparent); transition: color .4s; max-width: 46ch; }
 /* a step that spans several methodology phases names each one */
-.chapter h4 { margin: var(--space-20) 0 0; font-family: var(--mono); font-weight: 500; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: color-mix(in srgb, var(--teal-deep) 55%, transparent); transition: color .4s; }
+.chapter h4 { margin: var(--space-20) 0 0; font-family: var(--mono); font-weight: 600; font-size: 13px; color: color-mix(in srgb, var(--teal-deep) 55%, transparent); transition: color .4s; }
 .chapter h4 + p { margin-top: var(--space-8); }
 .chapter.is-active h4 { color: var(--teal-deep); }
 .chapter .chapter-link { margin-top: 18px; opacity: 0; transform: translateY(6px); transition: opacity .4s, transform .4s; pointer-events: none; }
@@ -336,7 +336,7 @@ section { position: relative; }
 .chapter.is-active p  { color: var(--paper-sub); }
 .chapter.is-active .chapter-link { opacity: 1; transform: none; pointer-events: auto; }
 .chapter .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
-.chapter .tag { font-family: var(--mono); font-size: 11px; letter-spacing: .04em; padding: 5px 11px; border-radius: 999px;
+.chapter .tag { font-family: var(--mono); font-weight: 600; font-size: 12px; padding: 5px 11px; border-radius: 999px;
   border: 1px solid var(--stroke-base); color: var(--paper-sub); }
 .chapter.is-active .tag { color: var(--teal-deep); border-color: var(--teal-soft); background: var(--base-white); }
 .journey-cta { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--space-12); margin-top: var(--space-24); }
@@ -359,7 +359,7 @@ section { position: relative; }
 }
 
 /* ---- stage internals (mini product mockups) ---- */
-.mini-h { font-family: var(--mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: rgba(155,242,196,.7); }
+.mini-h { font-family: var(--mono); font-weight: 600; font-size: 12px; color: rgba(155,242,196,.7); }
 
 /* Each stage shows the matching Help Centre screenshot, whole, under its label. */
 .s-shot { flex: 1; min-height: 0; width: 100%; margin-top: 12px; object-fit: contain; object-position: top center;
@@ -411,7 +411,7 @@ section { position: relative; }
   color: var(--paper-ink); margin: 0; padding-right: 28px; }
 .pf-back .pf-loc { color: var(--primary-700); }
 .pf-loc { display: flex; align-items: center; gap: 6px; margin: 8px 0 0;
-  font-family: var(--mono); font-size: 11px; }
+  font-family: var(--mono); font-weight: 600; font-size: 12px; }
 .pf-loc svg { width: 12px; height: 12px; flex: none; }
 .pf-copy { display: flex; flex-direction: column; gap: 6px; margin-top: 4px; min-height: 0;
   overflow-y: auto; overscroll-behavior: contain;
@@ -440,7 +440,7 @@ section { position: relative; }
 .mf-node:hover { transform: translateY(-2px); box-shadow: var(--elevation-3); }
 .mf-t { font-weight: 600; font-size: 13.5px; line-height: 1.3; }
 .mf-node small { font-size: 12px; line-height: 1.4; opacity: .75; }
-.mf-label { font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--spring); }
+.mf-label { font-family: var(--mono); font-weight: 600; font-size: 12px; color: var(--spring); }
 .mf-flags { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; }
 .mf-flags img { width: 22px; height: 22px; border-radius: 50%; box-shadow: 0 0 0 1px var(--stroke-base); }
 .mf-concept { background: var(--teal); border-color: var(--teal); color: var(--base-white); }
@@ -503,7 +503,7 @@ section { position: relative; }
   .mf-stage { position: relative; display: grid; grid-template-columns: 1fr; gap: var(--space-12); }
   .mf-step { display: flex; align-items: center; gap: 10px; }
   .mf-no { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; background: var(--base-white);
-    border: 2px solid var(--teal-soft); font-family: var(--mono); font-size: 12px; font-weight: 600; color: var(--teal-deep);
+    border: 2px solid var(--teal-soft); font-family: var(--mono); font-size: 13px; font-weight: 600; color: var(--teal-deep);
     transition: background .3s, color .3s, border-color .3s; }
   .mf-sl { font-size: 13px; font-weight: 600; color: var(--on-dark); }
   .mf-stage.is-lit .mf-no { background: var(--teal-deep); border-color: var(--teal-deep); color: var(--base-white); }
@@ -521,7 +521,7 @@ section { position: relative; }
 /* detail card: sticky beside the diagram, 200px of content */
 .mf-detail { position: sticky; top: 100px; padding: var(--space-24); border-radius: var(--radius-xl);
   background: var(--base-white); border: 1px solid var(--stroke-base); color: var(--paper-ink); }
-.mf-kicker { font-family: var(--mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--teal-deep); }
+.mf-kicker { font-family: var(--mono); font-weight: 600; font-size: 12px; color: var(--teal-deep); }
 .mf-detail h3 { font-family: var(--font-display); font-weight: 700; font-size: 24px; line-height: 1.1; letter-spacing: -.01em; margin: 10px 0 0; }
 .mf-detail p { font-size: 14px; line-height: 1.6; color: var(--paper-sub); margin: 12px 0 0; }
 .mf-detail .mf-more { margin-top: 16px; color: var(--teal-deep); } /* white card inside a dark band */
@@ -585,7 +585,7 @@ section { position: relative; }
 .coalition .rule { width: 64px; height: 3px; border-radius: 999px; background: var(--teal-deep); margin: 22px auto 0; }
 .partner-groups { display: flex; flex-direction: column; align-items: center; gap: clamp(32px, 5vw, 52px); margin: clamp(36px,5vw,56px) auto 0; max-width: 880px; }
 .partner-group { width: 100%; }
-.pg-label { font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase;
+.pg-label { font-family: var(--mono); font-size: 12px; font-weight: 600;
   color: var(--paper-sub); margin: 0 0 20px; }
 /* One <li class="reveal"> per logo: the home reveal observer staggers them in. Hover is per logo. */
 .logo-grid { list-style: none; margin: 0 auto; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px 24px; }
@@ -593,7 +593,17 @@ section { position: relative; }
 .logo-img:hover { filter: none; transform: translateY(-3px); }
 .logo-members { max-width: 700px; }
 .logo-support { max-width: 600px; }
-.logo-strategic { max-width: 120px; grid-template-columns: 1fr; }
+/* Square emblem: cropped tight, sized to match the padded tiles beside it (176/464 of a tile). */
+.logo-cell-square { display: flex; align-items: center; justify-content: center; }
+.logo-cell-square .logo-img { width: 38%; }
+.logo-support + .logo-support { margin-top: 8px; }
+.logo-support-4 { max-width: 760px; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.logo-members-4 { max-width: 880px; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.pg-title { font-family: var(--font-display); font-weight: 700; font-size: clamp(28px, 3.4vw, 38px); line-height: 1.1; letter-spacing: -.01em; color: var(--paper-ink); margin: 0 0 28px; }
+.developed .pg-label { margin: var(--space-8) 0 0; } /* logo PNGs carry their own top whitespace */
+.developed .logo-grid + .pg-label { margin-top: 32px; }
+.partner-group.support { margin-top: var(--space-48); }
+@media (max-width: 640px) { .logo-support-4, .logo-members-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 
 /* ============================================================
    7 · FINAL CTA + FOOTER
