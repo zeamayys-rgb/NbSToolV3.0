@@ -602,6 +602,7 @@ section { position: relative; }
 .pg-title { font-family: var(--font-display); font-weight: 700; font-size: clamp(28px, 3.4vw, 38px); line-height: 1.1; letter-spacing: -.01em; color: var(--paper-ink); margin: 0 0 28px; }
 .developed .pg-label { margin-top: 8px; }
 .developed .logo-grid + .pg-label { margin-top: 32px; }
+.partner-group.support { margin-top: var(--space-48); }
 @media (max-width: 640px) { .logo-support-4, .logo-members-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 
 /* ============================================================
