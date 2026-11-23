@@ -69,13 +69,6 @@
   body > .wrap{max-width:1360px;margin:0 auto;padding:40px 32px 56px}
 
   /* ---------- header ---------- */
-  .eyebrow{
-    font-family:var(--font); font-size:11px; font-weight:700; letter-spacing:.14em;
-    text-transform:uppercase; color:var(--primary-600);
-    display:flex; align-items:center; gap:10px; margin:0 0 14px;
-  }
-  .eyebrow:before{content:"";width:26px;height:2px;border-radius:2px;
-    background:linear-gradient(90deg,var(--primary-500),transparent)}
   h1{
     font-family:var(--display); font-weight:700; font-size:clamp(30px,4vw,46px);
     line-height:1.05; letter-spacing:-.01em; margin:0 0 12px; max-width:20ch; color:var(--heading);
@@ -178,7 +171,7 @@
      the overview, and its CTA sends anyone who wants to interrogate the matrix
      here, to the full page. Only the legend and the diagram remain. */
   .embed body{padding:10px 12px 12px}
-  .embed .eyebrow,.embed h1,.embed .lede,.embed .toolbar,.embed .stats,.embed footer{display:none}
+  .embed .crumbbar,.embed h1,.embed .lede,.embed .toolbar,.embed .stats,.embed footer{display:none}
   .embed .howto{margin-top:0}
 </style>
 <script>if(location.search.includes('embed'))document.documentElement.classList.add('embed');</script>
@@ -186,8 +179,22 @@
 <body>
 <nav class="sitenav" data-nav-auth="user"></nav>
 <script src="js/navbar.js"></script>
+<!-- The page is reached from the Help Centre or the Methodology; ?from=methods
+     (set by the link in js/technical-docs.js) picks the middle crumb. -->
+<nav class="crumbbar" aria-label="Breadcrumb">
+  <a href="index.html">Home</a>
+  <svg viewBox="0 -960 960 960" width="14" height="14" fill="currentColor" style="opacity:.45;flex:none" aria-hidden="true"><path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z"/></svg>
+  <a id="bc-parent" href="help.html#phase-4b">Help Centre</a>
+  <svg viewBox="0 -960 960 960" width="14" height="14" fill="currentColor" style="opacity:.45;flex:none" aria-hidden="true"><path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z"/></svg>
+  <span aria-current="page" style="color:var(--text-base-main);font-weight:600">Activity matrix</span>
+</nav>
+<script>
+  if (new URLSearchParams(location.search).get('from') === 'methods') {
+    var bc = document.getElementById('bc-parent');
+    bc.href = 'technical-docs.html#docs/phase4a/phase4a-matrix'; bc.textContent = 'Methodology';
+  }
+</script>
 <div class="wrap">
-  <p class="eyebrow">WRI Indonesia · Nature-based Solutions · Activity Matrix</p>
   <h1>From <em>pathway</em> to measurable indicator</h1>
   <p class="lede">A flow diagram tracing every row of the <b>ELIGIBLE activities-longform</b> matrix across eight dimensions: 2014 Land Cover &rarr; Trajectory &rarr; Pathway &rarr; Ecosystem &rarr; Activity &rarr; Benefit Category &rarr; Benefit &rarr; Indicator. Ribbon thickness is proportional to the number of matrix rows travelling that path. Filter by pathway, ecosystem, or benefit category to narrow the view; hover or click any node to trace a single flow end-to-end; hover an indicator for its definition, unit, frequency, method and reference.</p>
 

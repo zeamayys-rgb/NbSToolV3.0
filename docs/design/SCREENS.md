@@ -42,9 +42,9 @@ status, in the same change that adds or retires a route.
 | SCR-14 | reference | `/design-system` | Design System reference | Living catalogue of tokens and primitives | Look up a component before building | CMP-02, and every primitive | `css/tokens.css`, `css/styleguide.css` |
 | SCR-15 | archived | `/archive/screens/F02-P4_Pathway_Selection` | Pathway Selection (superseded) | Original Figma rebuild of Step 4 | — | — | Superseded by SCR-03 Step 4 |
 | SCR-16 | archived | `/archive/screens/F02-P5_Potential_Benefit_1` | Potential Benefit (superseded) | Original Figma rebuild of Step 5 | — | — | Superseded by SCR-03 Step 5 |
-| SCR-17 | live | `/technical-docs` | The science behind it (F09) | The Help Centre's method pages, generated from the Data & methodology documentation and nested under SCR-19's four science entry pages: scope, phases 1 to 5, benefit detail, data layers, limits; every article links back to its SCR-19 section | Understand and audit how a number was produced | CMP-01, CMP-28 | Reads live parameters from `NBS_DATA`, `NBS_ANALYSIS`, `NBS_LAYER_INFO`, `ecosystems`, `indicatorMeta`, `NBS_PEOPLE` — no static copies |
+| SCR-17 | live | `/technical-docs` | The science behind it (F09) | The Help Centre's method pages, generated from the team's Reference Methodology in three groups (Methodology summary; How each phase is calculated, Phase 1 to 7; Outputs, limitations and sources) and nested under SCR-19's three science entry pages (DEC-93); every article links back to its SCR-19 section | Understand and audit how a number was produced | CMP-01, CMP-28 | Reads live parameters from `NBS_DATA`, `NBS_ANALYSIS`, `NBS_LAYER_INFO`, `ecosystems`, `indicatorMeta`, `NBS_PEOPLE` — no static copies |
 | SCR-18 | redirect | `/walkthrough` | Walkthrough — **retired** | Redirect only: maps each old chapter anchor to its SCR-19 guide (DEC-30) | Keep old links working | — | None |
-| SCR-19 | live | `/help` | Help Centre | The hub for everything about the tool: a landing page of entry cards, then five sections — Get started, User guide (the user manual; called *How it works* before DEC-81) (one page per stage, with the manual's screenshots), The science behind it (four entry pages over SCR-17), Resources, Support (FAQ, contact) | Learn the tool, find the method, or get one question answered | CMP-01, CMP-22, CMP-28, CMP-29, CMP-33, CMP-35, CMP-36, CMP-37 | None — static HTML plus two video files; every how-to section with a method behind it links to its SCR-17 `#docs/` article (DEC-29, DEC-30, DEC-34) |
+| SCR-19 | live | `/help` | Help Centre | The hub for everything about the tool: a landing page of entry cards, then five sections — Get started, User guide (the user manual; called *How it works* before DEC-81) (one page per stage, with the manual's screenshots), The science behind it (three entry pages over SCR-17, DEC-93), Resources, Support (FAQ, contact) | Learn the tool, find the method, or get one question answered | CMP-01, CMP-22, CMP-28, CMP-29, CMP-33, CMP-35, CMP-36, CMP-37 | None — static HTML plus two video files; every how-to section with a method behind it links to its SCR-17 `#docs/` article (DEC-29, DEC-30, DEC-34) |
 
 **Orphans.** SCR-14 and SCR-17 are reachable by URL but linked from no nav, footer or
 sitemap. SCR-15 and SCR-16, the Figma-rebuild sources whose content now lives in
@@ -85,7 +85,7 @@ band ("Developed by": SCeNe Coalition members, then impact partners; "With suppo
 Held in parity with the implemented page at `staging-fe.scenecoalition.org` (DEC-28). Hero counters are `.odo` odometer reels (the field-stories band has no figures: it tells
 the field visits as narrative, and each card ends on how that site moves through scoping,
 documents and the NbS Incubator); the benefit cards carry a 233px photo header; and the proof
-band's portfolio is a paused-on-hover `.pmarquee` of `.pflip` flip cards (the "coming very soon" pill was removed, DEC-42). Each journey chapter (no "STEP 0N" eyebrow; the stage frame's HUD still reads "01 / 06 · Scope") carries a tag row naming the feature it uses and
+band's portfolio is a paused-on-hover `.pmarquee` of `.pflip` flip cards (the "coming very soon" pill was removed, DEC-42). Each journey chapter (no "STEP 0N" eyebrow; the stage frame's HUD reads "01 / 06 · Phases 0–1"; chapters and footer use the phase names from `help.html#phases`) carries a tag row naming the feature it uses and
 one or two "See how" links into `help.html`; the
 journey header links to the demo video (`help.html#demo`) and the Help Centre. The sticky stage frame on the
 left shows the matching Help Centre screenshot (`.s-shot`) for the active step, under a plain
@@ -337,6 +337,11 @@ footer, leaving the legend and the diagram. SCR-17 §7.5 iframes the page that w
 above the seventeen-row table; the filters are dropped there because the embed is an overview
 and its CTA sends anyone who wants to interrogate the matrix to this page. See DEC-26.
 
+**Breadcrumb.** `.crumbbar` (the same bar as F04.1) replaces the old eyebrow: Home › Help Centre ›
+Activity matrix, with the middle crumb pointing at Phase 4b of the user guide. Every matrix link inside a
+Methodology article gets `?from=methods` from `docs-shell.js`, which swaps the middle crumb to Methodology (Phase 4a · Decision
+matrix). Hidden in embed mode.
+
 ---
 
 ## SCR-14 · Design System
@@ -349,6 +354,15 @@ unreachable by a user.
 ---
 
 ## SCR-17 · Technical Documentation (F09)
+
+> **Rebuilt 2026-11-23 (DEC-93).** The 24 articles described below were replaced by 18 that follow
+> the team's *NbS Tool v3 · Reference Methodology*. Group 1, Methodology summary: `summary`,
+> `requirements`, `scope`, `workflow`, `landcover`. Group 2, How each phase is calculated: `phase1`,
+> `phase2`, `phase3`, `phase4a`, `phase4b`, `phase5`, `phase6`, `phase7`. Group 3, Outputs,
+> limitations and sources: `outputs`, `troubleshooting`, `worked-example`, `limitations`, `sources`.
+> Retired ids forward through `moved` in `js/docs-index.js`. Where the text below names an older
+> article (the annex pages, the split Phase 4a and Phase 5 pages, Parameters and glossary), read
+> it as history.
 
 **What the user is trying to accomplish.** Find out how a figure they are looking at was
 produced, and what it is safe to claim from it — before it goes into a proposal.
@@ -549,7 +563,7 @@ section inside an article opens that article scrolled to it (`#phase-2`, `#carbo
 | Get started | What the NbS Tool is (`what-is`) · Video tutorials (`demo`: sections `demo-watch`, the 49-second demo, and `videos`, the YouTube tutorials) · Who is behind the NbS Tool (`who`) |
 | User guide | The eight phases (`phases`: the chart, calculated / reported / described, where the tool fits) · Run an analysis (`analysis`: an entry page of phase cards, like the science entry pages) with eight pages nested under it in the sidebar: `phase-0` to `phase-5` (their sub-headings are sections: `phase-2-general`, `phase-2-nature`, `phase-2-people`, `phase-2-climate`, `phase-4a`, `phase-4b`, `phase-4-duration`), `monitoring` (Phase 6) and `documents` (Phase 7) · Manage your project (`manage`: sections `projects`, `project-inside`, `project-import`, `record`, `record-progress`, `record-own-data`) |
 | The science behind it | What the tool analyses (`science-scope`) · How each phase is calculated (`science-method`) · The data behind each figure (`science-data`: sections `reports`, `sources`) · Limits, carbon and how to cite (`science-limits`: sections `not-do`, `carbon`, `cite`). Each is an entry page: a short lead, then cards to its SCR-17 articles, which the sidebar nests beneath it |
-| Resources | Guidebook, modules and manual (`resources`): three external-document cards |
+| Resources | Guidebook, technical note, MRV framework and manual (`resources`): four external-document download rows |
 | Support | Frequently asked questions (`faq`: sections `faq-results`, `faq-accounts`, `faq-using`, `faq-trouble`) · Glossary (`glossary`: sections `glossary-core`, `glossary-general`, `glossary-nature`, `glossary-climate`, `glossary-threat`) · Contact us (`contact`) |
 
 **One phase numbering (DEC-81).** Phases 0 to 7 as the chart draws them, with Phase 4 in two
@@ -596,7 +610,7 @@ screenshot has descriptive alt text. The looping video is `muted`, has an `aria-
 not autoplay under `prefers-reduced-motion`; the full demo plays with native controls. The
 external resource cards are not links until they have addresses, and say so.
 
-`TODO(design): the three Resources cards (guidebook, capacity building modules, user manual)
+`TODO(design): the four Resources rows (guidebook, technical note, MRV framework, user manual)
 need published addresses from the Coalition. Rendered as non-links with a "Link coming soon"
 pill until then.`
 `TODO(design): the privacy notice and terms of use are rendered as one plain sentence under

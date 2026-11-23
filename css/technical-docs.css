@@ -150,6 +150,7 @@ a.docs-nav-parent { display: flex; align-items: center; justify-content: space-b
   border: 0;
   background: none;
   font: inherit;
+  text-align: left; /* a <button> centres its text by default */
   color: var(--text-primary);
   text-decoration: underline;
   text-underline-offset: var(--space-2);
@@ -250,3 +251,27 @@ a.docs-nav-parent { display: flex; align-items: center; justify-content: space-b
   html:has(.docs-page) { scroll-behavior: auto; }
   .docs-nav-button, .docs-article-footer a { transition: none; }
 }
+
+/* The Help Centre / Methodology switch above the sidebar head (docs-shell.js). */
+.docs-modes {
+  display: flex; gap: var(--space-2); padding: var(--space-4); margin-bottom: var(--space-16);
+  border-radius: var(--radius-lg); background: var(--bg-base-third);
+}
+.docs-modes a {
+  flex: 1; text-align: center; padding: var(--space-4) var(--space-12);
+  border-radius: var(--radius-md); font-family: var(--font-text); font-size: 12px; font-weight: 600;
+  color: var(--text-base-second); text-decoration: none;
+}
+.docs-modes a:hover { color: var(--text-base-main); }
+.docs-modes a[aria-current="page"] { background: var(--bg-primary-main); color: var(--text-on-color); }
+
+/* Formulas in plain words (docFormula): a title, one line per equation that
+   wraps instead of scrolling, a "where" list and the method it follows. */
+.doc-equation > strong { display: block; margin-bottom: var(--space-8); color: var(--text-title); font-size: 13px; font-weight: 600; }
+.doc-equation > strong ~ code { white-space: normal; overflow-wrap: anywhere; }
+.doc-equation > strong ~ code + code { margin-top: var(--space-4); }
+.doc-where { margin: var(--space-12) 0 0; padding-top: var(--space-12); border-top: 1px solid var(--stroke-base); display: grid; gap: var(--space-4); font-size: 12px; line-height: 1.55; }
+.doc-where > div { display: grid; grid-template-columns: minmax(120px, 28%) 1fr; gap: var(--space-12); }
+.doc-where dt { margin: 0; color: var(--text-base-main); font-weight: 600; }
+.doc-where dd { margin: 0; color: var(--text-base-second); }
+.doc-where .doc-where-label { color: var(--text-base-third); font-weight: 400; font-style: italic; }

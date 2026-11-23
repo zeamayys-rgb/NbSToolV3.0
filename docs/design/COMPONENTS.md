@@ -957,6 +957,9 @@ and search the same way, and a third page would cost one index entry and one `mo
 - Renders: the grouped sidebar as links (`a.docs-nav-button`), *Also in <page>* search hits
   (`.docs-nav-elsewhere`), the "On this page" list from `.doc-section > h2` with an
   IntersectionObserver highlight, and the pager (`.docs-article-footer a`).
+- The mode switch (`nav#docs-modes`, inserted before `.docs-sidebar-head`): two links,
+  Help Centre and Methodology, the current one `aria-current="page"`. The open article sets the
+  mode; the tree and the pager show only that mode, search shows both (DEC-92).
 
 **Required markup.** `#docs-search`, `#docs-article-nav`, `#docs-article`, optional `#docs-toc`.
 
