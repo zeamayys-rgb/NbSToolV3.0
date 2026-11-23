@@ -61,6 +61,8 @@ a.hc-card:hover > svg, a.hc-card:focus-visible > svg { fill: var(--text-primary)
    not a link, with a pill saying so (see UI-STATES SCR-19). */
 .hc-card-soon { border-style: dashed; background: var(--bg-base-second); }
 .hc-card-soon .hc-soon { grid-column: 2; grid-row: 1; justify-self: end; }
+/* No arrow on a card that is not a link, so the description can use the full width. */
+.hc-card-soon > span:not(.hc-soon) { grid-column: 1 / -1; }
 .hc-soon {
   padding: var(--space-2) var(--space-8); border-radius: var(--radius-pill);
   background: var(--bg-base-main); border: 1px solid var(--stroke-base);
@@ -228,4 +230,31 @@ a.hc-card:hover > svg, a.hc-card:focus-visible > svg { fill: var(--text-primary)
 
 @media (prefers-reduced-motion: reduce) {
   .hc-card, .hc-phase { transition: none; }
+}
+
+/* ---------- document downloads on the Methodology summary hub ----------
+   One grey row per document: type, title, state, and a download button on the
+   right. The buttons stay disabled until the files are published. */
+.doc-section .hc-dl-list, .hc-dl-list { list-style: none; margin: var(--space-16) 0 0; padding: 0; display: grid; gap: var(--space-12); }
+.hc-dl {
+  display: grid; grid-template-columns: auto 1fr auto; gap: var(--space-16); align-items: center;
+  padding: var(--space-16) var(--space-20);
+  border-radius: var(--radius-lg); background: var(--bg-base-second);
+}
+.hc-dl-icon { width: var(--space-24); height: var(--space-24); fill: var(--text-primary); align-self: start; }
+.hc-dl-text { display: grid; gap: var(--space-2); min-width: 0; }
+.hc-dl-text em { font-style: normal; color: var(--text-primary); font-size: 9.5px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+.hc-dl-text strong { color: var(--text-title); font-size: 14px; font-weight: 600; line-height: 1.35; }
+.hc-dl-text span { color: var(--text-base-third); font-size: 12px; }
+.hc-dl-btn {
+  display: inline-flex; align-items: center; gap: var(--space-8);
+  padding: var(--space-8) var(--space-16); border: 0; border-radius: var(--radius-md);
+  background: var(--bg-primary-main); color: var(--text-on-color);
+  font: inherit; font-size: 13px; font-weight: 600; cursor: pointer;
+}
+.hc-dl-btn svg { width: var(--space-16); height: var(--space-16); fill: currentColor; }
+.hc-dl-btn:disabled { background: var(--bg-base-main); color: var(--text-base-third); border: 1px solid var(--stroke-base); cursor: not-allowed; }
+@media (max-width: 640px) {
+  .hc-dl { grid-template-columns: auto 1fr; }
+  .hc-dl-btn { grid-column: 1 / -1; justify-content: center; }
 }

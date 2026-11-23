@@ -2028,3 +2028,35 @@ generic AI-generated styling rather than WRI's brand type.
 **Decision.** Every former monospace rule uses `--font-text` (Poppins). `--mono` stays as a name
 in `css/home.css` and `css/footer.css` but now resolves to `var(--font-text)`; new rules use
 `--font-text` directly. IBM Plex Mono is no longer loaded. Resolves TODO-05 and TODO-17.
+
+## DEC-92 · The documentation sidebar has two modes: Help Centre and Methodology
+
+**Context.** The Help Centre sidebar carried "The science behind it" as one more group, so the
+method pages and the how-to pages read as one long list.
+
+**Decision.** A switch above the sidebar head (`#docs-modes`, two links) separates them. The open
+article decides the mode: the four science entry pages in `help.html` and every article on
+`technical-docs.html` are Methodology; everything else is Help Centre. The sidebar tree and the
+previous/next pager show only the current mode. Search still covers both. No article moved and
+no id changed, so every existing link still works.
+
+## DEC-93 · The Methodology follows the team's Reference Methodology, in three groups
+
+**Context.** The method pages were written from an earlier methodology document and had drifted
+from the team's *NbS Tool v3 · Reference Methodology*: a different order, section numbers that no
+longer exist, formulas in code notation, sample-data figures quoted inside the method, and several
+figures that disagreed (guest area limit, carbon deduction defaults, the Net ERRs example, carbon
+stock units). The team compared the two row by row and decided each row.
+
+**Decision.** `js/technical-docs.js` now renders the reference document: same order, same wording,
+British spelling, formulas in plain words with a "where" list and the published method each
+follows, and two callouts only (Note, Caution). Three groups: Methodology summary; How each phase
+is calculated (Phase 1 to 7); Outputs, limitations and sources. Kept from the earlier build because
+the reference document does not hold them: Land cover classes, the Phase 6 and Phase 7 framework
+pages, the "What the tool says" sentences (quoted from the Data Analyser, figures as placeholders)
+and the rules for when a pathway is reported as not eligible. Removed: the six data-layer annex
+pages, the Parameters, formulas and glossary page (formulas moved to their phase, abbreviations
+merged into the Help Centre glossary), the per-country administrative level table, and every
+figure read from the sample AOI. The one worked example is the reference document's own run.
+SCR-19 has three science entry pages instead of four; `science-data` forwards to `#reports`.
+The guest area limit in the Help Centre FAQ reads 100,000 ha to match.

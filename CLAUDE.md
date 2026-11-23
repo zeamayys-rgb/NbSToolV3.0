@@ -12,6 +12,10 @@ documents, monitor impact (MRV).
 python3 -m http.server 8765   # then open http://localhost:8765/
 ```
 
+**Git remote.** Push only to `origin` = `https://github.com/zeamayys-rgb/NbSToolV3.0`. The old
+`WRI-Indonesia/design-test-nbs` repo is no longer used: never push there, and never re-add it as
+a remote.
+
 ---
 
 ## Design canon — read before changing any UI

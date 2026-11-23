@@ -36,11 +36,12 @@
       '</nav>' +
     '</div>' +
     '<nav class="footer-flow" aria-label="The NbS Tool workflow">' +
-      '<a href="interactive-map.html"><span class="fno">Phases 0–1</span><b>Explore &amp; select</b><em>Interactive Map</em></a>' +
-      '<a href="interactive-map.html"><span class="fno">Phases 2–5</span><b>Analyse</b><em>Data Analyser</em></a>' +
-      '<a href="create-monitoring-plan.html"><span class="fno">Phase 6</span><b>Plan monitoring</b><em>Monitoring Plan</em></a>' +
+      // Phase names and groupings follow help.html#phases, the canonical list.
+      '<a href="interactive-map.html"><span class="fno">Phase 0</span><b>Explore the map</b><em>Interactive Map</em></a>' +
+      '<a href="interactive-map.html"><span class="fno">Phases 1–5</span><b>Run the analysis</b><em>Data Analyser</em></a>' +
+      '<a href="create-monitoring-plan.html"><span class="fno">Phase 6</span><b>Monitoring planning</b><em>Monitoring Plan</em></a>' +
       '<a href="document-generator.html"><span class="fno">Phase 7</span><b>Generate documents</b><em>Document Generator</em></a>' +
-      '<a href="dashboard.html"><span class="fno">After the analysis</span><b>Manage &amp; monitor</b><em>My Projects</em></a>' +
+      '<a href="dashboard.html"><span class="fno">After the analysis</span><b>Manage your project</b><em>My Project</em></a>' +
     '</nav>' +
     '<div class="footer-bottom">' +
       '<span>© 2026 SCeNe Coalition · ASEAN-NbS Tool project</span>' +

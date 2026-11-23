@@ -5,7 +5,7 @@
    technical-docs.html generates the "science behind it" articles from
    js/technical-docs.js. Both read js/docs-index.js and show the same sidebar:
      · the Help Centre tree — five sections in order; an entry page with
-       children (the four science pages) expands while it, or one of its
+       children (the three science pages) expands while it, or one of its
        children, is the open article
      · the search box, which searches every article on both pages and lists
        the matches flat; a match on the other page links there with the query
@@ -75,6 +75,34 @@
     }).join('');
   }
 
+  /* ------------------------------------------------------- the two modes
+     The sidebar shows one of two trees: the Help Centre, or the Methodology
+     ("The science behind it": the three science entry pages in help.html and
+     every article on technical-docs.html). The switch above the sidebar head
+     moves between them; which one is on follows the open article. */
+  var SCIENCE = 'The science behind it';
+  function isScience(page, id) {
+    if (page === 'methodology') return true;
+    var a = find(page, id);
+    return !!a && a.group === SCIENCE;
+  }
+  function renderModes() {
+    var head = $('.docs-sidebar-head');
+    if (!head) return;
+    var sci = isScience(state.page, state.active);
+    var bar = $('#docs-modes');
+    if (!bar) {
+      bar = document.createElement('nav');
+      bar.id = 'docs-modes'; bar.className = 'docs-modes';
+      bar.setAttribute('aria-label', 'Documentation');
+      head.parentNode.insertBefore(bar, head);
+    }
+    bar.innerHTML =
+      '<a href="' + link('help', 'home') + '"' + (sci ? '' : ' aria-current="page"') + '>Help Centre</a>' +
+      '<a href="' + link('help', 'science-scope') + '"' + (sci ? ' aria-current="page"' : '') + '>Methodology</a>';
+    head.querySelector('strong').textContent = sci ? 'Methodology' : 'Help Centre';
+  }
+
   /* ------------------------------------------------------------- sidebar */
   function heading(label) { return '<div class="docs-nav-group">' + esc(label) + '</div>'; }
 
@@ -114,10 +142,11 @@
       return;
     }
 
-    /* Browsing: the Help Centre tree. An entry page with children expands only
-       while it, or one of its children, is the open article. */
+    /* Browsing: the tree of the current mode. An entry page with children
+       expands only while it, or one of its children, is the open article. */
+    var sci = isScience(state.page, state.active);
     DOCS_INDEX.help.articles.forEach(function (a) {
-      if (a.parent) return;
+      if (a.parent || (a.group === SCIENCE) !== sci) return;
       if (a.group && a.group !== group) { group = a.group; html += heading(group); }
       var kids = children(a.id);
       var open = (state.page === 'help' && a.id === state.active) ||
@@ -178,7 +207,9 @@
 
   /* --------------------------------------------------------------- pager */
   function renderPager() {
-    var list = state.cfg.articles;
+    /* Previous / next stays inside the current mode. */
+    var sci = isScience(state.page, state.active);
+    var list = state.cfg.articles.filter(function (a) { return isScience(state.page, a.id) === sci; });
     var i = list.indexOf(find(state.page, state.active));
     var prev = list[i - 1], next = list[i + 1];
     function card(a, dir) {
@@ -197,7 +228,14 @@
     var out = state.render(entry.id);
     host.textContent = '';
     if (typeof out === 'string') host.innerHTML = out; else if (out) host.appendChild(out);
+    /* The activity matrix names the mode it was opened from in its breadcrumb. */
+    if (isScience(state.page, entry.id)) {
+      host.querySelectorAll('a[href^="NbS_Activities_Flow_v2.html"]').forEach(function (a) {
+        if (a.getAttribute('href').indexOf('from=') === -1) a.setAttribute('href', 'NbS_Activities_Flow_v2.html?from=methods');
+      });
+    }
     renderPager();
+    renderModes();
     renderNav();
     keepCurrentInView();
     renderToc();
