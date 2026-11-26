@@ -2186,3 +2186,30 @@ It is built from Natural Earth 1:50m admin-0 countries (public domain) by
 `scripts/build-sea-map.py`: equirectangular, simplified, one `<path>` per country, 35 KB.
 It is a mask so it takes a colour token. Country borders are Natural Earth's and are shown
 for orientation only.
+
+## DEC-99 · Key features stages play live clips of each feature
+
+**Context.** The Key features frame (SCR-01) showed a static Help Centre screenshot per stage,
+swapped for another screenshot when a chapter `h4` is hovered. A still of a map or a form does
+not show what the feature does.
+
+**Decision.** Every picture the frame can show (three stage defaults plus six `h4` hovers) is
+replaced by a 7–10 s looping clip of that feature in use, recorded from this prototype with a
+visible cursor: drawing an AOI, opening a layer's info, exporting, the Data Analyser steps, and
+the Document Generator. Two things the prototype cannot show yet are mocked inside the
+recording only, never in the shipped pages: the export dialog, and the illustrative Key
+Biodiversity Area patches on the map. The screenshot stays under each video as its fallback.
+The page loads 1440 px wide web encodes (WebM, then MP4) with a JPEG poster, `preload="none"`,
+so only the clips a visitor actually sees are fetched. Masters (2880×1800 MP4 / WebM, GIF,
+PNG poster) are kept outside the repo with the recording scripts.
+
+**Accessibility.** The loops run longer than 5 s, so the HUD has a Pause / Play button
+(WCAG 2.2.2). `prefers-reduced-motion: reduce` shows the poster only. Videos are
+`aria-hidden`; the screenshot's `alt` still describes the stage. The new `pause` icon is added
+to the Material set (`scripts/fetch-material-icons.mjs`).
+
+**Consequence.** When a screen in a clip changes, its clip must be re-recorded or it will show
+the old UI. `TODO(design): the recorded map uses an offline Natural Earth basemap in OSM colours
+because the recording sandbox could not reach OpenStreetMap tiles; re-record against live tiles
+before launch if that matters.`
+

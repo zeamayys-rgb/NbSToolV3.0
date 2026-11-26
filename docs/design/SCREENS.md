@@ -88,8 +88,9 @@ documents and the NbS Incubator); the benefit cards carry a 233px photo header; 
 band's portfolio is a full-viewport field-stories gallery (`.pgal`): five site tiles around the heading, each opening a modal with all its photos and the field note (CMP-32, DEC-98; the "coming very soon" pill was removed, DEC-42). Each feature chapter (no "STEP 0N" eyebrow and no tag row; the stage frame's HUD reads "01 / 03 · Map it", then "Measure it" and "Document it") carries
 one or two "See how" links into `help.html`; the
 band's header links to the demo video (`help.html#demo`) and the Help Centre. The sticky stage frame on the
-left shows the matching Help Centre screenshot (`.s-shot`) for the active feature, under a plain
-feature label (no F-codes); it replaced the hand-built mock-ups.
+left plays a short looping clip of the active feature in use (`.s-clip`, DEC-99), with the matching
+Help Centre screenshot (`.s-shot`) underneath as its fallback, under a plain feature label (no
+F-codes); the screenshots replaced the hand-built mock-ups.
 
 **Components.** CMP-01, CMP-02, CMP-03 (auth modal — the same login form as SCR-02, overlaid),
 CMP-21 (scroll-reveal), CMP-22 (version / "what's new" modal, fired once per visitor and

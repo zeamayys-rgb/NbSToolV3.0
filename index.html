@@ -42,9 +42,9 @@
       <!-- Feature previews (DEC-95): one fades in while its headline line is hovered.
            Decorative and pointer-only; the Key features band below shows and describes the same screenshots. -->
       <div class="hero-peek stage-frame" aria-hidden="true">
-        <div class="peek" data-peek="map"><div class="stage-pad"><div class="mini-h">Interactive Map</div><img class="s-shot" src="assets/help/select-draw.jpg" alt="" loading="lazy" decoding="async" width="1600" height="986" /></div></div>
-        <div class="peek" data-peek="measure"><div class="stage-pad"><div class="mini-h">Data Analyser</div><img class="s-shot" src="assets/help/site-general.jpg" alt="" loading="lazy" decoding="async" width="1600" height="982" /></div></div>
-        <div class="peek" data-peek="document"><div class="stage-pad"><div class="mini-h">Document Generator</div><img class="s-shot" src="assets/help/docgen-sections.jpg" alt="" loading="lazy" decoding="async" width="1600" height="982" /></div></div>
+        <div class="peek" data-peek="map"><div class="stage-pad"><div class="mini-h">Interactive Map</div><div class="s-media"><img class="s-shot" src="assets/help/select-draw.jpg" alt="" loading="lazy" decoding="async" width="1600" height="986" /><video class="s-clip is-shown" data-clip="map-select-area" muted loop playsinline preload="none" poster="assets/clips/map-select-area-poster.jpg" aria-hidden="true" tabindex="-1"><source src="assets/clips/map-select-area.webm" type="video/webm" /><source src="assets/clips/map-select-area.mp4" type="video/mp4" /></video></div></div></div>
+        <div class="peek" data-peek="measure"><div class="stage-pad"><div class="mini-h">Data Analyser</div><div class="s-media"><img class="s-shot" src="assets/help/site-general.jpg" alt="" loading="lazy" decoding="async" width="1600" height="982" /><video class="s-clip is-shown" data-clip="analyser-site" muted loop playsinline preload="none" poster="assets/clips/analyser-site-poster.jpg" aria-hidden="true" tabindex="-1"><source src="assets/clips/analyser-site.webm" type="video/webm" /><source src="assets/clips/analyser-site.mp4" type="video/mp4" /></video></div></div></div>
+        <div class="peek" data-peek="document"><div class="stage-pad"><div class="mini-h">Document Generator</div><div class="s-media"><img class="s-shot" src="assets/help/docgen-sections.jpg" alt="" loading="lazy" decoding="async" width="1600" height="982" /><video class="s-clip is-shown" data-clip="docgen-sections" muted loop playsinline preload="none" poster="assets/clips/docgen-sections-poster.jpg" aria-hidden="true" tabindex="-1"><source src="assets/clips/docgen-sections.webm" type="video/webm" /><source src="assets/clips/docgen-sections.mp4" type="video/mp4" /></video></div></div></div>
       </div>
     </div>
     <p class="hero-sub reveal">NbS Tool is a free web tool for planning Nature-based Solutions in Southeast Asia. Give it a boundary and it reports what’s already there, what’s happening to it, and whether protecting, managing or restoring it fits. From there you can write the project up, plan the monitoring and keep the record as it runs. No GIS software needed.</p>
@@ -99,13 +99,16 @@
       <!-- STICKY STAGE VIEWPORT -->
       <div class="stage-col">
         <div class="stage-frame" id="stageFrame">
-          <div class="frame-hud"><span class="d live"></span> NbS&nbsp;Tool <span class="grow" id="frameStep">01 / 03 · Map it</span></div>
+          <div class="frame-hud"><span class="d live"></span> NbS&nbsp;Tool <span class="grow" id="frameStep">01 / 03 · Map it</span><button class="clip-toggle" id="clipToggle" type="button" aria-pressed="false" aria-label="Pause feature clips" hidden><svg class="i-pause" fill="currentColor" viewBox="0 -960 960 960"><path d="M520-200v-560h240v560H520Zm-320 0v-560h240v560H200Zm400-80h80v-400h-80v400Zm-320 0h80v-400h-80v400Zm0-400v400-400Zm320 0v400-400Z"/></svg><svg class="i-play" fill="currentColor" viewBox="0 -960 960 960"><path d="M320-200v-560l440 280-440 280Zm80-280Zm0 134 210-134-210-134v268Z"/></svg></button></div>
 
           <!-- STAGE 1 — INTERACTIVE MAP -->
           <div class="stage" data-stage="0">
             <div class="stage-pad">
               <div class="mini-h">Interactive Map · Select location</div>
-              <img class="s-shot" src="assets/help/select-draw.jpg" alt="Drawing an Area of Interest on the NbS Tool map" width="1600" height="986" />
+              <div class="s-media">
+                <img class="s-shot" src="assets/help/select-draw.jpg" alt="Drawing an Area of Interest on the NbS Tool map" width="1600" height="986" />
+                <video class="s-clip is-shown" data-clip="map-select-area" muted loop playsinline preload="none" poster="assets/clips/map-select-area-poster.jpg" aria-hidden="true" tabindex="-1"><source src="assets/clips/map-select-area.webm" type="video/webm" /><source src="assets/clips/map-select-area.mp4" type="video/mp4" /></video>
+              </div>
             </div>
           </div>
 
@@ -113,7 +116,10 @@
           <div class="stage" data-stage="1">
             <div class="stage-pad">
               <div class="mini-h">Data Analyser · Site characterisation</div>
-              <img class="s-shot" src="assets/help/site-general.jpg" alt="Data Analyser showing the general site baseline" loading="lazy" width="1600" height="982" />
+              <div class="s-media">
+                <img class="s-shot" src="assets/help/site-general.jpg" alt="Data Analyser showing the general site baseline" loading="lazy" width="1600" height="982" />
+                <video class="s-clip is-shown" data-clip="analyser-site" muted loop playsinline preload="none" poster="assets/clips/analyser-site-poster.jpg" aria-hidden="true" tabindex="-1"><source src="assets/clips/analyser-site.webm" type="video/webm" /><source src="assets/clips/analyser-site.mp4" type="video/mp4" /></video>
+              </div>
             </div>
           </div>
 
@@ -121,7 +127,10 @@
           <div class="stage" data-stage="2">
             <div class="stage-pad">
               <div class="mini-h">Document Generator</div>
-              <img class="s-shot" src="assets/help/docgen-sections.jpg" alt="Document Generator with its section list" loading="lazy" width="1600" height="982" />
+              <div class="s-media">
+                <img class="s-shot" src="assets/help/docgen-sections.jpg" alt="Document Generator with its section list" loading="lazy" width="1600" height="982" />
+                <video class="s-clip is-shown" data-clip="docgen-sections" muted loop playsinline preload="none" poster="assets/clips/docgen-sections-poster.jpg" aria-hidden="true" tabindex="-1"><source src="assets/clips/docgen-sections.webm" type="video/webm" /><source src="assets/clips/docgen-sections.mp4" type="video/mp4" /></video>
+              </div>
             </div>
           </div>
 
@@ -133,9 +142,9 @@
         <article class="chapter" data-chapter="0">
           <h3>Interactive Map</h3>
           <p>Where you look around, and where you tell the tool which piece of ground you mean.</p>
-          <h4 data-shot="assets/help/map-legend.jpg" data-shot-alt="Interactive Map with data layers switched on and the legend open">Explore the layers</h4>
+          <h4 data-shot="assets/help/map-legend.jpg" data-clip="map-layers" data-shot-alt="Interactive Map with data layers switched on and the legend open">Explore the layers</h4>
           <p>Regional data layers for Southeast Asia, grouped as site information, nature, people and climate. Switch several on at once to compare them, and open any layer’s source and caveats from the legend.</p>
-          <h4 data-shot="assets/help/map-export.jpg" data-shot-alt="Export area dialog with a map preview and a name field">Export the map</h4>
+          <h4 data-shot="assets/help/map-export.jpg" data-clip="map-export" data-shot-alt="Export area dialog with a map preview and a name field">Export the map</h4>
           <p>Take what you see into a meeting, a report or your own GIS. Export the map as an image at any time, with the layers you have switched on. Once you have selected an area, you can also export it as a GeoPDF that keeps its location information, or as KML for QGIS, ArcGIS and other mapping software.</p>
           <div class="chapter-links"><a class="chapter-link" href="help.html#phase-0">See how to explore the map <svg fill="currentColor" viewBox="0 -960 960 960"><path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/></svg></a><a class="chapter-link" href="help.html#phase-0-export-a-map-or-data">See how to download the map <svg fill="currentColor" viewBox="0 -960 960 960"><path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/></svg></a></div>
         </article>
@@ -143,9 +152,9 @@
         <article class="chapter" data-chapter="1">
           <h3>Data Analyser</h3>
           <p>Clips every layer to your boundary and reports back. No GIS software or spatial-analysis background needed.</p>
-          <h4 data-shot="assets/help/threat-profile.jpg" data-shot-alt="Data Analyser threat profile showing historical deforestation">What’s there, and what threatens it</h4>
+          <h4 data-shot="assets/help/threat-profile.jpg" data-clip="analyser-threat" data-shot-alt="Data Analyser threat profile showing historical deforestation">What’s there, and what threatens it</h4>
           <p>The site is summarised as general context, nature, people and climate, with the source and year behind each figure. A threat profile then shows how much of each ecosystem (forest, mangrove or peatland) is disturbed, what’s driving it, and the risk of flood, fire, landslide and drought.</p>
-          <h4 data-shot="assets/help/pathway-blocks.jpg" data-shot-alt="Data Analyser pathway selection with Protect, Manage and Restore per ecosystem">Which pathway fits, and what it could deliver</h4>
+          <h4 data-shot="assets/help/pathway-blocks.jpg" data-clip="analyser-pathway" data-shot-alt="Data Analyser pathway selection with Protect, Manage and Restore per ecosystem">Which pathway fits, and what it could deliver</h4>
           <p>Rules match each part of the site to Protect, Manage or Restore and state the reason. You choose the activities, and the tool estimates what they could deliver for nature, people and climate. These are screening figures for planning. They don’t replace field verification.</p>
           <div class="chapter-links"><a class="chapter-link" href="help.html#phase-2">See how to read the site <svg fill="currentColor" viewBox="0 -960 960 960"><path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/></svg></a><a class="chapter-link" href="help.html#phase-4">See how to choose a pathway <svg fill="currentColor" viewBox="0 -960 960 960"><path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/></svg></a></div>
         </article>
@@ -153,9 +162,9 @@
         <article class="chapter" data-chapter="2">
           <h3>Document Generator</h3>
           <p>Turns a saved analysis into a document you can put in front of a funder.</p>
-          <h4 data-shot="assets/help/docgen-sections.jpg" data-shot-alt="Document Generator with its section list">Two templates to start from</h4>
+          <h4 data-shot="assets/help/docgen-sections.jpg" data-clip="docgen-templates" data-shot-alt="Document Generator with its section list">Two templates to start from</h4>
           <p>A Feasibility Document, with the maps, baselines, benefit assessment and socio-economic profile a feasibility study starts from. Or a project document laid out to the Climate, Community &amp; Biodiversity (CCB) Standards, which can be paired with Verra or Gold Standard.</p>
-          <h4 data-shot="assets/help/docgen-sections.jpg" data-shot-alt="Document Generator with its section list">Drafted from your analysis</h4>
+          <h4 data-shot="assets/help/docgen-sections.jpg" data-clip="docgen-drafted" data-shot-alt="Document Generator with its section list">Drafted from your analysis</h4>
           <p>Sections the analysis can support are filled in and marked, and you can edit every one. The parts only your project knows, such as land tenure, consent and benefit sharing, are left for you. Download the result as an editable Word document. Documents are built from a saved project, which needs a free account.</p>
           <div class="chapter-links"><a class="chapter-link" href="help.html#documents">See how to generate a document <svg fill="currentColor" viewBox="0 -960 960 960"><path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/></svg></a></div>
         </article>
@@ -1051,25 +1060,111 @@ const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const stages = Array.from(document.querySelectorAll('.stage'));
   const frameStep = document.getElementById('frameStep');
   const stepNames = ['Map it', 'Measure it', 'Document it'];   // one per feature, echoing the hero
+  const stageFrame = document.getElementById('stageFrame');
+  let onStageChange = null;   // set by the feature-clip block below
   function setActive(idx) {
+    if (onStageChange) onStageChange(idx);
     chapters.forEach(function (c, i) { c.classList.toggle('is-active', i === idx); });
     stages.forEach(function (s, i) { s.classList.toggle('is-active', i === idx); });
     if (frameStep) frameStep.textContent = '0' + (idx + 1) + ' / 0' + stepNames.length + ' · ' + stepNames[idx];
   }
   setActive(0);
-  /* Hovering a chapter's h4 shows that job's screenshot in the pinned picture; leaving the
-     chapter puts the stage's own screenshot back. */
+  /* Feature clips (DEC-99). Each stage plays a short looping clip of its feature; hovering a
+     chapter's h4 swaps in that job's clip (and its screenshot underneath, as the fallback);
+     leaving the chapter puts the stage's own clip back. The clip on the active stage plays while
+     the frame is on screen; an inactive stage plays only while it is hovered. With
+     prefers-reduced-motion, or after the reader presses Pause, nothing plays: each video shows
+     its poster frame. A video that fails to load is hidden, leaving the screenshot. */
+  const motionQ = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const clipToggle = document.getElementById('clipToggle');
+  let clipsPaused = false, frameVisible = true, activeIdx = 0;
+  const canPlay = function () { return !motionQ.matches && !clipsPaused; };
+  function makeClip(name, poster) {
+    const v = document.createElement('video');
+    v.className = 's-clip'; v.dataset.clip = name;
+    v.muted = true; v.loop = true; v.playsInline = true; v.preload = 'none';
+    v.setAttribute('muted', ''); v.setAttribute('playsinline', ''); v.setAttribute('aria-hidden', 'true'); v.tabIndex = -1;
+    v.poster = poster || 'assets/clips/' + name + '-poster.jpg';
+    ['webm', 'mp4'].forEach(function (ext) {
+      const src = document.createElement('source');
+      src.src = 'assets/clips/' + name + '.' + ext; src.type = 'video/' + ext; v.appendChild(src);
+    });
+    return v;
+  }
+  function guard(v) {
+    // the error fires on the last <source>, not on the video
+    const last = v.querySelector('source:last-of-type');
+    (last || v).addEventListener('error', function () { v.classList.add('is-broken'); });
+  }
+  function play(v) {
+    if (!v || !canPlay()) return;
+    if (v.preload !== 'auto') { v.preload = 'auto'; }
+    const p = v.play(); if (p && p.catch) p.catch(function () {});
+  }
+  function stop(v, rewind) { if (!v) return; v.pause(); if (rewind) { try { v.currentTime = 0; } catch (e) {} } }
+  const stageClips = stages.map(function (stage) {
+    const media = stage.querySelector('.s-media');
+    const def = media && media.querySelector('.s-clip');
+    if (def) guard(def);
+    return { stage: stage, media: media, def: def, cur: def, byName: def ? { [def.dataset.clip]: def } : {} };
+  });
+  function showClip(i, name) {
+    const sc = stageClips[i]; if (!sc || !sc.media) return;
+    let v = sc.byName[name];
+    if (!v) { v = makeClip(name); guard(v); sc.media.appendChild(v); sc.byName[name] = v; }
+    if (sc.cur === v) return;
+    const prev = sc.cur; sc.cur = v;
+    Object.keys(sc.byName).forEach(function (k) { sc.byName[k].classList.toggle('is-shown', sc.byName[k] === v); });
+    stop(prev, true);
+    if (i === activeIdx && frameVisible) play(v);
+  }
+  function syncPlayback() {
+    stageClips.forEach(function (sc, i) {
+      if (i === activeIdx && frameVisible && canPlay()) play(sc.cur); else stop(sc.cur, false);
+    });
+  }
   chapters.forEach(function (c, i) {
     const img = stages[i] && stages[i].querySelector('.s-shot');
     if (!img) return;
     const def = { src: img.getAttribute('src'), alt: img.alt };
+    const defClip = stageClips[i] && stageClips[i].def && stageClips[i].def.dataset.clip;
     function show(src, alt) { if (img.getAttribute('src') !== src) { img.src = src; img.alt = alt; } }
     c.querySelectorAll('h4[data-shot]').forEach(function (h) {
       new Image().src = h.dataset.shot;   // preload so the swap is instant
-      h.addEventListener('mouseenter', function () { show(h.dataset.shot, h.dataset.shotAlt); });
+      h.addEventListener('mouseenter', function () {
+        show(h.dataset.shot, h.dataset.shotAlt);
+        if (h.dataset.clip) showClip(i, h.dataset.clip);
+      });
     });
-    c.addEventListener('mouseleave', function () { show(def.src, def.alt); });
+    c.addEventListener('mouseleave', function () { show(def.src, def.alt); if (defClip) showClip(i, defClip); });
   });
+  // Inactive stages play while hovered (where the layout makes them reachable, e.g. below 900px).
+  stageClips.forEach(function (sc, i) {
+    sc.stage.addEventListener('pointerenter', function () { if (i !== activeIdx) play(sc.cur); });
+    sc.stage.addEventListener('pointerleave', function () { if (i !== activeIdx) stop(sc.cur, false); });
+  });
+  // Hero previews: each plays only while its headline word is hovered.
+  document.querySelectorAll('.hero-head .hl[data-peek]').forEach(function (hl) {
+    const v = document.querySelector('.peek[data-peek="' + hl.dataset.peek + '"] .s-clip');
+    if (!v) return; guard(v);
+    hl.addEventListener('mouseenter', function () { play(v); });
+    hl.addEventListener('mouseleave', function () { stop(v, true); });
+  });
+  if ('IntersectionObserver' in window && stageFrame) {
+    new IntersectionObserver(function (es) { frameVisible = es[es.length - 1].isIntersecting; syncPlayback(); }, { threshold: 0.25 }).observe(stageFrame);
+  }
+  if (clipToggle) {
+    clipToggle.hidden = motionQ.matches;
+    clipToggle.addEventListener('click', function () {
+      clipsPaused = !clipsPaused;
+      clipToggle.setAttribute('aria-pressed', String(clipsPaused));
+      clipToggle.setAttribute('aria-label', clipsPaused ? 'Play feature clips' : 'Pause feature clips');
+      syncPlayback();
+    });
+  }
+  motionQ.addEventListener('change', function () { if (clipToggle) clipToggle.hidden = motionQ.matches; syncPlayback(); });
+  onStageChange = function (idx) { activeIdx = idx; syncPlayback(); };
+  syncPlayback();
   /* The active chapter is the one beside the middle of the pinned picture, so the picture
      changes when the next chapter's text arrives next to it, and not while the reader is still
      on the one before (DEC-96). Below 900px the picture is not pinned and stays on the first. */

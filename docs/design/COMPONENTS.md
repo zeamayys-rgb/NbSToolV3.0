@@ -586,6 +586,17 @@ the codebase.** `index.html` also reads the query into a `REDUCED` constant for 
 **Key-features sync.** On SCR-01 the `.stage` picture and its `.chapter` text share one
 `is-active` index: the chapter crossing the vertical middle of the pinned `.stage-col` (DEC-96).
 
+**Feature clips (DEC-99).** Each `.stage` holds a `.s-media` box: the screenshot (`.s-shot`) with
+a `<video class="s-clip" muted loop playsinline preload="none" poster>` over it. Hovering a
+chapter `h4` with `data-clip` swaps in that job's clip (created on first hover) and its
+`data-shot` screenshot; leaving the chapter restores the stage's own. The active stage's clip
+plays while the frame is at least a quarter on screen; an inactive stage plays only while
+hovered; the hero previews play while their headline word is hovered. A Pause / Play button
+(`#clipToggle`, `aria-pressed`) in the frame HUD stops every clip (WCAG 2.2.2). With
+`prefers-reduced-motion: reduce` nothing plays and the button is hidden: each video shows its
+poster frame. A clip that fails to load is hidden (`.is-broken`) and the screenshot shows.
+Clips live in `assets/clips/<name>.{webm,mp4}` with `<name>-poster.jpg`.
+
 ---
 
 ## CMP-22 · Version / "What's new" modal
