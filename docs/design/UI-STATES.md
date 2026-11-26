@@ -48,8 +48,8 @@ That is the useful output. The rows marked **No** are the backlog.
 | Loading | Hero and band imagery in flight | Nothing — images pop in as they decode; the hero has no placeholder or aspect-ratio box | Partial — no reserved space, so the hero shifts on slow connections |
 | Counters pre-roll | Before an `.odo` scrolls into view | Every digit reads `0`; the real figure is already in `aria-label`, so a screen reader is correct before the animation runs | Yes — CMP-30 |
 | Tab switched | Click or ←/→ on `.ftabs` | The selected panel's two cards replace the previous pair; unselected panels carry `hidden` | Yes — CMP-31 |
-| Card flipped | Click, Enter or Space on a `.pflip` | The card turns to its back: name, location, the field note and an external link. The card is sized to the longest note, so nothing clips | Yes — CMP-32 |
-| Marquee paused | Hover or keyboard focus inside `.pmarquee` | The strip stops moving so it can be read or tabbed through | Yes — CMP-32 |
+| Site modal open | Click, Enter or Space on a `.pg-tile` | A centred dialog shows every photo of the site (thumbnails switch the main photo) beside its name, location and field note. Esc, the close button or a backdrop click closes it | Yes — CMP-32 |
+| Tile photo | Page load | Each tile shows one of its site photos at random, so return visits see different images | Yes — CMP-32 |
 | Empty | N/A — all copy is static | — | N/A |
 | Partial | An image 404s | Browser default broken-image behaviour | No — `TODO(design)` |
 | Error | N/A | — | N/A |

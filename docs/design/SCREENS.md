@@ -77,18 +77,18 @@ is relevant to their organisation.
 **Entry** — direct link, coalition site, search. **Exit** — "Interactive Map" (SCR-03) or the
 auth modal (SCR-02 in overlay form).
 
-**Layout.** Full-bleed hero with a scroll-driven `.stage` sequence, then five `.band`
-sections: the `#journey` step strip (which also serves as the
-feature index and tutorial entry point, DEC-35; its six steps follow the v3 Reference Methodology, and a step that spans more than one phase names each phase in an `h4` with the same "Phase N · Name" label the Help Centre uses), a dark data-flow band (the ASEAN MRV Framework drawn as an interactive flow, CMP-38, DEC-36), benefits (opens with a plain-terms strip: what the tool is, who it is for, the eleven countries and three ecosystems; then "Nature, people, climate." — its logo card names the SCeNe Coalition as the developer and carries the page's only outbound link, a text link to scenecoalition.org that opens in a new tab), one `.band-dark` `#portfolio` band holding the field stories ("Before anyone drew a boundary, we went and listened.") and then the testimony (DEC-42; seven quotes from the field visits, the V3 concept interviews and the hands-on trainings, shown as two full-bleed `.tq-row` marquees drifting in opposite directions with cards of three widths set by quote length, DEC-38, DEC-40; a person's words are never rewritten, and the field stories carry no visit dates), and the `#about` coalition
+**Layout.** Full-bleed hero (its three headline lines each preview one key feature on hover, DEC-95) with a scroll-driven `.stage` sequence, then five `.band`
+sections: the `#journey` key-features band (three chapters, one each for the Interactive Map, the
+Data Analyser and the Document Generator, DEC-94; it is also the tutorial entry point, DEC-35. Each chapter names the feature in its `h3` and two of its jobs in `h4`s; hovering an `h4` underlines it, turns it green and swaps the pinned screenshot to that job's screen (`data-shot`), restored when the pointer leaves the chapter. The full eight-phase workflow is not told here: it lives in `help.html#phases`), a dark data-flow band (the ASEAN MRV Framework drawn as an interactive flow, CMP-38, DEC-36), benefits (opens with a plain-terms strip: what the tool is, who it is for, the eleven countries and three ecosystems; then "Nature, people, climate." — its logo card names the SCeNe Coalition as the developer and carries the page's only outbound link, a text link to scenecoalition.org that opens in a new tab), one `.band-dark` `#portfolio` band holding the field stories ("Before anyone drew a boundary, we went and listened.") and then the testimony (DEC-42; seven quotes from the field visits, the V3 concept interviews and the hands-on trainings, shown as two full-bleed `.tq-row` marquees drifting in opposite directions with cards of three widths set by quote length, DEC-38, DEC-40; a person's words are never rewritten, and the field stories carry no visit dates), and the `#about` coalition
 band ("Developed by": SCeNe Coalition members, then impact partners; "With support from": funders), closing on a `.finale` CTA. Each band changes tone from the one before (dark, light mint, dark, light, dark, light, dark; DEC-41, DEC-42).
 
 Held in parity with the implemented page at `staging-fe.scenecoalition.org` (DEC-28). Hero counters are `.odo` odometer reels (the field-stories band has no figures: it tells
 the field visits as narrative, and each card ends on how that site moves through scoping,
 documents and the NbS Incubator); the benefit cards carry a 233px photo header; and the proof
-band's portfolio is a paused-on-hover `.pmarquee` of `.pflip` flip cards (the "coming very soon" pill was removed, DEC-42). Each journey chapter (no "STEP 0N" eyebrow; the stage frame's HUD reads "01 / 06 · Phases 0–1"; chapters and footer use the phase names from `help.html#phases`) carries a tag row naming the feature it uses and
+band's portfolio is a full-viewport field-stories gallery (`.pgal`): five site tiles around the heading, each opening a modal with all its photos and the field note (CMP-32, DEC-98; the "coming very soon" pill was removed, DEC-42). Each feature chapter (no "STEP 0N" eyebrow and no tag row; the stage frame's HUD reads "01 / 03 · Map it", then "Measure it" and "Document it") carries
 one or two "See how" links into `help.html`; the
-journey header links to the demo video (`help.html#demo`) and the Help Centre. The sticky stage frame on the
-left shows the matching Help Centre screenshot (`.s-shot`) for the active step, under a plain
+band's header links to the demo video (`help.html#demo`) and the Help Centre. The sticky stage frame on the
+left shows the matching Help Centre screenshot (`.s-shot`) for the active feature, under a plain
 feature label (no F-codes); it replaced the hand-built mock-ups.
 
 **Components.** CMP-01, CMP-02, CMP-03 (auth modal — the same login form as SCR-02, overlaid),

@@ -61,6 +61,7 @@ is used a sixth as often. **No `cubic-bezier()` is defined anywhere.**
 | Export toast | `opacity`, `transform` | `.2s` | `ease` | ✅ (SCR-04, SCR-08) |
 | Home reveal (`.reveal`) | `opacity`, `transform` | `.55s` | `ease` | ✅ |
 | Home stage sequence (`.stage`) | `opacity` | `.2s`–`.8s` | `ease` | ✅ |
+| Home hero headline line hover (`.hero h1 .hl` and `.hero-peek`, DEC-95; pointer devices only, preview from 880px wide) | `transform` (scaleX wipe of the block behind the line), `color`; preview `opacity`, `scale` | `--motion-default` (200ms) | `ease-in-out` | ✅ (changes instantly) |
 | Hazard scene hover (CMP-39, DEC-54, DEC-55; plays once, no return) | `opacity`, SVG `transform`, `stroke-dashoffset`, via GSAP | `.2s`–`1.4s` in; loops `.3s`–`3s` | GSAP `power1`/`power2`, `bounce.out`, `none` for loops | ✅ (stays on the calm drawing) |
 
 ### The keyframes

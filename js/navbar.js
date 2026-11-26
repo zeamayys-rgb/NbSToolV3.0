@@ -19,7 +19,10 @@
   var LINKS = [
     { page: 'home',     href: 'index.html',          label: 'Home' },
     { page: 'map',      href: 'interactive-map.html', label: 'Interactive Map' },
-    { page: 'projects', href: 'dashboard.html',       label: 'My Project' }
+    { page: 'projects', href: 'dashboard.html',       label: 'My Project' },
+    // Never matches data-nav-page: js/docs-shell.js marks it current while the
+    // docs show the Methodology tree (DEC-97).
+    { page: 'methodology', href: 'help.html#science-scope', label: 'Methodology' }
   ];
   // Help sits at the far right as an icon (DEC-39); see help() below.
 
