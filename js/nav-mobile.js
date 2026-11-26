@@ -103,6 +103,12 @@
     initProfileDropdown();
     initBrandSwitch();
     hardenSvgs();
+    // dev only: right-click copies a CSS selector (js/dev-copy-selector.js)
+    if (location.protocol === 'file:' || /^(localhost|127\.0\.0\.1)$/.test(location.hostname)) {
+      var s = document.createElement('script');
+      s.src = (document.currentScript || document.querySelector('script[src*="nav-mobile.js"]')).src.replace('nav-mobile.js', 'dev-copy-selector.js');
+      document.head.appendChild(s);
+    }
     // catch dynamically-rendered icons — only on JS-rendered screens (F03 / F05.1.1)
     if (document.getElementById('root')) {
       setTimeout(hardenSvgs, 400);
