@@ -101,6 +101,12 @@
       '<a href="' + link('help', 'home') + '"' + (sci ? '' : ' aria-current="page"') + '>Help Centre</a>' +
       '<a href="' + link('help', 'science-scope') + '"' + (sci ? ' aria-current="page"' : '') + '>Methodology</a>';
     head.querySelector('strong').textContent = sci ? 'Methodology' : 'Help Centre';
+    // Keep the top bar's Methodology link in step with the mode (DEC-97).
+    var top = $('.sitenav-link[href$="#science-scope"]');
+    if (top) {
+      top.classList.toggle('active', sci);
+      if (sci) top.setAttribute('aria-current', 'page'); else top.removeAttribute('aria-current');
+    }
   }
 
   /* ------------------------------------------------------------- sidebar */

@@ -37,7 +37,16 @@
 
 
   <div class="hero-inner">
-    <h1 class="reveal">Draw a boundary. <span class="lit">See what the land can take.</span></h1>
+    <div class="hero-head">
+      <h1 class="reveal"><span class="hl" data-peek="map">Map&nbsp;it.</span> <span class="hl" data-peek="measure">Measure&nbsp;it.</span> <span class="hl" data-peek="document">Document&nbsp;it.</span></h1>
+      <!-- Feature previews (DEC-95): one fades in while its headline line is hovered.
+           Decorative and pointer-only; the Key features band below shows and describes the same screenshots. -->
+      <div class="hero-peek stage-frame" aria-hidden="true">
+        <div class="peek" data-peek="map"><div class="stage-pad"><div class="mini-h">Interactive Map</div><div class="s-media"><img class="s-shot" src="assets/help/select-draw.jpg" alt="" loading="lazy" decoding="async" width="1600" height="986" /><video class="s-clip is-shown" data-clip="map-select-area" muted loop playsinline preload="none" poster="assets/clips/map-select-area-poster.jpg" aria-hidden="true" tabindex="-1"><source src="assets/clips/map-select-area.webm" type="video/webm" /><source src="assets/clips/map-select-area.mp4" type="video/mp4" /></video></div></div></div>
+        <div class="peek" data-peek="measure"><div class="stage-pad"><div class="mini-h">Data Analyser</div><div class="s-media"><img class="s-shot" src="assets/help/site-general.jpg" alt="" loading="lazy" decoding="async" width="1600" height="982" /><video class="s-clip is-shown" data-clip="analyser-site" muted loop playsinline preload="none" poster="assets/clips/analyser-site-poster.jpg" aria-hidden="true" tabindex="-1"><source src="assets/clips/analyser-site.webm" type="video/webm" /><source src="assets/clips/analyser-site.mp4" type="video/mp4" /></video></div></div></div>
+        <div class="peek" data-peek="document"><div class="stage-pad"><div class="mini-h">Document Generator</div><div class="s-media"><img class="s-shot" src="assets/help/docgen-sections.jpg" alt="" loading="lazy" decoding="async" width="1600" height="982" /><video class="s-clip is-shown" data-clip="docgen-sections" muted loop playsinline preload="none" poster="assets/clips/docgen-sections-poster.jpg" aria-hidden="true" tabindex="-1"><source src="assets/clips/docgen-sections.webm" type="video/webm" /><source src="assets/clips/docgen-sections.mp4" type="video/mp4" /></video></div></div></div>
+      </div>
+    </div>
     <p class="hero-sub reveal">NbS Tool is a free web tool for planning Nature-based Solutions in Southeast Asia. Give it a boundary and it reports what’s already there, what’s happening to it, and whether protecting, managing or restoring it fits. From there you can write the project up, plan the monitoring and keep the record as it runs. No GIS software needed.</p>
     <div class="hero-cta reveal">
       <a class="cbtn cbtn-spring" href="interactive-map.html">
@@ -68,13 +77,15 @@
 
 
 <!-- ============================================================
-     2 · JOURNEY — sticky scrollytelling
+     2 · KEY FEATURES — sticky scrollytelling, one chapter per feature
+     (Interactive Map, Data Analyser, Document Generator; DEC-94).
+     The id and class names keep the older "journey" wording.
      ============================================================ -->
-<section class="journey" id="journey" data-screen-label="The Design-to-MRV workflow">
+<section class="journey" id="journey" data-screen-label="Key features">
   <div class="journey-top">
     <div class="wrap head center">
-      <h2 class="reveal">One project, <span class="em">start to finish.</span></h2>
-      <p class="reveal">Each step uses what the one before it produced, so the boundary you draw on day one is the one your monitoring plan is built on. Scroll to follow a project through.</p>
+      <h2 class="reveal">The three <span class="em">key features.</span></h2>
+      <p class="reveal">NbS Tool is built around an Interactive Map, a Data Analyser and a Document Generator. Each one picks up where the last left off, so the boundary you draw is the one your documents are written about.</p>
       <div class="journey-cta reveal">
         <a class="cbtn cbtn-solid" href="help.html#demo">Watch the demo</a>
         <a class="cbtn cbtn-light" href="help.html">Open the Help Centre</a>
@@ -88,99 +99,74 @@
       <!-- STICKY STAGE VIEWPORT -->
       <div class="stage-col">
         <div class="stage-frame" id="stageFrame">
-          <div class="frame-hud"><span class="d live"></span> NbS&nbsp;Tool <span class="grow" id="frameStep">01 / 05 · Phases 0–1</span></div>
+          <div class="frame-hud"><span class="d live"></span> NbS&nbsp;Tool <span class="grow" id="frameStep">01 / 03 · Map it</span><button class="clip-toggle" id="clipToggle" type="button" aria-pressed="false" aria-label="Pause feature clips" hidden><svg class="i-pause" fill="currentColor" viewBox="0 -960 960 960"><path d="M520-200v-560h240v560H520Zm-320 0v-560h240v560H200Zm400-80h80v-400h-80v400Zm-320 0h80v-400h-80v400Zm0-400v400-400Zm320 0v400-400Z"/></svg><svg class="i-play" fill="currentColor" viewBox="0 -960 960 960"><path d="M320-200v-560l440 280-440 280Zm80-280Zm0 134 210-134-210-134v268Z"/></svg></button></div>
 
-          <!-- STAGE 1 — PHASES 0–1 · EXPLORE THE MAP, SELECT LOCATION -->
+          <!-- STAGE 1 — INTERACTIVE MAP -->
           <div class="stage" data-stage="0">
             <div class="stage-pad">
               <div class="mini-h">Interactive Map · Select location</div>
-              <img class="s-shot" src="assets/help/select-draw.jpg" alt="Drawing an Area of Interest on the NbS Tool map" width="1600" height="986" />
+              <div class="s-media">
+                <img class="s-shot" src="assets/help/select-draw.jpg" alt="Drawing an Area of Interest on the NbS Tool map" width="1600" height="986" />
+                <video class="s-clip is-shown" data-clip="map-select-area" muted loop playsinline preload="none" poster="assets/clips/map-select-area-poster.jpg" aria-hidden="true" tabindex="-1"><source src="assets/clips/map-select-area.webm" type="video/webm" /><source src="assets/clips/map-select-area.mp4" type="video/mp4" /></video>
+              </div>
             </div>
           </div>
 
-          <!-- STAGE 2 — PHASES 2–3 · SITE CHARACTERISATION, THREAT PROFILE -->
+          <!-- STAGE 2 — DATA ANALYSER -->
           <div class="stage" data-stage="1">
             <div class="stage-pad">
               <div class="mini-h">Data Analyser · Site characterisation</div>
-              <img class="s-shot" src="assets/help/site-general.jpg" alt="Data Analyser showing the general site baseline" loading="lazy" width="1600" height="982" />
+              <div class="s-media">
+                <img class="s-shot" src="assets/help/site-general.jpg" alt="Data Analyser showing the general site baseline" loading="lazy" width="1600" height="982" />
+                <video class="s-clip is-shown" data-clip="analyser-site" muted loop playsinline preload="none" poster="assets/clips/analyser-site-poster.jpg" aria-hidden="true" tabindex="-1"><source src="assets/clips/analyser-site.webm" type="video/webm" /><source src="assets/clips/analyser-site.mp4" type="video/mp4" /></video>
+              </div>
             </div>
           </div>
 
-          <!-- STAGE 3 — PHASES 4–5 · PATHWAY SELECTION, POTENTIAL BENEFIT -->
+          <!-- STAGE 3 — DOCUMENT GENERATOR -->
           <div class="stage" data-stage="2">
             <div class="stage-pad">
-              <div class="mini-h">Data Analyser · Pathway selection</div>
-              <img class="s-shot" src="assets/help/pathway-blocks.jpg" alt="Pathway selection with Protect, Manage and Restore options" loading="lazy" width="1600" height="982" />
-            </div>
-          </div>
-
-          <!-- STAGE 4 — PHASES 6–7 · MONITORING PLANNING, GENERATE DOCUMENTS -->
-          <div class="stage" data-stage="3">
-            <div class="stage-pad">
               <div class="mini-h">Document Generator</div>
-              <img class="s-shot" src="assets/help/docgen-sections.jpg" alt="Document Generator with its section list" loading="lazy" width="1600" height="982" />
-            </div>
-          </div>
-
-          <!-- STAGE 5 — AFTER THE ANALYSIS · MANAGE YOUR PROJECTS -->
-          <div class="stage" data-stage="4">
-            <div class="stage-pad">
-              <div class="mini-h">My Project</div>
-              <img class="s-shot" src="assets/help/projects-table.jpg" alt="My Projects dashboard listing saved projects" loading="lazy" width="1600" height="982" />
+              <div class="s-media">
+                <img class="s-shot" src="assets/help/docgen-sections.jpg" alt="Document Generator with its section list" loading="lazy" width="1600" height="982" />
+                <video class="s-clip is-shown" data-clip="docgen-sections" muted loop playsinline preload="none" poster="assets/clips/docgen-sections-poster.jpg" aria-hidden="true" tabindex="-1"><source src="assets/clips/docgen-sections.webm" type="video/webm" /><source src="assets/clips/docgen-sections.mp4" type="video/mp4" /></video>
+              </div>
             </div>
           </div>
 
         </div>
       </div>
 
-      <!-- SCROLLING CHAPTERS -->
+      <!-- SCROLLING CHAPTERS — one per feature; each h4 names one of its two main jobs -->
       <div class="chapters">
         <article class="chapter" data-chapter="0">
-          <h3>Find the place.</h3>
-          <h4>Phase 0 · Explore the map</h4>
-          <p>Five layer groups sit on the map while you look around: country-specific layers, site information, nature, climate and people. Search a province or district and its boundary is drawn as a tracing guide. It doesn’t become your project polygon.</p>
-          <h4>Phase 1 · Select location</h4>
-          <p>Draw a polygon, or upload a zipped shapefile, KML or KMZ. The upload is the one method you can repeat exactly, so use it for anything you’ll need to defend. Check the area on the confirm card, set the project duration, and confirm. Nothing is computed before that point.</p>
-          <div class="tags"><span class="tag">Interactive Map</span></div>
-          <div class="chapter-links"><a class="chapter-link" href="help.html#phase-0">See how to explore the map <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="chapter-link" href="help.html#phase-1">See how to select a location <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+          <h3>Interactive Map</h3>
+          <p>Where you look around, and where you tell the tool which piece of ground you mean.</p>
+          <h4 data-shot="assets/help/map-legend.jpg" data-clip="map-layers" data-shot-alt="Interactive Map with data layers switched on and the legend open">Explore the layers</h4>
+          <p>Regional data layers for Southeast Asia, grouped as site information, nature, people and climate. Switch several on at once to compare them, and open any layer’s source and caveats from the legend.</p>
+          <h4 data-shot="assets/help/map-export.jpg" data-clip="map-export" data-shot-alt="Export area dialog with a map preview and a name field">Export the map</h4>
+          <p>Take what you see into a meeting, a report or your own GIS. Export the map as an image at any time, with the layers you have switched on. Once you have selected an area, you can also export it as a GeoPDF that keeps its location information, or as KML for QGIS, ArcGIS and other mapping software.</p>
+          <div class="chapter-links"><a class="chapter-link" href="help.html#phase-0">See how to explore the map <svg fill="currentColor" viewBox="0 -960 960 960"><path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/></svg></a><a class="chapter-link" href="help.html#phase-0-export-a-map-or-data">See how to download the map <svg fill="currentColor" viewBox="0 -960 960 960"><path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/></svg></a></div>
         </article>
 
         <article class="chapter" data-chapter="1">
-          <h3>Read the land.</h3>
-          <h4>Phase 2 · Site characterisation</h4>
-          <p>What is here. Every layer is clipped to your boundary and summarised in four groups: general context, nature, climate and people. This phase reads and makes no recommendation. Three of its figures carry everything that follows: land cover now, forest cover ten years earlier, and the yearly rate of forest loss.</p>
-          <h4>Phase 3 · Threat profile</h4>
-          <p>What is happening to it. How much of each ecosystem is disturbed and what’s driving that, whether small farms, logging, roads or fire; drainage pressure on peat; and the risk of flood, fire, landslide and drought. It doesn’t pick the pathway. It decides which activities are worth switching on.</p>
-          <div class="tags"><span class="tag">Data Analyser</span></div>
-          <div class="chapter-links"><a class="chapter-link" href="help.html#phase-2">See how to read the site <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="chapter-link" href="help.html#phase-3">See how to read the threat profile <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+          <h3>Data Analyser</h3>
+          <p>Clips every layer to your boundary and reports back. No GIS software or spatial-analysis background needed.</p>
+          <h4 data-shot="assets/help/threat-profile.jpg" data-clip="analyser-threat" data-shot-alt="Data Analyser threat profile showing historical deforestation">What’s there, and what threatens it</h4>
+          <p>The site is summarised as general context, nature, people and climate, with the source and year behind each figure. A threat profile then shows how much of each ecosystem (forest, mangrove or peatland) is disturbed, what’s driving it, and the risk of flood, fire, landslide and drought.</p>
+          <h4 data-shot="assets/help/pathway-blocks.jpg" data-clip="analyser-pathway" data-shot-alt="Data Analyser pathway selection with Protect, Manage and Restore per ecosystem">Which pathway fits, and what it could deliver</h4>
+          <p>Rules match each part of the site to Protect, Manage or Restore and state the reason. You choose the activities, and the tool estimates what they could deliver for nature, people and climate. These are screening figures for planning. They don’t replace field verification.</p>
+          <div class="chapter-links"><a class="chapter-link" href="help.html#phase-2">See how to read the site <svg fill="currentColor" viewBox="0 -960 960 960"><path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/></svg></a><a class="chapter-link" href="help.html#phase-4">See how to choose a pathway <svg fill="currentColor" viewBox="0 -960 960 960"><path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/></svg></a></div>
         </article>
 
         <article class="chapter" data-chapter="2">
-          <h3>Choose the pathway.</h3>
-          <h4>Phase 4 · Pathway selection</h4>
-          <p>Land cover now is compared with land cover ten years earlier, and both are read against the reference ecosystem: a modelled picture of what should grow there, which is the only way to tell degraded land from naturally open land. Each hectare lands on one answer, Protect, Manage, Restore or carbon ineligible, with the reason stated. The activities then follow from the ground, not the label. Restoring forest means planting; restoring mangrove means breaching pond dykes; restoring peat means raising the water table. It’s a screening answer, not a prescription.</p>
-          <h4>Phase 5 · Potential benefit</h4>
-          <p>The benefits those activities are expected to deliver, in three pillars, with carbon projected over the duration you set. Nothing appears here that an earlier phase didn’t select. Say it’s a carbon project and the tool also shows the deductions for leakage, uncertainty and buffer, and the net figures. Screening figures, labelled as such.</p>
-          <div class="tags"><span class="tag">Data Analyser</span></div>
-          <div class="chapter-links"><a class="chapter-link" href="help.html#phase-4">See how to choose a pathway <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="chapter-link" href="help.html#phase-5">See how benefits are estimated <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
-        </article>
-
-        <article class="chapter" data-chapter="3">
-          <h3>Plan it and write it up.</h3>
-          <h4>Phase 6 · Monitoring planning</h4>
-          <p>The activities you chose come with the indicators that can show whether they’re working. Keep, drop or add to them, and set the method and how often each is measured.</p>
-          <h4>Phase 7 · Generate documents</h4>
-          <p>Turn the analysis into a Feasibility Study Document Template, with the maps, baselines, benefit assessment and socio-economic profile a feasibility study starts from, or a CCB Template laid out to the Climate, Community &amp; Biodiversity Standards, which can be paired with Verra or Gold Standard. The tool fills in what it can. The parts only your project knows are left for you. The plan and the documents are built from a saved project, so save first.</p>
-          <div class="tags"><span class="tag">Monitoring Plan</span><span class="tag">Document Generator</span></div>
-          <div class="chapter-links"><a class="chapter-link" href="help.html#monitoring">See how to plan monitoring <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="chapter-link" href="help.html#documents">See how to generate a document <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
-        </article>
-
-        <article class="chapter" data-chapter="4">
-          <h3>Keep it in one place.</h3>
-          <h4>After the analysis · Manage your projects</h4>
-          <p>Every project you save sits in My Project: the boundary, the analysis, the documents, the monitoring plan and who you’ve shared it with. Set the privacy level, invite collaborators, import a project that’s already running, and when it’s ready, put it forward to the NbS Incubator. Saving is also what unlocks the documents and the monitoring plan.</p>
-          <div class="tags"><span class="tag">My Project</span></div>
-          <div class="chapter-links"><a class="chapter-link" href="help.html#projects">See how to manage projects <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+          <h3>Document Generator</h3>
+          <p>Turns a saved analysis into a document you can put in front of a funder.</p>
+          <h4 data-shot="assets/help/docgen-sections.jpg" data-clip="docgen-templates" data-shot-alt="Document Generator with its section list">Two templates to start from</h4>
+          <p>A Feasibility Document, with the maps, baselines, benefit assessment and socio-economic profile a feasibility study starts from. Or a project document laid out to the Climate, Community &amp; Biodiversity (CCB) Standards, which can be paired with Verra or Gold Standard.</p>
+          <h4 data-shot="assets/help/docgen-sections.jpg" data-clip="docgen-drafted" data-shot-alt="Document Generator with its section list">Drafted from your analysis</h4>
+          <p>Sections the analysis can support are filled in and marked, and you can edit every one. The parts only your project knows, such as land tenure, consent and benefit sharing, are left for you. Download the result as an editable Word document. Documents are built from a saved project, which needs a free account.</p>
+          <div class="chapter-links"><a class="chapter-link" href="help.html#documents">See how to generate a document <svg fill="currentColor" viewBox="0 -960 960 960"><path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/></svg></a></div>
         </article>
 
       </div>
@@ -194,300 +180,86 @@
      3 · DATA FLOW — ASEAN MRV Framework, global to site
      ============================================================ -->
 <section class="band band-dark" data-screen-label="From global data to your site">
-  <div class="wrap">
-    <div class="head proof-head reveal">
-      <h2>From global data<br><span class="em">to your site’s context.</span></h2>
-      <p>NbS Tool follows the ASEAN MRV Framework. Four global standards and the eleven Member States’ own systems feed one shared set of indicators, and the data behind it comes in three tiers, from regional maps down to your own field plots. Tap any box to see where it leads.</p>
-    </div>
-
-    <!-- Redrawn from the framework's "thinking process" diagram (ASEAN MRV Framework, UK PACT ASEAN GTF).
-         Sources per node match js/technical-docs.js. TODO(content): confirm the 85-item count against the published framework. -->
-    <div class="mrv reveal">
-      <div class="mrv-flow" id="mrvFlow">
-        <div class="mf-stage mf-s1">
-          <div class="mf-step"><span class="mf-no">01</span><span class="mf-sl">Two starting points</span></div>
-          <div class="mf-row">
-            <div class="mf-global"><div class="mf-label">Global standards</div><button type="button" class="mf-node has-down" data-id="iucn" data-desc="Sets the test for what counts as a Nature-based Solution: eight criteria a project has to meet." data-href="technical-docs.html#docs/scope"><span class="mf-t">IUCN Global Standard for NbS</span></button><button type="button" class="mf-node has-down" data-id="ncs" data-desc="Groups the land actions that store carbon or stop it escaping. That grouping is where the protect, manage and restore pathways come from." data-href="technical-docs.html#docs/phase4a/phase4a-outcomes"><span class="mf-t">Natural Climate Solutions framework</span></button><button type="button" class="mf-node has-down" data-id="ec" data-desc="A handbook for measuring what an NbS changes for climate, nature and society. The framework takes from it the habit of reporting all three together." data-href="technical-docs.html#docs/phase5"><span class="mf-t">European Commission NbS impact assessment</span></button><button type="button" class="mf-node has-down" data-id="ccb" data-desc="The Climate, Community &amp; Biodiversity Standard, which the tool’s project document is written to meet." data-href="technical-docs.html#docs/science-limits"><span class="mf-t">Verra CCB Standard</span></button></div>
-            <div class="mf-countries"><div class="mf-label" aria-hidden="true">Country standards</div><button type="button" class="mf-node mf-country" data-id="country" data-desc="Each ASEAN Member State already tracks some of this through its own ministries and statistics office. The framework starts from that instead of asking countries to measure twice." data-href="technical-docs.html#docs/phase2/phase2-people"><span class="mf-t sr-only">Country standards</span><small>Eleven Member States: what each already measures, and the national office that produces it.</small><span class="mf-flags" aria-hidden="true"><img src="https://cdnjs.cloudflare.com/ajax/libs/flag-icons/7.2.3/flags/1x1/bn.svg" alt="" title="Brunei Darussalam" width="22" height="22" loading="lazy" /><img src="https://cdnjs.cloudflare.com/ajax/libs/flag-icons/7.2.3/flags/1x1/kh.svg" alt="" title="Cambodia" width="22" height="22" loading="lazy" /><img src="https://cdnjs.cloudflare.com/ajax/libs/flag-icons/7.2.3/flags/1x1/id.svg" alt="" title="Indonesia" width="22" height="22" loading="lazy" /><img src="https://cdnjs.cloudflare.com/ajax/libs/flag-icons/7.2.3/flags/1x1/la.svg" alt="" title="Lao PDR" width="22" height="22" loading="lazy" /><img src="https://cdnjs.cloudflare.com/ajax/libs/flag-icons/7.2.3/flags/1x1/my.svg" alt="" title="Malaysia" width="22" height="22" loading="lazy" /><img src="https://cdnjs.cloudflare.com/ajax/libs/flag-icons/7.2.3/flags/1x1/mm.svg" alt="" title="Myanmar" width="22" height="22" loading="lazy" /><img src="https://cdnjs.cloudflare.com/ajax/libs/flag-icons/7.2.3/flags/1x1/ph.svg" alt="" title="Philippines" width="22" height="22" loading="lazy" /><img src="https://cdnjs.cloudflare.com/ajax/libs/flag-icons/7.2.3/flags/1x1/sg.svg" alt="" title="Singapore" width="22" height="22" loading="lazy" /><img src="https://cdnjs.cloudflare.com/ajax/libs/flag-icons/7.2.3/flags/1x1/th.svg" alt="" title="Thailand" width="22" height="22" loading="lazy" /><img src="https://cdnjs.cloudflare.com/ajax/libs/flag-icons/7.2.3/flags/1x1/tl.svg" alt="" title="Timor-Leste" width="22" height="22" loading="lazy" /><img src="https://cdnjs.cloudflare.com/ajax/libs/flag-icons/7.2.3/flags/1x1/vn.svg" alt="" title="Viet Nam" width="22" height="22" loading="lazy" /></span></button></div>
-          </div>
-        </div>
-        <div class="mf-stage mf-s2">
-          <div class="mf-step"><span class="mf-no">02</span><span class="mf-sl">What the standards settle</span></div>
-          <div class="mf-row">
-            <button type="button" class="mf-node mf-concept has-down" data-id="def" data-desc="The tool uses the definition UN member states agreed at the UN Environment Assembly in 2022, so “NbS” means the same thing in every country it covers." data-href="technical-docs.html#docs/scope"><span class="mf-t">Definition of NbS</span><small>UNEA (2022)</small></button>
-            <button type="button" class="mf-node mf-concept has-down" data-id="pathway" data-desc="Every site lands on one pathway, decided by the state its ecosystem is in today and where it’s heading." data-href="technical-docs.html#docs/phase4a/phase4a-matrix"><span class="mf-t">NbS pathway</span><small>protect, manage, restore</small></button>
-            <button type="button" class="mf-node mf-concept mf-type has-down" data-id="type" data-desc="A carbon figure never travels alone: the same report carries what the project does for nature and for the people who live there." data-href="technical-docs.html#docs/phase5"><span class="mf-t">NbS type and joint reporting</span><small>climate, nature and people reported together</small></button>
-            <button type="button" class="mf-node mf-concept mf-cind" data-id="cind" data-desc="What each country already reports, matched to the shared list so a project and a ministry describe the same thing in the same words." data-href="technical-docs.html#docs/phase2/phase2-people"><span class="mf-t">Country indicators</span></button>
-          </div>
-        </div>
-        <div class="mf-stage mf-s3">
-          <div class="mf-step"><span class="mf-no">03</span><span class="mf-sl">One shared list</span></div>
-          <div class="mf-row">
-            <button type="button" class="mf-node mf-core mf-set has-down short" data-id="set" data-desc="One shared list that every monitoring plan draws from. Each indicator says what to measure and which data route can feed it." data-href="technical-docs.html#docs/science-method"><span class="mf-t">Indicator set of the framework</span><small>85 items</small></button>
-          </div>
-        </div>
-        <div class="mf-stage mf-s4">
-          <div class="mf-step"><span class="mf-no">04</span><span class="mf-sl">Three data routes</span></div>
-          <div class="mf-row">
-            <div class="mf-tiers"><button type="button" class="mf-node mf-tier has-down" data-id="t1" data-desc="Global datasets clipped to Southeast Asia and aligned to the SERVIR Regional Land Cover Monitoring System, on a single 30 m grid. Every site gets this on day one, before anyone visits." data-href="technical-docs.html#docs/landcover"><span class="mf-t">Regional layers</span><small>Global datasets harmonised with SERVIR-Mekong’s land cover onto one 30 m grid</small></button><button type="button" class="mf-node mf-tier has-down" data-id="t2" data-desc="Official figures from each country’s statistics office (BPS, DOSM, PSA and the rest), tagged with the administrative level they come from: village, district, province or country." data-href="technical-docs.html#docs/phase2/phase2-people"><span class="mf-t">National statistics</span><small>From eleven national statistics offices, labelled by level</small></button><button type="button" class="mf-node mf-tier has-down" data-id="t3" data-desc="The measurements your team collects in the field. Where they exist, they take over from the regional and national figures." data-href="technical-docs.html#docs/limitations"><span class="mf-t">Field data</span><small>What implementers measure on site</small></button></div>
-          </div>
-        </div>
-        <div class="mf-stage mf-s5">
-          <div class="mf-step"><span class="mf-no">05</span><span class="mf-sl">Context for your site</span></div>
-          <div class="mf-row">
-            <button type="button" class="mf-node mf-core mf-ctx" data-id="ctx" data-desc="The three routes come together for your boundary. You can still see whether a number came from a regional map, a national table or your own plots, which is what an auditor will ask first." data-href="technical-docs.html#docs/science-data"><span class="mf-t">A dataset that fits your site</span><small>Regional, national and field data in one place, each figure pointing back to its source</small></button>
-          </div>
-        </div>
-      </div>
-
-      <aside class="mf-detail">
-        <div aria-live="polite">
-          <div class="mf-kicker" id="mfKicker">How it fits together</div>
-          <h3 id="mfTitle">Start anywhere</h3>
-          <p id="mfDesc">Pick a box in the flow to see what it does, what it feeds, and where the methodology explains it.</p>
-        </div>
-        <a class="cbtn cbtn-text mf-more" id="mfMore" href="technical-docs.html">How this works <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-      </aside>
-    </div>
-  </div>
-</section>
-
-
-<!-- ============================================================
-     4 · DEFINITION — the triple benefit
-     ============================================================ -->
-<section class="band band-paper grain" data-screen-label="What is NbS">
-  <div class="wrap">
-    <div class="triple-lead">
-      <div class="head">
-        <h2 class="reveal">Nature, people, climate. <span class="em">A good project answers to all three.</span></h2>
-        <p class="reveal">A Nature-based Solution protects, manages or restores an ecosystem to deal with a problem people actually have. The Coalition’s test is whether a project delivers for nature, people and climate at the same time, so the tool reports its results in those three columns.</p>
-      </div>
-      <div class="triple-logo-note reveal">
-        <div class="tln-marks">
-          <img src="assets/scene-logo.png" alt="SCeNe Coalition" />
-          <span class="tln-rule" aria-hidden="true"></span>
-          <img class="tln-nbs" src="assets/nbs-logo-dark.png" alt="NbS Tool" />
-        </div>
-        <p>NbS Tool is developed under the <b>SCeNe Coalition</b>, the Southeast Asia Climate and Nature-based Solutions Coalition: non-governmental organisations with a long presence in the region, working to get more good projects funded.</p>
-        <a class="cbtn cbtn-text tln-link" href="https://scenecoalition.org" target="_blank" rel="noopener">Visit scenecoalition.org <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="sr-only"> (opens in a new tab)</span></a>
-      </div>
-    </div>
-
-    <div class="triple">
-      <article class="tcard nature reveal">
-        <div class="tc-photo"><img src="assets/home/triple-benefit-nature-orangutan.webp" alt="An orangutan hanging between branches in the rainforest canopy" loading="lazy" /></div>
-        <div class="tc-body">
-          <div class="tc-head">
-            <div class="ic"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21V11M12 11c0-3-2-5.5-5-6m5 6c0-3.5 2.5-6 6-6.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 21c-4 0-8-3-8-8 0-2 1-4 1-4s3 1 5 4M12 21c4 0 8-3 8-9 0 0-3 0-5 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-            <h3>Nature</h3>
-          </div>
-          <p>What’s living there and how intact it is: forest integrity, habitat for threatened species, overlap with protected areas and Key Biodiversity Areas, and whether the habitat still connects.</p>
-        </div>
-      </article>
-      <article class="tcard people reveal">
-        <div class="tc-photo"><img src="assets/home/triple-benefit-people.webp" alt="Community members mapping their landscape around a long table" loading="lazy" /></div>
-        <div class="tc-body">
-          <div class="tc-head">
-            <div class="ic"><svg viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3" stroke="currentColor" stroke-width="1.8"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16 7a3 3 0 010 6M21 20c0-2.5-1.5-4.6-3.5-5.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></div>
-            <h3>People</h3>
-          </div>
-          <p>Who lives with the site: how many people, how exposed they are to flood and drought, and the official district figures on work, income, schooling and water. Tenure and consent still come from the community itself.</p>
-        </div>
-      </article>
-      <article class="tcard climate reveal">
-        <div class="tc-photo"><img src="assets/home/triple-benefit-climate.webp" alt="Forested mountain ridges of the Kibongcog landscape" loading="lazy" /></div>
-        <div class="tc-body">
-          <div class="tc-head">
-            <div class="ic"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.8"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></div>
-            <h3>Climate</h3>
-          </div>
-          <p>Carbon in the trees and in the soil, measured now and projected over the project’s life: what protecting a forest keeps out of the air, what restoring one could pull back in. Screening figures, labelled as such.</p>
-        </div>
-      </article>
-    </div>
-  </div>
-</section>
-
-
-<!-- ============================================================
-     5 · FIELD STORIES + TESTIMONY — what we heard on the ground, then what users said
-     ============================================================ -->
-<section class="band band-dark proof" id="portfolio" data-screen-label="Stories and testimony">
-  <div class="wrap">
-    <div class="head proof-head reveal">
+  <!-- Field stories gallery (DEC-98). Five site tiles scattered around the heading; each tile shows one of
+       its photos at random and opens the shared .pg-modal with every photo and the field note.
+       Card copy follows the GUI Design Document V3.1 (Launch Ver), section 5 · Field stories.
+       Each tile's <template> holds the modal content: its photos, then the story. -->
+  <div class="pgal">
+    <div class="pg-centre head reveal">
       <h2>Before anyone drew a boundary, <span class="em">we went and listened.</span></h2>
       <!-- TODO(content): confirm each site's real next step (scoping, documents, NbS Incubator) with the field team before launch. -->
       <p>SCeNe Coalition teams went to these sites to sit with the people who look after the land, before any boundary was drawn. What they heard decides how each project is scoped in NbS Tool, what its project document says, and what is put forward to the NbS Incubator. One thing held everywhere: the communities agreed to a study, not to a project. Every rule that comes later goes back to them for a decision.</p>
     </div>
-
-    <!-- Card copy follows the GUI Design Document V3.1 (Launch Ver), section 5 · Field stories.
-         Semendo reuses the Lematang Waterfall photo (same HaKi landscape). Mbeliling has no photo yet.
-         Teaser marquee. The second set is a visual clone for the seamless loop, hidden from AT. -->
-    <div class="pmarquee reveal">
-      <div class="pmarquee-track">
-        <div class="pflip" role="button" tabindex="0" aria-pressed="false" aria-label="Kibongcog, Bukidnon, Philippines. Show details.">
-          <div class="pflip-in">
-            <div class="pf-face pf-front">
-              <img src="assets/home/portfolio/kibongcog.jpg" alt="Aerial view of the forested Kibongcog valley" loading="lazy" />
-              <span class="pf-veil" aria-hidden="true"></span>
-              <h4>Kibongcog</h4>
-              <p class="pf-loc"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s-7-5-7-11a7 7 0 1114 0c0 6-7 11-7 11z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="2"/></svg>Bukidnon, Philippines</p>
-            </div>
-            <div class="pf-face pf-back">
-              <h4>Kibongcog</h4>
-              <p class="pf-loc"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s-7-5-7-11a7 7 0 1114 0c0 6-7 11-7 11z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="2"/></svg>Bukidnon, Philippines</p>
-              <div class="pf-copy"><p>The Kibongcog Tigwahanon Ancestral Domain, in San Fernando Municipality, Bukidnon, Mindanao, covers approximately 4,947.55 hectares which offers significant potential for climate mitigation, forest conservation, biodiversity protection, and ecosystem restoration. The project builds on Indigenous Peoples’ stewardship of their ancestral domain, supported by women’s active participation in nursery management, seedling preparation, and Philippine Eagle habitat protection. In partnership with PEF, the landscape also provides important habitats for threatened species, including the Philippine Eagle and Rafflesia, while proposed coffee, durian, and rambutan value chains offer opportunities to diversify community livelihoods.</p></div>
-              <a class="pf-ext" href="#" aria-label="Open Kibongcog"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 4h6v6M20 4l-8.5 8.5M18 14v5a1 1 0 01-1 1H5a1 1 0 01-1-1V7a1 1 0 011-1h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-            </div>
-          </div>
-        </div>
-        <div class="pflip" role="button" tabindex="0" aria-pressed="false" aria-label="Semendo Landscape, South Sumatra, Indonesia. Show details.">
-          <div class="pflip-in">
-            <div class="pf-face pf-front">
-              <img src="assets/home/portfolio/lematang-waterfall.jpg" alt="Waterfall spilling into a pool in dense rainforest" loading="lazy" />
-              <span class="pf-veil" aria-hidden="true"></span>
-              <h4>Semendo Landscape</h4>
-              <p class="pf-loc"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s-7-5-7-11a7 7 0 1114 0c0 6-7 11-7 11z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="2"/></svg>South Sumatra, Indonesia</p>
-            </div>
-            <div class="pf-face pf-back">
-              <h4>Semendo Landscape</h4>
-              <p class="pf-loc"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s-7-5-7-11a7 7 0 1114 0c0 6-7 11-7 11z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="2"/></svg>South Sumatra, Indonesia</p>
-              <div class="pf-copy"><p>The Semendo landscape, Muara Enim District, South Sumatra, covers approximately 11,657 hectares across six Village Forest (<em>Hutan Desa</em>) areas, offering significant potential for climate mitigation, forest conservation, and ecosystem restoration. Led by Yayasan Hutan Kita Institute (HaKi) in partnership with WRI Indonesia, the project combines the protection of 6,601 hectares of forest with the restoration of 4,628 hectares. The landscape supports important biodiversity, including threatened species such as the Sumatran Tiger, Sunda Pangolin, Malayan Tapir, and Sun Bear. Building on legally recognised community forest management rights and local customary practices, including the <em>Tunggu Tubang</em> matrilineal system, the initiative also aims to strengthen community stewardship and sustainable livelihoods through coffee agroforestry and non-timber forest products, such as Jernang resin.</p></div>
-              <a class="pf-ext" href="#" aria-label="Open Semendo Landscape"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 4h6v6M20 4l-8.5 8.5M18 14v5a1 1 0 01-1 1H5a1 1 0 01-1-1V7a1 1 0 011-1h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-            </div>
-          </div>
-        </div>
-        <div class="pflip" role="button" tabindex="0" aria-pressed="false" aria-label="Teluk Pambang, Riau, Indonesia. Show details.">
-          <div class="pflip-in">
-            <div class="pf-face pf-front">
-              <img src="assets/home/portfolio/teluk-pambang.jpg" alt="Field team discussing measurements under mangrove canopy" loading="lazy" />
-              <span class="pf-veil" aria-hidden="true"></span>
-              <h4>Teluk Pambang</h4>
-              <p class="pf-loc"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s-7-5-7-11a7 7 0 1114 0c0 6-7 11-7 11z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="2"/></svg>Riau, Indonesia</p>
-            </div>
-            <div class="pf-face pf-back">
-              <h4>Teluk Pambang</h4>
-              <p class="pf-loc"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s-7-5-7-11a7 7 0 1114 0c0 6-7 11-7 11z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="2"/></svg>Riau, Indonesia</p>
-              <div class="pf-copy"><p>Teluk Pambang Village, Bantan Sub-District, Bengkalis District, Riau Province, contains approximately 979 hectares of mangrove forest, one of the largest on Bengkalis Island. The landscape offers significant potential for blue carbon, biodiversity conservation, and ecosystem restoration, particularly in addressing degradation caused by aquaculture, settlement expansion, and oil palm cultivation. Managed under the Village Forest (<em>Hutan Desa</em>) scheme, it provides opportunities to strengthen community-based ecological mangrove restoration while promoting sustainable livelihoods, including alternatives to charcoal production. In partnership with YKAN, the project also promotes inclusive community engagement and women’s participation in NbS activities, including nursery management, planting, and logistical support.</p></div>
-              <a class="pf-ext" href="#" aria-label="Open Teluk Pambang"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 4h6v6M20 4l-8.5 8.5M18 14v5a1 1 0 01-1 1H5a1 1 0 01-1-1V7a1 1 0 011-1h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-            </div>
-          </div>
-        </div>
-        <div class="pflip" role="button" tabindex="0" aria-pressed="false" aria-label="Kampong Thom, Cambodia. Show details.">
-          <div class="pflip-in">
-            <div class="pf-face pf-front">
-              <img src="assets/home/portfolio/cambodia.jpg" alt="Survey group gathered among slender trees in dry forest" loading="lazy" />
-              <span class="pf-veil" aria-hidden="true"></span>
-              <h4>Kampong Thom</h4>
-              <p class="pf-loc"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s-7-5-7-11a7 7 0 1114 0c0 6-7 11-7 11z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="2"/></svg>Cambodia</p>
-            </div>
-            <div class="pf-face pf-back">
-              <h4>Kampong Thom</h4>
-              <p class="pf-loc"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s-7-5-7-11a7 7 0 1114 0c0 6-7 11-7 11z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="2"/></svg>Cambodia</p>
-              <div class="pf-copy"><p>Supported by RECOFTC, the project covers approximately 1,386 hectares across three Community Forests (CFs), Trapeang Lapeak, Ou Pong Roung, and Preah Sophea in Kampong Thom Province, central Cambodia. The landscape offers opportunities for climate mitigation, biodiversity conservation, and forest restoration through the planting of fast-growing pioneer species alongside longer-lived native species. The project also aims to strengthen community-based forest management and sustainable livelihoods through restoration and potential timber-related activities. Building on existing community forest management plans, the initiative promotes inclusive participation and culturally appropriate engagement with the Kuoy community in Preah Sophea.</p></div>
-              <a class="pf-ext" href="#" aria-label="Open Kampong Thom"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 4h6v6M20 4l-8.5 8.5M18 14v5a1 1 0 01-1 1H5a1 1 0 01-1-1V7a1 1 0 011-1h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-            </div>
-          </div>
-        </div>
-        <div class="pflip" role="button" tabindex="0" aria-pressed="false" aria-label="Mbeliling Landscape, East Nusa Tenggara, Indonesia. Show details.">
-          <div class="pflip-in">
-            <div class="pf-face pf-front">
-              <!-- TODO(content): no photo yet; the front shows the card gradient until one is supplied. -->
-              <span class="pf-veil" aria-hidden="true"></span>
-              <h4>Mbeliling Landscape</h4>
-              <p class="pf-loc"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s-7-5-7-11a7 7 0 1114 0c0 6-7 11-7 11z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="2"/></svg>East Nusa Tenggara, Indonesia</p>
-            </div>
-            <div class="pf-face pf-back">
-              <h4>Mbeliling Landscape</h4>
-              <p class="pf-loc"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s-7-5-7-11a7 7 0 1114 0c0 6-7 11-7 11z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="2"/></svg>East Nusa Tenggara, Indonesia</p>
-              <div class="pf-copy"><p>The Mbeliling landscape, West Manggarai, Flores, offers significant potential for climate mitigation, forest restoration, and biodiversity conservation. Led by Burung Indonesia, the proposed project covers an initial 1,649 hectare pilot across Liang Ndara and Tondong Belang. Combining forest protection and ecosystem restoration, the initiative aims to strengthen community-based forest management and sustainable livelihoods. The area forms part of the Mbeliling–Tanjung Kerita Mese Key Biodiversity Area, providing habitat for threatened species, including the Flores Hawk-eagle, Yellow-crested Cockatoo, and Flores Monarch, while supporting water supply to Labuan Bajo. The project also seeks to promote community participation and diversify local income through watershed payments for ecosystem services and sustainable candlenut production.</p></div>
-              <a class="pf-ext" href="#" aria-label="Open Mbeliling Landscape"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 4h6v6M20 4l-8.5 8.5M18 14v5a1 1 0 01-1 1H5a1 1 0 01-1-1V7a1 1 0 011-1h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-            </div>
-          </div>
-        </div>
-        <div class="pflip" role="button" tabindex="-1" aria-pressed="false" aria-hidden="true">
-          <div class="pflip-in">
-            <div class="pf-face pf-front">
-              <img src="assets/home/portfolio/kibongcog.jpg" alt="" loading="lazy" />
-              <span class="pf-veil" aria-hidden="true"></span>
-              <h4>Kibongcog</h4>
-              <p class="pf-loc"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s-7-5-7-11a7 7 0 1114 0c0 6-7 11-7 11z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="2"/></svg>Bukidnon, Philippines</p>
-            </div>
-            <div class="pf-face pf-back">
-              <h4>Kibongcog</h4>
-              <p class="pf-loc"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s-7-5-7-11a7 7 0 1114 0c0 6-7 11-7 11z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="2"/></svg>Bukidnon, Philippines</p>
-              <div class="pf-copy"><p>The Kibongcog Tigwahanon Ancestral Domain, in San Fernando Municipality, Bukidnon, Mindanao, covers approximately 4,947.55 hectares which offers significant potential for climate mitigation, forest conservation, biodiversity protection, and ecosystem restoration. The project builds on Indigenous Peoples’ stewardship of their ancestral domain, supported by women’s active participation in nursery management, seedling preparation, and Philippine Eagle habitat protection. In partnership with PEF, the landscape also provides important habitats for threatened species, including the Philippine Eagle and Rafflesia, while proposed coffee, durian, and rambutan value chains offer opportunities to diversify community livelihoods.</p></div>
-              <a class="pf-ext" href="#" aria-label="Open Kibongcog"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 4h6v6M20 4l-8.5 8.5M18 14v5a1 1 0 01-1 1H5a1 1 0 01-1-1V7a1 1 0 011-1h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-            </div>
-          </div>
-        </div>
-        <div class="pflip" role="button" tabindex="-1" aria-pressed="false" aria-hidden="true">
-          <div class="pflip-in">
-            <div class="pf-face pf-front">
-              <img src="assets/home/portfolio/lematang-waterfall.jpg" alt="" loading="lazy" />
-              <span class="pf-veil" aria-hidden="true"></span>
-              <h4>Semendo Landscape</h4>
-              <p class="pf-loc"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s-7-5-7-11a7 7 0 1114 0c0 6-7 11-7 11z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="2"/></svg>South Sumatra, Indonesia</p>
-            </div>
-            <div class="pf-face pf-back">
-              <h4>Semendo Landscape</h4>
-              <p class="pf-loc"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s-7-5-7-11a7 7 0 1114 0c0 6-7 11-7 11z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="2"/></svg>South Sumatra, Indonesia</p>
-              <div class="pf-copy"><p>The Semendo landscape, Muara Enim District, South Sumatra, covers approximately 11,657 hectares across six Village Forest (<em>Hutan Desa</em>) areas, offering significant potential for climate mitigation, forest conservation, and ecosystem restoration. Led by Yayasan Hutan Kita Institute (HaKi) in partnership with WRI Indonesia, the project combines the protection of 6,601 hectares of forest with the restoration of 4,628 hectares. The landscape supports important biodiversity, including threatened species such as the Sumatran Tiger, Sunda Pangolin, Malayan Tapir, and Sun Bear. Building on legally recognised community forest management rights and local customary practices, including the <em>Tunggu Tubang</em> matrilineal system, the initiative also aims to strengthen community stewardship and sustainable livelihoods through coffee agroforestry and non-timber forest products, such as Jernang resin.</p></div>
-              <a class="pf-ext" href="#" aria-label="Open Semendo Landscape"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 4h6v6M20 4l-8.5 8.5M18 14v5a1 1 0 01-1 1H5a1 1 0 01-1-1V7a1 1 0 011-1h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-            </div>
-          </div>
-        </div>
-        <div class="pflip" role="button" tabindex="-1" aria-pressed="false" aria-hidden="true">
-          <div class="pflip-in">
-            <div class="pf-face pf-front">
-              <img src="assets/home/portfolio/teluk-pambang.jpg" alt="" loading="lazy" />
-              <span class="pf-veil" aria-hidden="true"></span>
-              <h4>Teluk Pambang</h4>
-              <p class="pf-loc"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s-7-5-7-11a7 7 0 1114 0c0 6-7 11-7 11z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="2"/></svg>Riau, Indonesia</p>
-            </div>
-            <div class="pf-face pf-back">
-              <h4>Teluk Pambang</h4>
-              <p class="pf-loc"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s-7-5-7-11a7 7 0 1114 0c0 6-7 11-7 11z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="2"/></svg>Riau, Indonesia</p>
-              <div class="pf-copy"><p>Teluk Pambang Village, Bantan Sub-District, Bengkalis District, Riau Province, contains approximately 979 hectares of mangrove forest, one of the largest on Bengkalis Island. The landscape offers significant potential for blue carbon, biodiversity conservation, and ecosystem restoration, particularly in addressing degradation caused by aquaculture, settlement expansion, and oil palm cultivation. Managed under the Village Forest (<em>Hutan Desa</em>) scheme, it provides opportunities to strengthen community-based ecological mangrove restoration while promoting sustainable livelihoods, including alternatives to charcoal production. In partnership with YKAN, the project also promotes inclusive community engagement and women’s participation in NbS activities, including nursery management, planting, and logistical support.</p></div>
-              <a class="pf-ext" href="#" aria-label="Open Teluk Pambang"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 4h6v6M20 4l-8.5 8.5M18 14v5a1 1 0 01-1 1H5a1 1 0 01-1-1V7a1 1 0 011-1h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-            </div>
-          </div>
-        </div>
-        <div class="pflip" role="button" tabindex="-1" aria-pressed="false" aria-hidden="true">
-          <div class="pflip-in">
-            <div class="pf-face pf-front">
-              <img src="assets/home/portfolio/cambodia.jpg" alt="" loading="lazy" />
-              <span class="pf-veil" aria-hidden="true"></span>
-              <h4>Kampong Thom</h4>
-              <p class="pf-loc"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s-7-5-7-11a7 7 0 1114 0c0 6-7 11-7 11z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="2"/></svg>Cambodia</p>
-            </div>
-            <div class="pf-face pf-back">
-              <h4>Kampong Thom</h4>
-              <p class="pf-loc"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s-7-5-7-11a7 7 0 1114 0c0 6-7 11-7 11z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="2"/></svg>Cambodia</p>
-              <div class="pf-copy"><p>Supported by RECOFTC, the project covers approximately 1,386 hectares across three Community Forests (CFs), Trapeang Lapeak, Ou Pong Roung, and Preah Sophea in Kampong Thom Province, central Cambodia. The landscape offers opportunities for climate mitigation, biodiversity conservation, and forest restoration through the planting of fast-growing pioneer species alongside longer-lived native species. The project also aims to strengthen community-based forest management and sustainable livelihoods through restoration and potential timber-related activities. Building on existing community forest management plans, the initiative promotes inclusive participation and culturally appropriate engagement with the Kuoy community in Preah Sophea.</p></div>
-              <a class="pf-ext" href="#" aria-label="Open Kampong Thom"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 4h6v6M20 4l-8.5 8.5M18 14v5a1 1 0 01-1 1H5a1 1 0 01-1-1V7a1 1 0 011-1h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-            </div>
-          </div>
-        </div>
-        <div class="pflip" role="button" tabindex="-1" aria-pressed="false" aria-hidden="true">
-          <div class="pflip-in">
-            <div class="pf-face pf-front">
-              <span class="pf-veil" aria-hidden="true"></span>
-              <h4>Mbeliling Landscape</h4>
-              <p class="pf-loc"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s-7-5-7-11a7 7 0 1114 0c0 6-7 11-7 11z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="2"/></svg>East Nusa Tenggara, Indonesia</p>
-            </div>
-            <div class="pf-face pf-back">
-              <h4>Mbeliling Landscape</h4>
-              <p class="pf-loc"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s-7-5-7-11a7 7 0 1114 0c0 6-7 11-7 11z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="2"/></svg>East Nusa Tenggara, Indonesia</p>
-              <div class="pf-copy"><p>The Mbeliling landscape, West Manggarai, Flores, offers significant potential for climate mitigation, forest restoration, and biodiversity conservation. Led by Burung Indonesia, the proposed project covers an initial 1,649 hectare pilot across Liang Ndara and Tondong Belang. Combining forest protection and ecosystem restoration, the initiative aims to strengthen community-based forest management and sustainable livelihoods. The area forms part of the Mbeliling–Tanjung Kerita Mese Key Biodiversity Area, providing habitat for threatened species, including the Flores Hawk-eagle, Yellow-crested Cockatoo, and Flores Monarch, while supporting water supply to Labuan Bajo. The project also seeks to promote community participation and diversify local income through watershed payments for ecosystem services and sustainable candlenut production.</p></div>
-              <a class="pf-ext" href="#" aria-label="Open Mbeliling Landscape"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 4h6v6M20 4l-8.5 8.5M18 14v5a1 1 0 01-1 1H5a1 1 0 01-1-1V7a1 1 0 011-1h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+      <button type="button" class="pg-tile pg-t1" aria-haspopup="dialog">
+        <span class="pg-photo"><img src="assets/home/portfolio/kampong-thom-1.webp" alt="" loading="lazy" decoding="async" width="840" height="560" /></span>
+        <span class="pg-name">Kampong Thom</span>
+        <span class="pg-loc"><svg class="pg-pin" aria-hidden="true" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="M536.5-503.5Q560-527 560-560t-23.5-56.5Q513-640 480-640t-56.5 23.5Q400-593 400-560t23.5 56.5Q447-480 480-480t56.5-23.5ZM480-186q122-112 181-203.5T720-552q0-109-69.5-178.5T480-800q-101 0-170.5 69.5T240-552q0 71 59 162.5T480-186Zm0 106Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Zm0-480Z"/></svg>Cambodia</span>
+        <template>
+            <img src="assets/home/portfolio/kampong-thom-1.webp" alt="Survey team walking through dense young forest" decoding="async" width="840" height="560" />
+            <img src="assets/home/portfolio/kampong-thom-2.webp" alt="Dry grassland with scattered tall trees" decoding="async" width="840" height="560" />
+            <img src="assets/home/portfolio/kampong-thom-3.webp" alt="Open wetland grassland edged by trees" decoding="async" width="840" height="560" />
+            <p>Supported by RECOFTC, the project covers approximately 1,386 hectares across three Community Forests (CFs), Trapeang Lapeak, Ou Pong Roung, and Preah Sophea in Kampong Thom Province, central Cambodia. The landscape offers opportunities for climate mitigation, biodiversity conservation, and forest restoration through the planting of fast-growing pioneer species alongside longer-lived native species. The project also aims to strengthen community-based forest management and sustainable livelihoods through restoration and potential timber-related activities. Building on existing community forest management plans, the initiative promotes inclusive participation and culturally appropriate engagement with the Kuoy community in Preah Sophea.</p>
+        </template>
+      </button>
+      <button type="button" class="pg-tile pg-t2" aria-haspopup="dialog">
+        <span class="pg-photo"><img src="assets/home/portfolio/kibongcog-1.webp" alt="" loading="lazy" decoding="async" width="840" height="560" /></span>
+        <span class="pg-name">Kibongcog</span>
+        <span class="pg-loc"><svg class="pg-pin" aria-hidden="true" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="M536.5-503.5Q560-527 560-560t-23.5-56.5Q513-640 480-640t-56.5 23.5Q400-593 400-560t23.5 56.5Q447-480 480-480t56.5-23.5ZM480-186q122-112 181-203.5T720-552q0-109-69.5-178.5T480-800q-101 0-170.5 69.5T240-552q0 71 59 162.5T480-186Zm0 106Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Zm0-480Z"/></svg>Bukidnon, Philippines</span>
+        <template>
+            <img src="assets/home/portfolio/kibongcog-1.webp" alt="Tall trees rising above dense forest in Kibongcog" decoding="async" width="840" height="560" />
+            <img src="assets/home/portfolio/kibongcog-2.webp" alt="A Philippine Eagle spreading its wings on a branch" decoding="async" width="840" height="560" />
+            <img src="assets/home/portfolio/kibongcog-3.webp" alt="A Rafflesia flower in bloom on the forest floor" decoding="async" width="840" height="560" />
+            <p>The Kibongcog Tigwahanon Ancestral Domain, in San Fernando Municipality, Bukidnon, Mindanao, covers approximately 4,947.55 hectares which offers significant potential for climate mitigation, forest conservation, biodiversity protection, and ecosystem restoration. The project builds on Indigenous Peoples’ stewardship of their ancestral domain, supported by women’s active participation in nursery management, seedling preparation, and Philippine Eagle habitat protection. In partnership with PEF, the landscape also provides important habitats for threatened species, including the Philippine Eagle and Rafflesia, while proposed coffee, durian, and rambutan value chains offer opportunities to diversify community livelihoods.</p>
+        </template>
+      </button>
+      <button type="button" class="pg-tile pg-t3" aria-haspopup="dialog">
+        <span class="pg-photo"><img src="assets/home/portfolio/teluk-pambang-1.webp" alt="" loading="lazy" decoding="async" width="840" height="560" /></span>
+        <span class="pg-name">Teluk Pambang</span>
+        <span class="pg-loc"><svg class="pg-pin" aria-hidden="true" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="M536.5-503.5Q560-527 560-560t-23.5-56.5Q513-640 480-640t-56.5 23.5Q400-593 400-560t23.5 56.5Q447-480 480-480t56.5-23.5ZM480-186q122-112 181-203.5T720-552q0-109-69.5-178.5T480-800q-101 0-170.5 69.5T240-552q0 71 59 162.5T480-186Zm0 106Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Zm0-480Z"/></svg>Riau, Indonesia</span>
+        <template>
+            <img src="assets/home/portfolio/teluk-pambang-1.webp" alt="Eroded mudflat along a mangrove shoreline" decoding="async" width="840" height="560" />
+            <img src="assets/home/portfolio/teluk-pambang-2.webp" alt="Mangrove trees at the edge of an eroding shore" decoding="async" width="840" height="560" />
+            <img src="assets/home/portfolio/teluk-pambang-3.webp" alt="Field team talking under the forest canopy" decoding="async" width="840" height="560" />
+            <p>Teluk Pambang Village, Bantan Sub-District, Bengkalis District, Riau Province, contains approximately 979 hectares of mangrove forest, one of the largest on Bengkalis Island. The landscape offers significant potential for blue carbon, biodiversity conservation, and ecosystem restoration, particularly in addressing degradation caused by aquaculture, settlement expansion, and oil palm cultivation. Managed under the Village Forest (<em>Hutan Desa</em>) scheme, it provides opportunities to strengthen community-based ecological mangrove restoration while promoting sustainable livelihoods, including alternatives to charcoal production. In partnership with YKAN, the project also promotes inclusive community engagement and women’s participation in NbS activities, including nursery management, planting, and logistical support.</p>
+        </template>
+      </button>
+      <button type="button" class="pg-tile pg-t4" aria-haspopup="dialog">
+        <span class="pg-photo"><img src="assets/home/portfolio/semendo-1.webp" alt="" loading="lazy" decoding="async" width="840" height="560" /></span>
+        <span class="pg-name">Semendo Landscape</span>
+        <span class="pg-loc"><svg class="pg-pin" aria-hidden="true" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="M536.5-503.5Q560-527 560-560t-23.5-56.5Q513-640 480-640t-56.5 23.5Q400-593 400-560t23.5 56.5Q447-480 480-480t56.5-23.5ZM480-186q122-112 181-203.5T720-552q0-109-69.5-178.5T480-800q-101 0-170.5 69.5T240-552q0 71 59 162.5T480-186Zm0 106Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Zm0-480Z"/></svg>South Sumatra, Indonesia</span>
+        <template>
+            <img src="assets/home/portfolio/semendo-1.webp" alt="Waterfall spilling into a pool in dense rainforest" decoding="async" width="840" height="560" />
+            <img src="assets/home/portfolio/semendo-2.webp" alt="Forested hills above a town in the river valley" decoding="async" width="840" height="560" />
+            <img src="assets/home/portfolio/semendo-3.webp" alt="Aerial view of a waterfall and its plunge pool in the forest" decoding="async" width="840" height="560" />
+            <p>The Semendo landscape, Muara Enim District, South Sumatra, covers approximately 11,657 hectares across six Village Forest (<em>Hutan Desa</em>) areas, offering significant potential for climate mitigation, forest conservation, and ecosystem restoration. Led by Yayasan Hutan Kita Institute (HaKi) in partnership with WRI Indonesia, the project combines the protection of 6,601 hectares of forest with the restoration of 4,628 hectares. The landscape supports important biodiversity, including threatened species such as the Sumatran Tiger, Sunda Pangolin, Malayan Tapir, and Sun Bear. Building on legally recognised community forest management rights and local customary practices, including the <em>Tunggu Tubang</em> matrilineal system, the initiative also aims to strengthen community stewardship and sustainable livelihoods through coffee agroforestry and non-timber forest products, such as Jernang resin.</p>
+        </template>
+      </button>
+      <button type="button" class="pg-tile pg-t5" aria-haspopup="dialog">
+        <span class="pg-photo"><img src="assets/home/portfolio/mbeliling-1.webp" alt="" loading="lazy" decoding="async" width="840" height="560" /></span>
+        <span class="pg-name">Mbeliling Landscape</span>
+        <span class="pg-loc"><svg class="pg-pin" aria-hidden="true" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="M536.5-503.5Q560-527 560-560t-23.5-56.5Q513-640 480-640t-56.5 23.5Q400-593 400-560t23.5 56.5Q447-480 480-480t56.5-23.5ZM480-186q122-112 181-203.5T720-552q0-109-69.5-178.5T480-800q-101 0-170.5 69.5T240-552q0 71 59 162.5T480-186Zm0 106Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Zm0-480Z"/></svg>East Nusa Tenggara, Indonesia</span>
+        <template>
+            <img src="assets/home/portfolio/mbeliling-1.webp" alt="Aerial view of a village among green hills" decoding="async" width="840" height="560" />
+            <img src="assets/home/portfolio/mbeliling-2.webp" alt="Forested mountains above a hillside village" decoding="async" width="840" height="560" />
+            <img src="assets/home/portfolio/mbeliling-3.webp" alt="A stone grotto shrine in the forest" decoding="async" width="840" height="560" />
+            <img src="assets/home/portfolio/mbeliling-4.webp" alt="Forest canopy around small rice terraces" decoding="async" width="840" height="560" />
+            <p>The Mbeliling landscape, West Manggarai, Flores, offers significant potential for climate mitigation, forest restoration, and biodiversity conservation. Led by Burung Indonesia, the proposed project covers an initial 1,649 hectare pilot across Liang Ndara and Tondong Belang. Combining forest protection and ecosystem restoration, the initiative aims to strengthen community-based forest management and sustainable livelihoods. The area forms part of the Mbeliling–Tanjung Kerita Mese Key Biodiversity Area, providing habitat for threatened species, including the Flores Hawk-eagle, Yellow-crested Cockatoo, and Flores Monarch, while supporting water supply to Labuan Bajo. The project also seeks to promote community participation and diversify local income through watershed payments for ecosystem services and sustainable candlenut production.</p>
+        </template>
+      </button>
   </div>
+
+  <dialog class="pg-modal" id="pgModal" aria-labelledby="pgmName">
+    <div class="pgm-media">
+      <img class="pgm-main" src="" alt="" width="840" height="560" />
+      <div class="pgm-thumbs" role="group" aria-label="Site photos"></div>
+    </div>
+    <div class="pgm-text">
+      <h3 id="pgmName"></h3>
+      <p class="pg-loc pgm-loc"></p>
+      <div class="pgm-story"></div>
+    </div>
+    <button type="button" class="pgm-close" aria-label="Close"><svg aria-hidden="true" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg></button>
+  </dialog>
 
   <!-- testimony shares the field-stories band (DEC-42) -->
   <div class="wrap proof-tq">
@@ -825,9 +597,9 @@
       <div class="partner-group support">
         <h3 class="pg-title reveal">With support from</h3>
         <ul class="logo-grid logo-support">
-          <li class="reveal logo-cell-square"><img class="logo-img" src="assets/coalition/logos/asean.png" alt="ASEAN" loading="lazy" /></li>
           <li class="reveal"><img class="logo-img" src="assets/coalition/logos/asean-uk.png" alt="ASEAN-UK" loading="lazy" /></li>
           <li class="reveal"><img class="logo-img" src="assets/coalition/logos/uk-international-development.png" alt="UK International Development" loading="lazy" /></li>
+          <li class="reveal logo-cell-square"><img class="logo-img" src="assets/coalition/logos/asean.png" alt="ASEAN" loading="lazy" /></li>
         </ul>
         <ul class="logo-grid logo-support logo-support-4">
           <li class="reveal"><img class="logo-img" src="assets/coalition/logos/google-org.png" alt="Google.org" loading="lazy" /></li>
@@ -1178,21 +950,46 @@ const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const kicker = document.getElementById('mfKicker'), title = document.getElementById('mfTitle'),
       desc = document.getElementById('mfDesc'), more = document.getElementById('mfMore');
 
-    function light(ids, onId) {
-      flow.classList.add('has-focus');
-      nodes.forEach(function (n) {
-        n.classList.toggle('is-lit', ids.has(n.dataset.id));
-        n.classList.toggle('is-on', n.dataset.id === onId);
-        n.setAttribute('aria-pressed', n.dataset.id === onId ? 'true' : 'false');
-      });
+    /* Hover or focus previews a box. A click locks it: the card then stays on that box whatever
+       else is hovered, until the box is clicked again or another box is clicked (DEC-97). */
+    const idle = { kicker: kicker.textContent, title: title.textContent, desc: desc.textContent, href: more.getAttribute('href') };
+    const tip = document.createElement('span');
+    tip.className = 'mf-tip'; tip.setAttribute('aria-hidden', 'true');
+    flow.appendChild(tip);
+    let locked = null;
+
+    function light(ids) {
+      flow.classList.toggle('has-focus', ids.size > 0);
+      nodes.forEach(function (n) { n.classList.toggle('is-lit', ids.has(n.dataset.id)); });
       flow.querySelectorAll('.mf-stage').forEach(function (st) {
         st.classList.toggle('is-lit', !!st.querySelector('.mf-node.is-lit'));
       });
     }
+    function setLock(id) {
+      locked = id;
+      nodes.forEach(function (n) {
+        n.classList.toggle('is-on', n.dataset.id === id);
+        n.setAttribute('aria-pressed', n.dataset.id === id ? 'true' : 'false');
+      });
+    }
+    function showTip(n) {
+      const f = flow.getBoundingClientRect(), b = n.getBoundingClientRect();
+      tip.textContent = locked === n.dataset.id ? 'Click again to unlock'
+        : locked ? 'Click to lock this box instead' : 'Click to lock this information';
+      tip.style.left = (b.left - f.left + b.width / 2) + 'px';
+      tip.style.top = (b.top - f.top) + 'px';
+      tip.classList.add('is-shown');
+    }
+    function leave() {   // pointer or focus has left the diagram
+      tip.classList.remove('is-shown');
+      if (locked) return;
+      light(new Set());
+      kicker.textContent = idle.kicker; title.textContent = idle.title; desc.textContent = idle.desc; more.href = idle.href;
+    }
     function select(id) {
       const n = byId[id];
       const ids = walk(id, EDGES, walk(id, UP, new Set([id])));
-      light(ids, id);
+      light(ids);
       const next = (EDGES[id] || []).map(function (x) { return byId[x].querySelector('.mf-t').textContent; });
       kicker.textContent = next.length ? 'Feeds ' + next.join(', ') : 'Where it all lands';
       title.textContent = n.querySelector('.mf-t').textContent;
@@ -1200,55 +997,192 @@ const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       more.href = n.dataset.href;
     }
     nodes.forEach(function (n) {
+      const id = n.dataset.id;
       n.setAttribute('aria-pressed', 'false');
-      n.addEventListener('click', function () { select(n.dataset.id); });
-      n.addEventListener('mouseenter', function () { select(n.dataset.id); });
+      function preview() { if (!locked) select(id); showTip(n); }
+      n.addEventListener('mouseenter', preview);
+      n.addEventListener('focus', preview);
+      n.addEventListener('click', function () {
+        setLock(locked === id ? null : id);
+        select(id);
+        showTip(n);
+      });
     });
+    flow.addEventListener('mouseleave', leave);
+    flow.addEventListener('focusout', function (e) { if (!flow.contains(e.relatedTarget)) leave(); });
   })();
 
-  /* ---- portfolio: flip cards ---- */
-  /* All cards, loop clones included: clones are aria-hidden and tabindex=-1, but mouse users still click them. */
-  document.querySelectorAll('.pflip').forEach(function (card) {
-    function toggle() {
-      const on = card.classList.toggle('is-flipped');
-      card.setAttribute('aria-pressed', on ? 'true' : 'false');
-    }
-    card.addEventListener('click', function (e) {
-      if (e.target.closest('.pf-ext')) return;   // let the external link through
-      toggle();
-    });
-    card.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
-    });
-  });
+  /* ---- portfolio: field-stories gallery + modal (DEC-98) ---- */
+  (function () {
+    const modal = document.getElementById('pgModal');
+    if (!modal) return;
+    const main = modal.querySelector('.pgm-main');
+    const thumbs = modal.querySelector('.pgm-thumbs');
 
-  /* ---- journey: sticky stage <-> chapter sync ---- */
+    function show(img, btn) {
+      main.src = img.src; main.alt = img.alt;
+      thumbs.querySelectorAll('button').forEach(function (b) { b.setAttribute('aria-pressed', b === btn ? 'true' : 'false'); });
+    }
+
+    document.querySelectorAll('.pg-tile').forEach(function (tile) {
+      const photos = Array.from(tile.querySelector('template').content.querySelectorAll('img'));
+      // A different photo of the site on each visit.
+      tile.querySelector('.pg-photo img').src = photos[Math.floor(Math.random() * photos.length)].src;
+
+      tile.addEventListener('click', function () {
+        const content = tile.querySelector('template').content;
+        modal.querySelector('#pgmName').textContent = tile.querySelector('.pg-name').textContent;
+        modal.querySelector('.pgm-loc').innerHTML = tile.querySelector('.pg-loc').innerHTML;
+        modal.querySelector('.pgm-story').replaceChildren.apply(
+          modal.querySelector('.pgm-story'),
+          Array.from(content.querySelectorAll('p')).map(function (n) { return n.cloneNode(true); }));
+        thumbs.replaceChildren();
+        photos.forEach(function (img, i) {
+          const b = document.createElement('button');
+          b.type = 'button';
+          b.setAttribute('aria-label', 'Photo ' + (i + 1) + ' of ' + photos.length + ': ' + img.alt);
+          b.appendChild(Object.assign(document.createElement('img'), { src: img.src, alt: '' }));
+          b.addEventListener('click', function () { show(img, b); });
+          thumbs.appendChild(b);
+        });
+        show(photos[0], thumbs.firstChild);
+        modal.showModal();   // native dialog: focus moves in, Esc closes, focus returns to the tile
+      });
+    });
+
+    modal.querySelector('.pgm-close').addEventListener('click', function () { modal.close(); });
+    // Click on the backdrop (the dialog box itself, outside its content) closes it.
+    modal.addEventListener('click', function (e) { if (e.target === modal) modal.close(); });
+  })();
+
+  /* ---- key features: sticky stage <-> chapter sync ---- */
   const chapters = Array.from(document.querySelectorAll('.chapter'));
   const stages = Array.from(document.querySelectorAll('.stage'));
   const frameStep = document.getElementById('frameStep');
-  const stepNames = ['Phases 0–1', 'Phases 2–3', 'Phases 4–5', 'Phases 6–7', 'Manage your projects'];
+  const stepNames = ['Map it', 'Measure it', 'Document it'];   // one per feature, echoing the hero
+  const stageFrame = document.getElementById('stageFrame');
+  let onStageChange = null;   // set by the feature-clip block below
   function setActive(idx) {
+    if (onStageChange) onStageChange(idx);
     chapters.forEach(function (c, i) { c.classList.toggle('is-active', i === idx); });
     stages.forEach(function (s, i) { s.classList.toggle('is-active', i === idx); });
-    if (frameStep) frameStep.textContent = '0' + (idx + 1) + ' / 05 · ' + stepNames[idx];
+    if (frameStep) frameStep.textContent = '0' + (idx + 1) + ' / 0' + stepNames.length + ' · ' + stepNames[idx];
   }
   setActive(0);
-  if (chapters.length) {
-    if ('IntersectionObserver' in window) {
-      let current = 0;
-      const jo = new IntersectionObserver(function (entries) {
-        entries.forEach(function (en) {
-          if (en.isIntersecting) {
-            const idx = chapters.indexOf(en.target);
-            if (idx !== -1 && idx !== current) { current = idx; setActive(idx); }
-          }
-        });
-      }, { rootMargin: '-45% 0px -45% 0px', threshold: 0 });
-      chapters.forEach(function (c) { jo.observe(c); });
-    } else {
-      chapters.forEach(function (c) { c.classList.add('is-active'); });
-      stages[0] && stages[0].classList.add('is-active');
+  /* Feature clips (DEC-99). Each stage plays a short looping clip of its feature; hovering a
+     chapter's h4 swaps in that job's clip (and its screenshot underneath, as the fallback);
+     leaving the chapter puts the stage's own clip back. The clip on the active stage plays while
+     the frame is on screen; an inactive stage plays only while it is hovered. With
+     prefers-reduced-motion, or after the reader presses Pause, nothing plays: each video shows
+     its poster frame. A video that fails to load is hidden, leaving the screenshot. */
+  const motionQ = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const clipToggle = document.getElementById('clipToggle');
+  let clipsPaused = false, frameVisible = true, activeIdx = 0;
+  const canPlay = function () { return !motionQ.matches && !clipsPaused; };
+  function makeClip(name, poster) {
+    const v = document.createElement('video');
+    v.className = 's-clip'; v.dataset.clip = name;
+    v.muted = true; v.loop = true; v.playsInline = true; v.preload = 'none';
+    v.setAttribute('muted', ''); v.setAttribute('playsinline', ''); v.setAttribute('aria-hidden', 'true'); v.tabIndex = -1;
+    v.poster = poster || 'assets/clips/' + name + '-poster.jpg';
+    ['webm', 'mp4'].forEach(function (ext) {
+      const src = document.createElement('source');
+      src.src = 'assets/clips/' + name + '.' + ext; src.type = 'video/' + ext; v.appendChild(src);
+    });
+    return v;
+  }
+  function guard(v) {
+    // the error fires on the last <source>, not on the video
+    const last = v.querySelector('source:last-of-type');
+    (last || v).addEventListener('error', function () { v.classList.add('is-broken'); });
+  }
+  function play(v) {
+    if (!v || !canPlay()) return;
+    if (v.preload !== 'auto') { v.preload = 'auto'; }
+    const p = v.play(); if (p && p.catch) p.catch(function () {});
+  }
+  function stop(v, rewind) { if (!v) return; v.pause(); if (rewind) { try { v.currentTime = 0; } catch (e) {} } }
+  const stageClips = stages.map(function (stage) {
+    const media = stage.querySelector('.s-media');
+    const def = media && media.querySelector('.s-clip');
+    if (def) guard(def);
+    return { stage: stage, media: media, def: def, cur: def, byName: def ? { [def.dataset.clip]: def } : {} };
+  });
+  function showClip(i, name) {
+    const sc = stageClips[i]; if (!sc || !sc.media) return;
+    let v = sc.byName[name];
+    if (!v) { v = makeClip(name); guard(v); sc.media.appendChild(v); sc.byName[name] = v; }
+    if (sc.cur === v) return;
+    const prev = sc.cur; sc.cur = v;
+    Object.keys(sc.byName).forEach(function (k) { sc.byName[k].classList.toggle('is-shown', sc.byName[k] === v); });
+    stop(prev, true);
+    if (i === activeIdx && frameVisible) play(v);
+  }
+  function syncPlayback() {
+    stageClips.forEach(function (sc, i) {
+      if (i === activeIdx && frameVisible && canPlay()) play(sc.cur); else stop(sc.cur, false);
+    });
+  }
+  chapters.forEach(function (c, i) {
+    const img = stages[i] && stages[i].querySelector('.s-shot');
+    if (!img) return;
+    const def = { src: img.getAttribute('src'), alt: img.alt };
+    const defClip = stageClips[i] && stageClips[i].def && stageClips[i].def.dataset.clip;
+    function show(src, alt) { if (img.getAttribute('src') !== src) { img.src = src; img.alt = alt; } }
+    c.querySelectorAll('h4[data-shot]').forEach(function (h) {
+      new Image().src = h.dataset.shot;   // preload so the swap is instant
+      h.addEventListener('mouseenter', function () {
+        show(h.dataset.shot, h.dataset.shotAlt);
+        if (h.dataset.clip) showClip(i, h.dataset.clip);
+      });
+    });
+    c.addEventListener('mouseleave', function () { show(def.src, def.alt); if (defClip) showClip(i, defClip); });
+  });
+  // Inactive stages play while hovered (where the layout makes them reachable, e.g. below 900px).
+  stageClips.forEach(function (sc, i) {
+    sc.stage.addEventListener('pointerenter', function () { if (i !== activeIdx) play(sc.cur); });
+    sc.stage.addEventListener('pointerleave', function () { if (i !== activeIdx) stop(sc.cur, false); });
+  });
+  // Hero previews: each plays only while its headline word is hovered.
+  document.querySelectorAll('.hero-head .hl[data-peek]').forEach(function (hl) {
+    const v = document.querySelector('.peek[data-peek="' + hl.dataset.peek + '"] .s-clip');
+    if (!v) return; guard(v);
+    hl.addEventListener('mouseenter', function () { play(v); });
+    hl.addEventListener('mouseleave', function () { stop(v, true); });
+  });
+  if ('IntersectionObserver' in window && stageFrame) {
+    new IntersectionObserver(function (es) { frameVisible = es[es.length - 1].isIntersecting; syncPlayback(); }, { threshold: 0.25 }).observe(stageFrame);
+  }
+  if (clipToggle) {
+    clipToggle.hidden = motionQ.matches;
+    clipToggle.addEventListener('click', function () {
+      clipsPaused = !clipsPaused;
+      clipToggle.setAttribute('aria-pressed', String(clipsPaused));
+      clipToggle.setAttribute('aria-label', clipsPaused ? 'Play feature clips' : 'Pause feature clips');
+      syncPlayback();
+    });
+  }
+  motionQ.addEventListener('change', function () { if (clipToggle) clipToggle.hidden = motionQ.matches; syncPlayback(); });
+  onStageChange = function (idx) { activeIdx = idx; syncPlayback(); };
+  syncPlayback();
+  /* The active chapter is the one beside the middle of the pinned picture, so the picture
+     changes when the next chapter's text arrives next to it, and not while the reader is still
+     on the one before (DEC-96). Below 900px the picture is not pinned and stays on the first. */
+  const stageCol = document.querySelector('.stage-col');
+  if (chapters.length && stageCol) {
+    let current = 0, queued = false;
+    function syncChapter() {
+      queued = false;
+      const box = stageCol.getBoundingClientRect();
+      const line = box.top + box.height / 2;
+      let idx = 0;
+      chapters.forEach(function (c, i) { if (c.getBoundingClientRect().top <= line) idx = i; });
+      if (idx !== current) { current = idx; setActive(idx); }
     }
+    function queueSync() { if (!queued) { queued = true; requestAnimationFrame(syncChapter); } }
+    document.addEventListener('scroll', queueSync, { passive: true });
+    window.addEventListener('resize', queueSync);
+    syncChapter();
   }
 })();
 </script>

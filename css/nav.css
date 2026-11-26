@@ -9,7 +9,7 @@
   display: flex;
   align-items: center;
   padding: 0 var(--space-48);
-  gap: 40px;
+  gap: var(--space-40);
   position: sticky;
   top: 0;
   z-index: 200;
@@ -274,6 +274,13 @@ a.sitenav-signup { display: inline-flex; align-items: center; text-decoration: n
   cursor: pointer; flex-shrink: 0;
 }
 .sitenav-burger svg { width: 22px; height: 22px; }
+
+/* Narrow desktop: four links (DEC-97) need the bar's spacing tightened so it
+   fits without a horizontal scrollbar before the drawer takes over at 860px. */
+@media (min-width: 861px) and (max-width: 1160px) {
+  .sitenav { padding: 0 var(--space-24); gap: var(--space-16); }
+  .sitenav-links { gap: var(--space-20); }
+}
 
 /* ============================================================
    RESPONSIVE — shared site nav collapses to a hamburger menu
