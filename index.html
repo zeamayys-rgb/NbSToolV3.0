@@ -32,7 +32,7 @@
 <header class="hero" id="main" tabindex="-1" data-screen-label="Hero">
   <canvas id="terrain" aria-hidden="true"></canvas>
   <div class="hero-graticule" aria-hidden="true"></div>
-  <div class="hero-contour" aria-hidden="true" style="background:repeating-radial-gradient(circle at 84% 14%, transparent 0 25px, rgba(95,230,160,.14) 25px 26px); -webkit-mask-image:radial-gradient(60% 50% at 84% 14%, #000, transparent 72%); mask-image:radial-gradient(60% 50% at 84% 14%, #000, transparent 72%);"></div>
+  <div class="hero-contour" aria-hidden="true" style="background:repeating-radial-gradient(circle at 84% 14%, transparent 0 25px, rgba(95,230,160,.14) 25px 26px); -webkit-mask-image:radial-gradient(60% 50% at 84% 14%, var(--base-black), transparent 72%); mask-image:radial-gradient(60% 50% at 84% 14%, var(--base-black), transparent 72%);"></div>
   <div class="hero-veil" aria-hidden="true"></div>
 
 
@@ -104,7 +104,7 @@
           <!-- STAGE 1 — INTERACTIVE MAP -->
           <div class="stage" data-stage="0">
             <div class="stage-pad">
-              <div class="mini-h">Interactive Map · Select location</div>
+              <div class="mini-h">Interactive Map · Select area of interest</div>
               <div class="s-media">
                 <img class="s-shot" src="assets/help/select-draw.jpg" alt="Drawing an Area of Interest on the NbS Tool map" width="1600" height="986" />
                 <video class="s-clip is-shown" data-clip="map-select-area" muted loop playsinline preload="none" poster="assets/clips/map-select-area-poster.jpg" aria-hidden="true" tabindex="-1"><source src="assets/clips/map-select-area.webm" type="video/webm" /><source src="assets/clips/map-select-area.mp4" type="video/mp4" /></video>
@@ -425,7 +425,7 @@
               </span>
             </figcaption>
           </figure>
-          <figure class="tq tq-lg">
+          <figure class="tq tq-lg tq-narrow">
             <span class="tq-av"><span class="tq-ini" aria-hidden="true">DP</span><img src="assets/testimony/dedi.jpg" alt="" loading="lazy" onerror="this.remove()" /></span>
             <blockquote>NbS Tool will help processing and collecting data, so it would be better documented for related stakeholders who will manage sustainable social forestry after the permit.</blockquote>
             <figcaption>
@@ -466,7 +466,7 @@
               </span>
             </figcaption>
           </figure>
-          <figure class="tq tq-lg" aria-hidden="true">
+          <figure class="tq tq-lg tq-narrow" aria-hidden="true">
             <span class="tq-av"><span class="tq-ini" aria-hidden="true">DP</span><img src="assets/testimony/dedi.jpg" alt="" loading="lazy" onerror="this.remove()" /></span>
             <blockquote>NbS Tool will help processing and collecting data, so it would be better documented for related stakeholders who will manage sustainable social forestry after the permit.</blockquote>
             <figcaption>
@@ -506,7 +506,7 @@
               </span>
             </figcaption>
           </figure>
-          <figure class="tq tq-lg" aria-hidden="true">
+          <figure class="tq tq-lg tq-narrow" aria-hidden="true">
             <span class="tq-av"><span class="tq-ini" aria-hidden="true">DP</span><img src="assets/testimony/dedi.jpg" alt="" loading="lazy" onerror="this.remove()" /></span>
             <blockquote>NbS Tool will help processing and collecting data, so it would be better documented for related stakeholders who will manage sustainable social forestry after the permit.</blockquote>
             <figcaption>
@@ -546,7 +546,7 @@
               </span>
             </figcaption>
           </figure>
-          <figure class="tq tq-lg" aria-hidden="true">
+          <figure class="tq tq-lg tq-narrow" aria-hidden="true">
             <span class="tq-av"><span class="tq-ini" aria-hidden="true">DP</span><img src="assets/testimony/dedi.jpg" alt="" loading="lazy" onerror="this.remove()" /></span>
             <blockquote>NbS Tool will help processing and collecting data, so it would be better documented for related stakeholders who will manage sustainable social forestry after the permit.</blockquote>
             <figcaption>
@@ -571,7 +571,7 @@
             </figcaption>
           </figure>
           <figure class="tq tq-md">
-            <span class="tq-av"><span class="tq-ini" aria-hidden="true">MS</span></span>
+            <span class="tq-av"><span class="tq-ini" aria-hidden="true">MS</span><img src="assets/testimony/sambath.jpg" alt="" loading="lazy" onerror="this.remove()" /></span>
             <blockquote>What impressed me most was the ability to explore different ecosystems, such as dryland forests, mangroves, and peatlands.</blockquote>
             <figcaption>
               <span class="tq-meta">
@@ -581,7 +581,7 @@
             </figcaption>
           </figure>
           <figure class="tq tq-md">
-            <span class="tq-av"><span class="tq-ini" aria-hidden="true">HM</span></span>
+            <span class="tq-av"><span class="tq-ini" aria-hidden="true">HM</span><img src="assets/testimony/tramy.jpg" alt="" loading="lazy" onerror="this.remove()" /></span>
             <blockquote>Our project is still at the initial scoping stage, where we are exploring an NbS model that could potentially be scaled up in the future.</blockquote>
             <figcaption>
               <span class="tq-meta">
@@ -612,7 +612,7 @@
             </figcaption>
           </figure>
           <figure class="tq tq-md" aria-hidden="true">
-            <span class="tq-av"><span class="tq-ini" aria-hidden="true">MS</span></span>
+            <span class="tq-av"><span class="tq-ini" aria-hidden="true">MS</span><img src="assets/testimony/sambath.jpg" alt="" loading="lazy" onerror="this.remove()" /></span>
             <blockquote>What impressed me most was the ability to explore different ecosystems, such as dryland forests, mangroves, and peatlands.</blockquote>
             <figcaption>
               <span class="tq-meta">
@@ -622,7 +622,7 @@
             </figcaption>
           </figure>
           <figure class="tq tq-md" aria-hidden="true">
-            <span class="tq-av"><span class="tq-ini" aria-hidden="true">HM</span></span>
+            <span class="tq-av"><span class="tq-ini" aria-hidden="true">HM</span><img src="assets/testimony/tramy.jpg" alt="" loading="lazy" onerror="this.remove()" /></span>
             <blockquote>Our project is still at the initial scoping stage, where we are exploring an NbS model that could potentially be scaled up in the future.</blockquote>
             <figcaption>
               <span class="tq-meta">
@@ -652,7 +652,7 @@
             </figcaption>
           </figure>
           <figure class="tq tq-md" aria-hidden="true">
-            <span class="tq-av"><span class="tq-ini" aria-hidden="true">MS</span></span>
+            <span class="tq-av"><span class="tq-ini" aria-hidden="true">MS</span><img src="assets/testimony/sambath.jpg" alt="" loading="lazy" onerror="this.remove()" /></span>
             <blockquote>What impressed me most was the ability to explore different ecosystems, such as dryland forests, mangroves, and peatlands.</blockquote>
             <figcaption>
               <span class="tq-meta">
@@ -662,7 +662,7 @@
             </figcaption>
           </figure>
           <figure class="tq tq-md" aria-hidden="true">
-            <span class="tq-av"><span class="tq-ini" aria-hidden="true">HM</span></span>
+            <span class="tq-av"><span class="tq-ini" aria-hidden="true">HM</span><img src="assets/testimony/tramy.jpg" alt="" loading="lazy" onerror="this.remove()" /></span>
             <blockquote>Our project is still at the initial scoping stage, where we are exploring an NbS model that could potentially be scaled up in the future.</blockquote>
             <figcaption>
               <span class="tq-meta">
@@ -692,7 +692,7 @@
             </figcaption>
           </figure>
           <figure class="tq tq-md" aria-hidden="true">
-            <span class="tq-av"><span class="tq-ini" aria-hidden="true">MS</span></span>
+            <span class="tq-av"><span class="tq-ini" aria-hidden="true">MS</span><img src="assets/testimony/sambath.jpg" alt="" loading="lazy" onerror="this.remove()" /></span>
             <blockquote>What impressed me most was the ability to explore different ecosystems, such as dryland forests, mangroves, and peatlands.</blockquote>
             <figcaption>
               <span class="tq-meta">
@@ -702,7 +702,7 @@
             </figcaption>
           </figure>
           <figure class="tq tq-md" aria-hidden="true">
-            <span class="tq-av"><span class="tq-ini" aria-hidden="true">HM</span></span>
+            <span class="tq-av"><span class="tq-ini" aria-hidden="true">HM</span><img src="assets/testimony/tramy.jpg" alt="" loading="lazy" onerror="this.remove()" /></span>
             <blockquote>Our project is still at the initial scoping stage, where we are exploring an NbS model that could potentially be scaled up in the future.</blockquote>
             <figcaption>
               <span class="tq-meta">

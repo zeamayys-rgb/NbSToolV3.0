@@ -258,3 +258,23 @@ a.hc-card:hover > svg, a.hc-card:focus-visible > svg { fill: var(--text-primary)
   .hc-dl { grid-template-columns: auto 1fr; }
   .hc-dl-btn { grid-column: 1 / -1; justify-content: center; }
 }
+
+/* ---------- language notice (CMP-44) ----------
+   A small native <dialog> shown once on the first visit. The padding sits on
+   .hc-lang-body so a click on the dialog element itself is always the backdrop. */
+.hc-lang { padding: 0; border: 0; border-radius: var(--radius-xl); width: min(440px, 100% - var(--space-32));
+  background: var(--bg-base-main); color: var(--text-base-main); box-shadow: var(--elevation-5); }
+/* TODO(design) TODO-11: no shared scrim token yet; this mixes one from --gray-950. */
+.hc-lang::backdrop { background: color-mix(in srgb, var(--gray-950) 60%, transparent); }
+.hc-lang-body { position: relative; padding: var(--space-32) var(--space-24) var(--space-24); }
+.hc-lang-icon { display: grid; place-items: center; width: var(--space-48); height: var(--space-48);
+  border-radius: var(--radius-pill); background: var(--bg-primary-second); color: var(--text-primary); }
+.hc-lang-icon svg { width: var(--space-24); height: var(--space-24); }
+.hc-lang h2 { margin: var(--space-16) 0 var(--space-8); font-size: 18px; line-height: 1.35; color: var(--text-title); }
+.hc-lang p { margin: 0 0 var(--space-24); font-size: 14px; line-height: 1.6; color: var(--text-base-second); }
+.hc-lang .doc-cta { border: 0; cursor: pointer; font: inherit; font-size: 13.5px; font-weight: 600; padding: var(--space-12) var(--space-20); }
+.hc-lang-close { position: absolute; top: var(--space-12); right: var(--space-12); display: grid; place-items: center;
+  width: 40px; height: 40px; padding: 0; border: 0; border-radius: var(--radius-pill); cursor: pointer;
+  background: transparent; color: var(--text-base-second); }
+.hc-lang-close:hover { background: var(--bg-base-second); }
+.hc-lang-close svg { width: 22px; height: 22px; }

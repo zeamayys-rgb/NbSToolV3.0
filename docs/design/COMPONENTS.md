@@ -212,8 +212,8 @@ loses all analysis progress, and a step cannot be linked to or shared.**
 | `gcSource` | `(data, source, year)` | The attribution line under a card |
 | `gcDisc` | `(text)` | The disclaimer written for that card's dataset (GUI 3.1). Replaces the general `gcAlert` on the five General cards. Styled as `.gc-alert`: warm tint, 16px inline icon, no border, stripe or "Disclaimer:" prefix (DEC-60) |
 | `gcBars` | `(rows)` | Class bars for elevation and slope; `rows` is `[label, hectares, colour]`. The share is worked out from the hectares, and a class with 0 ha draws an empty track |
-| `gcDonut` | `(items, totalLabel, ariaLead, half)` | Total, donut and legend for `[label, hectares, colour]` rows. With `half = true` the segments are drawn on the Fire risk half doughnut (`gcGauge`'s look, shared arc `GC_ARC`) with `totalLabel` as the chart title above it and only the total (number and ha) in its centre, replacing the full ring (Land degradation). The donut is an SVG with one path per segment, `role="img"` with the shares in its `aria-label`; the legend repeats them as text. **Interaction:** pointing at a segment dims it and names only that segment in the People Context tooltip ("Degraded: 24,000 ha (16%)"), the same `data-tip` + `.pcx-tip` behaviour as the People Context charts (`js/people-context.js` wires every `.gc`). Mouse only; the legend carries the same figures for keyboard and screen-reader users. **Layout:** next to a long text column, put `gc-terr--mid` on the `.gc-terr` grid so the chart sits on the text's centre line; inside it the chart stacks above a full-width legend, both left-aligned (Land degradation does this). Elsewhere the donut stays 96px beside its legend. Used by Reference ecosystem (`gcEcoChart()`, drawn from `NBS_DATA`) and Land degradation |
-| `nbsRingSeg` | `(cx, cy, R, r, a0, a1, o)` | The shape of one doughnut segment, used by every ring chart: `gcDonut` (full and half), `gcGauge`, the Carbon Pool ring (`clPoolDonut`) and the People Context donut (`svgDonut`, via `window.nbsRingSeg`). A filled ring slice whose four corners are rounded to `--radius-sm`, with a `--space-4` gap between slices; both are read from `tokens.css` in screen pixels and `o.k` converts them to viewBox units. The outer ends of a half doughnut stay flush (`o.gapStart` / `o.gapEnd = false`). A slice too thin for full corners gets smaller ones; a 0% slice is not drawn (DEC-79) |
+| `gcDonut` | `(items, totalLabel, ariaLead, half)` | Total, donut and legend for `[label, hectares, colour]` rows. With `half = true` the segments are drawn on the Fire risk half doughnut (`gcGauge`'s look, shared arc `GC_ARC`) with `totalLabel` as the chart title above it and only the total (number and ha) in its centre, replacing the full ring (Land degradation). The donut is an SVG with one path per segment, `role="img"` with the shares in its `aria-label`; the legend repeats them as text. **Interaction:** pointing at a segment dims it and names only that segment in the People Context tooltip ("Degraded: 24,000 ha (16%)"), the same `data-tip` + `.pcx-tip` behaviour as the People Context charts (`js/people-context.js` wires every `.gc`). Mouse only; the legend carries the same figures for keyboard and screen-reader users. **Layout:** next to a long text column, put `gc-terr--mid` on the `.gc-terr` grid so the chart sits on the text's centre line; inside it the chart stacks above a full-width legend, both left-aligned (Land degradation does this). Without `half` (Reference ecosystem) it draws the `gcSunHalf` look with one ring: the same `.gc-gauge--sun` size, total and `totalLabel` in the hole, a one-column legend (colour, name, ha, %) at full width under it; the full ring and its 2 x 2 legend are gone. Reference ecosystem's map takes half the card, the chart the other half. Used by Reference ecosystem (`gcEcoChart()`, drawn from `NBS_DATA`) and Land degradation |
+| `nbsRingSeg` | `(cx, cy, R, r, a0, a1, o)` | The shape of one doughnut segment, used by every ring chart: `gcDonut`, `gcGauge`, the Carbon Pool ring (`clPoolDonut`) and the People Context donut (`svgDonut`, via `window.nbsRingSeg`). A filled ring slice whose four corners are rounded to `--radius-sm`, with a `--space-4` gap between slices; both are read from `tokens.css` in screen pixels and `o.k` converts them to viewBox units. The outer ends of a half doughnut stay flush (`o.gapStart` / `o.gapEnd = false`). A slice too thin for full corners gets smaller ones; a 0% slice is not drawn (DEC-79) |
 | `gcTip` | `(label, ha, pct)` | The `data-tip` attribute for one chart segment: "Label: 12,345 ha (16%)". Shared by `gcDonut` and `gcGauge` |
 | `gcGauge` | `(part, total, caption, partLabel, restLabel)` | Half-doughnut of a part against a whole, 0 to 100%. Two colours only: the whole is a grey ring (`--neutral-800`), the part is orange (`--warning-500`). It shows a share, not a level: no bands, thresholds or level labels (DEC-61). **Interaction:** pointing at an arc dims it and names it in the People Context tooltip (`gcTip`): the orange arc reads `partLabel` with its hectares and share, and the grey arc (the rest of the whole) reads `restLabel` with the remaining hectares and share. Fire risk passes "Overlaps mapped fire-risk areas" and "Outside mapped fire-risk areas" (DEC-79). Mouse only. **Accessibility:** the wrapper is `role="img"` and its `aria-label` says both figures; the caption under the gauge repeats them as text. Used by Fire risk |
 | `gcLevel` | `(label, value, tone)` | A labelled level badge; `tone` is `bad`, `warn` or `ok`. The word carries the meaning, the colour only repeats it |
@@ -1250,3 +1250,28 @@ sits mid-segment.
 
 **Accessibility contract.** `aria-hidden`: decorative. The badge and sentence beside it carry
 the same information as text. Colour is never the only cue: each segment is named.
+
+## CMP-44 · Language notice (`.hc-lang`)
+
+**Where.** SCR-19 only, at the end of `help.html`'s body. Introduced by DEC-103.
+
+**Parts.** A native `<dialog class="hc-lang">` holding `.hc-lang-body`: the Material `language`
+icon in a round tint, an `h2`, one paragraph, a *Continue in English* button (`.doc-cta`, from technical-docs.css)
+and a close icon button. Both buttons sit in `<form method="dialog">`, so they close the dialog
+with no script.
+
+**States.** *Closed* (default after the first visit). *Open*: centred over a scrim, focus on
+*Continue in English*. See UI-STATES SCR-19 (*First visit*).
+
+**Behaviour.** The inline script in `help.html` calls `showModal()` unless `localStorage`
+holds `nbs-help-lang-seen`; the `close` event writes that key. A click on the backdrop closes
+it (the padding lives on `.hc-lang-body`, so a click whose target is the dialog itself is the
+backdrop). Storage errors are swallowed: the notice then shows on every visit.
+
+**Accessibility contract.** Native modal dialog: focus is trapped, Esc closes, focus returns to
+the page. Named by its heading (`aria-labelledby`) and described by its paragraph
+(`aria-describedby`). The close button is labelled "Close"; the icons are decorative.
+
+**Known gap.** The scrim is mixed from `--gray-950` at 60% because no scrim token exists
+(TODO-11). When the product gains other languages, remove the notice or turn it into a language
+picker.

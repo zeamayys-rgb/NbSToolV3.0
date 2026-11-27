@@ -687,6 +687,7 @@ html:has(.pg-modal[open]) { overflow: hidden; }
 .tq.tq-sm { width: 440px; }
 .tq.tq-md { width: 520px; }
 .tq.tq-lg { width: 620px; }
+.tq.tq-narrow { width: 540px; } /* Dedi: card hugs a shorter quote; the mobile .tq-lg rule below still wins */
 .tq:hover { border-color: color-mix(in srgb, var(--base-white) 36%, transparent); background: color-mix(in srgb, var(--base-white) 10%, transparent); }
 .tq::before { content: "\201C"; grid-column: 2; height: var(--space-24); font-family: var(--font-display); font-weight: 700;
   font-size: 64px; line-height: .9; color: var(--spring-soft); opacity: .6; }
