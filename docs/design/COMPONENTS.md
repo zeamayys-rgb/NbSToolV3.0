@@ -61,7 +61,7 @@ to turn them into `<a>`.`
 |---|---|---|---|---|
 | `data-nav-page` | attribute | no | — | `home` \| `map` \| `projects` \| `docs` \| `account` — marks the current link `.active` + `aria-current` |
 | `data-nav-auth` | attribute | no | `user` | `user` = profile dropdown · `guest` = Login / Sign up |
-| `.sitenav-link.active` | class (set by JS) | no | — | Marks the current section |
+| `.sitenav-link.active` | class (set by JS) | no | — | Marks the current section. The Methodology link (`help.html#science-scope`, DEC-97) is not driven by `data-nav-page`: `js/docs-shell.js` marks it while the docs show the Methodology tree |
 | `#profileWrap` / `#profileBtn` | id | for signed-in screens | — | Presence enables the profile dropdown |
 | `.sitenav-login` / `.sitenav-signup` | class | no | — | Logged-out variant (SCR-01, SCR-02); rendered as `<a href="login.html" data-auth>` so SCR-01's auth modal can intercept it and every other screen just follows the link |
 | `.sitenav-help` | class (rendered by JS) | no | always shown | "?" icon link (Material `question_mark`, DEC-80) to `help.html`, last item on the right; tooltip `.sitenav-help-tip` on hover / focus-visible, shown as a visible label in the mobile drawer; `aria-current="page"` on SCR-19 (DEC-39) |
@@ -583,6 +583,20 @@ lock and initial focus right; **combine them.**
 `auto`, and the scroll cue and HUD dots stop animating. **The best reduced-motion handling in
 the codebase.** `index.html` also reads the query into a `REDUCED` constant for its JS path.
 
+**Key-features sync.** On SCR-01 the `.stage` picture and its `.chapter` text share one
+`is-active` index: the chapter crossing the vertical middle of the pinned `.stage-col` (DEC-96).
+
+**Feature clips (DEC-99).** Each `.stage` holds a `.s-media` box: the screenshot (`.s-shot`) with
+a `<video class="s-clip" muted loop playsinline preload="none" poster>` over it. Hovering a
+chapter `h4` with `data-clip` swaps in that job's clip (created on first hover) and its
+`data-shot` screenshot; leaving the chapter restores the stage's own. The active stage's clip
+plays while the frame is at least a quarter on screen; an inactive stage plays only while
+hovered; the hero previews play while their headline word is hovered. A Pause / Play button
+(`#clipToggle`, `aria-pressed`) in the frame HUD stops every clip (WCAG 2.2.2). With
+`prefers-reduced-motion: reduce` nothing plays and the button is hidden: each video shows its
+poster frame. A clip that fails to load is hidden (`.is-broken`) and the screenshot shows.
+Clips live in `assets/clips/<name>.{webm,mp4}` with `<name>-poster.jpg`.
+
 ---
 
 ## CMP-22 · Version / "What's new" modal
@@ -844,39 +858,43 @@ accessibility tree. The tablist carries `aria-label="NbS Tool features"`.
 
 ---
 
-## CMP-32 · Project flip card + marquee (`.pflip` / `.pmarquee`)
+## CMP-32 · Field-stories gallery + site modal (`.pgal` / `.pg-modal`)
 
 **Files.** [css/home.css](../../css/home.css) · inline script in
 [index.html](../../index.html) (SCR-01 only)
 
-**Purpose.** Tease the unbuilt project portfolio (SCR-08) with a looping strip of field-project
-cards that turn over to show a summary. Ported from staging (DEC-28), replacing the static
-three-card grid that had been `hidden` in the markup.
+**Purpose.** Tease the unbuilt project portfolio (SCR-08): five field sites laid around the
+section heading, each opening its photos and field note. Replaced the auto-scrolling flip-card
+marquee (DEC-98).
 
-**Parts.** `.pmarquee` scrolls `.pmarquee-track`, which holds the card set twice — the second
-copy is a visual clone only. `.pflip` is a 420×340 `perspective` box over `.pflip-in`, which
-rotates 180° between `.pf-front` (photo, name, location) and `.pf-back` (name, location, the
-field note, external-link corner).
+**Parts.** `.pgal` is a full-viewport (`min-height: 100svh`) 3×3 grid. `.pg-centre` (the
+heading and intro) holds the middle cell; the five `.pg-tile` buttons sit in the outer cells,
+each a different size and aspect, so the layout reads as scattered but tiles can never cover
+the copy. A tile is `.pg-photo` (one photo), `.pg-name` (display type, one word per line,
+overlapping the photo's lower edge) and `.pg-loc` (location, running down the photo's side).
+Behind everything, `.pgal::before` draws a faint map of the 11 ASEAN member states
+(`assets/home/sea-map.svg` as a CSS mask filled with `--ink-650`, full width at its own aspect ratio and centred on the gallery, so it is
+never clipped top or bottom; on wide screens it runs up into the dark band above and behind the
+testimony, whose content is lifted above it with `z-index: 1`; decorative, no
+alt). Each tile holds a `<template>` with every site photo and the field note. One shared
+`<dialog class="pg-modal">` shows them: main photo, thumbnail row, then name, location and
+story.
 
-**Sizing.** The card is sized to its longest back, not to a design grid: 420×340 holds the
-Lematang note at 336px with 12.5px/1.5 copy. Staging's 352×233 was cut around lorem ipsum and
-clips every real note. `.pf-copy` keeps `overflow-y: auto` as a safety net for narrow
-viewports, but nothing scrolls at the sizes shipped. **If a note is rewritten longer, re-measure
-and raise the height — do not let it scroll.**
+**States.** *Resting* — each tile shows one of its photos, picked at random on page load.
+*Hover / focus* — the photo pushes in to 1.04 and the name turns spring green. *Modal open* —
+the first photo is shown; a thumbnail switches the main photo and gets `aria-pressed="true"`.
+Page scroll is locked while the modal is open.
 
-**States.** *Resting* — front face, marquee sliding. *Flipped* — `.is-flipped` +
-`aria-pressed="true"`. *Paused* — `:hover` or `:focus-within` on `.pmarquee` stops the
-animation.
+**Responsive.** At 900px and below the grid becomes two columns: heading first, then the tiles
+with the name tucked over the photo's lower edge and the location underneath. At 760px and
+below the modal stacks photo over text and scrolls as one.
 
-**Accessibility contract.** Each real card is `role="button"`, `tabindex="0"`, labelled
-"<name>, <location>. Show details." and toggles on click, <kbd>Enter</kbd> and
-<kbd>Space</kbd>, with `aria-pressed` tracking the face. **The cloned set is `aria-hidden` and
-`tabindex="-1"`, with empty `alt` on its images** — without that, every project is announced
-and tabbed through twice. Focus inside the strip pauses the animation, so a keyboard user is
-not reading a moving target. The transition is removed under `prefers-reduced-motion: reduce`,
-along with the marquee itself.
-
----
+**Accessibility contract.** Tiles are real `<button>`s with `aria-haspopup="dialog"`, named by
+their visible name and location; the tile photo has empty `alt` (the name says it). The modal
+is a native `<dialog>` opened with `showModal()`: focus moves in, Tab stays inside, Esc closes
+and focus returns to the tile. It is labelled by its heading. Thumbnails are buttons labelled
+"Photo n of m: <alt>", and the main photo carries the real `alt`. The close button and a click
+on the backdrop also close it. Under `prefers-reduced-motion` the push-in is removed.
 
 ## CMP-33 · Help entry card + numbered steps (`.hc-card` / `.hc-steps`)
 
@@ -1049,14 +1067,21 @@ numbered stepper with no arrows. Beside the diagram, a sticky `.mf-detail` card 
 holds the picked node's title and text and one button, "How this works", which links to that
 node's `technical-docs.html#docs/…` section (the methodology home until a node is picked).
 
-**States.** Idle (all nodes at full strength). Focused, on click or hover: `.has-focus` on the
-flow; the picked node gets `.is-on` + `aria-pressed="true"`, its ancestors and descendants
-`.is-lit`, everything else drops to 0.28 opacity; on the stepper, each stage holding a lit node
-fills its number. At 900px and below the card stops being sticky and sits under the flow.
+**States.** Idle (all nodes at full strength, the card on its "Start anywhere" text).
+**Previewed**, on hover or keyboard focus: `.has-focus` on the flow; the node's ancestors and
+descendants get `.is-lit`, everything else drops to 0.28 opacity, and the card shows that node; on
+the stepper, each stage holding a lit node fills its number. The preview ends, back to idle, when
+the pointer or focus leaves the diagram. **Locked**, on click (DEC-97): the node also gets `.is-on`
+(spring ring) + `aria-pressed="true"`, and the card stays on it whatever else is hovered or
+focused. Clicking the locked node again unlocks it; clicking another node moves the lock there.
+One shared tooltip (`.mf-tip`) sits on the top edge of the hovered or focused node: "Click to lock
+this information", "Click again to unlock", or "Click to lock this box instead" while another node
+is locked. At 900px and below the card stops being sticky and sits under the flow.
 
 **Accessibility contract.** Every node is a `<button>` with a visible text label. Flags are
 decorative (`aria-hidden`); the node's text names the eleven Member States. The card's text sits
-in an `aria-live="polite"` region. Hover previews a node but never replaces click/keyboard.
+in an `aria-live="polite"` region. Focus previews a node the way hover does, and Enter or Space
+locks and unlocks it; `aria-pressed` carries the locked state. The tooltip is `aria-hidden`.
 
 **Known gap.** Flags load from cdnjs (`flag-icons` 7.2.3), the site's only image from a CDN. At
 900px and below the card sits below the flow, so a tap near the top updates text off-screen.

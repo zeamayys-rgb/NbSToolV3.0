@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>NbS Tool — Sitemap</title>
-<meta name="description" content="Every page of the NbS Tool platform — the full Design-to-MRV workflow, reference material and account pages, in one index." />
+<meta name="description" content="Every page of the NbS Tool: the eight phases of an analysis, managing a project, the science behind it and your account, in one index." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -12,20 +12,20 @@
 <link rel="stylesheet" href="css/nav.css" />
 <link rel="stylesheet" href="css/footer.css" />
 <style>
-  body { margin: 0; background: #f7faf8; color: #1c2a23; font-family: var(--font-text, "Poppins", sans-serif); }
+  body { margin: 0; background: var(--bg-base-second); color: var(--text-base-main); font-family: var(--font-text, "Poppins", sans-serif); }
   .wrap { max-width: 960px; margin: 0 auto; padding: 0 24px; }
   .sm-head { padding: 56px 0 8px; }
-  .sm-head .kicker { font-family: var(--font-text); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: #1e7a4d; }
+  .sm-head .kicker { font-family: var(--font-text); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--text-primary); }
   .sm-head h1 { font-size: clamp(30px, 5vw, 42px); font-weight: 700; letter-spacing: -.02em; margin: 10px 0 8px; }
-  .sm-head p { color: #55685e; max-width: 60ch; line-height: 1.6; margin: 0 0 40px; }
-  .sm-group { padding: 26px 0; border-top: 1px solid #dfe8e2; display: grid; grid-template-columns: 200px 1fr; gap: 20px; }
-  .sm-group h2 { font-family: var(--font-text); font-size: 11px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: #1e7a4d; margin: 6px 0 0; }
+  .sm-head p { color: var(--text-base-second); max-width: 60ch; line-height: 1.6; margin: 0 0 40px; }
+  .sm-group { padding: 26px 0; border-top: 1px solid var(--stroke-base); display: grid; grid-template-columns: 200px 1fr; gap: 20px; }
+  .sm-group h2 { font-family: var(--font-text); font-size: 11px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--text-primary); margin: 6px 0 0; }
   .sm-links { display: grid; gap: 2px; }
   .sm-links a { display: grid; grid-template-columns: 44px 190px 1fr; gap: 14px; align-items: baseline; padding: 9px 12px; border-radius: 10px; text-decoration: none; color: inherit; transition: background .15s; }
-  .sm-links a:hover { background: #e9f4ec; }
-  .sm-links .id { font-family: var(--font-text); font-size: 10.5px; letter-spacing: .1em; color: #1e7a4d; }
+  .sm-links a:hover { background: var(--bg-success-second); }
+  .sm-links .id { font-family: var(--font-text); font-size: 10.5px; letter-spacing: .1em; color: var(--text-primary); }
   .sm-links .nm { font-size: 14.5px; font-weight: 600; }
-  .sm-links .ds { font-size: 13px; color: #6b7d73; line-height: 1.45; }
+  .sm-links .ds { font-size: 13px; color: var(--text-base-second); line-height: 1.45; }
   main { padding-bottom: 56px; }
   @media (max-width: 720px){
     .sm-group { grid-template-columns: 1fr; gap: 10px; }
@@ -43,7 +43,7 @@
   <header class="sm-head">
     <span class="kicker">NbS Tool · Sitemap</span>
     <h1>Every page, one index.</h1>
-    <p>The full Design-to-MRV workflow and everything around it. Module codes (F01–F06) match the labels used across the platform.</p>
+    <p>The eight phases of an analysis and everything around them. Phase numbers match the Help Centre and the method pages, so Phase 3 here is Phase 3 there.</p>
   </header>
 
   <section class="sm-group">
@@ -56,25 +56,44 @@
   </section>
 
   <section class="sm-group">
-    <h2>Design-to-MRV workflow</h2>
+    <h2>Phases 0 to 5 · On the map</h2>
     <div class="sm-links">
-      <a href="interactive-map.html"><span class="id">F01</span><span class="nm">Interactive Map</span><span class="ds">Search a site, toggle five thematic layer groups, and draw your Area of Interest.</span></a>
-      <a href="new-project.html"><span class="id">F02</span><span class="nm">Data Analyser</span><span class="ds">Automatic baseline &amp; threat profile, then choose a pathway — Protect, Manage or Restore.</span></a>
-      <a href="document-generator.html"><span class="id">F03</span><span class="nm">Document Generator</span><span class="ds">Generate a General Feasibility Study and CCB Standard document from your analysis.</span></a>
-      <a href="dashboard.html"><span class="id">F04</span><span class="nm">My Project Dashboard</span><span class="ds">Run the portfolio — statuses, collaborators, privacy and incubator submission.</span></a>
-      <a href="project-detail.html"><span class="id">F04</span><span class="nm">Project Detail</span><span class="ds">A single project's boundary, baseline, documents and monitoring in one record.</span></a>
-      <a href="create-monitoring-plan.html"><span class="id">F05</span><span class="nm">Create Monitoring Plan</span><span class="ds">Turn a pathway into an MRV protocol — indicators, methods and frequency.</span></a>
-      <a href="monitoring-form.html"><span class="id">F05.1</span><span class="nm">Field Monitoring Form</span><span class="ds">Enter field measurements and evidence against your plan's indicators.</span></a>
-      <a href="mrv.html"><span class="id">F06</span><span class="nm">MRV Dashboard</span><span class="ds">Track indicators live, compare year on year, and export a verifiable report.</span></a>
+      <a href="interactive-map.html"><span class="id">0</span><span class="nm">Explore the map</span><span class="ds">Optional. Switch layers on and off, read the legend, find a place and export a map.</span></a>
+      <a href="interactive-map.html"><span class="id">1</span><span class="nm">Select location</span><span class="ds">Draw a polygon or upload a boundary file, then confirm the area.</span></a>
+      <a href="interactive-map.html"><span class="id">2</span><span class="nm">Site characterisation</span><span class="ds">What is here today: general context, nature, people and climate.</span></a>
+      <a href="interactive-map.html"><span class="id">3</span><span class="nm">Threat profile</span><span class="ds">What is happening to the site, and where it is heading if nothing changes.</span></a>
+      <a href="interactive-map.html"><span class="id">4</span><span class="nm">Pathway selection</span><span class="ds">4a: choose Protect, Manage or Restore for each ecosystem. 4b: choose the activities. Then set the duration and the carbon option.</span></a>
+      <a href="interactive-map.html"><span class="id">5</span><span class="nm">Potential benefit</span><span class="ds">What the project could deliver for nature, climate and people, then save the analysis.</span></a>
     </div>
   </section>
 
   <section class="sm-group">
-    <h2>Reference</h2>
+    <h2>Phases 6 and 7 · From the saved analysis</h2>
     <div class="sm-links">
-      <a href="technical-docs.html"><span class="id">F09</span><span class="nm">The science behind it</span><span class="ds">The Help Centre&rsquo;s method pages: the methodology summary, how each phase is calculated, and the outputs, limitations and sources.</span></a>
-      <a href="NbS_Activities_Flow_v2.html"><span class="id">—</span><span class="nm">Activity Matrix</span><span class="ds">The NbS activity flow — every pathway × ecosystem combination mapped out.</span></a>
-      <a href="index.html#about"><span class="id">—</span><span class="nm">About the coalition</span><span class="ds">The SE-Asian institutions behind the ASEAN-NbS Tool project.</span></a>
+      <a href="create-monitoring-plan.html"><span class="id">6</span><span class="nm">Monitoring planning</span><span class="ds">Turn the activities into indicators, methods and a schedule.</span></a>
+      <a href="document-generator.html"><span class="id">7</span><span class="nm">Generate documents</span><span class="ds">General project documentation, or a carbon project document for a chosen standard.</span></a>
+    </div>
+  </section>
+
+  <section class="sm-group">
+    <h2>After the analysis · Manage your project</h2>
+    <div class="sm-links">
+      <a href="dashboard.html"><span class="id">—</span><span class="nm">My Project</span><span class="ds">Save and find your projects: statuses, collaborators and privacy.</span></a>
+      <a href="project-detail.html"><span class="id">—</span><span class="nm">Inside one project</span><span class="ds">One project&rsquo;s overview, collaborators, privacy, history, analysis, monitoring and MRV.</span></a>
+      <a href="new-project.html"><span class="id">—</span><span class="nm">Import a running project</span><span class="ds">Register a project that is already running, from your own boundary file, without going through the map.</span></a>
+      <a href="monitoring-form.html"><span class="id">—</span><span class="nm">Add your own data</span><span class="ds">Enter field measurements and evidence against your plan&rsquo;s indicators.</span></a>
+      <a href="mrv.html"><span class="id">—</span><span class="nm">MRV dashboard</span><span class="ds">See whether the project is on track: monitoring results and verification status.</span></a>
+    </div>
+  </section>
+
+  <section class="sm-group">
+    <h2>The science behind it</h2>
+    <div class="sm-links">
+      <a href="help.html#science-scope"><span class="id">—</span><span class="nm">Methodology summary</span><span class="ds">Summary, requirements and limits, scope and analysis conventions, workflow and land cover classes.</span></a>
+      <a href="help.html#science-method"><span class="id">—</span><span class="nm">How each phase is calculated</span><span class="ds">The method behind each phase, from Phase 0 to Phase 7.</span></a>
+      <a href="help.html#science-limits"><span class="id">—</span><span class="nm">Outputs, limitations and sources</span><span class="ds">Outputs, troubleshooting, a worked example, known issues and limitations, and the references.</span></a>
+      <a href="NbS_Activities_Flow_v2.html"><span class="id">—</span><span class="nm">Activity matrix</span><span class="ds">The full logic, from land cover through to indicators, on its own page.</span></a>
+      <a href="help.html#who"><span class="id">—</span><span class="nm">Who is behind the NbS Tool</span><span class="ds">The SCeNe Coalition, its members and partners.</span></a>
     </div>
   </section>
 

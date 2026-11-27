@@ -22,7 +22,7 @@ const ICONS = [
   // Actions
   'close', 'check', 'add', 'remove', 'search', 'refresh', 'download', 'upload', 'save',
   'edit', 'delete', 'content_copy', 'send', 'logout', 'filter_list', 'sort',
-  'grid_view', 'view_list', 'visibility', 'visibility_off', 'play_arrow', 'play_circle',
+  'grid_view', 'view_list', 'visibility', 'visibility_off', 'play_arrow', 'play_circle', 'pause',
   'draw', 'print',
   // Help and status
   'question_mark', 'help', 'info:fill', 'warning:fill', 'error:fill',

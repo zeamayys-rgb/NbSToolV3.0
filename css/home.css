@@ -201,7 +201,40 @@ section { position: relative; }
   margin: 22px 0 0; max-width: 16ch; color: var(--base-white);
   text-wrap: balance;
 }
-.hero h1 .lit { color: var(--spring); font-style: italic; letter-spacing: -0.03em; }
+/* One sentence per line. Hovering a line wipes a spring block in behind it and shows that
+   feature's screenshot beside the headline (.hero-peek, DEC-95). */
+.hero-head { position: relative; }
+.hero h1 .hl {
+  position: relative; isolation: isolate;
+  display: block; width: fit-content; padding: 0 .12em; margin-left: -.12em;
+  transition: color var(--motion-default);
+}
+.hero h1 .hl::before {
+  content: ""; position: absolute; inset: 0 0 .06em; z-index: -1;
+  border-radius: var(--radius-lg); background: var(--spring);
+  transform: scaleX(0); transform-origin: left center;
+  transition: transform var(--motion-default);
+}
+/* The frame look comes from .stage-frame; this only places it and hides it until a line is hovered. */
+.hero .hero-peek {
+  position: absolute; right: 0; top: 50%; width: 42%; height: auto; aspect-ratio: 7 / 5;
+  translate: 0 -50%; scale: 1.04; opacity: 0; pointer-events: none; display: none;
+  transition: opacity var(--motion-default), scale var(--motion-default);
+}
+.peek { position: absolute; inset: 0; opacity: 0; transition: opacity var(--motion-default); }
+@media (hover: hover) {
+  .hero h1 .hl:hover { color: var(--on-spring); }
+  .hero h1 .hl:hover::before { transform: scaleX(1); }
+  /* keep the neighbours' ascenders and descenders above the block */
+  .hero h1:has(.hl:hover) .hl:not(:hover) { z-index: 1; }
+}
+@media (hover: hover) and (min-width: 880px) {
+  .hero .hero-peek { display: block; }
+  .hero-head:has(.hl:hover) .hero-peek { opacity: 1; scale: 1; }
+  .hero-head:has(.hl[data-peek="map"]:hover) .peek[data-peek="map"],
+  .hero-head:has(.hl[data-peek="measure"]:hover) .peek[data-peek="measure"],
+  .hero-head:has(.hl[data-peek="document"]:hover) .peek[data-peek="document"] { opacity: 1; }
+}
 .hero-sub {
   margin: 26px 0 0; max-width: 56ch;
   font-size: clamp(16px, 1.55vw, 20px); line-height: 1.62; color: rgba(220, 247, 234, .82);
@@ -288,7 +321,8 @@ section { position: relative; }
 @media (max-width: 880px){ .triple { grid-template-columns: 1fr; } .triple-lead { grid-template-columns: 1fr; align-items: start; } }
 
 /* ============================================================
-   2 · JOURNEY — sticky scrollytelling (light mint; the product frame stays dark)
+   2 · KEY FEATURES — sticky scrollytelling (light mint; the product frame stays dark).
+   Class names keep the older "journey" wording (DEC-94).
    ============================================================ */
 .journey { background: var(--paper-2); color: var(--paper-ink); overflow: clip; }
 .journey-top { padding: clamp(64px, 9vw, 120px) 0 var(--space-64); }
@@ -327,18 +361,23 @@ section { position: relative; }
 .chapter h3 { font-family: var(--font-display); font-weight: 700; font-size: clamp(28px, 3.8vw, 46px);
   letter-spacing: -0.02em; line-height: 1; margin: 0; color: color-mix(in srgb, var(--paper-ink) 35%, transparent); transition: color .4s; }
 .chapter p { margin: 16px 0 0; font-size: 16px; line-height: 1.62; color: color-mix(in srgb, var(--paper-sub) 60%, transparent); transition: color .4s; max-width: 46ch; }
-/* a step that spans several methodology phases names each one */
-.chapter h4 { margin: var(--space-20) 0 0; font-family: var(--mono); font-weight: 600; font-size: 13px; color: color-mix(in srgb, var(--teal-deep) 55%, transparent); transition: color .4s; }
+/* each feature chapter names its two main jobs */
+/* h4: a sub-heading one step below the h3, not an eyebrow */
+.chapter h4 { margin: var(--space-32) 0 0; font-family: var(--font-display); font-weight: 600; font-size: clamp(19px, 1.8vw, 23px);
+  letter-spacing: -0.01em; line-height: 1.25; color: color-mix(in srgb, var(--paper-ink) 35%, transparent); transition: color .4s; }
 .chapter h4 + p { margin-top: var(--space-8); }
-.chapter.is-active h4 { color: var(--teal-deep); }
+.chapter.is-active h4 { color: var(--paper-ink); }
+/* Hover: underline draws left to right and the heading turns green; it swaps the pinned screenshot. */
+.chapter h4 { width: fit-content; padding-bottom: 2px;
+  background: linear-gradient(currentColor, currentColor) 0 100% / 0 2px no-repeat;
+  transition: color .4s, background-size .35s ease; }
+@media (hover: hover) {
+  .chapter h4[data-shot]:hover { color: var(--teal-deep); background-size: 100% 2px; }
+}
 .chapter .chapter-link { margin-top: 18px; opacity: 0; transform: translateY(6px); transition: opacity .4s, transform .4s; pointer-events: none; }
 .chapter.is-active h3 { color: var(--paper-ink); }
 .chapter.is-active p  { color: var(--paper-sub); }
 .chapter.is-active .chapter-link { opacity: 1; transform: none; pointer-events: auto; }
-.chapter .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
-.chapter .tag { font-family: var(--mono); font-weight: 600; font-size: 12px; padding: 5px 11px; border-radius: 999px;
-  border: 1px solid var(--stroke-base); color: var(--paper-sub); }
-.chapter.is-active .tag { color: var(--teal-deep); border-color: var(--teal-soft); background: var(--base-white); }
 .journey-cta { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--space-12); margin-top: var(--space-24); }
 .chapter-links { display: flex; flex-wrap: wrap; gap: 8px 22px; }
 .chapter .chapter-link { display: inline-flex; align-items: center; gap: 7px; text-decoration: none;
@@ -353,7 +392,7 @@ section { position: relative; }
   .journey-grid { grid-template-columns: 1fr; }
   .stage-col { position: relative; top: 0; margin-bottom: 8px; }
   .chapter { padding: 30px 0; }
-  .chapter h3 { color: var(--paper-ink); }
+  .chapter h3, .chapter h4 { color: var(--paper-ink); }
   .chapter p { color: var(--paper-sub); }
   .chapter .chapter-link { opacity: 1; transform: none; pointer-events: auto; }
 }
@@ -365,64 +404,144 @@ section { position: relative; }
 .s-shot { flex: 1; min-height: 0; width: 100%; margin-top: 12px; object-fit: contain; object-position: top center;
   border-radius: var(--radius-lg); }
 
+/* Feature clips (DEC-99): each stage plays a short looping clip of the feature in use over its
+   screenshot. The screenshot stays underneath as the fallback (no video support, a failed load,
+   or before the first frame). Clips fade between each other when an h4 is hovered. */
+.s-media { position: relative; flex: 1; min-height: 0; margin-top: 12px; }
+.s-media .s-shot,
+.s-media .s-clip { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0;
+  object-fit: contain; object-position: top center; border-radius: var(--radius-lg); }
+.s-clip { opacity: 0; transition: opacity var(--motion-default); pointer-events: none; background: transparent; }
+.s-clip.is-shown { opacity: 1; }
+.s-clip.is-broken { display: none; }
+/* Pause / play for the looping clips (WCAG 2.2.2). Sits at the right end of the frame HUD. */
+.clip-toggle { display: inline-grid; place-items: center; width: 26px; height: 26px; margin-right: -6px; padding: 0;
+  border: 1px solid var(--hair-d2); border-radius: var(--radius-full); background: transparent; color: inherit; cursor: pointer; }
+.clip-toggle:hover { background: color-mix(in srgb, currentColor 12%, transparent); }
+.clip-toggle svg { width: 16px; height: 16px; }
+.clip-toggle .i-play, .clip-toggle[aria-pressed="true"] .i-pause { display: none; }
+.clip-toggle[aria-pressed="true"] .i-play { display: block; }
+.clip-toggle[hidden] { display: none; }
+
 /* ============================================================
    5 · PROOF — field stories + testimony, one dark band (DEC-42)
    ============================================================ */
-/* side-by-side heading: title left, intro right (Stories and Methods) */
-.proof-head { display: flex; align-items: flex-end; gap: 20px; max-width: none; }
-.proof-head h2 { flex: 1; margin: 0; }
-.proof-head p { flex: none; width: 500px; max-width: 100%; margin: 0; font-size: 18px; line-height: 1.69; }
-@media (max-width: 880px){
-  .proof-head { display: block; }
-  .proof-head p { width: auto; margin-top: 20px; }
+/* ---- field-stories gallery (DEC-98) ----
+   A full-viewport field: the heading sits in the middle, the five site tiles sit around it in a
+   3x3 grid so they can never overlap the copy. Each tile is a button that opens .pg-modal. */
+.proof { padding-top: 0; }
+.pgal { display: grid; min-height: 100svh; align-items: center;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 620px) minmax(0, 1fr); grid-template-rows: auto 1fr auto;
+  gap: var(--space-24) var(--space-48); padding: var(--space-48) var(--gutter);
+  position: relative; isolation: isolate;
+  /* Clip the map at the top edge only: the section above is light, so map spilling into it shows.
+     Sides and bottom stay open so the map still runs down behind the testimony. */
+  clip-path: inset(0 -100vw -100vh); }
+/* Map of the ASEAN member states behind the gallery. A mask, not an <img>, so it can take a colour
+   token. Decorative. Built by scripts/build-sea-map.py.
+   Sized to the full width at its own aspect ratio and centred on the gallery. On wide screens it is
+   taller than the gallery: the top is clipped by .pgal (the section above is light), and the bottom
+   runs down behind the testimony, which shares the band colour, so it reads as one field.
+   The map paints over earlier content, so the neighbouring content is lifted above it below. */
+.pgal::before { content: ""; position: absolute; left: 0; right: 0; top: 50%; aspect-ratio: 1000 / 810;
+  transform: translateY(-50%); z-index: -1;
+  /* A deep green one step off the band, not a tint of --spring: keeps the centre copy readable. */
+  background: var(--ink-650); pointer-events: none;
+  -webkit-mask: url("../assets/home/sea-map.svg") center / contain no-repeat;
+          mask: url("../assets/home/sea-map.svg") center / contain no-repeat; }
+/* Keep the content around the gallery above the map where it overflows. */
+.band:has(+ .proof) > *, .proof-tq { position: relative; z-index: 1; }
+.pg-centre { grid-column: 2; grid-row: 2; max-width: none; text-align: center; }
+.pg-centre h2 { margin: 0; }
+/* Heading words rise in one after another once the block reveals (JS wraps each word in .w).
+   TODO(design) TODO-20: no slow-duration or stagger token; values match the .reveal motion. */
+.pg-centre .w { display: inline-block; opacity: 0; transform: translateY(.5em);
+  transition: opacity .6s ease, transform .6s cubic-bezier(.2,.7,.3,1); transition-delay: calc(var(--w) * 45ms); }
+.pg-centre.is-in .w { opacity: 1; transform: none; }
+/* Tiles reveal one by one, in page order. */
+.pg-tile.reveal.is-in { transition-delay: calc(var(--pg-i) * 80ms); }
+
+.pg-tile { position: relative; display: block; padding: 0; border: 0; background: none; color: inherit;
+  font: inherit; text-align: left; cursor: pointer; }
+.pg-photo { display: block; overflow: hidden; border-radius: var(--radius-lg); background: var(--ink-700);
+  aspect-ratio: var(--pg-ar, 4 / 5); }
+.pg-photo img { display: block; width: 100%; height: 100%; object-fit: cover;
+  /* TODO(design) TODO-20: no slow-duration token; .6s matches the rest of SCR-01's photo motion. */
+  transition: transform .6s cubic-bezier(.2,.7,.3,1); }
+.pg-tile:hover .pg-photo img, .pg-tile:focus-visible .pg-photo img { transform: scale(1.04); }
+/* The name overlaps the photo's lower edge, one word per line. The shadow keeps it legible over light photos. */
+.pg-name { position: absolute; left: calc(var(--space-16) * -1); bottom: 0; transform: translateY(40%);
+  width: min-content; font-family: var(--font-display); font-weight: 700; font-size: clamp(24px, 2.3vw, 36px);
+  line-height: .9; letter-spacing: -.02em; color: var(--on-dark-hi); text-shadow: 0 0 24px var(--ink-900);
+  transition: color var(--motion-default); }
+.pg-tile:hover .pg-name, .pg-tile:focus-visible .pg-name { color: var(--spring); }
+.pg-loc { display: inline-flex; align-items: center; gap: var(--space-4); margin: 0;
+  font-family: var(--font-text); font-weight: 600; font-size: 12px; }
+.pg-pin { width: 14px; height: 14px; flex: none; }
+/* Location runs down the photo's right edge. */
+.pg-tile .pg-loc { position: absolute; top: 0; left: 100%; margin-left: var(--space-8);
+  writing-mode: vertical-rl; color: var(--on-dark); opacity: .72; white-space: nowrap; }
+/* With a mouse, the location appears only on hover or keyboard focus. Touch screens keep it visible. */
+@media (hover: hover) {
+  .pg-tile .pg-loc { opacity: 0; transition: opacity var(--motion-default); }
+  .pg-tile:hover .pg-loc, .pg-tile:focus-visible .pg-loc { opacity: .72; }
 }
 
-/* ---- teaser marquee of field-project cards (staging parity) ---- */
-/* Full-bleed: breaks out of .wrap to the viewport edges; body's overflow-x: hidden absorbs the scrollbar width. */
-.pmarquee { margin-top: clamp(30px, 4vw, 48px); margin-inline: calc(50% - 50vw); overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none; }
-.pmarquee::-webkit-scrollbar { display: none; }
-.pmarquee-track { display: flex; gap: 16px; width: max-content; animation: pslide 48s linear infinite; }
-.pmarquee:hover .pmarquee-track,
-.pmarquee:focus-within .pmarquee-track { animation-play-state: paused; }
-@keyframes pslide { to { transform: translateX(calc(-50% - 8px)); } }
+.pg-t1 { --pg-i: 0; grid-column: 1; grid-row: 2 / 4; justify-self: start; width: clamp(170px, min(19vw, 40svh), 300px); }
+.pg-t2 { --pg-i: 1; grid-column: 1; grid-row: 1; justify-self: center; align-self: start; margin-top: var(--space-40); width: clamp(130px, min(13vw, 18svh), 220px); --pg-ar: 4 / 3; }
+.pg-t3 { --pg-i: 2; grid-column: 3; grid-row: 1 / 3; justify-self: center; align-self: start; width: clamp(160px, min(17vw, 30svh), 270px); --pg-ar: 1; }
+.pg-t4 { --pg-i: 3; grid-column: 2; grid-row: 3; justify-self: start; width: clamp(170px, min(18vw, 24svh), 280px); --pg-ar: 5 / 4; }
+.pg-t5 { --pg-i: 4; grid-column: 3; grid-row: 3; justify-self: end; width: clamp(140px, min(14vw, 30svh), 230px); --pg-ar: 3 / 4; }
+/* Tiles near the right edge carry their name on the left, so it reads into the page, not off it. */
+.pg-t5 .pg-name { left: auto; right: 70%; text-align: right; }
 
-/* 420x340 is sized to the longest field note (Lematang, 336px at 12.5px) — staging's
-   352x233 was cut for lorem ipsum and clips real copy. See DEC-28. */
-.pflip { position: relative; width: 420px; height: 340px; flex: none; cursor: pointer; perspective: 1200px; }
-.pflip-in { position: relative; width: 100%; height: 100%; transform-style: preserve-3d;
-  transition: transform .6s cubic-bezier(.2,.7,.3,1); }
-.pflip.is-flipped .pflip-in { transform: rotateY(180deg); }
-.pf-face { position: absolute; inset: 0; border-radius: var(--radius-2xl); overflow: hidden;
-  backface-visibility: hidden; display: flex; flex-direction: column; justify-content: flex-end; }
-.pf-front { border: 1px solid var(--hair-d2); background: linear-gradient(162deg, var(--ink-700), var(--ink-850)); padding: 22px; }
-.pf-front img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: bottom; opacity: .8;
-  /* TODO(design) TODO-20: no slow-duration token; .6s matches the card flip above. */
-  transition: opacity .6s ease-out, transform .6s cubic-bezier(.2,.7,.3,1); }
-/* Hover/focus: photo comes forward at full colour with a slow push-in. The veil stays for title contrast. */
-.pflip:hover .pf-front img, .pflip:focus-visible .pf-front img { opacity: 1; transform: scale(1.05); }
-.pf-veil { position: absolute; inset: 0; background: linear-gradient(2deg, var(--card-veil), transparent 82%); }
-.pf-front h4, .pf-front .pf-loc { position: relative; }
-.pf-front h4 { font-family: var(--font-display); font-weight: 700; font-size: 25px; line-height: 1.02;
-  letter-spacing: -.01em; color: var(--base-white); margin: 0; }
-.pf-front .pf-loc { color: var(--base-white); }
-.pf-back { transform: rotateY(180deg); justify-content: flex-start; gap: 8px;
-  background: var(--base-white); border: 1px solid var(--stroke-base); padding: 17px 25px 17px 21px; }
-.pf-back h4 { font-family: var(--font-text); font-weight: 600; font-size: 17px; letter-spacing: -.01em;
-  color: var(--paper-ink); margin: 0; padding-right: 28px; }
-.pf-back .pf-loc { color: var(--primary-700); }
-.pf-loc { display: flex; align-items: center; gap: 6px; margin: 8px 0 0;
-  font-family: var(--mono); font-weight: 600; font-size: 12px; }
-.pf-loc svg { width: 12px; height: 12px; flex: none; }
-.pf-copy { display: flex; flex-direction: column; gap: 6px; margin-top: 4px; min-height: 0;
-  overflow-y: auto; overscroll-behavior: contain;
-  font-size: 12.5px; line-height: 1.5; color: var(--paper-sub); }
-.pf-copy p { margin: 0; }
-.pf-ext { position: absolute; top: 19px; right: 20px; color: var(--primary-700); transition: opacity .2s; }
-.pf-ext:hover { opacity: .7; }
-.pf-ext svg { width: 20px; height: 20px; display: block; }
+@media (max-width: 900px) {
+  .pgal { min-height: 0; grid-template-columns: 1fr 1fr; grid-template-rows: none; gap: var(--space-48) var(--space-16);
+    padding-block: var(--space-64); }
+  .pg-centre { grid-column: 1 / -1; grid-row: auto; text-align: left; }
+  .pg-tile { grid-column: auto; grid-row: auto; width: auto; justify-self: stretch; align-self: start; margin: 0; --pg-ar: 4 / 5; }
+  /* Name and location stack under the photo; the name still tucks up over its lower edge. */
+  .pg-name, .pg-t2 .pg-name, .pg-t5 .pg-name { position: relative; display: block; left: var(--space-12); right: auto;
+    top: auto; bottom: auto; margin-top: -.45em; transform: none; text-align: left; font-size: 24px; }
+  .pg-tile .pg-loc { position: static; writing-mode: horizontal-tb; margin: var(--space-8) 0 0 var(--space-12); white-space: normal; }
+}
 
-
-@media (max-width: 880px){ .pflip { width: 300px; height: 420px; } }
+/* ---- field-stories modal: every photo of the site, plus its field note ---- */
+html:has(.pg-modal[open]) { overflow: hidden; }
+.pg-modal { padding: 0; border: 0; border-radius: var(--radius-2xl); overflow: hidden;
+  width: min(1080px, 100% - var(--space-32)); max-width: none; max-height: min(720px, 100svh - var(--space-32));
+  background: var(--base-white); color: var(--paper-ink); }
+.pg-modal[open] { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); }
+.pg-modal::backdrop { background: var(--ink-veil); }
+/* The photo runs flush to the dialog's top, left and right edges (its top-left corner is rounded by
+   the dialog's own clip). It grows to fill any extra height the story column creates, so the
+   thumbnail row always sits at the bottom with the same inset on every side. */
+.pgm-media { display: flex; flex-direction: column; background: var(--ink-850); }
+.pgm-main { display: block; flex: 1 1 auto; min-height: 0; width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: cover; border-radius: 0; }
+.pgm-thumbs { display: flex; flex-wrap: wrap; gap: var(--space-12); padding: var(--space-16); }
+.pgm-thumbs button { width: 112px; aspect-ratio: 3 / 2; padding: 0; overflow: hidden; cursor: pointer;
+  border: 2px solid transparent; border-radius: var(--radius-md); background: none; opacity: .6;
+  transition: opacity var(--motion-fast), border-color var(--motion-fast); }
+.pgm-thumbs button:hover { opacity: .9; }
+.pgm-thumbs button[aria-pressed="true"] { opacity: 1; border-color: var(--spring); }
+.pgm-thumbs img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.pgm-text { min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: var(--space-40) var(--space-32); }
+.pgm-text h3 { margin: 0; padding-right: var(--space-40); font-family: var(--font-display); font-weight: 700;
+  font-size: clamp(30px, 3vw, 42px); line-height: .95; letter-spacing: -.02em; }
+.pgm-loc { margin-top: var(--space-12); color: var(--primary-700); }
+.pgm-story p { margin: var(--space-20) 0 0; font-size: 15px; line-height: 1.65; color: var(--paper-sub); }
+.pgm-close { position: absolute; top: var(--space-16); right: var(--space-16); display: grid; place-items: center;
+  width: 40px; height: 40px; padding: 0; cursor: pointer; border: 1px solid var(--stroke-base);
+  border-radius: var(--radius-pill); background: var(--base-white); color: var(--paper-ink); }
+.pgm-close:hover { background: var(--paper-2); }
+.pgm-close svg { width: 22px; height: 22px; }
+@media (max-width: 760px) {
+  .pg-modal { overflow-y: auto; }
+  .pg-modal[open] { grid-template-columns: 1fr; }
+  .pgm-thumbs { flex-wrap: nowrap; }
+  .pgm-thumbs button { flex: 1 1 0; width: auto; min-width: 0; }
+  .pgm-text { overflow: visible; padding: var(--space-24) var(--space-20) var(--space-32); }
+}
 
 /* ============================================================
    3 · DATA FLOW — ASEAN MRV Framework, global to site (dark)
@@ -454,6 +573,12 @@ section { position: relative; }
 .mrv-flow.has-focus .mf-node:not(.is-lit) { opacity: .28; }
 .mrv-flow.has-focus .mf-node.is-lit { --mf-line: var(--teal-deep); }
 .mf-node.is-on { box-shadow: 0 0 0 3px var(--spring), var(--elevation-3); }
+/* one shared tooltip, moved onto the top edge of the hovered or focused box; look follows .sitenav-help-tip */
+.mrv-flow { position: relative; }
+.mf-tip { position: absolute; z-index: 2; padding: var(--space-4) var(--space-8); border-radius: var(--radius-sm);
+  background: var(--spring); color: var(--on-spring); font-size: 12px; font-weight: 600; white-space: nowrap;
+  pointer-events: none; opacity: 0; transform: translate(-50%, -50%); transition: opacity var(--motion-fast); }
+.mf-tip.is-shown { opacity: 1; }
 
 /* ---- desktop: one diagram ---- */
 @media (min-width: 901px) {
@@ -552,28 +677,37 @@ section { position: relative; }
 @keyframes tqslide { to { transform: translateX(calc(-50% - var(--space-20) / 2)); } }
 
 /* card: quote mark, quote (Poppins), hairline, then avatar + name (Acumin) + role */
-.tq { position: relative; flex: 0 0 auto; margin: 0; display: flex; flex-direction: column; gap: var(--space-12);
-  padding: var(--space-24); border: 1px solid color-mix(in srgb, var(--base-white) 20%, transparent); border-radius: var(--radius-2xl);
+/* The portrait runs the full height of the card on the left, so the person leads, not the quote mark.
+   Grid: photo | (quote mark, quote, caption). Card widths add the photo column to the old text widths. */
+.tq { --tq-photo: calc(var(--space-100) + var(--space-40));
+  position: relative; flex: 0 0 auto; margin: 0; display: grid; grid-template-columns: var(--tq-photo) minmax(0, 1fr);
+  grid-template-rows: auto 1fr auto; gap: var(--space-12) var(--space-20);
+  padding: var(--space-20); border: 1px solid color-mix(in srgb, var(--base-white) 20%, transparent); border-radius: var(--radius-2xl);
   background: color-mix(in srgb, var(--base-white) 6%, transparent); transition: border-color .3s, background .3s; }
-.tq.tq-sm { width: 280px; }
-.tq.tq-md { width: 360px; }
-.tq.tq-lg { width: 460px; }
+.tq.tq-sm { width: 440px; }
+.tq.tq-md { width: 520px; }
+.tq.tq-lg { width: 620px; }
 .tq:hover { border-color: color-mix(in srgb, var(--base-white) 36%, transparent); background: color-mix(in srgb, var(--base-white) 10%, transparent); }
-.tq::before { content: "\201C"; height: var(--space-24); font-family: var(--font-display); font-weight: 700;
+.tq::before { content: "\201C"; grid-column: 2; height: var(--space-24); font-family: var(--font-display); font-weight: 700;
   font-size: 64px; line-height: .9; color: var(--spring-soft); opacity: .6; }
-.tq blockquote { flex: 1; margin: 0 0 var(--space-8); font-family: var(--font-text); font-weight: 400;
+.tq blockquote { grid-column: 2; margin: 0 0 var(--space-8); font-family: var(--font-text); font-weight: 400;
   font-size: 15px; line-height: 1.65; color: var(--on-dark); text-wrap: pretty; }
-.tq figcaption { display: flex; align-items: flex-start; gap: var(--space-12);
+.tq figcaption { grid-column: 2; display: flex; align-items: flex-start; gap: var(--space-12);
   padding-top: var(--space-16); border-top: 1px solid color-mix(in srgb, var(--base-white) 20%, transparent); }
-.tq-av { position: relative; flex: none; width: var(--space-40); height: var(--space-40); border-radius: var(--radius-full); overflow: hidden;
+/* Portrait. Until a photo arrives (or if it fails to load) the initials show on the gradient. */
+.tq-av { grid-column: 1; grid-row: 1 / -1; position: relative; min-height: calc(var(--tq-photo) * 1.25);
+  border-radius: var(--radius-xl); overflow: hidden;
   display: grid; place-items: center; background: linear-gradient(140deg, var(--teal), var(--spring));
-  color: var(--on-spring); font-weight: 700; font-size: 13px; font-family: var(--font-text); }
-.tq-av img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  color: var(--on-spring); font-weight: 700; font-size: 32px; font-family: var(--font-display); }
+.tq-av img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%;
+  transition: transform .5s; }
+.tq:hover .tq-av img { transform: scale(1.04); }
 .tq-meta { display: flex; flex-direction: column; gap: var(--space-2); min-width: 0; }
 .tq-n { font-family: var(--font-display); font-weight: 600; font-size: 19px; line-height: 1.15; color: var(--base-white); }
 .tq-r { font-size: 12px; line-height: 1.45; color: var(--on-dark); opacity: .9; } /* .9 keeps 12px text above 4.5:1 on the green */
 @media (max-width: 640px){
-  .tq.tq-sm { width: 240px; } .tq.tq-md { width: 280px; } .tq.tq-lg { width: 320px; }
+  .tq { --tq-photo: var(--space-80); }
+  .tq.tq-sm { width: 340px; } .tq.tq-md { width: 380px; } .tq.tq-lg { width: 420px; }
   .tq-track { animation-duration: 72s; } .tq-rev .tq-track { animation-duration: 84s; }
   .tq-row.tq-rev { padding-left: var(--space-40); }
 }
@@ -637,16 +771,19 @@ section { position: relative; }
 @media (prefers-reduced-motion: reduce) {
   * { animation-duration: .001ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; }
   .reveal { opacity: 1 !important; transform: none !important; }
+  .hero h1 .hl, .hero h1 .hl::before, .hero .hero-peek, .peek { transition: none; }
   .stage { transition: opacity .2s; }
+  .s-clip { transition: none; }
   .scrollcue .rail::after { animation: none; }
-  .pmarquee-track { animation: none; }
   .tq-slider { mask-image: none; -webkit-mask-image: none; }
   .tq-row { overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: var(--space-8); }
   .tq-row.tq-rev { padding-left: 0; }
   .tq-track { animation: none; width: auto; }
   .tq { scroll-snap-align: start; }
   .tq[aria-hidden] { display: none; }
-  .pflip-in { transition: none; }
-  .pflip:hover .pf-front img, .pflip:focus-visible .pf-front img { transform: none; }
+  .tq:hover .tq-av img { transform: none; }
+  .pg-photo img { transition: none; }
+  .pg-tile:hover .pg-photo img, .pg-tile:focus-visible .pg-photo img { transform: none; }
+  .pg-centre .w { opacity: 1; transform: none; transition: none; }
   .odo-col { transition: none; }
 }

@@ -1197,6 +1197,27 @@
       (byPw[label] = byPw[label] || []).push({ id:a.id, name:a.name });
     });
   });
+  /* Conservation activities (species-focused). In production this group appears
+     only when the AOI overlaps a species restoration need; ponytail: the
+     prototype shows it whenever Restore is on, to demo the UI. `tip` holds the
+     examples moved out of the activity name into a hover/focus tooltip. */
+  var CONSERVATION = {
+    forest: [
+      { id:'fo-con-1', name:'Protect species core habitat by establishing or expanding protected areas, and secure legal protection or easements for key habitat outside them.', tip:'Core habitat means nesting, roosting, feeding and breeding sites. Legal protection outside protected areas can include water rights and riparian buffers.' },
+      { id:'fo-con-2', name:'Maintain and manage the species protected area.', tip:'For example: boundaries, ranger presence, habitat upkeep and anti-poaching.' },
+      { id:'fo-con-3', name:'Restore degraded species habitat and natural processes.', tip:'For example: replanting, rewetting, corridors, prescribed burns and pollution cleanup.' },
+      { id:'fo-con-4', name:'Train rangers, practitioners and community members in relevant conservation skills.', tip:'For example: monitoring, species identification and management.' }
+    ],
+    mangrove: [
+      { id:'ma-con-1', name:'Strengthen legal and policy protection for the species and its habitat.', tip:'For example: enforcing sustainable harvest limits, and regulating trade through permits, quotas and aquarium/NTFP-trade controls.' },
+      { id:'ma-con-2', name:'Develop and promote alternative or nature-dependent livelihoods that reduce pressure on the species and its habitat.', tip:'For example: ecotourism and sustainable non-timber forest products (NTFPs).' },
+      { id:'ma-con-3', name:'Return the species to suitable habitat where it can establish.' }
+    ],
+    peat: [
+      { id:'pe-con-1', name:'Reward species conservation through incentives and voluntary standards or certification.', tip:'Incentives can be direct payments, tenure incentives or payments for ecosystem services (PES). Standards include FSC and sustainable sourcing.' },
+      { id:'pe-con-2', name:'Build public and community support for species and habitat conservation.', tip:'Through awareness campaigns, and by bringing species and habitat conservation into school and university curricula.' }
+    ]
+  };
   var PW_ORDER = ['Protect','Manage','Restore'];
   var PW_CLASS = { Protect:'pw-protect', Manage:'pw-manage', Restore:'pw-restore' };
   var checkedActs = new Set();                 // ticked activity ids (F05 ids)
@@ -1253,6 +1274,21 @@
       });
       html += '</div>';
     });
+    if (sel.indexOf('Restore') > -1 && CONSERVATION[eco]){
+      html += '<div class="act-group"><div class="act-group__head"><div class="act-group__ttl pw-conserve">Conservation</div>'
+            + '<p class="act-group__note">These are recommended activities because the area overlaps species restoration needs.</p></div>';
+      CONSERVATION[eco].forEach(function(a){
+        total++; var on = checkedActs.has(a.id); if (on) checked++;
+        var tipId = 'tip-' + a.id;
+        html += '<div class="activity-item' + (on ? ' checked' : '') + '" data-activity data-act="' + a.id + '"'
+              + ' role="checkbox" tabindex="0" aria-checked="' + (on ? 'true' : 'false') + '"'
+              + (a.tip ? ' aria-describedby="' + tipId + '"' : '') + '>'
+              + CHK + '<span class="activity-label' + (a.tip ? ' has-tip' : '') + '">' + esc(a.name) + '</span>'
+              + (a.tip ? '<span class="act-tip" role="tooltip" id="' + tipId + '">' + esc(a.tip) + '</span>' : '')
+              + '</div>';
+      });
+      html += '</div>';
+    }
     card.querySelector('[data-activity-list]').innerHTML = html;
     card.querySelector('[data-count]').textContent = checked;
     var tot = card.querySelector('[data-total]'); if (tot) tot.textContent = total;
@@ -1292,6 +1328,9 @@
       // activities start unchecked — the user opts in per activity;
       // deselecting the pathway still clears any it had checked
       if (!nowOn) ((NBS_ACTIVITIES[eco] || {})[pw] || []).forEach(function(a){
+        checkedActs.delete(a.id);
+      });
+      if (!nowOn && pw === 'Restore') (CONSERVATION[eco] || []).forEach(function(a){
         checkedActs.delete(a.id);
       });
       renderActivities(card);

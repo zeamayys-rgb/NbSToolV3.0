@@ -457,6 +457,21 @@
   .pw-protect{background:#e9f8f1;color:#044c3e;}
   .pw-manage{background:#fdf6ea;color:#8f611c;}
   .pw-restore{background:#e0f7fa;color:#0e7490;}
+  .pw-conserve{background:var(--bg-purple-second);color:var(--purple-800);}
+  .act-group__head{display:flex;align-items:flex-start;gap:10px;}
+  .act-group__head .act-group__ttl{flex:none;}
+  .act-group__head .act-group__note{flex:1 1 0;min-width:0;}
+  .act-group__note{margin:0;font-size:11px;line-height:18px;color:var(--purple-800);}
+  /* conservation activity examples — tooltip on hover/focus of the dashed label (same look as .crisk-tip) */
+  .activity-item{position:relative;}
+  .activity-label.has-tip{border-bottom:1px dashed var(--text-base-second);cursor:help;}
+  .act-tip{
+    position:absolute;left:32px;top:calc(100% - 2px);z-index:40;width:300px;max-width:calc(100% - 40px);
+    background:var(--bg-base-main);border:1px solid var(--stroke-base);border-radius:0 var(--radius-md) var(--radius-md) var(--radius-md);
+    padding:12px;display:none;font-size:11px;line-height:18px;color:var(--text-base-second);
+    box-shadow:0 4px 12px rgba(15,20,25,.08);cursor:default;
+  }
+  .activity-label.has-tip:hover + .act-tip,.activity-item:focus-visible .act-tip{display:block;}
   .tags .tag.pw-protect,.tags .tag.pw-manage,.tags .tag.pw-restore{font-size:10px;font-weight:600;}
 
   /* ---- divider before duration ---- */

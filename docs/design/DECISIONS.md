@@ -2060,3 +2060,201 @@ merged into the Help Centre glossary), the per-country administrative level tabl
 figure read from the sample AOI. The one worked example is the reference document's own run.
 SCR-19 has three science entry pages instead of four; `science-data` forwards to `#reports`.
 The guest area limit in the Help Centre FAQ reads 100,000 ha to match.
+
+## DEC-94 · The home page shows three key features, not the whole journey
+
+**Context.** The second band of the home page walked a project through five steps and all eight
+phases, then My Project. That is the Help Centre's job (`help.html#phases`), and it made the home
+page long before a visitor learned what the tool is made of. The WRI Application Plan (v2,
+20 October 2026) describes the tool as three main features: Interactive Map, Data Analyser and
+Document Generator.
+
+**Decision.** The band keeps its sticky stage frame but has three chapters, one per feature. Each
+chapter names the feature in its `h3`, gives one line on what it is for, and two `h4` jobs. The tag
+row is removed, since the heading now names the feature. The HUD reads "01 / 03 · Map it",
+"Measure it", "Document it", echoing the hero. Monitoring Plan and My Project are no longer
+described here; the hero and the MRV band still mention them. The section id and class names keep
+the word `journey`, so the hero link and the CSS are unchanged. Supersedes the chapter list of
+DEC-35; the stage frame, the Help Centre screenshots and the "See how" links stay.
+
+**Checked against the Application Plan.** Upload formats, the 100,000 and 500,000 hectare limits,
+the four site groups, the three ecosystems, Protect / Manage / Restore, the planning disclaimer,
+the Feasibility Document, the CCB template and the editable Word download all match. Two points
+do not, and are left out of the band until the team decides: the plan lists a Project Summary and
+the Monitoring Plan as Document Generator outputs, while the prototype has no Project Summary
+document and builds the Monitoring Plan on its own screen (F05).
+`TODO(design): confirm whether the Document Generator should also list Project Summary and Monitoring Plan.`
+
+## DEC-95 · Hovering a hero headline line previews that feature
+
+**Context.** The hero headline is three lines, "Map it. Measure it. Document it.", one per key
+feature (DEC-94). The space to its right was empty, and the headline gave no hint of what each
+verb opens.
+
+**Decision.** Hovering a line wipes a spring-green block in behind it from the left and turns its
+text to `--on-spring`. While a line is hovered, a product frame fades in to the right of the
+headline with that feature's Help Centre screenshot: Interactive Map, Data Analyser or Document
+Generator. These are the same three files the Key features band uses, so no new image was added.
+The pattern follows the hover on the SCeNe Coalition website's hero words.
+
+The preview is decorative: it is `aria-hidden`, has no focus stop and does not show on touch
+screens or below 880px. Nothing is lost there, because the band directly below shows and
+describes the same screenshots. The lines are not links.
+
+Both transitions use `--motion-default`. The SCeNe site runs the wipe at 350ms and the image fade
+at 500ms; no token exists for those, so they were not copied.
+`TODO(design): if the 300ms or 550ms durations proposed in MOTION.md are approved, decide whether this hover should use them.`
+
+## DEC-96 · The key-features picture changes at the middle of the pinned frame
+
+**Context.** In the key-features band (DEC-94) a chapter became active when it crossed the middle
+of the window. The chapters are shorter than the window, so the next chapter took over while the
+one before was still fully on screen: the picture changed and the text dimmed before the reader
+had finished it.
+
+**Decision.** The active chapter is the one that crosses the vertical middle of the pinned stage
+frame (`.stage-col`). The picture now changes when the next chapter's heading arrives beside it,
+by which point the last lines of the chapter before are leaving under the navigation bar. The
+check runs on scroll and resize, once per frame, in `index.html`; it replaced the
+`IntersectionObserver`. Below 900px the frame is not pinned and stays on the first picture, as it
+effectively did before. No timing or colour changed.
+
+**Also in this change.** The Interactive Map chapter's second job is now "Export the map" (text
+from `help.html#phase-0-export-a-map-or-data`), and its second link opens that guide. The band no
+longer states the upload formats or the 100,000 and 500,000 hectare limits listed under DEC-94;
+they remain in the Help Centre.
+`TODO(design): the map's Export control is still inert in the prototype (SCREENS.md, SCR-03), while the home page now describes image, GeoPDF and KML export.`
+
+## DEC-97 · Methodology gets its own link in the top bar
+
+**Context.** The Methodology pages could only be reached through the Help Centre: the "?" icon
+(DEC-39), then the Methodology tab in the documentation sidebar. Readers who want to check how a
+number was produced had no direct way in.
+
+**Decision.** The link row gains a fourth item, "Methodology", after My Project. It opens
+`help.html#science-scope`, the Methodology summary. The label matches the sidebar tab and the
+footer link. The "?" icon stays as it is.
+
+The link is marked current (`.active` and `aria-current="page"`) only while the documentation
+shows the Methodology tree. `js/docs-shell.js` sets this in `renderModes()`, because the Help
+Centre and the Methodology share one route and `data-nav-page="docs"` cannot tell them apart.
+
+
+Four links no longer fit the bar at full spacing on narrow desktop windows. Between 861px and
+1160px, `css/nav.css` tightens the bar's side padding to `--space-24`, its gap to `--space-16`
+and the link gap to `--space-20`. The drawer breakpoint (860px) did not move.
+`TODO(design): between 861px and about 920px the bar is still slightly wider than the window, as it was with three links. Decide whether the drawer should start earlier.`
+
+## DEC-97 · A click locks a data-flow box; hover only previews
+
+**Context.** In the data-flow diagram (CMP-38) hover and click did the same thing: both picked a
+box and filled the card beside it. Moving the pointer across the diagram to reach the card's
+"How this works" link changed the card on the way.
+
+**Decision.** Hover, or keyboard focus, previews a box, and the preview ends when the pointer or
+focus leaves the diagram. A click locks the box: the card stays on it whatever else is hovered.
+Clicking the locked box again unlocks it, and clicking another box moves the lock. The spring ring
+(`.is-on`) and `aria-pressed="true"` now mean locked, not merely picked. A tooltip on the hovered
+box says which of these a click will do. Its look follows the navigation tooltip
+(`.sitenav-help-tip`), in spring green so it reads on the dark band.
+
+**Not changed.** The band's lead still says "Tap any box to see where it leads", and the tooltip
+says "Click" on touch screens too.
+`TODO(design): decide whether touch screens need "Tap" wording in the tooltip.`
+
+## DEC-98 · Field stories become a gallery with a site modal; photos compressed to WebP
+
+**Context.** The field team supplied three photos per site (four for Mbeliling) as 5–48 MB
+camera files. The section was an endlessly scrolling marquee of flip cards (CMP-32), one older
+JPG each and none for Mbeliling. A first pass crossfaded each card's photos; that read as too
+much motion stacked on the marquee.
+
+**Decision.** No auto-running motion. The section is one viewport tall: the heading in the
+middle, five site tiles scattered around it (a 3×3 grid, so they never cover the copy). Each
+tile shows one of its photos at random per page load. Choosing a tile opens a centred native
+`<dialog>` with every photo of the site (thumbnails) and its field note. Flip cards, the
+marquee, its loop clones and the dead `href="#"` external links are removed. Photos are resized
+to 840 px wide (2× the largest tile) and saved as WebP at quality 62 with EXIF and GPS
+stripped: 16 files, about 1.3 MB in total, in `assets/home/portfolio/<site>-<n>.webp`. The old
+JPGs are deleted.
+
+**Consequence.** Adding a photo is a file plus one `<img>` in the tile's `<template>`.
+The tile hover reuses the existing .6 s photo duration (TODO-20).
+
+**Background map.** A faint outline of the 11 ASEAN member states sits behind the gallery.
+It is built from Natural Earth 1:50m admin-0 countries (public domain) by
+`scripts/build-sea-map.py`: equirectangular, simplified, one `<path>` per country, 35 KB.
+It is a mask so it takes a colour token. Country borders are Natural Earth's and are shown
+for orientation only.
+
+## DEC-99 · Key features stages play live clips of each feature
+
+**Context.** The Key features frame (SCR-01) showed a static Help Centre screenshot per stage,
+swapped for another screenshot when a chapter `h4` is hovered. A still of a map or a form does
+not show what the feature does.
+
+**Decision.** Every picture the frame can show (three stage defaults plus six `h4` hovers) is
+replaced by a 7–10 s looping clip of that feature in use, recorded from this prototype with a
+visible cursor: drawing an AOI, opening a layer's info, exporting, the Data Analyser steps, and
+the Document Generator. Two things the prototype cannot show yet are mocked inside the
+recording only, never in the shipped pages: the export dialog, and the illustrative Key
+Biodiversity Area patches on the map. The screenshot stays under each video as its fallback.
+The page loads 1440 px wide web encodes (WebM, then MP4) with a JPEG poster, `preload="none"`,
+so only the clips a visitor actually sees are fetched. Masters (2880×1800 MP4 / WebM, GIF,
+PNG poster) are kept outside the repo with the recording scripts.
+
+**Accessibility.** The loops run longer than 5 s, so the HUD has a Pause / Play button
+(WCAG 2.2.2). `prefers-reduced-motion: reduce` shows the poster only. Videos are
+`aria-hidden`; the screenshot's `alt` still describes the stage. The new `pause` icon is added
+to the Material set (`scripts/fetch-material-icons.mjs`).
+
+**Consequence.** When a screen in a clip changes, its clip must be re-recorded or it will show
+the old UI. `TODO(design): the recorded map uses an offline Natural Earth basemap in OSM colours
+because the recording sandbox could not reach OpenStreetMap tiles; re-record against live tiles
+before launch if that matters.`
+
+
+## DEC-100 · Conservation activity group in Pathway Selection (F02-P4)
+
+**Decision.** Step 4 of the Data Analyser gains a fourth activity group, **Conservation**,
+listed after Restore. It holds species-focused activities set per ecosystem (Forest 4,
+Mangrove 3, Peatland 2). In the product it should appear only when the AOI overlaps a species
+restoration need. The prototype has no such overlap data, so it shows the group whenever
+Restore is switched on, and clears its ticks when Restore is switched off.
+
+**Simplified wording.** Each activity shows only its main action. The examples that were in
+brackets in the source list are moved to a tooltip on the dashed label, shown on hover and on
+keyboard focus (`aria-describedby`). The look follows the carbon-risk field tooltip
+(`.crisk-label` / `.crisk-tip`).
+
+**Consequence.** Conservation ids (`*-con-*`) are not in `js/f05-shared.js`, so they don't yet
+carry through to the F05 Monitoring Plan. `TODO(design): confirm the trigger rule, the final
+wording, and whether these activities need indicators in F05.`
+
+## DEC-101 · The Methodology follows Reference Methodology v3
+
+**Context.** DEC-93 rebuilt the Methodology on the team's *NbS Tool v3 · Reference Methodology*.
+On 26 November 2026 the team published a successor, *Reference Methodology v3*, which restructures
+the document and changes the method itself. The site still rendered the earlier text.
+
+**Decision.** `js/technical-docs.js` now follows v3, with the same rules as DEC-93 (same order,
+same wording where it is new, British spelling, tables captioned with v3's own numbers, Table 1 to
+Table 37). What changed:
+- **Phase 0 · Interactive Map** is a new article (`phase0`): the 51 map layers in two tables, and
+  the warning that several map layers are older than the ones the Data Analyser reads.
+- **Phase 2** lists each tab's sections in screen order. Historical deforestation, deforestation
+  risk and natural disaster risk move to Phase 3. New: the peat depth method, the above-ground
+  biomass model, and the per-country table of national people indicators.
+- **Phase 3** is in three groups (observed disturbance, pressure and hazard, business-as-usual
+  projection). Fire risk is new and is no longer one of the natural hazards.
+- **Phase 4a**: the decision matrix grows from 17 to 21 rows (4B is Manage; Category 6 splits
+  6A/6B; 8D is new; Category 10 splits 10A/10B/10C). New: the savanna rule, the ecosystem summary
+  and the ineligible-area reasons. The reference ecosystem has four values, not five.
+- **Phase 4b** carries the duration and carbon settings. **Phase 5** is reorganised into a
+  summary, general benefits and unique benefits; the triple benefit score is gone.
+- **Sources** becomes **References**: v3's full reference list. The article id stays `sources`.
+
+Deep-linked section ids were kept. The Help Centre glossary, the science entry cards and the docs
+index were updated to match. Not changed here: screens that still mention the triple benefit score
+(`index.html`, `sitemap.html`, `design-system.html`), and any screen logic that still runs the
+17-row matrix. Those are separate tasks.
