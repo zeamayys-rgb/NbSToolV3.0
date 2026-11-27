@@ -481,9 +481,10 @@ so it cannot be empty, partial, stale or out of scope.
 | Demo full | The button is pressed | The full video with native controls; the button is gone | Yes |
 | Demo under reduced motion | `prefers-reduced-motion: reduce` | The poster, not the loop; the button still works | Yes |
 | Demo autoplay refused | The browser blocks autoplay | The poster; the button still works | Yes |
-| Tutorial without an address | A video slot whose key in `HC_VIDEOS` is empty or not a YouTube address | On the landing page and *Video tutorials*: a short dashed strip with a "Video coming soon" pill and the caption. Under a guide page's hero: nothing, the slot stays hidden | Yes — by design, `TODO(design)` |
+| Tutorial without an address | A video slot whose key in `HC_VIDEOS` is empty, or neither a YouTube address nor an `.mp4` path | On the landing page and *Video tutorials*: a short dashed strip with a "Video coming soon" pill and the caption. Under a guide page's hero: nothing, the slot stays hidden | Yes — by design, `TODO(design)` |
 | Tutorial ready | A slot whose key holds a YouTube link or id | A dark 16:9 frame with a *Play video* button labelled with the video's title. Nothing is requested from YouTube yet | Yes |
 | Tutorial playing | The button is pressed | The YouTube player (no-cookie domain) replaces the button and takes focus | Yes |
+| Tutorial self-hosted | A slot whose key holds the path of an `.mp4` in the site (DEC-104) | The browser's own player in the 16:9 frame: poster, native controls, English captions track. Only the poster loads until play is pressed | Yes — the overview video |
 | Tutorial blocked | YouTube is unreachable or blocked on the reader's network | The browser's own error inside the frame; the caption and its *Read the guide* link stay | Partial — no fallback message |
 | Resource without an address | A Resources card whose document is not yet published | A dashed, non-link card with a "Link coming soon" pill | Yes — by design, `TODO(design)` |
 | First visit | No `nbs-help-lang-seen` key in the browser's storage | CMP-44: the language notice opens over the page; it closes with its button, the close icon, Esc or a backdrop click, and is not shown again | Yes |

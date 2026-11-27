@@ -1213,16 +1213,21 @@ each guide page. Introduced by DEC-81.
 "Video coming soon" pill is CMP-33's `.hc-soon`.
 
 **Props.** `data-video` — a key of `HC_VIDEOS` in the inline script of `help.html`, whose value
-is a YouTube link in any common form or a bare video id. `data-title` — the accessible name of
+is a YouTube link in any common form, a bare video id, or the path of a self-hosted `.mp4`
+(DEC-104). A self-hosted file needs a poster (`.jpg`) and captions (`.vtt`) of the same name
+beside it. `data-title` — the accessible name of
 the play button and the `title` of the player. `hidden` — on a guide page's slot, so it takes
 no space until its video exists.
 
 **States.** *Coming soon* (no address): a short dashed strip with the pill. *Ready*: a 16:9
-dark frame with a *Play video* button. *Playing*: the YouTube iframe. See UI-STATES SCR-19.
+dark frame with a *Play video* button. *Playing*: the YouTube iframe. *Self-hosted*: the
+browser's own player showing the poster, with native controls and an English captions track.
+See UI-STATES SCR-19.
 
 **Behaviour.** Nothing is loaded from YouTube until the button is pressed; the player then
-comes from `youtube-nocookie.com` and takes focus. An address that is not a YouTube link is
-treated as empty.
+comes from `youtube-nocookie.com` and takes focus. A self-hosted video uses `preload="none"`,
+so only the poster is fetched until play is pressed. An address that is neither a YouTube link
+nor an `.mp4` path is treated as empty.
 
 **Accessibility contract.** The button is a real `<button>` named "Play video: <title>". The
 iframe carries the same title. The caption links to the written guide, so the content is never
