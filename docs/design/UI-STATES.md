@@ -486,6 +486,8 @@ so it cannot be empty, partial, stale or out of scope.
 | Tutorial playing | The button is pressed | The YouTube player (no-cookie domain) replaces the button and takes focus | Yes |
 | Tutorial blocked | YouTube is unreachable or blocked on the reader's network | The browser's own error inside the frame; the caption and its *Read the guide* link stay | Partial — no fallback message |
 | Resource without an address | A Resources card whose document is not yet published | A dashed, non-link card with a "Link coming soon" pill | Yes — by design, `TODO(design)` |
+| First visit | No `nbs-help-lang-seen` key in the browser's storage | CMP-44: the language notice opens over the page; it closes with its button, the close icon, Esc or a backdrop click, and is not shown again | Yes |
+| First visit, storage blocked | Private window or site data blocked | The language notice opens on every visit | Yes — by design |
 | Loading | N/A — static HTML | — | N/A |
 | Error | A screenshot or video file fails to load | Reserved box with alt text; the caption stays | Partial — by design |
 | JavaScript off | Scripting disabled | Every page in sequence as one long page; sidebar and TOC empty; search inert; the loop does not play; every video slot reads "Video coming soon" | Partial — readable, not navigable from the sidebar |

@@ -389,24 +389,24 @@ const gcDonut = (items, totalLabel, ariaLead, half) => {
                     </ul>
                   </div>`;
   }
-  /* 96-unit viewBox drawn at --space-100 x 2 (.gc-donut), so the gaps scale by k.
-     The total sits in the hole; the legend is a 2 x 2 grid under the ring. */
-  const k = 96 / (nbsCssPx('--space-100') * 2 || 96);
-  let a = -Math.PI / 2;
-  const segs = shown.map(e => {
-    const b = a + pct(e[1]) / 100 * 2 * Math.PI, d = nbsRingSeg(48, 48, 48, 34, a, b, { k });
-    a = b;
-    return `<path ${gcTip(e[0], e[1], Math.round(pct(e[1])))} d="${d}" style="fill:${e[2]}"/>`;
+  /* Default: the gcSunHalf look with one ring (same size, total + label in the hole),
+     a one-column legend under it at full width. */
+  let at = 0;
+  const segs = shown.map((e, i) => {
+    const p = pct(e[1]);
+    const s = `<path ${gcTip(e[0], e[1], Math.round(p))} d="${gcHalfSeg(at, at + p, i === 0, i === shown.length - 1, GC_HALF.R, GC_HALF.r, GC_SUN_K)}" style="fill:${e[2]}"/>`;
+    at += p;
+    return s;
   });
   const label = items.map(e => `${e[0].toLowerCase()} ${Math.round(pct(e[1]))}%`).join(', ');
   return `
-                  <div class="gc-ecochart">
-                    <div class="gc-donutwrap">
-                      <svg class="gc-donut" viewBox="0 0 96 96" role="img" aria-label="${ariaLead}, ${NBS_DATA.grp(total)} ha: ${label}">${segs.join('')}</svg>
-                      <div class="gc-donut__c" aria-hidden="true"><span>${totalLabel}</span><b>${NBS_DATA.grp(total)} ha</b></div>
+                  <div class="gc-sun">
+                    <div class="gc-gauge gc-gauge--sun" role="img" aria-label="${ariaLead}, ${NBS_DATA.grp(total)} ha: ${label}">
+                      <svg viewBox="0 0 200 110" aria-hidden="true">${segs.join('')}</svg>
+                      <div class="gc-gauge__c" aria-hidden="true"><b>${NBS_DATA.grp(total)} ha</b><span>${totalLabel}</span></div>
                     </div>
-                    <ul class="gc-legend gc-legend--grid">${items.map(e => `
-                      <li><i style="background:${e[2]}"></i><span>${e[0]}</span><b>${NBS_DATA.grp(e[1])} ha &middot; ${Math.round(pct(e[1]))}%</b></li>`).join('')}
+                    <ul class="gc-legend">${items.map(e => `
+                      <li><i style="background:${e[2]}"></i><span>${e[0]}</span><b>${NBS_DATA.grp(e[1])} ha</b><em>${Math.round(pct(e[1]))}%</em></li>`).join('')}
                     </ul>
                   </div>`;
 };

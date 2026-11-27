@@ -316,12 +316,12 @@ function docsWorkflow() {
   docSection('The phases', `
     ${docTable(['Phase', 'Name', 'What happens', 'What comes out'], [
       ['<strong>0</strong>', docJump('Interactive Map', 'phase0'), 'Explore 51 regional and country-specific layers in five groups, and search a province or district to draw a tracing guide.', 'A scoping view of the region before any boundary is drawn. Nothing is computed or saved, and no account is needed.'],
-      ['<strong>1</strong>', docJump('Select location', 'phase1'), 'The user draws or uploads a polygon, checks the area on the confirm card, sets the project duration and confirms.', 'A project boundary, the area of interest, measured on an equal-area grid.'],
+      ['<strong>1</strong>', docJump('Select area of interest', 'phase1'), 'The user draws or uploads a polygon, checks the area on the confirm card, sets the project duration and confirms.', 'A project boundary, the area of interest, measured on an equal-area grid.'],
       ['<strong>2</strong>', docJump('Site characterisation', 'phase2'), 'Every spatial layer is clipped to the boundary and summarised on four tabs: General, Nature, Climate and People.', 'A description of the site as area-weighted distributions.'],
       ['<strong>3</strong>', docJump('Threat profile', 'phase3'), 'Reports observed ecosystem disturbance, ecosystem pressure and hazard, and the business-as-usual projection.', 'Deforestation and burned-area history, drainage pressure on peat, natural hazard levels, and deforestation and fire risk.'],
       ['<strong>4a</strong>', docJump('Pathway selection', 'phase4a'), 'Land cover in 2024 is compared with 2014, read against the reference ecosystem, and every pixel is assigned to Protect, Manage, Restore or Carbon ineligible.', 'Area and share under each pathway by ecosystem, the ineligible area with its reason, and the pathway raster.'],
       ['<strong>4b</strong>', docJump('Activity selection', 'phase4b'), 'Each trajectory category and reference ecosystem is joined to the activity catalogue. The user then chooses activities, the project duration and the carbon project settings.', 'The activities that apply on this ground, per pathway, and the settings Phase 5 runs with.'],
-      ['<strong>5</strong>', docJump('Potential benefit', 'phase5'), 'Reports the benefits of the selected activities as a summary, general benefits and unique benefits across nature, people and climate, and quantifies carbon.', 'A benefit profile for nature, people and climate, plus gross and net carbon figures.']
+      ['<strong>5</strong>', docJump('Potential benefits', 'phase5'), 'Reports the benefits of the selected activities as a summary, general benefits and unique benefits across nature, people and climate, and quantifies carbon.', 'A benefit profile for nature, people and climate, plus gross and net carbon figures.']
     ])}
     ${docCaption('Table 3. The phases of the NbS Tool, the functionality of each and what it produces. Phase 0 sits before the Data Analyser; Phases 1 to 5 form the analysis chain.')}`,
     'six-phases') +
@@ -395,7 +395,7 @@ function docsPhase0() {
 
 /* -------------------------------------------------------------------- Phase 1 */
 function docsPhase1() {
-  return docHero(G_PHASES + ' &middot; Phase 1', 'Select location',
+  return docHero(G_PHASES + ' &middot; Phase 1', 'Select area of interest',
     'The user supplies a project boundary. The tool derives everything that it produces from that input and from layers that the server already holds. The tool does not require other user input, and it does not request other user input.') +
 
   docSection('Usage', `
@@ -547,7 +547,7 @@ function docsPhase2() {
       ['<strong>Plant species occurrence</strong>', 'Plant species recorded in the project area between 2000 and 2026, with the number listed under CITES Appendix I, II and III and the share of global plant species diversity those records represent.', 'GBIF.org (2026). n/a, 2026']
     ])}
     ${docCaption('Table 9. Layers read by the Nature tab, in the order the tab shows them. Endangered tree species richness remains a map layer (Table 4), and ecological connectivity is reported as a benefit in Phase 5.')}
-    <p>See ${docJump('Phase 0 &middot; Interactive Map', 'phase0')} for Table 4 and ${docJump('Phase 5 &middot; Potential benefit', 'phase5#phase5-nature')} for ecological connectivity.</p>
+    <p>See ${docJump('Phase 0 &middot; Interactive Map', 'phase0')} for Table 4 and ${docJump('Phase 5 &middot; Potential benefits', 'phase5#phase5-nature')} for ecological connectivity.</p>
 
     <h3>Method: area of habitat</h3>
     <p>The species habitat rasters for mammals, birds, reptiles and amphibians are clipped to the boundary and counted per taxon and per IUCN category. These same rasters are the direct input to three benefit components in Phase 5, where they are intersected with projected deforestation or with the restoration area.</p>
@@ -1059,7 +1059,7 @@ function docsPhase4Activities() {
       <li><strong>The list is not filtered by anything the user chooses.</strong> Selecting a pathway on the screen turns its activities on or off for the benefit roll-up. It does not change which activities the ground is eligible for.</li>
       <li><strong>Savanna is shown with dryland.</strong> For display, the savanna reference is folded into the dryland group. That changes only the group heading, never the category, pathway or activity of a pixel, so a savanna cell keeps its own row.</li>
     </ul>
-    <p>Besides its text, each catalogue row carries three benefit fields, one for each pillar, and two carbon flags. Those travel through to ${docJump('Phase 5 · Potential benefit', 'phase5')}, where the benefit list is assembled from them.</p>`,
+    <p>Besides its text, each catalogue row carries three benefit fields, one for each pillar, and two carbon flags. Those travel through to ${docJump('Phase 5 · Potential benefits', 'phase5')}, where the benefit list is assembled from them.</p>`,
     'activity-consequences') +
 
   docSection('The activity catalogue', `
@@ -1114,8 +1114,8 @@ function docsPhase4Activities() {
    (js/analysis-shared.js), with the figures replaced by [placeholders].
    Order follows the v3 interface: summary, general benefits, unique benefits. */
 function docsPhase5() {
-  return docHero(G_PHASES + ' &middot; Phase 5', 'Potential benefit',
-    'Potential benefit is the last phase. The full chain exists to produce it. The tool invents nothing at this stage. Each qualitative benefit comes from a benefit tag on an activity that the pathway logic already selected. If an activity is not eligible on this ground, the tool does not show its benefits.') +
+  return docHero(G_PHASES + ' &middot; Phase 5', 'Potential benefits',
+    'Potential benefits is the last phase. The full chain exists to produce it. The tool invents nothing at this stage. Each qualitative benefit comes from a benefit tag on an activity that the pathway logic already selected. If an activity is not eligible on this ground, the tool does not show its benefits.') +
 
   docSection('How the results are arranged', `
     <p>The interface arranges the results in three blocks, and this page follows the same order. The benefit summary comes first. General benefits follow, which any project on the pathway would deliver. Then come unique benefits, which depend on the specific conditions of the site, such as the threatened species present or the hazards the community faces. Within each block, benefits are grouped by pillar: Nature, People and Climate. A benefit shown without a number is not a weaker benefit; it is one for which the tool has no defensible spatial method yet.</p>
@@ -1678,17 +1678,17 @@ function docsSources() {
    the end of each Help section; change both together (DEC-30, SCREENS.md SCR-17/SCR-19). */
 const HELP_GUIDES = {
   summary:           [['The eight phases', 'phases']],
-  requirements:      [['Phase 1 · Select location', 'phase-1'], ['Accounts and area limits', 'faq-accounts']],
+  requirements:      [['Phase 1 · Select area of interest', 'phase-1'], ['Accounts and area limits', 'faq-accounts']],
   scope:             [['Phase 0 · Explore the map', 'phase-0']],
   workflow:          [['The eight phases', 'phases'], ['Run an analysis', 'analysis']],
   landcover:         [['Phase 0 · Explore the map', 'phase-0']],
   phase0:            [['Phase 0 · Explore the map', 'phase-0']],
-  phase1:            [['Phase 1 · Select location', 'phase-1']],
+  phase1:            [['Phase 1 · Select area of interest', 'phase-1']],
   phase2:            [['Phase 2 · Site characterisation', 'phase-2']],
   phase3:            [['Phase 3 · Threat profile', 'phase-3']],
   phase4a:           [['Phase 4a · Ecosystem and pathway', 'phase-4a']],
   phase4b:           [['Phase 4b · Activities', 'phase-4b']],
-  phase5:            [['Phase 5 · Potential benefit', 'phase-5'], ['Duration and carbon', 'phase-4-duration']],
+  phase5:            [['Phase 5 · Potential benefits', 'phase-5'], ['Duration and carbon', 'phase-4-duration']],
   phase6:            [['Phase 6 · Monitoring planning', 'monitoring']],
   phase7:            [['Phase 7 · Generate documents', 'documents']],
   outputs:           [['Manage your project', 'manage']],

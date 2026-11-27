@@ -83,7 +83,7 @@
   .dm-field input,.dm-field textarea{font:500 15px/1.5 'Poppins',sans-serif;color:#1a202c;background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:14px 16px;width:100%;transition:.15s;}
   .dm-field textarea{resize:vertical;min-height:120px;}
   .dm-field input::placeholder,.dm-field textarea::placeholder{color:#9aa4af;}
-  .dm-field input:focus,.dm-field textarea:focus{outline:none;border-color:#066653;box-shadow:0 0 0 3px rgba(6,102,83,.12);}
+  .dm-field input:focus,.dm-field textarea:focus{outline:none;border-color:var(--primary-600);box-shadow:0 0 0 3px rgba(6,102,83,.12);}
   .dm-foot{display:flex;justify-content:flex-end;gap:12px;padding-top:18px;border-top:1px solid #eaecf0;margin-top:20px;}
   .dm-foot .dm-btn{width:auto;padding:13px 22px;margin-top:0;}
 
@@ -221,15 +221,15 @@
         </button>
       </div>
       <div class="da-steps" id="daSteps">
-        <button class="da-step is-active" data-goto="1"><span class="da-step__num">1</span><span class="da-step__label">Select location</span></button>
+        <button class="da-step is-active" data-goto="1" aria-label="Phase 1: Select area of interest" title="Select area of interest"><span class="da-step__num">1</span><span class="da-step__label">Area of interest</span></button>
         <span class="da-conn"></span>
         <button class="da-step" data-goto="2"><span class="da-step__num">2</span><span class="da-step__label">Site characterisation</span></button>
         <span class="da-conn"></span>
         <button class="da-step" data-goto="3"><span class="da-step__num">3</span><span class="da-step__label">Threat profile</span></button>
         <span class="da-conn"></span>
-        <button class="da-step" data-goto="4"><span class="da-step__num">4</span><span class="da-step__label">Pathway Selection</span></button>
+        <button class="da-step" data-goto="4" aria-label="Phase 4: Pathway and activity selection" title="Pathway and activity selection"><span class="da-step__num">4</span><span class="da-step__label">Pathway &amp; activities</span></button>
         <span class="da-conn"></span>
-        <button class="da-step" data-goto="5"><span class="da-step__num">5</span><span class="da-step__label">Potential benefit</span></button>
+        <button class="da-step" data-goto="5"><span class="da-step__num">5</span><span class="da-step__label">Potential benefits</span></button>
       </div>
     </header>
 
@@ -319,7 +319,7 @@
               <img class="s1-alert__ic" src="assets/f01-step1/alert-toobig.svg" alt="" />
               <div>
                 <h5>The area is too big.</h5>
-                <p>You can only analyse areas under <b>100,000 ha</b>. <a href="login.html">Sign in→</a> to analyse up to <b>500,000 ha</b>.</p>
+                <p id="s1TooBigMsg">You can only analyse areas under <b>100,000 ha</b>. <a href="login.html">Sign in→</a> to analyse up to <b>500,000 ha</b>.</p>
               </div>
             </div>
 
@@ -754,7 +754,7 @@
           <div class="t3-head">
             <button class="t3-nav" data-go="4"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M14 7l-5 5 5 5"/></svg> Back</button>
             <div class="t3-titles">
-              <h2>Potential Benefit</h2>
+              <h2>Potential benefits</h2>
               <p>Estimated Nature, People, and Climate benefits from your selected interventions.</p>
             </div>
             <button class="t3-nav" data-dm-finish>Finish <svg viewBox="0 0 24 24" stroke-width="2"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button>
@@ -856,7 +856,7 @@
         </div>
         <div class="legend__group">
           <div class="legend__group-title">Site Information</div>
-          <div class="legend__item"><span class="legend__item-l"><span class="legend__swatch" style="background:#beead5"></span><span class="legend__name">Mangrove cover</span></span></div>
+          <div class="legend__item"><span class="legend__item-l"><span class="legend__swatch" style="background:var(--primary-100)"></span><span class="legend__name">Mangrove cover</span></span></div>
           <div class="legend__item"><span class="legend__item-l"><span class="legend__swatch" style="background:#9fd4c9"></span><span class="legend__name">Tidal wetland</span></span></div>
           <div class="legend__item"><span class="legend__item-l"><span class="legend__swatch" style="background:#f5c782"></span><span class="legend__name">Degraded / cleared</span></span></div>
         </div>
@@ -1073,8 +1073,14 @@
     const tooBig = document.getElementById('s1TooBig');
     const cont = document.getElementById('s1Continue');
     const num = 150000;                 // Figma demo size for drawn / uploaded areas
-    const isBig = num > 200000;         // limit is 200,000 ha
+    // Area allowance (App Plan v2, DEC-102): 100,000 ha for a guest, 500,000 ha signed in.
+    // ponytail: "signed in" is read from the nav's auth mode; swap for the real session once auth exists.
+    const signedIn = document.querySelector('nav.sitenav')?.dataset.navAuth !== 'guest';
+    const isBig = num > (signedIn ? 500000 : 100000);
     sizeEl.textContent = num.toLocaleString('en-US') + ' ha';   // 150,000 ha
+    if (isBig && signedIn) {
+      document.getElementById('s1TooBigMsg').innerHTML = 'You can analyse areas up to <b>500,000 ha</b>. For a larger area, <a href="help.html#faq-accounts">request broader analysis capability</a>.';
+    }
     tooBig.hidden = !isBig;             // red "too big" alert
     if (cont) cont.hidden = isBig;      // hide Continue when over the limit
   }
@@ -1275,7 +1281,7 @@
       html += '</div>';
     });
     if (sel.indexOf('Restore') > -1 && CONSERVATION[eco]){
-      html += '<div class="act-group"><div class="act-group__head"><div class="act-group__ttl pw-conserve">Conservation</div>'
+      html += '<div class="act-group"><div class="act-group__head"><div class="act-group__ttl pw-conserve">Wildlife Conservation</div>'
             + '<p class="act-group__note">These are recommended activities because the area overlaps species restoration needs.</p></div>';
       CONSERVATION[eco].forEach(function(a){
         total++; var on = checkedActs.has(a.id); if (on) checked++;

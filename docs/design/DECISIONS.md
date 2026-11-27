@@ -2258,3 +2258,64 @@ Deep-linked section ids were kept. The Help Centre glossary, the science entry c
 index were updated to match. Not changed here: screens that still mention the triple benefit score
 (`index.html`, `sitemap.html`, `design-system.html`), and any screen logic that still runs the
 17-row matrix. Those are separate tasks.
+
+## DEC-102 · Product copy follows the Application Plan v2 (20 October 2026)
+
+**Context.** The team's *NbS Tool Interactive App Plan v2 (comments addressed)*, dated
+20 October 2026, fixes the product's positioning, feature names, area allowances, privacy tiers
+and document outputs. The User Manual (Google Doc), the Help Centre and several screens still used
+older terms, and the App Plan lists one of the mismatches, privacy tiers that disagree with the
+system display, as a high-priority bug.
+
+**Decision.** The User Manual, `help.html` and the screens use the App Plan's terms:
+- **Users and features.** Frontline organisations, implementers and consultants are the users.
+  Funders and investors have no workflow of their own in v3.0. The three main features are the
+  Interactive Map, the Data Analyser and the Document Generator, with My Project and the
+  Monitoring Plan after them. The Help Centre gains a *Key features* section (`#what-features`),
+  a seventh limit ("not a marketplace or investor portal"), the three dataset kinds under
+  *Where the numbers come from*, and glossary rows for frontline organisations, triple benefit,
+  the ASEAN NbS Framework, monitoring plan and privacy level.
+- **Phase names.** Phase 1 is *Select area of interest*, Phase 4 *Pathway and activity
+  selection*, Phase 5 *Potential benefits*. The Phase 4a method page keeps *Pathway selection*,
+  because 4a covers the pathway only. The phase order is unchanged: Phase 6 is monitoring and
+  Phase 7 documents, although the App Plan lists the Document Generator before the Monitoring
+  Plan (product owner's decision, 27 November 2026).
+- **Area allowance.** 100,000 ha for a guest and 500,000 ha signed in. SCR-03's confirm step
+  reads the tier from the nav's auth mode (`data-nav-auth`), so the 150,000 ha sample area passes
+  for the signed-in map and the "too big" copy matches the tier.
+- **Privacy tiers.** *Level 1 · Temporary processing*, *Level 2 · Private storage*, *Level 3 ·
+  Authorised collaboration*. Level 3 shares with the SCeNe Coalition, not the public. Private
+  storage is the default. On SCR-07 the header badge now reads the saved level's own heading and
+  updates on save, so the tab and the badge can no longer disagree.
+- **Documents.** The Feasibility Document and the CCB Standards document (alone, or with Verra's
+  VCS or Gold Standard), downloaded as editable .docx. This is what `js/f03-app.js` already offers;
+  the copy had promised Plan Vivo and PDF.
+
+**Consequences.**
+- Every Help Centre screenshot the prototype can render was retaken from the build on
+  27 November 2026, at the original sizes (1600 px wide, 1x), with alt text rewritten where the
+  screen changed; `docgen-types.jpg` and `methodology-threat.jpg` are new. The "what the tool does
+  not do" figure now uses the threat-profile shot, the one that shows a card disclaimer. Two shots
+  were kept: `map-export.jpg` and `map-export-area.jpg` show the export dialog, which the
+  prototype does not have (SCR-03 TODO). The User Manual (Google Doc) takes the same files from
+  the repo's public raw URLs on this branch.
+- Claims the App Plan does not support are left as they were, at the product owner's request: the
+  "never shared … finer than one hectare" line, the Equitable Earth standard, "about half of a
+  Project Design Document" and the support@nbstool.org mailbox. They still need a source before
+  launch.
+- The App Plan mentions grasslands and savannas once; the product keeps three ecosystems.
+
+
+## DEC-103 · The Help Centre says it is English-only on first visit
+
+**Context.** The Help Centre is written in English only. Its readers work across Southeast Asia,
+and the FAQ was the only place that said so.
+
+**Decision.** SCR-19 opens a small notice on a reader's first visit (CMP-44): the Help Centre is
+in English for now, and translations into other Southeast Asian languages are coming soon. It is
+shown once per browser. The FAQ answer *Is the tool available in other languages?* carries the
+same sentence.
+
+**Consequences.** The "coming soon" promise needs to stay true: when translation plans change,
+change this copy. The notice is a native `<dialog>`, not one of the existing modal
+implementations (TODO-11 still asks for one shared modal).

@@ -44,7 +44,7 @@ status, in the same change that adds or retires a route.
 | SCR-16 | archived | `/archive/screens/F02-P5_Potential_Benefit_1` | Potential Benefit (superseded) | Original Figma rebuild of Step 5 | — | — | Superseded by SCR-03 Step 5 |
 | SCR-17 | live | `/technical-docs` | The science behind it (F09) | The Help Centre's method pages, generated from the team's Reference Methodology in three groups (Methodology summary; How each phase is calculated, Phase 0 to 7; Outputs, limitations and sources) and nested under SCR-19's three science entry pages (DEC-93, updated to Reference Methodology v3 in DEC-101); every article links back to its SCR-19 section | Understand and audit how a number was produced | CMP-01, CMP-28 | Reads live parameters from `NBS_DATA`, `NBS_ANALYSIS`, `NBS_LAYER_INFO`, `ecosystems`, `indicatorMeta`, `NBS_PEOPLE` — no static copies |
 | SCR-18 | redirect | `/walkthrough` | Walkthrough — **retired** | Redirect only: maps each old chapter anchor to its SCR-19 guide (DEC-30) | Keep old links working | — | None |
-| SCR-19 | live | `/help` | Help Centre | The hub for everything about the tool: a landing page of entry cards, then five sections — Get started, User guide (the user manual; called *How it works* before DEC-81) (one page per stage, with the manual's screenshots), The science behind it (three entry pages over SCR-17, DEC-93), Resources, Support (FAQ, contact) | Learn the tool, find the method, or get one question answered | CMP-01, CMP-22, CMP-28, CMP-29, CMP-33, CMP-35, CMP-36, CMP-37 | None — static HTML plus two video files; every how-to section with a method behind it links to its SCR-17 `#docs/` article (DEC-29, DEC-30, DEC-34) |
+| SCR-19 | live | `/help` | Help Centre | The hub for everything about the tool: a landing page of entry cards, then five sections — Get started, User guide (the user manual; called *How it works* before DEC-81) (one page per stage, with the manual's screenshots), The science behind it (three entry pages over SCR-17, DEC-93), Resources, Support (FAQ, contact) | Learn the tool, find the method, or get one question answered | CMP-01, CMP-22, CMP-28, CMP-29, CMP-33, CMP-35, CMP-36, CMP-37, CMP-44 | None — static HTML plus two video files; every how-to section with a method behind it links to its SCR-17 `#docs/` article (DEC-29, DEC-30, DEC-34) |
 
 **Orphans.** SCR-14 and SCR-17 are reachable by URL but linked from no nav, footer or
 sitemap. SCR-15 and SCR-16, the Figma-rebuild sources whose content now lives in
@@ -621,9 +621,8 @@ pill until then.`
 Contact us. They need legal text from WRI before launch.`
 `TODO(design): the member table lists ZSL and not IDH; the home page partner strip shows IDH.
 Confirm with the Coalition.`
-`TODO(design): the guest area allowance. The User Manual and SCR-03 say 200,000 ha; the
-Reference Methodology and the FAQ say 100,000 ha. The Help Centre and SCR-17 use 200,000 until
-the product owner confirms.`
+The guest area allowance is 100,000 ha and the signed-in allowance 500,000 ha, everywhere: the
+User Manual, SCR-03, this page and SCR-17 (DEC-102).
 `TODO(design): the video tutorials have no addresses yet; every slot reads "Video coming soon".`
 `TODO(design): the Glossary source document is a draft due for review (25 November 2026).`
 `TODO(design): the Reference Methodology says the project duration is set in Phase 1; the

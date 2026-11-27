@@ -150,7 +150,7 @@
         </a>
         <h1 id="projTitle" style="font-family:var(--font-display);font-weight:700;font-size:34px;letter-spacing:-1.5px;margin:0;color:var(--text-base-main);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:none">Kubu Raya Mangrove</h1>
         <div style="display: flex; align-items: center; gap: 9px; letter-spacing: 0.2px;min-width:0">
-          <span class="privacy" style="font-size:12px"><span class="pill" onclick="document.getElementById('tab-privacy').click()" style="cursor:pointer"><svg viewBox="0 0 24 24" fill="none"><rect x="5" y="11" width="14" height="9" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M8 11V8a4 4 0 018 0v3" stroke="currentColor" stroke-width="1.8"/></svg>Level 2 · Coalition</span></span>
+          <span class="privacy" style="font-size:12px"><span class="pill" onclick="document.getElementById('tab-privacy').click()" style="cursor:pointer"><svg viewBox="0 0 24 24" fill="none"><rect x="5" y="11" width="14" height="9" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M8 11V8a4 4 0 018 0v3" stroke="currentColor" stroke-width="1.8"/></svg><span id="privacyPillLabel">Level 2 · Private storage</span></span></span>
           <span class="badge s-monitoring"><span class="d"></span>Monitoring Active</span>
         </div>
       </div>
@@ -366,10 +366,10 @@
           </div>
           <div style="font-family:var(--font-text);font-size:12px;color:#444a51;line-height:1.75">
             <p style="font-weight:600;color:#252525;margin:0 0 6px">1. Scope of data shared</p>
-            <p style="margin:0 0 14px">When you raise your privacy level, SCeNe Coalition may share project metadata, baseline summaries, ecosystem descriptions, and aggregated carbon estimates with verified members, funders, and the public — depending on the level selected.</p>
+            <p style="margin:0 0 14px">Your project is private by default, and other users cannot see it. Only at Level 3 does the SCeNe Coalition receive your project information, such as metadata, baseline summaries, ecosystem descriptions and aggregated carbon estimates, so it can offer technical support, collaboration, project incubation and financing.</p>
 
             <p style="font-weight:600;color:#252525;margin:0 0 6px">2. Irreversibility</p>
-            <p style="margin:0 0 14px">Lowering your privacy level <em>after</em> data has been viewed or shared may not fully retract that data from third parties who have already accessed it. Once shared publicly (Level 3), summaries may be cached or indexed externally.</p>
+            <p style="margin:0 0 14px">Lowering your privacy level <em>after</em> the Coalition has accessed your data may not fully retract it from the people who have already seen it.</p>
 
             <p style="font-weight:600;color:#252525;margin:0 0 6px">3. Collaborator notification</p>
             <p style="margin:0 0 14px">All project collaborators are automatically notified by email when the privacy level changes. The change is also logged in the project History for audit purposes.</p>
@@ -380,7 +380,7 @@
             <p style="font-weight:600;color:#252525;margin:0 0 6px">5. Your rights</p>
             <p style="margin:0 0 18px">You retain ownership of your project data at all times. You may request data deletion or correction by contacting the SCeNe Coalition data team. Requests are processed within 30 business days.</p>
           </div>
-          <a href="#" class="btn btn-secondary" style="color:#066653;border-color:#066653;text-decoration:none">
+          <a href="#" class="btn btn-secondary" style="color:var(--primary-600);border-color:var(--primary-600);text-decoration:none">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 3h6v6M10 14L21 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             Read full SCeNe Privacy Policy
           </a>
@@ -389,25 +389,25 @@
         <!-- RIGHT: Privacy levels + controls -->
         <div>
           <div class="plevels" id="privacyLevels">
-            <div class="plevel sel" data-level="1" onclick="selectPrivacy(1)"><span class="rb"></span><div><h4>Level 1 · Temporary <span class="badge i-na" id="currentBadge" style="margin-left:6px">Current</span></h4><p>User data will not be stored on the NbS Tool server; it is accessible to the User only within a 24-hour period.</p></div></div>
-            <div class="plevel" data-level="2" onclick="selectPrivacy(2)"><span class="rb"></span><div><h4>Level 2 · Private</h4><p>User data is obtained, collected, and stored on the NbS Tool server to be used for analysis across NbS Tool features, in accordance with the User's needs.</p></div></div>
-            <div class="plevel" data-level="3" onclick="selectPrivacy(3)"><span class="rb"></span><div><h4>Level 3 · Limited Shared</h4><p>User data obtained, collected, and stored on the NbS Tool server may be used for analysis within any NbS Tool feature according to the User's needs; furthermore, such data may be used by WRI Indonesia and institutions partnering with WRI under the SCeNe Coalition cooperation scheme for the joint development of NbS Projects with the user, subject to the user's consent.</p></div></div>
+            <div class="plevel" data-level="1" onclick="selectPrivacy(1)"><span class="rb"></span><div><h4>Level 1 · Temporary processing</h4><p>You do not allow the tool to keep your data. It is used only to run the analysis you asked for, and the project and its processing files are deleted automatically within 24 hours.</p></div></div>
+            <div class="plevel sel" data-level="2" onclick="selectPrivacy(2)"><span class="rb"></span><div><h4>Level 2 · Private storage <span class="badge i-na" id="currentBadge" style="margin-left:6px">Current</span></h4><p>You allow the tool to keep your project and its results. Only you can open them, from your own project dashboard, and no one outside can find them.</p></div></div>
+            <div class="plevel" data-level="3" onclick="selectPrivacy(3)"><span class="rb"></span><div><h4>Level 3 · Authorised collaboration</h4><p>You allow the tool to keep your project, and you agree to share it with the SCeNe Coalition. The Coalition can then work with you on technical support, collaboration, project incubation and financing.</p></div></div>
           </div>
-          <div class="note" style="margin-top:14px"><b>Heads up:</b> raising the privacy level shares your baseline and documentation more widely and cannot be silently reversed — collaborators are notified.</div>
+          <div class="note" style="margin-top:14px"><b>Heads up:</b> raising the privacy level to Level 3 shares your project with the SCeNe Coalition and cannot be silently reversed. Collaborators are notified.</div>
           <div style="margin-top:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
             <button class="btn btn-secondary btn-sm" id="changePrivacyBtn" onclick="togglePrivacyEdit()">Change privacy level</button>
             <button class="btn btn-primary btn-sm" id="savePrivacyBtn" style="display:none" onclick="savePrivacy()">
               <svg viewBox="0 0 24 24" fill="none" width="14" height="14"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v14a2 2 0 01-2 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M17 21v-8H7v8M7 3v5h8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
               Save changes
             </button>
-            <span id="savedMsg" style="display:none;font-family:var(--font-text);font-size:12px;color:#066653;font-weight:600">✓ Privacy level saved</span>
+            <span id="savedMsg" style="display:none;font-family:var(--font-text);font-size:12px;color:var(--primary-600);font-weight:600">✓ Privacy level saved</span>
           </div>
         </div>
       </div>
     </div>
       <script>
-        let savedLevel = 1;
-        let pendingLevel = 1;
+        let savedLevel = 2;   // private storage is the default (App Plan v2, DEC-102)
+        let pendingLevel = 2;
         let editing = false;
 
         function togglePrivacyEdit() {
@@ -440,6 +440,9 @@
         function savePrivacy() {
           savedLevel = pendingLevel;
           renderPrivacy();
+          // keep the header badge in step with the saved level (one source: the level's own heading)
+          document.getElementById('privacyPillLabel').textContent =
+            document.querySelector(`.plevel[data-level="${savedLevel}"] h4`).firstChild.textContent.trim();
           editing = false;
           document.getElementById('savePrivacyBtn').style.display = 'none';
           document.getElementById('changePrivacyBtn').textContent = 'Change privacy level';
@@ -508,7 +511,7 @@
         </div>
         <div class="an2-step" id="an2-step-3">
           <button class="an2-step__hd" onclick="an2ToggleStep(3)">
-            <span class="an2-num">3</span><span class="an2-step__lbl">Potential Benefit</span>
+            <span class="an2-num">3</span><span class="an2-step__lbl">Potential Benefits</span>
             <svg class="an2-chev" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </button>
           <div class="an2-subs">

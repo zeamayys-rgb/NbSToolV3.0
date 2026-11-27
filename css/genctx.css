@@ -93,35 +93,21 @@
 .gc-src a { color: inherit; font-style: italic; text-decoration: underline; }
 
 /* ============================================================
-   1 · Reference ecosystem — map, total, compact donut + legend
+   1 · Reference ecosystem — map (half the card), half doughnut + legend
    ============================================================ */
 .gc-eco { display: flex; gap: var(--space-20); align-items: flex-start; }
 .gc-eco__map {
-  margin: 0; flex: 1 1 0; min-width: 0; height: 293px;
+  margin: 0; flex: none; width: 50%; height: 293px;
   border: 1.5px solid var(--base-white); border-radius: var(--radius-xl); overflow: hidden;
   background: rgba(255,255,255,0.1);
   box-shadow: 1.5px 3px 3px rgba(0,0,0,0.07), 11px 8px 14px rgba(0,0,0,0.07);
 }
 .gc-eco__map img { display: block; width: 100%; height: 100%; object-fit: cover; }
-.gc-eco__side { flex: none; width: 355px; display: flex; flex-direction: column; gap: var(--space-16); }
+.gc-eco__side { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: var(--space-16); }
 .gc-eco__total { display: flex; flex-direction: column; }
 .gc-eco__total span { font-size: 12px; font-weight: 500; line-height: 20px; color: var(--text-base-second); }
 .gc-eco__total b { font-family: var(--font-display); font-size: 32px; font-weight: 600; line-height: 36px; color: var(--text-base-main); letter-spacing: -0.015em; }
 .gc-eco__chartrow { display: flex; gap: var(--space-16); align-items: center; }
-/* SVG ring, one path per segment, written by gcDonut() */
-.gc-donut { display: block; width: calc(var(--space-100) * 2); height: calc(var(--space-100) * 2); flex: none; }
-/* Reference ecosystem: total inside the ring, legend in a 2 x 2 grid below it */
-.gc-ecochart { display: flex; flex-direction: column; align-items: center; gap: var(--space-16); }
-.gc-donutwrap { position: relative; }
-.gc-donut__c {
-  position: absolute; inset: 0; pointer-events: none;
-  display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
-}
-.gc-donut__c span { font-size: 12px; font-weight: 500; line-height: 18px; color: var(--text-base-second); }
-.gc-donut__c b { font-family: var(--font-display); font-size: 24px; font-weight: 600; line-height: 28px; color: var(--text-base-main); letter-spacing: -0.015em; }
-.gc-legend.gc-legend--grid { align-self: stretch; flex: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-12) var(--space-16); }
-.gc-legend.gc-legend--grid li { display: grid; grid-template-columns: var(--space-12) minmax(0, 1fr); column-gap: var(--space-8); row-gap: 0; align-items: center; white-space: normal; }
-.gc-legend.gc-legend--grid b { grid-column: 2; }
 /* beside a long text column (Land degradation): the half doughnut on top, the legend
    under it at full width, both on the left edge */
 .gc-terr--mid .gc-eco__chartrow { flex-direction: column; align-items: flex-start; }
@@ -155,6 +141,7 @@
 .gc-gauge--sun .gc-gauge__c { bottom: var(--space-32); }
 /* Fire risk: the share and its label sit 16px up inside the arc */
 [data-gc="firerisk"] .gc-gauge__c { bottom: var(--space-16); }
+.gc-sun > .gc-legend { flex: none; align-self: stretch; }
 .gc-legend-cols { align-self: stretch; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-24); }
 /* Threshold row (Drainage canal pressure): text left, horizontal threshold bar right */
 .gc-thr { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--space-24); align-items: center; }

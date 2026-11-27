@@ -525,7 +525,7 @@ function buildActivitySectionsHTML(activeEco, activeIntv) {
           <div class="eco-empty-ic">${EMPTY_IC}</div>
           <div class="eco-empty-title">${e.noPicks ? 'No activities selected' : 'No matching activities'}</div>
           <div class="eco-empty-msg">${e.noPicks
-            ? `You didn't select any <strong>${e.name}</strong> activities in the Data Analyser (Step 4 — Pathway selection).`
+            ? `You didn't select any <strong>${e.name}</strong> activities in the Data Analyser (Step 4, Pathway and activity selection).`
             : `<strong>${e.name}</strong> has no ${listIntv()} activities. Adjust the Intervention filter above.`}</div>
         </div>
         <button class="btn-add-act" onclick="openAddModal('${e.id}')">+ Add custom activity</button></div>`;
