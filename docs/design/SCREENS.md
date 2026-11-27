@@ -42,7 +42,7 @@ status, in the same change that adds or retires a route.
 | SCR-14 | reference | `/design-system` | Design System reference | Living catalogue of tokens and primitives | Look up a component before building | CMP-02, and every primitive | `css/tokens.css`, `css/styleguide.css` |
 | SCR-15 | archived | `/archive/screens/F02-P4_Pathway_Selection` | Pathway Selection (superseded) | Original Figma rebuild of Step 4 | — | — | Superseded by SCR-03 Step 4 |
 | SCR-16 | archived | `/archive/screens/F02-P5_Potential_Benefit_1` | Potential Benefit (superseded) | Original Figma rebuild of Step 5 | — | — | Superseded by SCR-03 Step 5 |
-| SCR-17 | live | `/technical-docs` | The science behind it (F09) | The Help Centre's method pages, generated from the team's Reference Methodology in three groups (Methodology summary; How each phase is calculated, Phase 1 to 7; Outputs, limitations and sources) and nested under SCR-19's three science entry pages (DEC-93); every article links back to its SCR-19 section | Understand and audit how a number was produced | CMP-01, CMP-28 | Reads live parameters from `NBS_DATA`, `NBS_ANALYSIS`, `NBS_LAYER_INFO`, `ecosystems`, `indicatorMeta`, `NBS_PEOPLE` — no static copies |
+| SCR-17 | live | `/technical-docs` | The science behind it (F09) | The Help Centre's method pages, generated from the team's Reference Methodology in three groups (Methodology summary; How each phase is calculated, Phase 0 to 7; Outputs, limitations and sources) and nested under SCR-19's three science entry pages (DEC-93, updated to Reference Methodology v3 in DEC-101); every article links back to its SCR-19 section | Understand and audit how a number was produced | CMP-01, CMP-28 | Reads live parameters from `NBS_DATA`, `NBS_ANALYSIS`, `NBS_LAYER_INFO`, `ecosystems`, `indicatorMeta`, `NBS_PEOPLE` — no static copies |
 | SCR-18 | redirect | `/walkthrough` | Walkthrough — **retired** | Redirect only: maps each old chapter anchor to its SCR-19 guide (DEC-30) | Keep old links working | — | None |
 | SCR-19 | live | `/help` | Help Centre | The hub for everything about the tool: a landing page of entry cards, then five sections — Get started, User guide (the user manual; called *How it works* before DEC-81) (one page per stage, with the manual's screenshots), The science behind it (three entry pages over SCR-17, DEC-93), Resources, Support (FAQ, contact) | Learn the tool, find the method, or get one question answered | CMP-01, CMP-22, CMP-28, CMP-29, CMP-33, CMP-35, CMP-36, CMP-37 | None — static HTML plus two video files; every how-to section with a method behind it links to its SCR-17 `#docs/` article (DEC-29, DEC-30, DEC-34) |
 
@@ -364,6 +364,9 @@ unreachable by a user.
 > Retired ids forward through `moved` in `js/docs-index.js`. Where the text below names an older
 > article (the annex pages, the split Phase 4a and Phase 5 pages, Parameters and glossary), read
 > it as history.
+>
+> **Updated 2026-11-27 (DEC-101).** Now follows *Reference Methodology v3*. One article added:
+> `phase0` (Interactive Map), first in group 2. `sources` is titled *References*. 19 articles.
 
 **What the user is trying to accomplish.** Find out how a figure they are looking at was
 produced, and what it is safe to claim from it — before it goes into a proposal.

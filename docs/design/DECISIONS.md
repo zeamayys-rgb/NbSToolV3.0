@@ -2213,3 +2213,48 @@ the old UI. `TODO(design): the recorded map uses an offline Natural Earth basema
 because the recording sandbox could not reach OpenStreetMap tiles; re-record against live tiles
 before launch if that matters.`
 
+
+## DEC-100 · Conservation activity group in Pathway Selection (F02-P4)
+
+**Decision.** Step 4 of the Data Analyser gains a fourth activity group, **Conservation**,
+listed after Restore. It holds species-focused activities set per ecosystem (Forest 4,
+Mangrove 3, Peatland 2). In the product it should appear only when the AOI overlaps a species
+restoration need. The prototype has no such overlap data, so it shows the group whenever
+Restore is switched on, and clears its ticks when Restore is switched off.
+
+**Simplified wording.** Each activity shows only its main action. The examples that were in
+brackets in the source list are moved to a tooltip on the dashed label, shown on hover and on
+keyboard focus (`aria-describedby`). The look follows the carbon-risk field tooltip
+(`.crisk-label` / `.crisk-tip`).
+
+**Consequence.** Conservation ids (`*-con-*`) are not in `js/f05-shared.js`, so they don't yet
+carry through to the F05 Monitoring Plan. `TODO(design): confirm the trigger rule, the final
+wording, and whether these activities need indicators in F05.`
+
+## DEC-101 · The Methodology follows Reference Methodology v3
+
+**Context.** DEC-93 rebuilt the Methodology on the team's *NbS Tool v3 · Reference Methodology*.
+On 26 November 2026 the team published a successor, *Reference Methodology v3*, which restructures
+the document and changes the method itself. The site still rendered the earlier text.
+
+**Decision.** `js/technical-docs.js` now follows v3, with the same rules as DEC-93 (same order,
+same wording where it is new, British spelling, tables captioned with v3's own numbers, Table 1 to
+Table 37). What changed:
+- **Phase 0 · Interactive Map** is a new article (`phase0`): the 51 map layers in two tables, and
+  the warning that several map layers are older than the ones the Data Analyser reads.
+- **Phase 2** lists each tab's sections in screen order. Historical deforestation, deforestation
+  risk and natural disaster risk move to Phase 3. New: the peat depth method, the above-ground
+  biomass model, and the per-country table of national people indicators.
+- **Phase 3** is in three groups (observed disturbance, pressure and hazard, business-as-usual
+  projection). Fire risk is new and is no longer one of the natural hazards.
+- **Phase 4a**: the decision matrix grows from 17 to 21 rows (4B is Manage; Category 6 splits
+  6A/6B; 8D is new; Category 10 splits 10A/10B/10C). New: the savanna rule, the ecosystem summary
+  and the ineligible-area reasons. The reference ecosystem has four values, not five.
+- **Phase 4b** carries the duration and carbon settings. **Phase 5** is reorganised into a
+  summary, general benefits and unique benefits; the triple benefit score is gone.
+- **Sources** becomes **References**: v3's full reference list. The article id stays `sources`.
+
+Deep-linked section ids were kept. The Help Centre glossary, the science entry cards and the docs
+index were updated to match. Not changed here: screens that still mention the triple benefit score
+(`index.html`, `sitemap.html`, `design-system.html`), and any screen logic that still runs the
+17-row matrix. Those are separate tasks.
