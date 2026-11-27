@@ -591,7 +591,7 @@ of the old methodology page is not used: it shows the sidebar this change replac
 `demo-full.mp4` (48.5 s, 1080p, no audio track) plays on request. Together 7.9 MB, served
 statically.
 
-**Video tutorials (CMP-42).** YouTube videos, one slot per stage, whose addresses are the
+**Video tutorials (CMP-42).** YouTube videos or self-hosted `.mp4` files (DEC-104), one slot per stage, whose addresses are the
 `HC_VIDEOS` map in the inline script of `help.html`. Slots sit on the landing page (overview),
 on *Video tutorials* (all five) and under the hero of each guide page (hidden until its video
 has an address).

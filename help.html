@@ -205,13 +205,13 @@
             </figure>
           </section>
 
-          <!-- The tutorials are YouTube videos (CMP-42). Their addresses live in one
+          <!-- The tutorials are YouTube videos or self-hosted .mp4 files (CMP-42). Their addresses live in one
                place: HC_VIDEOS in the script at the foot of this file. A slot with no
                address shows "Video coming soon"; add or remove a <figure> to match
                the videos that exist. -->
           <section class="doc-section" id="videos">
             <h2>Tutorials</h2>
-            <p>One video for each stage of the work. A video starts loading from YouTube only when you press play.</p>
+            <p>One video for each stage of the work. A video starts loading only when you press play.</p>
             <figure class="hc-shot hc-yt" data-video="overview" data-title="NbS Tool overview">
               <div class="hc-video hc-yt-frame"><span class="hc-soon">Video coming soon</span></div>
               <figcaption><b>Overview.</b> The whole workflow, from a boundary on the map to a document for a funder.</figcaption>
@@ -1701,11 +1701,13 @@
     d.showModal();
   })();
 
-  /* The video tutorials (CMP-42). Paste each YouTube address between the quotes:
-     a full link or just the video id. A key left empty shows "Video coming soon"
-     on the Video tutorials page and nothing on the guide pages. */
+  /* The video tutorials (CMP-42). Paste each address between the quotes: a YouTube
+     link or video id, or the path of an .mp4 in this site. A self-hosted .mp4 needs
+     a poster (.jpg) and captions (.vtt) of the same name beside it (DEC-104). A key
+     left empty shows "Video coming soon" on the Video tutorials page and nothing on
+     the guide pages. */
   var HC_VIDEOS = {
-    overview:   '',
+    overview:   'assets/help/tutorial-overview.mp4',
     analysis:   '',
     monitoring: '',
     documents:  '',
@@ -1729,14 +1731,29 @@
     function videos() {
       host.querySelectorAll('.hc-yt:not([data-ready])').forEach(function (el) {
         el.dataset.ready = '1';
-        var m = /(?:youtu\.be\/|[?&]v=|embed\/|shorts\/)([\w-]{11})|^([\w-]{11})$/.exec(HC_VIDEOS[el.dataset.video] || '');
+        var src = HC_VIDEOS[el.dataset.video] || '', frame = el.querySelector('.hc-yt-frame');
+        if (/\.mp4$/.test(src)) {
+          /* Self-hosted: the browser's own player. preload="none" keeps it to the
+             poster until play is pressed; is-full keeps loops() from starting it. */
+          el.hidden = false;
+          var v = document.createElement('video'), t = document.createElement('track');
+          v.controls = true; v.preload = 'none'; v.playsInline = true;
+          v.src = src; v.poster = src.replace(/\.mp4$/, '.jpg');
+          v.setAttribute('aria-label', el.dataset.title);
+          t.kind = 'captions'; t.srclang = 'en'; t.label = 'English'; t.src = src.replace(/\.mp4$/, '.vtt');
+          v.appendChild(t);
+          frame.classList.add('is-full');
+          frame.replaceChildren(v);
+          return;
+        }
+        var m = /(?:youtu\.be\/|[?&]v=|embed\/|shorts\/)([\w-]{11})|^([\w-]{11})$/.exec(src);
         if (!m) return;
         el.hidden = false;
         var b = document.createElement('button');
         b.type = 'button'; b.className = 'hc-video-play'; b.dataset.yt = m[1] || m[2];
         b.textContent = 'Play video';
         b.setAttribute('aria-label', 'Play video: ' + el.dataset.title);
-        el.querySelector('.hc-yt-frame').replaceChildren(b);
+        frame.replaceChildren(b);
       });
     }
     new MutationObserver(function () { loops(); videos(); }).observe(host, { childList: true });

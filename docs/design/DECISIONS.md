@@ -2216,18 +2216,17 @@ before launch if that matters.`
 
 ## DEC-100 · Conservation activity group in Pathway Selection (F02-P4)
 
-**Decision.** Step 4 of the Data Analyser gains a fourth activity group, **Conservation**,
-listed after Restore. It holds species-focused activities set per ecosystem (Forest 4,
-Mangrove 3, Peatland 2). In the product it should appear only when the AOI overlaps a species
-restoration need. The prototype has no such overlap data, so it shows the group whenever
-Restore is switched on, and clears its ticks when Restore is switched off.
+**Decision.** Step 4 of the Data Analyser gains a **Wildlife Conservation** card, a sibling of
+the Forest / Mangrove / Peatland cards placed after them. It has no pathway switches: just one
+list of nine suggested wildlife conservation activities, the same for every ecosystem. It
+appears once any pathway is on, on any ecosystem, and hides (clearing its ticks) when none is.
+In the product it should appear only when the AOI overlaps a species restoration need; the
+prototype has no such data, so it follows the pathway switches.
 
-**Simplified wording.** Each activity shows only its main action. The examples that were in
-brackets in the source list are moved to a tooltip on the dashed label, shown on hover and on
-keyboard focus (`aria-describedby`). The look follows the carbon-risk field tooltip
-(`.crisk-label` / `.crisk-tip`).
+**Wording.** Each activity is a single short line. There is no hover tooltip with examples; an
+earlier version moved bracketed examples into tooltips, and that was dropped.
 
-**Consequence.** Conservation ids (`*-con-*`) are not in `js/f05-shared.js`, so they don't yet
+**Consequence.** Conservation ids (`wc-*`) are not in `js/f05-shared.js`, so they don't yet
 carry through to the F05 Monitoring Plan. `TODO(design): confirm the trigger rule, the final
 wording, and whether these activities need indicators in F05.`
 
@@ -2319,3 +2318,23 @@ same sentence.
 **Consequences.** The "coming soon" promise needs to stay true: when translation plans change,
 change this copy. The notice is a native `<dialog>`, not one of the existing modal
 implementations (TODO-11 still asks for one shared modal).
+
+
+## DEC-104 · The overview tutorial is self-hosted
+
+**Context.** The five tutorial slots (CMP-42, DEC-81) expected YouTube addresses, and none
+existed. The overview tutorial now exists as a file: 2 min 19 s, narrated, covering Phase 0 to
+Phase 7 and *Manage your project*. It has no YouTube address yet.
+
+**Decision.** A key in `HC_VIDEOS` may hold the path of an `.mp4` in the site as well as a
+YouTube address. A self-hosted video plays in the browser's own player, with a poster and an
+English captions track taken from files of the same name (`.jpg`, `.vtt`). The overview slot
+points at `assets/help/tutorial-overview.mp4`.
+
+**Consequences.**
+- The file is 14 MB and is tracked in git. When the Coalition publishes the video on YouTube,
+  replace the path with the address and delete the three files.
+- Phases 0 to 2 of the video are screen recordings of a newer build than the screenshots used
+  for the later phases, so two versions of the interface are visible in it.
+- The video's source project is `video-tutorial/`, which is local only (gitignored).
+

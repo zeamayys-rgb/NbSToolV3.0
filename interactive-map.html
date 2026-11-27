@@ -649,6 +649,30 @@
     </div>
   </section>
 
+  <!-- ======================= WILDLIFE CONSERVATION ======================= -->
+  <!-- Shown once any pathway is on, for any ecosystem (DEC-100). -->
+  <section class="eco-card cons-card" data-cons-card hidden>
+    <div class="cons-head">
+      <div class="cons-icon"><svg width="32" height="32" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="M180-475q-42 0-71-29t-29-71q0-42 29-71t71-29q42 0 71 29t29 71q0 42-29 71t-71 29Zm109-189q-29-29-29-71t29-71q29-29 71-29t71 29q29 29 29 71t-29 71q-29 29-71 29t-71-29Zm240 0q-29-29-29-71t29-71q29-29 71-29t71 29q29 29 29 71t-29 71q-29 29-71 29t-71-29Zm251 189q-42 0-71-29t-29-71q0-42 29-71t71-29q42 0 71 29t29 71q0 42-29 71t-71 29ZM266-75q-45 0-75.5-34.5T160-191q0-52 35.5-91t70.5-77q29-31 50-67.5t50-68.5q22-26 51-43t63-17q34 0 63 16t51 42q28 32 49.5 69t50.5 69q35 38 70.5 77t35.5 91q0 47-30.5 81.5T694-75q-54 0-107-9t-107-9q-54 0-107 9t-107 9Z"/></svg></div>
+      <div class="cons-titles">
+        <div class="eco-name">Wildlife Conservation</div>
+        <p class="act-group__note">These are recommended activities because the area overlaps species restoration needs.</p>
+      </div>
+    </div>
+    <div class="activity show">
+      <div class="activity-head">
+        <div class="activity-head-left">
+          <div class="activity-titlewrap">
+            <div class="activity-title">Choose conservation activities</div>
+          </div>
+        </div>
+        <div class="count"><span data-cons-count>0</span> of <b data-cons-total>0</b> activities selected</div>
+        <span class="activity-chev"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 5.25 7 9.25l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </div>
+      <div class="activity-list" data-cons-list></div>
+    </div>
+  </section>
+
   <!-- ============================= DIVIDER ============================= -->
   <div class="divider"></div>
 
@@ -1203,27 +1227,21 @@
       (byPw[label] = byPw[label] || []).push({ id:a.id, name:a.name });
     });
   });
-  /* Conservation activities (species-focused). In production this group appears
-     only when the AOI overlaps a species restoration need; ponytail: the
-     prototype shows it whenever Restore is on, to demo the UI. `tip` holds the
-     examples moved out of the activity name into a hover/focus tooltip. */
-  var CONSERVATION = {
-    forest: [
-      { id:'fo-con-1', name:'Protect species core habitat by establishing or expanding protected areas, and secure legal protection or easements for key habitat outside them.', tip:'Core habitat means nesting, roosting, feeding and breeding sites. Legal protection outside protected areas can include water rights and riparian buffers.' },
-      { id:'fo-con-2', name:'Maintain and manage the species protected area.', tip:'For example: boundaries, ranger presence, habitat upkeep and anti-poaching.' },
-      { id:'fo-con-3', name:'Restore degraded species habitat and natural processes.', tip:'For example: replanting, rewetting, corridors, prescribed burns and pollution cleanup.' },
-      { id:'fo-con-4', name:'Train rangers, practitioners and community members in relevant conservation skills.', tip:'For example: monitoring, species identification and management.' }
-    ],
-    mangrove: [
-      { id:'ma-con-1', name:'Strengthen legal and policy protection for the species and its habitat.', tip:'For example: enforcing sustainable harvest limits, and regulating trade through permits, quotas and aquarium/NTFP-trade controls.' },
-      { id:'ma-con-2', name:'Develop and promote alternative or nature-dependent livelihoods that reduce pressure on the species and its habitat.', tip:'For example: ecotourism and sustainable non-timber forest products (NTFPs).' },
-      { id:'ma-con-3', name:'Return the species to suitable habitat where it can establish.' }
-    ],
-    peat: [
-      { id:'pe-con-1', name:'Reward species conservation through incentives and voluntary standards or certification.', tip:'Incentives can be direct payments, tenure incentives or payments for ecosystem services (PES). Standards include FSC and sustainable sourcing.' },
-      { id:'pe-con-2', name:'Build public and community support for species and habitat conservation.', tip:'Through awareness campaigns, and by bringing species and habitat conservation into school and university curricula.' }
-    ]
-  };
+  /* Suggested Wildlife Conservation activities — one list for every ecosystem,
+     shown in their own card. In production the card appears only when the AOI
+     overlaps a species restoration need; ponytail: the prototype shows it
+     whenever any pathway is on, to demo the UI. */
+  var CONSERVATION = [
+    { id:'wc-1', name:'Protect wildlife species core habitat by establishing or expanding protected area through legal protection.' },
+    { id:'wc-2', name:'Maintain and manage the wildlife species protected area.' },
+    { id:'wc-3', name:'Restore degraded wildlife species habitat.' },
+    { id:'wc-4', name:'Train rangers, practitioners and community members in relevant wildlife conservation skills.' },
+    { id:'wc-5', name:'Enforcing sustainable wildlife harvest limits and regulating trade through permits, quotas, and aquarium/NTFP-trade control.' },
+    { id:'wc-6', name:'Reduce pressure on wildlife species/habitat by developing and promoting alternative livelihoods.' },
+    { id:'wc-7', name:'Return the species to suitable habitat where it can establish.' },
+    { id:'wc-8', name:'Incentivise wildlife species conservation through certification, market mechanism and direct payments.' },
+    { id:'wc-9', name:'Build public awareness on wildlife species conservation through campaigns and formal education.' }
+  ];
   var PW_ORDER = ['Protect','Manage','Restore'];
   var PW_CLASS = { Protect:'pw-protect', Manage:'pw-manage', Restore:'pw-restore' };
   var checkedActs = new Set();                 // ticked activity ids (F05 ids)
@@ -1280,26 +1298,29 @@
       });
       html += '</div>';
     });
-    if (sel.indexOf('Restore') > -1 && CONSERVATION[eco]){
-      html += '<div class="act-group"><div class="act-group__head"><div class="act-group__ttl pw-conserve">Wildlife Conservation</div>'
-            + '<p class="act-group__note">These are recommended activities because the area overlaps species restoration needs.</p></div>';
-      CONSERVATION[eco].forEach(function(a){
-        total++; var on = checkedActs.has(a.id); if (on) checked++;
-        var tipId = 'tip-' + a.id;
-        html += '<div class="activity-item' + (on ? ' checked' : '') + '" data-activity data-act="' + a.id + '"'
-              + ' role="checkbox" tabindex="0" aria-checked="' + (on ? 'true' : 'false') + '"'
-              + (a.tip ? ' aria-describedby="' + tipId + '"' : '') + '>'
-              + CHK + '<span class="activity-label' + (a.tip ? ' has-tip' : '') + '">' + esc(a.name) + '</span>'
-              + (a.tip ? '<span class="act-tip" role="tooltip" id="' + tipId + '">' + esc(a.tip) + '</span>' : '')
-              + '</div>';
-      });
-      html += '</div>';
-    }
     card.querySelector('[data-activity-list]').innerHTML = html;
     card.querySelector('[data-count]').textContent = checked;
     var tot = card.querySelector('[data-total]'); if (tot) tot.textContent = total;
+    renderConservation();
     recomputeBenefit();
     savePickedActs();
+  }
+
+  /* Wildlife Conservation card — shown while any pathway is on, on any ecosystem. */
+  function anyPathwayOn(){ return !!document.querySelector('.eco-card [data-pathway].selected'); }
+  function renderConservation(){
+    var cardEl = document.querySelector('[data-cons-card]'); if (!cardEl) return;
+    cardEl.hidden = !anyPathwayOn();
+    var html = '', checked = 0;
+    CONSERVATION.forEach(function(a){
+      var on = checkedActs.has(a.id); if (on) checked++;
+      html += '<div class="activity-item' + (on ? ' checked' : '') + '" data-activity data-act="' + a.id + '"'
+            + ' role="checkbox" tabindex="0" aria-checked="' + (on ? 'true' : 'false') + '">'
+            + CHK + '<span class="activity-label">' + esc(a.name) + '</span></div>';
+    });
+    cardEl.querySelector('[data-cons-list]').innerHTML = html;
+    cardEl.querySelector('[data-cons-count]').textContent = checked;
+    cardEl.querySelector('[data-cons-total]').textContent = CONSERVATION.length;
   }
 
   // Persist F02-P4 picks so F05 Monitoring Plan Step 1 lists only these.
@@ -1336,7 +1357,7 @@
       if (!nowOn) ((NBS_ACTIVITIES[eco] || {})[pw] || []).forEach(function(a){
         checkedActs.delete(a.id);
       });
-      if (!nowOn && pw === 'Restore') (CONSERVATION[eco] || []).forEach(function(a){
+      if (!nowOn && !anyPathwayOn()) CONSERVATION.forEach(function(a){
         checkedActs.delete(a.id);
       });
       renderActivities(card);
@@ -1348,11 +1369,12 @@
   });
 
   // checkbox toggle, event-delegated so it survives re-render (keyboard too, E-04)
-  document.querySelectorAll('.eco-card [data-activity-list]').forEach(function(list){
+  document.querySelectorAll('.eco-card [data-activity-list], [data-cons-list]').forEach(function(list){
     function toggleItem(item){
       var k = item.dataset.act;
       if (checkedActs.has(k)) checkedActs.delete(k); else checkedActs.add(k);
-      renderActivities(list.closest('.eco-card'));
+      if (list.hasAttribute('data-cons-list')) { renderConservation(); recomputeBenefit(); savePickedActs(); }
+      else renderActivities(list.closest('.eco-card'));
     }
     list.addEventListener('click', function(e){
       var item = e.target.closest('[data-activity]'); if (!item) return;

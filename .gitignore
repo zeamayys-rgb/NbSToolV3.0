@@ -9,3 +9,5 @@ docs/*
 .DS_Store
 # Shareable outputs (copy approvals, teaser video) — keep local, don't serve
 deliverables/
+# Video tutorial (HyperFrames project: sources, voiceover, renders) — local only
+video-tutorial/
